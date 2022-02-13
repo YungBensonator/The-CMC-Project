@@ -1,0 +1,501 @@
+/*
+sato_reimu, marisa_mash, cirno, meiling_cogu, ciel_koa, patchouli_mp3, sakuya_cogu, remilia, flandre
+ciel_mugetsu, sato_shinki, sato_alice, sato_youmu, yuyuko, suika, mokou_solo, aya, komachi
+sanae_mash, nitoriagent5, iku_mash, sato_parsee, utsuho_cogu, koishi, murasa_cogu, nueHoujuu, sato_clownpiece, akyuu
+wriggle, reisen, toehoe, (yukkusato_reimu as sato_reimu alt 3, meimu as sato_reimu alt 2, lie meiling as meiling alt 2, ~~vera~~ as marisa_mash alt 2)
+seija, daiyousei
+*/
+/*
+hakurei, reimaden, PSHtouhou, sunflowerfield, mugenkan, frozenworld, pandaemonium
+sdmlibrary, rcastle, SDMbasement, borderoflifeth, hakugyokurou, netherworld
+forestofmagic, bamboo, eientei, gardenofsun, sanzuriver
+moriyashrine, heaven, nuclearfurnace, palaquin, hallofdreamsth, animalrealmth
+*/
+//Yes, I managed to use every single touhou content in the game here, except for "sunflowerfield" and the yukkuri.
+
+
+temp_partner = choose("sato_reimu", "marisa_mash", "sanae_mash", "sato_alice")
+if global.gs_character[0] = fighter_get_dbid_no_fail("sato_reimu")
+temp_partner = choose("marisa_mash", "sato_alice")
+if global.gs_character[0] = fighter_get_dbid_no_fail("marisa_mash")
+temp_partner = choose("sato_reimu", "sanae_mash")
+if global.gs_character[0] = fighter_get_dbid_no_fail("sanae_mash")
+temp_partner = choose("marisa_mash", "sato_alice")
+if global.gs_character[0] = fighter_get_dbid_no_fail("sato_alice")
+temp_partner = choose("sato_reimu", "sanae_mash")
+if global.gs_character[0] = fighter_get_dbid_no_fail("akyuu")
+temp_partner = choose("sanae_mash", "marisa_mash", "sato_alice")
+if global.gs_character[0] = fighter_get_dbid_no_fail("suika")
+temp_partner = choose("sato_reimu", "marisa_mash", "sato_alice")
+if global.gs_character[0] = fighter_get_dbid_no_fail("aya")
+temp_partner = choose("sato_reimu", "sanae_mash", "sato_alice")
+if global.gs_character[0] = fighter_get_dbid_no_fail("patchouli_mp3")
+temp_partner = choose("sato_reimu", "sanae_mash", "marisa_mash")
+
+if temp_partner = "sato_reimu"{
+temp_rival = "sanae_mash"
+temp_partner_stage = "hakurei"
+temp_rival_stage = "moriyashrine"
+temp_rival_partner = "akyuu"
+}
+else if temp_partner = "sanae_mash"{
+temp_rival = "sato_reimu"
+temp_partner_stage = "moriyashrine"
+temp_rival_stage = "hakurei"
+temp_rival_partner = "suika"
+}
+else if temp_partner = "marisa_mash"{
+temp_rival = "sato_alice"
+temp_partner_stage = "sdmlibrary"
+temp_rival_stage = "alicehouse"
+temp_rival_partner = "aya"
+}
+else if temp_partner = "sato_alice"{
+temp_rival = "marisa_mash"
+temp_partner_stage = "alicehouse"
+temp_rival_stage = "sdmlibrary"
+temp_rival_partner = "patchouli_mp3"
+}
+
+temp_goal = choose("yuyuko", "utsuho_cogu", "iku_mash", "komachi")
+if global.gs_character[0] = fighter_get_dbid_no_fail("yuyuko") or global.gs_character[0] = fighter_get_dbid_no_fail("sato_youmu")
+temp_goal = choose("utsuho_cogu", "iku_mash", "komachi")
+if global.gs_character[0] = fighter_get_dbid_no_fail("utsuho_cogu") or global.gs_character[0] = fighter_get_dbid_no_fail("sato_parsee")
+temp_goal = choose("yuyuko", "iku_mash", "komachi")
+if global.gs_character[0] = fighter_get_dbid_no_fail("iku_mash") or global.gs_character[0] = fighter_get_dbid_no_fail("sato_suguri")
+temp_goal = choose("utsuho_cogu", "yuyuko", "komachi")
+if global.gs_character[0] = fighter_get_dbid_no_fail("komachi") or global.gs_character[0] = fighter_get_dbid_no_fail("nitoriagent5")
+temp_goal = choose("utsuho_cogu", "yuyuko", "iku_mash")
+
+if temp_goal = "yuyuko"{
+temp_goal_stage = choose("borderoflifeth", "hakugyokurou", "netherworld")
+temp_goal_partner = "sato_youmu"
+}
+if temp_goal = "utsuho_cogu"{
+temp_goal_stage = choose("nuclearfurnace","PSHtouhou")
+temp_goal_partner = "sato_parsee"
+}
+if temp_goal = "iku_mash"{
+temp_goal_stage = choose("heaven","hallofdreamsth","gardenofsun")
+temp_goal_partner = "sato_suguri"
+}
+if temp_goal = "komachi"{
+temp_goal_stage = choose("sanzuriver","animalrealmth","reimaden")
+temp_goal_partner = "nitoriagent5" //replace with boss Eiki later
+}
+
+
+arcade_enemy[1] = choose("cirno","cirno","wriggle","wriggle","daiyousei","daiyousei","sato_clownpiece","sato_clownpiece","koishi")
+arcade_enemy[2] = temp_partner
+arcade_enemy[3] = "meiling_cogu"
+arcade_enemy[4] = "flandre"
+arcade_enemy[5] = temp_rival
+arcade_enemy[6] = "mokou_solo"
+arcade_enemy[7] = temp_goal
+arcade_enemy[8] = "murasa_cogu"
+arcade_enemy[9] = "sato_shinki"
+
+arcade_set_lives(5);//set stock count
+
+arcade_win_quotes(
+1, //number of quotes(max = 15)
+"STAGE CLEAR!"
+)
+specific_win_quote(
+"sato_shinki", //against who
+"So she was behind this,#I guess it makes sense.#In any case, that was fun."
+)
+specific_win_quote(
+"flandre", //against who
+"So you're not behind the incident, I see.#We'll investigate further."
+)
+specific_win_quote(
+"mokou_solo", //against who
+"Accoding to the rabbit, we are in the right path#let's pursue our next goal."
+)
+specific_win_quote(
+"murasa_cogu", //against who
+"Now that we have the aid of the Palaquin Ship#we are all set!"
+)
+specific_win_quote(
+temp_partner, //against who
+"You really aren't half bad,#let's team up to solve this incident!"
+)
+specific_win_quote(
+temp_rival, //against who
+"Apologies, but this#incident is ours to solve!"
+)
+specific_win_quote(
+temp_goal, //against who
+"Thank you for cooperating!#Now we're all set for our destination."
+)
+
+//STAGE 1 First encounter
+arcade_enemy_setting(
+1, //Number of the round
+"forestofmagic", //Stage
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 2, Meet up your partner
+arcade_enemy_setting(
+2, //Number of the round
+temp_partner_stage, //Stage
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 3, Visiting the SDM
+arcade_enemy_setting(
+3, //Number of the round
+"rcastle", //Stage
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+choose(0,0,0,1), //Number of the alt(0 = default)
+"none", //Assist Name
+0  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 3, Koakuma Helper for meiling
+add_extra_arcade_enemy(
+3, //Number of the round(the DR. Kohaku one in this case)
+2, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+"ciel_koa", //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//Partner
+add_extra_arcade_enemy(
+3, //Number of the round(the DR. Kohaku one in this case)
+3, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_partner, //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+
+//STAGE 4, Deeper into the SDM
+arcade_enemy_setting(
+4, //Number of the round
+"SDMbasement", //Stage
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 4, Remilia Helper for flan
+add_extra_arcade_enemy(
+4, //Number of the round(the DR. Kohaku one in this case)
+2, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+"remilia", //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//STAGE 4, Sakuya Helper for flan
+add_extra_arcade_enemy(
+4, //Number of the round(the DR. Kohaku one in this case)
+3, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+"sakuya_cogu", //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//Partner
+add_extra_arcade_enemy(
+4, //Number of the round(the DR. Kohaku one in this case)
+4, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_partner, //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+
+//STAGE 5 A rival appears!
+arcade_enemy_setting(
+5, //Number of the round
+temp_rival_stage, //Stage
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 5, Rival's Helper for Rival
+add_extra_arcade_enemy(
+5, //Number of the round(the DR. Kohaku one in this case)
+2, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_rival_partner, //The extra character
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//Partner
+add_extra_arcade_enemy(
+5, //Number of the round(the DR. Kohaku one in this case)
+3, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_partner, //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+
+
+//STAGE 6 The eternal snake
+arcade_enemy_setting(
+6, //Number of the round
+choose("eientei"), //Stage (not adding bamboo, mokou already takes enough memory as is LOL)
+5, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 6, Reisen's helping too!
+add_extra_arcade_enemy(
+6, //Number of the round(the DR. Kohaku one in this case)
+2, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+"reisen", //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//Partner
+add_extra_arcade_enemy(
+6, //Number of the round(the DR. Kohaku one in this case)
+3, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_partner, //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+
+//Stage 7! Goal in mind
+arcade_enemy_setting(
+7, //Number of the round
+temp_goal_stage, //Stage
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 7, Goals's Helper for Goals
+add_extra_arcade_enemy(
+7, //Number of the round(the DR. Kohaku one in this case)
+2, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_goal_partner, //The extra character
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//Partner
+add_extra_arcade_enemy(
+7, //Number of the round(the DR. Kohaku one in this case)
+3, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_partner, //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+
+//Stage 8, heading to makai!
+arcade_enemy_setting(
+8, //Number of the round
+"palaquin", //Stage
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"Shion", //Assist Name
+0  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 8, Nueeeeen helping murasa
+add_extra_arcade_enemy(
+8, //Number of the round(the DR. Kohaku one in this case)
+2, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+"nueHoujuu", //The extra character
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//Partner
+add_extra_arcade_enemy(
+8, //Number of the round(the DR. Kohaku one in this case)
+3, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_partner, //The extra character
+1, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+
+//Stage 9, of course it was shinki
+arcade_enemy_setting(
+9, //Number of the round
+choose("mugenkan", "frozenworld", "pandaemonium"), //Stage
+3, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1  //What BGM to play (0 = stage, 1 = versus, 2 = custom defined in the next argument)
+)
+
+//STAGE 9, Mugetsu helps shinki, why not?
+add_extra_arcade_enemy(
+9, //Number of the round(the DR. Kohaku one in this case)
+2, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+"ciel_mugetsu", //The extra character
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//STAGE 9, And so does Meimu
+add_extra_arcade_enemy(
+9, //Number of the round(the DR. Kohaku one in this case)
+3, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+"sato_reimu", //The extra character
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+1, //Number of the alt(0 = default)
+"none", //Assist Name
+1 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+//Partner
+add_extra_arcade_enemy(
+9, //Number of the round(the DR. Kohaku one in this case)
+4, //ID(use from 2 to 5, theyre "player 3,4,5 and 6)
+temp_partner, //The extra character
+2, //Number of Stocks
+1, //Size Multiplier
+0, //Is metal?(1 = yes, 0 = nope)
+0, //Palette number(0 = default)
+0, //Number of the alt(0 = default)
+"none", //Assist Name
+0 //Team number (0 = player team, 1 = enemy team, 2-4 = other team)
+)
+
+
+set_round_text_settings(
+9, //Round number
+"arcade/bgm/56-Recollection.ogg", //Path of the music file to play during dialogue
+"arcade/gfx/Artificial Eden.jpg", //Path of the background image
+"gfx/cbust/"+string(db_charname[ global.gs_character[0], 1 ] )+".png", //Path of the image of the left side character
+"arcade/gfx/Shinki_Right.png", //Path of the image of the right side character
+3 //Number of messages(infinite)
+)
+arcade_text_queue_add(
+9, //Round number
+"Protag: So. I have finally found you."
+)
+arcade_text_queue_add(
+9, //Round number
+"Shinki: What!? How come? It's not possible!"
+)
+arcade_text_queue_add(
+9, //Round number
+"Protag: I have found the root of all evil. You must pay for your crimes."
+)
