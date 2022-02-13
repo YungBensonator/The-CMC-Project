@@ -1,0 +1,33 @@
+vspeed=-1
+hspeed=0
+if arma=1 and owner.percent>=((1/17)*20)
+owner.percent-=((1/17)*20)
+else if arma=1
+percent=0
+if ( timer == 0 )
+{
+sprite_index = exit_sprite;
+image_speed = 0;
+image_index = 0;
+gravity = 0
+image_speed=0.25
+time = 16
+}
+
+    repeat ( choose(2,3) )
+      {
+	spark = instance_create ( x , y - 22*tamano , obj_spark_effect );
+	spark.speed = random ( 4 )*tamano;
+	spark.direction = random ( 360 )
+	spark.image_xscale=0.5*tamano
+	spark.image_yscale=0.5*tamano;
+      }
+image_alpha=1-(timer/time)
+if ( timer >= time )
+{
+state_type = "ded";
+timer = 0;
+time = -1;
+//execute_string(deinit_script)
+instance_destroy()
+}

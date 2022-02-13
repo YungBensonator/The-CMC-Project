@@ -1,0 +1,113 @@
+owner.assistmeter = 0
+if ( timer == 0 ) {
+state_type = "action"
+sprite_index = tje_sprite;
+image_speed = 0;
+image_index = 1;
+timer = 0;
+time = 264;
+}
+  switch (timer) {
+    case 1: image_index = 1; break;
+    case 9: image_index = 2; break;
+    case 18: image_index = 3; break;
+    case 27: image_index = 4; break;
+	case 36: image_index = 5; break;
+    case 45: image_index = 6; break;
+    case 54: image_index = 7; break;
+    case 63: image_index = 8; break;
+    case 72: image_index = 9; break;
+	case 81: image_index = 10; break;
+    case 90: image_index = 11; break;
+    case 99: image_index = 12; break;
+    case 108: image_index = 13; break;
+    case 117: image_index = 14; break;
+	case 126: image_index = 15; break;
+    case 134: image_index = 16; break;
+    case 143: image_index = 17; break;
+    case 152: image_index = 18; break;
+    case 161: image_index = 19; break;
+	case 170: image_index = 20; break;
+    case 179: image_index = 21; break;
+    case 188: image_index = 22; break;
+    case 197: image_index = 23; break;
+    case 206: image_index = 24; break;
+    case 215: image_index = 25; break;
+    case 224: image_index = 26; break;
+    case 233: image_index = 27; break;
+    case 242: image_index = 28; break;
+	case 250: image_index = 29; break;
+    case 252: image_index = 30; break;
+    case 254: image_index = 31; break;
+    case 256: image_index = 32; break;
+    case 258: image_index = 33; break;
+	case 260: image_index = 34; break;
+	case 262: image_index = 35; break;
+	case 264: image_index = 36; break;
+}
+
+if ( timer = 1){
+{track_id=-1
+equipo=owner.team
+//if instance_number(tje)<=1
+track_id = tempmus_play("assists/tje/jammin.mp3",500);
+//track_id = jammin_beats
+mode=1}
+if timer < time {
+with player
+{if team!=other.equipo and (state_type="stand"||state_type="run"||state_type="crouch")
+{state_type="air_attack"
+attack_type="taunt"
+hspeed=0
+timer=-other.time+other.timer-percent-1
+time=-1
+if tjetaunt_sprite
+{sprite_index=tjetaunt_sprite
+image_speed=0.3/44*image_number}
+else
+sprite_index=taunt_sprite
+if image_speed=0
+image_speed=0.3}}
+}
+if ( timer >= time-1 || !instance_exists(owner))
+  {with player
+{	if attack_type="taunt"
+{	attack_type = "none";
+state_type = "stand";}}
+}
+}
+
+if ( timer >= 1 && timer <= 269 ){
+fiesta=create_homing_bubble(timer/10,timer/10,0,8,owner.id,2)
+with player
+{if place_meeting(x,y,other.fiseta) and team!=owner.team
+{state_type="air_attack"
+attack_type="taunt"
+timer=-other.timer-percent
+time=0
+if taunt_sprite
+sprite_index=taunt_sprite
+else
+sprite_index=taunt_sprite}
+	}
+}
+
+if timer = 250 {
+//if instance_number(tje)=1
+tempmus_stop ( track_id )
+sound_play(tje_boom_sound);
+explosion = create_projectile(25,90,7,4,8,10,explodehit4,obj_spark_fire1,4.5,4.5,0,10,owner.id,20,-1);
+explosion.hit_stun = 10;
+}
+
+if timer = 252 {
+image_speed=0.8;
+sound_play(tje_leave_voice);
+}
+
+if ( timer >= time-1) {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

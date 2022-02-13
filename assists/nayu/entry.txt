@@ -1,0 +1,72 @@
+// Entry //
+if ( timer == 0 )
+{
+  // INIT START //
+  image_xscale = 0.4 * ( 1 - facing * 2 );
+  image_yscale = 0.4;
+  actual_width = 12;
+  actual_height = 32;
+  actual_width = sprite_get_bbox_right ( nayu_mask_sprite ) - sprite_get_bbox_left ( nayu_mask_sprite );
+  actual_width *= 0.5 * image_xscale;
+  if ( actual_width > 22 ) actual_width = 22;
+  actual_height = sprite_get_bbox_bottom ( nayu_mask_sprite ) - sprite_get_bbox_top ( nayu_mask_sprite );
+  actual_height *= image_yscale;
+  if ( actual_height > 44 ) actual_height = 44;
+  ac2 = actual_height * 0.5;
+  temp = 0;
+  // INIT END //
+  state_type = "entry";
+  sprite_index = nayu_entry_sprite;
+  image_speed = 0;
+  image_index = 0;
+  hspeed = 0;
+  vspeed = 0;
+  time = 31;
+  sound_play ( choose ( nayu_entry_voice1, nayu_entry_voice2 ) );
+  instance_create ( x , y - 15 , obj_spark_shockwave );
+  repeat ( 5 )
+  {
+    spark = instance_create ( x , y - 15 , obj_spark_effect );
+    spark.speed = random ( 4 );
+    spark.direction = random ( 360 );
+  }
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 12: image_index = 4; break;
+    case 15: image_index = 5; break;
+    case 18: image_index = 6; break;
+  }
+  if ( timer >= 1 )
+    vspeed += 0.15;
+  if ( vspeed > 3.5 )
+    vspeed = 3.5;
+  if ( on_floor || on_platform )
+  {
+    if ( timer >= 2 )
+    {
+      sound_play ( nayu_land_sound );
+      splash = instance_create ( x - 2.5 + facing * 5 , y , obj_spark );
+      splash.sprite_index = nayu_splash_effect;
+      splash.image_xscale = image_xscale * ( 1 - facing * 2 );
+      splash.image_yscale = image_yscale;
+      splash.image_speed = 0.45;
+      splash.image_alpha = 0.75;
+      splash.depth = depth - 1;
+    }
+    if ( temp = 0 )
+      state_type = "action";
+    else
+      state_type = "end";
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+  }
+}
+if ( timer >= time - 1 )
+  timer -= 10;

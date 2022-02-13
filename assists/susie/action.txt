@@ -1,0 +1,187 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+	sprite_index = falling_sprite;
+    timer = 0;
+    time = 370;
+    image_speed = 0;
+    image_index = 0;
+	timer_speed=1
+	target = -99
+	repeated = 0
+	storeposition=owner.y
+	y=owner.y-120
+	target = 0;
+	scalex=image_xscale
+	couragetemp=0
+	owner.facing=facing
+  }
+
+if ( timer < time )
+  {
+  if timer<40
+	y+=3
+	//regular projectile
+	switch ( timer )
+    {
+		case 3: image_index=1; break 
+		case 6: image_index=2; break
+		case 9: image_index=0; break
+		case 12: image_index=1; break
+		case 15: image_index=2; break
+		
+		case 18: sprite_index=fall_smear_sprite; image_index=0; break
+		case 20: image_index=1; break
+		case 22: image_index=2; break
+		
+		case 24: sprite_index=curl_sprite; image_index=0; break
+		case 27: image_index=1; break
+		case 30: image_index=2; break
+		case 33: image_index=3; break
+		case 36: image_index=0; break
+		case 39: image_index=1; break
+		
+		case 42: sprite_index=landing_sprite; image_index=0; break
+		case 46: image_index=1; break
+		case 50: image_index=2; break
+		
+		case 54: sprite_index=land_eyes_sprite; image_index=0; break
+		
+		case 60: sprite_index=turn_right_sprite; break
+		
+		case 63: 
+		case 91:
+			sprite_index=idle_sprite; image_index=0; break
+		case 70: 
+		case 98:
+			image_index=1; break
+		case 77: 
+		case 105:
+			image_index=2; break
+		case 84:
+		case 112:
+			image_index=3; break
+		
+		case 120: 
+		case 152:
+			sprite_index=spellready_sprite; image_index=0; break
+		case 128: 
+		case 160:
+			image_index=1; break
+		case 136:
+		case 168:
+			image_index=2; break
+		case 144:
+		case 176:
+			image_index=3; break
+		
+		case 185: sprite_index=proj_launch_sprite; image_index=0; break
+		case 189: image_index=1; break
+		case 191: image_index=2; break
+		case 194: image_index=3; break
+		case 196: image_index=4; break
+		case 206: image_index=6; break
+		case 211: image_index=7; break
+		case 214: image_index=8; break
+		case 219: image_index=10; break
+		case 229: image_index=11; break
+		case 233: image_index=12; break
+		case 237: image_index=13; break
+		
+		case 267: sprite_index=despawn_sprite; image_index=0; break
+		case 273: image_index=1; break
+		case 278: image_index=2; break
+		case 284: image_index=3; break
+		case 288: image_index=4; break
+		case 294: image_index=5; break
+		case 297: image_index=6; break
+		case 302: image_index=7; break
+		case 307: image_index=8; break
+		case 312: image_index=9; break
+		case 317: image_index=10; break
+		case 322: image_index=11; break
+		case 327: image_index=12; break
+		case 332: image_index=13; break
+		case 337: image_index=14; break
+		case 342: image_index=15; break
+		case 348: image_index=16; break
+		//fadeout
+		case 354: image_index=17; break
+		case 359: image_index=18; break
+		case 364: image_index=19; break
+    }
+	if timer>354
+		image_alpha-=0.067
+	if timer<70
+		spritetemp=sprite_index
+	if owner.attack_type="taunt" && timer>70 && timer <120
+		taunttemp=1
+	if owner.attack_type!="taunt" && sprite_index=pose_sprite
+		taunttemp=0
+	if timer<120 && timer>70
+	{
+		if taunttemp=1 
+		{
+			sprite_index=pose_sprite
+			couragetemp=1
+		}
+		else
+		{
+			sprite_index=spritetemp
+		}
+	}
+	if couragetemp=1
+	{
+	if timer=200
+		create_homing_bubble ( 4 , 4 , 45 , 50 , self.id , 2 );
+	if timer=201
+		storetarget=target
+	}
+	if timer=120
+		sound_play(ax_pullout_sound)
+	if timer=206
+	{
+		target=storetarget
+		sound_play(proj_launch_sound)
+		if couragetemp=0
+		{
+			create_projectile(18,30+facing*120,6,5.7,-1,60,magic3,obj_spark_hit2,-1,-1,26,32,owner.id,60,assist_custom);
+			proj.kind=1
+			proj.hspeed = 9-facing*18
+			proj.hit_stun=15
+			proj.sprite_index = proj_sprite
+		}
+		else
+		{
+			create_projectile(23,30+facing*120,7.2,6.5,-1,90,magic3,obj_spark_hit3,-1,-1,26,32,owner.id,60,assist_custom);
+			proj.kind=2
+			proj.hit_stun=30
+			proj.sprite_index = proj_red_sprite
+			if target>0 && target!=owner.id 
+			{
+				proj.direction=point_direction(x,y,target.x,target.y)
+				proj.speed=10
+			}
+			else
+			proj.hspeed=10-facing*20
+		}
+
+		//proj.x= x+(35*image_xscale)*(1-facing*2)
+		//proj.y= y-(43*image_yscale)
+		proj.image_angle=direction
+		proj.facing=facing
+		proj.image_xscale = image_xscale+couragetemp*0.2
+		proj.image_yscale = image_yscale+couragetemp*0.2
+		proj.image_speed = 0.5
+		proj.image_index = 0
+		soundtemp=1
+	}
+  }
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

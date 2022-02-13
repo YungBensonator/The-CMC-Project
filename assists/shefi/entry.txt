@@ -1,0 +1,74 @@
+// Entry //
+if ( timer == 0 )
+{
+  // INIT START //
+  image_xscale = 0.3 * ( 1 - facing * 2 );
+  image_yscale = 0.3;
+  actual_width = 12;
+  actual_height = 32;
+  actual_width = sprite_get_bbox_right ( shefi_mask_sprite ) - sprite_get_bbox_left ( shefi_mask_sprite );
+  actual_width *= 0.5 * image_xscale;
+  if ( actual_width > 22 ) actual_width = 22;
+  actual_height = sprite_get_bbox_bottom ( shefi_mask_sprite ) - sprite_get_bbox_top ( shefi_mask_sprite );
+  actual_height *= image_yscale;
+  if ( actual_height > 44 ) actual_height = 44;
+  temp = 0;
+  attack_temp = 0;
+  if ( owner.moveright || owner.moveleft )
+    attack_temp = 1;
+  if ( owner.movedown )
+    attack_temp = 2;
+  // INIT END //
+  state_type = "entry";
+  sprite_index = shefi_entry_sprite;
+  image_speed = 0;
+  image_index = 0;
+  hspeed = 0;
+  vspeed = 0;
+  time = 41;
+  instance_create ( x , y - 15 , obj_spark_shockwave );
+  repeat ( 5 )
+  {
+    spark = instance_create ( x , y - 15 , obj_spark_effect );
+    spark.speed = random ( 4 );
+    spark.direction = random ( 360 );
+  }
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 2: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 6: image_index = 3; break;
+    case 8: image_index = 4; break;
+    case 10: image_index = 5; break;
+    case 12: image_index = 6; break;
+    case 14: image_index = 7; break;
+    case 16: image_index = 8; break;
+    case 18: image_index = 9; break;
+    case 20: image_index = 10; break;
+    case 22: image_index = 11; break;
+    case 24: image_index = 12; break;
+  }
+  if ( timer == 2 && temp == 0 )
+    sound_play ( shefi_entry_voice );
+  if ( timer >= 1 )
+    vspeed += 0.15;
+  if ( vspeed > 3.5 )
+    vspeed = 3.5;
+  if ( on_floor || on_platform )
+  {
+    if ( timer > 2 )
+      gfx_land_effect ( x , y , actual_width );
+    if ( temp = 0 )
+      state_type = "action";
+    else
+      state_type = "end";
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+  }
+}
+if ( timer >= time - 1 )
+  timer -= 10;

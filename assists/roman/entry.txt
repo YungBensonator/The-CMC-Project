@@ -1,0 +1,40 @@
+
+if (owner.state_type != "attack" and owner.state_type != "air_attack" and owner.state_type != "air_dodge") or owner.attack_type = "grab" or owner.attack_type = "taunt"{
+	owner.assistmeter = owner.maxassistmeter
+	instance_destroy();
+}else if owner.state_type = "attack" or owner.state_type = "air_attack" or owner.state_type = "air_dodge"{
+	with (owner){
+		repeat(2)
+		sound_play(a_roman_c_sfx)
+		repeat(3){
+			spark3 = instance_create(x,y-20,obj_spark_shockwave)
+			spark3.image_angle = 90
+			spark3.image_blend = c_red
+			spark3.image_alpha = 1
+			spark3.depth = depth - 1
+		}
+		effect_create_below(ef_ellipse,x,y,1,c_white)
+		if alarm[1] != 0
+		alarm[1] = 1
+		
+		with (obj_spark){
+			if snap = other.id
+			instance_destroy();
+			
+			if keepmain = other.keepmain
+			instance_destroy();
+		}
+		
+		timer = 0
+		time = -1
+		attack_type = "none"
+		if air > 0
+		state_type = "jump"
+		else if air = 0 and movedown
+		state_type = "crouch"
+		else
+		state_type = "stand"
+	    //interrupt = 1
+	}
+	instance_destroy();
+}

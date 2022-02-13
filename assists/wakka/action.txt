@@ -1,0 +1,43 @@
+if ( timer = 0 )
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 60;
+    visible = 1;
+  }
+
+if ( timer < time )
+  {
+    wakka.x = x;
+    wakka.y = y;
+    if ( timer mod 3 == 0 )
+      {
+	var d, l;
+	d = random ( 360 );
+	l = random ( 16 );
+	spark = instance_create ( x + lengthdir_x ( l , d ) , y - actual_height * 0.5 + lengthdir_y ( l , d ) , obj_spark );
+	spark.image_xscale *= 0.05 + random ( 0.1 );
+	spark.image_yscale = spark.image_xscale;
+	spark.alpha_add = -1/60;
+	spark.alarm[0] = 59;
+	spark.angle_add = random ( 360 );
+	spark.sprite_index = spr_light;
+	spark.image_speed = 0;
+      }
+    if ( timer mod 12 == 0 )
+	sound_play ( wakka_wakka_sound );
+    if ( timer mod 30 == 0 )
+      {
+	wakka = create_projectile ( 12 , 30 + facing * 120 , 7 , 6 , 5 , 10 , slash3 , obj_spark_slash5 , 1.4 , 1.4 , 0 , 0 , owner.id , 30 , no_script );
+	wakka.hit = 0;
+      }
+  }
+
+if ( timer >= time-1 )
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

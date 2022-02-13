@@ -1,0 +1,40 @@
+// Projectile //
+absorb = -1;
+if ( timer <= 1 && hit = 0 && initialized = 0 )
+{
+  parry_nodestroy = 1;
+  proj_hits = 1;
+  priority = 5;
+  no_clash = 1;
+  no_reflect = 1;
+  initialized = 1;
+}
+if ( attack_success = 1 && timer = time )
+{
+  time += 2;
+  attack_success = 2;
+  attacker.id.attack_hits -= 1;
+}
+if ( timer = time && proj_hits < max_hits )
+{
+  hspeed = 3-facing*6;
+  proj_hits += 1;
+  hit = 0;
+  launch = 0;
+  attack_success = 0;
+  target.hitby = 0;
+  if ( proj_hits = max_hits )
+  {
+    bkb = 4.8;
+    kbg = 6.8;
+    sfx = water3;
+  }
+  timer = 0;
+  time = 6;
+}
+if ( timer = 50 && proj_hits < max_hits - 1 )
+  proj_hits = max_hits - 1;
+if ( timer >= 55 )
+  proj_hits = max_hits;
+if ( image_index >= image_number - image_speed )
+  instance_destroy();

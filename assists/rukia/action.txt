@@ -1,0 +1,90 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 90;
+    sprite_index = rukia_atk_sprite;
+    image_speed = 0;
+    image_index = 0;
+  }
+
+if ( timer < time )
+  {
+	
+    if timer = 3 {
+	  //sound_play(rukia_shot_sound)
+	  sound_play(rukia_atk_sound1)
+}
+    if timer = 36 {
+	  //sound_play(rukia_shot_sound)
+	  sound_play(rukia_atk_sound2)
+	  sprite_index = rukia_atk_sprite
+	  create_projectile(1,0+facing*180,0,0,-1,6,slash3,obj_spark_hit1,0.5,0.5,0,0,owner.id,60,-1);
+	  //proj.hspeed = 9-facing*18
+	  proj.di = 0;
+	  proj.sdi = 0;
+	  proj.image_alpha = 0;
+	  proj.image_xscale = 0.7-facing*1.4;
+	  proj.image_yscale = 0.7;
+	  proj.sprite_index = rukia_atk_sprite;
+	  proj.image_index = 7;
+	  proj.image_speed = 0;
+	  proj.image_index = 0;
+	  //proj.moving_object = 1;
+      //proj.absorb2 = 1
+	  proj.depth = depth - 1;
+}
+if timer >= 36 && timer <= 45 {
+ if facing = 1 {
+x += -30
+proj.x += -30
+ }
+else
+ if facing = 0 {
+x += 30
+proj.x += 30
+ }
+}
+
+if proj.hit = 1 && timer < 100 {
+time = 150
+timer = 100
+ if facing = 1 {
+x += -60
+ }
+else
+ if facing = 0 {
+x += 60
+ }
+}
+
+if timer > 100 && timer < 150 && timer mod 3 = 0 {
+create_projectile(1,90,6,7,-1,2,freeze2,obj_spark_ice2,0.5,5.5,0,0,owner.id,9,-1);
+proj.image_alpha = 0;
+proj.sprite_index = rukia_icep_sprite;
+    	proj.image_xscale = image_xscale*1;
+    	proj.image_yscale = image_yscale*4;
+proj.di = 0;
+proj.sdi = 0;
+}
+
+if timer = 101 {
+	icep_spark = create_spark(0,600,self.id);
+	icep_spark.sprite_index = rukia_icep_sprite;
+    	icep_spark.image_speed = 0;
+	icep_spark.image_alpha = 0.7;
+    	icep_spark.image_xscale = image_xscale*1;
+    	icep_spark.image_yscale = image_yscale*4;
+    	icep_spark.depth = depth - 0.5;
+}
+
+}
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

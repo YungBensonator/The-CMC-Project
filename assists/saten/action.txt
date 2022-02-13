@@ -1,0 +1,113 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time =40;
+    antijoseph=0;
+    target=0;
+    targetchecks=0;
+    i=0;
+  }
+
+if ( timer < time )
+  {
+if antijoseph=0 && timer < 20{ targetchecks = collision_rectangle ( x + 7.70 * ( 1 - facing * 2 ) * size , y * size , x + 35 * ( 1 - facing * 2 ) * size , y+35 * size , player , 0 , 1 );
+} for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  {
+    if ( db_charname[global.gs_character[i],0] == "Joseph" )
+    {
+    antijoseph+=1;
+    }
+  }
+if i = MAX_FIGHTERS{
+i=0;
+}
+
+
+if timer=24{image_speed=0;}
+
+
+if timer = 12{
+bat=create_projectile ( 4 , 60+facing*60 , 4.5 , 0 , 2 , 4 , strongpunch,obj_spark_hit1 , 0.92 , 0.49 , 17.50 , 24.50 , owner.id , 8 , no_script );
+}
+if bat.hit>0 && bat.attack_shielded=0{
+create_homing_bubble(0.92 , 0.49 , 17.50 , 24.50,self.id,3);
+}
+
+if timer = 20 && antijoseph > 0 && target > 0{
+timer = 100;
+time = 180;
+image_speed=0;
+image_index=0;
+}
+switch ( timer )
+      {
+    case 100: image_index = 0; sprite_index = saten_grabantijoseph_sprite; break;
+    case 108: image_index = 1; break;
+    case 116: image_index = 2; break;
+    case 120: image_index = 3; break;
+    case 150: image_index = 2; break;
+    case 165: image_index = 4; break;
+      }
+if timer >= 100 && timer < 108{
+target.x=x+8.4*( 1 - facing * 2 );
+target.y=y;
+target.timer=0;
+target.time=2;
+target.invincible=1;
+target.sprite_index=target.flinch_sprite;
+}
+if timer >= 108 && timer < 116{
+target.x=x+8.4*( 1 - facing * 2 );
+target.y=y-8.4;
+target.timer=0;
+target.time=2;
+target.invincible=1;
+target.sprite_index=target.flinch_sprite;
+}
+if timer >= 116 && timer < 165{
+target.x=x+0.7*( 1 - facing * 2 );
+target.y=y-12.6;
+target.timer=0;
+target.time=2;
+target.invincible=1;
+target.sprite_index=target.flinch_sprite;
+}
+
+
+if timer >= 120 && timer < 131{
+vspeed=-5;
+hspeed=2-facing*4;
+}
+if timer >= 131 && timer < 150{
+vspeed=3.5;
+hspeed=1-facing*2;
+}
+if timer > 121 && timer < 164 && (on_platform = 1 || on_floor = 1){
+timer = 164;
+}
+
+if timer > 165{
+hspeed=0;
+}
+if timer = 165{
+target.invincible=0;
+boom=create_projectile ( 0 , 60+facing*60 , 4 , 0 , 2 , 2 , punch4,obj_spark_hit2 , 1.15 , 1.40 , 2.10 , 18.20 , owner.id , 2 , no_script );
+}
+
+}
+
+   
+
+
+
+
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

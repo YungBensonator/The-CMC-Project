@@ -1,0 +1,38 @@
+absorb = -1
+proj_destroy = 0;
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    image_speed = 0.8;
+    visible=1;
+    temp = 1
+    proj_hits = 1
+    }
+	
+
+if image_index >= 22 {
+instance_destroy()
+}
+
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+
+visible=1
+if timer = time+1 && proj_hits <= 5 {
+proj_hits+=1
+if proj_hits = 5 {
+damage = 3
+bkb = 6.5*attacker.size
+kbg = 3.5*attacker.size
+sfx = shock3
+gfx = obj_spark_shock
+bloom = 5 }
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+timer = 0
+time = 7
+//image_index = image_number-8
+}

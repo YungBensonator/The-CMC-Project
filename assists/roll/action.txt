@@ -1,0 +1,106 @@
+if arma=0
+{if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 80;
+    sprite_index = magic_arrow_sprite;
+    image_speed=0
+    image_speed = 0;
+    image_index = 0;
+  }
+if timer < time {
+if timer = 30
+{
+image_speed=0.25
+flecha = create_projectile(5,5+facing*170,3,0.5,1,2,slash1,obj_spark_hit1,tamano,tamano,(3*tamano),(29*tamano),owner.id,72,assist_custom)
+flecha.hspeed=-8*sign(image_xscale)*tamano
+flecha.size=tamano
+flecha.sprite_index = flecha_sprite;
+flecha.image_xscale *= sign(image_xscale)
+flecha.visible=1}
+if image_index>=image_number-image_speed
+image_speed=0
+}}
+if arma=1 
+{if timer = 0
+  {time=80
+	image_speed=0
+    state_type = "action";
+    attack_type = "atk2"}
+
+target=owner.target
+if timer<20
+timer-=0.75
+if ( timer = 20) and target
+{
+sprite_index = exit_sprite;
+image_speed = 0;
+image_index = 0;
+gravity = 0
+image_speed=0.25
+state_type = "action";
+    attack_type = "atk1"
+aura = 16
+}
+else if  ( timer = 20) and !target
+{    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;}
+if aura=16
+    {	vspeed=-1
+repeat ( choose(2,3) )
+      {
+	spark = instance_create ( x , y - 22*tamano , obj_spark_effect );
+	spark.speed = random ( 4 )*tamano;
+	spark.direction = random ( 360 )
+	spark.image_xscale=0.5*tamano
+	spark.image_yscale=0.5*tamano;
+      }}
+if timer<40
+image_alpha=1-((timer-20)/aura)
+
+if timer=40
+{aura=10
+vspeed=0
+x=target.x+30*sign(image_xscale)
+y=target.y-5
+}
+if timer >=40 and timer<=50
+{image_alpha=((timer-40)/aura)}
+if timer=50
+{sprite_index=coletas
+image_speed=0.5
+image_alpha=1}
+if timer=52||timer=60||timer=68||timer=76
+{
+create_projectile(5,20+facing*140,2,1,1,20,punch4,obj_spark_hit3,1.6,0.8,26,25,owner.id,6,-1)}}
+if arma=2
+{if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 13;
+    sprite_index = soporte_sprite;
+    image_speed=0
+    image_speed = 0.25;
+    image_index = 0;
+  if timer =12
+barrera=create_projectile(0,361,0.1,0,0,0,-1,-1,9,9,0,0,owner.id,900,assist_custom)
+barrera.barrera=1
+barrera.owner=owner.id
+barrera.timer=0
+barrera.hit=2}
+}
+
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

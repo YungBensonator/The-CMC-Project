@@ -1,0 +1,64 @@
+// End //
+if ( timer == 0 )
+{
+  state_type = "end";
+  if ( temp = 1 )
+    sprite_index = nayu_attack_sprite;
+  else
+    sprite_index = nayu_land_sprite;
+  image_speed = 0;
+  image_index = 0;
+  time = 83;
+}
+if ( timer < time )
+{
+  if ( temp = 1 )
+  {
+    switch ( timer )
+    {
+      case 3: image_index = 1; break;
+      case 6: image_index = 2; break;
+      case 9: image_index = 3; break;
+      case 13: image_index = 2; break;
+      case 16: image_index = 1; break;
+      case 19: image_index = 0; break;
+      case 22: sprite_index = nayu_taunt_sprite; image_index = 0; break;
+      case 26: image_index = 1; break;
+      case 30: image_index = 2; break;
+      case 34: image_index = 3; break;
+    }
+  }
+  else
+  {
+    switch ( timer )
+    {
+      case 4: image_index = 1; break;
+      case 16: image_index = 2; break;
+      case 19: image_index = 3; break;
+      case 22: sprite_index = nayu_taunt_sprite; image_index = 0; break;
+      case 26: image_index = 1; break;
+      case 30: image_index = 2; break;
+      case 34: image_index = 3; break;
+    }
+  }
+  if ( !on_floor && !on_platform )
+  {
+    state_type = "entry";
+    sprite_index = nayu_entry_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    vspeed = 0;
+    timer = 1;
+    time = 31;
+    temp = 1;
+  }
+  if ( timer = 30 && temp = 0 )
+    sound_play ( nayu_taunt_voice ); 
+}
+if ( timer >= time - 1 )
+{
+  state_type = "dead";
+  timer = 0;
+  time = -1;
+}

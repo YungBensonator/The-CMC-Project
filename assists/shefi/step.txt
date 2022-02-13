@@ -1,0 +1,52 @@
+// Step //
+apply_camera();
+owner.assistmeter = 0;
+moving_object = 1;
+timer += timer_speed;
+
+// Collision //
+on_floor = 0;
+on_platform = 0;
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_floor , 1 , 1 ) )
+  y -= 1;
+if ( vspeed >= 0 )
+  while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_platform , 1 , 1 ) )
+    y -= 1;
+if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+  on_floor = 1;
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+  on_platform = 1;
+
+// Depth //
+if ( on_floor || on_platform )
+  depth = -2;
+else
+  depth = 0;
+
+// Destroy //
+if ( y > obj_game_control.death_d )
+{
+  state_type = "dead";
+  timer = 0;
+  time = -1;
+}
+
+// States //
+if ( state_type = "entry" )
+  assist_entry();
+if ( state_type = "action" )
+  assist_action();
+if ( state_type = "end" )
+  assist_end();
+if ( state_type = "dead" )
+{
+  sound_play ( shefi_vanish_sound );
+  instance_create ( x , y - 15 , obj_spark_shockwave );
+  repeat ( 5 )
+  {
+    spark = instance_create ( x , y - 15 , obj_spark_effect );
+    spark.speed = random ( 4 );
+    spark.direction = random ( 360 );
+  }
+  instance_destroy();
+}
