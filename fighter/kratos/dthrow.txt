@@ -1,0 +1,92 @@
+if time = -1 {
+hspeed = 0;
+state_type = "air_attack";
+attack_type = "dthrow";
+image_speed = 0.4;
+sprite_index = nair_sprite;
+image_index=0;
+timer = 0;
+time = 110;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 70
+starty = y
+}
+if timer < time {
+	if ( timer = 0 || timer = 1 )
+	{
+	target.x = x
+	target.y = starty;
+	}
+    if ( timer = 2 || timer = 3 )
+		{
+        target.x = x+5-facing*10
+        target.y = starty
+        }
+     if ( timer >= 4 && timer <= 8 )
+		{
+        target.x = x+7.5-facing*15
+        target.y = starty
+        }
+     if ( timer >= 9 && timer <= 42 )
+		{
+        target.x = x+15-facing*30
+        target.y = starty
+        }
+    
+
+	//if timer = 1
+	//     sound_play(downb_voice);
+	
+
+    if timer = 0 and air = 0{
+	duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+    duster.facing = facing;
+	
+	vspeed = - 6
+	
+	}
+	
+	
+	if timer = 24{
+	
+	image_index = 0
+	timer = 99
+	}
+	
+	
+	if timer >= 99
+	vspeed = 16
+
+    if timer = 100{
+	//create_hitbox(2,270,8,0,3,1,slash3,obj_spark_hit3,0.8,1.2,21,19,self.id,4,4);
+	//hitbox.di = 0
+	}
+
+	if timer = 104{
+	create_throw_box(6,10+facing*160,5,6,5,6,talesslash,obj_spark_hit3,0.8,1.2,21,19,self.id,12,4);
+	hitbox.di = 0
+	}
+	
+	if timer = 108{
+	hitbox.hitbox_y = 10
+	hitbox.image_yscale = 0.6
+	hitbox.bkb =6
+	hitbox.kb = 6
+	hitbox.kbg = 4
+	hitbox.hitlag = 15
+	hitbox.damage = 4
+	}
+
+    if ( timer = 26 ) {
+	create_throw_box(5,50+facing*80,5.65,3,1.75,4,magic1,obj_spark_slash3,1.4,1.4,0,24,self.id,12,3);
+    }
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

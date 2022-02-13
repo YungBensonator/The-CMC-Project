@@ -1,0 +1,68 @@
+if ( timer == 0 )
+{
+sprite_index = entry_sprite;
+image_speed = 0;
+image_index = 0;
+}
+
+switch ( timer )
+	{
+	case 60: image_index = 1; break;
+	case 63: image_index = 2; break;
+	case 66: image_index = 3; break;
+	case 69: image_index = 4; break;
+	case 72: image_index = 5; break;
+	case 90: image_index = 6; break;
+	case 93: image_index = 7; break;
+	case 96: image_index = 8; break;
+	case 108: image_index = 9; break;
+	case 126: image_index = 10; break;
+	case 129: image_index = 11; break;
+	case 132: image_index = 12; break;
+	}
+
+if timer = 1
+{
+sound_play(entry_voice);
+}
+
+if timer = 93
+{
+dress = instance_create(x-17*(1-facing*2)*size,y-42*size,obj_spark);
+dress.sprite_index = entry_dress_sprite;
+dress.image_index = 0;
+dress.image_speed = 0;
+dress.image_xscale = 0.195 * (1-facing*2) * size;
+dress.image_yscale = 0.195 * size;
+dress.image_alpha = 1;
+dress.alarm[0] = 40;
+dress.number = -number;
+}
+
+if timer = 93
+{
+dress.hspeed = -4 * (1-facing*2) * size;
+dress.vspeed = -6 * size;
+dress.gravity = 0.25;
+}
+
+if timer >= 121 and timer <= 131
+{
+dress.image_alpha -= 0.1;
+}
+
+if timer >= 132
+{
+with (dress)
+	instance_destroy();
+}
+
+if ( timer >= 138 )
+{
+visible = 1;
+state_type = "stand";
+sprite_index = stand_sprite;
+vspeed = 0;
+timer = 0;
+time = -1;
+}

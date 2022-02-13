@@ -1,0 +1,180 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch"
+{
+state_type = "air_attack"
+attack_type = "sideb"
+image_speed = 0;
+sprite_index = sideb_sprite
+image_index=0
+hspeed = 0;
+vspeed = 0;
+timer = 0
+time = 75
+speed=0;
+dontrepeat = 0;
+}
+
+if ( timer < time )
+{
+switch ( timer )
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+case 18: image_index = 6; break;
+case 21: image_index = 7; break;
+case 24: image_index = 8; break;
+case 27: image_index = 9; break;
+case 30: image_index = 10; break;
+case 33: image_index = 11; break;
+case 36: image_index = 12; break;
+case 39: image_index = 13; break;
+case 42: image_index = 14; break;
+case 51: image_index = 15; break;
+case 56: image_index = 16; break;
+case 60: image_index = 17; break;
+case 64: image_index = 18; break;
+case 70: image_index = 19; break;
+}
+
+if timer = 12
+sound_play(attack_voice3);
+
+if timer = 12
+{
+sound_play(dash_sound);
+effect = instance_create(x,y-18,obj_spark);
+effect.sprite_index = sideb_effect_sprite;
+effect.image_xscale = 0.9 * (1-facing*2) * size;
+effect.image_yscale = 0.65 * size;
+effect.image_index = 0;
+effect.image_speed = 0.65;
+effect.depth = depth + 2;
+effect.image_alpha = 0.75;
+effect.x = x;
+effect.y = y - 18 * size;
+effect.alarm[0] = 45;
+create_hitbox(5,angle_correct(25),8.0,0,14,3,kick2,obj_spark_hit3,1.5,0.7,18.50,5.20,self.id,15,2);
+hitbox.hit_stun = 18;
+hitbox.di = -4;
+}
+if timer = 15
+{
+create_hitbox(5,angle_correct(30),7.0,0,14,3,kick2,obj_spark_hit3,1.5,0.7,18.50,5.20,self.id,20,2);
+hitbox.hit_stun = 25;
+hitbox.di = -4;
+}
+if timer >= 12 and timer <= 20
+{
+hspeed = 14.0 * (1-facing*2) * size
+vspeed *= -0.7;
+}
+
+if timer >= 12 and timer < time
+{
+air_move = 0;
+}
+
+if timer = 21
+{
+hspeed = 0;
+}
+
+if timer >= 12 and timer <= 60
+{
+repeat(2)
+	{
+	a = after_image(4,make_color_rgb(12,89,234),0.25);
+	a.image_xscale *= 1;
+	a.image_yscale *= 1;
+	}
+}
+
+if timer >= 21 and timer <= 70
+{
+vspeed *= -0.1;
+}
+
+if timer = 30
+{
+sound_play(swingsnd3);
+vspeed = -9 * size;
+create_hitbox(7,angle_correct(45),3.9,10.5,14,5,kick3,obj_spark_hit4,0.95,1.7,10,28,self.id,25,2);
+hitbox.hit_stun = 10;
+hitbox.image_angle = angle_correct(300)
+}
+if (timer >= 30 && timer < 55){
+if (attack_success || target.object_index == obj_enemy) && (target.percent > 100 && temp_spawn >= 2) && dontrepeat = 0{
+				killspark = instance_create(enemy.x-180,enemy.y-208,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.55;
+				killspark.image_yscale = size * 0.75;
+				killspark.image_yscale = size * 0.75;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				image_speed = 0.5;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+				}
+if timer = 31
+{
+vspeed = -6 * size;
+hspeed = 6 * size;
+}
+
+if timer = 32
+{
+vspeed = -4 * size;
+hspeed = 4 * size;
+}
+
+if timer = 33
+{
+vspeed = -2 * size;
+hspeed = 2 * size;
+}
+
+if timer = 34
+{
+vspeed = -1 * size;
+hspeed = 1 * size;
+}
+
+if timer = 40
+{
+vspeed = 0;
+hspeed = 0
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    grav = 0.265
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

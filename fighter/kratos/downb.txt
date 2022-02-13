@@ -1,0 +1,54 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch"{
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+        image_index=0
+        timer = 0
+		sprite_index = grab_sprite
+		time = 76
+		hspeed *= 0.5
+}
+if ( timer < time )
+  {
+state_type = "air_attack";
+
+if timer = 1
+sound_play(cast_sound);	
+
+if timer = 4 {
+hspeed = 0
+}
+
+if ( timer mod 4 = 1 && timer < 60 )
+      {
+	flashing = 1;
+	alarm[7] = 2;
+	spark = instance_create(x +random(64) - random(64) ,y - random(32),obj_spark_effect2)
+	spark.depth = depth -1
+	
+      }
+	  
+if timer = 60{
+	sound_play(downb_voice);	
+	image_index =1
+}
+
+if timer = 66
+sound_play(downb_sound);
+
+if timer = 72{
+		
+	percent -= 10
+}
+
+    
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

@@ -1,0 +1,297 @@
+speed = 0;
+gravity_lock = 1;
+
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" )
+{
+hspeed = 0;
+size = csize;
+state_type = "air_attack";
+attack_type = "final_smash";
+image_speed = 0;
+sprite_index = jab1_sprite;
+image_index = 0;
+timer = 1;
+time = 125;
+timer_speed = 1;
+intangible = 1;
+final_smashes += 1;
+smash_power = 0;
+air_move = 0;
+}
+
+if ( timer < time )
+{
+switch ( timer )
+{
+case 101: image_index = 1; break;
+case 103: image_index = 2; break;
+case 105: image_index = 3; break;
+case 110: image_index = 4; break;
+case 113: image_index = 5; break;
+
+case 155: sprite_index = final_smash; image_index = 27; break;
+}
+
+if timer = 1
+{
+finalspark = create_spark(0,35,global.final_spark,0.5,0.125,0.125);
+freezer = instance_create (0,0,obj_freeze);
+freezer.dontpause = self.id;
+freezer.alarm[0] = 99;
+camerazoom = instance_create (0,0,obj_camerazoom);
+camerazoom.camera_l = x - 12;
+camerazoom.camera_r = x + 12;
+camerazoom.camera_u = y - 12 - actual_height;
+camerazoom.camera_d = y + 12;
+camerazoom.camera_boundary_zoom = 50;
+camerazoom.alarm[0] = 99;
+}
+
+if timer = 105
+{
+spark = create_spark(22,27,charge_spark_sprite,1.0,0.325*size*(1-facing*2),0.325*size);
+spark.depth = depth - 1;
+create_hitbox(5,90,1,0,-1,4,magic3,obj_spark_shock,0.6,0.6,21,28,self.id,5,4);
+}
+
+if ( timer >= 105 and timer <= 110 and hitbox.hit = 1 )
+{
+timer = 130;
+time = 450;
+
+target1 = target;
+target1.sprite_index = target1.flinch_sprite;
+target1.state_type = "flinch";
+target1.speed = 0;
+target1.gravity_lock = 1;
+target1.facing = !facing;
+target1.sprite_index = target.flinch_sprite;
+target1.x = x+52*(1-facing*2)*size;
+target1.y = y;
+}
+
+if timer >= 146 and timer <= 435
+{
+target1.sprite_index = target1.flinch_sprite;
+target1.state_type = "flinch";
+target1.speed = 0;
+target1.gravity_lock = 1;
+target1.facing = !facing;
+target1.x = x+52*(1-facing*2)*size;
+target1.y = y;
+}
+
+
+if timer = 135
+{
+finalspark = create_spark(0,35,global.final_spark,0.5,0.125,0.125);
+freezer = instance_create (0,0,obj_freeze);
+freezer.dontpause = self.id;
+freezer.alarm[0] = 300;
+camerazoom = instance_create (0,0,obj_camerazoom);
+camerazoom.camera_l = x - 10 * (1-facing*2);
+camerazoom.camera_r = x + 45 * (1-facing*2);
+camerazoom.camera_u = y - 30 - actual_height;
+camerazoom.camera_d = y + 30;
+camerazoom.camera_boundary_zoom = 50;
+camerazoom.alarm[0] = 295;
+nightmare = instance_create ( x , y , obj_spark );
+nightmare.depth = -10;
+nightmare.image_alpha = 0;
+nightmare.image_speed = 0;
+nightmare.alarm[0] = 295;
+nightmare.sprite_index = black_screen_sprite;
+nightmare.image_yscale = 30;
+nightmare.image_xscale = 30;
+sprite = instance_create(x,y,obj_spark);
+sprite.sprite_index = final_smash_sprite;
+sprite.image_index = 0;
+sprite.depth = -12;
+sprite.image_xscale = 0.195 * ( 1 - facing * 2 ) * size;
+sprite.image_yscale = 0.196 * size;
+sprite.image_speed = 0;
+sprite.alarm[0] = 315;
+sprite.image_alpha = 0;
+sprite.number = -number;
+dummy = instance_create(target1.x,target1.y-2*size,obj_spark);
+dummy.sprite_index = target1.flinch_sprite;
+dummy.image_index = 0;
+dummy.depth = -12;
+dummy.image_xscale = target1.xsize * ( 1 - facing * 2 ) * size;
+dummy.image_yscale = target1.ysize * size;
+dummy.image_speed = 0;
+dummy.alarm[0] = 315;
+dummy.image_alpha = 0;
+dummy.number = -target1.number;
+}
+
+switch ( timer )
+	{
+	case 149: sprite.image_index = 1; break;
+	case 152: sprite.image_index = 2; break;
+	case 155: sprite.image_index = 3; break;
+	case 158: sprite.image_index = 4; break;
+	case 161: sprite.image_index = 5; break;
+	case 164: sprite.image_index = 6; break;
+	case 167: sprite.image_index = 7; break;
+	case 170: sprite.image_index = 8; break;
+	case 173: sprite.image_index = 9; break;
+	case 176: sprite.image_index = 10; break;
+	case 179: sprite.image_index = 11; break;
+	case 182: sprite.image_index = 12; break;
+	case 185: sprite.image_index = 13; break;
+	case 188: sprite.image_index = 14; break;
+	case 191: sprite.image_index = 15; break;
+	case 194: sprite.image_index = 16; break;
+	case 197: sprite.image_index = 17; break;
+	case 200: sprite.image_index = 18; break;
+	case 203: sprite.image_index = 19; break;
+	case 206: sprite.image_index = 20; break;
+	case 209: sprite.image_index = 21; break;
+	case 212: sprite.image_index = 5; break;
+	case 215: sprite.image_index = 6; break;
+	case 218: sprite.image_index = 7; break;
+	case 221: sprite.image_index = 8; break;
+	case 224: sprite.image_index = 9; break;
+	case 227: sprite.image_index = 10; break;
+	case 230: sprite.image_index = 11; break;
+	case 233: sprite.image_index = 12; break;
+	case 236: sprite.image_index = 13; break;
+	case 239: sprite.image_index = 14; break;
+	case 242: sprite.image_index = 15; break;
+	case 245: sprite.image_index = 16; break;
+	case 248: sprite.image_index = 17; break;
+	case 251: sprite.image_index = 18; break;
+	case 254: sprite.image_index = 19; break;
+	case 257: sprite.image_index = 20; break;
+	case 260: sprite.image_index = 21; break;
+	case 264: sprite.image_index = 6; break;
+	case 267: sprite.image_index = 7; break;
+	case 270: sprite.image_index = 8; break;
+	case 273: sprite.image_index = 9; break;
+	case 276: sprite.image_index = 10; break;
+	case 279: sprite.image_index = 11; break;
+	case 282: sprite.image_index = 12; break;
+	case 285: sprite.image_index = 13; break;
+	case 288: sprite.image_index = 14; break;
+	case 291: sprite.image_index = 15; break;
+	case 294: sprite.image_index = 16; break;
+	case 297: sprite.image_index = 17; break;
+	case 300: sprite.image_index = 18; break;
+	case 303: sprite.image_index = 19; break;
+	case 306: sprite.image_index = 20; break;
+	case 309: sprite.image_index = 21; break;
+	case 312: sprite.image_index = 6; break;
+	case 315: sprite.image_index = 7; break;
+	case 318: sprite.image_index = 8; break;
+	case 321: sprite.image_index = 9; break;
+	case 324: sprite.image_index = 10; break;
+	case 327: sprite.image_index = 11; break;
+	case 330: sprite.image_index = 12; break;
+	case 333: sprite.image_index = 13; break;
+	case 336: sprite.image_index = 14; break;
+	case 339: sprite.image_index = 15; break;
+	case 342: sprite.image_index = 16; break;
+	case 345: sprite.image_index = 17; break;
+	case 348: sprite.image_index = 18; break;
+	case 351: sprite.image_index = 19; break;
+	case 354: sprite.image_index = 20; break;
+	case 357: sprite.image_index = 21; break;
+	case 360: sprite.image_index = 11; break;
+	case 363: sprite.image_index = 12; break;
+	case 366: sprite.image_index = 13; break;
+	case 369: sprite.image_index = 14; break;
+	case 372: sprite.image_index = 15; break;
+	case 375: sprite.image_index = 16; break;
+	case 378: sprite.image_index = 17; break;
+	case 381: sprite.image_index = 18; break;
+	case 384: sprite.image_index = 19; break;
+	case 387: sprite.image_index = 20; break;
+	case 390: sprite.image_index = 21; break;
+	case 393: sprite.image_index = 22; break;
+	case 396: sprite.image_index = 23; break;
+	case 399: sprite.image_index = 24; break;
+	case 402: sprite.image_index = 25; break;
+	case 405: sprite.image_index = 26; break;
+	case 408: sprite.image_index = 27; break;
+	}
+
+if ( timer >= 136 and timer <= 146 )
+{
+sprite.image_alpha += 0.1;
+nightmare.image_alpha += 0.1;
+dummy.image_alpha += 0.1;
+}
+
+if timer = 164
+{
+tornizard = create_spark(52,0,tornado_sprite,0.5,0.325*size*(1-facing*2),0.325*size);
+tornizard.depth = sprite.depth;
+tornizard.alarm[0] = 295;
+}
+
+if tornizard.image_index >= 18
+{
+tornizard.image_index = 13;
+}
+
+if timer = 400 and ( tornizard.image_index >= 13 and tornizard.image_index <= 18 )
+{
+tornizard.image_index = 19;
+}
+
+if timer >= 165 and timer <= 410 and timer mod 5 = 0
+{
+target1.percent += 1;
+sound_play(ice_sound1);
+spark = create_spark(0,0,charge_spark_sprite,1.0,0.325*size*(1-facing*2),0.325*size);
+spark.depth = -12;
+spark.x = target.x + choose(random(-10),random(10)) * (1-facing*2) * size;
+spark.y = target.y - choose(random(40),random(10)) * size;
+}
+
+if timer = 435 and target1.percent < 100
+{
+create_hitbox(10,angle_correct(90),8,8,-1,1,freeze3,obj_spark_slash4,0.7,1.2,52,16,self.id,10,5);
+slash = create_spark(52,18,obj_spark_slash4,1.0,0.4*size*(1-facing*2),0.4*size);
+slash.depth = -12;
+}
+
+if timer = 435 and target1.percent >= 100
+{
+target1.dead = 1;
+target1.state_type = "ded";
+target1.dead_timer = 120;
+sound_play(target1.starko_voice);
+}
+
+if timer >= 400 and timer <= 410
+{
+tornizard.image_alpha -= 0.1;
+}
+
+if timer = 410
+{
+image_alpha = 1;
+visible = 1;
+}
+
+if timer >= 425 and timer <= 435
+{
+dummy.image_alpha -= 0.1
+nightmare.image_alpha -= 0.1;
+}
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+smash_power = 0;
+attack_type = "none";
+intangible = 0;
+if ( air > 0 )
+	state_type = "jump";
+else
+	state_type = "stand";
+timer = 0;
+time = -1;
+}

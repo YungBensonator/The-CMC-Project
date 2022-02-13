@@ -1,0 +1,49 @@
+sprite_index = attacker.id.icicle_sprite;
+visible = 1;
+moving_object = 0;
+priority = 3;
+alarm[0] = 155;
+time = 155;
+
+if timer = 1
+{
+image_alpha = 0;
+image_speed = 0.33;
+hspeed = 0;
+}
+
+if timer >= 2 and timer <= 12
+{
+image_xscale += 0.016 * (1-facing*2) * size;
+image_yscale += 0.016 * (1-facing*2) * size;
+image_alpha += 0.1;
+hspeed = 0;
+}
+
+if timer >= 22 and timer < time
+{
+hspeed = 3.75 * (1-facing*2) * size;
+}
+
+if timer >= 22
+{
+absorb2 = 1;
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self))
+hspeed = !hspeed;
+vspeed = 0;
+}
+
+if hit = 1
+{
+time = 155;
+}
+
+if timer >= 80 and timer <= 90
+{
+image_alpha -= 0.1;
+}
+
+if timer = 91
+{
+instance_destroy();
+}

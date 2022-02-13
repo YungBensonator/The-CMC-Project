@@ -1,0 +1,358 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" || state_type = "crouch" {
+size = csize
+hspeed = 0;
+air_move=0
+grab_edge = 0
+image_angle = 0
+state_type = "air_attack";
+attack_type = "final_smash";
+image_speed = 0.25
+if air > 0 {
+sprite_index = final_smash_air_sprite}
+if air = 0 {
+sprite_index = final_smash_sprite}
+image_index=0
+timer = 0
+time = 960
+temp = 0
+timer_speed=1
+intangible = 1
+final_smashes+=1
+speed = 0
+smash_power = 0
+image_blend = c_white
+if air > 0 {tank_state = "fall"}
+if air = 0 {tank_state = "ground"}
+percent -= 20
+temp_fall_speed = 4.5
+smash_power = 0
+freezer  = instance_create(x,y,obj_freeze)
+freezer.dontpause = self.id
+freezer.alarm[0] = 25
+attack_time = 25
+last_crush = 0;
+zoom1 = instance_create ( 0 , 0 , obj_camerazoom );
+zoom1.camera_l = x - 10;
+zoom1.camera_r = x + 10;
+zoom1.camera_u = y - 8 - actual_height
+zoom1.camera_d = y + 8;
+zoom1.alarm[0] = 39}
+
+////////////////////STARTING///////////////////////////////
+
+/*if timer = 1 {
+spf1 = instance_create(x-5*(1-facing*2),y+15,obj_spark);
+spf1.sprite_index = final_spark1;
+spf1.image_xscale = image_xscale*0.4
+spf1.image_yscale = image_yscale*0.4
+spf1.image_speed = 0.25
+spf1.image_alpha = 0.75
+spf1.depth = depth-3
+spf1.loop = 99999}*/
+
+if timer = 35 {
+//spf1.image_alpha = 0
+spf2 = instance_create(x,y,obj_spark);
+spf2.sprite_index = final_spark2;
+spf2.image_xscale = image_xscale*0.6
+spf2.image_yscale = image_yscale*0.6
+spf2.image_speed = 0.25
+spf2.image_alpha = 0.75
+spf2.depth = depth-3}
+
+if temp = 0 {
+speed = 0
+gravity_lock = 1;}
+
+if timer = 40 {
+temp = 0
+image_speed = 0
+vspeed = -1
+zoom2 = instance_create ( 0 , 0 , obj_camerazoom );
+zoom2.camera_l = x - 350;
+zoom2.camera_r = x + 350;
+zoom2.camera_u = y - 350 - actual_height
+zoom2.camera_d = y + 350;
+zoom2.alarm[0] = 920
+if global.crowdcheering <= 0 {
+global.crowdcheering = 45
+global.crowdtarget = self.id}
+
+temp = 1
+sprite_index = titan_stand_sprite
+vspeed = 0
+can_die = 1 
+timer = 41
+camera.following_state = 0}
+
+////////////////////AI///////////////////////////////
+
+if temp = 1 {
+if y < 0
+can_die = 0
+else can_die = 1
+if ai = 1  {
+if offstage = 0 {
+if enemy.x >= x {
+moveright=1
+moveleft = 0 }
+else {moveleft = 1
+moveright = 0 }
+if enemy.y > y+2 {
+movedown = 1
+moveup = 0 }
+if enemy.y < y-38 {
+moveup = 1
+movedown = 0 }
+if abs(y-50-enemy.y)<30 && abs(enemy.x-x) > 50 && random(100) > 78
+attacking = 1
+if abs(y-50-enemy.y)<30 && abs(enemy.x-x) > 50 && random(100) > 50 && random(100) < 78
+special = 1}
+if offstage = 1 {
+moveup = 1
+if x < room_width/2 {
+moveright = 1
+moveleft = 0}
+else {
+moveleft = 1
+moveright =0 }
+}
+}
+
+////////////////////JUMP Y FALL///////////////////////////////
+
+if movedown = 1 && vspeed < temp_fall_speed
+vspeed+=0.2
+
+if (movejump=1 || moveup = 1) && (tank_state = "ground")  {
+vspeed-=0.65
+sub_timer = 0
+tank_state = "jump"}
+
+if tank_state = "jump" || tank_state = "fall" && air > 0 {
+if moveright = 1 && hspeed < 1
+hspeed+=0.19
+if moveleft = 1 && hspeed > -1
+hspeed -=0.19
+if hspeed > 0.4 facing = 0
+else if hspeed < -0.4 facing = 1}
+
+if tank_state = "jump" || tank_state = "fall" && air = 0 && hspeed != 0 {
+hspeed = 0;}
+
+////////////////////GROUND Y WALK///////////////////////////////
+		  
+if tank_state = "ground" {
+hspeed = max ( 0 , abs ( hspeed ) - 0.25 ) * sign ( hspeed );
+sprite_index = titan_walk_sprite
+if moveright = 1 && hspeed < 1.2
+hspeed+=0.75 //0.4
+if moveleft = 1 && hspeed > -1.2
+hspeed -=0.75 //0.4
+if hspeed > 0.15 facing = 0
+else if hspeed < -0.15 facing = 1
+else sprite_index = titan_stand_sprite}
+
+////////////////////ATTACK///////////////////////////////
+                   
+if ( tank_state == "attack" ) {
+hspeed = 0;
+sprite_index = titan_attack_sprite;
+gravity = 0.3
+sub_timer+=1;
+if ( sub_timer == 16 ){
+image_speed = 0
+mp = instance_create(x+70*(1-facing*2),y+20,obj_spark);
+mp.sprite_index = gigan_spark;
+mp.image_yscale = image_yscale*0.6;
+mp.image_xscale = image_xscale*0.6;
+mp.image_speed = 0.35;
+mp.image_index = 0;
+mp.depth = -3;
+create_hitbox(20,42+facing*96,6.5,8.1,15,8,punch3,obj_spark_hit3,4.5,2,0,0,self.id,10,6);}
+if ( sub_timer == 30 ) {
+tank_state = "ground";}
+}
+
+////////////////////CROUCH ATTACK///////////////////////////////
+
+if ( tank_state == "attack2" ) {
+hspeed = 0;
+sprite_index = titan_crouch_attack_sprite;
+gravity = 0.3
+sub_timer+=1;
+if ( sub_timer == 8 ) {
+image_speed = 0
+create_hitbox(20,42+facing*96,6.5,8.1,15,6,punch3,obj_spark_hit3,2.5,2.15,40,55,self.id,10,6);}
+if ( sub_timer == 20 ) {
+image_index = 0;
+tank_state = "crouch";}
+}
+
+////////////////////ATTACK 2///////////////////////////////
+
+if ( tank_state == "grab" ) {
+hspeed = 0;
+sprite_index = titan_attack2_sprite;
+gravity = 0.3
+sub_timer+=1;
+if ( sub_timer == 10 ){
+create_hitbox(20,20+facing*140,5,8.9,22,1,punch3,obj_spark_hit3,1.85,2.5,30,50,self.id,10,6);}
+if ( sub_timer == 20 ) {
+image_speed = 0}
+if ( sub_timer == 30 ) {
+tank_state = "ground";}
+}
+
+////////////////////SPECIAL///////////////////////////////
+
+if ( tank_state == "special" ) {
+hspeed = 0;
+sprite_index = titan_special_sprite;
+gravity = 0.3
+sub_timer+=1;
+if sub_timer = 20 {
+image_speed = 0}
+if sub_timer = 5 || sub_timer = 10 || sub_timer = 15 || sub_timer = 20 || sub_timer = 25 || sub_timer = 30 || sub_timer = 35 {
+expl = create_projectile(10,20+facing*140,5,8.9,20,4,fire2,obj_spark_explode1,1,1,120,0,self.id,120,char_custom1);
+expl.x = x+45-random(90)
+expl.y = y-100+random(80)
+expl.no_reflect = 1
+expl.parry_noreflect = 1
+}
+if sub_timer = 40 {
+tank_state = "ground";}
+}
+
+////////////////////TANK STATES///////////////////////////////
+
+if tank_state = "ground" && movedown {
+tank_state = "crouch";
+sprite_index = titan_crouch_sprite;
+image_speed = 0;
+image_index = 0;
+hspeed = 0;
+attacking = 0;
+}
+
+if tank_state = "crouch" && ( moveup = 1 || movejump = 1 ){
+tank_state = "ground";}
+
+if tank_state = "crouch" && ( moveleft = 1 || moveright = 1 ){
+tank_state = "ground";}
+
+if tank_state = "ground" {
+image_speed = 0.125
+gravity_lock = 1;
+if hspeed = 0 {
+sprite_index = titan_stand_sprite
+image_index = 0}
+else {
+sprite_index = titan_walk_sprite
+}
+vspeed = 0
+
+if ( attacking ) {
+tank_state = "attack";
+sub_timer = 0;
+sprite_index = titan_attack_sprite;
+image_speed = 0.15;
+image_index = 0;
+attacking = 0;}
+
+if ( grab ) {
+tank_state = "grab";
+sub_timer = 0;
+sprite_index = titan_attack2_sprite;
+image_speed = 0.15;
+image_index = 0;
+attacking = 0;}
+
+if ( special ) {
+tank_state = "special";
+sub_timer = 0;
+sprite_index = titan_special_sprite;
+image_speed = 0.15;
+image_index = 0;
+special = 0;}
+
+if air = 1 || !collision_rectangle(x-20,y-1,x+20,y+1,obj_slope_left2,1,1) && !collision_rectangle(x-20,y-1,x+20,y+1,obj_slope_right2,1,1) && !collision_rectangle(x-20,y-1,x+20,y+1,obj_floor,1,1) && (!collision_rectangle(x-20,y-1,x+20,y+1,obj_platform,1,1) )
+tank_state = "fall"}
+
+if tank_state = "crouch" && ( attacking ) {
+tank_state = "attack2";
+sub_timer = 0;
+sprite_index = titan_crouch_attack_sprite;
+image_speed = 0.15;
+image_index = 0
+attacking = 0;}
+   
+if tank_state = "fall" {
+sub_timer = 0
+gravity = 0.3
+image_speed = 0
+image_index = 0
+if air > 0 {
+sprite_index = titan_jump_sprite}
+else{
+sprite_index = titan_stand_sprite}
+if vspeed > 4.5
+vspeed = 4.5
+last_crush += 1;
+if (air = 0 || collision_rectangle(x-20,y-1,x+20,y+1,obj_slope_left2,1,1) || collision_rectangle(x-20,y-1,x+20,y+1,obj_slope_right2,1,1) || collision_rectangle(x-20,y-1,x+20,y+1,obj_floor,1,1) || (collision_rectangle(x-20,y-1,x+20,y+1,obj_platform,1,1) ) ) {
+if ( last_crush > 3 ) {
+last_crush = 0;}
+tank_state = "ground"
+vspeed = 0 }
+}
+
+if tank_state = "jump" {
+if sub_timer <= 2
+vspeed = -9
+else
+vspeed += 0.2
+sub_timer+=1
+if air > 0 {
+sprite_index = titan_jump_sprite}
+else{
+sprite_index = titan_stand_sprite}
+image_speed = 0.25
+if image_index >= 2.8 {
+tank_state = "fall"}
+if moveup = 0 && movejump = 0 && vspeed > -3
+tank_state = "fall"}
+
+}
+
+////////////////////ENDING///////////////////////////////
+
+if timer = 920 {
+humo2 = instance_create(x+5*(1-facing*2),y+55,obj_spark);
+humo2.sprite_index = humo_spark;
+humo2.image_xscale = image_xscale*2.5
+humo2.image_yscale = image_yscale*1.8
+humo2.image_speed = 0.15
+humo2.image_alpha = 0.75
+humo2.depth = depth-3
+temp = 0
+speed = 0
+sprite_index = titan_crouch_sprite;
+image_blend = c_silver
+speed = 0
+image_index = 0
+image_speed = 0
+air = 1 
+tank_state = "none"}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+y -= 50;
+smash_power = 0;
+image_blend = c_white;
+attack_type = "none";
+intangible = 0;
+if air > 0 {state_type = "jump"; sprite_index = jump_sprite;}
+else {state_type = "stand"; sprite_index = land_sprite;}
+timer = 0;
+time =-1;
+grab_edge=1
+can_die=1}

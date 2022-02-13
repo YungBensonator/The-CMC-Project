@@ -1,0 +1,162 @@
+if cantusedownb > 0 {
+	exit; }
+if (state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch")
+	{
+	state_type = "air_attack"
+	attack_type = "downb"
+	image_speed = 0;
+	sprite_index = downb_sprite;
+	image_index = 1;
+	timer = 0;
+	time = 130;
+	hspeed = 0;
+	scharge = 0;
+	special = 1;
+	}
+
+if ( timer < time )
+	{
+	switch ( timer )
+	{
+	case 3: image_index = 1; break;
+	
+	case 103: image_speed = 0.33; break;
+	case 169: image_speed = 0.2; image_index = 22; break;
+	case 214: image_speed = 0; image_index = 31; break;
+	case 218: image_index = 32; break;
+	}
+
+if scharge >= 90 || special = 0 && timer < 92
+	{
+	timer = 92
+	}
+
+if ( timer >= 1 and timer < 92 )
+	{
+	scharge += 1;
+	}
+
+if ( timer >= 1 and timer < 92 and timer mod 15 = 0 )
+	{
+	shake = instance_create(x,y,obj_shakescreen3)
+	}
+
+if timer = 1 || timer = 41 || timer = 81
+	{
+	spark = create_spark(0,0,wind_fx,0.5,0.3*size*(1-facing*2),0.3*size);
+	spark.depth = depth - 1;
+	spark.image_alpha = 0.8;
+	}
+
+if timer >= 1 and timer < 92 and timer mod 4 = 0
+	{
+	spark = create_spark(0,0,charge_spark_sprite,1.0,0.325*size*(1-facing*2),0.325*size);
+	spark.depth = depth - 1;
+	spark.x = x + choose(random(-10),random(10)) * (1-facing*2) * size;
+	spark.y = y - choose(random(50),random(10)) * size;
+	}
+
+if timer = 5
+	{
+	sound_play(downb_voice);
+	}
+
+if ( scharge >=0 and scharge <= 10 and timer = 7 )
+	{
+	sound_play(ice_sound1);
+	sound_play(ice_sound1);
+	pillar1 = create_projectile(3,angle_correct(50),6.5,1.5,6,5,ice1,obj_spark_ice,0.075,0.075,25,0,self.id,50,char_custom3);
+	pillar2 = create_projectile(3,angle_correct(50),6.5,1.5,6,5,ice1,obj_spark_ice,0.075,0.075,50,0,self.id,50,char_custom3);
+	pillar3 = create_projectile(3,angle_correct(130),6.5,1.5,6,5,ice1,obj_spark_ice,0.075,0.075,-25,0,self.id,50,char_custom3);
+	pillar3.image_xscale = -0.075 * (1-facing*2) * size;
+	pillar3.image_yscale = 0.075 * size;
+	pillar4 = create_projectile(3,angle_correct(130),6.5,1.5,6,5,ice1,obj_spark_ice,0.075,0.075,-50,0,self.id,50,char_custom3);
+	pillar4.image_xscale = -0.075 * (1-facing*2) * size;
+	pillar4.image_yscale = 0.075 * size;
+	if timer = 145
+instance_destroy()
+	}
+
+if ( scharge >= 10 and scharge <= 20 and timer = 10 )
+	{
+	sound_play(ice_sound1);
+	sound_play(ice_sound1);
+	pillar1 = create_projectile(6,angle_correct(50),7,1.5,6,10,ice2,obj_spark_ice,0.1,0.1,30,0,self.id,40,char_custom3);
+	pillar2 = create_projectile(6,angle_correct(50),7,1.5,6,10,ice2,obj_spark_ice,0.1,0.1,60,0,self.id,40,char_custom3);
+	pillar3 = create_projectile(6,angle_correct(130),7,1.5,6,10,ice2,obj_spark_ice,0.1,0.1,-30,0,self.id,40,char_custom3);
+	pillar3.image_xscale = -0.1 * (1-facing*2) * size;
+	pillar3.image_yscale = 0.1 * size;
+	pillar4 = create_projectile(6,angle_correct(130),7,1.5,6,10,ice2,obj_spark_ice,0.1,0.1,-60,0,self.id,40,char_custom3);
+	pillar4.image_xscale = -0.1 * (1-facing*2) * size;
+	pillar4.image_yscale = 0.1 * size;
+	}
+
+if ( scharge >= 41 and scharge <= 60 and timer = 15 )
+	{
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	pillar1 = create_projectile(9,angle_correct(50),8,1.5,20,ice2,obj_spark_ice,0.125,0.125,35,0,self.id,30,char_custom3);
+	pillar2 = create_projectile(9,angle_correct(50),8,1.5,6,20,ice2,obj_spark_ice,0.125,0.125,70,0,self.id,30,char_custom3);
+	pillar3 = create_projectile(9,angle_correct(130),8,1.5,6,20,ice2,obj_spark_ice,0.125,0.125,-35,0,self.id,30,char_custom3);
+	pillar3.image_xscale = -0.125 * (1-facing*2) * size;
+	pillar3.image_yscale = 0.125 * size;
+	pillar4 = create_projectile(9,angle_correct(130),8,1.5,6,20,ice2,obj_spark_ice,0.125,0.125,-70,0,self.id,30,char_custom3);
+	pillar4.image_xscale = -0.125 * (1-facing*2) * size;
+	pillar4.image_yscale = 0.125 * size;
+	}
+	
+if ( scharge >= 61 and scharge <= 80 and timer = 25 )
+	{
+	shake2 = instance_create(x,y,obj_shakescreen2);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	pillar1 = create_projectile(12,angle_correct(50),9.5,1.75,6,30,freeze2,obj_spark_ice,0.15,0.15,40,0,self.id,20,char_custom3);
+	pillar2 = create_projectile(12,angle_correct(50),9.5,1.75,6,30,freeze2,obj_spark_ice,0.15,0.15,80,0,self.id,20,char_custom3);
+	pillar3 = create_projectile(12,angle_correct(130),9.5,1.75,6,30,freeze2,obj_spark_ice,0.15,0.15,-40,0,self.id,20,char_custom3);
+	pillar3.image_xscale = -0.15 * (1-facing*2) * size;
+	pillar3.image_yscale = 0.15 * size;
+	pillar4 = create_projectile(12,angle_correct(130),9.5,1.75,6,30,freeze2,obj_spark_ice,0.15,0.15,-80,0,self.id,20,char_custom3);
+	pillar4.image_xscale = -0.15 * (1-facing*2) * size;
+	pillar4.image_yscale = 0.15 * size;
+	}
+
+if ( scharge >= 81 and scharge <= 90 and timer = 115 )
+	{
+	shake3 = instance_create(x,y,obj_shakescreen);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	sound_play(ice_sound2);
+	pillar1 = create_projectile(15,angle_correct(185),2,0.1,6,45,freeze4,obj_spark_ice,0.3,0.75,90,0,self.id,350,char_custom3);
+	hitbox.hit_stun = 990;
+	hitbox.di = 0;
+	if (pillar1.hit = 1 && timer >= 115 && timer < 185){
+	target.gravity_lock = 2
+	target.x = pillar1.x
+	target.y = pillar1.y
+	target.hspeed = 0
+	target.vspeed = 0
+	target.gravity = 0;
+	target.state_type = "flinch";
+	}
+
+	}
+
+}
+
+if timer >= time - 1 and state_type != "flinch" and state_type != "air_flinch" and blob.hit = 1
+	{
+	cantusedownb = 40
+	attack_type = "none";
+	if air > 0
+		state_type = "jump";
+	else
+		state_type = "stand";
+	timer = 0;
+	time =-1;
+
+	}

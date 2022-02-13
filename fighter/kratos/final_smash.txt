@@ -1,0 +1,84 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = grab_sprite; 
+        image_index=0;
+        timer = 1;
+        time = 750;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		temp = 0
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time )
+    {
+switch ( timer )
+      {
+	case 420: image_index = 1; break;
+
+      }
+	if timer = 1
+	     sound_play(judgement_voice);
+	
+	if ( timer mod 4 = 1 && timer < 420 )
+      {
+	flashing = 1;
+	alarm[7] = 2;
+	spark = instance_create(x +random(64) - random(64) ,y - random(32),obj_spark_effect2)
+	spark.depth = depth -1
+      }
+	  
+	if timer = 1{
+	magic_circle = create_spark(0,0,self.id);
+	magic_circle.sprite_index = magic_circle_sprite;
+    magic_circle.image_speed = 0;
+	magic_circle.image_alpha = 0.9;
+    magic_circle.image_xscale = image_xscale * 1 ;
+    magic_circle.image_yscale = image_yscale * 1;
+    magic_circle.depth = depth + 1.0;
+	}
+	
+	if timer = 420
+	sound_play(judgement_sound);
+	
+    if timer >= 420 and temp <= 0{
+	judgement = create_projectile(12,random(360),6,5,6,8,magic1,obj_spark_hit4,0,0,random(500)*choose(-1,1),-200,self.id,99999,char_custom1);
+	judgement.sprite_index = judgement_sprite;
+	judgement.image_speed = 0.4
+	judgement.image_index = 0
+	judgement.image_xscale = image_xscale*3
+	judgement.image_yscale = image_yscale*5
+	judgement.alarm[0] = 99999;
+	judgement.hit = 0
+	judgement.image_alpha = 1
+	temp = 4
+	}
+	
+	if temp > 0
+	temp -= 1
+    
+
+  
+  }
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	with (magic_circle) {instance_destroy()}
+	
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

@@ -1,0 +1,118 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch"
+{
+state_type = "air_attack"
+attack_type = "b"
+image_speed = 0
+sprite_index = b_sprite;
+image_index = 0
+timer = 0
+time = 115
+hspeed = 0
+vspeed = 0
+speed=0
+}
+if ( timer < time ) 
+{
+state_type = "air_attack"
+
+switch ( timer )
+{
+case 3: image_index = 1; break;
+case 9: image_index = 2; break;
+case 15: image_index = 3; break;
+case 21: image_index = 4; break;
+case 24: image_index = 5; break;
+case 27: image_index = 6; break;
+case 30: image_index = 7; break;
+case 33: image_index = 8; break;
+case 39: image_index = 9; break;
+case 42: image_index = 10; break;
+case 45: image_index = 11; break;
+case 48: image_index = 4; break;
+case 51: image_index = 5; break;
+case 54: image_index = 6; break;
+case 57: image_index = 7; break;
+case 60: image_index = 8; break;
+case 66: image_index = 9; break;
+case 69: image_index = 10; break;
+case 72: image_index = 11; break;
+case 78: image_index = 12; break;
+case 84: image_index = 13; break;
+case 87: image_index = 14; break;
+}
+
+if (timer = 1){
+hspeed *= 2;
+vspeed *= 2;
+}
+if timer = 21
+	sound_play(b_voice);
+
+if timer = 15
+{
+sound_play(ice_sound1);
+icicle1 = create_projectile(2,60+facing*60,5.5,0,10,3,freeze2,obj_spark_slash3,0.01,0.01,20.5,20,self.id,80,char_custom2)
+icicle1.sprite_index = feather_spark_sprite;
+icicle1.image_xscale = image_xscale * 0.45;
+icicle1.image_yscale = image_yscale * -0.001;
+hitbox.hit_stun = 65
+}
+if (timer >= 0 && timer < time && instance_exists(icicle1)){
+if(movedown && facing = 0){
+	icicle1.vspeed = 3-facing*2.5
+	icicle1.direction = -130
+	}
+	else if(moveup && facing = 0){
+	icicle1.vspeed = 3-facing*-2.5
+	icicle1.direction = 90
+	}
+	else if(movedown && facing = 1){
+	icicle1.vspeed = 3-facing*2.5
+	icicle1.direction = -130
+	}
+	else if(moveup && facing = 1){
+	icicle1.vspeed = 3-facing*-2.5
+	icicle1.direction = 90
+	}
+	else{
+	icicle1.vspeed = 0
+	}
+	}
+
+if timer = 30
+{
+sound_play(ice_sound1);
+icicle2 = create_projectile(4,angle_correct(90),2,1.5,10,3,freeze3,obj_spark_slash3,0.01,0.08,25.5,30,self.id,130,char_custom2);
+icicle2.sprite_index = feather_spark_sprite;
+icicle2.hspeed = 3-facing*6
+icicle2.image_xscale = image_xscale * 0.55;
+icicle2.image_yscale = image_yscale * -0.001
+hitbox.hit_stun = 75
+
+}
+
+if timer = 45
+{
+sound_play(ice_sound1);
+icicle3 = create_projectile(6,60+facing*60,8.5,2,10,3,freeze4,obj_spark_ice,0.01,0.1,45.75,40,self.id,150,char_custom2);
+icicle3.sprite_index = feather_spark_sprite;
+icicle3.hspeed = 3-facing*6
+icicle3.image_xscale = image_xscale * 0.75;
+icicle3.image_yscale = image_yscale * -0.001
+hitbox.hit_stun = 200
+}
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    special = 0
+	attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

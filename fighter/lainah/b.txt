@@ -1,0 +1,107 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" ){
+special = 0;
+attack_type = "b";
+timer = 0;
+state_type = "air_attack";
+hspeed = 0;
+sprite_index = b_sprite;
+image_index = 0;
+image_speed = 0;
+time = 50;
+timer_speed = 1;
+hspeed = 0}
+
+switch ( timer ) {
+case 30: image_index = 1; break;
+case 34: image_index = 2; break;
+case 42: image_index = 0; break;}
+
+if timer < time {
+
+if timer = 10 {
+rf = instance_create(x,y-25,obj_spark);
+rf.sprite_index = rifle_sprite;
+rf.image_yscale = 0.5*image_yscale;
+rf.image_xscale = 0.5*image_xscale;
+rf.depth = depth - 3
+rf.image_alpha = 1
+rf.image_angle = 0
+rf.snap = self.id
+rf.loop = 9999}
+
+if timer = 12 {
+rf.image_yscale = 0.55*image_yscale;
+rf.image_xscale = 0.55*image_xscale;}
+
+if timer = 14 {
+rf.image_yscale = 0.6*image_yscale;
+rf.image_xscale = 0.6*image_xscale;
+sound_play(b_sound1)}
+
+if timer = 16 {
+rf.image_yscale = 0.65*image_yscale;
+rf.image_xscale = 0.65*image_xscale;}
+
+if timer = 18 {
+rf.image_yscale = 0.7*image_yscale;
+rf.image_xscale = 0.7*image_xscale;}
+
+if timer = 20 {
+rf.image_yscale = 0.75*image_yscale;
+rf.image_xscale = 0.75*image_xscale;}
+
+if timer = 22 {
+rf.image_yscale = 0.8*image_yscale;
+rf.image_xscale = 0.8*image_xscale;}
+
+if timer = 24 {
+rf.image_yscale = 0.85*image_yscale;
+rf.image_xscale = 0.85*image_xscale;}
+
+if timer = 26 {
+rf.image_yscale = 0.9*image_yscale;
+rf.image_xscale = 0.9*image_xscale;}
+
+if timer = 28 {
+rf.image_yscale = 0.95*image_yscale;
+rf.image_xscale = 0.95*image_xscale;}
+
+if timer > 10 && timer < 30 {
+rf.image_angle += 30 * (1-facing*2)}
+
+if timer = 30 {
+rf.image_angle = 0;
+rf.image_alpha = 0;}
+
+if timer = 34 {
+sound_play(b_sound2)
+bala = create_projectile(12,45+facing*110,7.6,8.4,25,3,fire2,obj_spark_fire1,1,1,20,26,self.id,30,no_script);
+bala.sprite_index = bala_sprite;
+bala.image_alpha = 1;
+bala.hspeed = 14 * (1-facing*2)
+bala.image_yscale = (0.39) * image_yscale
+bala.image_xscale = (0.39) * image_xscale
+
+duster = instance_create(x,y,obj_dust_effect);
+duster.facing = facing;
+duster.image_yscale = 0.3
+duster.image_xscale = 0.35}
+
+if timer = 42 {
+rifle = create_projectile(0,0,0,0,-1,0,-1,-1,1,1,-15,15,self.id,30,no_script)
+rifle.sprite_index = rifle_sprite
+rifle.hit = 2
+rifle.hspeed = -4 * (1-facing*2)
+rifle.vspeed = 1.5
+rifle.image_yscale = 0.85*image_yscale;
+rifle.image_xscale = 0.85*image_xscale;
+rifle.use_palette = number}
+
+}
+ 
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+if ( air = 0 ) {state_type = "stand";}
+else {state_type = "jump"; }
+attack_type = "none";
+timer = 0;
+time = -1;}

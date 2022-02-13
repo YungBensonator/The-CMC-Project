@@ -1,0 +1,103 @@
+if ( state_type == "dodge" && sprite_index == roll_sprite )
+{
+image_speed = 0;
+	switch (timer)
+	{
+	case 0: image_index = 0; break;
+	case 3: image_index = 1; break;
+	case 7: image_index = 2; break;
+	case 11: image_index = 3; break;
+	case 15: image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 27: image_index = 7; break;
+	}
+}
+
+if sprite_index = crouch_sprite and image_index >= 2
+{
+image_index = 2;
+}
+
+if (enemy.state_type = "respawn"){
+temp_spawn += 1
+}
+
+if state_type = "stand" && sprite_index = stand_sprite
+	{
+	image_speed = 0;
+	switch (timer)
+	{
+	case 0: image_index = 0; break;
+	case 12: image_index = 1; break;
+	case 21: image_index = 2; break;
+	case 30: image_index = 3; break;
+	case 39: image_index = 4; break;
+	case 51: image_index = 5; break;
+	case 57: image_index = 6; break;
+	case 63: image_index = 7; break;
+	case 69: image_index = 8; break;
+	case 99: image_index = 9; break;
+	case 108: image_index = 10; break;
+	case 117: image_index = 11; break;
+	case 126: image_index = 12; break;
+	case 138: image_index = 13; break;
+	case 144: image_index = 14; break;
+	case 150: image_index = 15; break;
+	case 162: image_index = 16; break;
+	case 168: image_index = 17; break;
+	case 174: image_index = 18; break;
+	case 177: image_index = 19; break;
+	case 183: image_index = 20; break;
+	case 189: image_index = 21; break;
+	case 201: image_index = 0; timer = 0; break;
+	}
+	}
+
+if (state_type == "run") {
+    //Walking
+    if (sprite_index != walk_sprite){
+        image_speed = 0;
+    }
+    //Dash
+    if (runtimer >= 0 and runtimer < 50){
+        sprite_index = run_sprite;
+        switch (runtimer){
+            case 1: image_index = 0; break;
+            case 4: image_index = 1; break;
+            case 7: image_index = 2; break;
+            case 10: image_index = 3; break;
+            case 13: image_index = 4; break;
+            case 16: image_index = 5; break;
+        }
+	//Stop running (run brake)
+    } else if (runtimer >= 60 and runtimer < 90 and dash_end == 0){
+        sprite_index = brake_sprite;
+
+        if (runtimer < 62){
+            image_index = 0;
+        } 
+    //Stop running during the initial dash
+    } else if (runtimer >= 60 and runtimer < 90 and dash_end == 1) {
+        sprite_index = brake_sprite;
+        }
+    //Run normally
+    else if (runtimer >= 50 and runtimer < 60){
+        sprite_index = run_sprite;
+        image_speed = 0.25;
+		if image_index >= 6
+			image_index = 1;
+    } 
+    
+}
+
+if (cantusedownb > 0){
+cantusedownb -= 1
+}
+if (attack_type != "upb" && cantupb > 0 && air >= 0 ){
+cantupb = 0
+}
+if ( (attack_type == "upb") && cantupb > 0 && ( state_type = "stand" || state_type = "land" || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" || state_type = "out" ) )
+{
+cantupb = 0
+}
