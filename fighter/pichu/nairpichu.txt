@@ -1,0 +1,50 @@
+if state_type = "jump" {
+	state_type = "air_attack";
+	attack_type = "nair";
+	sprite_index = nair_sprite;
+	image_speed = 0.4;
+	timer = 0;
+	time = 39;	
+	lcancel = 1;
+	timer_speed = 1;
+	}
+if timer < time {
+	state_type = "attack";
+	if timer = 3 {
+		create_hitbox(999,45+facing*90,300,300,13,30,punch2,obj_spark_hit1,0.3,0.5,10,0,self.id,25,3);
+		hitbox.hitstun = 4;
+		hitbox.shield_stun = 2.5;
+		create_hitbox2(999,135-facing*90,300,300,13,30,punch2,obj_spark_hit1,0.3,0.5,-10,0,self.id,25,3);
+		hitbox2.hitstun = 4;
+		hitbox2.shield_stun = 2.5;
+		}
+
+	if air = 0 {
+
+                state_type="land";
+
+                attack_type="none";
+
+                sprite_index = land_sprite;
+
+                timer=0;
+
+                time=12; }
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+
+    attack_type = "none";
+
+    if air > 0
+
+        state_type = "jump";
+
+    else
+
+        state_type = "stand";
+
+    timer = 0;
+
+    time =-1;
+    }

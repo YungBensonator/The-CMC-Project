@@ -1,0 +1,63 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "run" || state_type = "stand" || state_type = "jump") {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0.35;
+    sprite_index = upb_sprite;
+    image_index = 0.1;
+    time = 50;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+
+        if timer < time {
+		state_type = "air_attack"
+	if timer > 25
+	force_edge_grab = 1
+	        
+			if (timer > 0 && timer < 20){
+		vspeed = 0;
+        largebonespark = instance_create(x+size,y+size+10,obj_spark)
+        largebonespark.sprite_index = largebone_platform_sprite;
+        largebonespark.image_xscale = size*0.1;
+        largebonespark.image_yscale = size*0.5;
+      }
+
+    if timer = 20{
+    vspeed = -12;
+    }
+
+    if timer = 22{
+        sound_play(attack_voice2);
+    	boneplatform = create_projectile(10,285-facing*30,4.5,1,10,4,kick3,obj_spark_hit4,1.8,1.2,0,-10,self.id,60,bone_platform_script)
+    	boneplatform.sprite_index = largebone_platform_sprite;
+        boneplatform.image_index = 0;
+    	boneplatform.vspeed = 7;
+    	boneplatform.image_xscale = size*0.1;
+        boneplatform.image_yscale = size*0.5;
+    }
+    if timer = 1{
+    upb = 1;
+}
+    if timer = 110
+    {
+    vspeed = -8;
+    sound_play(upb_sound);
+    }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

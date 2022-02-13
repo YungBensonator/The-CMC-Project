@@ -1,0 +1,68 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0.18;
+sprite_index = dthrow_sprite;
+image_index=0;
+timer = 0;
+time = 33;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+}
+    state_type = "attack";
+    if timer = 3 {
+        target.x = x +7 - facing*14;
+        sound_play(dthrow_sound);
+        if collision_point(x + 16 -facing*32, y-1,obj_wall,0,1)
+            hspeed = -10*(1-facing*2)
+    }
+    if timer >= 4 && timer <= 23 {
+        hspeed = 0
+        target.x = x + 17 - facing*34;
+    }
+    if timer = 15 || timer = 16 || timer = 17 || timer = 18 || timer = 19 || timer = 20 || timer = 21|| timer = 22 {
+	target.alarm[2]=-1; 
+	target.timer_speed=1; 
+	target.timer=0; 
+	target.time=40;
+        create_hitbox(1.2,90,1,0,5,1+(timer=22)*3,fire2,obj_spark_fire1,0.6,0.6,16,12,self.id,1,5); 
+	hitbox.di = 0;
+
+    }
+    if timer = 24
+        image_speed = 0.5
+    if (timer >= 24 && timer < 26) || (timer >= 30 && timer < 32) {
+        target.x = x +size*(10 - facing*20);
+        target.y = y-12*size;
+
+    }
+    if timer >= 26 && timer < 28 {
+        target.x = x +size*(1 - facing*2);
+        target.y = y-19*size;
+
+    }
+    if timer >= 28 && timer < 30 {
+        target.x = x +size*(10 - facing*20);
+        target.y = y-17*size;
+
+    }
+    if timer = 32 {
+        target.x = x +size*(10 - facing*20);
+        target.y = y-3*size;
+        create_throw_box(2,300-facing*60,6,0,1,1,-1,obj_down_impact,0.6,0.5,9,7,self.id,1)
+        hitbox.hit_stun = 3;
+        hitbox.shake_ampl = 0;
+        screen_shake(1.2,11)
+        image_index = 10.1
+        image_speed = 0.2
+       vspeed = -2.5*size
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

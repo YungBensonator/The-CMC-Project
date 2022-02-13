@@ -1,0 +1,123 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "crouch" {
+    special = 1
+    attacking = 0
+    downbbox = 0;
+    timer = 0
+    air_move=0
+    attack_type = "downb"
+    if air > 0
+    state_type = "air_attack"
+    else
+    state_type = "attack"
+    image_speed = 0.6
+    sprite_index = downb_start_sprite
+    image_index=0
+    time = 32
+    timer_speed=1
+    temp=0
+	temp2 = 0;
+    if air = 0
+    hspeed =0
+    else {
+    hspeed*=0.1
+    }
+	create_hurtbox_precise(self.id,32,downb_start_mask)
+}
+if ( timer < time )
+  {
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    if ( timer <= 30 && vspeed > 0.3*size ) {
+	vspeed = 0.3*size; }
+}
+    if timer = 2 {
+	image_speed = 0.6 }
+    if air = 0
+    hspeed =0
+    if timer = 10 && ai && random(16)>9
+        special=0
+    if timer = 9 {
+        sound_play(downb_sound1)
+    }
+    if timer >= 8 && timer <= 30 {
+        temp = instance_nearest(x,y-10*size,projectile_box)
+    if temp.absorb = 1 && distance_to_object(temp) < 10*size && temp.hit != 2 {
+		temp2 = 10;
+            temp.hit = 1
+            temp.launch = 0
+            temp.time = temp.hitlag_frames+2
+            temp.attack_success = 1
+            percent -= temp.damage*1.5
+            if percent < 0
+            percent=0
+            with temp instance_destroy()
+            create_spark((temp.x-x)/size,(temp.y-y+9)/size,global.shock_spark,0.5,0.25,0.25)
+            sound_play(downb_sound2)
+	    flashing = 1
+	    alarm[7] = 7
+	    movejump = 0
+	    moveleft = 0
+	    moveright = 0
+	    movedown = 0
+        }
+		
+	if ( temp2 > 0 )
+		{
+		temp2 -= 1
+		}
+	if ( temp2 = 0 )
+		{
+		intangible = 0;
+		}
+    }
+    if timer = 10 && downbbox = 0 {
+        sound_play(downb_sound2)
+	create_hitbox(5,90,5.8,0.6,7,4,shock2,obj_spark_shock,1,1,5,11,self.id,4,1);
+	hitbox.hit_stun = 18
+	if air vspeed = 0;
+	}
+    if timer = 15 {
+	downbbox = 1;
+	}
+    if ( timer >= 15 && air<max_jumps-1 && (movejump || (ai && ( random (10) + ai_level ) >= 11)) )
+      {
+	special = 0;
+	CAN_shield = 0;
+	CAN_jump = 2;
+      }
+    if sprite_index = downb_start_sprite && image_index >= image_number - image_speed {
+	if  special = 0 { 
+	image_speed = 0
+	image_index = 0
+	}
+	else {
+			with(hurtbox)
+				instance_destroy()
+			create_hurtbox_precise(self.id,999,downb_loop_mask)
+            sprite_index = downb_loop_sprite
+	}
+	}
+    if timer = 30 {
+        if special = 0 {
+		intangible = 0;
+            sprite_index = downb_start_sprite
+	    create_wind(0.9,1.5,14,19,7,0,5);
+	    create_wind(0.9,1.5,-14,19,-7,0,5);
+        }
+        else {
+            timer = 8
+            sprite_index = downb_loop_sprite
+        }
+    } 
+if timer >=time-1 {
+    attack_type = "none";
+    if air = 0
+    state_type = "crouch";
+    else
+    state_type ="jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+}

@@ -1,0 +1,38 @@
+moving_object = 1;
+proj_destroy = 0
+absorb = 0
+absorb2 = 0
+if timer = 1  && hit = 0 {         // Initialize sprite and speed during frame 1
+    hit = 0
+    sprite_index = attacker.pasta_sprite
+    speed = 3
+    image_speed = 0.3;
+    visible = 1;
+	hspeed = 3.2-facing*6.4
+	vspeed = -4
+	gravity = 0.4
+    }
+
+	if (on_floor || on_platform)
+		{
+		hspeed = 0;
+		}
+
+if timer > 5 && timer < 150
+if frac(timer/9) = 0
+if exploded = 0 && (((hit = 0 && (timer = time-2)) || (hit > 0 && timer < time-1))) {
+    exploded = 100
+    instance_destroy();
+}
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self) {
+	if hit = 2{
+	hit = 0;}
+	if timer < 120{
+	timer = 120;}
+}
+if hit > 0{
+	exploded = 100
+	hit = 2
+    instance_destroy();
+}
+

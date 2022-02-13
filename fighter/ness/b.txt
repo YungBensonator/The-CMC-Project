@@ -1,0 +1,100 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+    attacking = 0;
+    timer = 0;
+    temp = 0;
+    if air = 0 
+        hspeed = 0
+    air_move = 0 
+    attack_type = "b"
+    state_type = "air_attack";
+    hspeed = 0;
+    image_speed = 0.25;
+    sprite_index = b_sprite;
+    image_index=0;
+    time = 190;
+    timer_speed=1;
+    special = 1;
+    tempx = 0
+    tempy = 0
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+    sound_play(b_voice);
+    special = 1;
+}
+if vspeed > 0.6
+vspeed = 0.6
+if sin(pi*timer/9)>0.95
+    instance_create(x,y,obj_down_impact)
+if ai && (random(40) > 39.5 - timer/15 || distance_to_object(enemy) < 20 - random(10))
+    special = 0
+if (special = 0 || timer = 164) && timer > 20 && !temp {
+    sound_stop(b_sound1)
+    temp = timer-20
+    timer = 191
+    time = 245   
+    sprite_index = b_sprite2
+    image_speed = 0.2
+}
+
+// pk flash explosion 
+if timer = 207 {
+    shaker = instance_create(x,y,obj_shakescreen3)
+    shaker.ampl = 0.75
+    shaker.time = 6
+    sound_play(b_sound2)
+    sound_play(b_sound3)
+    create_projectile(9+temp*0.215,70+facing*40,7.25+temp/70,6.95+temp/60,13+round(temp*.4),9+round(temp/9),fire3,obj_spark_shock,0.8+temp/277,0.8+temp/277,(tempx/size)*(1-facing*2),-tempy/size,self.id,24,ness_pkflash)
+    // max power: damage - 39.96, bkb - 9.114, kbg - 10.3
+    instance_create(x+tempx,y+tempy,obj_spark_shockwave)
+    proj.shake_ampl = 0.2
+}
+
+if timer = 20 {
+    sound_play(b_sound1)
+    spark = create_spark(4,23,pkflash_sprite1,0.4,0.6,0.6)
+    tempx = spark.x-x
+    tempy = spark.y-y
+}
+if timer > 20 && special = 1 && timer < 165 && temp = 0 {
+    tempx = spark.x-x
+    tempy = spark.y-y
+    spark.x += 0.15*size*(1-facing*2) + (moveright*.4+(facing=0)) - (moveleft*.4+(facing=1))
+    spark.y += 0.02*size*(timer-85) + movedown*0.65 - moveup*0.65
+ 
+
+    /*tempx += 0.08*size*(1-facing*2) + moveright*0.075 - moveleft*0.075
+    tempy += 0.0275*size*(timer-80) + movedown*0.02 - moveup*0.02
+    spark.x = x+tempx
+    spark.y = y+tempy*/
+    
+    with spark {
+        if image_index >= image_number-image_speed
+            image_index = 0
+    }
+    if is_on_floor(spark) {
+    sound_stop(b_sound1)
+    temp = timer-20
+    timer = 191
+    time = 245   
+    sprite_index = b_sprite2
+    image_speed = 0.2
+}
+}
+if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+    air_move = 0
+    state_type = "attack"
+    hspeed=0 }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    sound_stop(b_sound1)
+    attack_type = "none";
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    special = 0
+    temp = 0
+    }

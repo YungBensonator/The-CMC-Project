@@ -1,0 +1,61 @@
+if state_type = "stand" || state_type = "run" {
+	hspeed = 0;
+	sprite_index = usmash_sprite;
+	image_speed = 0.4;
+	image_index = 0.3;
+	state_type = "attack";
+	attack_type = "usmash";
+	timer = 0;
+	time = 43;
+	charge_frame = 8;
+	}
+if timer < time {
+	state_type = "attack";
+	if timer = 2 {
+		image_speed = 0;
+		}
+	if timer = 9 {
+		sound_play(usmash_voice);
+		sound_play(attacksnd3);
+		image_speed = 0.4;
+		create_hitbox(999,80+facing*20,300,300,14,30,punch3,obj_spark_hit3,0.6,0.5,-8,8,self.id,3,2);
+		hitbox.hit_stun = 7;
+		hitbox.shield_stun = 3;
+		}
+	if timer = 10 {
+		hitbox.hitbox_x = 0;
+		hitbox.hitbox_y = 16;
+		}
+	if timer = 11 {
+		hitbox.hitbox_x = 8;
+		hitbox.hitbox_y = 8;
+		hitbox.dir = 100-facing*20;
+		}
+	if timer = 17 {
+		image_speed = 0;
+		}
+	if timer = 39 {
+		image_speed = 0.3;
+		}
+	if timer = 41 {
+		interrupt = 1;
+		}
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+
+    attack_type = "none";
+
+    if air > 0
+
+        state_type = "jump";
+
+    else
+
+        state_type = "stand";
+
+    timer = 0;
+
+    time =-1;
+
+    }
+    

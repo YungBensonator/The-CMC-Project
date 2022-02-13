@@ -1,0 +1,94 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    if instance_exists(proj)
+	exit;
+    attacking = 0
+    attack_type = "sideb"
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0;
+        temp = 0;
+        sprite_index = sideb_sprite; 
+    }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.4;
+        sprite_index = sideb_sprite;
+        temp = 1;
+    }
+    image_speed = 0;
+    image_index=4;
+    timer = 0;
+    time = 42;
+    timer_speed=1;
+}
+switch ( timer )
+  {
+  case 1: image_index = 4; break;
+  case 13: shakex = 0; image_angle *= 0.5; break;
+  case 14: image_angle = 0; sprite_index = grab_sprite; image_index = 1; break;
+  case 16: image_index = 2; break;
+  case 18: sprite_index = sideb_sprite; image_index = 8; shakex = 7; break;
+  case 21: shakex = 4; break;
+  case 24: shakex = 2; break; 
+  case 27: shakex = 1; break; 
+  case 20: case 23: case 26: case 28: shakex = 0; break;
+  case 38: sprite_index = grab_sprite; image_index = 4; break;
+  case 40: image_index = 1; break;
+  }
+shakex *= size * ( 1 - facing * 2 );
+if ( timer >= 1 && timer < 13 )
+  {
+  image_angle = lengthdir_y ( 5 , ( timer - 1 ) / ( 18 - 1 ) * 90 );
+  image_angle *= -1 + facing * 2;
+  shakex = -(timer - 1)*0.25;
+  shakex *= size;
+  }
+if timer = 1
+    sound_play(sideb_voice)
+if timer = 5
+    sound_play(sideb_sound2)
+if timer = 14
+    create_spark(20,13,psi_sprite,0.5,0.25,0.25)
+if timer = 18  {
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing; 
+    sound_play(sideb_sound);
+    create_projectile(4,100-facing*20,2.4,0.1,8,4,magic3,obj_spark_fire1,1.2,0.75,16,15,self.id,36,ness_pkfire);
+    proj.air = (air>0)
+    proj.hit_stun = 2
+    proj.di = 0.7
+    if air > 0 
+        proj.sprite_index = pkfire_air_sprite
+    else
+        proj.sprite_index = pkfire_sprite
+    vspeed *= 0.7;
+    hspeed *= 0.5;
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+
+if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+    air_move = 0
+    state_type = "attack"
+    hspeed=0 
+}
+if temp && air = 0 {
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=10;
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+}
+        
+

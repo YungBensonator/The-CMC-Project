@@ -1,0 +1,72 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0;
+        sprite_index = bair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 38;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 5: image_index = 2; break;
+  case 7: image_index = 4; image_xscale *= 1.15; image_yscale *= 1.15; shakex = -3 + facing * 6; break;
+  case 8: image_xscale *= 1.05; image_yscale *= 1.05; shakex = -4 + facing * 8; break;
+  case 9: shakex = -2 + facing * 4; break;
+  case 17: image_index = 5; break;
+  case 27: image_index = 9; image_angle = 0; break;
+  }
+if ( timer >= 17 && timer < 27 )
+  {
+  image_angle = -90 + lengthdir_x ( 90 , ( timer - 14 ) / ( 24 - 14 ) * 180 );
+  image_angle *= 1 - facing * 2;
+  }
+shakex *= size;
+if timer < time && state_type = "air_attack" {
+            attacking = 0;
+            state_type = "air_attack";
+            if timer = 4 {
+                sound_play(bairpsi_sound);
+                }
+            if timer = 7 {
+		//image_speed = 0.275;
+                sound_play(swing_sound2);
+                sound_play(psi_sound1);
+                play_attack_voice();
+                spark1 = create_spark(-23.5,13,psi_sprite,0.6,0.27,0.27)
+                create_hitbox(8,155-facing*130,5.1,4.3,15,9,kick1,obj_spark_hit2,0.42,0.42,-11,15,self.id,14,1);
+                create_hitbox2(15,155-facing*130,5.1,6.5,22,14,magic3,obj_spark_shock,0.6,0.6,-23,14,self.id,12,2);
+                hitbox.shake_ampl = 0.4
+                hitbox.shake_type = 0
+                hitbox.shield_stun = 4.0
+                }
+		spark1.x = x - (23.5*(1-facing*2))
+		spark1.y = y-13
+            if timer = 14 {
+                hitbox.damage = 6*size;
+                hitbox.kbg = 3*size;
+                hitbox.shield_damage = round(8*size);
+                hitbox.hitlag_frames = round(5*size);
+                hitbox.sfx = magic1;
+                hitbox.gfx = obj_spark_hit4;
+            }
+        if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=12; }
+        }  
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

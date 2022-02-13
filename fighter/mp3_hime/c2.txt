@@ -1,0 +1,63 @@
+if ( base_speed <= 8 )
+{
+chaintemp = max( 1 , ( 20 / base_speed * image_yscale ) );
+chaintimer += 1;
+}
+if ( base_speed > 8 )
+{
+chaintemp = 1;
+chaintimer += 1;
+}
+
+time = base_time;
+
+if ( timer >= time - 50 ) {
+	chainstop = 1;
+}
+
+if timer > time - 20
+{
+image_alpha -= 0.05
+hit = 2;
+}
+
+if instance_exists(my_chain) and instance_exists(og_chain)
+speed = base_speed
+if og_chain.chainstop = 1 or !instance_exists(og_chain)
+speed = 0
+
+if ( temp = 1 )
+{
+timer += 1;
+}
+
+if chaintimer >= chaintemp and !instance_exists(my_chain) and instance_exists(og_chain) and !og_chain.chainstop {
+	my_chain = instance_create ( x , y , obj_custom_gfx );
+	my_chain.sprite_index = chain_sprite
+	my_chain.image_index = image_index
+	my_chain.image_speed = image_speed
+	my_chain.image_xscale = image_xscale
+	my_chain.image_yscale = image_yscale
+	my_chain.image_angle = image_angle
+	my_chain.image_alpha = 1
+	my_chain.base_x = base_x
+	my_chain.base_y = base_y
+	my_chain.chain_sprite = chain_sprite
+	my_chain.time = time-timer*1.65
+	my_chain.base_time = my_chain.time
+	my_chain.x = base_x
+	my_chain.y = base_y
+	my_chain.speed = 0
+	my_chain.base_speed = base_speed
+	my_chain.direction = direction
+	my_chain.depth = depth + 0.01
+	my_chain.og_chain = og_chain
+	my_chain.alarm[0] = my_chain.time+20
+	my_chain.temp = 1;
+    my_chain.step_script = char_custom2;
+    my_chain.draw_script = char_custom1;
+	my_chain.keepmain = self.keepmain;
+}
+
+if timer > time
+instance_destroy();

@@ -1,0 +1,122 @@
+if ( state_type = "jump" )
+  {
+if shottimer2 >= 1
+	{
+		exit;
+	}	
+	else
+	{
+	shottimer2 = 60;
+	}
+    state_type = "air_attack";
+    attack_type = "dair";
+    timer = 0;
+    time = 35;
+    sprite_index = dair_sprite;
+    image_speed = 0;
+    image_index = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 8: image_index = 3; break;
+	case 12: image_index = 4; break;
+        case 13: sound_play ( shock1 );
+	case 17: image_index = 5; break;
+	case 22: image_index = 6; break;
+	case 26: image_index = 7; break;
+      }
+	  
+	      if ( timer = 9 )
+       {
+  sound_play ( explode_small );
+        }
+	  
+
+    if ( timer = 14 )
+       {
+  spark = instance_create ( x + 7 * size * ( 1 - facing * 2 ) , y -9 * size , obj_spark_shockwave );
+  spark.image_blend = c_lime;
+  spark = instance_create ( x + 8 * size * ( 1 - facing * 2 ) , y -10 * size , obj_spark );
+  spark.sprite_index = global.explosion_spark2;
+  spark.image_speed = 0.8;
+  spark.image_blend = merge_color ( c_white , c_lime , .4 );
+  spark.image_xscale = 0.3 * size;
+  spark.image_yscale = 0.1 * size;
+  spark.image_angle = random ( 1 );
+  spark.image_index = 0;
+  sound_play ( shock2 );
+  create_hitbox(5,40+facing*100,3.8,6.95,7,6,shock1,obj_spark_shock,0.55,0.6,10,11,self.id,8,1);
+  }
+    if ( timer = 14 )
+       {
+  spark = instance_create ( x + 8 * size * ( 1 - facing * 2 ) , y -10 * size , obj_spark_shockwave );
+  spark.image_blend = c_white;
+  spark = instance_create ( x + 8 * size * ( 1 - facing * 2 ) , y -10 * size , obj_spark );
+  spark.sprite_index = global.explosion_spark2;
+  spark.image_speed = 0.8;
+  spark.image_blend = merge_color ( c_white , c_lime , .4 );
+  spark.image_xscale = 0.1 * size;
+  spark.image_yscale = 0.3 * size;
+  spark.image_angle = random ( 1 );
+  spark.image_index = 0;
+  sound_play ( shock1 );
+  }
+    if ( timer = 14 )
+       {
+  spark = instance_create ( x + 8 * size * ( 1 - facing * 2 ) , y -10 * size , obj_spark_shockwave );
+  spark.image_blend = c_white;
+  spark = instance_create ( x + 8 * size * ( 1 - facing * 2 ) , y -10 * size , obj_spark );
+  spark.sprite_index = global.explosion_spark2;
+  spark.image_speed = 0.8;
+  spark.image_blend = merge_color ( c_white , c_white , .4 );
+  spark.image_xscale = 0.1 * size;
+  spark.image_yscale = 0.1 * size;
+  spark.image_angle = random ( 1 );
+  spark.image_index = 0;
+  }
+    if ( timer = 16 )
+      {
+		  vspeed -= 5;
+		  hspeed = -1+facing*2;
+	play_attack_voice();
+  sound_play ( shock2 );
+        create_projectile(3,280-facing*20,6,3,3+round(charge/6),4+ceil(charge/16),shock1,obj_spark_shock,(1-facing*2)*(0.2+charge/450),(0.3+charge/450),15,11,self.id,140,ridley_downb_fireball);
+        proj.hit_stun = 5.5
+		proj.vspeed = 3;
+		proj.hspeed = 0.5 -facing*1
+      }
+    if ( timer = 18 )
+      {
+        create_projectile(3,280-facing*20,6,3,3+round(charge/6),4+ceil(charge/16),shock1,obj_spark_shock,(1-facing*2)*(0.2+charge/450),(0.3+charge/450),15,11,self.id,140,ridley_downb_fireball);
+        proj.hit_stun = 5.5
+		proj.vspeed = 3;
+		proj.hspeed = 2 -facing*4
+      }
+    if ( timer = 20 )
+      {
+        create_projectile(3,280-facing*20,6,3,3+round(charge/6),4+ceil(charge/16),shock1,obj_spark_shock,(1-facing*2)*(0.2+charge/450),(0.3+charge/450),15,11,self.id,140,ridley_downb_fireball);
+        proj.hit_stun = 5.5
+		proj.vspeed = 3;
+		proj.hspeed = 3.6 -facing*7.2
+      }
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 9;
+	sprite_index = land_sprite;
+      }
+  }
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

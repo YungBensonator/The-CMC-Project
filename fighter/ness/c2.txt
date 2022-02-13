@@ -1,0 +1,80 @@
+priority = 1;
+proj_destroy = 0
+moving_object=1;
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+if timer <= 1 && hit = 0 && temp = 0 {         // Initialize sprite and speed during frame 1
+    hspeed = 3.75 - attacker.id.facing*7.5
+    image_speed = 0.25;
+    visible =1
+    temp = 0
+    ness = attacker
+    hits = 0
+}
+if hit = 0 && temp = 0 {
+    vspeed = air*3.25
+    if is_on_floor(self) || collision_point(x+sign(hspeed),y,obj_wall,1,1) 
+        instance_destroy()
+}
+else {
+    if !is_on_floor(self)
+        vspeed += (vspeed < 2.5)*0.18
+    else
+        vspeed = 0
+}
+if ( temp == 0 && timer == 28 )
+  {
+  instance_create ( x , y , obj_smoke );
+  instance_destroy();
+  }
+if hit!=0 && temp = 0 && instance_exists(ness) && time < 30 {
+    if string(victim.state_type) != "shielding" {
+    sprite_index = ness.pkfire_pillar_sprite
+    hspeed = 0
+    sfx = fire1
+    temp = 1
+    timer = 0
+    image_xscale *= 0.85
+    image_yscale *= 0.75
+    image_alpha = 0.9;
+    hit=0
+    launch=0
+    target.hitby=0
+    x=victim.x
+    bkb = 0.3 }
+    else {
+     instance_create ( x , y , obj_smoke );
+     instance_destroy();
+    }
+}
+if attack_success = 1 && timer = time {
+    time += 1
+    attack_success=2;
+    ness.attack_hits-=1;
+}
+if timer >= time+1 && temp = 1 && hits < 6 {
+    hits+=1
+    hit=0
+    launch=0
+    timer=0
+    time=8
+    target.hitby=0
+    //proj_clear_hits()
+    image_speed = 0.35
+    damage = 1.5
+    bkb = 0.3
+    kbg = 0.05
+    dir = 75 + ness.facing*30
+    hit_stun = 6
+    di = 0.5
+    instance_create ( x + ( -16 + random(32) ) , y + ( -40 + random ( 40 ) ) , obj_smoke );
+    var o;
+    o = instance_create ( x , y , obj_spark_shockwave );
+    o.image_yscale *= 0.3;
+    o.image_xscale *= 1.1;
+    o.image_blend = c_orange;
+    if hits = 6 && instance_exists(ness)
+        sprite_index = ness.pkfire_end_sprite
+}
+if hit > 0
+hspeed = 0

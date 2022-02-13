@@ -1,0 +1,338 @@
+if ( sprite_index = run_sprite && state_type = "run" )
+{
+image_speed = 0.3;
+
+if ( runtimer >= 1 )
+{
+after_image(6,c_aqua,0.5);
+}
+
+if ( runtimer = 1 )
+{
+sound_play( boosting_sound );
+}
+
+if ( timer mod 10 = 0 )
+	{
+	dash_wing_vfx = instance_create ( x - 5 * (1-facing*2) * size , y - 15 * size , obj_spark )
+	dash_wing_vfx.sprite_index = boost_ring_vfx_sprite;
+	dash_wing_vfx.image_xscale = 0.05 * (1-facing*2) * size;
+	dash_wing_vfx.image_yscale = 0.1 * size;
+	dash_wing_vfx.image_alpha = 1;
+	dash_wing_vfx.image_index = 0;
+	dash_wing_vfx.image_speed = 0.25;
+	dash_wing_vfx.depth = depth + 0.1;
+	dash_wing_vfx.script = char_custom11;
+	dash_wing_vfx.owner = self.id;
+	dash_wing_vfx.keepmain = self.keepmain;
+	
+	if ( facing = 0 )
+		{
+		dash_wing_vfx.temp = 0;
+		}
+	if ( facing = 1 )
+		{
+		dash_wing_vfx.temp = 1;
+		}
+	}
+}
+
+if ( sprite_index = walk_sprite && state_type = "run" )
+{
+image_speed = 0.25;
+}
+
+if ( state_type = "jump" )
+{
+image_speed = 0.25;
+}
+
+//--------------------------------------------------------------------------------CROUCH-----------------------------------------------------------
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(4,timer)
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 2 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 4 ){
+    image_index = 1;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+
+//-----------------------------------------------------------------RED WINGS JUMP------------------------------------------------------------------
+if ( !instance_exists ( wing_jump_red_0 ) )
+{
+wing_jump_red_0 = instance_create ( x , y , obj_spark )
+wing_jump_red_0.sprite_index = wing_red_sprite;
+wing_jump_red_0.tempx = 24;
+wing_jump_red_0.tempy = 10;
+wing_jump_red_0.temp_xscale = 0.06;
+wing_jump_red_0.temp_yscale = 0.03;
+wing_jump_red_0.image_alpha = 1;
+wing_jump_red_0.image_index = 0;
+wing_jump_red_0.image_speed = 0;
+wing_jump_red_0.tempangle = 32;
+wing_jump_red_0.depth = depth + 0.1;
+wing_jump_red_0.script = char_custom10;
+wing_jump_red_0.owner = self.id;
+wing_jump_red_0.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_red_1 ) )
+{
+wing_jump_red_1 = instance_create ( x , y , obj_spark )
+wing_jump_red_1.sprite_index = wing_red_sprite;
+wing_jump_red_1.tempx = 26;
+wing_jump_red_1.tempy = 12;
+wing_jump_red_1.temp_xscale = 0.06;
+wing_jump_red_1.temp_yscale = 0.03;
+wing_jump_red_1.image_alpha = 1;
+wing_jump_red_1.image_index = 0;
+wing_jump_red_1.image_speed = 0;
+wing_jump_red_1.tempangle = 22;
+wing_jump_red_1.depth = depth + 0.1;
+wing_jump_red_1.script = char_custom10;
+wing_jump_red_1.owner = self.id;
+wing_jump_red_1.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_red_2 ) )
+{
+wing_jump_red_2 = instance_create ( x , y , obj_spark )
+wing_jump_red_2.sprite_index = wing_red_sprite;
+wing_jump_red_2.tempx = 28;
+wing_jump_red_2.tempy = 14;
+wing_jump_red_2.temp_xscale = 0.06;
+wing_jump_red_2.temp_yscale = 0.03;
+wing_jump_red_2.image_alpha = 1;
+wing_jump_red_2.image_index = 0;
+wing_jump_red_2.image_speed = 0;
+wing_jump_red_2.tempangle = 15;
+wing_jump_red_2.depth = depth + 0.1;
+wing_jump_red_2.script = char_custom10;
+wing_jump_red_2.owner = self.id;
+wing_jump_red_2.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_red_3 ) )
+{
+wing_jump_red_3 = instance_create ( x , y , obj_spark )
+wing_jump_red_3.sprite_index = wing_red_sprite;
+wing_jump_red_3.tempx = 27;
+wing_jump_red_3.tempy = 17;
+wing_jump_red_3.temp_xscale = 0.06;
+wing_jump_red_3.temp_yscale = 0.03;
+wing_jump_red_3.image_alpha = 1;
+wing_jump_red_3.image_index = 0;
+wing_jump_red_3.image_speed = 0;
+wing_jump_red_3.tempangle = 5;
+wing_jump_red_3.depth = depth + 0.1;
+wing_jump_red_3.script = char_custom10;
+wing_jump_red_3.owner = self.id;
+wing_jump_red_3.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_red_4 ) )
+{
+wing_jump_red_4 = instance_create ( x , y , obj_spark )
+wing_jump_red_4.sprite_index = wing_red_sprite;
+wing_jump_red_4.tempx = 20;
+wing_jump_red_4.tempy = 18;
+wing_jump_red_4.temp_xscale = 0.05;
+wing_jump_red_4.temp_yscale = 0.025;
+wing_jump_red_4.image_alpha = 1;
+wing_jump_red_4.image_index = 0;
+wing_jump_red_4.image_speed = 0;
+wing_jump_red_4.tempangle = 340;
+wing_jump_red_4.depth = depth + 0.1;
+wing_jump_red_4.script = char_custom10;
+wing_jump_red_4.owner = self.id;
+wing_jump_red_4.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_red_5 ) )
+{
+wing_jump_red_5 = instance_create ( x , y , obj_spark )
+wing_jump_red_5.sprite_index = wing_red_sprite;
+wing_jump_red_5.tempx = 21;
+wing_jump_red_5.tempy = 21;
+wing_jump_red_5.temp_xscale = 0.05;
+wing_jump_red_5.temp_yscale = 0.025;
+wing_jump_red_5.image_alpha = 1;
+wing_jump_red_5.image_index = 0;
+wing_jump_red_5.image_speed = 0;
+wing_jump_red_5.tempangle = 330;
+wing_jump_red_5.depth = depth + 0.1;
+wing_jump_red_5.script = char_custom10;
+wing_jump_red_5.owner = self.id;
+wing_jump_red_5.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_red_6 ) )
+{
+wing_jump_red_6 = instance_create ( x , y , obj_spark )
+wing_jump_red_6.sprite_index = wing_red_sprite;
+wing_jump_red_6.tempx = 20;
+wing_jump_red_6.tempy = 24;
+wing_jump_red_6.temp_xscale = 0.05;
+wing_jump_red_6.temp_yscale = 0.025;
+wing_jump_red_6.image_alpha = 1;
+wing_jump_red_6.image_index = 0;
+wing_jump_red_6.image_speed = 0;
+wing_jump_red_6.tempangle = 320;
+wing_jump_red_6.depth = depth + 0.1;
+wing_jump_red_6.script = char_custom10;
+wing_jump_red_6.owner = self.id;
+wing_jump_red_6.keepmain = self.keepmain;
+}
+
+
+//-----------------------------------------------------------------BLUE WINGS JUMP------------------------------------------------------------------
+if ( !instance_exists ( wing_jump_blue_0 ) )
+{
+wing_jump_blue_0 = instance_create ( x , y , obj_spark )
+wing_jump_blue_0.sprite_index = wing_blue_sprite;
+wing_jump_blue_0.tempx = 24;
+wing_jump_blue_0.tempy = 10;
+wing_jump_blue_0.temp_xscale = -0.06;
+wing_jump_blue_0.temp_yscale = 0.03;
+wing_jump_blue_0.image_alpha = 1;
+wing_jump_blue_0.image_index = 0;
+wing_jump_blue_0.image_speed = 0;
+wing_jump_blue_0.tempangle = -32;
+wing_jump_blue_0.depth = depth + 0.1;
+wing_jump_blue_0.temp = 1;
+wing_jump_blue_0.script = char_custom10;
+wing_jump_blue_0.owner = self.id;
+wing_jump_blue_0.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_blue_1 ) )
+{
+wing_jump_blue_1 = instance_create ( x , y , obj_spark )
+wing_jump_blue_1.sprite_index = wing_blue_sprite;
+wing_jump_blue_1.tempx = 26;
+wing_jump_blue_1.tempy = 12;
+wing_jump_blue_1.temp_xscale = -0.06;
+wing_jump_blue_1.temp_yscale = 0.03;
+wing_jump_blue_1.image_alpha = 1;
+wing_jump_blue_1.image_index = 0;
+wing_jump_blue_1.image_speed = 0;
+wing_jump_blue_1.tempangle = -22;
+wing_jump_blue_1.depth = depth + 0.1;
+wing_jump_blue_1.temp = 1;
+wing_jump_blue_1.script = char_custom10;
+wing_jump_blue_1.owner = self.id;
+wing_jump_blue_1.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_blue_2 ) )
+{
+wing_jump_blue_2 = instance_create ( x , y , obj_spark )
+wing_jump_blue_2.sprite_index = wing_blue_sprite;
+wing_jump_blue_2.tempx = 28;
+wing_jump_blue_2.tempy = 14;
+wing_jump_blue_2.temp_xscale = -0.06;
+wing_jump_blue_2.temp_yscale = 0.03;
+wing_jump_blue_2.image_alpha = 1;
+wing_jump_blue_2.image_index = 0;
+wing_jump_blue_2.image_speed = 0;
+wing_jump_blue_2.tempangle = -15;
+wing_jump_blue_2.depth = depth + 0.1;
+wing_jump_blue_2.temp = 1;
+wing_jump_blue_2.script = char_custom10;
+wing_jump_blue_2.owner = self.id;
+wing_jump_blue_2.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_blue_3 ) )
+{
+wing_jump_blue_3 = instance_create ( x , y , obj_spark )
+wing_jump_blue_3.sprite_index = wing_blue_sprite;
+wing_jump_blue_3.tempx = 27;
+wing_jump_blue_3.tempy = 17;
+wing_jump_blue_3.temp_xscale = -0.06;
+wing_jump_blue_3.temp_yscale = 0.03;
+wing_jump_blue_3.image_alpha = 1;
+wing_jump_blue_3.image_index = 0;
+wing_jump_blue_3.image_speed = 0;
+wing_jump_blue_3.tempangle = -5;
+wing_jump_blue_3.depth = depth + 0.1;
+wing_jump_blue_3.temp = 1;
+wing_jump_blue_3.script = char_custom10;
+wing_jump_blue_3.owner = self.id;
+wing_jump_blue_3.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_blue_4 ) )
+{
+wing_jump_blue_4 = instance_create ( x , y , obj_spark )
+wing_jump_blue_4.sprite_index = wing_blue_sprite;
+wing_jump_blue_4.tempx = 20;
+wing_jump_blue_4.tempy = 18;
+wing_jump_blue_4.temp_xscale = -0.05;
+wing_jump_blue_4.temp_yscale = 0.025;
+wing_jump_blue_4.image_alpha = 1;
+wing_jump_blue_4.image_index = 0;
+wing_jump_blue_4.image_speed = 0;
+wing_jump_blue_4.tempangle = -340;
+wing_jump_blue_4.depth = depth + 0.1;
+wing_jump_blue_4.temp = 1;
+wing_jump_blue_4.script = char_custom10;
+wing_jump_blue_4.owner = self.id;
+wing_jump_blue_4.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_blue_5 ) )
+{
+wing_jump_blue_5 = instance_create ( x , y , obj_spark )
+wing_jump_blue_5.sprite_index = wing_blue_sprite;
+wing_jump_blue_5.tempx = 21;
+wing_jump_blue_5.tempy = 21;
+wing_jump_blue_5.temp_xscale = -0.05;
+wing_jump_blue_5.temp_yscale = 0.025;
+wing_jump_blue_5.image_alpha = 1;
+wing_jump_blue_5.image_index = 0;
+wing_jump_blue_5.image_speed = 0;
+wing_jump_blue_5.tempangle = -330;
+wing_jump_blue_5.depth = depth + 0.1;
+wing_jump_blue_5.temp = 1;
+wing_jump_blue_5.script = char_custom10;
+wing_jump_blue_5.owner = self.id;
+wing_jump_blue_5.keepmain = self.keepmain;
+}
+if ( !instance_exists ( wing_jump_blue_6 ) )
+{
+wing_jump_blue_6 = instance_create ( x , y , obj_spark )
+wing_jump_blue_6.sprite_index = wing_blue_sprite;
+wing_jump_blue_6.tempx = 20;
+wing_jump_blue_6.tempy = 24;
+wing_jump_blue_6.temp_xscale = -0.05;
+wing_jump_blue_6.temp_yscale = 0.025;
+wing_jump_blue_6.image_alpha = 1;
+wing_jump_blue_6.image_index = 0;
+wing_jump_blue_6.image_speed = 0;
+wing_jump_blue_6.tempangle = -320;
+wing_jump_blue_6.depth = depth + 0.1;
+wing_jump_blue_6.temp = 1;
+wing_jump_blue_6.script = char_custom10;
+wing_jump_blue_6.owner = self.id;
+wing_jump_blue_6.keepmain = self.keepmain;
+}

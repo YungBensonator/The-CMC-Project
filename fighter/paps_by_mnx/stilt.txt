@@ -1,0 +1,43 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 25;
+        timer_speed=1;
+	}
+
+	if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 0; break;
+	case 6: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 12: image_index = 1; break;
+	case 14: image_index = 0; break;
+
+      }
+
+    if ( timer = 6 ) 
+      {
+    play_attack_voice()
+	sound_play(swingsnd2);
+	create_hitbox(10,45+facing*90,4.5,4,14,9,kick1,obj_spark_hit3,0.95,0.5,21,28,self.id,4,2);
+	hitbox.image_angle = 45+facing*90;
+      }
+    
+  }
+
+  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

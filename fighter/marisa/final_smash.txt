@@ -1,0 +1,129 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = b_sprite;
+        image_index=0;
+        timer = 1;
+        time = 207;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+
+switch ( timer )
+  {
+  case 35: image_index = 1; break;
+  case 40: image_index = 2; break;
+  case 195: image_index = 1; break;
+  case 200: image_index = 0; break;
+  }
+
+	if timer = 5{
+
+        	sound_play(card_sound);
+        	sound_play(card_sound);
+                card = instance_create(x,y-40*size,obj_spark)
+                card.image_xscale *= (0.05*size)*0.75
+                card.image_yscale *= (1*size)*0.75
+                card.image_alpha = 1
+		card.sprite_index = card_sprite;
+		card.image_speed = 0
+
+	}
+
+	if instance_exists(card) && card.image_xscale < (0.8)*0.75{
+		card.image_xscale = card.image_xscale + 0.05*0.75
+	}
+
+	if instance_exists(card) && card.image_xscale >= (0.8)*0.75{
+		card.image_xscale = (0.8*size)*0.75;
+		card.image_speed = 0.05;
+		card.image_alpha = card.image_alpha - 0.05;
+	}
+
+	    if timer = 25
+		{ 
+		sound_play(beamu_voice);
+		sound_play(beamu_voice);
+	image_blend = merge_color ( c_white , c_blue , .4 ); alarm[7] = 3; }
+
+    if timer = 40 {
+        sound_play(beamu_sound1);
+        sound_play(beamu_sound2);
+        sound_play(beamu_sound2);
+        instance_create(x,y,obj_shakescreen)
+        create_projectile(3,25+facing*130,3,0,-1,4,magic3,obj_spark_hit3,0.7,0.8,13,15,self.id,8,Marisa_beeeeemu); 
+        proj.facing = facing;
+        proj.di = 0;
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        }
+	if (timer >= 40 && timer < 175 && timer mod 4 = 0){
+                duster = instance_create(x-6+facing*12,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_yscale *= 0.8*size
+                duster.image_xscale *= 1*size
+                spark = instance_create(x+(15*(1-2*facing))*size,y-13.5*size,obj_spark_shockwave)
+                spark.image_xscale *= (0.1*size+(timer-40)*(0.015))*(1-2*facing)
+                spark.image_yscale *= 0.8*size+(timer-40)*(0.015)
+		spark.image_blend = choose(c_blue,c_aqua,c_fuchsia,c_lime,c_purple,c_red,c_yellow);
+                spark.image_alpha = 0.9
+                spark3 = instance_create(x+(85*(1-2*facing))*size,y-13.5*size,obj_spark_shockwave)
+                spark3.image_xscale *= (0.2*size)*(1-2*facing)//+(timer-40)*(0.0125)
+                spark3.image_yscale *= 1*size+(timer-40)*(0.025)
+		spark3.image_blend = choose(c_blue,c_aqua,c_fuchsia,c_lime,c_purple,c_red,c_yellow);
+                spark3.image_alpha = 0.9
+                spark4 = instance_create(x+(155*(1-2*facing))*size,y-13.5*size,obj_spark_shockwave)
+                spark4.image_xscale *= (0.3*size)*(1-2*facing)//+(timer-40)*(0.0225)
+                spark4.image_yscale *= 1.2*size+(timer-40)*(0.035)
+		spark4.image_blend = choose(c_blue,c_aqua,c_fuchsia,c_lime,c_purple,c_red,c_yellow);
+                spark4.image_alpha = 0.9
+             	spark5 = instance_create(x+(225*(1-2*facing))*size,y-13.5*size,obj_spark_shockwave)
+                spark5.image_xscale *= (0.3*size)*(1-2*facing)//+(timer-40)*(0.0225)
+                spark5.image_yscale *= 1.4*size+(timer-40)*(0.045)
+		spark5.image_blend = choose(c_blue,c_aqua,c_fuchsia,c_lime,c_purple,c_red,c_yellow);
+                spark5.image_alpha = 0.9
+          	spark6 = instance_create(x+(225*(1-2*facing))*size,y-13.5*size,obj_spark_shockwave)
+                spark6.image_xscale *= (0.3*size)*(1-2*facing)//+(timer-40)*(0.0225)
+                spark6.image_yscale *= 1.6*size+(timer-40)*(0.055)
+		spark6.image_blend = choose(c_blue,c_aqua,c_fuchsia,c_lime,c_purple,c_red,c_yellow);
+                spark6.image_alpha = 0.9
+    	   	spark7 = instance_create(x+(225*(1-2*facing))*size,y-13.5*size,obj_spark_shockwave)
+                spark7.image_xscale *= (0.3*size)*(1-2*facing)//+(timer-40)*(0.0225)
+                spark7.image_yscale *= 1.8*size+(timer-40)*(0.065)
+		spark7.image_blend = choose(c_blue,c_aqua,c_fuchsia,c_lime,c_purple,c_red,c_yellow);
+                spark7.image_alpha = 0.9
+                spark2 = instance_create(x+(20*(1-2*facing))*size,y-16.5*size,obj_spark)
+                spark2.image_xscale *= (0.1*size+(timer-40)*(0.015))*(1-2*facing)
+                spark2.image_yscale *= 0.8*size+(timer-40)*(0.015)
+		spark2.sprite_index = fireball_sprite;
+		spark2.image_blend = choose(c_blue,c_aqua,c_fuchsia,c_lime,c_purple,c_red,c_yellow);
+                spark2.image_alpha = 0.7
+		spark2.depth = -2
+	}
+
+    if timer = 100 {
+        sound_play(beamu_sound3);
+        sound_play(beamu_sound3);
+	}
+    }
+if timer >= 205 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    change_character ( "zsamus" );
+    }

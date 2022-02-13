@@ -1,0 +1,89 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  //show_message("a");
+  if ( downb_reload > 0 ) exit;
+  sound_play ( attack_sound2 );
+  instance_create ( x - 2 * size * ( 1 - facing * 2 ) , y - 10 * size , obj_spark_effect );
+  attacking = 0;
+  attack_type = "downb";
+  timer = 0;
+  time = 45;
+  state_type = "air_attack";
+  timer_speed = 1;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0.4;
+  vspeed *= 0.7;
+  hspeed *= 0.7;
+  temp = 0;
+  }
+
+if ( air == 0 ) hspeed *= 0.1;
+
+if ( timer == 2 )
+  {
+  armor_frames = 18;
+  super_armor = 2;
+  }
+
+if ( timer >= 2 && timer < 20 )
+  {
+  if ( timer mod 2 == 0 )
+    image_blend = c_yellow;
+    else
+    image_blend = c_white;
+  flashing = 1;
+  alarm[7] = 3;
+  var obj;
+  if ( place_meeting ( x , y , attack_box ) )
+    {
+    obj = instance_nearest ( x , y , attack_box );
+    if ( obj.priority == 6 )
+      armor_frames = 0;
+      else
+      {
+      if ( x < obj.attacker.x )
+        facing = 0;
+        else
+        facing = 1;
+	temp = 1
+      }
+    }
+    else
+  if ( place_meeting ( x , y , projectile_box ) )
+    {
+    obj = instance_nearest ( x , y , projectile_box );
+    if ( obj.priority == 6 )
+      armor_frames = 0;
+      else
+      {
+      if ( x < obj.x )
+        facing = 0;
+        else
+        facing = 1;
+	temp = 1
+      }
+    }
+  }
+
+if ( temp == 1 )
+  {
+  super_armor = 2;
+  armor_frames = 140;
+  interrupt = 1;
+  downb_reload = 150;
+  }
+
+if image_index >= image_number - image_speed
+image_speed = 0
+
+if ( timer >= time - 1 )
+  {
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+  }

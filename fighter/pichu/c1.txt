@@ -1,0 +1,287 @@
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+moving_object = 1
+
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.b_spark_sprite
+    hspeed = 2.5 - attacker.id.facing*5
+    vspeed = 2.0
+    image_speed = 0.25-attacker.facing*0.5;
+    visible=1
+    temp = 0
+    pika = attacker
+    facing = pika.facing
+    image_xscale = abs(image_xscale) * 0.7;
+    image_yscale = abs(image_yscale) * 0.7;
+    }
+
+// temp 0 - fall down
+// temp 1 - go
+// temp 2 - go alt
+
+if ( temp == 0 )
+  {
+  if ( on_floor || on_platform )
+    {
+    //temp = 1;
+    //gox = sign ( hspeed ) + ( hspeed == 0 );
+    //goy = 0;
+    //stickx = 0;
+    //sticky = 1;
+    temp = 2;
+    reset = 360;
+    if ( hspeed > 0 )
+      {
+      direc = 165;
+      dires = -15;
+      stickpointx = x + 24;
+      stickpointy = y;
+      }
+      else
+      {
+      direc = 15;
+      dires = 15;
+      stickpointx = x - 24;
+      stickpointy = y;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    }
+  if ( next_to_rwall )
+    {
+    //temp = 1;
+    //gox = 0;
+    //goy = -1;
+    //stickx = 1;
+    //sticky = 0;
+    temp = 2;
+    reset = 360;
+    if ( vspeed < 0 )
+      {
+      direc = 255;
+      dires = -15;
+      stickpointx = x;
+      stickpointy = y - 24;
+      }
+      else
+      {
+      direc = 105;
+      dires = 15;
+      stickpointx = x;
+      stickpointy = y + 24;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    }
+  if ( next_to_lwall )
+    {
+    //temp = 1;
+    //gox = 0;
+    //goy = -1;
+    //stickx = -1;
+    //sticky = 0;
+    temp = 2;
+    reset = 360;
+    if ( vspeed < 0 )
+      {
+      direc = -75;
+      dires = 15;
+      stickpointx = x;
+      stickpointy = y - 24;
+      }
+      else
+      {
+      direc = 75;
+      dires = -15;
+      stickpointx = x;
+      stickpointy = y + 24;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    }
+  if ( under_ceiling )
+    {
+    //temp = 1;
+    //gox = sign ( hspeed ) + ( hspeed == 0 );
+    //goy = 0;
+    //stickx = 0;
+    //sticky = -1;
+    temp = 2;
+    reset = 360;
+    if ( hspeed > 0 )
+      {
+      direc = 195;
+      dires = 15;
+      stickpointx = x + 24;
+      stickpointy = y;
+      }
+      else
+      {
+      direc = -15;
+      dires = -15;
+      stickpointx = x - 24;
+      stickpointy = y;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    }
+  exit;
+  }
+
+if ( temp == 2 )
+  {
+  direc += dires;
+  after_image ( 6 , c_aqua , .4 );
+  after.image_xscale *= 0.6;
+  after.image_yscale = after.image_xscale;
+  after_image ( 4 , c_aqua , .4 );
+  after.image_xscale *= 0.6;
+  after.image_yscale = after.image_xscale;
+  after_image ( 2 , c_aqua , .4 );
+  after.image_xscale *= 0.6;
+  after.image_yscale = after.image_xscale;
+  reset -= 10;
+  if ( on_floor || on_platform )
+    {
+    temp = 2;
+    reset = 360;
+    if ( ( direc < 90 && direc > -90 ) || ( direc > 270 && direc < 450 ) )
+      {
+      direc = 165;
+      dires = -15;
+      stickpointx = x + 24;
+      stickpointy = y;
+      }
+      else
+      {
+      direc = 15;
+      dires = 15;
+      stickpointx = x - 24;
+      stickpointy = y;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    exit;
+    }
+  if ( under_ceiling )
+    {
+    temp = 2;
+    reset = 360;
+    if ( ( direc < 90 && direc > -90 ) || ( direc > 270 && direc < 450 ) )
+      {
+      direc = 185;
+      dires = 15;
+      stickpointx = x + 24;
+      stickpointy = y;
+      }
+      else
+      {
+      direc = -15;
+      dires = -15;
+      stickpointx = x - 24;
+      stickpointy = y;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    exit;
+    }
+  if ( next_to_rwall )
+    {
+    temp = 2;
+    reset = 360;
+    if ( ( direc > 0 && direc < 180 ) || ( direc < - 180 && direc > -360 ) )
+      {
+      direc = 255;
+      dires = -15;
+      stickpointx = x;
+      stickpointy = y - 24;
+      }
+      else
+      {
+      direc = 105;
+      dires = 15;
+      stickpointx = x;
+      stickpointy = y + 24;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    exit;
+    }
+  if ( next_to_lwall )
+    {
+    temp = 2;
+    reset = 360;
+    if ( ( direc > 0 && direc < 180 ) || ( direc < - 180 && direc > -360 ) )
+      {
+      direc = -75;
+      dires = 15;
+      stickpointx = x;
+      stickpointy = y - 24;
+      }
+      else
+      {
+      direc = 75;
+      dires = -15;
+      stickpointx = x;
+      stickpointy = y + 24;
+      }
+    hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+    vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+    exit;
+    }
+  hspeed = stickpointx + lengthdir_x ( 24 , direc ) - x;
+  vspeed = stickpointy + lengthdir_y ( 24 , direc ) - y;
+  if ( reset <= 0 )
+    {
+    temp = 0;
+    }
+  exit;
+  }
+
+if ( temp == 1 )
+  {
+  hspeed = gox * 3 + stickx * 6;
+  vspeed = goy * 3 + sticky * 6;
+  if ( gox != 0 )
+    {
+    if ( ( gox == 1 && next_to_rwall ) || ( gox == -1 && next_to_lwall ) )
+      {
+      stickx = gox;
+      gox = 0;
+      goy = sticky;
+      sticky = 0;
+      exit;
+      }
+    if ( ( sticky == 1 && !on_floor && !on_platform ) || ( sticky == -1 && !under_ceiling ) )
+      {
+      temp = 0;
+      hspeed = -3 * gox;
+      vspeed = 3 * sticky;
+      exit;
+      }
+    }
+    else
+    {
+    if ( ( goy == 1 && ( on_floor || on_platform ) ) || ( goy == -1 && under_ceiling ) )
+      {
+      gox = stickx;
+      sticky = goy;
+      goy = 0;
+      stickx = 0;
+      exit;
+      }
+    if ( ( stickx == 1 && !next_to_rwall ) || ( stickx == -1 && !next_to_lwall ) )
+      {
+      temp = 0;
+      hspeed = -3 * stickx;
+      vspeed = 3 * goy;
+      exit;
+      }
+    }
+  exit;
+  }
+
+
+if hit > 0
+    visible = 0
+    

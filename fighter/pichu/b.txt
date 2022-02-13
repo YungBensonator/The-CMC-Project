@@ -1,0 +1,49 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    attacking = 0
+    attack_type = "b"
+    if air = 0 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing;
+        state_type = "attack";
+        hspeed = 0; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.5;
+        }
+        image_speed = 0.125;
+        sprite_index = b_sprite;
+        image_index=0.5;
+        timer = 0;
+        time = 48;
+        timer_speed=1;
+        sound_play(b_voice);
+}
+        if timer < time {
+            if timer = 15 {
+                sound_play(b_sound);
+                percent += 2;
+                image_blend = c_blue;
+                flashing = 1;
+                alarm[7] = 2;
+                create_projectile(999,30+facing*120,300,300,13,30,shock1,obj_spark_shock,1,1,11,12,self.id,120,char_custom1);
+                proj.hit_stun = 5
+                proj.shield_stun = 1.5
+            }
+            if timer = 36
+            image_speed = 0.15
+            if timer = 45
+                interrupt = 1
+        }  
+        if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+        air_move = 0
+        hspeed=0 }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+    }
+        

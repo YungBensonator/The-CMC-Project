@@ -1,0 +1,237 @@
+///////////////////////////////////////////// my edits start
+if(instance_exists ( CardMeter ) && (state_type = "flinch" || state_type = "air_flinch" || state_type = "respawn"))
+{with (CardMeter) {instance_destroy();}}
+
+///variables
+floatspeedv = 4;
+floatspeedh = 4;
+maxfloattime = 150;
+///
+
+
+
+if (state_type = "flinch" || state_type = "air_flinch" || state_type = "tumble" || state_type = "edge" || state_type = "grabbed" || state_type = "out" || state_type = "respawn" || state_type = "entry" )
+{
+		floattemp = 1;
+}
+
+
+
+if (( (moveup && special)&& state_type != "attack" && floattime > 0 && floattemp != 0) && state_type != "tumble" && state_type != "air_flinch" && state_type != "edge" && state_type != "grabbed" && state_type != "dodge" && state_type != "air_dodge" && state_type != "ukemi" && state_type != "locked" && state_type != "broken" && sprite_index != fall_sprite && sprite_index != flinch_sprite && attack_type != "b" )
+{
+	floattemp = 0;
+} 
+if floattemp = 0 
+{ 
+	if (taunt)
+	{
+	attack_type = "taunt";
+	}
+	if (shieldup = 1)
+	{
+		floattemp = 1;
+	}
+
+	gravity = 0;
+    gravity_lock = 1;
+	if moveup
+	{
+	vspeed -= 0.3
+	}
+	if movedown
+	{
+	vspeed += 0.3
+	}
+	if moveleft
+	{
+	hspeed -= 0.3
+	}
+	if moveright
+	{
+	hspeed += 0.3
+	}
+	if (!moveright || !moveleft)
+	{
+		if hspeed > 0
+		{
+		hspeed -= 0.1;
+		}
+		if hspeed < 0
+		{
+		hspeed += 0.1;
+		}
+	}
+		if (!moveup || !movedown )
+	{
+		if vspeed < 0
+		{
+		vspeed += 0.1; 
+		}
+		if vspeed > 0
+		{
+		vspeed -= 0.1; 
+		}
+	}
+	if hspeed > floatspeedh
+	{
+		hspeed = floatspeedh
+	}
+	if vspeed > floatspeedv
+	{
+		vspeed = floatspeedv
+	}
+		if hspeed < -floatspeedh
+	{
+		hspeed = -floatspeedh
+	}
+	if vspeed < -floatspeedv
+	{
+		vspeed = -floatspeedv
+	}
+}
+
+if (floattime > 0 && ((air > 0 && floattemp = 0) || (hover_timer > 0 && vspeed = 0)))
+{
+floattime -= 1
+}
+
+
+if ( sprite_index == jump_sprite && floattemp == 0 )
+{
+	sprite_index = hover_sprite;
+}
+
+
+
+/////////////////Meter Start/////////////////////////////////////
+
+if (!instance_exists(CardHud))
+	{
+		hud_x = obj_game_control.hud_x[other.number-1];
+		hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+		CardHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+		CardHud.step_script = hudThing_step_script;
+		CardHud.draw_script = hudThing_draw_script;
+		CardHud.owner = self.id;
+		CardHud.keepmain = self.keepmain;
+	}
+
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+}
+
+MeterHud.sprite_index = meter_sprite;
+CardHud.sprite_index = card_meter_sprite;
+CardHud.image_index = card_meter;
+CardHud.image_speed = 0;
+MeterHud.hudalpha = obj_game_control.hud_cover[number-1];
+CardHud.hudalpha = obj_game_control.hud_cover[number-1];
+
+if(card_meter > 2){card_meter = 0}
+
+if(floattime = maxfloattime){MeterHud.image_index = 55;} else {MeterHud.image_index = floattime*56/maxfloattime;}
+MeterHud.image_speed = 0;
+
+/////////////////Meter Stop/////////////////////////////////////
+
+
+
+if air = 0 
+{
+	hover_time = 9999;
+	candash = 1 + kaioken;
+	if(floattime < maxfloattime ){floattime += 1;} 
+	if (moveup != 1) { floattemp = 1;}
+	upbtemp = 0;
+}
+
+if ((floattime <= 0 && air > 0) || state_type = "out" || state_type = "respawn" ) 
+{
+	floattemp = 2;
+	hover = 0;
+	hover_time = 0;
+	hover_timer = 0;
+}
+///////////////////////////////////////////// my edits stop
+
+
+
+
+
+
+if shottimer1 >= 1
+{
+shottimer1 -= 1;
+}
+
+if shottimer1 <= 0
+{
+	shottimer1 = 0;
+}
+
+if shottimer2 >= 1
+{
+shottimer2 -= 1;
+}
+
+if ((shottimer2 <= 0) || (air = 0))
+{
+	shottimer2 = 0;
+}
+
+if sidetime >= 1
+{
+sidetime -= 1
+}
+
+if sidetime <= 0
+{
+	sidetime = 0;
+}
+
+//BIG MARISA NEGRA CODE START
+if ( dead || state_type == "out" )
+  black_marisa = 0;
+
+if ( black_marisa = 2 ) {
+  smash_power = 0;
+  size_target = min ( 2 , csize * 2 );
+  size = size_target;
+  size_transformation = 2;
+  if ( size < csize * 2 )
+    {
+    offense = csize * 2 - 1;
+    }
+    else
+    {
+    offense = 1;
+    }
+  defense = 1.5;
+  if ( black_marisa == 0 )
+    {
+    size_target = csize;
+    size = csize;
+    size_transformation = 0;
+    }
+}
+//BIG MARISA NEGRA CODE END
+
+if state_type = "land" || state_type = "respawn" || state_type = "edge" || state_type = "stand" {
+    can_sideb = 1;
+	}
+if ( sprite_index == walk_sprite )
+image_speed = 0.13;
+
+if state_type = "entry" || state_type = "respawn" || state_type = "out" || state_type = "dead" {
+btemp = 0
+}
+if btemp < 0
+btemp = 0
+if attack_type != "b"
+btemp -= 0.04

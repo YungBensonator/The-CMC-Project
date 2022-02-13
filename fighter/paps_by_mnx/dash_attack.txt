@@ -1,0 +1,96 @@
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0.3;
+        sprite_index = dash_attack_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 66;
+        timer_speed = 1;
+        hspeed *= 0.3;
+		has_hit = 0
+}
+
+if timer < time {
+     state_type = "attack";		 
+ switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+	case 36: image_index = 9; break;
+	case 40: image_index = 10; break;
+	case 44: image_index = 11; break;
+	case 48: image_index = 12; break;
+	case 52: image_index = 5; break;
+	case 54: image_index = 2; break;
+	case 56: image_index = 1; break;
+	case 58: image_index = 0; break;
+	}
+	
+    if timer = 4 {
+        duster = instance_create(x,y,obj_dust_effect)
+        duster.facing = facing;
+        sound_play(attack_sound3)
+        }
+
+	if timer = 8
+		{
+		sound_play(attack_voice1)
+		}
+		
+    if timer < 16 && timer >= 4
+		{
+		hspeed = (4-facing*8)*size;
+		}
+	
+    if timer >= 16 && timer < 24
+		{
+		hspeed = (2.8-facing*5.6)*size;
+		}
+	
+    if timer >= 40 && timer <= 48
+		{
+		hspeed = (1.6-facing*3.2)*size;
+		}
+	
+    if timer = 50
+		{
+        interrupt = 1
+		}
+	
+	if timer = 8
+		{
+		create_hitbox(6,20+facing*140,9,0,2,2,kick1,obj_spark_hit2,1,1.2,0,22,self.id,4,1);
+		hitbox.hit_stun = 60
+		hitbox.execute_on_hit = "attacker.has_hit = 1"
+		}
+	
+	if timer = 32 || timer = 36 || timer = 40
+		{
+		create_hitbox(1.5,370,8,0,2,2,punch4,obj_spark_hit2,1.2,1.6,0,27,self.id,4,1);
+		hitbox.execute_on_hit = "attacker.has_hit = 1"
+		}
+		
+	if timer = 44
+		{
+		create_hitbox(4.5,90,4,3.65,2,2,punch4,obj_spark_hit2,1.2,1.6,0,27,self.id,4,2);
+		}
+		
+	if has_hit = 1 and timer <= 44{
+		target.direction = point_direction(target.x,target.y,x,y)
+	}
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+    }
+        

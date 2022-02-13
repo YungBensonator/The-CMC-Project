@@ -1,0 +1,229 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" )
+  {
+  sound_play ( upb_sound );
+  attacking = 0;
+  attack_type = "upb";
+  timer = -20;
+  time = 38;
+  state_type = "air_attack";
+  timer_speed = 1;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0.5;
+  intangible = 1;
+  speed = 0;
+  gravity_lock = 1;
+  fall_lock = 0;
+  air_move = 0;
+  temp = 3;
+  vspeed = -2;
+  }
+
+if ( state_type == "air_attack" )
+  gravity_lock = 2;
+
+var spp;
+spp = 24;
+if timer > 5
+force_edge_grab = 1
+if ( ( timer > 1 && timer < 12 ) || ( timer >= 17 && timer <= 23 ) ) && !ai
+  {
+  if ( moveright ) temp = 1;
+  if ( moveleft ) temp = 5;
+  if ( moveup )
+    {
+    if ( moveright )
+      temp = 2;
+      else
+    if ( moveleft )
+      temp = 4;
+      else
+      temp = 3;
+    }
+  if ( movedown )
+    {
+    if ( moveright )
+      temp = 8;
+      else
+    if ( moveleft )
+      temp = 6;
+      else
+      temp = 7;
+    }
+  }
+  if ( ai && ( offstage || ai_state = "recover" ) ) {
+	if timer = 11 {
+	if y > nearest_edge.y {
+	temp = 3 }
+	else {
+	if ( x < nearest_edge.x )
+	      {
+		temp = 1
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		temp = 5
+	      }
+	}
+	}
+	if timer = 25 {
+	if y > nearest_edge.y {
+		if ( x < nearest_edge.x )
+	      {
+		temp = 2
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		temp = 4
+	      }
+	}
+	else {
+	if temp2 != 1 && temp2 != 5 {
+	if ( x < nearest_edge.x )
+	      {
+		temp = 1
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		temp = 5
+	      }
+	}
+	else if temp2 = 1 || temp2 = 5 {
+	if ( x < nearest_edge.x )
+	      {
+		temp = 2
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		temp = 4
+	      }
+	}
+	}
+	}
+}
+
+if ( ( ( timer >= 12 && timer < 17 ) || ( timer >= 27 && timer < 32 ) ) && temp != 0 )
+  {	
+  after_image ( 6 , c_aqua , .8 );
+  after.alpha_add = -1/6;
+  after.sprite_index = b_spark_sprite;
+  after.x += -3 + random ( 7 );
+  after.y -= 12 * size * ysize;
+  after.y += -3 + random ( 7 );
+  after.depth = depth - 2;
+  after.image_xscale *= 1.4 + random ( 0.4 );
+  after.image_yscale *= 1.4 + random ( 0.4 );
+  after.image_angle = random ( 360 );
+  after.angle_add = -40 + random ( 81 );
+  after_image ( 4 , c_aqua , .8 );
+  after.alpha_add = -1/4;
+  after.sprite_index = b_spark_sprite;
+  after.x += -3 + random ( 7 );
+  after.y -= 12 * size * ysize;
+  after.y += -3 + random ( 7 );
+  after.depth = depth - 2;
+  after.image_xscale *= 1.4 + random ( 0.4 );
+  after.image_yscale *= 1.4 + random ( 0.4 );
+  after.image_angle = random ( 360 );
+  after.angle_add = -40 + random ( 81 );
+  after_image ( 2 , c_aqua , .8 );
+  after.alpha_add = -1/2;
+  after.sprite_index = b_spark_sprite;
+  after.x += -3 + random ( 7 );
+  after.y -= 12 * size * ysize;
+  after.y += -3 + random ( 7 );
+  after.depth = depth - 2;
+  after.image_xscale *= 1.4 + random ( 0.4 );
+  after.image_yscale *= 1.4 + random ( 0.4 );
+  after.image_angle = random ( 360 );
+  after.angle_add = -40 + random ( 81 );
+  switch ( temp )
+    {
+    case 1: hspeed = spp * size; break;
+    case 2: vspeed = -spp * size * 0.7; hspeed = spp * size * 0.7; break;
+    case 3: vspeed = -spp * size; break;
+    case 4: vspeed = -spp * size * 0.7; hspeed = -spp * size * 0.7; break;
+    case 5: hspeed = -spp * size; break;
+    case 6: vspeed = spp * size * 0.7; hspeed = -spp * size * 0.7; break;
+    case 7: vspeed = spp * size; break;
+    case 8: vspeed = spp * size * 0.7; hspeed = spp * size * 0.7; break;
+    }
+  if ( air == 0 && vspeed > 0 )
+    {
+    sound_play ( thud2_sound );
+    state_type = "land";
+    hspeed *= 0.25;
+    timer = 0;
+    time = 14;
+    attack_type = "none";
+    //temp = instance_create ( x , y , obj_dust_effect );
+    //temp . facing = 0;
+    //temp = instance_create ( x , y , obj_dust_effect );
+    //temp . facing = 1;
+    temp = instance_create ( x , y , obj_down_impact );
+    temp . image_blend = c_aqua;
+    screen_shake ( 2 , 3 );
+    exit;
+    }
+  }
+
+switch ( timer )
+  {
+  case 2:
+    vspeed = 0;
+    instance_create ( x , y - 7 * size , obj_spark_effect );
+    break;
+  case 6:
+    intangible = 0;
+    break;
+  case 12:
+    percent += 1;
+    create_hitbox ( 999 , point_direction ( 0 , 0 , hspeed , vspeed ) , 300 , 300 , 8 , 30 , shock2 , obj_spark_shock , 0.75 , 0.75 , 0 , 12 , self.id , 5 , 4 );
+    hitbox.hit_stun = 8; 
+    image_index = 0;
+    image_speed = 0;
+    instance_create ( x , y - 7 * size , obj_spark_effect );
+    sound_play ( upb_voice );
+    sound_play ( upb_sound2 );
+    break;
+  case 16:
+    temp2 = temp;
+    break;
+  case 17:
+    temp = 0;
+    speed = 0;
+    break;
+  case 26:
+    if ( temp == 0 || temp == temp2 )
+      {
+      speed = 0;
+      timer = time - 1;
+      }
+      else
+      {
+      image_index = 0;
+      image_speed = 0;
+      instance_create ( x , y - 7 * size , obj_spark_effect );
+      sound_play ( upb_voice2 );
+      sound_play ( upb_sound2 );
+      }
+    break;
+  case 27:
+    percent += 1;
+    create_hitbox ( 999 , point_direction ( 0 , 0 , hspeed , vspeed ) , 300 , 300, 8 , 30 , shock2 , obj_spark_shock , 0.75 , 0.75 , 0 , 12 , self.id , 5 , 4 );
+    hitbox.hit_stun = 8; 
+    break;
+  case 32:
+    speed = 0;
+    break;
+  }
+
+if ( timer >= time - 1 )
+  {
+  state_type = "fall";
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+  }

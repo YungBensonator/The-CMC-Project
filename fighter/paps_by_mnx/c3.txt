@@ -1,0 +1,42 @@
+if timer = 1 && hit = 0 					// Initialize sprite and speed during frame 1
+	{
+    sprite_index = attacker.id.spinningbone_sprite
+    image_speed = 0.3;
+    visible = 1;
+	moving_object = 1;
+	facing = attacker.facing;
+	scale = attacker.scale;
+	size = attacker.size;
+	hspeed = 3.5-facing*7
+	vspeed = -6;
+	gravity = 0.4
+	
+	if attacker.facing = 0
+	image_xscale = attacker.image_xscale
+	else
+	image_xscale = attacker.image_xscale
+	image_yscale = attacker.image_yscale
+	}
+
+if timer > 1 && timer < 100
+	{
+	if (on_floor || on_platform)
+		{
+		vspeed = -6;
+		}
+	if (next_to_rwall && hspeed > 0) 
+		{
+		hspeed *= -1;
+		vspeed = -6;
+		}
+	if (next_to_lwall && hspeed < 0) 
+		{ 
+		hspeed *= -1;
+		vspeed = -6;
+		}
+	}
+	
+if timer > 100 && hit = 1
+	{
+	instance_destroy()
+	}

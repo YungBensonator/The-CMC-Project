@@ -1,0 +1,191 @@
+moving_object=1;
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+if timer = 1 && hit = 0 {
+    speed = 4
+    direction = 90
+    temp = 0
+    sprite_index = attacker.id.pkthunder_sprite
+    ness = attacker
+    alarm[0] = 179
+    visible = 1 
+    size = ness.size
+    //parent=instance_create(x,y,obj_plrParent)
+    ball = self.id
+    hit_script = char_custom6
+    roam = 0
+}
+if attack_success {
+    ness.attack_success = 1
+}
+if !instance_exists(ness)
+    instance_destroy();
+if attacker = ness && string(ness.attack_type) = "upb" && roam = 0 {
+    moveup = ness.moveup
+    moveright = ness.moveright
+    movedown = ness.movedown
+    moveleft = ness.moveleft
+    moveupright = ness.moveup * ness.moveright
+    movedownright = ness.movedown * ness.moveright
+    movedownleft = ness.movedown * ness.moveleft
+    moveupleft = ness.moveup * ness.moveleft
+}
+if attacker = ness && (string(ness.state_type) = "flinch" || string(ness.state_type) = "air_flinch" || string(ness.state_type) = "tumble") {
+var i;
+for (i = 0; i < 1000; i += 1)
+if (instance_exists(trail[i])) {
+with trail[i] hit_attacker = 1;
+}
+}
+if temp = 0 && !ness.ai && string(ness.attack_type) = "upb" && roam = 0 {
+if ( ness.analog_control )
+{
+dd = stick_angle ( ness , 0.5 , 1 );
+if ( dd != -1 )
+{
+if ( abs ( angle_difference ( dd , direction ) ) < 7.3 )
+  direction = dd;
+  else
+if ( angle_difference ( dd , direction ) > 0 )
+  direction += 7.3;
+  else
+  direction -= 7.3;
+}
+}
+else
+{
+if moveup = 1 {
+    if direction < 90 || direction >= 270   
+        direction+=5
+    else if direction > 90 && direction < 270
+        direction-=5
+    }
+if movedown = 1 {
+    if direction < 90 || direction > 270   
+        direction-=5
+    else if direction >= 90 && direction < 270
+        direction+=5
+    }
+if moveright = 1 {
+    if direction < 180 && direction > 0   
+        direction-=5
+    else if direction >= 180 && direction < 360
+        direction+=5
+    }
+if moveleft = 1 {
+    if direction < 180 && direction >= 0   
+        direction+=5
+    else if direction > 180 && direction < 360
+        direction-=5
+    }
+if moveupright = 1 {
+    if direction < 45 || direction >= 225
+	direction+=5
+    else if direction > 45 && direction < 225
+	direction-=5
+    }
+if movedownright = 1 {
+    if direction < 135 || direction > 315
+	direction-=5
+    else if direction >= 135 && direction < 315
+	direction+=5
+    }
+if movedownleft = 1 {
+    if direction < 45 || direction > 225
+	direction-=5
+    else if direction >= 45 && direction < 225
+	direction+=5
+    }
+if moveupleft = 1 {
+    if direction < 135 || direction >= 315
+	direction+=5
+    else if direction > 135 && direction < 315
+	direction-=5
+    }
+}
+}
+/*if timer >= 1 {
+    parent.x = x
+    parent.y = y
+}*/
+if temp = 0
+speed = 3.9
+image_angle = direction+facing*180
+if (under_ceiling || (is_on_floor(self) && vspeed > 0) || collision_point(x+sign(hspeed),y,obj_wall,1,1)) && hit = 0 {  
+    temp = 0
+    sound_stop(ness.upb_sound)
+    hit = 1
+    timer = 0
+    time = -1
+    alarm[0] = 2
+    visible = 0
+    spark = instance_create ( x , y , obj_spark_shock );
+    spark.image_xscale *= 1.4;
+    spark.image_yscale *= 1.4;
+    sprite_index = spr_collision_bubble
+    image_xscale = 0.2
+    image_yscale = 0.2
+	instance_destroy()
+}
+if timer >= 179 {
+    temp = 1
+    }
+if timer > 12 && hit = 0 && collision_rectangle(x-5,y-5,x+5,y+5,ness,0,0) && roam = 0 {
+    /*if y < ness.y - 13 {
+        if x < ness.x - 5 
+            ness.direct = 315
+        else if x > ness.x + 5
+            ness.direct = 225
+        else
+            ness.direct = 270
+    }*/
+    script_execute(char_custom6);
+    ness.intangible = 1
+    ness.intangibility_frames = 10;
+    sound_play2 ( kick3 );
+    spark = instance_create ( x , y , obj_spark_shock );
+    spark.image_xscale *= 1.4;
+    spark.image_yscale *= 1.4;
+    spark = instance_create ( x , y , obj_spark_shockwave );
+    spark.image_blend = c_aqua;
+    spark.image_xscale *= 1.6;
+    ness.direct = arctan2(-(ness.y-13*ness.size-y),(ness.x-x))
+    ness.time = 360
+    ness.timer = 300
+    hit = 2
+    timer = time
+}
+image_blend = c_aqua;
+if timer mod 7 == 0 && hit = 0 {
+    spark = instance_create ( x , y , obj_spark_shockwave );
+    spark.image_alpha *= 0.3;
+    spark.image_xscale *= 0.3;
+    spark.image_yscale *= 0.3;
+}
+if hit = 0 && timer > 8 && timer mod 3 = 0 {
+    trail[h] = create_projectile(1,direction,0.5,0,3,2,shock1,obj_spark_shock,1,1,0,0,ness,15,no_script);
+    trail[h].sprite_index = global.electricity_spark
+    trail[h].image_index = 0
+    trail[h].image_speed = 0.8
+    trail[h].image_xscale = 0.2
+    trail[h].image_yscale = 0.18 * ( choose ( 1 , -1 ) )
+    trail[h].image_alpha = 0.75
+    trail[h].image_angle = direction
+    h += 1
+}
+if ness.timer < 176 && string(ness.attack_type) != "upb" && timer < time {
+    sound_stop(ness.upb_sound)
+    roam = 1
+}
+//effect_create_below(ef_spark,x,y,0,c_aqua)
+if hit = 2 && ness.timer < 200 && string(ness.attack_type) = "upb" && timer < time {
+/*if attack_success {
+ness.timer = 550
+ness.time = 560
+}
+else {
+    ness.timer = 200
+}*/
+ness.DONOTFALL = attack_success
+sound_stop(ness.upb_sound)
+}

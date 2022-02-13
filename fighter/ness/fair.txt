@@ -1,0 +1,86 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0;
+        sprite_index = fair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 46;
+        timer_speed=1;
+	a = 0;
+	p = 0;
+}
+switch ( timer )
+  {
+  case 3: image_xscale *= 0.9; image_yscale *= 0.9; break;
+  case 4: image_xscale *= 0.8; image_yscale *= 0.8; break;
+  case 5: image_index = 1; break;
+  case 28: image_index = 0; break;
+  case 39: image_index = image_number - 1; break;
+  }
+if ( timer >= 25 && timer < 42 )
+  {
+  image_angle = 180 - lengthdir_x ( 180 , ( timer - 25 ) / ( 42 - 25 ) * 180 );
+  if ( !facing )
+    image_angle *= -1;
+  }
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 3 {
+                sound_play(fairpsi_sound);
+                }
+            if timer = 5 {
+                if random(10)>1.5
+                play_attack_voice()
+                sound_play(psi_sound1);
+                create_hitbox(2,45+facing*90,4,0,4,3,magic2,obj_spark_shock,0.4,0.4,23,15,self.id,2,3);
+                hitbox.di = 0.5
+		hitbox.hit_stun = 3;
+		hitbox.shield_stun = 2;
+                create_hitbox2(2,45+facing*90,4,0,4,2,magic2,obj_spark_shock,0.4,0.4,14,14,self.id,2,3);
+                hitbox2.di = 0.5
+		hitbox.hit_stun = 3;
+		hitbox.shield_stun = 2;
+                spark[a] = create_spark(24,15,psi_sprite,0.6,0.27,0.27)
+		a += 1
+            }
+            if timer = 7 || timer = 9 || timer = 11 || timer = 13 {
+                create_hitbox(1.5,50+facing*80,4+((vspeed<-2)*0.75),0,4,1,magic2,obj_spark_shock,0.7,0.7,23,15,self.id,2,3);
+                hitbox.di = 0.5
+                create_hitbox2(1.5,50+facing*80,4+((vspeed<-2)*0.75),0,4,1,magic2,obj_spark_shock,0.4,0.4,14,14,self.id,2,3);
+                hitbox2.di = 0.5
+                spark[a] = create_spark(24,15,psi_sprite,0.6,0.24,0.24)
+		a += 1
+            }
+            if timer = 15 {
+                create_hitbox(4,40+facing*100,4.5,6.5,5,3,magic3,obj_spark_shock,0.75,0.75,23,15,self.id,3,3);
+                create_hitbox2(4,40+facing*100,4.5,6.5,5,3,magic3,obj_spark_shock,0.45,0.45,14,14,self.id,3,3);
+                spark[a] = create_spark(24,15,psi_sprite,0.6,0.27,0.27)
+		a += 1
+            }
+	var p;
+	if timer mod 2 = 0
+	for (p = 0; p < 10; p += 1 ) {
+	spark[p].x = x + (24*(1-facing*2))
+	spark[p].y = y - 15
+	}
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=8; }
+            if timer = 33
+                interrupt = 1
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

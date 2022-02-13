@@ -1,0 +1,53 @@
+if state_type = "crouch" || state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 10;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 1: shakex = 0.5 - facing; break;
+  case 2: image_index = 1; shakex = 2 - facing * 2; break;
+  case 3: shakex = 1 - facing; break;
+  case 4: image_index = 2; break;
+  case 7: shakex = 0.5 - facing; break;
+  case 8: image_index = 0; break;
+  case 9: shakex = 0; break;
+  }
+        if timer < time {
+            state_type = "attack";
+            if timer = 2 {
+                sound_play(attack_sound1);
+                //sound_play(choose(attack_voice1,attack_voice2,attack_voice3))
+                create_hitbox(4,20+facing*140,1.6,0.05,6,4,kick1,obj_spark_hit1,0.5,0.3,10,4,self.id,3,1);
+                hitbox.hit_stun = -3
+                duster = instance_create ( x - size * 6 * ( 1 - facing * 2 ) , y + 1.5 , obj_dust_effect );
+                duster.image_xscale *= 0.16 * size;
+                duster.image_yscale *= 0.16 * size;
+                duster.facing = facing;
+                duster = instance_create ( x - size * 6 * ( 1 - facing * 2 ) , y + 1.5 , obj_dust_effect );
+                duster.image_xscale *= 0.16 * size;
+                duster.image_yscale *= 0.16 * size;
+                duster.facing = !facing;
+				var burst;
+    //78, 36
+	burst = instance_create(place_x(30)+x,place_y(24)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+            }
+            if timer = 7
+            interrupt = 1
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

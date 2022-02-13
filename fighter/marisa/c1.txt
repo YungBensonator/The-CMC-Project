@@ -1,0 +1,38 @@
+absorb = 1
+absorb2 = 1
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.fireball_sprite
+    if speed == 0  hspeed=4.5 - attacker.id.facing*9
+    image_speed = 0.4
+    visible = 1
+    dir = 90 - sign ( hspeed ) * 30;
+    time = 33
+}
+image_angle = direction+facing*180
+moving_object = 1;
+
+if ((collision_point(x,y+((sign(vspeed))-5),obj_platform,1,1)))
+{
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  vspeed = abs(vspeed);
+}
+
+if ( on_floor || on_platform )
+  {
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  vspeed = -abs(vspeed);
+  }
+
+  if (collision_point(x+sign(hspeed),y,obj_wall,1,1))
+  {
+	bounce += 1;
+	instance_create ( x , y , obj_spark_effect );
+	hspeed = -hspeed;
+    if ( vspeed = 0 )
+	{
+		image_angle = -180
+	}
+  }  
+

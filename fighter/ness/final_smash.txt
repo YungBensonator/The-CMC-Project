@@ -1,0 +1,153 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding"  {
+    size = csize
+    sound_play(final_smash_sound1)
+        state_type = "air_attack";
+    attack_type = "final_smash";
+    image_speed = 0.2;
+    sprite_index = final_smash_sprite;
+    image_index=0;
+    timer = 1;
+    time = 125;
+    timer_speed=1;
+    intangible = 1;
+    final_smashes+=1
+    smash_power = 0
+    freezer  = instance_create(x,y,obj_freeze)
+    freezer.dontpause = self.id
+    freezer.alarm[0] = 48
+    instance_create(x,y-20,obj_spark_effect2);
+    air_move=0
+    //effect_create_above(ef_ring,x,y-15*size,1,c_white)
+}
+speed=0
+gravity_lock = 1;
+intangible = 1
+if timer = 3 {
+    //sound_play(final_smash_voice);
+    //effect_create_above(ef_ring,x,y-15*size,0,c_white)
+}
+if timer = 55 {
+    create_spark(25,16,psi_sprite,0.5,0.33,0.33)
+    create_hitbox(8,35+facing*110,3.5,3.3,-1,9,magic3,obj_spark_shock,0.9,0.8,25,16,self.id,4,5);
+    sound_play(psi_sound3)
+    sound_play(dsmash_voice)
+    target = -1
+}
+if timer >= 56 && timer < 59 && target > -1 && instance_exists(target) {
+    sprite_index = final_smash_sprite2
+    image_speed = 0.2
+    image_index = 0
+    timer = 200
+    time = 400
+    target1 = target
+}
+
+if timer = 59 {
+    sprite_index = b_sprite2
+    image_speed = 0.25
+    if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = self.id
+        FMODSoundPlay(crowd_launch1)
+     }
+}
+if timer = 68 || timer = 320 {
+    sound_play(final_smash_sound1);
+    if timer = 320 
+        sound_play(final_smash_voice)
+    create_projectile(5,80+facing*20,2,0,-1,(3+(timer=320)*1)/size,sf_shell,obj_spark_shock,0.6+(timer=320)*0.2,0.6+(timer=320)*0.2,36,22+(timer=320)*4,id,28,ness_rockin);
+    proj.ness = self.id;
+    proj.hitlag_diff = 4
+    spark = instance_create(x+(16-facing*32)*size,y-15*size,obj_spark_shockwave)
+    spark.image_xscale *= (0.6+(timer=320)*0.25)*size
+    spark.image_yscale *= (0.6+(timer=320)*0.25)*size*4
+    spark.image_blend = c_yellow
+    spark.image_alpha = 0.75
+    sound_play(b_sound3);
+}
+if timer = 325 {
+    spark = instance_create(x+(19-facing*38)*size,y-15*size,obj_spark_shockwave)
+    spark.image_xscale *= (0.65+(timer=320)*0.275)*size
+    spark.image_yscale *= (0.68+(timer=320)*0.275)*size*4
+    spark.image_blend = c_yellow
+    spark.image_alpha = 0.75
+}
+if timer = 330 {
+    spark = instance_create(x+(22-facing*44)*size,y-15*size,obj_spark_shockwave)
+    spark.image_xscale *= (0.7+(timer=320)*0.275)*size
+    spark.image_yscale *= (0.8+(timer=320)*0.275)*size*4
+    spark.image_blend = c_yellow
+    spark.image_alpha = 0.75
+}
+if timer = 375 {
+    if air = 0
+        sprite_index = crouch_sprite
+}
+if timer >= 200 && timer <= 320 && instance_exists(target1) && target1.timer_speed > 0 {
+        target1.time = 210;
+        target1.timer = 0
+        if timer < 213
+            target1.sprite_index=target1.flinch_sprite
+        else
+            target1.sprite_index=target1.broken_sprite
+        target1.state_type = "flinch"
+        target1.speed=0;
+        target1.gravity_lock = 1;
+		target1.ignore_physics = 1;
+        target1.y = self.y;
+        target1.x = x + (25 - facing*50)*size
+}
+if timer = 220 {
+    sound_play(final_smash_sound2)
+    play_attack_voice()
+    for (i = 0; i <= 7; i +=1) {
+        var q;
+        q = create_spark(-120 + i*14, 32 + i*14,rockin_sprite2,0,0.75,0.75);
+        q.image_speed = 0
+        q.alarm[0] = 65
+        q.hspeed = 9*(1-facing*2)
+        q.vspeed = 9
+        q.image_angle = 315 - facing*90
+    }
+}
+if timer = 234 || timer = 280 {
+    for (i = 0; i <= 2; i +=1) {
+        for (j = 0; j <= 2; j+=1) {
+            var q;
+            q = create_spark(-24 + i*32, 64 - j*32,rockin_sprite1,0.4,0.75,0.75);
+        }
+    }
+    create_hitbox(9,35+facing*110,3.5,3.3,-1,7,magic3,obj_spark_shock,1.4,1.4,25,16,self.id,4,5);
+}
+if timer = 266  {
+    play_attack_voice()
+    sound_play(final_smash_sound2)
+    for (i = 0; i <= 7; i +=1) {
+        var q;
+        q = create_spark(230 - i*14, 40 + i*14,rockin_sprite2,0,0.75,0.75);
+        q.image_speed = 0
+        q.alarm[0] = 65
+        q.hspeed = -9*(1-facing*2)
+        q.vspeed = 9
+        q.image_angle = 225 + facing*90
+    }
+}
+if timer = 300 {
+    sprite_index = b_sprite2
+    image_index = 0
+    image_speed = 0.2
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+    
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}

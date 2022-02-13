@@ -1,0 +1,57 @@
+if state_type = "jump" {
+        state_type = "attack";
+        attack_type = "uair";
+        image_speed = 0;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 1: image_angle = 6; break;
+  case 2: image_angle = 9; break;
+  case 3: image_angle = 10; break;
+  case 5: instance_create ( x , y - 15 * size , obj_spark_effect ); image_index = 2; image_xscale *= 1.2; image_yscale*= 1.2; shakey = -1; break;
+  case 6: shakey = -2; break;
+  case 7: shakey = -1; image_xscale *= 1.1; image_yscale*= 1.1; break;
+  case 9: image_xscale *= 1.05; image_yscale*= 1.05; break;
+  case 11: image_index = 8; break;
+  }
+if ( timer >= 5 && timer < 30 )
+  {
+  image_angle = 10 - lengthdir_y ( 350 , ( timer - 5 ) / ( 5 - 30 ) * 90 );
+  if ( image_index == 2 )
+    image_angle += 80;
+if ( facing )
+  image_angle *= -1;
+  }
+state_type = "air_attack";
+if timer = 3
+    vspeed -= size*0.8
+if timer = 5 {
+    sound_play(attack_sound3);
+    play_attack_voice()
+    create_hitbox(13,75+facing*30,5.5,6.25,16,9,punch3,obj_spark_hit2,0.72,0.77,0,20,self.id,5,3);
+    hitbox.hit_stun = 9
+    hitbox.shake_ampl = 0.75
+    hitbox.shake_type = 1
+    hitbox.shield_stun = 2.5
+}
+if timer = 35
+interrupt = 1
+if air = 0 {
+    shakey = 0;
+    state_type="land";
+    sprite_index = land_sprite;
+    attack_type="none";
+    timer=0;
+    time=9; }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    }
+        

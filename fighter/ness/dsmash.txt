@@ -1,0 +1,105 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 54;
+        timer_speed=1;
+        charge_frame = 6;
+		create_hurtbox_precise(self.id,55,dsmash_mask)
+}
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 7: case 9: image_index = 2; break;
+  case 8: case 10: image_index = 2; break;
+  case 11: image_index = 5; break;
+  case 13: image_index = 6; break;
+  case 16: image_index = 7; break;
+  case 19: image_index = 8; break;
+  case 22: image_index = 9; break;
+  case 25: image_index = 10; break;
+  case 26: image_index = 13; break;
+  case 27: image_index = 13; break;
+  case 28: image_index = 13; break;
+  case 31: image_index = 14; break;
+  case 34: image_index = 15; break;
+  case 37: image_index = 16; break;
+  case 40: image_index = 17; break;
+  case 41: shakex = -1 + facing * 2; break;
+  case 42: shakex = 0; break;
+  }
+if ( timer == 7 )
+if ( collision_line ( x - 20 * size * ( 1 - facing * 2 ) , y - 6 , x - 20 * size * ( 1 - facing * 2 ) , y + 6 , obj_pavement , 1 , 1 ) )
+  {
+  duster = instance_create ( x - 20 * size * ( 1 - facing * 2 ) , y + 1 , obj_dust_effect );
+  duster.facing = facing;
+  duster.image_xscale *= 0.4;
+  duster.image_yscale *= 0.4;
+  }
+if ( timer == 25 )
+if ( collision_line ( x + 30 * size * ( 1 - facing * 2 ) , y - 6 , x + 30 * size * ( 1 - facing * 2 ) , y + 6 , obj_pavement , 1 , 1 ) )
+  {
+  duster = instance_create ( x + 30 * size * ( 1 - facing * 2 ) , y + 1 , obj_dust_effect );
+  duster.facing = !facing;
+  duster.image_xscale *= 0.4;
+  duster.image_yscale *= 0.4;
+  }
+        if timer < time {
+            state_type = "attack";
+	    if timer = 5  {
+	    create_projectile(1,90,0.9,0.1,6,8,kick2,obj_spark_hit2,0.3,0.3,-27,2,self.id,90,ness_yoyo)
+	    }
+	    if timer = 6 && instance_exists (proj)
+		with proj instance_destroy()
+            if timer = 7 {
+                sound_play(yoyo_sound2)
+                //instance_create(x+10-facing*20,y-20,obj_spark_effect)
+                sound_play(attacksnd3);
+                create_hitbox(3,22+facing*136,5.1,0.1,10,5,kick2,obj_spark_hit4,0.5,0.5,-26,5,self.id,6,3);
+                hitbox.shake_ampl = 0.8
+                hitbox.shake_kb = 0
+                hitbox.hit_stun = 4
+                //duster = instance_create(x+(22-facing*44)*size,y,obj_dust_effect)
+                //duster.facing = 1-facing
+                //duster.image_alpha = 0.75
+            }
+            if timer = 11 {
+                sound_play(dsmash_voice); 
+                sound_play(yoyo_sound1);
+            }
+            if timer = 19 {
+                create_hitbox(12,30+facing*120,6.4,7.3,16,7,kick3,obj_spark_hit4,0.5,0.5,13,7,self.id,13,3);
+                hitbox.charge_dmg = 0.5
+                hitbox.charge_kb = 0.75
+                hitbox.charge_hitlag = 0.75
+            }
+            if timer = 23 {
+                hitbox.hitbox_x = size*(25 - facing*50)
+                sound_play(yoyo_sound1);
+            }
+            if timer = 25 {
+                hitbox.hitbox_x = size*(38 - facing*76)
+            }
+            if timer = 40 {
+                image_index = 18
+                sound_play(catchsnd)
+                image_speed = 0
+            }
+        if timer = 51
+            interrupt = 1
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

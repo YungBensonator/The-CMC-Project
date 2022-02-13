@@ -1,0 +1,44 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 2;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 6: image_index = 2;  break;
+  case 9: image_index = 3;  break;
+  case 12: image_index = 4;  break;
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	}
+  timer = 0;
+  time = -1;
+  }

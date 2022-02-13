@@ -1,0 +1,85 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash1_sprite;
+        image_index=0;
+        timer = 1;
+        time = 1350;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+}
+speed = 0
+gravity_lock = 1;
+if ( timer < time ){
+
+switch ( timer )
+    {
+	case 200: image_index = 0; break;
+	case 750: image_index = 1; break;
+	case 1200: image_index = 2; break;
+	case 1205: image_index = 3; break;
+	case 1210: image_index = 4; break;
+	case 1220: image_index = 5; break;
+	case 1230: image_index = 6; break;
+	case 1250: sprite_index = final_smash2_sprite; image_index = 0; break;
+	case 1260: sprite_index = final_smash2_sprite; image_index = 1; break;
+	case 1265: sprite_index = final_smash2_sprite; image_index = 2; break;
+	case 1270: sprite_index = final_smash2_sprite; image_index = 3; break;
+	case 1275: sprite_index = final_smash2_sprite; image_index = 4; break;
+	case 1280: sprite_index = final_smash2_sprite; image_index = 5; break;
+	case 1285: sprite_index = final_smash2_sprite; image_index = 6; break;
+	case 1290: sprite_index = final_smash2_sprite; image_index = 7; break;
+    }
+	
+    if timer = 1 {
+		fs_music = tempmus_play2(fsmusic_sound,1400,1);
+		duster = instance_create ( 0 , 0 , obj_freeze );
+		duster.dontpause = self.id;
+		duster.alarm[0] = 1249;
+		camerazoomstuff = instance_create ( 0 , 0 , obj_camerazoom );
+		camerazoomstuff.camera_l = x - 8;
+		camerazoomstuff.camera_r = x + 8;
+		camerazoomstuff.camera_u = y - 4 - actual_height;
+		camerazoomstuff.camera_d = y + 4;
+		camerazoomstuff.camera_boundary_zoom = 25;
+		camerazoomstuff.alarm[0] = 1249;
+		 }
+	 
+	if timer = 1270
+		{
+		sound_play(final_smash_appear_sound);
+		create_hitbox(10,270,1,0,180,180,punch4,obj_spark_slash2,0.6,1.8,38,29,self.id,2,1);
+		hitbox.image_angle = 87+6*(1-facing*2);
+		}
+	
+	if timer = 1280
+		{
+		giantbone = create_projectile(50,45+facing*90,10,10,60,60,fire3,obj_spark_explode1,3,0.7,45,225,self.id,100,fsbone_script);
+		giantbone.sprite_index = final_smash_bone_sprite;
+		giantbone.image_xscale = size*1.5;
+		giantbone.image_yscale = size*1.5;
+		}
+	
+	if timer = 1290
+		{
+		giantbone.vspeed = 20;
+		}
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

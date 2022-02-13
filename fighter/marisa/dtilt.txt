@@ -1,0 +1,70 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        //hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+}
+        if timer < time {
+			
+			hspeed *= 0.95;
+			
+		switch ( timer )
+		{
+		case 6: image_index = 1; break;
+		}
+            if timer = 7 || timer = 9 || timer = 11 || timer= 13 {
+  spark = instance_create ( x + 12 * size * ( 1 - facing * 2 ) , y -5 * size , obj_spark_shockwave );
+  spark.image_blend = c_white;
+  spark.image_xscale = 0.1 * size;
+  spark.image_yscale = 0.1 * size;
+  spark = instance_create ( x + 12 * size * ( 1 - facing * 2 ) , y -5 * size , obj_spark );
+  spark.sprite_index = global.explosion_spark2;
+  spark.image_speed = 1.2;
+  spark.image_blend = c_white
+  spark.image_xscale = 0.1 * size;
+  spark.image_yscale = 0.1 * size;
+  spark.image_angle = random ( 360 );
+  spark.image_index = 0;
+            }
+            if timer = 14 {
+  spark = instance_create ( x + 12 * size * ( 1 - facing * 2 ) , y -5 * size , obj_spark_shockwave );
+  spark.image_blend = c_white;
+  spark.image_xscale = 0.2 * size;
+  spark.image_yscale = 0.2 * size;
+  spark = instance_create ( x + 12 * size * ( 1 - facing * 2 ) , y -5 * size , obj_spark );
+  spark.sprite_index = global.explosion_spark2;
+  spark.image_speed = 1.2;
+  spark.image_blend = merge_color ( c_white, c_gray , 25 )
+  spark.image_xscale = 0.3 * size;
+  spark.image_yscale = 0.3 * size;
+  spark.image_angle = random ( 360 );
+  spark.image_index = 0;
+  sound_play ( explode_small );
+  create_hitbox(6,40+facing*100,8,1,140,9,fire1,obj_spark_aura,0.7 , 0.6 , 15 , 5,self.id,24,3);
+  screen_shake(1.2,5)
+            }
+			
+			if timer = 15 
+			{
+				hspeed = -4.5+facing*9;
+			}
+			
+			if (timer > 20 && movejump) 
+			{
+				interrupt = 1;
+			}
+			
+			
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "crouch";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,274 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "sideb";
+  time = 110;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  sprite_index = attack_sprite1;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 0;
+  has_hit = 0;
+  targetLock = 0;
+  temp1 = 0;
+  temp2 = 0;
+  temp3 = 0;
+  temp4 = 0;
+  temp5 = 0;
+  temp6 = 0;
+  }
+
+switch ( timer )
+  {
+  case 10: image_index = 1;  break;
+  case 12: image_index = 2;  break;
+  case 14: image_index = 3;  break;
+  case 16: image_index = 4;  break;
+  }
+
+speed = 0;
+gravity_lock = 2;
+
+	if ( timer = 12 )
+	{
+		sound_play(shooting_sound);
+		temp = angle_correct(0);
+		
+		chain = create_projectile(5,90,5,0,30,1,slash3,obj_spark_slash3,0,0,22,17,self.id,70,char_custom2);
+		chain.sprite_index = chain_sprite2
+		chain.image_xscale = abs(image_xscale) * 0.3;
+		chain.image_yscale = abs(image_yscale) * 0.3;
+		chain.image_speed = 0.3
+		chain.image_angle = temp
+		chain.direction = temp
+		chain.priority = 5
+		chain.ungrazable = 1
+		chain.chain_sprite = chain_sprite
+		chain.base_x = chain.x
+	    chain.base_y = chain.y
+		chain.base_time = chain.time
+		chain.speed = 0
+		chain.base_speed = 8 * size
+		chain.hit_stun = 30
+		chain.og_chain = chain.id
+		chain.the_number = 0
+		chain.alarm[0] = chain.time+20
+		chain.depth = 0.01;
+		chain.execute_on_hit = "attacker.targetLock = attacked.id; attacker.has_hit = 1;"
+	}
+
+if ( has_hit = 1 && timer < 100 )
+{
+timer = 200;
+time = 300;
+
+tempx = targetLock.x;
+tempy = targetLock.y;
+
+targetLock.state_type = "flinch"
+targetLock.attack_type = "none";
+targetLock.timer = 0;
+targetLock.timer_speed = 0;
+targetLock.alarm[0] = 2;
+targetLock.depth = depth + 1;
+targetLock.intangible = 0;
+targetLock.x = tempx;
+targetLock.y = tempy;
+}
+
+if ( timer >= 200 && timer <= 260 && has_hit = 1 )
+{
+targetLock.state_type = "flinch"
+targetLock.attack_type = "none";
+targetLock.timer = 0;
+targetLock.timer_speed = 0;
+targetLock.alarm[0] = 2;
+targetLock.depth = depth + 1;
+targetLock.intangible = 0;
+targetLock.x = tempx;
+targetLock.y = tempy;
+}
+
+if ( timer = 220 )
+{
+	chain1 = create_projectile(2,90,5,0,-1,1,slash3,obj_spark_slash3,0,0,-20,random_range(30,50),self.id,70,char_custom2);
+	temp1 = point_direction( chain1.x , chain1.y , targetLock.x , targetLock.y - targetLock.actual_height/2 );
+	
+	chain1.sprite_index = chain_sprite2
+	chain1.image_xscale = abs(image_xscale) * 0.3
+	chain1.image_yscale = abs(image_yscale) * 0.3
+	chain1.image_speed = 0.3
+	chain1.image_angle = temp1
+	chain1.direction = temp1
+	chain1.priority = 5
+	chain1.ungrazable = 1
+	chain1.chain_sprite = chain_sprite
+	chain1.base_x = chain1.x
+	chain1.base_y = chain1.y
+	chain1.base_time = chain1.time
+	chain1.speed = 0
+	chain1.base_speed = 11 * size
+	chain1.hit_stun = 10
+	chain1.og_chain = chain1.id
+	chain1.the_number = 0
+	chain1.depth = -8;
+	chain1.alarm[0] = chain1.time+20
+}
+
+if ( timer = 225 )
+{
+	chain2 = create_projectile(2,90,5,0,-1,1,slash3,obj_spark_slash3,0,0,-20,random_range(40,60),self.id,70,char_custom2);
+	temp2 = point_direction( chain2.x , chain2.y , targetLock.x , targetLock.y - targetLock.actual_height/2 );
+	
+	chain2.sprite_index = chain_sprite2
+	chain2.image_xscale = abs(image_xscale) * 0.3
+	chain2.image_yscale = abs(image_yscale) * 0.3
+	chain2.image_speed = 0.3
+	chain2.image_angle = temp2
+	chain2.direction = temp2
+	chain2.priority = 5
+	chain2.ungrazable = 1
+	chain2.chain_sprite = chain_sprite
+	chain2.base_x = chain2.x
+	chain2.base_y = chain2.y
+	chain2.base_time = chain2.time
+	chain2.speed = 0
+	chain2.base_speed = 11 * size
+	chain2.hit_stun = 0
+	chain2.og_chain = chain2.id
+	chain2.the_number = 0
+	chain2.depth = -8;
+	chain2.alarm[0] = chain2.time+20
+}
+
+if ( timer = 230 )
+{
+	chain3 = create_projectile(2,90,5,0,-1,1,slash3,obj_spark_slash3,0,0,-20,random_range(50,70),self.id,70,char_custom2);
+	temp3 = point_direction( chain3.x , chain3.y , targetLock.x , targetLock.y - targetLock.actual_height/2 );
+	
+	chain3.sprite_index = chain_sprite2
+	chain3.image_xscale = abs(image_xscale) * 0.3
+	chain3.image_yscale = abs(image_yscale) * 0.3
+	chain3.image_speed = 0.3
+	chain3.image_angle = temp3
+	chain3.direction = temp3
+	chain3.priority = 5
+	chain3.ungrazable = 1
+	chain3.chain_sprite = chain_sprite
+	chain3.base_x = chain3.x
+	chain3.base_y = chain3.y
+	chain3.base_time = chain3.time
+	chain3.speed = 0
+	chain3.base_speed = 11 * size
+	chain3.hit_stun = 0
+	chain3.og_chain = chain3.id
+	chain3.the_number = 0
+	chain3.depth = -8;
+	chain3.alarm[0] = chain3.time+20
+}
+
+if ( timer = 235 )
+{
+	chain4 = create_projectile(2,90,5,0,-1,1,slash3,obj_spark_slash3,0,0,-20,random_range(-10,-30),self.id,70,char_custom2);
+	temp4 = point_direction( chain4.x , chain4.y , targetLock.x , targetLock.y - targetLock.actual_height/2 );
+	
+	chain4.sprite_index = chain_sprite2
+	chain4.image_xscale = abs(image_xscale) * 0.3
+	chain4.image_yscale = abs(image_yscale) * 0.3
+	chain4.image_speed = 0.3
+	chain4.image_angle = temp4
+	chain4.direction = temp4
+	chain4.priority = 5
+	chain4.ungrazable = 1
+	chain4.chain_sprite = chain_sprite
+	chain4.base_x = chain4.x
+	chain4.base_y = chain4.y
+	chain4.base_time = chain4.time
+	chain4.speed = 0
+	chain4.base_speed = 11 * size
+	chain4.hit_stun = 0
+	chain4.og_chain = chain4.id
+	chain4.the_number = 0
+	chain4.depth = -8;
+	chain4.alarm[0] = chain4.time+20
+}
+
+if ( timer = 240 )
+{
+	chain5 = create_projectile(2,90,5,0,-1,1,slash3,obj_spark_slash3,0,0,-20,random_range(-20,-40),self.id,70,char_custom2);
+	temp5 = point_direction( chain5.x , chain5.y , targetLock.x , targetLock.y - targetLock.actual_height/2 );
+	
+	chain5.sprite_index = chain_sprite2
+	chain5.image_xscale = abs(image_xscale) * 0.3
+	chain5.image_yscale = abs(image_yscale) * 0.3
+	chain5.image_speed = 0.3
+	chain5.image_angle = temp5
+	chain5.direction = temp5
+	chain5.priority = 5
+	chain5.ungrazable = 1
+	chain5.chain_sprite = chain_sprite
+	chain5.base_x = chain5.x
+	chain5.base_y = chain5.y
+	chain5.base_time = chain5.time
+	chain5.speed = 0
+	chain5.base_speed = 11 * size
+	chain5.hit_stun = 0
+	chain5.og_chain = chain5.id
+	chain5.the_number = 0
+	chain5.depth = -8;
+	chain5.alarm[0] = chain5.time+20
+}
+
+if ( timer = 245 )
+{
+	chain6 = create_projectile(3,angle_correct(25),6,6,-1,1,slash3,obj_spark_slash3,0,0,-20,random_range(-30,-50),self.id,70,char_custom2);
+	temp6 = point_direction( chain6.x , chain6.y , targetLock.x , targetLock.y - targetLock.actual_height/2 );
+	
+	chain6.sprite_index = chain_sprite2
+	chain6.image_xscale = abs(image_xscale) * 0.3
+	chain6.image_yscale = abs(image_yscale) * 0.3
+	chain6.image_speed = 0.3
+	chain6.image_angle = temp6
+	chain6.direction = temp6
+	chain6.priority = 5
+	chain6.ungrazable = 1
+	chain6.chain_sprite = chain_sprite
+	chain6.base_x = chain6.x
+	chain6.base_y = chain6.y
+	chain6.base_time = chain6.time
+	chain6.speed = 0
+	chain6.base_speed = 11 * size
+	chain6.hit_stun = 0
+	chain6.og_chain = chain6.id
+	chain6.the_number = 0
+	chain6.alarm[0] = chain6.time+20
+	chain6.temp = 0;
+	chain6.depth = -8;
+	chain6.execute_on_hit = "attacker.has_hit = 2; attacker.has_hit = 2;"
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	}
+  timer = 0;
+  time = -1;
+  }
