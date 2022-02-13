@@ -1,0 +1,65 @@
+if ( state_type = "edge" )
+  {
+    state_type = "attack";
+    attack_type = "edge_attack";
+	if percent < 100
+        timer = 0;
+	else {
+	timer = -10 }
+    time = 34;
+    sprite_index = edge_attack_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	intangible = 1;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 7: image_index = 2; break;
+	case 10: image_index = 3; break;
+	case 13: image_index = 4; break;
+	case 16: image_index = 5; break;
+	case 19: image_index = 6; break;
+	case 22: image_index = 7; break;
+	case 25: image_index = 8; break;
+	case 28: image_index = 9; break;
+	case 31: image_index = 10; break;
+      }
+	if ( timer = 23 )
+	{
+	intangible = 0;
+	}
+    if ( timer = 5 )
+      {
+	sound_play(rubyswing3);
+	sound_play(choose(attack_voice4,attack_voice5,attack_voice6));
+	create_hitbox(8,27+facing*126,6.5,2.5,11,8,slash3,obj_spark_slash3,1.5,2.5,10,35,self.id,6,3);
+	uair_eff = instance_create(x+5*(1-facing*2)*size,y+15*size,obj_spark)
+	uair_eff.sprite_index = uair_fx
+	uair_eff.image_xscale = 0.095*(1-facing*2)*size;
+	uair_eff.image_yscale = 0.08*size;
+	uair_eff.image_speed = 0
+	uair_eff.image_alpha = 1
+	uair_eff.depth = depth - 0.1
+	uair_eff.snap = self.id
+      }
+	if timer >= 5 {
+	uair_eff.image_alpha -= 0.2;
+	}
+  }
+
+if ( image_index < 3 )
+  please_shadow = -1;
+  
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	sprite_index = stand_sprite;
+  }

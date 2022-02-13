@@ -1,0 +1,111 @@
+if ( state_type = "stand" )
+  {
+    attacking = 1;
+    state_type = "attack";
+    attack_type = "jab";
+    timer = 0;
+    time = 20;
+    sprite_index = jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+hspeed *= 0.1
+slide = 0
+    switch ( timer )
+      {
+	case 1: image_index = 0; break;
+	case 2: image_index = 1; break;
+	case 3: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 13: image_index = 5; break;
+	case 101: image_index = 6; break;
+	case 105: image_index = 7; break;
+	case 107: image_index = 8; break;
+	case 110: image_index = 9; break;
+	case 113: image_index = 10; break;
+	case 201: image_index = 11; break;
+	case 203: image_index = 12; break;
+	case 205: image_index = 13; break;
+	case 208: image_index = 14; break;
+	case 213: image_index = 15; break;
+	case 291: image_index = 16; break;
+	case 292: image_index = 17; break;
+	case 295: image_index = 18; break;
+	case 297: image_index = 19; break;
+	case 298: image_index = 20; break;
+	case 300: image_index = 21; break;
+	case 302: image_index = 22; break;
+	case 304: image_index = 23; break;
+	case 306: image_index = 24; break;
+      }
+
+    if ( timer = 3 )
+      {
+	sound_play(attack_sound1);
+	create_hitbox(1,80+facing*20,2,0.1,4,3,kick2,obj_spark_hit1,0.6,0.5,15,12,self.id,3,1);
+	hitbox.hit_stun = 3;
+	hitbox.di = 0.3;
+      }
+    if ( ai && timer = 11 && !attack_success && random(10) > 7 )
+	attacking = 0;
+    if ( ai && ( timer = 9 || timer = 112 || timer = 115 ) && random(10) > 1.5 )
+	attacking = 1;
+    if ( timer >= 8 && timer <= 19 && attacking )
+      {
+	timer = 100;
+	time = 124;
+      }
+
+    if ( timer = 105 )
+      {
+	sound_play(attack_sound1);
+	create_hitbox(1,90,2.5,0,4,3,kick2,obj_spark_hit1,0.6,0.5,16,12,self.id,3,1);
+	hitbox.hit_stun = 3;
+	hitbox.di = 0.3;
+      }
+    if ( timer >= 112 && timer <= 120 && attacking )
+      {
+	timer = 200;
+	time = 222;
+      }
+
+    if ( timer = 205 )
+      {
+	sound_play(attack_sound2);
+	create_hitbox(3,90,2.5,0,4,3,kick2,obj_spark_hit1,0.6,0.5,16,16,self.id,3,1);
+	hitbox.hit_stun = 3;
+	hitbox.di = 0.3;
+      }
+
+    if ( timer >= 209 && timer <= 216 && attacking )
+      {
+    attacking = 0;
+    timer = 290;
+	time = 313;
+      }
+    if ( timer = 295 )
+      {
+    if random(10) > 3.2
+		sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4,csh_voice));
+	sound_play(attack_sound3);
+	create_hitbox(4,60+facing*60,5.7,4,6,5,kick2,obj_spark_hit1,0.6,0.65,19,18,self.id,3,1);
+	hitbox.hit_stun = 7
+	duster = instance_create(x-1+facing*2,y,obj_dust_effect);
+  	duster.facing = facing;
+  	duster.image_xscale *= 0.7;
+  	duster.image_yscale *= 0.7;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

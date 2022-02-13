@@ -1,0 +1,79 @@
+if state_type = "jump"  {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "nair";
+        image_speed = 0.24;
+        sprite_index = nair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 51;
+        timer_speed=1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            vspeed -= grav*0.3
+            if timer = 11 {
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
+                sound_play(attack_sound4);
+                create_hitbox(2,45+facing*90,2.6,0,4,3,snake_hit_sound3,obj_spark_hit3,0.5,0.5,2,7,self.id,3,3);
+                create_hitbox2(2,315-facing*90,2.6,0,4,3,snake_hit_sound3,obj_spark_hit3,0.5,0.5,2,18,self.id,3,3);
+                create_hitbox3(2,135-facing*90,2.6,0,4,3,snake_hit_sound3,obj_spark_hit3,0.5,0.5,16,7,self.id,3,3);
+                create_hitbox4(2,225+facing*90,2.6,0,4,3,snake_hit_sound3,obj_spark_hit3,0.5,0.5,16,18,self.id,3,3);
+				var burst;
+    //78, 36
+	burst = instance_create(place_x(37)+x,place_y(24)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+				hitbox.di = 0
+				hitbox2.di = 0
+                image_speed = 0.6 }
+            if timer = 16 || timer = 21 {
+                sound_play(attack_sound4);
+                create_hitbox(2,45+facing*90,2.6,0,5,3,snake_hit_sound2,obj_spark_hit3,0.5,0.5,2,7,self.id,3,2);
+                create_hitbox2(2,315-facing*90,2.6,0,5,3,snake_hit_sound2,obj_spark_hit3,0.5,0.5,2,18,self.id,3,2);
+                create_hitbox3(2,135-facing*90,2.6,0,5,3,snake_hit_sound2,obj_spark_hit3,0.5,0.5,16,7,self.id,3,3);
+                create_hitbox4(2,225+facing*90,2.6,0,5,3,snake_hit_sound2,obj_spark_hit3,0.5,0.5,16,18,self.id,3,3);
+				var burst;
+    //78, 36
+	burst = instance_create(place_x(37)+x,place_y(24)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+                image_speed = 0.55 }
+            if timer = 26 {
+                instance_create(x+14-facing*28,y-16,obj_spark_effect2)
+                sound_play(attack_sound4);
+                create_hitbox(6,33+facing*114,6,6,10,8,snake_hit_sound4,obj_spark_hit3,1,1,10,12,self.id,5,3);
+				var burst;
+    //78, 36
+	burst = instance_create(place_x(37)+x,place_y(24)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+            if timer = 35 {
+                image_speed = 0.1 }
+            if (timer = 12  || timer = 17 || timer = 22) && attack_success = 1 {
+                target.x+=hspeed*.75
+                target.y+=vspeed*1
+                }
+            if timer = 27 {
+                image_speed = 0.3 }
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                time=8;
+                timer=0; }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

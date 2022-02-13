@@ -1,0 +1,98 @@
+if ( state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "dash_attack";
+    timer = 19;
+    time = 76;
+    sprite_index = dash_attack_sprite;
+    image_speed = 0;
+    image_index = 3;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	//case 5: image_index = 1; break;
+	//case 10: image_index = 2; break;
+	//case 15: image_index = 3; break;
+	case 20: image_index = 4; break;
+	case 23: image_index = 5; break;
+	case 26: image_index = 6; break;
+	case 29: image_index = 7; break;
+	case 32: image_index = 8; break;
+	case 35: image_index = 9; break;
+	case 38: image_index = 10; break;
+	case 41: image_index = 11; break;
+	case 44: image_index = 12; break;
+	case 47: image_index = 13; break;
+	case 50: image_index = 14; break;
+	case 53: image_index = 15; break;
+	case 56: image_index = 0; break;
+	case 61: image_index = 1; break;
+	case 66: image_index = 2; break;
+	case 71: image_index = 3; break;
+      }
+	if ( timer = 29 )
+      {
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_yscale *= 0.7*size;
+	utilt_eff = instance_create(x+3*(1-facing*2),y,obj_spark)
+	utilt_eff.sprite_index = utilt_fx
+	utilt_eff.image_xscale = 0.08*(1-facing*2)*size;
+	utilt_eff.image_yscale = 0.08*size;
+	utilt_eff.image_speed = 0
+	utilt_eff.image_alpha = 1
+	utilt_eff.depth = depth - 0.1
+	utilt_eff.snap = self.id
+	sound_play(choose(attack_voice4,attack_voice5,attack_voice6));
+	sound_play(rubyswing2);
+	create_hitbox(3,30+facing*120,5.35,0,10,4,slash3,obj_spark_slash3,1.5,2.5,30,35,self.id,4,1);
+	hitbox.hit_stun = 9.5;
+      }
+	if timer >= 31 {
+		utilt_eff.image_alpha -= 0.2;
+	}
+	if timer = 37 {
+		duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_yscale *= 0.9*size;
+	sound_play(rubyswing2);
+	stilt_eff = instance_create(x+6*(1-facing*2),y-10*size,obj_spark)
+	stilt_eff.sprite_index = stilt_fx
+	stilt_eff.image_xscale = 0.08*(1-facing*2)*size;
+	stilt_eff.image_yscale = 0.08*size;
+	stilt_eff.image_speed = 0
+	stilt_eff.image_alpha = 1
+	stilt_eff.depth = depth - 0.1
+	stilt_eff.snap = self.id
+	create_hitbox(3,90,4.35,0,10,4,slash3,obj_spark_slash3,1.5,2.5,30,35,self.id,4,1);
+      }
+	if timer >= 39 {
+		stilt_eff.image_alpha -= 0.2;
+	}
+	if timer = 47 {
+		sound_play(rubyswing3);
+	create_hitbox(8,27+facing*126,6.5,5.5,11,8,slash3,obj_spark_slash3,1.5,2.5,10,35,self.id,6,3);
+	uair_eff = instance_create(x,y+15*size,obj_spark)
+	uair_eff.sprite_index = uair_fx
+	uair_eff.image_xscale = 0.095*(1-facing*2)*size;
+	uair_eff.image_yscale = 0.08*size;
+	uair_eff.image_speed = 0
+	uair_eff.image_alpha = 1
+	uair_eff.depth = depth - 0.1
+	uair_eff.snap = self.id
+	}
+	if timer >= 49 {
+	uair_eff.image_alpha -= 0.2;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

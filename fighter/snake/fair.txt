@@ -1,0 +1,37 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0.25;
+        sprite_index = fair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 43;
+        timer_speed=1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 21 {
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
+                sound_play(attack_sound4);
+                create_hitbox2(15,305-facing*70,5.8,3.5,22,11,snake_hit_sound3,obj_spark_hit3,0.43,0.6,21,17,self.id,3,4);
+                hitbox2.shake_kb = 5;
+                hitbox2.shake_ampl=1.5;
+                create_hitbox(14,70+facing*40,5,6.75,18,8,snake_hit_sound4,obj_spark_hit1,0.6,0.72,11,20,self.id,3,4);
+                }
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=18; }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

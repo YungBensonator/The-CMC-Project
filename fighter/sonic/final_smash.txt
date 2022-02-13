@@ -1,0 +1,178 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        air_move=0
+        grab_edge = 0
+        can_die = 0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.23
+        sprite_index = supersonic_transform_sprite
+        image_index= 0
+        timer = 0
+        time = 645
+        temp = 0
+        timer_speed=1
+        intangible = 1
+        final_smashes+=1
+        speed = 0
+        smash_power = 0
+        //create_hitbox(16,35+facing*110,7.25,7,-1,10,punch3,obj_spark_special1,1.4,1.1,1,15,self.id,1,6)
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 69
+}
+if timer < time {
+    fast_fall = 0
+    fast_fall_temp = 0
+    if timer = 40 {
+        spark = instance_create(x,y-40,obj_spark)
+        spark.image_speed = 0.15
+        spark.sprite_index = emerald_sprite
+        spark.image_blend = c_red
+        spark2 = instance_create(x+20,y-25,obj_spark)
+        spark2.image_speed = 0.15
+        spark2.sprite_index = emerald_sprite
+        spark2.image_blend = c_blue
+        spark3 = instance_create(x+27,y-10,obj_spark)
+        spark3.image_speed = 0.15
+        spark3.sprite_index = emerald_sprite
+        spark3.image_blend = c_yellow
+        spark4 = instance_create(x+10,y+5,obj_spark)
+        spark4.image_speed = 0.15
+        spark4.sprite_index = emerald_sprite
+        spark4.image_blend = c_aqua
+        spark5 = instance_create(x-10,y+5,obj_spark)
+        spark5.image_speed = 0.15
+        spark5.sprite_index = emerald_sprite
+        spark5.image_blend = c_purple
+        spark6 = instance_create(x-27,y-10,obj_spark)
+        spark6.image_speed = 0.15
+        spark6.sprite_index = emerald_sprite
+        spark6.image_blend = c_green
+        spark7 = instance_create(x-20,y-25,obj_spark)
+        spark7.image_speed = 0.15
+        spark7.sprite_index = emerald_sprite
+        spark7 = instance_create(x,y-15*size,obj_spark)
+        spark7.image_speed = 1
+        spark7.sprite_index = super_spark_sprite
+        image_blend = c_white
+        instance_create(0,0,obj_flashscreen)
+        spark = instance_create(0,0,obj_shakescreen2)
+        spark.ampl = 3.5
+        spark.time = 9
+        sound_play(final_smash_sound_1)
+        sound_play(final_smash_sound_2)
+        sound_play(final_smash_voice_1)
+        effect_create_below(ef_ellipse,x,y,1,c_yellow)
+        //camera.following_state = 0
+    }
+    if temp = 0
+    speed = 0
+    gravity_lock = 1;
+     if timer = 72 {
+         temp=1
+         sprite_index = supersonic_idle_sprite
+         crowd_call(0,100);
+     }
+     if timer > 60 && timer < 600 && frac(timer/7)=0 {
+        //effect_create_above(ef_spark,x+random(30)-facing*25,y-30+random(35),0,c_white)
+        spark7 = instance_create(x+random(14)-facing*28,y-30+random(20),obj_spark)
+        spark7.image_speed = 1
+        spark7.sprite_index = super_spark_sprite
+        spark7.image_xscale *= 0.1*size
+        spark7.image_yscale *= 0.1*size
+     }
+     if timer < 625 && frac(timer/3) = 0 
+        after_image(6,c_white,0.5)
+    if temp = 1 {
+            if ai = 1 && enemy.intangible != 1{ //&& ai_state != "recover"  {
+            if y < 20 {
+                movedown=1
+                y+=1
+                moveup=0
+                }
+            else {
+            if enemy.x > x {
+                moveright=1
+                moveleft = 0 }
+            else { moveleft = 1
+                moveright = 0 }
+            if enemy.y > y+2 || collision_point(x+2*(1-facing*2),y,obj_wall,1,1) {
+                movedown = 1
+                moveup = 0 }
+            else if enemy.y < y-5 {
+                moveup = 1
+                movedown = 0 }
+                }
+            }
+            if ai = 1 && enemy.intangible = 1 {
+                if x > room_width/2+30 {
+                    moveright = 0
+                    moveleft = 1
+                    }
+                if x < room_width/2-30 {
+                    moveright = 1
+                    moveleft = 0
+                    }
+                if y > room_height/2+10 {
+                    moveup = 1
+                    movedown = 0
+                    }
+                if y < room_height/2-15 {
+                    moveup = 0
+                    movedown = 1
+                    }
+                }
+        if attack_success = 1 && random(30)>24 && distance_to_object(target) > 16
+            attack_success=0
+        if attack_success=0 {
+                attacks-=1
+                create_hitbox(10+(floor(speed/2)),75+facing*30,7.25,4+floor(speed/3),-1,9,punch3,obj_spark_hit4,1.1,1.2,1,15,self.id,1,6)
+                hitbox.shake_ampl = 0.45 
+        }
+        if movedown = 1 && vspeed < 9
+            vspeed+=0.4
+         if moveup = 1 && vspeed > -9
+            vspeed-=0.4
+          if moveright = 1 && hspeed < 9
+            hspeed+=0.4
+          if moveleft = 1 && hspeed > -9
+            hspeed -=0.4
+          if speed > 3
+            sprite_index = supersonic_dash_sprite
+          else
+            sprite_index = supersonic_idle_sprite
+          if hspeed > 0 facing = 0
+          else if hspeed < 0 facing = 1
+          if speed > 0.3 speed -= 0.13
+    }
+    if timer = time-20 {
+        //sound_play(final_smash_sound_2
+        sound_play(final_smash_sound_3)
+        //effect_create_below(ef_ellipse,x,y,1,c_white)
+        spark = instance_create(x,y-12*size,obj_spark_shockwave)
+        spark.image_xscale *= size*1.4
+        spark.image_yscale *= size*1.4
+        temp = 0
+        speed = 0
+        sprite_index = supersonic_end_sprite;
+        image_index = 0
+        image_speed = 0.3
+        air = 1
+    }
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    grab_edge=1
+    can_die=1
+    }

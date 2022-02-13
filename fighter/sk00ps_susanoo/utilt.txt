@@ -1,0 +1,153 @@
+if state_type = "run" || state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0;
+        sprite_index = utilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 48;
+        timer_speed=1;
+        attacking = 0
+		canceltemp = 0;
+}
+    if hitbox.hit = 1 {
+		canceltemp = 1;
+	}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 3; break;
+	case 9: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 15: image_index = 6; utilt_fx.image_index += 1; break;
+	case 21: image_index = 7; utilt_fx.image_index += 1; break;
+	case 24: image_index = 8; break;
+	case 28: image_index = 9; break;
+	case 33: image_index = 10; break;
+	case 37: image_index = 11; break;
+	case 41: image_index = 12; break;
+	case 45: image_index = 13; break;
+    }
+	if timer = 0 {
+	sound_play(choose(attack_voice5,attack_voice6));
+	}
+	if timer = 12 {
+	utilt_fx = create_spark ( 10 , 0 , utilt_fx_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	utilt_fx.snap = self.id;
+	utilt_fx.image_alpha = 0.8;
+	}
+	if timer = 24 {
+	sound_play(cfswing3);
+	utilt_fx.image_speed = 0.3;
+	utilt_fx.image_index = 3;
+	create_hitbox(11,angle_correct(300),4,2,5,6,cfhit4,obj_spark_hit4,0.85 , 1.09 , 20.89 , 31.32,self.id,4,3);
+	speed = 6*(1-facing*2);
+	direction = 0*(1-facing*2);
+	if sealcount < 8 {
+	hitbox.execute_on_hit = "attacker.sealcount += 1"
+	}
+	if sealcount = 8 {
+	hitbox.execute_on_hit = "attacker.sealcount = 1"
+	}
+	}
+	if timer = 28 {
+		speed = 0;
+	}
+	//Smash Cancels Start
+	if timer >= 24 && timer <= 34 {
+	if  canceltemp = 1 && (!smashdown && (smashleft = 1 || smashright = 1) && !smashup) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_ssmash();
+	}
+	if  canceltemp = 1 && (!smashdown && !smashleft && !smashright && smashup = 1) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_usmash();
+	}
+	if canceltemp = 1 && (smashdown = 1 && !smashleft && !smashright && !smashup) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_dsmash();
+	}
+	//Special Cancels
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1) && megalithlvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_b();
+	}
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup != 1 && (moveleft = 1 || moveright = 1)) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_sideb();
+	}
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup = 1 && moveleft != 1 && moveright != 1) && huntersfanglvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_upb();
+	}
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup = 1 && moveleft != 1 && moveright != 1) && tflamelvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_downb();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1) && icalamitylvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_ab();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown = 1 && moveup != 1 && moveleft != 1 && moveright != 1) && sthrustlvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_dab();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown != 1 && moveup = 1 && moveleft != 1 && moveright != 1) && bjudgmentlvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_uab();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown != 1 && moveup != 1 && (moveleft = 1 || moveright = 1)) && ddkicklvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_sab();
+	}
+	//Special Cancels end
+	}
+	//Smash Cancels End
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+
+

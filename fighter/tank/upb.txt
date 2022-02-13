@@ -1,0 +1,154 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" || state_type="land") && ((!instance_exists(orbfire) && !instance_exists(orbfire2) && !instance_exists(orbfire3) && air = 0) || air > 0)
+  {
+    state_type = "air_attack";
+    attack_type = "upb"
+    timer = 0;
+    time = 47;
+    sprite_index = stand_sprite;
+    image_speed = 0;
+    image_index = 0;
+    slide=0;
+    hspeed=0;
+  }
+switch ( timer )
+      {
+  case 1: image_index = 0; break;
+  case 36: sprite_index=crouch_sprite; break;
+  case 42: sprite_index = stand_sprite; break;
+      }
+
+if ( timer < time )
+  {
+  state_type = "air_attack";
+
+  if timer = 36 && ai && global.gs_rules = "Challenge" {
+  sound_play(upb_sound);
+  orbfire=create_projectile(6,90,5,3,5,1,blitztank_beam_hit_sound_2,obj_spark_stun,0.2 , 0.2 , 0 ,20, self.id, 300, char_custom1);
+  orbfire.alarm[0]=300;
+  orbfire.sprite_index=orb_sprite;
+  orbfire.di=0.4;
+  orbfire.image_speed=0.25;
+  orbfire.depth=0;
+  orbfire.image_alpha=0.9;
+  orbfire.hspeed=1.8*(1-facing*2)*size;
+  orbfire.vspeed=-9;
+  orbfire.stun_scaler=1.5;
+  orbfire.stun_base=55;
+  orbfire.tanker=self.id;
+  orbfire2=create_projectile(6,90,5,3,5,1,shock3,obj_spark_stun,0.2 , 0.2 , 0 ,20, self.id, 300, char_custom1);
+  orbfire2.alarm[0]=300;
+  orbfire2.sprite_index=orb_sprite;
+  orbfire2.di=0.4;
+  orbfire2.image_speed=0.25;
+  orbfire2.depth=0;
+  orbfire2.image_alpha=0.9;
+  orbfire2.hspeed=3.2*(1-facing*2)*size;
+  orbfire2.vspeed=-7;
+  orbfire2.stun_scaler=1.5;
+  orbfire2.stun_base=55;
+  orbfire2.tanker=self.id;
+  orbfire3=create_projectile(6,90,5,3,5,1,shock3,obj_spark_stun,0.2 , 0.2 , 0 ,20, self.id, 300, char_custom1);
+  orbfire3.alarm[0]=300;
+  orbfire3.sprite_index=orb_sprite;
+  orbfire3.di=0.4;
+  orbfire3.image_speed=0.25;
+  orbfire3.depth=0;
+  orbfire3.image_alpha=0.9;
+  orbfire3.hspeed=6*(1-facing*2)*size;
+  orbfire3.vspeed=-5;
+  orbfire3.stun_scaler=1.5;
+  orbfire3.stun_base=55;
+  orbfire3.tanker=self.id;
+  }
+  if timer = 36 && (!ai || (ai && global.gs_rules != "Challenge")){
+  if air > 0{
+      vspeed=-16/size;
+      sound_play(mid_jump_sound);
+      getupbooster = instance_create(x-41.72*(1-facing*2)*size, y+0.84*size, obj_spark);
+      getupbooster.sprite_index = jumpflame_sprite;
+      getupbooster.image_xscale = 0.4*( 1 - facing * 2 )*size;
+      getupbooster.image_yscale = 0.4*size;
+      getupbooster.image_angle=30*(1-facing*2);
+      getupbooster.image_speed=0.3;
+      getupbooster.depth=depth+1;
+      getupbooster.image_index=0;
+      getupbooster.snap=self.id;
+      getupbooster.loop=3;
+      getupbooster2 = instance_create(x-3.64*(1-facing*2)*size, y-3.92*size, obj_spark);
+      getupbooster2.sprite_index = jumpflame_sprite;
+      getupbooster2.image_xscale = 0.4*( 1 - facing * 2 )*size;
+      getupbooster2.image_yscale = 0.4*size;
+      getupbooster2.image_angle=30*(1-facing*2);
+      getupbooster2.image_speed=0.3;
+      getupbooster2.depth=depth+1;
+      getupbooster2.image_index=0;
+      getupbooster2.snap=self.id;
+      getupbooster2.loop=3;
+      getupbooster3 = instance_create(x+25.48*(1-facing*2)*size, y+0.56*size, obj_spark);
+      getupbooster3.sprite_index = jumpflame_sprite;
+      getupbooster3.image_xscale = 0.4*( 1 - facing * 2 )*size;
+      getupbooster3.image_yscale = 0.4*size;
+      getupbooster3.image_angle=30*(1-facing*2);
+      getupbooster3.image_speed=0.3;
+      getupbooster3.depth=depth+1;
+      getupbooster3.image_index=0;
+      getupbooster3.snap=self.id;
+      getupbooster3.loop=3;
+      create_hitbox(9,angle_correct(45),7,7.1,2,1,punch2,obj_spark_hit1,4.3,1.8,10,24,self.id,9,2);
+  }
+  else if (!instance_exists(orbfire) && !instance_exists(orbfire2) && !instance_exists(orbfire3)){
+  sound_play(upb_sound);
+  orbfire=create_projectile(7,90,5,3,5,1,shock3,obj_spark_stun,0.2 , 0.2 , 0 ,20, self.id, 300, char_custom1);
+  orbfire.alarm[0]=300;
+  orbfire.sprite_index=orb_sprite;
+  orbfire.di=0.6;
+  orbfire.image_speed=0.25;
+  orbfire.depth=0;
+  orbfire.image_alpha=0.9;
+  if (facing=0 && moveleft) || (facing=1 && moveright) || (ai && global.gs_rules != "Challenge" && irandom(1)=1){
+  orbfire.hspeed=1.8*(1-facing*2)*size;
+  orbfire.vspeed=-9; 
+  }
+  if !moveleft && !moveright || (ai && global.gs_rules != "Challenge" && irandom(2)=2){
+  orbfire.hspeed=3.2*(1-facing*2)*size;
+  orbfire.vspeed=-7;
+  }
+  if (facing=1 && moveleft) || (facing=0 && moveright) || (ai && global.gs_rules != "Challenge" && irandom(3)=1){
+  orbfire.hspeed=6*(1-facing*2)*size;
+  orbfire.vspeed=-5;
+  }
+  orbfire.stun_scaler=1.2;
+  orbfire.stun_base=38;
+  orbfire.tanker=self.id;}
+  }
+
+if vspeed>1.2*size && ((ai && global.gs_rules = "Challenge") || (timer >=36 && (!ai || (ai && global.gs_rules != "Challenge") ) ) ){
+  vspeed=1.2*size;
+}
+if (ai && global.gs_rules = "Challenge") || (timer <36 && (!ai || (ai && global.gs_rules != "Challenge"))){
+vspeed=0;
+}
+
+if (ai && global.gs_rules = "Challenge") || (timer <36 && (!ai || (ai && global.gs_rules != "Challenge"))) {
+air_move=0;}
+fast_fall=0;
+fast_fall_temp=0;
+
+getupbooster.alarm[0]=2;
+getupbooster2.alarm[0]=2;
+getupbooster3.alarm[0]=2;
+
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0 && ai && global.gs_rules = "Challenge"{
+    state_type = "jump";}
+    if air > 0 &&(ai=0 || (ai && global.gs_rules != "Challenge")){
+    state_type = "fall";}
+    if air = 0{
+    state_type = "stand";}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

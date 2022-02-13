@@ -1,0 +1,88 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "fthrow";
+image_speed = 0;
+sprite_index = fthrow_sprite;
+image_index=0;
+timer = 0;
+time = 116;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 77
+intangible = 1;
+no_flash = 1;
+	platstay = 1;
+if vsragna = 0 {
+izanamisndtemp = choose(1,2);
+}
+}
+if timer < time {
+	 switch (timer)
+	 {
+	case 5: image_index = 1; target.x = x+19*(1-facing*2)*size; target.y = y-22*size; break;
+	case 11: image_index = 2; target.x = x+8*(1-facing*2)*size; target.y = y-37*size; break;
+	case 21: image_index = 3; target.x = x+21*(1-facing*2)*size; target.y = y-25*size; break;
+	case 26: image_index = 4; target.x = x+25*(1-facing*2)*size; target.y = y-22*size; break;
+	case 31: image_index = 5; target.x = x+24*(1-facing*2)*size; target.y = y-6*size; break;
+	case 36: image_index = 6; target.x = x+20*(1-facing*2)*size; target.y = y*size; break;
+	case 41: image_index = 7; break;
+	case 46: image_index = 8; break;
+	case 51: image_index = 9; break;
+	case 75: image_index = 10; break;
+	case 77: image_index = 11; break;
+	case 79: image_index = 12; break;
+	case 81: image_index = 13; break;
+	case 89: image_index = 14; break;
+	case 97: image_index = 15; break;
+	case 101: image_index = 16; break;
+	case 105: image_index = 17; break;
+	case 109: image_index = 18; break;
+	case 113: image_index = 19; break;
+	}
+	if timer >= 36 && timer < 77 {
+	target.sprite_index = target.down_sprite;
+	target.image_speed = 0;
+	target.image_index = 0;
+	}
+	if timer = 11 {
+	if izanamisndtemp = 1 {
+	sound_play(fthrow_voice1);
+	}
+	if izanamisndtemp = 2 {
+	sound_play(fthrow_voice2);
+	}
+	if vsragna = 1 {
+	sound_play(fthrow_voice1rg);
+	}
+	}
+	if timer = 77 {
+	if izanamisndtemp = 1 {
+	sound_play(fthrow_voice3);
+	}
+	if izanamisndtemp = 2 {
+	sound_play(fthrow_voice4);
+	}
+	if vsragna = 1 {
+	sound_play(fthrow_voice2rg);
+	}
+	speed = 2*(1-facing*2);
+	direction = 180*(1-facing*2);
+	percent -= 5;
+	shield_hp += 60;
+	target.shield_hp -= 40;
+	create_hitbox(10,angle_correct(25),8,3,5,9,cfslash4,obj_spark_slash3,0.61 , 0.56 , 11.02 , 7.54,self.id,3,3);
+	dsmash_fx = create_spark ( 15 , 15 , fthrow_fx_sprite , 0.3 , 0.24*(1-facing*2)*size , 0.24*size );
+	dsmash_fx.image_alpha = 0.7;
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none"
+    state_type = "stand"
+    timer = 0
+    time =-1
+intangible = 0;
+no_flash = 0;
+	platstay = 0;
+    }
+        

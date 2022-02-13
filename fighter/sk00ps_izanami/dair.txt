@@ -1,0 +1,110 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=-0;
+        timer = 0;
+        time = 42;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 17: image_index = 6; break;
+	case 19: image_index = 7; break;
+	case 21: image_index = 8; break;
+	case 25: image_index = 9; break;
+	case 29: image_index = 10; break;
+	case 33: image_index = 11; break;
+	case 36: image_index = 12; break;
+	case 39: image_index = 13; break;
+	
+	case 23: dair_ring.image_index = 1; break;
+	case 25: dair_ring.image_index = 2; dair_fx2.image_index = 0; break;
+	case 27: dair_ring.image_index = 3; dair_fx2.image_index = 1; break;
+	case 28: dair_ring.image_index = 4; dair_fx2.image_index = 2; break;
+	case 29: dair_ring.image_index = 5; dair_fx2.image_index = 3; break;
+	case 30: dair_ring.image_index = 6; dair_fx2.image_index = 4; break;
+	case 31: dair_ring.image_index = 7; dair_fx2.image_index = 5; break;
+	case 32: dair_ring.image_index = 8; dair_fx2.image_index = 6; break;
+	case 33: dair_ring.image_index = 9; dair_fx2.image_index = 7; break;
+	case 34: dair_ring.image_index = 10; break;
+	case 35: dair_ring.image_index = 11; break;
+      }
+	if timer = 9 {
+	sound_play(choose(attack_voice5,attack_voice6,no_voice));
+	sound_play(cfswing8);
+	sound_play(izanami_snd1);
+	dair_fx = create_spark ( 8 , 14 , dair_fx_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	dair_fx.alarm[0] = 25
+	dair_fx.snap = self.id;
+	dair_fx.image_alpha = 0.8;
+	}
+	if timer = 12
+	{
+	create_hitbox(2,270,4,0,5,6,cfhit3,obj_spark_hit3,0.37 , 0.40 , 8.70 , 14.50,self.id,3,3);
+	dair_fx.image_index = 1;
+	}
+	if timer = 15 {
+	dair_fx.image_speed = 0.5;
+	}
+	if ringtemp = 0 {
+	if timer = 21 {
+	if (instance_exists(stand_ringa)) {with (stand_ringa){instance_destroy();}}
+	noring = 1;
+	dair_ring = create_spark ( -3 , -13 , dair_ring_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	dair_ring.snap = self.id;
+	dair_ring.alarm[0] = 15
+	dair_ring.depth = depth - 0.1;
+	}
+	if timer = 25 {
+	sound_play(cfslashswing2);
+	dair_fx2 = create_spark ( -22 , -16 , dair_fx2_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	dair_fx2.alarm[0] = 11
+	dair_fx2.snap = self.id;
+	}
+	if timer = 27 {
+	create_hitbox(8,270,5,5,5,6,cfslash3,obj_spark_hit3,0.92 , 0.69 ,-1.74 , -0.65,self.id,3,3);
+	}
+	if timer = 28 {
+	hitbox.hitbox_y = -4.65*size;
+	}
+	if timer = 29 {
+	hitbox.hitbox_y = -9.65*size;
+	}
+	}
+	if timer = 36 {
+	noring = 0;
+	
+	}
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=9;
+		noring = 0;
+	if (instance_exists(dair_fx)) {with (dair_fx){instance_destroy();}}
+	if (instance_exists(dair_fx2)) {with (dair_fx2){instance_destroy();}}
+	if (instance_exists(dair_ring)) {with (dair_ring){instance_destroy();}}
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+        

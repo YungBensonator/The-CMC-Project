@@ -1,0 +1,91 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "ssmash";
+    timer = 0;
+    time = 42;
+    sprite_index = ssmash_sprite;
+    image_speed = 0;
+    image_index = 0;
+    charge_frame = 5;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 8: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 16: image_index = 3; break;
+	case 22: image_index = 4; break;
+	case 26: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 34: image_index = 7; break;
+	case 38: image_index = 8; break;
+      }
+    if ( timer = 12 )
+      {
+	sound_play(choose(rubygunblast1,rubygunblast2,rubygunblast3,no_voice));
+	sound_play(rubydash);
+	create_hitbox(14,43+facing*94,5,9.5,19,9,punch3,obj_spark_hit4,1,1,20,15,self.id,3,2);
+	hitbox.charge_dmg = 0.8;
+	hitbox.charge_hitlag = 1.3;
+	hitbox.shake_type = 1;
+	hitbox.shake_ampl = 0.7;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	gunblast_eff = instance_create(x-20*(1-facing*2),y-20,obj_spark)
+	gunblast_eff.sprite_index = gunblast_fx
+	gunblast_eff.image_xscale = -0.08*(1-facing*2)*size;
+	gunblast_eff.image_yscale = 0.08*size;
+	gunblast_eff.image_speed = 0.7
+	gunblast_eff.image_alpha = 1
+	gunblast_eff.depth = depth - 0.1
+	gunblast_eff.snap = self.id
+	spark = instance_create(x-13*(1-facing*2)*size,y-13*size,obj_spark_shockwave);
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.8;
+	spark.image_xscale *= 0.2*size;
+	spark.image_yscale *= 0.8*size;
+    }
+	if timer >= 12 && timer <= 22 {
+		hspeed = 10-facing*20;
+		image_alpha -= 0.2;
+	}
+	if timer >= 17 && timer <= 30 && special && moveup {
+		interrupt = 1;
+		image_alpha = 1;
+	}
+	if timer >= 12 && timer <= 22 && timer mod 2 = 0 {
+        petals2 = instance_create(x-20*(1-facing*2),y,obj_spark)
+        petals2.sprite_index = choose(petal_fx2,petal_fx3)
+        petals2.image_xscale = size*0.2
+        petals2.image_yscale = size*0.2
+        petals2.image_speed = 0.4
+        petals2.image_alpha = 1
+        petals2.depth = 1
+        petals2.snap = 0
+}
+	if timer = 22 {
+		hspeed = 0.5;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.image_xscale = -image_xscale
+	}
+	if timer >= 19 {
+		image_alpha +=0.2;
+	}
+	if timer = 20 {
+		hspeed = 0.3;
+	}
+	if timer = 21 {
+		hspeed = 0;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

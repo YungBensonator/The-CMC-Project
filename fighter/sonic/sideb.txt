@@ -1,0 +1,265 @@
+if ( cantb = 1 )
+{
+exit;
+}
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 90;
+    sound_play(here_we_voice);
+    sprite_index = land_sprite;
+    image_speed = 0;
+    image_index = 2;
+    hspeed = 0;
+	special = 1;
+	
+    temp = 11; //used for speed
+  }
+
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 0; break;
+	case 28: image_index = 7; break;
+
+	case 90: image_index=0; break;
+	case 95: image_index=1; break;
+	}
+    fast_fall = 0;
+    fast_fall_temp = 0;
+
+    if ( temp = 0 && timer = 8 )
+      {
+	flashing = 1;
+	alarm[7] = 4;
+      }
+
+
+   if ( timer >= 25 )
+      {
+after_image(1,c_blue,0.11)
+after_image(2,c_blue,0.1)
+after_image(3,c_blue,0.09)
+after_image(4,c_blue,0.08)
+after_image(5,c_blue,0.07)
+after_image(6,c_blue,0.06)
+after_image(7,c_blue,0.05)
+after_image(8,c_blue,0.04)
+after_image(9,c_blue,0.03)
+after_image(10,c_blue,0.02)
+after_image(11,c_blue,0.01)
+}
+    if ( timer = 25 )
+      {
+	timer = 40;
+	sound_play(choose(go_voice,go_voice,go_voice,woo_voice,b_voice,go_voice));
+	sound_play(boost_sound);
+	sprite_index = boost_sprite;
+	image_index = 0;
+	image_speed = 0.25;
+	create_hitbox(10,angle_correct(25),7.4,3.9,80,1,punch3,obj_spark_hit1,0.75,0.85,1,9,self.id,100,0);
+	hitbox.shield_stun = 3.5;
+	hitbox.armor_break = 1;
+      }
+
+	if ( timer >= 25 && timer < 80 )
+	{
+	hspeed = size * temp * (1-facing*2);
+	}
+
+	if ( timer >= 25 && temp > 9 )
+	{
+	temp -= 0.2;
+	}
+
+    if ( timer = 41 )
+      {
+	screen_shake(6.2,6)
+      }
+
+	//To make sure the Metroidvania enemies can be hit again.
+	if ( hit_enemy > -1 )
+	{
+		if ( timer mod 20 = 0 )
+		{
+		hit_enemy = 0;
+		}
+	}
+
+	if ( timer = 79 && special && !attacking )
+	{
+	timer = 51;
+	hitbox.timer = 0;
+	hitbox.time = 100;
+	hitbox.alarm[0] = 100;
+	}
+
+	if ( timer > 50 && timer <80 && !special )
+	{
+	timer = 80;
+	}
+
+	if ( timer = 81 && air = 0 )
+	{
+	sound_play(stop_sound);
+	}
+
+	if ( timer > 80 )
+	{
+		if ( instance_exists ( hitbox ) ) { with ( hitbox ) instance_destroy(); }
+		
+		if air=0
+		{
+			state_type="attack"
+			sprite_index = land_sprite;
+			hspeed*=0.85;
+		}
+		else
+		{
+			sprite_index = jumpfall_sprite
+			image_speed = 0.25
+			hspeed *= 0.95;
+		}	
+	}
+
+//To make sure the AI knows it's time to stop boosting or else he dies.
+if ( offstage and ai )
+{
+special = 0;
+}
+
+//JUMP
+if ( timer >= 25 && timer <= 80 && air = 0 && movejump )
+{
+vspeed = -6 * size;
+}
+
+
+//Cancel stuff
+if ( timer >= 25 )
+{
+force_edge_grab = 1;
+
+	//CANCEL
+	if ( attacking && !moveup && !movedown && !moveleft && !moveright )
+	{
+		if ( air = 0 )
+		{
+		state_type = "stand";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_jab();
+		}
+		if ( air > 0 )
+		{
+		state_type = "jump";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_nair();
+		hspeed *= 0.5;
+		}
+	}
+	if ( attacking && ( ( moveleft && facing = 1 ) || ( moveright && facing = 0 ) ) )
+	{
+		if ( air = 0 )
+		{
+		state_type = "stand";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_stilt();
+		}
+		if ( air > 0 )
+		{
+		state_type = "jump";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_fair();
+		hspeed *= 0.5;
+		}
+	}
+	if ( attacking && ( ( moveleft && facing = 0 ) || ( moveright && facing = 1 ) ) )
+	{
+		if ( air = 0 )
+		{
+		state_type = "stand";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_stilt();
+		facing = !facing;
+		}
+		if ( air > 0 )
+		{
+		state_type = "jump";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_bair();
+		hspeed *= 0.5;
+		}
+	}
+	if ( attacking && moveup )
+	{
+		if ( air = 0 )
+		{
+		state_type = "stand";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_utilt();
+		}
+		if ( air > 0 )
+		{
+		state_type = "jump";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_uair();
+		hspeed *= 0.5;
+		}
+	}
+	if ( attacking && movedown )
+	{
+		if ( air = 0 )
+		{
+		state_type = "stand";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_dtilt();
+		}
+		if ( air > 0 )
+		{
+		state_type = "jump";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		char_dair();
+		hspeed *= 0.5;
+		}
+	}
+}
+
+if ( timer >= time-1 )
+  {
+    if ( air = 0 )
+		{
+		state_type = "stand";
+		hspeed *= 0.9;
+		}
+	else
+		{
+		state_type = "jump";
+		sprite_index = jumpfall_sprite;
+		hspeed *= 0.95;
+		}
+	attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

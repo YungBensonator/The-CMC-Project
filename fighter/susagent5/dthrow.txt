@@ -1,0 +1,84 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0;
+sprite_index = grab_sprite;
+image_index=0;
+timer = 0;
+time =31;
+timer_speed=1;
+if instance_exists(stabspark[2]){
+timer =-9;
+target.alarm[0]=25;
+}
+if !instance_exists(stabspark[2]) && instance_exists(stabspark[1]){
+timer =-6;
+target.alarm[0]=22;
+}
+if !instance_exists(stabspark[2]) && !instance_exists(stabspark[1]){
+timer =-3;
+target.alarm[0]=19;
+}
+}
+if timer = -6{
+stabspark[0].x=x+30.6*(1-facing*2)*size;
+stabspark[1].x=x-0.9*(1-facing*2)*size;
+with (stabspark[2]){instance_destroy();}
+}
+if timer = -3{
+stabspark[0].x=x-0.9*(1-facing*2)*size;
+with (stabspark[1]){instance_destroy();}
+}
+if timer = 4{
+with (stabspark[0]){instance_destroy();}
+with (snatchedspark){instance_destroy();}
+}
+
+if timer < 4{
+stabspark[0].alarm[0]=3;
+stabspark[1].alarm[0]=3;
+stabspark[2].alarm[0]=3;
+snatchedspark.alarm[0]=3;
+snatchedspark.x=stabspark[0].x+31.5*(1-facing*2)*size;
+snatchedspark.y=stabspark[0].y;
+target.x=stabspark[0].x+44.1*(1-facing*2)*size;
+target.y=y-18.90*size+(target.actual_height/2);
+}
+
+switch (timer){
+    case 0: image_index = 0; break;
+    case 4: image_index = 1; break;
+    case 8: image_index = 2; break;
+    case 16: image_index = 3; break;
+    case 19: image_index = 4; break;
+    case 22: image_index = 5; break;
+    case 26: image_index = 6; break;
+}
+    if image_index=1{
+    target.x=x+36.90*(1-facing*2)*size;
+    target.y=y-18.90*size+(target.actual_height/2);
+    }
+    if image_index=2{
+    target.x=x+11.70*(1-facing*2)*size;
+    target.y=y-18.90*size+(target.actual_height/2);
+    }
+
+
+
+
+        if timer < time {
+            if timer = 16 {
+                create_hitbox(12,366+facing,8,1.2,2,10,SussyImpostySnapYourNoPussyHavvingAssIntoYourLowerBodyAndSingleSpinalBone2,obj_spark_slash2,0.89 , 1.00 , 11.70 , 18.90,self.id,3,3);
+                hitbox.hit_stun = 7;
+                hitbox.di = 0.1;
+            }
+          }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,69 @@
+if state_type = "stand" || state_type ="run" || state_type ="crouch"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0.23;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+        charge_frame = 15
+}
+
+
+	
+        if timer < time {
+             state_type = "attack";
+			
+			
+			if(smash_charge < 90)
+				{
+					if timer = 19 
+					{
+						instance_create(x+12-facing*24,y-17,obj_spark_effect)
+						duster = instance_create(x,y,obj_dust_effect);
+						duster.facing = facing; 
+						sound_play(attacksnd3);
+						sound_play(sans_voice3);
+						create_hitbox(1,270,6.1,0,18,10,kick3,obj_spark_hit4,9999,9999,0,0,self.id,3,4)
+						hitbox.ground_only = 1;
+						hitbox.charge_dmg = 0;
+						hitbox.shake_ampl = 0.8
+					}
+				}
+				else
+				{
+					if timer = 21 
+					{
+						instance_create(x+12-facing*24,y-17,obj_spark_effect)
+						duster = instance_create(x,y,obj_dust_effect);
+						duster.facing = facing; 
+						sound_play(attacksnd3);
+						sound_play(sans_voice4);
+						create_hitbox_impaler( 1 , 290-facing*40 , 6.1 , 0 , 18 , 10 , kick3 , obj_spark_hit4 , 9999 , 9999 , 0 , 0 , self.id , 3 , 9001 )
+						new_index = image_index;
+						sprite_index = dsmash2_sprite;
+						image_index = new_index;
+						hitbox.charge_dmg = 0;
+						hitbox.shake_ampl = 0.8
+					}
+				}
+            
+			
+
+
+            if image_index > image_number-image_speed*2
+                image_speed = 0
+            }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
+
+
+
+

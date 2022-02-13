@@ -1,0 +1,185 @@
+// jump stuff start //
+if state_type = "jump" {
+    force_edge_grab = 0;
+    if (sprite_index != mid_jump_sprite ) 
+	{
+        image_speed = 0;
+		//if(air = 1){sprite_index = jump_sprite;}
+		if(vspeed < 0)
+		{
+			if ( timer = 0 )
+			{
+			image_index = 0;
+			} 
+			if ( timer = 9 )
+			{
+			image_index = 0;
+			}
+			if ( timer = 12 )
+			{
+			image_index = 3;
+			}
+			if ( timer = 15 )
+			{
+			image_index = 4;
+			}
+			if ( timer = 18 )
+			{
+			image_index = 4;
+			}
+		}
+		else
+		{
+			image_index = 4;
+		}
+    }
+    else 
+	{
+    if ( timer == 0 )
+      {
+      vspeed = 2.8*size;
+      boosting_frames = 7 + mid_jump_speed / 0.75;
+      }
+    if ( timer < 30 )
+      {
+      image_index = 4;
+      image_speed = 0;
+      if ( timer == 1 )
+        create_spark(8,14,psi_sprite,0.6,0.27,0.27)
+      if ( attack_type == "none" )
+        {
+        sprite_angle = ( 1 - facing * 2 ) * ( 180 + lengthdir_x ( 180 , timer * 6 ) );
+        }
+      }
+      else
+      {
+      image_index = 8;
+      image_speed = 0;
+      }
+    }
+    climbing = 0;
+}
+
+
+if ( gravity_lock == 0 )
+  {
+  if ( boosting_frames > 0 )
+    {
+    if ( air == 0 )
+      {
+      boosting_frames = 0;
+      }
+      else
+    if ( attack_type != "none" && !holdjump )
+      {
+      boosting_frames = 0;
+      vspeed = 0
+      }
+      else if state_type != "flinch" && state_type != "air_flinch"
+      {
+		  if (attack_type = "none"){sprite_index = mid_jump_sprite;}
+      if vspeed > -mid_jump_speed*size
+        vspeed -= size * 0.8;
+      boosting_frames -= 1;
+      }
+    }
+  }
+  else
+  boosting_frames = 0;
+//jump stuff end / */
+
+
+
+//dodge stuff start //
+if ( sprite_index = air_dodge_sprite )
+{
+	image_speed = 0;
+	switch ( timer )
+	{
+	case 0: image_index = 0; break;
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	}
+}
+//dodge stuff end / */
+
+//idle stuff //
+if ( sprite_index = stand_sprite )
+{
+image_speed = 0.16;
+}
+//idle stuff end / */
+
+
+//hover stuff //
+if ( sprite_index = hover_sprite )
+{
+if(image_index = 0){image_index = 1;}
+if(image_index = 1){image_index = 0;}
+}
+//hover stuff end / */
+
+
+///timer stuff //
+if (nbtimer >= 1){nbtimer -= 1;}
+if (nbtimer <= 0){nbtimer  = 0;}
+
+if (uttimer >= 1){uttimer -= 1;}
+if (uttimer <= 0){uttimer  = 0;}
+
+if (sttimer >= 1){sttimer -= 1;}
+if (sttimer <= 0){sttimer  = 0;}
+
+if (dbtimer >= 1){dbtimer -= 1;}
+if (dbtimer <= 0){dbtimer  = 0;}
+
+
+if (invtimer >= 1){invtimer -= 1}
+if (invtimer <= 0)
+{
+	if (invtemp == 1)
+	{
+	intangible = 0;
+	invtimer = 0;
+	invtemp = 0;
+	}
+}
+
+if (invtimer > 0) {intangible = 1;}
+
+//timer stuff end / */
+
+
+if(air = 0){upbtemp = 0;}
+
+
+
+
+if(ctimer > 0)
+{
+	ctimer -= 1;
+	repeat ( 2 )
+    {
+    a = after_image ( 2 , grey , .25 );
+    a.image_xscale *= 1.15;
+    a.image_yscale *= 1.15;
+    a.x += -1 + floor ( random ( 3 ) );
+    a.y += -1 + floor ( random ( 3 ) );
+    }
+	
+}
+if(ctimer < 0){ctimer = 0}
+
+
+if(shottimer > 0){shottimer -= 1;}
+if(shottimer < 0){shottimer = 0}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,497 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" || state_type = "crouch" {
+        size = csize
+        hspeed = 0;
+        air_move=0
+        grab_edge = 0
+        image_angle = 0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0
+        sprite_index = finalsmash_sprite
+        image_index=0
+        timer = 0
+        time = 125
+        temp = 0
+        timer_speed=1
+        intangible = 1
+        final_smashes+=1
+        speed = 0
+        sound_play(fs_voice1)
+        sound_play(super)
+        background_blend=c_ltgray
+        smash_power = 0
+        effect_create_below(ef_ellipse,x,y,1,c_red)
+        image_blend = c_white
+		fstemp1 = 0;
+  freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 75;
+  freezer.dontpause = self.id;
+  zoom = instance_create ( 0 , 0 , obj_camerazoom );
+  zoom.camera_l = x - 8;
+  zoom.camera_r = x + 8;
+  zoom.camera_u = y - 4 - actual_height;
+  zoom.camera_d = y + 4;
+  zoom.camera_boundary_zoom = 120;
+  zoom.alarm[0] = 75;
+}
+switch ( timer )
+{
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 20: image_index = 1; break;
+	case 25: image_index = 2; break;
+	case 30: image_index = 3; break;
+	case 35: image_index = 1; break;
+	case 40: image_index = 2; break;
+	case 45: image_index = 3; break;
+	case 50: image_index = 1; break;
+	case 55: image_index = 2; break;
+	case 60: image_index = 4; break;
+	case 63: image_index = 5; break;
+	case 66: image_index = 6; break;
+	case 69: image_index = 7; break;
+	case 72: image_index = 8; break;
+	case 75: image_index = 9; break;
+	case 78: image_index = 10; break;//hitbox
+	case 81: image_index = 11; break;
+	case 84: image_index = 12; break;
+	case 88: image_index = 13; break;//endlag if miss
+	case 94: image_index = 14; break;
+	case 100: image_index = 15; break;
+	
+	case 205: image_index = 1; break;
+	case 210: image_index = 2; break;
+	case 215: image_index = 3; break;
+	case 220: image_index = 4; break;
+	case 223: image_index = 5; break;
+	case 226: image_index = 6; break;
+	case 229: image_index = 7; break;//
+	case 232: image_index = 8; break;
+	case 235: image_index = 9; break;
+	case 238: sprite_index = finalsmash_sprite4pt2; image_index = 0; break;//
+	case 241: image_index = 1; break;
+	case 244: image_index = 2; break;
+	case 247: image_index = 3; break;//
+	case 250: image_index = 4; break;
+	case 253: image_index = 5; break;
+	case 256: image_index = 6; break;//
+	case 259: image_index = 7; break;
+	case 262: image_index = 8; break;
+	case 265: image_index = 9; break;
+	case 268: image_index = 3; break;//
+	case 271: image_index = 4; break;
+	case 274: image_index = 5; break;
+	case 277: image_index = 6; break;//
+	case 280: image_index = 7; break;
+	case 283: image_index = 8; break;
+	case 286: sprite_index = finalsmash_sprite2; image_index = 2; break;
+	case 289: image_index = 3; break;
+	case 292: image_index = 4; break;
+	case 295: image_index = 5; break;
+	
+	case 299: sprite_index = finalsmash_sprite3; image_index = 0; break;
+	case 392: image_index = 1; break;
+case 399: image_index = 2; break;
+case 406: image_index = 0; break;
+case 413: image_index = 1; break;
+case 420: image_index = 2; break;
+case 427: image_index = 0; break;
+case 434: image_index = 1; break;
+case 441: image_index = 2; break;
+case 448: image_index = 0; break;
+case 455: image_index = 1; break;
+case 462: image_index = 2; break;
+case 469: image_index = 0; break;
+case 476: image_index = 1; break;
+case 483: image_index = 2; break;
+case 490: image_index = 0; break;
+case 497: image_index = 1; break;
+case 504: image_index = 2; break;
+case 511: image_index = 0; break;
+case 518: image_index = 1; break;
+case 525: image_index = 2; break;
+case 532: image_index = 0; break;
+case 539: image_index = 1; break;
+case 546: image_index = 2; break;
+case 553: image_index = 0; break;
+case 560: image_index = 1; break;
+case 567: image_index = 2; break;
+case 574: image_index = 0; break;
+case 581: image_index = 1; break;
+case 588: image_index = 3; break;//
+case 595: image_index = 4; break;
+case 602: image_index = 5; break;
+case 609: image_index = 6; break;
+case 616: image_index = 7; break;
+case 623: image_index = 8; break;
+case 630: image_index = 9; break;//
+case 637: image_index = 10; break;
+case 642: image_index = 11; break;
+case 647: image_index = 9; break;
+case 652: image_index = 10; break;
+case 657: image_index = 11; break;
+case 662: image_index = 9; break;
+case 667: image_index = 10; break;
+case 672: image_index = 11; break;
+case 677: image_index = 9; break;
+case 682: image_index = 10; break;
+case 687: image_index = 11; break;
+case 692: image_index = 9; break;
+case 697: image_index = 10; break;
+case 702: image_index = 11; break;
+case 707: image_index = 9; break;
+case 712: image_index = 10; break;
+case 717: image_index = 11; break;
+case 722: image_index = 9; break;
+case 727: image_index = 10; break;
+case 732: image_index = 11; break;
+case 737: image_index = 9; break;
+case 742: image_index = 10; break;
+case 747: image_index = 11; break;
+case 752: image_index = 9; break;
+case 757: image_index = 10; break;
+case 762: image_index = 11; break;
+case 767: image_index = 9; break;
+case 772: image_index = 10; break;
+case 777: image_index = 11; break;
+case 782: image_index = 9; break;
+case 787: image_index = 10; break;
+case 792: image_index = 11; break;
+case 797: image_index = 9; break;
+/*case 802: image_index = 10; break;
+case 807: image_index = 11; break;
+case 812: image_index = 9; break;
+case 817: image_index = 10; break;
+case 822: image_index = 11; break;
+case 827: image_index = 9; break;
+case 832: image_index = 10; break;
+case 837: image_index = 11; break;
+case 842: image_index = 9; break;
+case 847: image_index = 10; break;
+case 852: image_index = 11; break;
+case 857: image_index = 9; break;
+case 862: image_index = 9; break;
+case 867: image_index = 10; break;
+case 872: image_index = 11; break;
+case 877: image_index = 9; break;
+case 882: image_index = 10; break;
+case 887: image_index = 9; break;
+case 892: image_index = 10; break;
+case 897: image_index = 9; break;*/
+
+case 800: sprite_index = win_sprite; image_index = 0; break;
+case 805: image_index = 1; break;
+case 810: image_index = 2; break;
+case 817: image_index = 3; break;
+case 822: image_index = 4; break;
+case 827: image_index = 5; break;
+case 832: image_index = 6; break;
+case 837: image_index = 7; break;
+}
+if timer >= 78 && timer <= 81 && hitbox.hit = 1 && attack_shielded = 0 {
+	fstemp1 = 1;
+}
+if timer > 1 {
+speed = 0;
+gravity = 0;
+gravity_lock = 1;
+}
+if timer >= 200 && timer < 799 {
+	target1.y = y;
+	target1.state_type = "flinch"
+	target1.sprite_index = target1.flinch_sprite;
+	depth = -18;
+	target1.depth = -19;
+}
+if timer >= 200 && timer <= 371 {
+	target1.x = x + 20 * (1-facing*2);
+}
+if timer >= 200 && timer < 313 {
+	target1.shakey = shakey;
+}
+if fstemp1 = 1 {
+	if timer = 87 {
+	timer = 200
+	time = 900
+	sprite_index = finalsmash_sprite4;
+	image_index = 0;
+	shakey = + 20
+	target1 = target;
+}
+}
+if timer = 78 {
+	sound_play(swingsnd3);
+	create_hitbox(14,90,2,0,19,20,kick3,obj_spark_hit4,1.7,0.8,25,15,self.id,3,5);
+}
+if timer = 88 {
+	sound_play(choose(grabmiss1,grabmiss2))
+}
+if timer > 200 && timer < 800 {
+	visible = 0;
+	target1.visible = 0;
+}
+if timer = 200 {
+	instance_create(0,0,obj_flashscreen)
+	sound_play(fs_voice4);
+	zoom = instance_create ( 0 , 0 , obj_camerazoom );
+	zoom.camera_l = x - 8;
+	zoom.camera_r = x + 8;
+	zoom.camera_u = y - 4 - actual_height;
+	zoom.camera_d = y + 4;
+	zoom.camera_boundary_zoom = 120;
+	zoom.alarm[0] = 130;
+	
+	fsbg1 = instance_create(x-80*(1-facing*2),y-60,obj_spark);
+	fsbg1.depth = -17;
+	fsbg1.image_alpha = 0;
+	fsbg1.image_speed = 0;
+	fsbg1.sprite_index = fs_background4;
+	fsbg1.image_yscale = 0.17;
+	fsbg1.image_xscale = 0.17*(1-facing*2);
+	
+	fsbg2 = instance_create(x-80*(1-facing*2),y-80,obj_spark);
+	fsbg2.depth = -16;
+	fsbg2.image_alpha = 0;
+	fsbg2.image_speed = 0;
+	fsbg2.sprite_index = fs_background;
+	fsbg2.image_yscale = 0.17;
+	fsbg2.image_xscale = 0.17*(1-facing*2);
+	
+	ruby_dummy = instance_create(x,y+20,obj_spark);
+	ruby_dummy.image_speed = 0;
+	ruby_dummy.image_alpha = 1;
+	ruby_dummy.depth = -17;
+	ruby_dummy.image_yscale = ysize;
+	ruby_dummy.image_xscale = xsize*(1-facing*2);
+	ruby_dummy.alarm[0] = 99999
+	ruby_dummy.number = number
+	
+	enemy_dummy = instance_create(target1.x,target1.y+20,obj_spark);
+	enemy_dummy.image_speed = 0;
+	enemy_dummy.image_alpha = 1;
+	enemy_dummy.depth = -17;
+	enemy_dummy.image_yscale = target1.ysize;
+	enemy_dummy.image_xscale = target1.xsize*(1-facing*2);
+	enemy_dummy.alarm[0] = 99999
+	enemy_dummy.number = target1.number
+	enemy_dummy.sprite_index = target1.sprite_index;
+	enemy_dummy.image_index = target1.image_index;
+}
+	ruby_dummy.sprite_index = sprite_index;
+	ruby_dummy.image_index = image_index;
+if timer >= 200 && timer <= 211 {
+	fsbg1.image_alpha += 0.15;
+	fsbg2.image_alpha += 0.15;
+}
+if timer = 229 || timer = 247 || timer = 256 || timer = 268 || timer = 277 {
+	sound_play(rubyswing2);
+	create_hitbox(3,361,2,0,19,4,slash3,obj_spark_slash3,1,1,25,15,self.id,3,5);
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_yscale *= 0.7*size;
+	slash = instance_create(x,y,obj_spark_slash3)
+	slash.image_xscale = size*0.3*(1-facing*2);
+	slash.image_yscale = size*0.3
+	slash.image_speed = 1;
+	slash.image_alpha = 1;
+	slash.depth = -19;
+	slash.snap = 0;
+	slash.x = target1.x;
+	slash.y = target1.y-20;
+	slash.image_blend = c_red;
+}
+if timer = 229 {
+	utilt_eff = instance_create(x+3*(1-facing*2),y,obj_spark)
+	utilt_eff.sprite_index = utilt_fx
+	utilt_eff.image_xscale = 0.08*(1-facing*2)*size;
+	utilt_eff.image_yscale = 0.08*size;
+	utilt_eff.image_speed = 0
+	utilt_eff.image_alpha = 1
+	utilt_eff.depth = depth - 0.1
+	utilt_eff.snap = self.id
+}
+	if timer >= 231 {
+		utilt_eff.image_alpha -= 0.2;
+	}
+if timer = 247 {
+	stilt_eff = instance_create(x+6*(1-facing*2),y-10*size,obj_spark)
+	stilt_eff.sprite_index = stilt_fx
+	stilt_eff.image_xscale = 0.08*(1-facing*2)*size;
+	stilt_eff.image_yscale = 0.08*size;
+	stilt_eff.image_speed = 0
+	stilt_eff.image_alpha = 1
+	stilt_eff.depth = depth - 0.1
+	stilt_eff.snap = self.id
+} 
+if timer >= 249 {
+	stilt_eff.image_alpha -= 0.2;
+}
+if timer = 256 || timer = 268 || timer = 277 {
+	uair_eff = instance_create(x,y+15*size,obj_spark)
+	uair_eff.sprite_index = uair_fx
+	uair_eff.image_xscale = 0.095*(1-facing*2)*size;
+	uair_eff.image_yscale = 0.08*size;
+	uair_eff.image_speed = 0
+	uair_eff.image_alpha = 1
+	uair_eff.depth = depth - 0.1
+	uair_eff.snap = self.id
+}
+if timer >= 258 {
+	uair_eff.image_alpha -= 0.2;
+}
+if timer = 295 {
+	sound_play(rubydash);
+}
+if timer = 298 {
+	ruby_dummy.image_alpha = 0;
+	enemy_dummy.image_alpha = 0;
+}
+if timer = 301 {
+	nightmare = create_spark(0,0,self.id);
+	nightmare.depth = -18;
+	nightmare.image_alpha = 0;
+	nightmare.image_speed = 0;
+	nightmare.x = view_xview - 30;
+	nightmare.y = view_yview - 30;
+	nightmare.sprite_index = black_screen_sprite;
+	nightmare.image_yscale = view_hview * 30;
+	nightmare.image_xscale = view_hview * 30;
+}
+if timer >= 301 && timer <= 311 {
+	nightmare.image_alpha += 0.1;
+}
+if timer = 312 {
+	enemy.dummy.depth = -16
+	enemy_dummy.x = x-20*(1-facing*2);
+	enemy_dummy.y = target1.y+35;
+}
+if timer = 312 {
+	if (instance_exists(fsbg2)) {with (fsbg2){instance_destroy();}}
+}
+if timer >= 385 && timer <= 587 && timer mod 20 = 0 {
+	sound_play(rubydash);
+	gunblast_eff = instance_create(x-30*(1-facing*2),y-10,obj_spark)
+	gunblast_eff.sprite_index = gunblast_fx
+	gunblast_eff.image_xscale = -0.08*(1-facing*2)*size;
+	gunblast_eff.image_yscale = 0.08*size;
+	gunblast_eff.image_speed = 0.7
+	gunblast_eff.image_alpha = 1
+	gunblast_eff.depth = depth - 0.1
+	gunblast_eff.snap = self.id
+	gunblast_eff.image_angle = 45*(1-facing*2);
+}
+if timer >= 313 && timer < 799 && !instance_exists(fsbg3) {
+	fsbg3 = instance_create(x-30*(1-facing*2)*size,y+60,obj_spark);
+	fsbg3.depth = -17;
+	fsbg3.image_alpha = 1;
+	fsbg3.image_speed = 0.5;
+	fsbg3.sprite_index = fs_background2;
+	fsbg3.image_yscale = 1;
+	fsbg3.image_xscale = 1*(1-facing*2);
+	target1.shakey = shakey+10;
+}
+if timer = 313 {
+	fsbg1.image_alpha = 0;
+	fsbg2 = instance_create(x-130*(1-facing*2)*size,y-100,obj_spark);
+	fsbg2.depth = -16;
+	fsbg2.image_alpha = 1;
+	fsbg2.image_speed = 0;
+	fsbg2.sprite_index = fs_background;
+	fsbg2.image_yscale = 0.3;
+	fsbg2.image_xscale = 0.3*(1-facing*2);
+	
+	zoom = instance_create ( 0 , 0 , obj_camerazoom );
+	zoom.camera_l = x - 8;
+	zoom.camera_r = x + 8;
+	zoom.camera_u = y - 4 - actual_height;
+	zoom.camera_d = y + 4;
+	zoom.camera_boundary_zoom = 220;
+	zoom.alarm[0] = 487;
+	nightmare.image_yscale = view_hview * 30;
+	nightmare.image_xscale = view_hview * 30;
+	nightmare.x = view_xview - 30;
+	nightmare.y = view_yview - 30;
+}
+if timer >= 371 && timer <= 382 {
+	nightmare.image_alpha -= 0.1;
+}
+if timer = 371 {
+	ruby_dummy.image_alpha = 1;
+	enemy_dummy.image_alpha = 1;
+	sound_play(fs_voice2);
+	sound_play(fs_sound1);
+}
+if timer >= 371 && timer < 799{
+	target1.x = x - 20 * (1-facing*2);
+	target1.can_die = 0;
+	target1.depth = -1
+}
+if timer = 630 {
+	sound_play(rubyswing2);
+	sound_play(finalhit);
+	create_projectile(10,361,0.1,0,19,4,slash3,obj_spark_slash3,1,1,25,15,self.id,3,no_script);
+	proj.x = target1.x
+	proj.y = target1.y-20;
+	sound_play(fs_voice3);
+	screen_shake(7,7)
+	instance_create(0,0,obj_flashscreen)
+	slash = instance_create(x,y,obj_spark_slash3)
+	slash.image_xscale = size*1*(1-facing*2);
+	slash.image_yscale = size*1
+	slash.image_speed = 0.6;
+	slash.image_alpha = 1;
+	slash.depth = -18;
+	slash.snap = 0;
+	slash.x = target1.x;
+	slash.y = target1.y-5;
+	slash.image_blend = c_red;
+}
+if timer = 640 {
+	redscreen = create_spark(0,0,self.id);
+	redscreen.depth = -18;
+	redscreen.image_alpha = 0;
+	redscreen.image_speed = 0;
+	redscreen.x = view_xview - 30;
+	redscreen.y = view_yview - 30;
+	redscreen.sprite_index = red_screen_sprite;
+	redscreen.image_yscale = view_hview * 30;
+	redscreen.image_xscale = view_hview * 30;
+}
+if timer >= 640 && timer <= 651 {
+redscreen.image_alpha += 0.1;
+}
+if timer = 800 {
+	shakey = 0;
+	target1.shakey = 0;
+	if (instance_exists(fsbg2)) {with (fsbg2){instance_destroy();}}
+	if (instance_exists(fsbg3)) {with (fsbg3){instance_destroy();}}
+	if (instance_exists(redscreen)) {with (redscreen){instance_destroy();}}
+	if (instance_exists(ruby_dummy)) {with (ruby_dummy){instance_destroy();}}
+	if (instance_exists(enemy_dummy)) {with (enemy_dummy){instance_destroy();}}
+	visible = 1;
+	create_projectile(20,30+facing*120,7,8,-1,60,slash3,obj_spark_impact,1,1,25,15,self.id,3,no_script);
+	proj.x = target1.x
+	proj.y = target1.y-20;
+	screen_shake(7,7)
+	sound_play(fs_voice5);
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	attack_type = "none";
+	state_type = "stand";
+	if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	}
+    smash_power = 0
+    attacking = 0
+    special = 0
+    intangible = 0;
+    timer = 0;
+    time =-1;
+    grab_edge=1
+    can_die=1
+    }

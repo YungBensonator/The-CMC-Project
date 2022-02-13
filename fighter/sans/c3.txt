@@ -1,0 +1,40 @@
+///Beam/////////////////////////////////////
+sans = attacker;
+proj_destroy = 0
+absorb = 1  // This attack may be absorbed by PSI magnet
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = sans.id.beam_sprite
+    image_speed = 0.9;
+    visible=1;
+    proj_hits = 1
+    
+	
+    }
+	//hit = 0;
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+sans.id.attack_hits-=1;
+}
+visible=1
+
+image_blend =c_white
+
+if (timer = time && proj_hits <= 14) 
+{
+proj_hits+=1
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+
+timer = 0
+time = 6
+}
+
+if (sans.id.timer = 80 && proj_hits<14)
+{proj_hits=14}
+if (sans.id.timer > 90) 
+{proj_hits=15}
+if (image_index >= image_number-image_speed*2 )
+{instance_destroy()}

@@ -1,0 +1,75 @@
+if state_type = "shielding" || state_type = "stand" {
+if runtimer <= 0 {
+        image_speed = 0;
+        image_index = 0;
+        timer = 0;
+        timer_speed=1;
+        time = 68;
+}
+else if runtimer > 0 {
+        image_speed = 0;
+        image_index = 0;
+        timer = 0;
+        timer_speed=1;
+        time = 74;
+}
+        state_type = "attack";
+        attack_type = "grab";
+        sprite_index = stand_sprite;
+        i=0;
+        j=0;
+        xemout=x;
+        yemout=y;      
+}
+switch ( timer )
+      {
+    case 0: image_index = 0; break;
+    case 5: image_index = 1; break;
+    case 11: image_index = 2; break;
+    case 18:  image_index=0; sprite_index=grab_sprite; sound_play(swingsnd5); script_execute(create_grab_box,25.2+(time=36),19.8,1.05+((time=36)*0.1),1.25,self.id,12+((time=36)*2)); break;
+    case 55: image_index = 0; sprite_index=win_sprite; break;
+}
+hspeed=0;
+vspeed=0;
+x=xemout;
+y=yemout;
+
+if timer < time {
+    state_type = "attack";
+		hspeed *= 0.5;
+
+    if timer = 18 || timer = 21 || timer = 24{
+     stabspark[i] = instance_create(  x-0.9*(1-facing*2)*size ,y-18.90*size, obj_spark)
+     stabspark[i].number=-number;
+     stabspark[i].sprite_index=grabeff1_sprite;
+     if i < 1{
+     stabspark[i].image_index=1;}
+     if i >= 1{
+     stabspark[i].image_index=0;}
+     stabspark[i].image_speed=0;
+     stabspark[i].image_xscale=0.9*(1-facing*2)*size;
+     stabspark[i].image_yscale=0.9*size;
+     stabspark[i].depth=depth-1;
+     stabspark[0].x+=31.5*(1-facing*2)*size;
+     stabspark[1].x+=31.5*(1-facing*2)*size;
+     stabspark[i].x=x-0.9*(1-facing*2)*size;
+     grab_box.hitbox_x=(25.2+(31.5*i))*(1-facing*2)*size;
+     i+=1;}
+     if timer = 33 || timer =  39 || timer =  45{
+     with (stabspark[j]){instance_destroy();}
+     j+=1;
+     }
+     if timer <42{
+     stabspark[0].alarm[0]=3;
+     stabspark[1].alarm[0]=3;
+     stabspark[2].alarm[0]=3;}
+
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    runtimer = 0;
+    timer = 0;
+    time =-1;
+    }
+        

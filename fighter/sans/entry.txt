@@ -1,0 +1,46 @@
+if ( timer == 0 )
+{
+spark = instance_create ( x - 600 , y - 70 , obj_spark );
+spark.sprite_index = entry_sprite;
+spark.image_index = 0;
+spark.image_xscale = 1;
+spark.image_yscale = 1;
+spark.depth = -9;
+spark.image_speed = 0;
+spark.hspeed = 20;
+spark.alarm[0] = 60;
+}
+if ( timer < 30 )
+{
+visible = 0;
+}
+if ( timer == 30 )
+{
+sprite_index = jump_sprite;
+image_speed = 0.25;
+image_index = 0;
+sound_play ( entry_sound );
+}
+if ( timer >= 30 && timer <= 66 )
+{
+visible = 1;
+shakey = lengthdir_y ( 96 , 135 - ( timer - 30 ) * 3.75 );
+}
+if ( timer == 66 )
+{
+shakey = 0;
+sprite_index = land_sprite;
+duster = instance_create ( x + 3 , y + 1 , obj_dust_effect );
+duster.facing = 1;
+duster = instance_create ( x - 3 , y + 1 , obj_dust_effect );
+duster.facing = 0;
+}
+if ( timer >= 80 )
+{
+visible = 1;
+state_type = "stand";
+sprite_index = stand_sprite;
+vspeed = 0;
+timer = 0;
+time = -1;
+}

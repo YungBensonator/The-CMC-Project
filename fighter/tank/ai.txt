@@ -1,0 +1,121 @@
+if ai_timer >= time-2
+ai_state="idle"
+
+if combotemp=0{
+if air = 0 {
+if collision_rectangle(x-13,y-13,x+10,y,item,0,0) && hold_item = 0 && instance_nearest(x,y-5,item).holder = 0 && instance_nearest(x,y-5,item).grab > 0 {
+        attack_type = "none";
+        state_type = "land";
+        sprite_index=land_sprite;
+        timer = 0;
+        time = 3;
+        hold_item = 1;
+        held_item = instance_nearest(x,y-5,item);
+        held_item.holder = id;
+        held_item.state_type = "held"
+        sound_play(itemgetsnd);
+        attacking = 0;
+        exit
+        }  
+else {
+if distance_to_object(enemy) < 116 {
+    //timer=0
+    if smash_power >= global.gs_fs_charge && enemy.air = 0 {
+    if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+        facing=1-facing;
+    attack_type = "final_smash" }
+    else {
+    if enemy.air=0 {
+    if held_item = -1 {
+    attack_type = choose("jab","ftilt","dtilt","usmash","downb","b","dsmash","grab","ssmash","ftilt","dtilt","usmash","downb","b","dsmash","grab")
+    }
+    else
+    attack_type = "itemfthrow"
+    }
+    else {
+    if held_item = -1
+    attack_type = choose("jab","ftilt","utilt","usmash","sideb","b","upb","grab","jab","ftilt","usmash","usmash","sideb","b","upb","grab")
+    else
+    attack_type = choose("itemfthrow","itemuthrow") }
+    exit
+    }
+    }
+else {
+    //timer=0
+    if held_item = -1 {
+    if smash_power >= global.gs_fs_charge && abs(enemy.y-self.y) < 36 {
+        if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+            facing=1-facing;
+        attack_type = "final_smash" 
+    }
+    else {
+        if enemy.y < y - 80+(enemy.actual_height/2)*enemy.size
+            attack_type = choose("upb","sideb"); 
+        else
+            attack_type = choose("upb","b","downb","ssmash","upb","upb");
+    }
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+    }
+}
+}
+else if distance_to_object(enemy) <=90{
+    if enemy.y > y{
+    attack_type = choose("dair","nair","fair","dair","dair")
+    }
+    else{
+    if (facing=1 && enemy.x>x-20*size) || (facing=0 && enemy.x<x+20*size){
+    attack_type="bair";
+    }
+    else{
+    attack_type = choose("nair","uair","fair","nair","fair")
+    }
+    }
+}
+}
+
+else{
+    if combotype=1 {
+    if attack_type="none"{
+    if air = 0{
+    if enemy.y < y - 80+(enemy.actual_height/2)*enemy.size{
+    attack_type="sideb";
+    combotype=0;
+    combotemp=0;
+    }
+    else{
+    attack_type="ssmash"
+    combotype=0;
+    combotemp=0;
+    }
+    }
+    else{
+    if (facing=1 && enemy.x>x-20*size) || (facing=0 && enemy.x<x+20*size){
+    attack_type="fair"
+    combotype=0;
+    combotemp=0;
+    }
+    else{
+    attack_type="bair"
+    combotype=0;
+    combotemp=0;
+    }
+    }
+    }}
+    if combotype=2{
+    if attack_type="none" && air = 0{
+    if combotemp=2 && attack_type="none"{
+    attack_type="ssmash";
+    combotype=0;
+    combotemp=0;
+    }
+    if combotemp=1 {
+    attack_type="usmash";
+    combotemp=2;
+    }
+    }
+    }
+    
+}

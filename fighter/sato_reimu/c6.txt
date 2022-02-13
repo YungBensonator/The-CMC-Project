@@ -1,0 +1,34 @@
+priority = 0;
+absorb = 0;  // This attack may be absorbed by PSI magnet
+absorb2 = 0;
+reflect = 1;
+no_clash = 0;
+
+reff.hit = 2;
+reff.x = x;
+reff.y = y+20;
+//reff.hspeed = hspeed;
+
+
+if (!instance_exists(reff))
+	{
+		reff = instance_create(x,y+20,obj_spark)
+        reff.sprite_index = attacker.id.wall_card_sprite;
+        if(facing = 0){reff.image_xscale = -0.5;}
+		if(facing = 1){reff.image_xscale =  0.5;}
+		reff.image_yscale =  0.5;
+        reff.image_speed = 0.5
+        //reff.snap = self.id
+		reff.alarm[0] = 599;	
+	}
+
+if (!instance_exists(attacker.id.wall))
+{
+	with (reff){instance_destroy();}
+}
+
+if(timer >= 20)
+{
+	hspeed = 0;
+}
+

@@ -1,0 +1,224 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 48;
+        timer_speed=1;
+        charge_frame = 1;
+	if (instance_exists(stand_ringa)) {with (stand_ringa){instance_destroy();}}
+	if (instance_exists(stand_ringg)) {with (stand_ringg){instance_destroy();}}
+	if (instance_exists(stand_ringc)) {with (stand_ringc){instance_destroy();}}
+	if ringtemp = 0 {
+	stand_ringdtilt = create_spark ( -5 , -15 , stand_ring_sprite , 0.2 , 0.29 , 0.29 );
+	stand_ringdtilt.depth = -1;
+	stand_ringdtilt.loop = 999;
+	stand_ringdtilt.snap = self.id;
+	}
+	canceltemp = 0
+	noring = 1;
+	platstay = 1;
+  }
+if hitbox.hit = 1 || proj.hit = 1 {
+	canceltemp = 1;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; dsmash_fx.image_index = 0; break;
+	case 21: image_index = 7; dsmash_fx.image_index = 1; break;
+	case 24: dsmash_fx.image_index = 2; break;
+	case 25: image_index = 8; break;
+	case 27: dsmash_fx.image_index = 3; break;
+	case 29: image_index = 9; break;
+	case 32: image_index = 10; break;
+	case 35: image_index = 11; break;
+	case 38: image_index = 12; break;
+	case 40: image_index = 13; break;
+	case 42: image_index = 14; break;
+	case 44: image_index = 15; break;
+	case 46: image_index = 16; break;
+	
+	case 69: image_index = 9; break;
+	case 72: image_index = 10; break;
+	case 75: image_index = 11; break;
+	case 78: image_index = 9; break;
+	case 81: image_index = 10; break;
+	case 84: image_index = 11; break;
+	case 87: image_index = 12; break;
+	case 89: image_index = 13; break;
+	case 91: image_index = 14; break;
+	case 93: image_index = 15; break;
+	case 95: image_index = 16; break;
+      }
+	if timer = 9 {
+		speed = 2*(1-facing*2);
+		direction = 0*(1-facing*2);
+	}
+	if timer = 15 {
+	sound_play(choose(attack_voice5,attack_voice6,no_voice));
+	sound_play(izanami_snd1);
+	sound_play(cfslashswing2);
+	}  
+	if timer = 18 {
+	dsmash_fx = create_spark ( -7 , 7 , dsmash_fx_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	dsmash_fx.snap = self.id;
+	dsmash_fx.image_alpha = 0.7;
+	if moveup != 1 {
+	if izanamitimestoptemp = 0 {
+	create_hitbox(9,angle_correct(30),5,5,5,9,cfslash4,obj_spark_slash3,1.00 , 0.72 , 18.27 , 14.79,self.id,3,3);
+	}
+	if izanamitimestoptemp = 1 {
+	create_projectile(9,361,1,0,5,9,cfslash4,obj_spark_slash3,1.00 , 0.72 , 18.27 , 14.79,self.id,3,no_script);
+	}
+	}
+	if moveup = 1 {
+	if izanamitimestoptemp = 0 {
+	create_hitbox(9,angle_correct(90),3,0,5,9,cfslash4,obj_spark_slash3,1.00 , 0.72 , 18.27 , 14.79,self.id,3,3);
+	hitbox.hit_stun = 8;
+	}
+	if izanamitimestoptemp = 1 {
+	create_projectile(9,361,1,0,5,9,cfslash4,obj_spark_slash3,1.00 , 0.72 , 18.27 , 14.79,self.id,3,no_script);
+	}
+	}
+	}
+	if timer >= 18 && timer <= 28 {
+		if canceltemp = 1 && attacking = 1 && special != 1 && (movedown !=1 && moveup = 1 && moveleft != 1 && moveright != 1) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_utilt();
+	noring = 0;
+		canceltemp = 0;
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		}
+		if canceltemp = 1 && (!smashdown && !smashleft && !smashright && smashup = 1) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_usmash();
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		noring = 0;
+		}
+		if canceltemp = 1 && (smashdown != 1 && !smashup && (smashleft = 1 || smashright = 1) ) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_ssmash();
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		noring = 0;
+		}
+		//Special Cancels
+		if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_b();
+	noring = 0;
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		}
+		if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup != 1 && (moveleft = 1 || moveright = 1)) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_sideb();
+	noring = 0;
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		}
+		if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup = 1 && moveleft != 1 && moveright != 1) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_upb();
+	noring = 0;
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		}
+		if canceltemp = 1 && attacking != 1 && special =1 && (movedown = 1 && moveup != 1 && moveleft != 1 && moveright != 1) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_downb();
+	noring = 0;
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		}
+		//AB Cancels
+		if canceltemp = 1 && attacking = 1 && special =1 && (movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_ab();
+		noring = 0;
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+		}
+	}
+	if timer = 30 {
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+	}
+	if timer >= 28 && timer <= 38 && attacking && ringtemp = 0 {
+	timer = 68 
+	time = 97
+	image_index = 9;
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+	}
+	if timer = 69 {
+	sound_play(cfslashswing2);
+	dsmash_ring = create_projectile(6,angle_correct(170),5,4,5,9,cfslash3,obj_spark_slash3,0.29 , 0.29 , 0 , 0,self.id,22,char_custom2);
+	dsmash_ring.sprite_index = dsmash_ring_sprite;
+	dsmash_ring.snap = self.id;
+	dsmash_ring.proj_destroy = 0;
+	dsmash_ring.image_speed = 0;
+	dsmash_ring.time = 22;
+	dsmash_ring.depth = depth - 0.1;
+	dsmash_ring.mask_index = no_mask;
+	}
+	if timer > 69 && timer <= 97 {
+	dsmash_ring.image_index += 0.5;
+	}
+	if timer = 79 {
+	dsmash_ring.mask_index = dsmash_ring_sprite;	
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = 4; }
+	else {state_type = "stand";}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	noring = 0;
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+    if movedown {
+		state_type = "crouch"; sprite_index = crouch_sprite; image_index = frame_where_youre_fully_crouched;
+	stand_ringc = create_spark ( -4 , 0 , stand_ring_sprite , 0.2 , 0.29 , 0.29 );
+	stand_ringc.depth = -1;
+	stand_ringc.loop = 99999999;
+		}
+	platstay = 0;
+  }

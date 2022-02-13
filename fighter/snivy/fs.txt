@@ -1,0 +1,156 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = final_smash_sprite;
+  image_index = 0;
+  timer = 1;
+  time = 230;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  background_blend = c_ltgray;
+  smash_power = 0;
+  air_move = 0;
+  sound_play ( finale_voice );
+  for ( i = 0 ; i < 7 ; i += 1 )
+    {
+    stick_x[i] = x;
+    stick_y[i] = y;
+    stick_d[i] = -1;
+    }
+  }
+
+gravity = 0;
+vspeed = 0;
+
+if ( timer > 3 && timer <= 74 )
+  {
+  with ( player )
+    {
+    if ( id == other.id ) continue;
+    if ( team == other.team && !team_attack ) continue;
+    if ( intangible || attack_type == "final_smash" ) continue;
+    if ( intangible_frames != -1 || state_type == "dead" ) continue;
+    if ( other . stick_d [ number ] == -1 )
+      {
+      if ( abs ( x - other . x ) > 96 || abs ( y - other . y ) > 144 ) continue;
+      instance_create ( x , y - 16 * size , obj_spark_effect );
+      state_type = "air_flinch";
+      timer = 0;
+      time = 4;
+      other . stick_x [ number ] = x - other . x;
+      other . stick_y [ number ] = y;
+      other . stick_d [ number ] = 0;
+      }
+      else
+      {
+      state_type = "air_flinch";
+      timer = 0;
+      time = 4;
+      hspeed = 0;
+      vspeed = -0;
+      y = other . stick_y [ number ];
+      x = other . x + lengthdir_x ( other . stick_x [ number ] , other . stick_d [ number ] );
+      }
+    }
+  }
+if (timer = 74) {
+  sound_play ( tornado_sound3 );
+}
+if ( timer > 74 && timer < 220 )
+  {
+  if ( timer mod 4 == 0 ) screen_shake ( 0.1 , 4 );
+  if ( timer mod 6 == 0 )
+    {
+    create_projectile ( 4 , 90 , 7 , 7.7 , 7 , 2 , kick1 , obj_spark_hit1 , 1 , 1 , 0 , -140 , self.id , 42 , custom_custom7 );
+    proj . sprite_index = leaf_sprite;
+    proj . visible = 1;
+    proj . keepmain = self.id;
+    proj . image_speed = choose ( 0.5 , 0.6 , 0.4 , 0.3 , 0.7 );
+    proj . image_xscale = ( 80 + random ( 75 ) ) * 0.01;
+    proj . image_yscale = proj . image_yscale;
+    proj . image_index = choose ( 0 , 1 , 2 , 3 );
+    proj . rotspeed = 5 + random ( 15 );
+    proj . xorr = -96 + random ( 193 );
+    proj . depth = depth - 1;
+    proj . image_alpha = 0;
+    }
+  with ( player )
+    {
+    if ( id == other.id ) continue;
+    if ( team == other.team && !team_attack ) continue;
+    if ( intangible || attack_type == "final_smash" ) continue;
+    if ( intangible_frames != -1 || state_type == "dead" ) continue;
+    if ( other . stick_d [ number ] == -1 )
+      {
+      if ( abs ( x - other . x ) > 96 || abs ( y - other . y ) > 144 ) continue;
+      state_type = "air_flinch";
+      timer = 0;
+      time = 4;
+      other . stick_x [ number ] = x - other . x;
+      other . stick_y [ number ] = y;
+      other . stick_d [ number ] = 0;
+      }
+      else
+      {
+      state_type = "air_flinch";
+      timer = 0;
+      time = 4;
+      hspeed = 0;
+      vspeed = -0.5;
+      other . stick_d [ number ] += 10;
+      y = other . stick_y [ number ];
+      if ( other . stick_d [ number ] >= 360 ) other . stick_d [ number ] -= 360;
+      x = other . x + lengthdir_x ( other . stick_x [ number ] , other . stick_d [ number ] );
+      }
+    }
+  }
+if ( timer == 220 )
+  {
+  create_hitbox ( 12 , 362 , 6.4 , 8 , 3 , 12 , kick3 , obj_spark_hit3 , 5 , 7 , 0 , 0 , self.id , 2 , 5 );
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 9: image_index = 3; break;
+  case 74:
+    repeat ( 6 )
+      {
+      create_projectile ( 0 , 0 , 0 , 0 , 0 , 0 , -1 , -1 , 1 , 1 , 0 , 0 , self.id , 146 , custom_custom6 );
+      proj . sprite_index = tornado_sprite;
+      proj . hit = 2;
+      proj . visible = 1;
+      proj . keepmain = self.id;
+      proj . image_speed = 0;
+      proj . image_xscale = 2 * choose ( 1 , -1 );
+      proj . image_yscale = 2;
+      proj . depth = depth - 1;
+      proj . image_alpha = 0;
+      proj . image_index = 0;
+      }
+    image_index = 4;
+    break;
+  case 77: image_index = 5; break;
+  case 220: image_index = 7; break;
+  case 223: image_index = 8; break;
+  }
+
+if ( timer >= time )
+  {
+  smash_power = 0;
+  background_blend = c_white;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

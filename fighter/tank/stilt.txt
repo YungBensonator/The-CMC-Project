@@ -1,0 +1,59 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "stilt"
+    timer = 0;
+    time = 48;
+    sprite_index = jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    slide=0;
+    hspeed=0;
+    maxtime=0;
+  }
+switch ( timer )
+      {
+  case 1: image_index = 0; break;
+  case 5: image_index = 2; break;
+  case 10: image_index = 1; sound_play(ftilt_sound); break;
+  case 38: image_index = 2; break;
+  case 43: image_index = 3; break;
+      }
+
+if ( timer < time )
+  {
+  state_type = "air_attack";
+
+  if timer = 10 {
+  stiltshot=create_projectile(15,32+116*facing,6,4,20,3,fire1,obj_spark_fire1,0.72 , 0.66 , 20.76 , 37.24, self.id, 28, no_script);
+  stiltshot.alarm[0]=28;
+  stiltshot.sprite_index=fire_sprite;
+  stiltshot.di=0.2;
+  stiltshot.image_speed=0.5;
+  stiltshot.depth=depth-1;
+  stiltshot.grazehp = 5;
+  if !ai || (ai && global.gs_rules != "Challenge"){
+  stiltshot.damage=11*size;
+  stiltshot.kbg=3.2*size;
+  }
+  }
+
+  stiltshot.x=x+18.76*(1-facing*2)*size;
+  stiltshot.y=y-37.24*size;
+	
+  if stiltshot.hit=1{
+  stiltshot.timer=0;
+  }
+  stiltshot.depth=depth-1;
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+        else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,285 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 91;
+    sprite_index = sideb_sprite;
+    image_speed = 0;
+    image_index = 1;
+    target=0;
+    target1=0;
+    shieldup=0;
+    special=0;
+    susman=1;
+    if sussyswappy>=420{
+    timer = 499;
+    sprite_index=downb3_sprite;
+    image_index=0;
+    time=703;
+    invincible=1;
+    sussyswappy=0;
+    }
+    if air =0{
+    hspeed=0;
+    }
+  }
+mask_index=sprite_index;
+
+switch ( timer )
+      {
+  case 1: image_index = 1; break;
+  case 100: image_index = 0; break;
+  case 107: image_index = 1; break;
+  case 114: image_index = 2; intangible=0; break;
+  case 121: image_index = 3; break;
+  case 125: image_index = 4; break;
+  case 129: image_index = 5; break;
+  case 134: image_index = 6; break;
+  case 139: image_index = 7; break;
+  case 144: image_index = 8; break;
+  case 149: image_index = 9; break;
+  case 152: image_index = 10; break;
+  case 156: image_index = 11; break;
+  case 161: image_index = 12; break;
+  case 166: image_index = 13; break;
+  case 169: image_index = 14; break;
+  case 192: image_index = 7; break;
+  case 199: image_index = 6; break;
+  case 206: image_index = 1; break;
+  case 213: image_index = 0; break;
+  case 300: image_index = 0; break;
+  case 307: image_index = 1; break;
+  case 314: image_index = 2; intangible=0; break;
+  case 321: image_index = 3; break;
+  case 325: image_index = 4; break;
+  case 329: image_index = 5; break;
+  case 333: image_index = 6; break;
+  case 337: image_index = 7; break;
+  case 340: image_index = 8; break;
+  case 345: image_index = 9; break;
+  case 350: image_index = 10; break;
+  case 355: image_index = 11; break;
+  case 360: image_index = 12; break;
+  case 365: image_index = 13; break;
+  case 382: image_index = 14; break;
+  case 399: image_index = 15; break;
+  case 404: image_index = 16; break;
+  case 407: image_index = 17; break;
+  case 420: image_index = 11; break;
+  case 428: image_index = 1; break;
+  case 438: image_index = 0; break;
+  case 500: image_index = 0; break;
+  case 505: image_index = 1; break;
+  case 515: image_index = 2; sound_play(weeb_sound); break;
+  case 517: image_alpha=0.4; break;
+  case 518: x+=237.6*(1-facing*2)*size; sound_play(swingsnd2); image_alpha=0; break;
+  case 521: image_alpha=0.4; break;
+  case 523: image_alpha=1; break;
+  case 693: image_index=1; break;
+  case 698: image_index=0; break;
+      }
+
+if ( timer < time )
+  { if timer < 499 && timer >= 100{
+  hspeed=0;
+  }
+
+    if timer = 524{
+    sound_play(downb_sound);
+    duster = instance_create ( x-12*(1-facing*2)*size , 0 , obj_freeze );
+    duster.dontpause = self.id;
+    duster.alarm[0] = 166;
+    target1.sprite_index=target1.flinch_sprite;
+    }
+    if timer = 692{
+    create_hitbox(20,24+132*facing,9.5,11.4,-1,2,SussyImpostySnapYourNoPussyHavvingAssIntoYourLowerBodyAndSingleSpinalBone2,obj_spark_slash1,6.96 , 1.81 , -127.90 , 18,self.id,1,5);
+    slashedman.image_speed=0.3;
+    }
+    if timer = 518{
+    create_homing_bubble(7.46 , 3.81 , -127.90 , 18,self.id,5);
+    slashedman = instance_create( x, y, obj_spark);
+    slashedman.image_xscale=0.9*(1-facing*2)*size;
+    slashedman.image_yscale=0.9*size;
+    slashedman.x=x-10*(1-facing*2)*size;
+    slashedman.snap=self.id;
+    slashedman.image_speed=0.3;
+    slashedman.image_index=0;
+    slashedman.depth=3;
+    slashedman.sprite_index=downb3eff_sprite;
+    }
+    if timer >= 518 && timer < 523{
+    homing_bubble.x=x-127.9*(1-facing*2)*size;
+    homing_bubble.y=y-18*size;
+    }
+    if timer >= 300 && timer < 430{
+    heavy_armor=13*size;
+    }
+    if timer < 100 && special = 1{
+    if sussyswappy < 180{
+    timer = 99;
+    sprite_index=downb_sprite;
+    image_index=0;
+    time=222;
+    intangible=1;
+    super_armor=1;
+    sussyswappy=0;
+    }
+    if sussyswappy >= 180 && sussyswappy<420{
+    timer = 299;
+    sprite_index=downb2_sprite;
+    image_index=0;
+    time=450;
+    intangible=1;
+    }
+    sussyswappy=0;
+    }
+    if sussyswappy>=420{
+    timer=0;
+    time=-1;
+    }
+    if timer >= 10 && timer < 100{
+    if !instance_exists(impostystando){
+    sussyswappy+=1;}
+    else{
+    sussyswappy+=0.1;
+    }
+    if timer mod 10 = 0{
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+    duster.depth=depth+1;
+    }
+    if sussyswappy=180 || sussyswappy=420{
+    instance_create(x,y-20*size,obj_spark_shockwave);
+    sound_play(explode_small);
+    }
+    if timer = 90{
+    timer = 10;
+    }
+    if shieldup{
+    timer=0;
+    time=-1;
+    if air > 0{
+    state_type="jump"
+    }
+    if air = 0{
+    state_type="stand"
+    }
+    attack_type="none";
+    }
+    }
+
+    if timer > 100 && vspeed > 0.8 && timer < 500{
+    vspeed=0.8*size;
+    air_move=0;
+    fast_fall=0;
+    fast_fall_temp=0;
+    }
+    if timer >=500{
+    vspeed=0;
+    gravity_lock=1;
+    air_move=0;
+    fast_fall=0;
+    fast_fall_temp=0;
+    hspeed=0;
+    }
+    if timer = 337 {
+    sound_play(swingsnd2);
+    create_hitbox(3,112+(-44)*facing,5,0.5,9,5,punch2,obj_spark_hit1,1.68 , 1.65 , 30.60 , 21.60,self.id,8,3);
+    hitbox.hit_stun=25;
+    }
+
+    if timer = 365 {
+    sound_play(swingsnd2);
+    create_hitbox(3,90,1,0.5,9,5,punch2,obj_grab_spark,1.68 , 1.65 , 30.60 , 21.60,self.id,8,3);
+    hitbox.hit_stun=25;
+    }
+    if timer > 365 && timer < 373 && !instance_exists(hitbox){
+    create_hitbox(3,90,1,0.5,9,5,punch2,obj_grab_spark,1.68 , 1.65 , 30.60 , 21.60,self.id,373-timer,3);
+    hitbox.hit_stun=25;  
+    }
+    if timer = 407 {
+    target1.x=x+44.10*(1-facing*2)*size
+    target1.y=y-10.80*size+(target1.actual_height);
+    target1=0;
+    sound_play(swingsnd2);
+    screen_shake(6,6);
+    create_hitbox(7,312+(-84)*facing,6,2.5,-1,6,punch3,obj_spark_hit2,1.27 , 1.36 , 44.10 , 10.80,self.id,13,3);
+    hitbox.hit_stun=5;
+    }
+    if (timer >= 365 && timer < 382) || (timer >= 404 && timer < 407){
+    target1.x=x+44.10*(1-facing*2)*size
+    target1.y=y-37.80*size+(target.actual_height/2);
+    }
+    if (timer >= 382 && timer < 399){
+    target1.x=x+40.50*(1-facing*2)*size
+    target1.y=y-45*size+(target.actual_height/2);
+    }
+    if (timer >= 399 && timer < 404){
+    target1.x=x+20.70*(1-facing*2)*size
+    target1.y=y-56.70*size+(target.actual_height/2);
+    }
+    if timer > 365 && timer <  407{
+    target1.timer=0;
+    target1.time=3;
+    target1.state_type="air_flinch";
+    }
+
+    if timer = 125 {
+    sound_play(swingsnd1);
+    create_hitbox(3,68+44*facing,4.2,0.5,3,4,punch1,obj_spark_hit1,0.96 , 1.32 , 27.90 , 18.90,self.id,9,2);
+    hitbox.hit_stun=13;
+    }
+    if timer = 149 {
+    sound_play(swingsnd3);
+    create_hitbox(3,38+104*facing,7,0.5,3,4,punch2,obj_spark_hit1,1.01 , 1.36 , 34.20 , 18.90,self.id,7,2);
+    hitbox.hit_stun=25;
+    }
+    if ((timer >= 125 && timer < 156)||(timer >=365 && timer < 371)) && hitbox.hit > 0 && target1=0{
+    target1=target;
+    }
+    if timer > 518 && timer < 523 && target1=0 && target>0{
+    target1=target;
+    target1.y=y;
+    slashedman.image_speed=0;
+    }
+
+    if timer = 169{
+    hiddenstabby=create_projectile(12,90,7,1,30,23,SussyImpostySnapYourNoPussyHavvingAssIntoYourLowerBodyAndSingleSpinalBone2,obj_spark_hit1,1.3 , 1.3 , 31.50 , 1.80, self.id, 70, char_custom4);
+    hiddenstabby.sprite_index=downbeff_sprite;
+    hiddenstabby.x=target1.x;
+    hiddenstabby.y=target1.y+10*target1.size;
+    hiddenstabby.hit=2;
+    hiddenstabby.alarm[0]=70;
+    hiddenstabby.image_speed=0;
+    hiddenstabby.image_index=0;
+    }
+
+    if (air >0 || target1=0) && timer =160{
+    timer =191;
+    }
+    if target1=0 && timer =381{
+    timer =409;
+    }
+    if target1=0 && timer = 523{
+    timer =692;
+    }
+
+
+}
+
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    super_armor=0;
+    heavy_armor=0;
+    invincible=0;
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

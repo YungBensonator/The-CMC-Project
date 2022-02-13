@@ -1,0 +1,53 @@
+if ( time != -1 )
+  {
+    state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    image_speed = 0;
+    image_index = 2;
+    sprite_index=grab_sprite;
+    hspeed = 0;
+    target.attack_type = "none"
+    timer_speed=1;
+    pummel = -1;
+  }
+
+  if !ai && target.state_type="grabbed"{
+    if (moveright && facing = 0) || (moveleft && facing=1){
+    attack_type = "fthrow";
+    }
+    if (moveright && facing = 1) || (moveleft && facing=0){
+    attack_type = "bthrow";
+    }
+    if moveup{
+    attack_type = "uthrow";
+    }
+    if movedown{
+    attack_type = "dthrow";
+    }
+    }
+
+    if ai{
+    if irandom(3)=0{
+    attack_type = "fthrow";
+    }
+    if irandom(3)=1{
+    attack_type = "bthrow";
+    }
+    if irandom(3)=2{
+    attack_type = "uthrow";
+    }
+    if irandom(3)=3{
+    attack_type = "dthrow";
+    }
+    }
+    
+ target.x=x+43.96*(1-facing*2)*size;
+ target.y=y-38.08*size+(target.actual_height/2);
+
+
+  if target.state_type != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }

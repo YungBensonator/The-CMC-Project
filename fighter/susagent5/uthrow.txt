@@ -1,0 +1,66 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = usmash_sprite;
+image_index=0;
+timer = 0;
+time = 48;
+timer_speed=1;
+target.alarm[0]=21;
+}
+
+switch (timer){
+    case 0: image_index = 4; break;
+    case 5: image_index = 5; break;
+    case 10: image_index = 6; break;
+    case 15: image_index = 7; break;
+    case 18: image_index = 8; break;
+    case 21: image_index = 9; break;
+    case 24: image_index = 14; break;
+    case 31: image_index = 15; break;
+    case 39: image_index = 16; break;
+}
+
+
+
+    if image_index=4{
+    target.x=x-2.70*(1-facing*2)*size;
+    target.y=y-6.30*size+(target.actual_height/2);
+    }
+    if image_index=5{
+    target.x=x-5.40*(1-facing*2)*size;
+    target.y=y-5.40*size+(target.actual_height/2);
+    }
+    if image_index=6{
+    target.x=x-21.60*(1-facing*2)*size;
+    target.y=y-2.70*size+(target.actual_height/2);
+    }
+    if image_index=7{
+    target.x=x;
+    target.y=y-3.60*size+(target.actual_height/2);
+    }
+    if image_index=8{
+    target.x=x+37.80*(1-facing*2)*size;
+    target.y=y-11.70*size+(target.actual_height/2);
+    }
+
+
+
+        if timer < time {
+            if timer = 21 {
+                target.x=x+17.10*(1-facing*2)*size;
+                target.y=y-77.40*size+(target.actual_height/2);
+                create_hitbox(4,90,4,12.5,2,3,punch2,obj_spark_hit2,1.81 , 1.29 , 17.10 , 77.40,self.id,3,3);
+                hitbox.di = 0.3;
+            }
+          }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,65 @@
+if ( time = -1 )
+  {
+    state_type = "air_attack";
+    attack_type = "uthrow";
+    timer = 0;
+    time = 42;
+    sprite_index = uthrow_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	target.sprite_index = target.down_sprite;
+	target.shakex = 0;
+	target.shakey = 0;
+	target.image_index = 0;
+	target.image_speed = 0;
+	target.timer_speed = 0.01;
+	target.alarm[0] = 100;
+	sound_play(sideb_air_voice1);
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 19: image_index = 3; break;
+	case 26: image_index = 4; break;
+	case 28: image_index = 5; sound_play(sideb_air_voice2); break;
+	case 30: image_index = 6; break;
+	case 33: image_index = 7; break;
+	case 36: image_index = 8; break;
+	case 39: image_index = 9; break;
+      }
+
+    if ( timer = 28 )
+      {
+	sound_play(rubyswing3);
+	create_hitbox(10,80+facing*20,7,4,19,3,slash3,obj_spark_slash3,0.8,0.5,20,0,self.id,3,2);
+	hitbox.di = 0;
+	duster = instance_create(x+40*(1-facing*2),y,obj_dust_effect);
+	duster.facing = 1-facing;
+	usmash_eff = instance_create(x+30*(1-facing*2),y,obj_spark)
+	usmash_eff.sprite_index = usmash_fx
+	usmash_eff.image_xscale = 0.08*(1-facing*2)*size;
+	usmash_eff.image_yscale = 0.08*size;
+	usmash_eff.image_speed = 0
+	usmash_eff.image_alpha = 1
+	usmash_eff.depth = depth - 0.1
+	usmash_eff.snap = 0
+	speed = 5*(1-facing*2);
+	direction = 80*(1-facing*2);
+      }
+	if timer >= 30 {
+		usmash_eff.image_alpha -= 0.2;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

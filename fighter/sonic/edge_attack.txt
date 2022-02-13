@@ -1,0 +1,76 @@
+// Why did Luku make this LAMER
+if ( state_type = "edge" ) {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "edge_attack";
+  sprite_index = edge_sprite;
+  image_index = 0;
+  image_speed = 0;
+  if ( percent < 100 )
+        timer = 0;
+        else {
+        timer = -10; }
+  time = 45;
+  timer_speed = 1;
+  intangible = 1;
+  }
+
+if ( timer = -10 )
+{
+instance_create(x-size,y+size,obj_spark_effect);
+}
+
+//This handles the "climb" movement itself before the roll/attack/jump portion of the script starts. You can mostly leave this alone unless you want to improve it. Or remove if you use an actual edge climb animation.
+switch ( timer )
+	{
+	case 1: shakex=-8*size*(1-facing*2); shakey=15*size; break;
+	case 3: shakey=12*size; break;
+	case 4: shakex=-6*size*(1-facing*2); shakey=8*size; break;
+	case 6: shakex=-4*size*(1-facing*2); shakey=4*size; break;
+	case 8: shakex=0*size*(1-facing*2); shakey=0*size; break;
+	case 10: shakex=0*size*(1-facing*2); shakey=0*size; break;
+	}
+
+//The animation portion.
+switch ( timer )
+	{
+	//Sprite frames used for the climb portion of the move. Can be mostly left alone unless you know what you are doing.
+	case 1: sprite_index=upb_sprite; image_index=0; break;
+	case 10: sprite_index=crouch_sprite; image_index=0; break;
+
+	//The attack itself.
+	case 11: sprite_index = stilt_sprite; image_index = 0; break;
+	case 12: image_index = 1; break;
+	case 14: image_index = 2; break;
+	case 16: image_index = 3; break;
+	case 18: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 26: image_index = 6; break;
+	case 29: image_index = 7; break;
+	case 32: image_index = 8; break;
+	case 35: image_index = 9; break;
+	}
+
+// Intended standard was to have invincibility end 3 frames before the hitbox come out.
+if ( timer == 17 )
+  intangible = 0;
+
+if ( timer == 20 )
+  {
+  if random(10) > 3.2
+	sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4,csh_voice));
+  sound_play(attack_sound2);
+  create_hitbox( 8 , angle_correct(27) , 6.5 , 2.5 , 11 , 6 , kick3 , obj_spark_hit3 , 0.9 , 0.6 , 24 , 17 ,self.id,5,5);
+  }
+
+if ( timer < 10 )
+  please_shadow = -1;
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+	sprite_index = stand_sprite;
+    timer = 0;
+    time = -1;
+  }

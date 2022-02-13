@@ -1,0 +1,106 @@
+
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "dair";
+    timer = 0;
+	time = 46;
+	sprite_index = stomp_sprite;
+ 	image_speed = 0;
+    image_index = 0;
+    hspeed *= 0.8;
+   	air_move = 0;
+  }
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	//case 8: image_index = 4; break;
+	case 7: image_index = 4; break;
+      }
+
+	if ( timer < 4 )
+	  {
+	    vspeed = 0;
+	    gravity = 0;
+	  }
+	  if timer=1 
+	  {sound_play(stomp_dive_sound)}
+	if ( timer = 7 )
+	  {
+	  stompfxdive = instance_create( x,y,obj_spark );
+		stompfxdive.image_angle=270
+		stompfxdive.sprite_index = boost_sprite
+		stompfxdive.image_xscale = xsize*size
+		stompfxdive.image_yscale = ysize*size
+		stompfxdive.image_speed = 0.3;
+		stompfxdive.image_alpha=0.6;
+		stompfxdive.depth=-10
+		stompfxdive.number=number
+	    create_hitbox( 9 , 290-(facing*40) , 5 , 4 , 15 , 2/size , kick3 , obj_spark_hit3 , 0.56 , 0.91 , 4 , 0.95 , self.id , 25 , 0 );
+	    hitbox.hit_stun = 9;
+	    vspeed = 8.5*size;
+	    temp_fall_speed = 5.25*size;
+		stompfxdive.x =x-(14 + facing*7)*size;
+		stompfxdive.y=y-size*10;
+	  }
+	  if timer>7
+	  {
+		stompfxdive.image_alpha-=0.057
+		stompfxdive.x =x-(14 + facing*7)*size;
+		stompfxdive.y=y-size*10;
+	  }
+	if ( timer = 8 )
+	    vspeed = fall_speed + temp_fall_speed;
+  if ( timer = 17 )
+	{
+    hitbox.damage = 6;
+	hitbox.dir = 50+facing*80;
+	hitbox.hit_stun = 6;
+	hitbox.bkb = 5;
+	}
+	
+  
+ if ( air = 0 )
+      {
+	  sound_stop(stomp_dive_sound)
+	  sound_play(stomp_land_sound)
+	  if ( instance_exists ( stompfxdive ) ) { with ( stompfxdive ) instance_destroy(); }
+	  stompfxland = instance_create( x,y,obj_spark );;
+		stompfxland.image_angle=270
+		stompfxland.sprite_index = stomp_fx_sprite
+		stompfxland.image_xscale = 0.15*size
+		stompfxland.image_yscale = 0.3*size
+		stompfxland.image_speed = 0.3;
+		stompfxland.depth=-10
+		stompfxland.x = x;
+		stompfxland.y = y;
+	state_type = "land";
+	attack_type = "none";
+	hspeed*=0.3
+	timer = 0;
+	time = 16;
+	sprite_index = land_sprite;
+  }
+
+
+
+if ( air > 0 && timer >= 30 && temp != -1 && (shieldup || special ||(attacking && !movedown ) || movejump || grabbing || taunt) && hitbox.hit = 1)
+      {
+	air_move = 1;
+	interrupt = 1;
+      }
+      
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,54 @@
+// This attack may not be absorbed by PSI magnet
+absorb = 0;
+absorb2 = 1;
+moving_object = 1;
+
+if ( timer = 1 )
+  {
+    hspeed = 8-facing*16;
+    vspeed = 0;
+  }
+if ( timer = 7 )
+    hspeed *= 0.4;
+
+if ( timer = 8 )
+    hspeed *= 0.1;
+if ( timer = 3 )
+  {
+    create_projectile(1,10+facing*160,8,0,6,1,punch1,obj_spark_hit1,1.9,1.3,0,0,attacker.id,1,-1);
+    proj.weight_kb = 1;
+    proj.di = 0;
+  }
+if ( timer = 5 )
+  {
+    create_projectile(1,5+facing*170,8,0,6,1,punch1,obj_spark_hit1,1.3,1.3,0,0,attacker.id,1,-1);
+    proj.weight_kb = 1;
+    proj.di = 0;
+  }
+if ( timer = 7 )
+  {
+    create_projectile(1,5+facing*170,1,0,6,1,punch1,obj_spark_hit1,1.3,1.3,0,0,attacker.id,1,-1);
+    proj.weight_kb = 1;
+    proj.di = 0;
+    proj.hit_stun = 10;
+  }
+if ( timer = 9 || timer = 11 || timer = 13 || timer = 15 || timer = 17 || timer = 19 || timer = 21 || timer = 23 || timer = 25 || timer = 27 || timer = 29 || timer = 31 || timer = 33 )
+  {
+    create_projectile(1,90,1.5,0,3,0.1,punch1,obj_spark_hit1,1.3,1.3,0,0,attacker.id,1,-1);
+    proj.weight_kb = 1;
+    proj.di = 0;
+    proj.hit_stun = 2;
+    proj.shield_stun = 2;
+  }
+if ( timer = 35 )
+  {
+    create_projectile(1,135-facing*90,5.6,1.5,6,1,punch2,obj_spark_hit1,2.1,1.3,0,0,attacker.id,1,-1);
+    proj.weight_kb = 1;
+    proj.di = 0;
+    proj.hit_stun = 10;
+  }
+if ( ( timer = 40 ) || ( string(attacker.id.state_type) = "flinch" || string(attacker.id.state_type) = "air_flinch" ) || ( x < obj_game_control.death_l || x > obj_game_control.death_r || y < obj_game_control.death_u || y > obj_game_control.death_d ) )
+  {
+    instance_create ( x , y , obj_smoke_front );
+    instance_destroy();
+  }

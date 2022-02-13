@@ -1,0 +1,116 @@
+if ai = 1 and !instance_exists(vent) and air = 0 and state_type != "attack" and state_type != "air_attack" and state_type != "flinch"{
+    state_type = "stand"
+    timer = 0
+    time = -1
+    char_upb();}
+if state_type="out"{
+bulletta=6;
+}
+if state_type = "stand"{
+image_speed = 0.1;
+}
+if state_type = "run"{
+if sprite_index=run_sprite{
+image_speed = 0.32;	
+}
+if sprite_index = walk_sprite{
+image_speed = 0.1;
+}
+}
+if sprite_index=crouch_sprite && state_type="crouch"{
+    image_speed=0.05;
+    if image_index>2.95{
+    image_index=1;
+    }
+}
+
+if bulletta>11 && attack_type!="b"{
+    bulletta=13;
+}
+if bulletta<0{
+bulletta=0;
+}
+
+if reload<1 && (hitbox.hit>0 || hitbox2.hit>0 || hitbox3.hit>0 || hitbox4.hit>0 || bullet.hit =1 || knife.hit=1 || knife2.hit=1 || knife3.hit=1 || grenaddy.hit=1)  {
+ reload+=1;
+ if bulletta<12{
+ bulletta-=1;
+ }
+ else{
+ bulletta=11;
+ }
+ bulletcount.image_index=bulletta;
+ bulletcount.sprite_index=b5_sprite;
+}
+if attack_type="none" && reload>0{
+reload-=1;
+}
+if reload < 0{
+reload=0;
+}
+if reload > 1{
+reload=1;
+}
+ 
+ if sussyswappy > 540{
+ sussyswappy = 540;
+ }
+  if sussyswappy < 0{
+ sussyswappy = 0;
+ }
+ if attack_type!="b" && susman>0{
+    super_armor=0;
+    heavy_armor=0;
+    susman=0;}
+///meter stuff
+    if (!instance_exists(MeterHud)) {
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+    MeterHud.image_xscale *= 2.5;
+    MeterHud.image_yscale *= 2.5;
+    MeterHud.sprite_index=b6_sprite;
+    MeterHud.image_speed=0;
+}
+if floor(bulletta)>=12{
+MeterHud.image_index=0;
+}
+if floor(bulletta)=11{
+MeterHud.image_index=1;
+}
+if floor(bulletta)=10{
+MeterHud.image_index=2;
+}
+if floor(bulletta)=9{
+MeterHud.image_index=3;
+}
+if floor(bulletta)=8{
+MeterHud.image_index=4;
+}
+if floor(bulletta)=7{
+MeterHud.image_index=5;
+}
+if floor(bulletta)=6{
+MeterHud.image_index=6;
+}
+if floor(bulletta)=5{
+MeterHud.image_index=7;
+}
+if floor(bulletta)=4{
+MeterHud.image_index=8;
+}
+if floor(bulletta)=3{
+MeterHud.image_index=9;
+}
+if floor(bulletta)=2{
+MeterHud.image_index=10;
+}
+if floor(bulletta)=1{
+MeterHud.image_index=11;
+}
+if floor(bulletta)=0{
+MeterHud.image_index=12;
+}
+///end of meterstuff

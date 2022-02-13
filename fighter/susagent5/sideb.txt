@@ -1,0 +1,58 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" ) && !instance_exists(impostystando)
+  {
+
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 30;
+    sprite_index = sideb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    vspeed=0;
+
+}
+switch ( timer )
+      {
+    case 0: image_index = 0; break;
+    case 8: image_index = 1; break;
+    case 16: image_index = 2; break;
+    case 26: image_index = 1; break;
+}
+if ( timer < time )
+  {
+    if timer = 16{
+    impostystando=create_projectile(1,90,7,1,30,23,punch1,obj_spark_hit1,1.3 , 1.3 , 31.50 , 1.80, self.id, 61, char_custom5);
+    impostystando.sprite_index=sidebeff_sprite;
+    impostystando.hit=2;
+    impostystando.can_reflect=0;
+    impostystando.priority=5;
+    impostystando.parry_nodestroy=1;
+    impostystando.alarm[0]=31;
+    impostystando.image_speed=0;
+    impostystando.image_index=0;
+    impostystando.size=size;
+    impostystando.facing=facing;
+    impostystando.target=0;
+    impostystando.target1=0;
+    impostystando.sussusthesupersusoftheomegasus=self.id;
+    impostystando.hspeed=2.5*(1-facing*2)*size;
+    impostystando.use_palette=number;
+    sound_play(swingsnd5);
+    }
+
+
+    }
+ 
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

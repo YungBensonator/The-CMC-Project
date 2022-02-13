@@ -1,0 +1,52 @@
+moving_object = 0;
+absorb = 0;
+absorb2 = 0;
+priority = 5;
+time = 300;
+proj_destroy = 0;
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.platform_sprite;
+    visible = 1;
+    image_speed = 0.2;
+	sound_play(attacker.plat_sound);
+  }
+if timer <= 10  {
+	image_xscale += 0.01*(1-facing*2)*size;
+	image_yscale += 0.01*size;
+}
+if timer = 6 && ( !instance_exists ( platform ) )
+    {
+    platform = instance_create ( x-7 , y+1 , obj_mplatform );
+    platform.visible = 0;
+    platform.image_xscale = 1.75;
+    platform.image_yscale = 0.25;
+}
+ platform.x = round ( x - 12 );
+  platform.y = round ( y  );
+  platform.alarm[0] = 2;
+  platform.exception = attacker.enemy;
+  with ( platform )
+    event_user(0);
+if timer >= 294 && timer <= 299 {
+	image_xscale -= 0.02*(1-facing*2)*size;
+	image_yscale -= 0.02*size;
+}
+if timer = 264 {
+	image_blend = c_red;
+	spark = instance_create(x - (4-facing*8) *size, y - 3 * size,obj_spark_effect);
+}
+if timer >= 293 && (attacker.state_type = "attack" || attacker.state_type = "air_attack") {
+	timer = 283;
+}
+if timer = 294 {
+	if (instance_exists(platform)) {with (platform){instance_destroy();}}
+}
+if y <= attacker.savey-100 && timer >= 11 && timer < 263 {
+	timer = 263
+}
+if ( timer >= 300 )
+  {
+   visible = 0;
+   instance_destroy();
+  }

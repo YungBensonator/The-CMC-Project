@@ -1,0 +1,34 @@
+// Energy ball
+priority = 2
+absorb = 1;
+absorb2 = 1;
+if ( hspeed > 0 )
+  dir = 30;
+  else
+  dir = 150;
+if ( random(10) < 3 )
+  after_image(3,c_lime,0.2);
+trigger = 0;
+trigger2 = 0;
+moving_object = 1;
+if ( collision_point ( x + sign(hspeed) , y + sign(vspeed) , obj_ceiling , 1 , 1 ) ) trigger = 1;
+if ( collision_point ( x + sign(hspeed) , y + sign(vspeed) , obj_wall , 1 , 1 ) ) trigger2 = 1;
+if ( collision_point ( x + sign(hspeed) , y + sign(vspeed) , obj_floor , 1 , 1 ) ) trigger = 1;
+if ( collision_point ( x + sign(hspeed) , y + sign(vspeed) , obj_platform , 1 , 1 ) && vspeed > 0 ) trigger = 1;
+if ( hit != 0 ) { trigger2 = 0; trigger = 0; }
+if ( trigger )
+  {
+  y-=vspeed*2; vspeed *= -1;
+  after_image(4,c_white,0.5);
+  after_image(5,c_white,0.5);
+  after_image(6,c_white,0.5);
+  after_image(7,c_white,0.5);
+  }
+if ( trigger2 )
+  {
+  x-=hspeed*2; hspeed *= -1;
+  after_image(4,c_white,0.5);
+  after_image(5,c_white,0.5);
+  after_image(6,c_white,0.5);
+  after_image(7,c_white,0.5);
+  }

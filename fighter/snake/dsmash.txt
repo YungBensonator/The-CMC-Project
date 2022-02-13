@@ -1,0 +1,45 @@
+if state_type = "stand" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0.175;
+        sprite_index = dsmash_sprite;
+        image_index=-0.2;
+        timer = 0;
+        time = 60;
+        timer_speed=1;
+        charge_frame = 21
+}
+
+if timer < time {
+  if timer = 20 && instance_exists(mine2) {
+    with mine instance_destroy()
+	  mine = mine2
+	}
+  state_type = "attack";
+  if timer = 8 {
+    sound_play(dsmash_voice);
+  }
+  if timer = 22 {
+		image_speed = 0.25
+    sound_play(dsmash_sound);
+    create_projectile(14+round(smash_charge/25),75+floor(random(2))*30,5.6,6.9+smash_charge/90,18,6,fire3,obj_spark_fire1,0.84,0.84,2,0,self.id,4530,char_custom5);
+    proj.snake = self.id;
+    if instance_exists(mine) {
+		  mine2 = proj
+	  } else {
+      mine = proj
+    }
+    temp = smash_charge
+  }
+  if timer = 33 && temp >= 60
+    sound_play(there_voice)
+  if timer = 50
+    interrupt = 1
+}
+if timer >= 58 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}

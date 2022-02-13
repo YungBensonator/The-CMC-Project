@@ -1,0 +1,45 @@
+// Leaf tornado - air version
+image_index += 1/6;
+if ( image_index >= 7.5 || !instance_exists ( attacker ) ) instance_destroy();
+x = attacker . x;
+y = attacker . y - 6;
+if ( timer == 2 )
+  {
+  for ( i = 0 ; i < 12 ; i += 1 )
+    {
+    leaf [ i ] = instance_create ( x , y , obj_spark );
+    leaf [ i ] . alarm [ 0 ] = 3;
+    leaf [ i ] . image_speed = 0;
+    leaf [ i ] . sprite_index = attacker . leaf_sprite;
+    leaf [ i ] . image_xscale = ( 50 + random ( 50 ) ) * 0.01;
+    leaf [ i ] . image_yscale = leaf [ i ] . image_xscale;
+    leaf [ i ] . image_alpha = 0;
+    d [ i ] = random ( 360 );
+    f [ i ] = random ( 4 );
+    }
+  }
+  else
+  {
+  if ( timer > 2 )
+    {
+    for ( i = 0 ; i < 12 ; i += 1 )
+      {
+      d [ i ] += 8 * ( 1 - attacker.facing * 2 );
+      if ( d [ i ] >= 360 ) d [ i ] -= 360;
+      if ( d [ i ] > 180 )
+        leaf [ i ] . depth = depth + 1;
+        else
+        leaf [ i ] . depth = depth;
+      leaf [ i ] . alarm [ 0 ] = 2;
+      leaf [ i ] . x = x + lengthdir_x ( 24 - i , d [ i ] );
+      leaf [ i ] . y = y - 12 + i * 2 + lengthdir_y ( 12 - i * 0.5 , d [ i ] );
+      if ( timer < time - 10 )
+        leaf [ i ] . image_alpha = min ( 1 , leaf [ i ] . image_alpha + 0.1 );
+        else
+        leaf [ i ] . image_alpha = max ( 0 , leaf [ i ] . image_alpha - 0.1 );
+      f [ i ] += 0.25;
+      if ( f [ i ] >= 4 ) f [ i ] -= 4;
+      leaf [ i ] . image_index = floor ( f [ i ] );
+      }
+    }
+  }

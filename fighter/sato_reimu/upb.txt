@@ -1,0 +1,92 @@
+if cantupb>0 {break;}
+
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch"{
+        state_type = "air_attack"
+        attack_type = "upb"
+        image_speed = 0
+        sprite_index = jump_sprite
+        image_index=0
+        timer = 0
+        time = 29
+		canceltemp = 0
+		special = 0
+		attacking = 0
+		air_move = 1;
+	if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack"
+
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+      }	
+
+if ( timer > 25 )
+{
+force_edge_grab = 1;
+}	
+
+
+if timer = 2{
+	sound_play(upb_sound);
+	}
+	
+	if instance_exists(effectjab){
+	effectjab.image_angle += -12+facing*24
+	
+	}
+
+
+grazetimer = 2
+
+if timer = 1{
+vspeed = -8.2
+}
+if timer = 8
+vspeed = -6.2
+
+
+if attacking = 1 or (special = 1 and !moveup)
+{
+cantupb = 1
+interrupt = 1
+}
+
+if timer = 0{
+	if air = 0{
+    duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+    duster.facing = facing; }
+	}
+	
+
+
+  }
+
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  cantupb = 1;
+  }

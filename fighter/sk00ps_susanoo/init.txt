@@ -1,0 +1,534 @@
+//This is a comment. It has two / symbols preceding it to tell the game it must ignore these lines.
+//If these were not used or you were to delete them, the game will crash upon trying to read this file.
+//This is because computers don't understand our language. They understand specific commands and functions instead.
+
+//Comments are used to document what everything in your code does for your own reference.
+//They're also used to help others understand your code. For example, you reading this right now.
+
+/* This is an extended comment. It has a / followed by a *, and it goes on until there's a * followed by a /.
+By using this kind of comment, I don't have to bother putting a // before every line I write.
+It's very useful.
+It's also used to comment out whole chunks of code for pinpointing issues, or to simply make the game ignore a section of code.
+
+Use this knowledge to your advantage in this init.txt file.
+Delete these symbols if you want to make a section of code be read by the game.
+(you'll need to do this in the voice files section you'll find by scrolling down a bunch).
+
+Thanks for reading! :D
+*/
+
+// System Animations
+
+	entry_sprite = cspr_add('fighter/sk00ps_susanoo/entry_strip38.png',38,1,1,0,1,147,263);
+	entry_hakumen_sprite = cspr_add('fighter/sk00ps_susanoo/entry_hakumen_strip1.png',1,1,1,0,1,67,195);
+    sprite_start = entry_sprite //from which sprite the game should begin reading downwards in this file. IMPORTANT.
+	
+    stand_sprite = cspr_add('fighter/sk00ps_susanoo/stand_strip10.png',10,0,1,0,1,115,226);
+    mask_sprite = cspr_add('fighter/sk00ps_susanoo/mask.png',1,0,1,0,1,115,226);
+	//your character's hurtbox when doing anything but crouching
+	//should be a square of a different colour than the sprites's background, of the same dimensions as the standing animation's first frame
+	//it should cover the relevant bodyparts of your character's standing animation's first frame
+	//since it uses the standing sprite as a base, it should also share its aligning coordinates (last two numbers)
+	
+	walk_sprite = cspr_add('fighter/sk00ps_susanoo/walk_strip14.png',14,1,1,0,1,121,214);
+    run_sprite = cspr_add('fighter/sk00ps_susanoo/run_strip17.png',17,1,1,0,1,141,188);
+	
+    jump_sprite = cspr_add('fighter/sk00ps_susanoo/jump_strip10.png',10,1,1,0,1,72,291);
+    mid_jump_sprite = cspr_add('fighter/sk00ps_susanoo/jump_strip10.png',10,1,1,0,1,72,291);
+	
+	crouch_sprite = cspr_add('fighter/sk00ps_susanoo/crouch_strip12.png',12,1,1,0,1,96,188);
+    crouch_mask_sprite = cspr_add('fighter/sk00ps_susanoo/crouchmask.png',1,0,1,0,1,96,188);
+	
+	shield_sprite = cspr_add('fighter/sk00ps_susanoo/shield_strip3.png',3,1,1,0,1,117,197);
+    roll_sprite = cspr_add('fighter/sk00ps_susanoo/roll_strip8.png',8,1,1,0,1,88,207);
+	air_dodge_sprite = cspr_add('fighter/sk00ps_susanoo/air_dodge_strip4.png',4,1,1,0,1,153,191); 
+	spot_dodge_sprite = cspr_add('fighter/sk00ps_susanoo/taunt_strip7.png',7,1,1,0,1,114,224); 
+	
+    flinch_sprite = cspr_add('fighter/sk00ps_susanoo/flinch.png',1,1,1,0,1,89,217);
+    flinch2_sprite = cspr_add('fighter/sk00ps_susanoo/flinch2.png',1,1,1,0,1,79,211);
+    flinch3_sprite = cspr_add('fighter/sk00ps_susanoo/flinch3.png',1,1,1,0,1,75,180);
+	
+	launched_sprite = flinch_sprite
+	//this sprite is for when you're actually launched by a strong attack, should be 8 frames long preferably, imagine the sonic battle sprite where you're spinning backwards in the air. Align it in the same way you align flinch sprites, and make sure the sprite doesn't have extra canvas space so that the game actually spins it properly to avoid wack results
+	
+	broken_sprite = cspr_add('fighter/sk00ps_susanoo/broken_strip2.png',2,1,1,0,1,110,192);
+    fall_sprite = cspr_add('fighter/sk00ps_susanoo/fall.png',1,1,1,0,1,72,291);
+	land_sprite = cspr_add('fighter/sk00ps_susanoo/land_strip5.png',5,1,1,0,1,90,232);
+	
+	sleep_sprite = broken_sprite // sprite for when jigglypuff sings to you
+	
+	taunt_sprite = cspr_add('fighter/sk00ps_susanoo/taunt_strip7.png',7,1,1,0,1,114,224); 
+    win_sprite = cspr_add('fighter/sk00ps_susanoo/win_strip13.png',13,1,1,0,1,119,243);
+    lose_sprite = cspr_add('fighter/sk00ps_susanoo/lose_strip7.png',7,1,1,0,1,117,229);
+	
+	henrytaunt_sprite = taunt_sprite; //for if the opponent uses the henry distraction dance assist on you
+	
+	edge_sprite = cspr_add('fighter/sk00ps_susanoo/edge.png',1,1,1,0,1,115,12);
+    edge_climb_sprite = cspr_add('fighter/sk00ps_susanoo/edgeclimb.png',1,1,1,0,1,26,20);
+	
+	down_sprite = cspr_add('fighter/sk00ps_susanoo/getup_strip11.png',11,1,1,0,1,162,199);
+    ukemi_sprite = cspr_add('fighter/sk00ps_susanoo/tech_strip7.png',7,1,1,0,1,91,295);
+	
+    swim_sprite = fall_sprite;
+    ladder_sprite = fall_sprite;
+    vehicle_sprite = fall_sprite //ACTUALLY USE THESE THREE AND REPLACE THEM BY FITTING SPRITES FOR THE GAME'S NEXT VERSION
+	
+	meter_sprite = cspr_add('fighter/sk00ps_susanoo/meter.png',1,1,1,0,1,80,32);
+	metercursor_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/metercursor.png',8,1,0,80,32);
+	meter1_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter1.png',3,1,0,80,32);
+	meter2_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter2.png',1,1,0,80,32);
+	meter3_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter3.png',3,1,0,80,32);
+	meter4_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter4.png',2,1,0,80,32);
+	meter5_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter5.png',1,1,0,80,32);
+	meter6_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter6.png',1,1,0,80,32);
+	meter7_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter7.png',1,1,0,80,32);
+	meter8_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/meter8.png',1,1,0,80,32);
+	electric_aura_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/electricaura_strip8.png',8,0,0,28,44);
+	electric_aura_sprite2 = cspr_add_alpha('fighter/sk00ps_susanoo/electricaura2_strip8.png',8,0,0,50,45);
+	electric_aura_sprite3 = cspr_add_alpha('fighter/sk00ps_susanoo/electricaura3_strip7.png',7,0,0,43,34);
+
+// Attack Animations
+
+    jab_sprite = cspr_add('fighter/sk00ps_susanoo/jab1_strip7.png',7,1,1,0,1,111,218);
+    jab_sprite2 = cspr_add('fighter/sk00ps_susanoo/jab2_strip11.png',11,1,1,0,1,115,217);
+    jab_sprite3 = cspr_add('fighter/sk00ps_susanoo/jab3_strip13.png',13,1,1,0,1,151,230);
+	
+    stilt_sprite = cspr_add('fighter/sk00ps_susanoo/stilt_strip14.png',14,1,1,0,1,109,211);
+    utilt_sprite = cspr_add('fighter/sk00ps_susanoo/utilt_strip14.png',14,1,1,0,1,130,230);
+    utilt_fx_sprite = cspr_add('fighter/sk00ps_susanoo/utilt_fx_strip7.png',7,1,1,0,1,121,232);
+	dtilt_sprite = cspr_add('fighter/sk00ps_susanoo/dtilt_strip9.png',9,1,1,0,1,115,135);
+    dtilt_fx_sprite = cspr_add('fighter/sk00ps_susanoo/dtilt_fx_strip3.png',3,1,1,0,1,5,80);
+
+    ssmash_sprite = cspr_add('fighter/sk00ps_susanoo/ssmash_strip15.png',15,1,1,0,1,122,224);
+    ssmash_fx_sprite = cspr_add('fighter/sk00ps_susanoo/ssmash_fx_strip8.png',8,1,1,0,1,292,128);
+    usmash_sprite = cspr_add('fighter/sk00ps_susanoo/usmash_strip15.png',15,1,1,0,1,81,215);
+    usmash_fx_sprite = cspr_add('fighter/sk00ps_susanoo/usmash_fx_strip6.png',6,1,1,0,1,272,233);
+    dsmash_sprite = cspr_add('fighter/sk00ps_susanoo/dsmash_strip13.png',13,0,1,0,1,151,152);
+	
+    nair_sprite = cspr_add('fighter/sk00ps_susanoo/nair_strip11.png',11,1,1,0,1,97,178);
+    nair_fx_sprite = cspr_add('fighter/sk00ps_susanoo/nair_fx_strip7.png',7,1,1,0,1,102,109);
+    fair_sprite = cspr_add('fighter/sk00ps_susanoo/fair_strip9.png',9,1,1,0,1,77,169);
+    bair_sprite = cspr_add('fighter/sk00ps_susanoo/bair_strip11.png',11,0,1,0,1,109,195);
+    bair_fx_sprite = cspr_add('fighter/sk00ps_susanoo/bair_fx_strip2.png',2,0,1,0,1,105,155);
+    uair_sprite = cspr_add('fighter/sk00ps_susanoo/uair_strip10.png',10,1,1,0,1,115,170);
+    uair_fx_sprite = cspr_add('fighter/sk00ps_susanoo/uair_fx_strip2.png',2,1,1,0,1,15,185);
+    dair_sprite = cspr_add('fighter/sk00ps_susanoo/dair_strip12.png',12,1,1,0,1,96,211);
+    dair_fx_sprite = cspr_add('fighter/sk00ps_susanoo/dair_fx_strip6.png',6,1,1,0,1,156,237);	
+	
+	dash_attack_sprite = cspr_add('fighter/sk00ps_susanoo/dashattack.png',5,0,1,0,1,69,92);
+    down_attack_sprite = cspr_add('fighter/sk00ps_susanoo/getupattack.png',4,1,1,0,1,57,92);
+    edge_attack_sprite = cspr_add('fighter/sk00ps_susanoo/edge_attack_strip17.png',17,1,1,0,1,112,130);
+	
+    b_sprite = cspr_add('fighter/sk00ps_susanoo/b.png',12,1,1,0,1,57,92);
+    upb_sprite = cspr_add('fighter/sk00ps_susanoo/upb_strip8.png',8,0,1,0,1,90,208);
+    upb_sprite2 = cspr_add('fighter/sk00ps_susanoo/upb2_strip6.png',6,0,1,0,1,93,213);
+    upb_land_sprite = cspr_add('fighter/sk00ps_susanoo/upb_land_strip11.png',11,0,1,0,1,112,208);
+    upb_fx1_sprite = cspr_add('fighter/sk00ps_susanoo/upb_fx1_strip9.png',9,0,1,0,1,79,204);
+	upb_fx2_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/upb_fx2.png',8,0,0,50,204);
+	sideb_sprite = cspr_add('fighter/sk00ps_susanoo/sideb.png',3,0,1,0,1,47,58);
+    downb_sprite = cspr_add('fighter/sk00ps_susanoo/downb.png',4,0,1,0,1,69,92);
+	susanoo_fx1_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/susanoo_fx1.png',1,0,1,86,91);
+	susanoo_fx1_2_sprite = cspr_add('fighter/sk00ps_susanoo/susanoo_fx1_2.png',1,0,1,0,1,86,91);
+	susanoo_fx2_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/susanoo_fx2.png',7,0,1,134,306);
+    rocks_sprite = cspr_add('fighter/sk00ps_susanoo/rocks.png',1,1,1,0,1,198,78);
+    sclaws_sprite = cspr_add('fighter/sk00ps_susanoo/sclaws_strip22.png',22,1,1,0,1,127,215);
+    tflame_sprite = cspr_add('fighter/sk00ps_susanoo/tflame_strip17.png',17,1,1,0,1,121,217);
+    tflame_fx1_sprite = cspr_add('fighter/sk00ps_susanoo/tflame_fx1_strip4.png',4,1,1,0,1,150,225);
+    tflame_fx2_sprite = cspr_add('fighter/sk00ps_susanoo/tflame_fx2_strip4.png',4,1,1,0,1,120,173);
+    megalith_sprite = cspr_add('fighter/sk00ps_susanoo/megalith_strip16.png',16,1,1,0,1,123,250);
+    megalith_fx_sprite = cspr_add('fighter/sk00ps_susanoo/megalith_fx_strip6.png',6,1,1,0,1,4,233);
+    ddkick_sprite = cspr_add('fighter/sk00ps_susanoo/ddkick_strip13.png',13,1,1,0,1,105,199);
+    ddkick_sprite2 = cspr_add('fighter/sk00ps_susanoo/ddkick2_strip15.png',15,1,1,0,1,106,231);
+	ddkick_fx2_sprite = cspr_add('fighter/sk00ps_susanoo/ddkick_fx2_strip13.png',13,0,1,0,1,44,306);
+	crater_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/dsmash_crater_strip10.png',10,0,0,48,55);
+	huntersfang_sprite = cspr_add('fighter/sk00ps_susanoo/huntersfang_strip10.png',10,1,1,0,1,101,233);
+	huntersfang_land_sprite = cspr_add('fighter/sk00ps_susanoo/huntersfang_land_strip8.png',8,1,1,0,1,104,187);
+	icalamity_sprite = cspr_add('fighter/sk00ps_susanoo/icalamity_strip15.png',15,1,1,0,1,136,225);
+	icalamity_fx_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/downbproj.png',27,0,0,114,114);
+	sthrust_sprite = cspr_add('fighter/sk00ps_susanoo/sthrust_strip30.png',30,1,1,0,1,94,210);
+	bjudgment_sprite = cspr_add('fighter/sk00ps_susanoo/bjudgment_strip15.png',15,1,1,0,1,161,213);
+	bjudgment_fx2_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/bjudgment_fx2_strip2.png',2,0,0,6,50);
+	crest_fx_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/crest.png',1,1,0,109,97);
+	fs_sprite = cspr_add('fighter/sk00ps_susanoo/fs1_strip14.png',14,1,1,0,1,99,214);
+	fs_sprite2 = cspr_add('fighter/sk00ps_susanoo/fs2_strip22.png',22,1,1,0,1,99,214);
+	blackscreen_sprite = cspr_add('fighter/sk00ps_susanoo/blackbg2.gif',1,0,0,0,0,0,0);
+	whitescreen_sprite = cspr_add('fighter/sk00ps_susanoo/blackbg.gif',1,0,0,0,0,0,0);
+	fs_floor_fx_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/fs_floor.png',1,1,0,258,93);
+	slash_eff_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/slasheff.png',1,1,0,388,83);
+	fs_fx2_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/fs_fx2.png',18,1,0,223,235);
+	astral_finish_fx_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/astralfinish.png',1,1,0,395,225);
+	fs_bg_sprite = cspr_add('fighter/sk00ps_susanoo/fs_bg.gif',1,0,0,0,0,319,466);
+	fs_fx4_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/fs_fx4.png',3,1,0,57,49);
+	win_fx_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/susanooWIN.png',1,1,0,608,264);
+	
+// Grabs and Throws
+    
+    grab_sprite = cspr_add('fighter/sk00ps_susanoo/grab_strip9.png',9,1,1,0,1,125,230);
+    hold_sprite = cspr_add('fighter/sk00ps_susanoo/grab_strip9.png',9,1,1,0,1,125,230);
+    pummel_sprite = jab_sprite;
+    fthrow_sprite = cspr_add('fighter/sk00ps_susanoo/fthrow_strip20.png',20,1,1,0,1,64,211);
+    bthrow_sprite = cspr_add('fighter/sk00ps_susanoo/bthrow_strip14.png',14,1,1,0,1,127,232);
+	bthrow_fx_sprite = cspr_add_alpha('fighter/sk00ps_susanoo/bthrow_fx.png',12,1,0,142,184)
+    uthrow_sprite = cspr_add('fighter/sk00ps_susanoo/uthrow_strip19.png',19,1,1,0,1,107,228);
+    dthrow_sprite = cspr_add('fighter/sk00ps_susanoo/dthrow_strip13.png',13,1,1,0,1,103,216);
+	
+// Item-Related
+	
+	item_down_sprite = crouch_sprite;
+	item_forward_sprite = jab_sprite;
+    item_up_sprite = jab_sprite;
+    item_heavy_sprite = shield_sprite;
+    item_swing_sprite = utilt_sprite; //sprite for homerun bat, lightsaber, and similar swingable items. Should clearly swing from above and forwards.
+    item_swing_frame = 1; //frame at which the character is at the zenith of swinging their hand/appendage forwards
+    hammer_swing_frame = 0; //frame at which the character starts swinging their hand, should ideally be pointing upwards
+    item_shoot_sprite = stilt_sprite; //sprite for ray gun and similar shootable weapons. Should be the character in a position similar to holding a gun.
+    item_shoot_frame = 2; //frame at which the character should shoot the gun in question.
+	
+    sprite_end = dthrow_sprite //which DECLARED (cspr_add) sprite is the last one the game should load. IMPORTANT.
+
+// Scripts
+	
+    entry_script = char_entry;
+    taunt_script = char_taunt;
+    win_script = char_win;
+    lose_script = char_lose;
+    edge_jump_script = char_edge_jump;
+    edge_roll_script = char_edge_roll;
+    step_script = char_step;
+	
+    jab_script = char_jab;
+	
+    stilt_script = char_stilt;
+    utilt_script = char_utilt;
+    dtilt_script = char_dtilt;
+	
+    ssmash_script=char_ssmash;
+    usmash_script=char_usmash;
+    dsmash_script=char_dsmash;
+	
+    nair_script = char_nair;
+    fair_script = char_fair;
+    bair_script = char_bair;
+    uair_script = char_uair;
+    dair_script = char_dair;
+	
+    dash_attack_script = char_dash_attack;
+    edge_attack_script = char_edge_attack;
+    down_attack_script = char_down_attack;
+	
+    b_script = char_b;
+    upb_script = char_upb;
+    sideb_script = char_sideb;
+    smashb_script=sideb_script;
+    downb_script = char_downb;
+    final_smash_script = char_final_smash;
+	
+    grab_script = char_grab;
+    hold_script = char_hold;
+    fthrow_script = char_fthrow;
+    bthrow_script = char_bthrow;
+    uthrow_script = char_uthrow;
+    dthrow_script = char_dthrow;
+    ai_attack_script = char_ai;
+	hudThing_draw_script = char_custom7;
+    hudThing_step_script = char_custom8;
+	ab_script = char_ab
+	sab_script = char_sab
+	dab_script = char_dab
+	uab_script = char_uab
+	
+// Sounds
+	
+    jump_sound = sound_add("fighter/sk00ps_susanoo/jump.wav",0,1);
+    sound_start = jump_sound //from which sound the game should begin loading sounds in. IMPORTANT.
+    mid_jump_sound = jump_sound;
+	cfhit1 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfhit1.wav")
+	cfhit2 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfhit2.wav")
+	cfhit3 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfhit3.wav")
+	cfhit4 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfhit4.wav")
+	cfslash1 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfslash1.wav")
+	cfslash2 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfslash2.wav")
+	cfslash3 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfslash3.wav")
+	cfslash4 = add_hit_sfx(0,"fighter/sk00ps_susanoo/cfslash4.wav")
+	cfswing1 = sound_add("fighter/sk00ps_susanoo/cfswing1.wav",0,1); 
+	cfswing2 = sound_add("fighter/sk00ps_susanoo/cfswing2.wav",0,1); 
+	cfswing3 = sound_add("fighter/sk00ps_susanoo/cfswing3.wav",0,1);
+	cfslashswing1 = sound_add("fighter/sk00ps_susanoo/cfslashswing1.wav",0,1);  
+	cfslashswing2 = sound_add("fighter/sk00ps_susanoo/cfslashswing2.wav",0,1);  
+	stilt_snd = sound_add("fighter/sk00ps_susanoo/stilt_snd.wav",0,1);   
+	taunt_snd = sound_add("fighter/sk00ps_susanoo/taunt_snd.wav",0,1);  
+	unlock_sound = sound_add("fighter/sk00ps_susanoo/unlock.wav",0,1); 
+	susan_snd1 = sound_add("fighter/sk00ps_susanoo/susan_snd1.wav",0,1);
+	smash_snd = sound_add("fighter/sk00ps_susanoo/smash_snd.wav",0,1);
+	dthrow_snd = sound_add("fighter/sk00ps_susanoo/dthrow_snd.wav",0,1);
+	upb_snd1 = sound_add("fighter/sk00ps_susanoo/suse_04.wav",0,1); 
+	upb_snd2 = sound_add("fighter/sk00ps_susanoo/016_explode_2.wav",0,1);  
+	upb_snd3 = sound_add("fighter/sk00ps_susanoo/suse_04.wav",0,1);  
+	upb_snd4 = sound_add("fighter/sk00ps_susanoo/025_cleanhit_grap.wav",0,1);   
+	entry_snd = sound_add("fighter/sk00ps_susanoo/suse_08.wav",0,1);   
+	sclaws_snd1 = sound_add("fighter/sk00ps_susanoo/sclaws_snd1.wav",0,1);
+	downb_snd1 = sound_add("fighter/sk00ps_susanoo/209_down_normal_1.wav",0,1);  
+	downb_snd2 = sound_add("fighter/sk00ps_susanoo/016_explode_1.wav",0,1);
+	upb2_snd1 = sound_add("fighter/sk00ps_susanoo/002_highjump_1.wav",0,1);
+	sideab_snd1 = sound_add("fighter/sk00ps_susanoo/000_airdash_2.wav",0,1);
+	icalamity_snd1 = sound_add("fighter/sk00ps_susanoo/014_electric_l.wav",0,1);
+	bjudgment_snd1 = sound_add("fighter/sk00ps_susanoo/suse_05.wav",0,1);
+	throw_catch = sound_add("fighter/sk00ps_susanoo/107_throw_catch.wav",0,1);
+	astral_snd = sound_add("fighter/sk00ps_susanoo/302_spsys_drivemotion.wav",0,1);
+	fs_snd1 = sound_add("fighter/sk00ps_susanoo/suse_07.wav",0,1);
+	fs_snd2 = sound_add("fighter/sk00ps_susanoo/suse_06.wav",0,1);
+	fs_snd3 = sound_add("fighter/sk00ps_susanoo/suse_10.wav",0,1);
+    sound_volume(fs_snd3,0.8);
+	cfcounterslash = sound_add("fighter/sk00ps_susanoo/103_hit_counter_slash_2.wav",0,1);
+	astralfinish_voice = sound_add("fighter/sk00ps_susanoo/astralfinish.wav",0,1);
+	astralfinish_snd = sound_add("fighter/sk00ps_susanoo/300_ko_d_drive.wav",0,1);
+	astralcfslash = sound_add("fighter/sk00ps_susanoo/cfslash4.wav",0,1);
+    astralmusic = sound_add("fighter/sk00ps_susanoo/astralmusic.ogg",0,1);
+    astralmusicshort = sound_add("fighter/sk00ps_susanoo/astralmusicshort.ogg",0,1);
+	susanoo_win = sound_add("fighter/sk00ps_susanoo/ns027.wav",0,1);
+	susanoo_announcer = sound_add("fighter/sk00ps_susanoo/ns232.wav",0,1);
+// Voices
+
+	//Delete the * and / symbols preceding and ending this section when you're ready to start adding voice files to your character.
+	
+	jump_voice = sound_add("fighter/sk00ps_susanoo/attack.wav",0,1); // voice for first jump
+	mid_jump_voice = sound_add("fighter/sk00ps_susanoo/attack.wav",0,1); // voice for double jump
+    sound_mute = mid_jump_voice
+	//sound_mute takes the sound you specify and mutes all sounds from that sound onwards for when you grab a Metal Cap.
+	//Effect lasts until Metal Cap runs out.
+	
+	b_voice = sound_add("fighter/sk00ps_susanoo/smash.wav",0,1);
+    upb_voice1 = sound_add("fighter/sk00ps_susanoo/su281a.wav",0,1);
+    upb_voice2 = sound_add("fighter/sk00ps_susanoo/su282a.wav",0,1);
+	sideb_voice = sound_add("fighter/sk00ps_susanoo/smash.wav",0,1);
+    downb_voice = sound_add("fighter/sk00ps_susanoo/smash.wav",0,1);
+	
+    throw_voice1 = sound_add("fighter/sk00ps_susanoo/su153a.wav",0,1);
+	throw_voice2 = sound_add("fighter/sk00ps_susanoo/su153b.wav",0,1);
+	dsmash_voice = sound_add("fighter/sk00ps_susanoo/smash.wav",0,1);
+	
+    attack_voice1 = sound_add("fighter/sk00ps_susanoo/su100a.wav",0,1);
+    attack_voice2 = sound_add("fighter/sk00ps_susanoo/su101a.wav",0,1);
+    attack_voice3 = sound_add("fighter/sk00ps_susanoo/su102a.wav",0,1);
+    attack_voice4 = sound_add("fighter/sk00ps_susanoo/su103a.wav",0,1);
+    attack_voice5 = sound_add("fighter/sk00ps_susanoo/su104a.wav",0,1);
+    attack_voice6 = sound_add("fighter/sk00ps_susanoo/su105a.wav",0,1);
+    attack_voice7 = sound_add("fighter/sk00ps_susanoo/su106a.wav",0,1);
+    attack_voice8 = sound_add("fighter/sk00ps_susanoo/su107a.wav",0,1);
+	
+	
+    seal_voice1 = sound_add("fighter/sk00ps_susanoo/su300a.wav",0,1);
+    seal_voice2 = sound_add("fighter/sk00ps_susanoo/su301a.wav",0,1);
+    seal_voice3 = sound_add("fighter/sk00ps_susanoo/su302a.wav",0,1);
+    seal_voice4 = sound_add("fighter/sk00ps_susanoo/su303a.wav",0,1);
+    seal_voice5 = sound_add("fighter/sk00ps_susanoo/su304a.wav",0,1);
+    seal_voice6 = sound_add("fighter/sk00ps_susanoo/su305a.wav",0,1);
+    seal_voice7 = sound_add("fighter/sk00ps_susanoo/su306a.wav",0,1);
+    seal_voice8 = sound_add("fighter/sk00ps_susanoo/su307a.wav",0,1);
+	
+    sclaws_voice1 = sound_add("fighter/sk00ps_susanoo/su200a.wav",0,1)
+    sclaws_voice2 = sound_add("fighter/sk00ps_susanoo/su200b.wav",0,1)
+    sclaws_voice3 = sound_add("fighter/sk00ps_susanoo/su201a.wav",0,1)
+    sclaws_voice4 = sound_add("fighter/sk00ps_susanoo/su201b.wav",0,1)
+	 
+    tflame_voice1 = sound_add("fighter/sk00ps_susanoo/su202a.wav",0,1)
+    tflame_voice2 = sound_add("fighter/sk00ps_susanoo/su202b.wav",0,1)
+	
+	huntersfang_voice1 = sound_add("fighter/sk00ps_susanoo/su208a.wav",0,1)
+	huntersfang_voice2 = sound_add("fighter/sk00ps_susanoo/su208b.wav",0,1)
+	
+    ddkick_voice1 = sound_add("fighter/sk00ps_susanoo/su209a.wav",0,1)
+    ddkick_voice2 = sound_add("fighter/sk00ps_susanoo/su209b.wav",0,1)
+	
+    icalamity_voice1 = sound_add("fighter/sk00ps_susanoo/su206a.wav",0,1)
+    icalamity_voice2 = sound_add("fighter/sk00ps_susanoo/su206b.wav",0,1)
+	
+    sthrust_voice1 = sound_add("fighter/sk00ps_susanoo/su204a.wav",0,1)
+    sthrust_voice2 = sound_add("fighter/sk00ps_susanoo/su204b.wav",0,1)
+	
+    bjudgment_voice1 = sound_add("fighter/sk00ps_susanoo/su203a.wav",0,1)
+    bjudgment_voice2 = sound_add("fighter/sk00ps_susanoo/su203b.wav",0,1)
+	
+    astral_voice1 = sound_add("fighter/sk00ps_susanoo/su290a.wav",0,1)
+    astral_voice2 = sound_add("fighter/sk00ps_susanoo/su290b.wav",0,1)
+    astral_voice3 = sound_add("fighter/sk00ps_susanoo/su291a.wav",0,1)
+    astral_voice4 = sound_add("fighter/sk00ps_susanoo/su291b.wav",0,1)
+    astral_voice5 = sound_add("fighter/sk00ps_susanoo/su292a.wav",0,1)
+    astral_voice6 = sound_add("fighter/sk00ps_susanoo/su292b.wav",0,1)
+    astral_voice7 = sound_add("fighter/sk00ps_susanoo/su293a.wav",0,1)
+    astral_voice8 = sound_add("fighter/sk00ps_susanoo/su293b.wav",0,1)
+    astral_voice9 = sound_add("fighter/sk00ps_susanoo/su294a.wav",0,1)
+    astral_voice10 = sound_add("fighter/sk00ps_susanoo/su294b.wav",0,1)
+    astral_voice11 = sound_add("fighter/sk00ps_susanoo/su295a.wav",0,1)
+    astral_voice12 = sound_add("fighter/sk00ps_susanoo/su295b.wav",0,1)
+	
+	hit_voice1 = sound_add("fighter/sk00ps_susanoo/hit.wav",0,1); // voice for when you get hit by a normal attack
+	hit_voice2 = hit_voice1 // another voice for when you get hit by a normal attack
+	broken_voice = sound_add("fighter/sk00ps_susanoo/hit.wav",0,1); // voice for when your shield breaks and you get up and are stunned
+    win_voice = sound_add("fighter/sk00ps_susanoo/win_voice.wav",0,1);;
+	
+    starko_voice = sound_add("fighter/sk00ps_susanoo/hit.wav",0,1);
+    fly_voice1 = sound_add("fighter/sk00ps_susanoo/su021b.wav",0,1);
+    fly_voice2 = sound_add("fighter/sk00ps_susanoo/su022b.wav",0,1);
+    die_voice1 = sound_add("fighter/sk00ps_susanoo/su020a.wav",0,1);
+    die_voice2 = sound_add("fighter/sk00ps_susanoo/su021a.wav",0,1);;
+	entry_voice = sound_add("fighter/sk00ps_susanoo/su413b.wav",0,1);
+	taunt_voice = sound_add("fighter/sk00ps_susanoo/su404a.wav",0,1);
+	taunt_voice2 = sound_add("fighter/sk00ps_susanoo/su405a.wav",0,1);
+	
+	
+    sound_end = taunt_voice2 //at which DECLARED (sound_add) sound the game should stop loading sounds in. IMPORTANT.
+	
+// Stats
+	
+    weight = 0.35;
+	//Weight determines how easy it is to send opponents flying. Higher weight = Harder to launch overall.
+	//Should be between 0.1 (very light) and 0.4 (very heavy).
+	//Sans uses a negative value so he's incredibly easy to be launched.
+	
+    grav = 0.3;
+	//Grav is gravity, determines at what rate the character will ascend and descend in the air.
+	//0.35 is the standard value. You can play with it if you want.
+	//Jigglypuff uses a 0.2 value, while Fox uses a 0.45 value.
+	//Keep in mind that examples going forward will assume you have this set to 0.35.
+	
+    max_jumps=3;
+	//The max amount of jumps your character can use, minus one. The default is 3 (so, 2)
+   
+   jump_speed = 7.15;
+	//How high your jump from the floor can reach. Common values between 4 (mildly low) and 9 (very high).
+   
+   mid_jump_speed = 5.8;
+	//How strong your jumps in midair are. Values for this function equally as the ones for grounded jump.
+	//Some modders make this value be a bit lower than the grounded jump.
+	//The more midair jumps your character has, the lower you should make this value for balance purposes.
+	
+    short_hop_speed = 2.9;
+	//How tall your short hop is. Common values between 2 (very short) and 4 (very tall).
+	//Don't make the value too high, as this would defeat the purpose of a short hop.
+	
+    airdash_speed = 8;
+	//The speed of your Crusade Airdodge.
+	//Works in a similar vein to jump_speed and mid_jump_speed, but you can direct it to any cardinal direction.
+	
+	jump_voice_freq = 0.5
+	mid_jump_voice_freq = 0.5
+	//frequency at which the game plays the character's voice when jumping or double jumping.
+	//Valid values range from 0 to 1. Default is 0.5
+	
+    run_speed = 4.2;
+	//Self explanatory.
+	//Ganondorf uses a 2.5 value (very very slow) while Sonic uses a value of 5 (very fast).
+	
+    walk_speed = 1.1;
+	//Self explanatory. If not specified, the default value is 0.6 of the run speed value.
+	
+	dash_speed = 4.1;
+    run_start_speed = 4.1;
+	//Speed at which you start out your run from a standstill.
+	//If not specified, the default value is 1.55 of the run speed value.
+	//Ideally keep both dash_speed and run_start_speed at the same values.
+	
+    run_accel = 0.90
+	//The higher the value, the less it takes you to go from 0 speed to your top speed (determined by run_speed).
+	//Porky has a value of 0.06 (takes a lot of time to reach top speed), while Rayman has a value of 0.4 (takes very little).
+	
+    fric = 0.90;
+	//How slippery your character is on the floor.
+	//Luigi has the lowest friction at 0.75 (very slippery), while Porky has the highest friction at 7 (not slippery).
+	
+    walkstopspeed = 0.85
+	
+    air_speed = 2.3;
+	//the top speed you can achieve moving forwards/backwards in midair.
+	//Sonic's airspeed is 1.8 (kinda low), while Wario's is 3.1 (pretty fast).
+	
+    fall_speed = 3.5;
+	//Top speed you can achieve falling down. Don't confuse this with what grav does.
+	//Grav sets the rate at which you ascend, reach your jump's zenith, and begin descending.
+	//Fall speed sets what the top speed at which you can fall is.
+	//If you set the gravity very high and the fall speed very low, you'll jump, immediately reach your jump's zenith but then fall down very slowly.
+	//Jigglypuff has a 2.2 fall_speed (quite low), while Falco has a fall_speed of 5 (very high).
+	
+    fast_fall_multiplier = 2.5;
+	//How fast you'll fall down if you flick your movement stick downwards/doubletap down on your keyboard twice in the air.
+	//As its name states, it's a multiplier for the fall_speed. The default value is 1.5.
+	
+    air_accel = 0.3;
+	//At what speed you can change directions and maneuver horizontally in mid air.
+	//Porky has a 0.175 air_accel (very, very slow maneuvering) while Jigglypuff has a 0.6 air_accel (can maneuver very freely)
+	
+    
+    xsize = 0.29;
+    ysize = 0.29;
+	//These two change the size of your character. 
+	//Make sure to set these stats up first thing when setting your character's system stats up, since hitbox and projectile positions won't change alongside these two if you change them later. This may cause undesired results.
+	
+	//PLEASE DON'T HAVE THE XSIZE HAVE A DIFFERENT VALUE THAN THE YSIZE. XSIZE = YSIZE.
+	//If for example, xsize = 0.1 and ysize = 0.1, this is a good setting.
+	//If, instead, xsize = 1 but ysize = 0.5, this is horrible. This one will stretch the character horizontally and it will look hideous. You can play around with this to see what I mean. Always make sure xsize and ysize share the same value.
+	
+    ability = "wheel"
+	// Ability Kirby gets upon absorbing this character you're making.
+	// Available:
+	// "fire"
+	// "beam"
+	// "fighter"
+	// "wheel"
+	// "laser"
+	// "sword"
+	// "bomb"
+	// "spark"
+	// "parasol"
+	// "falcon"
+	// "ice"
+	// "hammer"
+	// "cutter"
+	// "leaf"
+	// "whip"
+	// "esp"
+	// "sleep"
+	// "animal"
+	// "famicom"
+	// "magic"
+
+    smash_power_gain = 1
+	//Rate at which your smash bar fills up, default is 1.
+	
+    smash_charge_sound = 0
+	//Sound that plays when you charge a smash attack
+	//0 is the default chargesnd1 (find it in the sfx folder), 1 is chargesnd2, anything else won't play anything.
+	
+//Don't touch the ones below
+
+    state_type = "enter";
+    attack_type = "none";
+    image_yscale = ysize;
+    jumptimer = 1 //Determines frame lag on jump.
+    moveright = 0; moveleft = 0; moveup = 0; movedown = 0;
+	attacking =0; movejump = 0;
+    mask_index = stand_sprite;
+    points = 0;
+    kos = 0;
+    falls = 0;
+    air = 0;
+    time = 90;
+    timer = 0;
+    timer_speed = 1;
+    facing = 0;
+    hitby = 0;
+    special_land_time = 13
+    ranged_attacks = 4
+    ranged_attack_types[0] = "upb"
+    ranged_attack_types[1] = "upb"
+    ranged_attack_types[2] = "downb"
+    ranged_attack_types[3] = "downb"
+    scancel_type[0]=0
+    scancel_type[1]=0
+    scancel_type[2]=1
+    scancel_type[3]=1
+    scancel_type[4]=0
+    max_attack_dist = 55
+    held_item=-1
+	sealcount = 0;
+	sclawslvl = 1;

@@ -1,0 +1,144 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" ) && sidebtemp = 0
+  {
+    special = 1;
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 76;
+    sprite_index = sideb_air_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    air_move = 0;
+	soundtemp1 = 0;
+	soundtemp2 = 0;
+	petaltemp = 0;
+  }
+if sidebtemp = 0 {
+vspeed = 0;
+gravity = 0;
+gravity_lock = 0;
+}
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;//
+	case 36: image_index = 9; break;
+	case 40: image_index = 10; break;
+	case 44: sprite_index = sideb2_air_sprite; image_index = 0; break;
+	case 48: image_index = 1; break;
+	case 52: image_index = 2; break;
+	case 56: image_index = 3; break;
+	case 60: image_index = 4; break;
+	case 64: image_index = 5; break;
+	case 68: image_index = 6; break;
+	case 72: image_index = 7; break;
+	
+	case 109: image_index = 3; break;
+	case 112: image_index = 4; break;
+	case 116: image_index = 5; break;
+	case 120: image_index = 6; break;
+	case 124: image_index = 4; break;
+	case 128: image_index = 5; break;
+	case 132: image_index = 6; break;
+	case 136: image_index = 7; break;
+	case 140: image_index = 8; break;
+	}
+	if timer = 1 {
+		sound_play(sideb_air_voice1);
+	}
+	if timer >= 32 && timer <= 43 {
+		speed = 10*(1-facing*2);
+		direction = 0*(1-facing*2);
+	}
+	if timer = 32 {
+	sound_play(sideb_air);
+	create_hitbox(7,30+facing*120,7,0,19,4,slash3,obj_spark_slash3,2.3,0.8,8,20,self.id,11,2);
+	}
+	if timer  >= 32 && timer <= 43 && hitbox.hit = 1 && attack_shielded = 0 {
+		petaltemp = 1;
+	}
+	if timer >= 32 && timer <= 64 && timer mod 3 = 0 {
+        petals2 = instance_create(x-20*(1-facing*2),y,obj_spark)
+        petals2.sprite_index = choose(petal_fx2,petal_fx3)
+        petals2.image_xscale = size*0.2
+        petals2.image_yscale = size*0.2
+        petals2.image_speed = 0.4
+        petals2.image_alpha = 1
+        petals2.depth = 1
+        petals2.snap = 0 
+	}
+	if timer >= 44 {
+		speed *= 0.9;
+	}
+	if timer >= 44 && timer <= 67 && timer mod 6 = 0 && air = 0 {
+	duster = instance_create(x+20*(1-facing*2),y,obj_dust_effect);
+	duster.facing = facing;
+	}
+	if timer = 51 && petaltemp = 0 {
+		timer = 109
+		time = 143
+		sprite_index = grab_sprite
+		image_index = 3;
+		}
+	if timer = 109 {
+	sound_play(choose(grabmiss1,grabmiss2));
+	}
+	if petaltemp = 1 {
+	if timer = 33 {
+	sound_play(sideb_air_voice2);
+	}
+	if timer >= 52 && timer <= 60 && timer mod 4 = 0 {
+	create_projectile(3,30+facing*120,3,0,19,5,slash3,obj_spark_slash3,0.8,0.5,20,0,self.id,4,no_script);
+	proj.x = target.x
+	proj.y = target.y-5*size;
+	}
+	if timer = 64 {
+	create_projectile(7,30+facing*120,6,6,19,30,slash3,obj_spark_slash3,0.8,0.5,20,0,self.id,4,no_script);
+	proj.x = target.x
+	proj.y = target.y-5*size
+	}
+	if timer = 48 {
+	sound_play(sideb_air2);
+	}
+	if timer >= 52 && timer <= 67 && timer mod 2 = 0 {
+        petals = instance_create(x,y,obj_spark)
+        petals.sprite_index = choose(petal_fx2,petal_fx3)
+        petals.image_xscale = size*0.3
+        petals.image_yscale = size*0.3
+        petals.image_speed = 0.7
+        petals.image_alpha = 1
+        petals.depth = target.depth - 0.1
+        petals.snap = 0
+		petals.x = target.x;
+		petals.y = target.y;
+	}
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	if air = 0 {
+    state_type = "stand";
+	sprite_index = stand_sprite;
+	}
+	if air > 0 {
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	if petaltemp = 1 {
+	facing = !facing
+	}
+	sidebtemp = 1;
+  }

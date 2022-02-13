@@ -1,0 +1,156 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if air < max_jumps && (state_type = "stand" || state_type = "run" || state_type = "jump") {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "upb";
+        image_speed = 0;
+        sprite_index = upb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 64;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+}
+if timer < time {
+    if timer <= 15 && vspeed > 0
+        vspeed = 0
+    if timer = 5 {
+        sound_play(upb_sound2)
+        instance_create(x+13-facing*26,y-18,obj_spark_effect)
+        spark = instance_create(x,y,obj_spark_shockwave)
+        spark.image_xscale *= 0.7*size
+        spark.image_yscale *= 0.1*size
+        spark.image_blend = c_yellow
+        spark.image_alpha = 0.8
+        image_speed = 0.3
+    }
+    if timer = 13 {
+        sound_play(upb_sound1)
+        vspeed = -size*6.6
+        hspeed = 1.5*size*(1-facing*2)
+        air_move = 0
+        target =-99
+        proj = create_homing_bubble(0.35,0.4,10,28,self.id,20);
+        instance_create(x,y,obj_down_impact)
+        air = max_jumps
+    }
+    if timer > 25
+	force_edge_grab = 1
+    if timer > 13 && timer < 22 {
+        if facing = 0 && moveleft = 1 {
+            hspeed -= 0.4 }
+        if facing = 1 && moveright = 1 {
+            hspeed += 0.4 }
+        if facing = 0 && moveright = 1 {
+            hspeed += 0.15 }
+        if facing = 1 && moveleft = 1 {
+            hspeed -= 0.15 }
+    }
+    if timer >= 13 && timer <= 34 {
+	if timer = 13 || timer = 17 || timer = 21 || timer = 25 || timer = 29 || timer = 33 {
+	image_blend = c_red
+	image_alpha = 0.8
+	}
+	else if timer = 15 || timer = 19 || timer = 23 || timer = 27 || timer = 31 {
+	image_blend = c_yellow;
+	image_alpha = 0.8;
+	}
+	else {
+	image_blend = c_white;
+	image_alpha = 1;
+	}
+    }
+    if timer >= 16 && timer < 27 {
+        vspeed -= size*grav*0.825*GRAV_MUL
+    }
+    if timer = 38 {
+        air_move = 1
+    }
+    if timer >= 15 && timer < 29 && time < 100 {
+        if instance_exists(proj) {
+            proj.x = x + (1-facing*2)*11*size + hspeed/4
+            proj.y = y - 28*size + vspeed/2
+        }
+        air = max_jumps
+        if target > -1 && distance_to_object(target)<size*5 {
+            if  target.intangible = 0 && target.attack_type != "final_smash" {
+                    sprite_index = upb_end_sprite
+                    target.state_type = "air_flinch"
+                    target.attack_type = "none"
+					target.sprite_index = target.flinch_sprite;
+					target.image_index = 0;
+					target.image_angle = 0;
+                    target.timer = 0
+                    target.time = 50
+                    target.timer_speed = 0
+                    target.alarm[0] = 2
+                    time = 182
+                    timer = 140
+                    x = target.x
+                    y = target.y
+                    image_speed = 0
+                    image_index = 0
+                    sound_play(catchsnd)
+                    instance_create(target.x,target.y-9,obj_grab_spark)
+            }
+        }
+    }
+}
+if timer >= 140 && timer <= 156 {
+    target.state_type = "air_flinch"
+    target.attack_type = "none"
+    target.timer = 0
+    target.time = 50
+    target.timer_speed = 0
+    target.alarm[0] = 2
+    target.facing = 1-facing
+    shakex = (1 - facing*2)*size*(-6)
+    speed = 0
+    gravity = 0
+    intangible = 1
+    air_move = 0
+    }  
+if timer = 156 {
+    sound_play(b_hit_sound)
+    create_throw_box(15,35+facing*110,5.25,7.15,19,1,fire3,obj_spark_fire1,0.6,0.6,10,10,self.id,4,5)
+    hitbox.shake_ampl = 0.3
+    sound_play(upb_voice)
+    image_index = 1
+    image_speed = 0.3
+    super_armor = 0
+    intangible = 0
+    shaker = instance_create(x,y,obj_shakescreen3);
+    shaker.ampl = 3.2;
+    shaker.xampl = 0;
+    shaker.time = 12;
+    var exploder;
+    exploder = instance_create(x + 10*size*(1-facing*2),y - 10*size, obj_spark_explode2);
+    exploder.image_xscale*=size;
+    exploder.image_yscale*=size;
+    speed = 7.8*size
+    direction = 105 - facing*30
+    shakex = 0
+    image_blend = c_white;
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    image_blend = c_white;
+	state_type = "stand";
+	if air > 0
+	{
+    if timer > 100 {
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 7;
+	image_speed = 0;
+    air = max_jumps-1;
+    }
+    else
+    state_type = "fall";
+	}
+    timer = 0;
+    time =-1;
+}     

@@ -1,0 +1,51 @@
+if ( state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "zair";
+    timer = 0;
+    time = 55;
+    sprite_index = trick_sprite;
+    image_speed = 0;
+    image_index = 0;
+
+if ( moveright ) {facing = 0}
+if ( moveleft ) {facing = 1}
+  }
+
+
+if (timer = 0)
+{
+    timer = 0;
+    time = 20;
+    sprite_index = trick_sprite;
+    image_speed = 0;
+    image_index = (choose(0,1,2,3,4));;
+    vspeed -= 0.1;
+    crowd_call(0,0+random(100));
+    sound_play(choose(joy1,joy2,joy3));
+    sound_play(choose(woo_voice,b_voice,zair_voice1,zair_voice2,zair_voice3,zair_voice4));
+instance_create(x+20,y-30*size,obj_spark_effect);
+instance_create(x-20,y-30*size,obj_spark_effect);
+instance_create(x+20,y+10*size,obj_spark_effect);
+instance_create(x-20,y+10*size,obj_spark_effect);
+}
+
+if (timer >= 0) && (timer <= 10) && ZairMomentum = 0
+{
+    vspeed = 0;
+}
+if (timer >= 0) && (timer <= 10) && ZairMomentum = 1
+{
+    vspeed -= 0.1;
+}
+if (timer >= 10) {
+   ZairMomentum = 1
+}
+
+if ( timer >= time-1 )
+  {
+    state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

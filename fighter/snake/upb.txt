@@ -1,0 +1,100 @@
+fast_fall = 0
+fast_fall_temp = 0
+if air < 3 && (state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch") {
+    special = 0;
+    attacking = 0;
+    timer = 0;
+    attack_type = "upb";
+        state_type = "air_attack";
+        image_speed = 0.2;
+        sprite_index = upb_sprite;
+        image_index=0;
+        time = 120;
+        timer_speed=1;      
+        sound_play(cypher_start_sound)
+        sound_play(cypher_sound)
+        effect_create_above(ef_spark,x,y-30,0,c_white)
+        instance_create(x,y+1,obj_down_impact)
+        if vspeed >= 2.0
+        vspeed = 2.0
+        air_move=1
+}
+if timer > 25
+force_edge_grab = 1
+if timer = 3 {
+    heavy_armor = 7;
+    sound_play(electric_sound);
+    effect_create_above(ef_spark,x+2-facing*4,y-20,0,c_white)
+    effect_create_above(ef_spark,x+2-facing*4,y-22,0,c_white)
+    effect_create_above(ef_spark,x+2-facing*4,y-24,0,c_white)
+    effect_create_above(ef_spark,x+2-facing*4,y-26,0,c_white)
+    effect_create_above(ef_spark,x+2-facing*4,y-28,0,c_white)
+    effect_create_above(ef_spark,x+2-facing*4,y-30,0,c_white)
+    effect_create_above(ef_spark,x+2-facing*4,y-32,0,c_white)
+    instance_create(x+2-facing*4,y-20,obj_spark_shock)
+    instance_create(x+2-facing*4,y-22,obj_spark_shock)
+    instance_create(x+2-facing*4,y-24,obj_spark_shock)
+    instance_create(x+2-facing*4,y-26,obj_spark_shock)
+    instance_create(x+2-facing*4,y-28,obj_spark_shock)
+    instance_create(x+2-facing*4,y-30,obj_spark_shock)
+    instance_create(x+2-facing*4,y-32,obj_spark_shock)
+    create_hitbox(2,80+facing*20,5.3,0,6,6,shock1,obj_spark_shock,1.5,1.5,0,20,self.id,3,5);
+    hitbox.hit_stun = 12;
+    create_hitbox2(3,45+facing*90,1,1,5,4,shock1,obj_spark_shock,0.37,0.43,1,40,self.id,115,1);
+    hitbox2.hit_stun = 3
+    }
+if timer = 10 || timer = 30 || timer = 50
+    image_blend = c_white
+if timer = 70
+    heavy_armor = 0
+if timer <= 114 {
+    if (attacking || special || shieldup || grab || smash) && timer > 20 {
+    with hitbox2 instance_destroy();
+    state_type = "jump";
+    attack_type = "none";
+    create_projectile(3,45+facing*90,1,1,5,4,shock1,obj_spark_shock,0.85,0.85,0,30,self.id,200,char_custom2)
+    timer = 0;
+    time = -1;
+    exit;
+    }
+    if hspeed < - 1.5
+    hspeed = -1.5
+    if hspeed > 1.5
+    hspeed = 1.5
+    if vspeed > -2.2
+        vspeed-=0.5*size
+        air = 3
+        image_blend = c_white
+}
+if (timer > 60 && timer < 110) && (shieldup = 1 || (ai && y < obj_game_control.camera_boundary_u + 32)) {
+    with hitbox2 instance_destroy();
+    sound_play(air_dodge_sound)
+    air = max_jumps
+    state_type = "air_dodge"
+    sprite_index = air_dodge_sprite
+    speed = 0
+    image_blend = c_white
+    heavy_armor = 0
+    attack_type = "none"
+    timer = 0
+    time = 25
+    create_projectile(3,45+facing*90,1,1,5,4,shock1,obj_spark_shock,0.85,0.85,0,30,self.id,200,char_custom2)
+    exit;
+    }
+if timer = 118 {
+    if instance_exists(hitbox2)
+    with hitbox2 instance_destroy();
+    create_projectile(3,45+facing*90,1,1,5,4,shock1,obj_spark_shock,0.85,0.85,0,30,self.id,200,char_custom2) 
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    heavy_armor = 0
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+    air = 3
+    }

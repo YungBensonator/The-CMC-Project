@@ -1,0 +1,195 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 1024;
+  state_type = "air_attack";
+  hspeed *= 0.8;
+  sprite_index = b_sprite;
+  chargin = 0;
+  spark2 = noone;
+  image_blend = c_white;
+  if ( charge < 180 )
+    {
+    timer = 0;
+    image_index = 5;
+    image_speed = 0;
+    }
+    else
+    {
+    timer = 32;
+    image_index = 0;
+    image_speed = 0.3;
+    }
+  }
+if air = 0
+hspeed = 0
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( timer < 32 )
+{
+if ( image_index < 7 ) image_index += 0.25;
+image_blend = c_white;
+if ( timer == 5 || timer == 10 )
+  {
+  if ( charge == 180 )
+    image_blend = c_green;
+    else
+    image_blend = c_lime;
+  }
+
+
+if ( timer == 4 ) && air=0
+  {
+  spark = instance_create(x-6+facing*12,y,obj_spark)
+  spark.snap = self.id
+  spark.sprite_index = spr_dust2
+  spark.image_xscale = 0.6-facing*1.2
+  spark.image_yscale = 0.45
+  spark.image_speed = 0.5
+  spark.image_alpha = 0.75
+  spark.depth = 0
+  }
+if ( chargin )
+  {
+  if ( charge < 180 )
+    {
+    if ( charge mod 10 == 0 ) sound_play ( nbcharge_sound );
+    charge += 1.25;
+    }
+  if ( !instance_exists ( spark2 ) )
+    {
+    spark2 = instance_create ( x + (25-facing*50) * size , y - 12 * size , obj_spark );
+    spark2 . snap = self.id;
+    spark2 . sprite_index = ball_sprite;
+    spark2 . image_speed = 0.3;
+    spark2 . image_xscale = size * ( (120+charge)/200 );
+    spark2 . image_yscale = size * ( (120+charge)/200 );
+    spark2 . depth = -2;
+    spark2 . image_alpha = 0.95;
+  
+    spark2 . alarm[0] = 999;
+ 
+    }
+  spark2 . x = spark2 . xstart - 1 + random ( 3 );
+  spark2 . y = spark2 . ystart - 1 + random ( 3 );
+if timer mod 5 = 0 
+{
+       create_projectile(1,140-facing*100,2.6,0,3,3,magic1,obj_spark_hit4,0.01+charge/200,0.01+charge/200,26,10,self.id,4,no_script);
+            proj.hit_stun = -3
+}
+  }
+
+if ( timer > 16 )
+  {
+  if ( chargin == 0 )
+    {
+    chargin = 1;
+    }
+  timer = 6;
+  }
+if ( ( moveleft || moveright ) && air == 0 )
+  {
+  runtimer = 0
+  if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
+  attack_type = "none";
+  state_type = "dodge";
+  sprite_index = roll_sprite;
+  image_index = 0
+  sound_play(roll_dodge_snd);
+  shieldup = 0;
+  timer = 0;
+  time = 29;
+  facing = moveright;
+  exit;
+  }
+if ( air == 0 && ai && ( distance_to_object ( enemy ) || collision_rectangle ( x+4*(1-facing*2) , y , x+30*(1-facing*2) , y-33 , projectile_box , 1 , 1 ) ) < 29 && random(20)>14 )
+  {
+  runtimer = 0
+  if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
+  attack_type = "none";
+  state_type = "dodge";
+  sprite_index = roll_sprite;
+  image_index = 0
+  sound_play(roll_dodge_snd);
+  shieldup = 0;
+  timer = 0;
+  time = 29;
+  facing = moveright;
+  exit;
+  }
+if ( shieldup == 1 )
+  {
+if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
+  flashing = true;
+  alarm[7] = 3;
+  if ( air == 0 ) {
+    state_type = "stand"
+    }
+    else
+    {
+	state_type="jump";
+    }
+  }
+if ( special )
+  {
+  if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
+
+  timer = 32;
+  image_index = 0;
+  image_speed = 0.3;
+  }
+exit;
+}
+
+image_blend = c_white;
+if timer >=32 && timer <= 37 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if timer=32
+{
+  if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
+  spark2 = instance_create ( x + (20-facing*40) * size , y - 12 * size , obj_spark );
+  spark2 . snap = self.id;
+  spark2 . sprite_index = ball_sprite;
+  spark2 . image_speed = 0.2;
+  spark2 . image_xscale = size * ( (120+charge)/300 );
+  spark2 . image_yscale = size * ( (120+charge)/300 );
+  spark2 . depth = -2;
+  spark2 . image_alpha = 0.95;
+  spark2 . image_index = 0;
+  spark2 . image_speed = 0.2;
+}
+if ( timer == 45 )
+  {
+  sound_play ( projectile_voice );
+  sound_play ( nbshoot_sound );
+  if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
+  create_projectile ( 4 + (charge/180) * 10 , 30 + facing * 120 , 3 + (charge/180) * 3.1 , 3 + (charge/180) * 4.4 , 5 + (charge/180) * 16 , 8 , magic1 , obj_spark_hit4 , 0.9 , 0.9 , 20 , 12 , self.id , 90 , custom_custom2 );
+  proj . keepmain = self.id;
+  proj . visible = 1;
+  proj . sprite_index = ball_sprite;
+  proj . hspeed = 3.5 - facing * 7;
+  proj . image_speed = 0.5;
+  proj . image_xscale = size * ( (120+charge)/300 );
+  proj . image_yscale = proj . image_xscale;
+  if ( moveup ) proj . vspeed = -1;
+  if ( movedown ) proj . vspeed = 1;
+  charge = 0;
+  }
+
+if ( image_index >= 9.5 )
+  {
+  image_blend = c_white;
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "air";
+  timer = 0;
+  time = -1;
+  }

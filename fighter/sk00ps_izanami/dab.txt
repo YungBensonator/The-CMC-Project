@@ -1,0 +1,176 @@
+if (state_type = "stand" || state_type = "crouch" || state_type = "run") && od = 1 && izanamitimestoptemp = 0 {
+	special = 1;
+	hspeed = 0;
+	state_type = "air_attack";
+	attack_type = "dab";
+	image_speed = 0;
+	sprite_index = super3_sprite;
+	image_index=0;
+	timer = 0;
+	time = 98
+	timer_speed=1;
+	sound_play(super_snd);
+	ZAWARUDOTOKIWOTOMARE  = instance_create(x,y,obj_freeze)
+	ZAWARUDOTOKIWOTOMARE.dontpause = self.id
+	ZAWARUDOTOKIWOTOMARE.alarm[0] = 53
+}
+vspeed = 0;
+gravity = 0;
+gravity_lock = 1;
+if ( timer < time )
+{
+	switch (timer)
+	{
+	case 6: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 22: image_index = 4; break;
+	case 26: image_index = 5; break;
+	case 30: image_index = 3; break;
+	case 34: image_index = 4; break;
+	case 38: image_index = 5; break;
+	case 42: image_index = 3; break;
+	case 46: image_index = 4; break;
+	case 50: image_index = 5; break;
+	case 54: image_index = 22; sound_play(grab_swing); sound_play(choose(grab_voice1,grab_voice2)); break;
+	case 58: image_index = 23; break;
+	case 62: image_index = 24; break;
+	case 66: image_index = 25; break;
+	case 70: image_index = 26; break;
+	case 74: image_index = 27; break;
+	case 78: image_index = 28; break;
+	case 82: image_index = 29; break;
+	case 86: image_index = 30; break;
+	case 90: image_index = 31; break;
+	case 94: image_index = 32; break;
+	
+	case 200: image_index = 3; break;
+	case 204: image_index = 4; break;
+	case 208: image_index = 6; break;
+	case 216: image_index = 7; break;
+	case 224: image_index = 8; break;
+	case 232: image_index = 9; break;
+	case 238: image_index = 10; break;
+	case 244: image_index = 11; break;
+	case 248: image_index = 12; break;
+	case 252: image_index = 13; break;
+	case 256: image_index = 14; break;
+	case 260: image_index = 15; break;
+	case 264: image_index = 13; break;
+	case 268: image_index = 14; break;
+	case 272: image_index = 15; break;
+	case 276: image_index = 13; break;
+	case 280: image_index = 14; break;
+	case 284: image_index = 15; break;
+	case 288: image_index = 13; break;
+	case 292: image_index = 14; break;
+	case 296: image_index = 15; break;
+	case 300: image_index = 13; break;
+	case 304: image_index = 14; break;
+	case 308: image_index = 15; break;
+	case 312: image_index = 13; break;
+	case 316: image_index = 14; break;
+	case 320: image_index = 15; break;
+	case 324: image_index = 16; break;
+	case 329: image_index = 17; break;
+	case 334: image_index = 18; break;
+	case 339: image_index = 19; break;
+	case 344: image_index = 20; break;
+	case 349: image_index = 21; break;
+	}
+	if timer = 1 {
+	crest_eff = instance_create(x+2*(1-facing*2)*size,y-30,obj_spark)
+	crest_eff.sprite_index = crest_fx
+	crest_eff.image_xscale = 0.4*(1-facing*2)*size;
+	crest_eff.image_yscale = size*0.4
+	crest_eff.image_speed = 0;
+	crest_eff.image_index = 0;
+	crest_eff.image_alpha = 0.1;
+	crest_eff.image_angle = 180;
+	if air = 0 {
+	crest_eff.depth = 1;
+	}
+	if air > 0 {
+	crest_eff.depth = 2;
+	}
+	crest_eff.snap = self.id;
+	}
+	if timer >= 1 && timer <= 15 {
+	crest_eff.image_alpha += 0.07;
+	crest_eff.image_angle -= 12;
+	crest_eff.image_xscale -= 0.012*(1-facing*2)*size;
+	crest_eff.image_yscale -= 0.012
+	}
+	if timer >= 37  {
+	crest_eff.image_alpha -= 0.11;
+	crest_eff.image_xscale += 0.01*(1-facing*2)*size;
+	crest_eff.image_yscale += 0.01
+	}
+	if timer = 18 {
+	create_hitbox(1,90,1,0,0.1,1,-1,-1,0.64 , 1.10 , 11.60 , 17.11,self.id,36,5);
+	hitbox.execute_on_hit = "sound_play(attacker.throw_catch); target.x = x+11*(1-facing*2)*size; target.y = y;"
+	}
+	if timer >= 18 && timer <= 53 && hitbox.hit = 1 {
+	time = 354;
+	timer = 200;
+	image_index = 3;
+	target.x = x+11*(1-facing*2)*size;
+	target.y = y;
+	}
+	if timer >= 200 {
+	target.speed = 0;
+	target.gravity = 0;
+	target.gravity_lock = 1;
+	target.timer_speed = 0;
+	target.sprite_index = target.flinch_sprite;
+	target.state_type = "flinch"
+	}
+	if timer = 208 {
+	sound_play(choose(dab_voice1,dab_voice2,dab_voice3));
+	sound_play(timestop_snd);
+	}
+	if timer >= 208 && timer <= 218 {
+		speed = 3*(1-facing*2);
+		direction = 180*(1-facing*2);
+	}
+	if timer >= 213 && timer <= 233 {
+	speed *= 0.9;	
+	}
+	if timer >= 233 && timer < 244 {
+		speed = 5*(1-facing*2);
+		direction = 0*(1-facing*2);
+	}
+	if timer >= 244 {
+	speed *= 0.92;
+	}
+	if timer = 248 {
+	izanamitimestoptimer = 334;
+	sound_play(izanami_snd3);
+	instance_create(0,0,obj_flashscreen)
+	izanamitimestop = instance_create(x,y,obj_freeze)
+	izanamitimestop.dontpause = self.id
+	izanamitimestop.alarm[0] = 1200
+	izanamitimestoptemp = 1;
+	spark = instance_create(x,y-27*size,obj_spark_shockwave)
+	spark.image_xscale = 1*size
+	spark.image_yscale = 1*size
+	spark.image_blend = c_black
+	spark.image_alpha = 0.7
+	if (instance_exists(projectile_box)) {with (projectile_box){instance_destroy();}}
+	if (instance_exists(attack_box)) {with (attack_box){instance_destroy();}}
+	}
+	
+}
+
+  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+  attack_type = "none";
+	if(air != 0){state_type = "jump";}
+  else{state_type = "stand";}
+  timer = 0;
+  time =-1;
+	nometergain = 0;
+}
+    
+

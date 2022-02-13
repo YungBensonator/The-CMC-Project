@@ -1,0 +1,84 @@
+if ( state_type = "jump" )
+  { 
+    state_type = "air_attack";
+    attack_type = "dair"
+    timer = 0;
+    time = 125;
+    if !ai || (ai && global.gs_rules != "Challenge"){
+    time = 155;
+    }
+    sprite_index = stand_sprite;
+    image_speed = 0;
+    image_index = 0;
+    slide=0;
+    hspeed=0;
+    sound_play(atk3_sound);
+  }
+
+switch ( timer )
+      {
+  case 1: image_index = 0; break;
+  case 35: image_index = 5; sprite_index=throw_sprite; break;
+  case 100: image_index = 2; sprite_index=land_sprite; break;
+  case 120: image_index = 0; break;
+      }
+
+if ( timer < time )
+  {
+
+
+
+	if timer < 35{
+  vspeed=0;
+  gravity=0;
+  gravity_lock=1;
+  fast_fall=0;
+  fast_fall_temp=0;
+  air_move=0;
+  }
+  if timer >=35 && timer < 100{
+  vspeed=9*size;
+  if air = 0{
+    timer=100;
+    with (hitbox){instance_destroy();}
+    image_index = 2;
+    sprite_index=land_sprite;
+    sound_play(dair_sound);
+  }
+  if timer =99{
+  timer=35;
+  }
+  }
+  if timer = 34{
+  create_hitbox(21,305+(-70)*facing,7,0.1,-1,1,kick2,obj_spark_hit1,4.8 , 1.9 , 8 , 27.72,self.id,9999,5);
+  hitbox.hit_stun = 999*size;
+  hitbox.sdi=0;
+  hitbox.di=0;
+  if !ai || (ai && global.gs_rules != "Challenge"){
+  hitbox.hit_stun=12*size;
+  hitbox.damage=6*size;
+  }
+  }
+  if timer = 101{
+  create_hitbox(17,60+60*facing,6,8,20,6,kick2,obj_spark_hit1,4.8 , 1.9 , 8 , 27.72,self.id,6,3);
+  if !ai || (ai && global.gs_rules != "Challenge"){
+  hitbox.damage=9*size;
+  hitbox.kbg=4*size;
+  }
+  hitbox.hit_stun=9*size;
+  }
+ 
+
+   
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+        else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

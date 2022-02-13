@@ -1,0 +1,77 @@
+proj_destroy = 0
+moving_object = 1;
+if timer = 1 && hit = 0 {
+hspeed = 2.85-attacker.id.facing*5.7
+temp = 0
+nikita_loop_sound = attacker.nikita_loop_sound
+sprite_index = attacker.id.missile_sprite
+snake = attacker
+time=400
+alarm[0] = 415
+visible = 1
+priority = 2 }
+
+moveup = attacker.moveup
+moveright = attacker.moveright
+movedown = attacker.movedown
+moveleft = attacker.moveleft
+if temp = 0 {
+if moveup = 1 {
+    if direction < 90 || direction > 270
+        direction+=2
+    else if direction > 90 && direction < 270
+        direction-=2
+    }
+if movedown = 1 {
+    if direction < 90 || direction > 270
+        direction-=2
+    else if direction > 90 && direction < 270
+        direction+=2
+    }
+if moveright = 1 {
+    if direction < 180 && direction > 0
+        direction-=2
+    else if direction > 180 && direction < 360
+        direction+=2
+    }
+if moveleft = 1 {
+    if direction < 180 && direction > 0
+        direction+=2
+    else if direction > 180 && direction < 360
+        direction-=2
+    }
+}
+if temp = 0
+speed = 3.9-(moveright || moveleft || moveup || movedown)
+image_angle = direction - 180*facing
+if (collision_point(x,y-1,obj_ceiling,1,1) || collision_point(x+sign(hspeed),y,obj_wall,1,1) || (is_on_floor(self) && vspeed > 0) || hit != 0) && visible {
+    instance_create(x,y,obj_spark_explode1)
+    shaker = instance_create(0,0,obj_shakescreen2)
+    shaker.ampl = 1.25
+    temp = 0
+    sound_play(explode1)
+    sound_stop(nikita_loop_sound)
+    hit = 1
+    timer = 1
+    time = 5
+    alarm[0] = 7
+    visible = 0
+    sprite_index = spr_collision_bubble
+    image_xscale = 1.2
+    image_yscale = 1.1
+    }
+if timer >= 276 || string(snake.attack_type) != "sideb" {
+    temp = 1
+    }
+if temp = 1 {
+    hspeed = 0
+    gravity = 0.2
+    if vspeed > 3.8
+    vspeed = 3.8 }
+if frac(timer/7)=0
+effect_create_below(ef_smoke,x,y,0,c_ltgray)
+if hit = 2 && snake.timer < 281 && string(snake.attack_type) = "sideb" {
+snake.timer = 281
+sound_play(explode1)
+sound_stop(nikita_loop_sound)
+}

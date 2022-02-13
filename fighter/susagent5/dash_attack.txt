@@ -1,0 +1,80 @@
+fast_fall=0;
+fast_fall_temp=0;
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0;
+        sprite_index = dash_attack_sprite;
+        image_index=0;
+        timer = 0;
+        time = 53;
+        timer_speed=1;
+}
+
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 5: image_index = 1; state_type = "air_attack"; vspeed=-4*size; hspeed*=2.7*size;break;
+    case 35: image_index = 2; state_type = "attack"; break;
+}
+if timer < time {
+     
+    if timer = 5{
+    sound_play(swingsnd2);
+    create_hitbox(7,36+108*facing,6,4.2,10,4,kick1,obj_spark_hit1,0.95 , 0.47 , 3.60 , 4.50 ,self.id,30,2);
+    hitbox.di = 0.7;
+    hitbox.hit_stun = 4;
+    }  
+    if timer > 5 && timer < 34 && vspeed < 0{
+    after_image(3,c_white,0.6)
+    }
+    if timer  > 5 && timer < 34 && air < 1{
+    with(hitbox){instance_destroy()} 
+    timer = 34;
+    }
+
+    if timer >= 5 && timer mod 8 = 0{
+            hspeed/=2*size;
+    }
+
+    if hitbox.hit>0 && attacking=1{
+    if !moveleft && !moveright && !moveup && !movedown{
+    state_type="jump";
+    attack_type="none";
+    timer=0;
+    time = -1;
+    char_nair();}
+    if !moveleft && !moveright && moveup && !movedown{
+    state_type="jump";
+    attack_type="none";
+    timer=0;
+    time = -1;
+    hspeed=0;
+    char_uair();}
+    if !moveleft && !moveright && !moveup && movedown{
+    state_type="jump";
+    attack_type="none";
+    timer=0;
+    time = -1;
+    char_dair();}
+    if ((moveright && !moveleft && facing = 0) || (!moveright && moveleft && facing = 1)) && !moveup && !movedown{
+    state_type="jump";
+    attack_type="none";
+    timer=0;
+    time = -1;
+    hspeed=0;
+    char_fair();}
+    if ((moveright && !moveleft && facing = 1) || (!moveright && moveleft && facing = 0)) && !moveup && !movedown{
+    state_type="jump";
+    attack_type="none";
+    timer=0;
+    time = -1;
+    char_bair();}
+    }
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

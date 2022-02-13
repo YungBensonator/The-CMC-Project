@@ -1,0 +1,65 @@
+if ( state_type == "jump" || state_type == "run" || state_type == "stand" || state_type == "crouch" )
+  {
+  state_type = "air_attack";
+  attack_type = "downb";
+  image_speed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  if ( air )
+    timer = 2;
+    else
+    timer = 0;
+  time = 61;
+  timer_speed = 1;
+  special = 0;
+  }
+
+if ( air == 0 )
+  hspeed *= 0.7;
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 10:
+    instance_create ( x - 5 * (1-facing*2) * size , y - 20 * size , obj_spark_effect );
+    image_index = 3;
+    break;
+  case 30: image_index = 4; break;
+  case 33: image_index = 5; break;
+  case 36: image_index = 6; break;
+  case 39:
+    sound_play ( projectile_voice );
+    image_index = 7;
+	if !instance_exists(leech) {
+    leech = create_projectile ( 0 , 0 , 0 , 0 , 0 , 0 , -1 , -1 , 0.9 , 0.9 , 20 , 12 , self.id , 180 , custom_custom4 );
+    leech . keepmain = self.id;
+    leech . sprite_index = leech_seed_sprite;
+    leech . visible = 1;
+    leech . captured = 0;
+    leech . target = -1;
+    leech . hspeed = 7 - facing *14;
+    leech . vspeed = -1;
+    leech . hit = 2;
+    break;
+	}
+  case 48: image_index = 6; break;
+  case 52: image_index = 5; break;
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( timer >= 40 && movedown && air == 0 ) timer = time;
+if ( timer >= 10 && timer < 30 && special ) timer = 30;
+
+if ( timer >= 60 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

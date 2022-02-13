@@ -1,0 +1,69 @@
+moving_object = 0
+damage = ( 5 + (attacker.id.smash_charge/90)) * attacker.id.size;
+bkb = ( 6 + (attacker.id.smash_charge/120)) * attacker.id.size;
+kbg = ( 5 + (attacker.id.smash_charge/120)) * attacker.id.size;
+
+
+if attacker.release_them = 1{
+	stop_spin = 1
+	direction = orbit_dir
+	speed = 5
+}
+
+if stop_spin = 0{
+
+if facing = 0{
+orbit_dir+=4.5;
+image_angle +=4.5
+}
+if facing = 1{
+orbit_dir-=4.5;
+image_angle -=4.5
+}
+
+if (orbit_dir>359) { orbit_dir=0; }
+if (orbit_dir<0) { orbit_dir=359; }
+
+if max_distance = 0
+max_distance = 32
+
+if distance_value < max_distance
+distance_value += 2
+
+orbit_x=attacker.x+(lengthdir_x(distance_value, orbit_dir));
+orbit_y=(attacker.y - 20*attacker.size)+(lengthdir_y(distance_value, orbit_dir));
+
+x=orbit_x;
+y=orbit_y;
+
+if timer = 10
+hit = 0
+
+
+
+if timer >time - 15{
+image_alpha -= 0.075
+distance_value += 0.5
+}
+
+if hit = 1{
+	hit = 2
+	if keep_alive = 1
+	time = theTime
+}
+
+
+
+
+}
+
+if hit = 0
+if timer mod 7{
+imagee = after_image(5,c_white,image_alpha*0.5)
+imagee.image_xscale = image_xscale*0.5
+imagee.image_yscale = image_yscale*0.5
+
+}
+
+
+

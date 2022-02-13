@@ -1,0 +1,366 @@
+ for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  {
+	if ( db_charname[global.gs_character[i],1] == "ragna_cogu" ){
+	vsragna = 1
+	}
+  }
+  has_abs = 1;
+///////////////////////////////////Crouch thing for crouching and getting up from crouch visually
+if ( state_type = "crouch" ){
+	if (instance_exists(stand_ringg)) {with (stand_ringg){instance_destroy();}}
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(12,timer) //replace the 12 by the number the last case you add below has
+    switch (timer){
+        case 0: image_index = 0; 
+	if ringtemp = 0 {
+	stand_ringc = create_spark ( -4 , 0 , stand_ring_sprite , 0.2 , 0.29 , 0.29 );
+	stand_ringc.depth = -1;
+	stand_ringc.loop = 99999999;
+	stand_ringc.image_index = stand_ringg.image_index;
+	}
+	break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; stand_ringc.y = y+20*size; break;
+        case 9: image_index = 3; break;
+        case 12: image_index = 4; break;
+		//put as many cases as frames your crouch animation has
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+    image_index = 0;
+	stand_ringc.y = y;
+}
+if sprite_index = crouch_sprite && image_index >= 1 && image_index < 2 {
+	stand_ringc.y = y+10*size; 
+}
+if sprite_index = crouch_sprite && image_index >= 2 {
+	stand_ringc.y = y+20*size; 
+}
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+    image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+    image_index = 2;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 9 ){
+    image_index = 3;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 12 ){
+    image_index = 4;
+} //copypaste this conditional for every frame your crouch animation has, changing the number of the crouchgetuptimer from 12 to whichever corresponds to that frame's switch case number, and the image_index number to the frame number itself.
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch thing for crouching and getting up from crouch visually
+if (!instance_exists(OverdriveHud)){
+    hud_x = obj_game_control.hud_x[44];
+    hud_y = window_h-77+lengthdir_y(obj_game_control.hudp_shake[i]*0.1,obj_game_control.hudp_shake[i]*10);    
+    OverdriveHud = instance_create ( hud_x+40, hud_y, obj_custom_gfx);
+    OverdriveHud.step_script = hudThing_step_script;
+    OverdriveHud.draw_script = hudThing_draw_script;
+    OverdriveHud.owner = self.id;
+    OverdriveHud.keepmain = self.keepmain;
+	OverdriveHud.image_xscale = 1.2
+	OverdriveHud.image_yscale = 1.2
+	OverdriveHud.sprite_index = overdrive_ui;
+    OverdriveHud.image_speed = 0;
+	OverdriveHud.image_alpha = 1;
+}
+
+if odactivate = 0 or odtimer > 0 {
+	OverdriveHud.image_angle += 1
+	OverdriveHud.image_blend = c_white
+}
+
+if odactivate = 1 and odtimer = 0 {
+	OverdriveHud.image_blend = c_dkgray
+}
+
+
+
+if odtimer > 0 {
+	odtimer -= 1
+	od = 1
+}
+
+if odtimer <= 0 {
+	odtimer = 0
+	od = 0
+}
+
+if odtimer = 1 {
+	sound_play(overdriveend_sound);
+}
+
+if od = 1 {
+	 aaa = after_image ( 3 , c_black , 0.25 );
+ aaa.image_xscale *= 1.15;
+ aaa.image_yscale *= 1.15;
+ aaa.x += -1 + floor ( random ( 3 ) );
+ aaa.y += -1 + floor ( random ( 3 ) );
+}
+
+if state_type = "out" {
+	odactivate = 0
+	odtimer = 0
+}
+							
+if sprite_index = mid_jump_sprite && plattemp = 0 && flinchtemp = 0 {
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    char_custom9();
+}
+if attack_type = "c9"
+char_custom9();	
+izanamiplatform.x = x;
+izanamiplatform.y = y;
+izanamiplatformS.x = x;
+izanamiplatformS.y = y;
+if instance_exists(izanamiplatform) {
+	utilttemp = 1
+}
+if air = 0 && !instance_exists(izanamiplatform) {
+	plattemp = 0;
+}
+if izanamiplatform.alarm[0] <= 5 && (state_type = "attack" || state_type = "air_attack") {
+	izanamiplatform.alarm[0] = 5
+}
+if (sprite_index = jump_sprite || sprite_index = mid_jump_sprite) && instance_exists(izanamiplatform){
+	if (instance_exists(izanamiplatform)) {with (izanamiplatform){instance_destroy();}}
+	vspeed = -2;
+	hspeed = 0;
+}
+//Ring Control
+if !instance_exists(stand_ringg) && air = 0 && noring = 0 && ringtemp = 0 && (sprite_index != crouch_sprite || sprite_index != down_sprite || sprite_index != dtilt_sprite || sprite_index != dsmash_sprite || sprite_index != fthrow_sprite || sprite_index != dthrow_sprite || sprite_index != bthrow_sprite) {
+	stand_ringg = create_spark ( 0 , 0 , stand_ring_sprite , 0.2 , 0.29 , 0.29 );
+	stand_ringg.depth = -1;
+	stand_ringg.loop = 99999999;
+	if (instance_exists(stand_ringa)) {with (stand_ringa){instance_destroy();}}
+	if (instance_exists(stand_ringc)) {with (stand_ringc){instance_destroy();}}
+}
+if sprite_index != crouch_sprite {
+	if (instance_exists(stand_ringc)) {with (stand_ringc){instance_destroy();}}
+	}
+if !instance_exists(stand_ringa) && air > 0 && noring = 0 && ringtemp = 0 {
+	stand_ringa = create_spark ( 0 , 0 , stand_ring_sprite , 0.2 , 0.29 , 0.29 );
+	stand_ringa.depth = 2;
+	stand_ringa.loop = 99999999;
+	if (instance_exists(stand_ringg)) {with (stand_ringg){instance_destroy();}}
+	if (instance_exists(stand_ringc)) {with (stand_ringc){instance_destroy();}}
+}
+stand_ringg.x = x-4*(1-facing*2)*size;
+stand_ringg.y = y-4*size;
+stand_ringa.x = x-4*(1-facing*2)*size;
+stand_ringa.y = y-4*size;
+stand_ringg.image_alpha = image_alpha;
+stand_ringa.image_alpha = image_alpha;
+
+if ringtemp = 1 && !instance_exists(stand_ringB) {
+	stand_ringB = instance_create ( x-5*(1-facing*2) , y , obj_spark);
+	stand_ringB.loop = 999999;
+	stand_ringB.depth = -1;
+}
+stand_ringB.x = x-4*(1-facing*2)*size;
+stand_ringB.y = y+4*size;
+stand_ringB.image_alpha = image_alpha;
+if attack_type != "b" {
+stand_ringB.image_index = 8;
+}
+stand_ringB.image_xscale = 0.29*(1-facing*2)*size;
+stand_ringB.image_yscale = 0.29*size;
+
+stand_ringBfx2.x = x-4*(1-facing*2)*size;
+stand_ringBfx2.y = y-13*size;
+stand_ringBfx2.image_alpha = image_alpha;
+stand_ringBfx2.image_xscale = 0.29*(1-facing*2)*size;
+stand_ringBfx2.image_yscale = 0.29*size;
+if noring2 = 0 {
+	stand_ringB.sprite_index = stand_ringB_sprite;
+	stand_ringBfx2.sprite_index = stand_ringBfx3_sprite
+}
+if noring2 = 1 {
+	stand_ringB.sprite_index = no_sprite;
+	stand_ringBfx2.sprite_index = stand_ringBfx3_sprite
+}
+
+if ringtemp = 1 && (taunt = 1 && movedown != 1 && moveup != 1 && (moveleft = 1 || moveright = 1)) && noring2 = 0 {
+	sound_play(b_snd2);
+	noring2 = 1;
+	taunt = 0;
+	noring2timer = 120;
+	ringproj1 =	create_projectile(5, angle_correct(30), 5, 1, 15, 10, cfslash3, obj_spark_slash3, .29, .29, -6, 0, self.id, 30, char_custom4);
+	ringproj1.sprite_index = stand_ringB_sprite
+	ringproj1.image_speed = 0;
+	ringproj1.image_index = 8;
+}
+if ringtemp = 1 && (taunt = 1 && movedown = 1 && moveup != 1 && moveleft != 1 && moveright != 1) && noring2 = 0 {
+	sound_play(b_snd3);
+	noring2 = 1;
+	taunt = 0;
+	noring2timer = 120;
+	ringproj2 =	create_projectile(3, 370, 2, 0, 15, 1, cfslash3, obj_spark_slash3, .29, .29, -15, 35, self.id, 100, char_custom5);
+	ringproj2.image_alpha = 0;
+}
+if air = 0 && ringtemp = 1 {
+	if  state_type = "shielding" or shieldup = 1 && (moveleft != 1 || moveright != 1 || movedown != 1)
+	{
+	if state_type != "attack" || state_type = "air_attack" {
+    state_type = "stand"
+	}
+	shieldup = 0
+	}
+}
+if noring2timer > 0 {
+noring2timer -= 1;
+}
+if noring2timer <= 0 {
+	noring2 = 0;
+}
+if sprite_index = walk_sprite && image_index >= 9 {
+	image_index = 1;
+}
+if sprite_index = run_sprite && image_index >= 4 {
+	image_index = 1;
+}
+if air = 0 {
+	flinchtemp = 0
+}
+if sprite_index = broken_sprite || state_type = "flinch" || state_type = "air_flinch" || sprite_index = down_sprite || sprite_index = flinch_sprite || sprite_index = flinch2_sprite || sprite_index = flinch3_sprite {
+	if (instance_exists(stand_ringa)) {with (stand_ringa){instance_destroy();}}
+	if (instance_exists(stand_ringg)) {with (stand_ringg){instance_destroy();}}
+	if (instance_exists(stand_ringc)) {with (stand_ringc){instance_destroy();}}
+	if (instance_exists(stand_ringdtilt)) {with (stand_ringdtilt){instance_destroy();}}
+	if (instance_exists(izanamiplatform)) {with (izanamiplatform){instance_destroy();}}
+	if (instance_exists(izanamiplatformS)) {with (izanamiplatformS){instance_destroy();}}
+	if (instance_exists(dair_fx)) {with (dair_fx){instance_destroy();}}
+	if (instance_exists(dair_fx2)) {with (dair_fx2){instance_destroy();}}
+	if (instance_exists(dair_ring)) {with (dair_ring){instance_destroy();}}
+	if (instance_exists(dsmash_fx)) {with (dsmash_fx){instance_destroy();}}
+	if (instance_exists(usmash_fx2)) {with (usmash_fx){instance_destroy();}}
+	if (instance_exists(usmash_fx2)) {with (usmash_fx2){instance_destroy();}}
+	if (instance_exists(stand_ringB)) {with (stand_ringB){instance_destroy();}}
+	if (instance_exists(stand_ringBfx2)) {with (stand_ringBfx2){instance_destroy();}}
+	
+}
+if state_type = "flinch" || state_type = "air_flinch" || sprite_index = flinch_sprite || sprite_index = flinch2_sprite || sprite_index = flinch3_sprite {
+	flinchtemp = 1;
+	ringtemp = 0;
+	noring = 0;
+	if (instance_exists(downb_fxspine)) {with (downb_fxspine){instance_destroy();}}
+	if (instance_exists(downb_fxribs)) {with (downb_fxribs){instance_destroy();}}
+}
+if sprite_index = stand_sprite || sprite_index = walk_sprite || sprite_index = run_sprite || sprite_index = jump_sprite || sprite_index = mid_jump_sprite || sprite_index = flinch_sprite || sprite_index = flinch2_sprite || sprite_index = flinch3_sprite {
+stilttemp = 0;
+dtilttemp = 0;
+utilttemp = 0;
+}
+if air = 0 {
+sidebtemp = 0;
+}
+if sprite_index = roll_sprite {
+	after_image ( 4 , c_white, .25 );
+}
+if sprite_index = stand_sprite {
+	image_speed = 0.2;
+}
+if (instance_exists(downb_fxspine)) && downb2temp = 0 {
+	hyper_armor = 999999;
+	super_armor = 999999;
+	heavy_armor = 999999;
+	defense = 999;
+	if shield_hp > 0 {
+	shield_hp -= 0.7;
+	}
+	if air = 0 && state_type = "shielding" or shieldup = 1
+	{
+    state_type = "stand"
+	shieldup = 0
+	}
+}
+if downb_fxspine.image_index = 3 {
+	downb_fxspine.x = x;
+	downb_fxspine.y = y+30*size;
+	downb_fxspine.image_xscale = 0.29*(1-facing*2)*size;
+	downb_fxribs.x = x;
+	downb_fxribs.y = y;
+	downb_fxribs.image_xscale = 0.29*(1-facing*2)*size;
+}
+//Shield Control
+if sprite_index != downb_sprite {
+if shield_hp <= 0 {
+	dangerstate = 1;
+	if (instance_exists(downb_fxspine)) {with (downb_fxspine){instance_destroy();}}
+	if (instance_exists(downb_fxribs)) {with (downb_fxribs){instance_destroy();}}
+}
+if dangerstate > 0 && shield_hp < 165 { 
+	defense = 0.5;
+	hyper_armor = 0;
+	super_armor = 0;
+	heavy_armor = 0;
+	if (instance_exists(downb_fxspine)) {with (downb_fxspine){instance_destroy();}}
+	if (instance_exists(downb_fxribs)) {with (downb_fxribs){instance_destroy();}}
+    repeat ( 1 )
+    {
+    a = after_image ( 1 , c_red , .80 );
+    a.image_xscale *= 1.15;
+    a.image_yscale *= 1.15;
+    }
+	if air = 0 && state_type = "shielding" or shieldup = 1
+	{
+    state_type = "stand"
+	shieldup = 0
+	}
+}
+	if dangerstate = 1 && shield_hp = 165 {
+	defense = 1;
+	dangerstate = 0;
+	}
+}
+if izanamitimestoptemp = 1 {
+	izanamitimestoptimer -= 1;
+	enemy.timer_speed = 0;
+	enemy.speed = 0;
+	enemy.gravity = 0;
+	enemy.gravity_lock = 1;
+	enemy.state_type = "air_flinch"
+	enemy.sprite_index = enemy.flinch_sprite;
+}
+if izanamitimestoptimer <= 0 && (state_type != "attack" || state_type != "air_attack") && izanamitimestoptemp = 1 && playtemp = 0 {
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    char_custom10();
+	playtemp = 1;
+}
+if attack_type = "c9"
+char_custom10();
+if enemy.state_type = "out" {
+izanamitimestoptemp2 = 1
+}
+if enemy.state_type != "out" {
+izanamitimestoptemp2 = 0
+}

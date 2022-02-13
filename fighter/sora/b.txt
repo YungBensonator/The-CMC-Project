@@ -1,0 +1,72 @@
+if ( state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" )
+  {
+    state_type = "air_attack";
+    attack_type = "b";
+    image_speed = 0;
+    sprite_index = b_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 69;
+    hspeed = 0;
+    special = 0;
+  }
+
+if ( timer < time )
+  {
+  
+if timer >=18 && air > 0
+{
+fast_fall = 0
+fast_fall_temp = 0
+gravity = 0
+vspeed = 0
+vspeed -= 0.1
+}  
+  
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+	case 21: image_index = 7; break;
+
+	case 62: image_index = 8; break;
+	case 64: image_index = 9; break;
+	case 66: image_index = 10; break;
+	case 68: image_index = 11; break;
+      }
+    if ( timer = 1 )
+	sound_play(b_voice);
+	
+    if ( timer = 18 )
+      {
+	sound_play(attack_sound);
+	keyblade = create_projectile(1,362,4.55,0,15,3,punch2,obj_spark_hit1,0,0,20,15,self.id,60,char_custom1);
+	keyblade.sprite_index = key_sprite;
+	keyblade.image_speed = 0.5;
+	keyblade.image_index = 0;
+	keyblade.image_xscale = image_xscale;
+	keyblade.image_yscale = image_xscale;
+	keyblade.hit = 2;
+	keyblade.image_alpha = 1;
+	keyblade.facing = facing;
+    air_move = 0;
+    hspeed = 0;
+      }
+    if ( timer = 60 )
+	sound_play(throw_sound);
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+  }

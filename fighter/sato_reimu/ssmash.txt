@@ -1,0 +1,101 @@
+if (state_type = "stand" || state_type = "crouch" || state_type = "run" ){
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0.3;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+        if(zawarudo = 0){charge_frame = 5}
+}
+
+if(zawarudo = 0)
+{
+	if timer < time {
+             state_type = "attack"; 
+            if timer = 14 {
+                hspeed = (4.2-facing*8.4)*size
+                instance_create(x+12-facing*24,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                sound_play(attack_sound3);
+                sound_play(attack_voice3);
+                create_hitbox(16,24+facing*132,5.75,7.7,22,9,reimuhit1,obj_spark_hit4,0.8,0.65,19,19,self.id,9,2); 
+                hitbox.shake_ampl = 0.8
+                hitbox.ball_angle = angle_correct(5)
+                hspeed = 4.5-facing*9
+            }
+            if timer = 15
+                hspeed = 3.75-facing*7.5
+            if timer = 16 || timer = 17 || timer = 18 || timer = 19 {
+                hitbox.damage = 12*size
+                hitbox.bkb = 5*size
+                hitbox.kbg = 5.5*size
+                hitbox.sfx = kick2
+                hspeed = 2.9 - facing*5.8
+                set_hitlag(hitbox,8)
+                }
+            if timer = 20 || timer = 21 {
+                hspeed = 2.5 - facing*5
+            }
+            if timer = 22 {
+                hspeed = 0
+                }
+            if image_index > image_number-image_speed*2
+                image_speed = 0
+            }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
+
+}
+
+if(zawarudo = 1)
+{
+        if timer < time {
+             state_type = "attack";
+            if timer = 10 || timer = 11 || timer = 12
+                hspeed = 3.75-facing*7.5 
+            if timer = 14 {
+                hspeed = (4.2-facing*8.4)*size
+                instance_create(x+12-facing*24,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                sound_play(attack_sound3);
+                sound_play(attack_voice1);
+                create_projectile(16,24+facing*132,5.75,7.7,22,9,kick3,obj_spark_hit4,0.8,0.65,19,19,self.id,9,2); 
+                proj.shake_ampl = 0.8
+                hspeed = 4.5-facing*9
+            }
+            if timer = 15
+                hspeed = 3.75-facing*7.5
+            if timer = 16 || timer = 17 || timer = 18 || timer = 19 {
+                proj.damage = 12*size
+                proj.bkb = 5*size
+                proj.kbg = 5.5*size
+                proj.sfx = kick2
+                hspeed = 2.9 - facing*5.8
+                set_hitlag(proj,8)
+                }
+            if timer = 20 || timer = 21 {
+                hspeed = 2.5 - facing*5
+            }
+            if timer = 22 {
+                hspeed = 0
+                }
+            if image_index > image_number-image_speed*2
+                image_speed = 0
+            }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+}   

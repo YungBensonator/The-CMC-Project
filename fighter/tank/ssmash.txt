@@ -1,0 +1,66 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch")
+  {
+    state_type = "air_attack";
+    attack_type = "ssmash"
+    timer = 0;
+    time = 36;
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    image_index = 0;
+    //hspeed = 0;
+	  canceltemp = 0
+    charge_frame=-1;
+    if !ai || (ai && global.gs_rules != "Challenge"){
+    charge_frame=1;
+    }
+    smash_charge=0;
+  }
+
+if ( timer < time )
+  {
+  state_type = "air_attack";
+  vspeed = 0
+  
+  if timer = 1
+  hspeed = -1.2*(1-facing*2)*size;
+
+    if ( timer = 12 ) 
+    {
+  if ai && global.gs_rules = "Challenge"{
+	hspeed = 15*(1-facing*2)*size;
+  super_armor = 999;
+  hyper_armor=999;
+  heavy_armor=999;}
+	sound_play(swingsnd2);
+  sound_play(choose(atk1_sound,atk2_sound, atk3_sound));
+	create_hitbox(26,5+facing*170,6.2,7.6,8,34,kick2,obj_spark_hit1,4.3,1.8,10,24,self.id,15,5);
+	hitbox.hit_stun = 6*size;
+  if !ai || (ai && global.gs_rules != "Challenge"){
+  hspeed = 7*(1-facing*2)*size;
+  hitbox.damage=17*size;
+  hitbox.bkb=4*size;
+  hitbox.kbg=5*size;
+  super_armor =2;
+  hitbox.priority=1;
+  }
+	}
+	
+    if timer = 24{
+	hspeed *= 0.1
+    super_armor = 0
+    heavy_armor = 0;
+    hyper_armor = 0;
+	}
+   
+   
+   
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	canceltemp = 0
+  }

@@ -1,0 +1,257 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+	if air > 0 {
+    sprite_index = upb_sprite;
+	sound_play(upb_voice1);
+    image_index=0;
+    time = 34;
+    timer = 0;
+	}
+	if air = 0 && huntersfanglvl > 0 {
+    sprite_index = land_sprite;
+	sound_play(choose(huntersfang_voice1,huntersfang_voice2));
+    image_index=2;
+    timer = 700;
+    time = 757;
+		hittemp = 0;
+	}
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+	facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+	facing = 1
+	dragtemp = 0;
+	air_move = 0;
+}
+
+if timer < time {
+	state_type = "air_attack"
+    switch ( timer )
+	{
+	case 702: image_index = 0; break;
+	case 704: sprite_index = huntersfang_sprite; image_index = 0; sound_play(upb2_snd1); break;
+	case 707: image_index = 1; break;
+	case 710: image_index = 2; break;
+	case 713: image_index = 3; break;
+	case 716: image_index = 4; break;
+	case 719: image_index = 5; sound_play(susan_snd1); break;
+	case 722: image_index = 6; break;
+	case 724: image_index = 7; break;
+	case 726: image_index = 8; break;
+	case 728: image_index = 9; break;
+	case 730: sprite_index = huntersfang_land_sprite; image_index = 0; speed = 0; screen_shake(5,5); sound_play(downb_snd2); break;//10
+	case 733: image_index = 1; break;//11
+	case 737: image_index = 2; break;//12
+	case 741: image_index = 3; break;//13
+	case 745: image_index = 4; break;//14
+	case 748: image_index = 5; break;//15
+	case 751: image_index = 6; break;//16
+	case 754: image_index = 7; break;//17	
+		
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 22: image_index = 6; break;
+	case 25: image_index = 7; break;
+	case 28: image_index = 4; break;
+	case 31: image_index = 5; break;
+	
+	case 100: image_index = 0; target.x = x-9.86 *(1-facing*2)*size; target.y = y-2.90 *size; break;
+	case 103: image_index = 1; target.x = x-23.78 *(1-facing*2)*size; target.y = y-27.26 *size; break;
+	case 106: image_index = 2; target.x = x-20.88 *(1-facing*2)*size; target.y = y-38.86 *size; break;
+	case 109: image_index = 3; target.x = x-13.63 *(1-facing*2)*size; target.y = y-47.85 *size; break;
+	case 112: image_index = 4; target.x = x-6.09  *(1-facing*2)*size; target.y = y-50.75 *size; break;
+	case 115: image_index = 5; target.x = x+2.61  *(1-facing*2)*size; target.y = y-58.58 *size; break;
+	
+	case 604: image_index = 1; break;
+	case 608: image_index = 2; break;
+	case 612: image_index = 3; break;
+	case 616: image_index = 0; break;
+	case 620: image_index = 1; break;
+	case 624: image_index = 2; break;
+	case 628: image_index = 3; break;
+	case 632: image_index = 4; break;
+	case 635: image_index = 5; break;
+	case 638: image_index = 6; break;
+	case 641: image_index = 7; break;
+	case 644: image_index = 8; break;
+	case 647: image_index = 9; break;
+	case 650: image_index = 10; break;
+	}
+	if timer = 704 {
+	speed = 3.5*(1-facing*2);
+	direction = 60*(1-facing*2);
+	}
+	if timer >= 722 && timer <=733 && attack_success = 1 {
+		hittemp = 1;
+	}
+	if timer = 722 {
+	speed = 0;
+	create_hitbox(3,angle_correct(75),1,0,5,5,cfhit4,obj_spark_hit4,1.31 , 1.15 , 4.64 , 27.26,self.id,8,3);
+	hitbox.di = 0;
+	susanoo_fx1 = create_spark ( 0 , 25 , susanoo_fx1_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	susanoo_fx1.snap = self.id;
+	susanoo_fx1.image_alpha = 0.8;
+	susanoo_fx2 = create_spark ( 0 , 25 , susanoo_fx1_2_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	susanoo_fx2.snap = self.id;
+	susanoo_fx2.image_alpha = 1;
+	susanoo_fx2.image_blend = c_black;
+	}
+	if timer = 729 && air > 0 {
+	timer = 723
+	}
+	if timer > 704 && timer < 729 && air = 0 {
+		timer = 729
+	}
+	if timer = 730 {
+	rocks_fx = create_spark ( 28.71  , 0 , rocks_sprite , 0 , 0.1*(1-facing*2)*size , 0.1*size );
+	rocks_fx.snap = self.id;
+	rocks_fx.image_alpha = 1;
+	rocks_fx.depth = 2;
+	if huntersfanglvl <= 1 {
+	create_hitbox(8,angle_correct(75),6,4,5,5,cfhit4,obj_spark_hit4,1.31 , 1.15 , 4.64 , 27.26,self.id,8,3);
+	}
+	if huntersfanglvl = 2 {
+	create_hitbox(8,angle_correct(75),4,0,5,5,cfhit4,obj_spark_hit4,1.31 , 1.15 , 4.64 , 27.26,self.id,8,3);
+	}
+	if (instance_exists(susanoo_fx1)) {with (susanoo_fx1){instance_destroy();}}
+	if (instance_exists(susanoo_fx2)) {with (susanoo_fx2){instance_destroy();}}
+	}
+	if timer = 733 && huntersfanglvl = 2 {
+	if hittemp = 1 {
+	target.x = x+27*(1-facing*2);
+	target.y = y
+	}
+	sound_play(dthrow_snd);
+	screen_shake(5,5);
+	create_hitbox(7,angle_correct(75),5,4,5,6,cfhit4,obj_spark_hit4,0.47 , 0.86 , 27.55 , 10.44,self.id,2,3);
+	hitbox.hit_stun = 20;
+	ddkick_fx2 = create_spark (27 , 0 , ddkick_fx2_sprite , 0.5 , 0.29*(1-facing*2)*size , 0.29*size );
+	ddkick_fx2.snap = self.id;
+	ddkick_fx2.image_alpha = 0.8;
+	ddkick_fx2.depth = depth - 0.1;
+	crater = create_spark (27 , 0 , crater_sprite , 0.5 , 0.4*(1-facing*2)*size , 0.4*size );
+	crater.snap = self.id;
+	crater.image_alpha = 0.8;
+	crater.depth = depth - 0.2;
+	}
+	if ddkick_fx2.image_index >= 7 {
+		ddkick_fx2.image_alpha -= 0.1;
+		crater.image_alpha -= 0.1;
+	}
+	if timer = 8 {
+	sound_play(smash_snd);
+	create_hitbox(7,angle_correct(75),8,0,5,6,cfhit4,obj_spark_hit4,0.79 , 1.12 , 10.15 , 28.42,self.id,8,3);
+	}
+	if timer >= 8 && timer < 16 && attack_success = 1 {
+	dragtemp = 1;
+	}
+	if timer >= 8 && timer < 25 {
+	speed = 8*(1-facing*2);
+	direction = 75*(1-facing*2);
+	}
+	if timer >= 8 && timer < 30 {
+	if dragtemp = 1 {
+	target.x = x+10*(1-facing*2);
+	target.y = y;
+	target.ignore_boundary = 1;
+	}
+	}
+	if timer >= 25 && timer < 100 {
+		speed *= 0.9;
+	}
+	if timer = 16 {
+	create_hitbox(3,angle_correct(75),1,0,5,5,cfhit4,obj_spark_hit4,1.31 , 1.15 , 4.64 , 27.26,self.id,8,3);
+	hitbox.di = 0;
+	susanoo_fx1 = create_spark ( 0 , 25 , susanoo_fx1_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	susanoo_fx1.snap = self.id;
+	susanoo_fx1.image_alpha = 0.8;
+	susanoo_fx2 = create_spark ( 0 , 25 , susanoo_fx1_2_sprite , 0 , 0.29*(1-facing*2)*size , 0.29*size );
+	susanoo_fx2.snap = self.id;
+	susanoo_fx2.image_alpha = 1;
+	susanoo_fx2.image_blend = c_black;
+	}
+	susanoo_fx1.image_angle -= 10*(1-facing*2);
+	susanoo_fx2.image_angle -= 10*(1-facing*2);
+	if timer >= 16 && timer <= 28 && timer mod 3 = 0 {
+	create_hitbox(3,angle_correct(75),1,0,5,5,cfhit4,obj_spark_hit4,1.31 , 1.15 , 4.64 , 27.26,self.id,8,3);
+	hitbox.di = 0;
+	}
+	if timer = 31 && dragtemp = 0 {
+	create_hitbox(7,angle_correct(75),5,5,5,8,cfhit4,obj_spark_hit4,1.31 , 1.15 , 4.64 , 27.26,self.id,8,3);
+	}
+	if timer = 31 && dragtemp = 1 {
+	sound_play(throw_catch);
+	timer = 100;
+	time = 500;
+	target.ignore_boundary = 0;
+    sprite_index = upb_sprite2;
+    image_index=0;
+	if (instance_exists(susanoo_fx1)) {with (susanoo_fx1){instance_destroy();}}
+	if (instance_exists(susanoo_fx2)) {with (susanoo_fx2){instance_destroy();}}
+	}
+	if timer >= 109 && timer <= 500 && air > 0 {
+	after_image ( 6 , c_white , .25 );
+	vspeed += 1.5; 
+	target.x = x+2.61  *(1-facing*2)*size; 
+	target.y = y-58.58 *size; 
+	target.state_type = "flinch"
+	target.sprite_index = target.flinch_sprite;
+	}
+	if timer >= 109 && timer <= 500 && air = 0 {
+	timer = 600;
+	time = 653;
+    sprite_index = upb_land_sprite;
+    image_index=0;
+	speed = 0;
+	}
+	if timer = 600 {
+	sound_play(upb_voice2);
+	sound_play(upb_snd1);
+	sound_play(upb_snd2);
+	sound_play(dthrow_snd);
+	sound_play(upb_snd4);
+	screen_shake(7,7);
+	create_hitbox(10,angle_correct(80),7,7,5,14,cfhit4,obj_spark_hit4,1.32 , 0.31 , -1.45 , 0.29,self.id,8,3);
+	target.x = x;
+	target.y = y;
+	upb_fx1 = create_spark ( 0 , 0 , upb_fx1_sprite , 1 , 0.6*(1-facing*2)*size , 0.6*size );
+	upb_fx1.snap = self.id;
+	upb_fx1.image_alpha = 0.8;
+	upb_fx1.loop = 999;
+	upb_fx1.depth = 2;
+	//upb_fx1.alarm[0] = 50
+	upb_fx2 = create_spark ( 5 , 0 , susanoo_fx2_sprite , 0.9 , 0.3*(1-facing*2)*size , 0.4*size );
+	upb_fx2.snap = self.id;
+	upb_fx2.image_alpha = 0.8;
+	upb_fx2.loop = 999;
+	upb_fx2.depth = 1;
+	rocks_fx = create_spark ( 0 , -5 , rocks_sprite , 0 , 0.24*(1-facing*2)*size , 0.24*size );
+	rocks_fx.snap = self.id;
+	rocks_fx.image_alpha = 1;
+	rocks_fx.depth = 2;
+	//upb_fx2.alarm[0] = 50
+	}
+	if timer >= 632 {
+	upb_fx1.image_alpha -= 0.1;
+	upb_fx2.image_alpha -= 0.1;
+	rocks_fx.image_alpha -= 0.1;
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+	if (instance_exists(susanoo_fx1)) {with (susanoo_fx1){instance_destroy();}}
+	if (instance_exists(susanoo_fx2)) {with (susanoo_fx2){instance_destroy();}}
+    }

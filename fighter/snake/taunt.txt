@@ -1,0 +1,40 @@
+// This is the script for Snake's taunt action.
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0.25;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 240;
+        timer_speed=1;
+        if ai {
+            moveleft = 0
+            moveright = 0
+        }
+}
+state_type = "attack";
+if timer = 12
+    sound_play(box_sound1);
+if image_index >= image_number-image_speed && timer < 100
+    image_speed = 0
+if timer < 200 && timer > 40 && (moveright || moveleft || attacking || taunt || (ai && abs(enemy.x - x) < 30))
+    timer = 200
+if timer = 204
+    image_speed = -0.25
+if timer = 238 {
+    sound_play(box_sound2);
+    image_index = 0
+    create_projectile(1,270,2.75,0.25,2,4,punch1,obj_spark_hit1,0.85,0.85,-3,27,self.id,100,char_custom6);
+    proj.hit_stun = 4;
+}
+if timer = time-2
+    interrupt = 1;    
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

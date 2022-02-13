@@ -1,0 +1,201 @@
+if (state_type = "stand" || state_type = "crouch" || state_type = "run" ){
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0;
+        if !movedown{
+        sprite_index = win2_sprite;
+        image_index=0;
+        timer = 0;
+        time = 67;
+        timer_speed=1;
+        if instance_exists(obj_training){
+        if sussyswappy < 180{
+        sussyswappy=180;
+        }
+        else{
+        sussyswappy=540;
+        }
+        }}
+        if movedown{
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 99;
+        time = 1075;
+        taunt=1;
+     coolfist = instance_create(  x+6.30*(1-facing*2)*size ,y-32.4*size, obj_spark)
+     coolfist.number=-number;
+     coolfist.sprite_index=taunt2_sprite;
+     coolfist.image_index=0;
+     coolfist.image_speed=0;
+     coolfist.image_xscale=0.9*(1-facing*2)*size;
+     coolfist.image_yscale=0.9*size;
+     coolfist.depth=depth-1;
+        /*with(player){
+        if sussysussysussysussyvar>=1 && attack_type = "taunt" && timer >=99{
+        timer = 99;
+        time=1060;
+        }
+        }*/
+        }
+
+}
+switch ( timer )
+      {
+    case 0: image_index = 0; break;
+    case 5: image_index = 1; break;
+    case 10: image_index = 2; break;
+    case 15: image_index = 3; break;
+    case 21: image_index = 4; break;
+    case 27: image_index = 5; break;
+    case 47: image_index = 4; break;
+    case 51: image_index = 3; break;
+    case 55: image_index = 2; break;
+    case 59: image_index = 1; break;
+    case 63: image_index = 0; break;
+    
+    case 100: image_index = 0; break;
+    case 115: image_index = 1; fs_music = tempmus_play2 ( taunt_sound , 956 , 1 ); break;
+    case 130: image_index = 0; break;
+    case 145: image_index = 1; break;
+    case 160: image_index = 0; break;
+    case 175: image_index = 1; break;
+    case 190: image_index = 0; break;
+    case 205: image_index = 1; break;
+
+    case 220: image_index = 0; facing=!facing; break;
+    case 235: image_index = 1; break;
+    case 250: image_index = 0; break;
+    case 265: image_index = 1; break;
+    case 280: image_index = 0; break;
+    case 295: image_index = 1; break;
+    case 310: image_index = 0; break;
+    case 325: image_index = 1; break;
+
+    case 340: image_index = 0; facing=!facing; break;
+    case 355: image_index = 1; break;
+    case 370: image_index = 0; break;
+    case 385: image_index = 1; break;
+    case 400: image_index = 0; break;
+    case 415: image_index = 1; break;
+    case 430: image_index = 0; break;
+    case 445: image_index = 1; break;
+
+    case 460: facing=!facing; break;
+    case 485: image_index = 2; break;
+
+    case 555: with(coolknife){instance_destroy();} with(coolfist2){instance_destroy();} break;
+
+
+    case 575: image_index = 0; break;
+    case 590: image_index = 1; break;
+    case 605: image_index = 0; break;
+    case 620: image_index = 1; break;
+    case 635: image_index = 0; break;
+    case 650: image_index = 1; break;
+    case 665: image_index = 0; break;
+    case 680: image_index = 1; break;
+
+    case 695: image_index = 0; facing=!facing; break;
+    case 710: image_index = 1; break;
+    case 725: image_index = 0; break;
+    case 740: image_index = 1; break;
+    case 755: image_index = 0; break;
+    case 770: image_index = 1; break;
+    case 785: image_index = 0; break;
+    case 800: image_index = 1; break;
+
+    case 815: image_index = 0; facing=!facing; break;
+    case 830: image_index = 1; break;
+    case 845: image_index = 0; break;
+    case 860: image_index = 1; break;
+    case 875: image_index = 0; break;
+    case 890: image_index = 1; break;
+    case 905: image_index = 0; break;
+    case 920: image_index = 1; break;
+
+    case 935: image_index = 0; facing=!facing; break;
+    case 950: image_index = 1; break;
+    case 965: image_index = 0; break;
+    case 980: image_index = 1; break;
+    case 995: image_index = 0; break;
+    case 1010: image_index = 1; break;
+    case 1025: image_index = 0; break;
+    case 1040: image_index = 1; break;
+
+      }
+    if timer = 1069 && taunt=1{
+    timer=114;
+    image_index=0;
+    }
+     
+    if image_index=0{ 
+    coolfist.x=x+6.30*(1-facing*2)*size;
+    coolfist.y=y-32.4*size;
+    }
+    if image_index=2 || (image_index=1 && timer >=460 && timer < 575){ 
+    coolfist.x=x+6.30*(1-facing*2)*size;
+    coolfist.y=y-32.4*size;
+    }
+    if image_index=1 && (timer <460 || timer >= 575){
+    with(coolfist){after_image(4,c_white,0.6);}
+    if (coolfist.x < x+19.8*size && facing=0) || (coolfist.x > x-19.8*size && facing=1){
+    coolfist.x+=2.7*(1-facing*2)*size;
+    }
+    if (coolfist.x >= x+19.8*size && facing=0) || (coolfist.x <= x-19.8*size && facing=1){
+    coolfist.x=x+19.8*(1-facing*2)*size;
+    }
+    if coolfist.y<y-3.6*size{
+    coolfist.y+=5.76*size;
+    }
+    if coolfist.y>=y-3.6*size{
+    coolfist.y=y-3.6*size;
+    }
+    }
+    coolfist.alarm[0]=3;
+    coolfist2.alarm[0]=3;
+    coolknife.alarm[0]=3;
+    if timer = 460{
+     coolknife = instance_create(  x+5.40*(1-facing*2)*size ,y-9*size, obj_spark)
+     //coolknife.number=-number;
+     coolknife.sprite_index=taunt3_sprite;
+     coolknife.image_index=0;
+     coolknife.image_speed=0;
+     coolknife.image_xscale=0.9*(1-facing*2)*size;
+     coolknife.image_yscale=0.9*size;
+     coolknife.depth=depth+2;
+    }
+    if coolknife.y<y && timer <545{
+    coolknife.x+=2.42*(1-facing*2)*size;
+    coolknife.y+=1.8*size;
+    }
+    if timer = 545{
+     coolfist2 = instance_create( x+5.40*(1-facing*2)*size ,y-9*size, obj_spark)
+     coolfist2.number=-number;
+     coolfist2.sprite_index=taunt2_sprite;
+     coolfist2.image_index=0;
+     coolfist2.image_speed=0;
+     coolfist2.image_xscale=0.9*(1-facing*2)*size;
+     coolfist2.image_yscale=0.9*size;
+     coolfist2.depth=depth+1;   
+    }
+    if timer >=545 && timer <549{
+    coolfist2.x+=3.025*(1-facing*2)*size;
+    coolfist2.y+=2.25*size;
+    }
+    if timer >= 551{
+    coolknife.x-=3.025*(1-facing*2)*size;
+    coolknife.y-=2.25*size;
+    coolfist2.x-=3.025*(1-facing*2)*size;
+    coolfist2.y-=2.25*size;
+    }
+
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

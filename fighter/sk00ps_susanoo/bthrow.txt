@@ -1,0 +1,124 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "bthrow";
+image_speed = 0;
+sprite_index = bthrow_sprite;
+image_index=0;
+timer = 0;
+time = 80;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 40
+canceltemp = 0;
+}
+if hitbox.hit = 1 {
+canceltemp = 1;
+}
+if timer < time {
+	switch (timer)
+	{
+	case 3: image_index = 1; target.x = x+21.17 *(1-facing*2)*size; target.y = y-33.94 *size; break;
+	case 9: image_index = 2; target.x = x-6.38 *(1-facing*2)*size; target.y = y-40.90 *size; break;
+	case 15: image_index = 3; target.x = x-16.24*(1-facing*2)*size; target.y = y-38.87 *size; break;
+	case 40: image_index = 4; target.x = x-18.56*(1-facing*2)*size; target.y = y-38.87 *size; break;
+	case 46: image_index = 5; break;
+	case 52: image_index = 6; break;
+	case 55: image_index = 7; break;
+	case 58: image_index = 8; break;
+	case 61: image_index = 9; break;
+	case 64: image_index = 7; break;
+	case 67: image_index = 8; break;
+	case 70: image_index = 9; break;
+	case 72: image_index = 10; break;
+	case 74: image_index = 11; break;
+	case 76: image_index = 12; break;
+	case 78: image_index = 13; break;
+	}
+	if timer >= 40 && timer < 52 {
+	target.state_type = "tumble"
+	target.sprite_index = target.flinch_sprite
+	target.ignore_physics = 1;
+	target.hspeed = 0;
+	}
+	if timer = 51 {
+    facing = 1-facing
+	}
+	if timer = 52 {
+	sound_play(susan_snd1);
+	bthrow_fx = create_spark (25 , 25 , bthrow_fx_sprite , 1 , 0.15*(1-facing*2)*size , 0.15*size );
+	bthrow_fx.snap = self.id;
+	bthrow_fx.image_alpha = 0.8;
+	bthrow_fx.depth = depth - 0.1;
+	create_hitbox(7,angle_correct(20),8,7,5,10,cfhit4,obj_spark_hit4,0.69 , 1.11 , 23.49 , 41.47,self.id,2,3);
+	}
+	if timer >= 52 && timer <= 62 && canceltemp = 1 {
+	
+	//Special Cancels
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1) && megalithlvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_b();
+	}
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup != 1 && (moveleft = 1 || moveright = 1)) {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_sideb();
+	}
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup = 1 && moveleft != 1 && moveright != 1) && huntersfanglvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_upb();
+	}
+	if canceltemp = 1 && attacking != 1 && special =1 && (movedown != 1 && moveup = 1 && moveleft != 1 && moveright != 1) && tflamelvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_downb();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1) && icalamitylvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_ab();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown = 1 && moveup != 1 && moveleft != 1 && moveright != 1) && sthrustlvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_dab();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown != 1 && moveup = 1 && moveleft != 1 && moveright != 1) && bjudgmentlvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_uab();
+	}
+	if canceltemp = 1 && attacking = 1 && special =1 && (movedown != 1 && moveup != 1 && (moveleft = 1 || moveright = 1)) && ddkicklvl > 0 {
+		state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        time = -1;
+        char_sab();
+	}
+	//Special Cancels end
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    facing = 1-facing
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

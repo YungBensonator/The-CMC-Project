@@ -1,0 +1,229 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 93;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+    facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+    facing = 1
+	izanamisndtemp = choose(1,2);
+	if izanamisndtemp = 1 {
+	sound_play(upb_voice1);
+	}
+	if izanamisndtemp = 2 {
+	sound_play(upb_voice2);
+	}
+	speed = 0;
+	special = 1;
+	originaly = y;
+	chargelvl = 0;
+	platstay = 1;
+	nohittemp = 0;
+	dragtemp = 0;
+}
+if timer < 100 {
+speed *= 0.9;
+gravity = 0;
+gravity_lock = 1;
+}
+air_move = 0;
+if timer < time {
+	state_type = "air_attack"
+    switch ( timer )
+	{
+	case 2: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 14: image_index = 3; break;
+	case 20: image_index = 1; break;
+	case 24: image_index = 2; break;
+	case 28: image_index = 3; break;
+	case 32: image_index = 2; break;
+	case 35: image_index = 3; break;
+	case 38: image_index = 4; break;
+	case 41: image_index = 5; break;
+	case 45: image_index = 6; break;
+	case 49: image_index = 7; break;//
+	case 52: image_index = 8; break;
+	case 56: image_index = 9; break;
+	case 59: image_index = 7; break;//
+	case 62: image_index = 8; break;
+	case 65: image_index = 9; break;
+	case 68: image_index = 7; break;//
+	case 71: image_index = 8; break;
+	case 74: image_index = 9; break;
+	case 77: image_index = 7; break;//
+	case 80: image_index = 8; break;
+	case 81: image_index = 9; break;
+	case 84: image_index = 19; break;
+	case 87: image_index = 20; break;
+	case 90: image_index = 21; break;
+	}
+	if timer >= 0 && timer <= 32 && timer mod 12 = 0 {
+	sound_play(upb_snd);
+	wave = instance_create(x+5*(1-facing*2)*size,y,obj_down_impact);
+	wave.image_blend = c_blue;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	duster.depth = 1;
+	duster2 = instance_create(x+5*(1-facing*2),y,obj_dust_effect);
+	duster2.facing = !facing;
+	duster2.depth = 1;
+	}
+	if timer = 2 && !instance_exists(upb_projfx) {
+	upb_projfx = create_spark ( 5 , 65 , upb_proj_sprite , 0.4 , 0*(1-facing*2)*size , 0*size );
+	upb_projfx.snap = self.id;
+	upb_projfx.depth = depth - 0.1;
+	upb_projfx.loop = 999;
+	create_hitbox(5, 90, 6, 3, 15, 7.5, cfhit3, obj_spark_hit3, 1, 1, 5, 65, self.id, 30, 4);
+	hitbox.hit_stun = 20;
+	}
+	if timer >= 2 && timer <= 6 && upb_projfx.image_yscale < 0.29 {
+		upb_projfx.image_xscale += 0.0725*(1-facing*2)*size;
+		upb_projfx.image_yscale += 0.0725*size;
+	}
+	if timer = 12 && (chargelvl = 5 || chargelvl = 6 || chargelvl = 7) {
+	sound_play(upb_snd3);
+	upb_projfx.image_xscale += 0.05*(1-facing*2)*size;
+	upb_projfx.image_yscale += 0.05*size;
+	effect_create_above(ef_ring,upb_projfx.x,upb_projfx.y,0.5,c_blue);
+	}
+	if timer = 35 && special = 1 && chargelvl < 10 {
+	timer = 11;
+	image_index = 1;
+	sound_play(upb_snd);
+	chargelvl += 1;
+	}
+	if timer = 45 {
+	if (instance_exists(upb_projfx)) {with (upb_projfx){instance_destroy();}}
+	sound_play(upb_snd2);
+	if izanamisndtemp = 1 {
+	sound_play(upb_voice3);
+	}
+	if izanamisndtemp = 2 {
+	sound_play(upb_voice4);
+	}
+	if chargelvl < 5 {
+	upb_proj = create_projectile(3, 370, 3, 0, 15, 7.5, cfhit4, obj_spark_hit3, .29, .29, 5, 65, self.id, 30, char_custom3);
+	}
+	if chargelvl = 5 {
+	upb_proj = create_projectile(5, 370, 3, 0, 15, 7.5, cfhit4, obj_spark_hit3, .34, .34, 5, 65, self.id, 30, char_custom3);
+	}
+	if chargelvl = 6 {
+	upb_proj = create_projectile(7, 370, 3, 0, 15, 7.5, cfhit4, obj_spark_hit3, .39, .39, 5, 65, self.id, 30, char_custom3);
+	}
+	if chargelvl >= 7 {
+	upb_proj = create_projectile(9, 370, 3, 0, 15, 7.5, cfhit4, obj_spark_hit3, .44, .44, 5, 65, self.id, 30, char_custom3);
+	}
+	upb_proj.sprite_index = upb_proj_sprite
+	upb_proj.image_speed = 0.5;
+	upb_proj.speed = 4*(1-facing*2);
+	if air = 0 {
+	if moveleft != 1 || moveright != 1 {
+	upb_proj.direction = 330*(1-facing*2);
+	upb_proj.image_angle = 60*(1-facing*2);
+	}
+	if facing = 0 && moveleft = 1 {
+	upb_proj.direction = 300*(1-facing*2);
+	upb_proj.image_angle = 30*(1-facing*2);
+	}
+	if facing = 1 && moveright = 1 {
+	upb_proj.direction = 300*(1-facing*2);
+	upb_proj.image_angle = 30*(1-facing*2);
+	}
+	}
+	if air > 0 {
+	upb_proj.direction = 270*(1-facing*2);
+	upb_proj.mask_index = no_mask;
+	nohittemp = 1;
+	}
+	}
+	if upb_proj.y >= y && timer < 100 && air > 0{
+	timer = 100;
+	if chargelvl < 5 {
+	time = 115;
+	}
+	if chargelvl = 5 {
+	time = 120;
+	}
+	if chargelvl = 6 {
+	time = 130;
+	}
+	if chargelvl >= 7 {
+	time = 140;
+	}
+	sprite_index = launched_sprite;
+	image_index = 0;
+	}
+	if timer = 100 {
+	air_move = 1;
+	if (instance_exists(upb_proj)) {with (upb_proj){instance_destroy();}}
+	screen_shake(5,5);
+	sound_play(cf_explode);
+	upb_proj_expl_fx = instance_create ( x , y , obj_spark );
+	upb_proj_expl_fx.sprite_index = upb_proj_expl_sprite
+	upb_proj_expl_fx.image_xscale = (0.29*size)*(1-facing*2);;
+    upb_proj_expl_fx.image_yscale = (0.29*size);
+	upb_proj_expl_fx.image_speed = 0.3;
+	upb_proj_expl_fx.alarm[0] = 20;
+	upb_proj_expl_fx.loop = 999;
+	}
+	if upb_proj_expl_fx.image_index >= 5 {
+		upb_proj_expl_fx.image_index = 2;
+	}
+	if upb_proj_expl_fx.image_index >= 2 {
+		upb_proj_expl_fx.image_alpha -= 0.1;
+	}
+	if chargelvl < 5 {
+	if timer >= 100 && timer < 105 {
+	speed = 10*(1-facing*2)*size;
+	direction = 90*(1-facing*2);
+	}
+	if timer >= 105 {
+		speed *= 0.9;
+	}
+	}
+	if chargelvl = 5 {
+	if timer >= 100 && timer < 110 {
+	speed = 10*(1-facing*2)*size;
+	direction = 90*(1-facing*2);
+	}
+	if timer >= 110 {
+		speed *= 0.9;
+	}
+	}
+	if chargelvl = 6 {
+	if timer >= 100 && timer < 120 {
+	speed = 10*(1-facing*2)*size;
+	direction = 90*(1-facing*2);
+	}
+	if timer >= 120 {
+		speed *= 0.9;
+	}
+	}
+	if chargelvl >= 7 {
+	if timer >= 100 && timer < 130 {
+	speed = 10*(1-facing*2)*size;
+	direction = 90*(1-facing*2);
+	}
+	if timer >= 130 {
+		speed *= 0.9;
+	}
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+	platstay = 0;
+    }

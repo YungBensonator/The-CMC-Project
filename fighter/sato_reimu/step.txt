@@ -1,0 +1,153 @@
+if(!instance_exists(wall))
+{
+	with (wall3){instance_destroy();}
+}
+			
+
+if ai = 1 and (!instance_exists(obj_training) or (instance_exists(obj_training) and obj_training.ai_type = 5)){
+	
+	if nospam > 0
+	nospam -= 1
+	
+	if !instance_exists(yingyang2) and !offstage and state_type != "attack" and state_type != "air_attack" and enemy > 99 and enemy.percent > 60 and nospam <= 0{
+		if (point_direction(x,y-15,enemy.x,enemy.y-15) <= 30 or point_direction(x,y-15,enemy.x,enemy.y-15) >= 330 )
+		or (point_direction(x,y-15,enemy.x,enemy.y-15) >= 150 and point_direction(x,y-15,enemy.x,enemy.y-15) <= 210 ){
+			nospam = 60
+			go_to_spirit_bomb = 1
+			//state_type = "air_attack"
+			attack_type = "b"
+			char_b();
+		}
+	}
+	
+	else if instance_exists(projectile_box) and !instance_exists(wall) and nospam <= 0{
+		notmine = 1
+		with (projectile_box){
+			if attacker.id != other.id and point_distance(x,x,other.x,other.y) < 50
+			and ( (point_direction(x,y,other.x,other.y-15) <= 20 or point_direction(x,y,other.x,other.y-15) >= 340 )
+		    or (point_direction(x,y,other.x,other.y-15) >= 160 and point_direction(x,y,other.x,other.y-15) <= 200 ) )
+			other.notmine = 2
+		}
+		if notmine = 2 and !offstage and state_type != "attack" and state_type != "air_attack"{
+			nospam = 60
+			go_to_barrier = 1
+			//state_type = "air_attack"
+			attack_type = "b"
+			char_b();
+			
+			
+		}
+		
+		
+	}
+	
+	
+	
+}
+
+
+///////////////////////////////////Crouch shit I stole from mp3
+if ( state_type = "crouch" ){
+	
+	sprite_index = crouch_sprite;
+	image_speed = 0;
+	crouchgetuptimer = min(15,timer)
+	switch (timer){
+		case 0: image_index = 0; break;
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break;
+		case 12: image_index = 4; break;
+		case 15: image_index = 5; break;
+	}
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+	image_speed = 0;
+	crouchgetuptimer -= 1;
+	sprite_index = crouch_sprite;
+	crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+	sprite_index = stand_sprite;
+	image_index = 0;
+	crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+	image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+	image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+	image_index = 2;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 9 ){
+	image_index = 3;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 12 ){
+	image_index = 4;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 15 ){
+	image_index = 5;
+}
+
+
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+	crouchgetuptimer = 0;
+	crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch shit stolen from mp3
+
+
+if air = 0 {
+	if(floattime < maxfloattime ){floattime += 0.25;} 
+}
+
+maxfloattime = 300
+
+if floattime > maxfloattime
+floattime = maxfloattime
+
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){   
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+}
+
+MeterHud.hudalpha = obj_game_control.hud_cover[number-1];
+MeterHud.sprite_index = meter_sprite;
+if(floattime >= maxfloattime){MeterHud.image_index = 55;} else if(floattime <= 0){MeterHud.image_index = 0;} else {MeterHud.image_index = floattime*56/maxfloattime;}
+MeterHud.image_speed = 0;
+
+/////////////////Meter Stop/////////////////////////////////////
+
+
+
+///////////////////////////////////////////// my edits stop
+
+if state_type = "run" and sprite_index = run_sprite
+{
+if runtimer = 1
+{
+sound_play(upb_sound);
+}
+}
+
+if ( cantupb > 0 && ( state_type = "stand" || state_type = "land" || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" || state_type = "out" ) )
+{
+cantupb = 0;
+}

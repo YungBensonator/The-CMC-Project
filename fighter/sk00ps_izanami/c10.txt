@@ -1,0 +1,69 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump"
+  {
+    state_type = "air_attack";
+    attack_type = "c10";
+    timer = 0;
+    time = 181;
+    sprite_index = super2end_sprite;
+    image_speed = 0;
+    image_index = 0;
+	vspeed = 0;
+	air_move = 0;
+	image_angle = 0;
+	intangible = 1;
+	no_flash = 1;
+	playtemp = 1;
+	spark = instance_create ( 0 , 0 , obj_camerazoom );
+	spark.camera_l = x - 8;
+	spark.camera_r = x + 8;
+	spark.camera_u = y - 4 - actual_height;;
+	spark.camera_d = y + 4;
+	spark.camera_boundary_zoom = 10;
+	spark.alarm[0] = 162;
+}
+
+		speed = 0;
+		gravity = 0;
+		gravity_lock = 1;
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 6: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 24: image_index = 4; break;
+	case 30: image_index = 5; break;
+	case 36: image_index = 6; break;
+	case 160: image_index = 7; break;
+	case 166: image_index = 8; break;
+	case 172: image_index = 9; break;
+	case 178: image_index = 10; break;
+    }
+	if timer = 24 {
+	sound_play(choose(timestopend_voice1,timestopend_voice2));
+	}
+	if timer = 160 {
+	izanamitimestop.alarm[0] = 1
+	izanamitimestoptemp = 0;
+	instance_create(0,0,obj_flashscreen)
+	sound_play(izanami_snd3);
+	spark = instance_create(x,y-27*size,obj_spark_shockwave)
+	spark.image_xscale = 1*size
+	spark.image_yscale = 1*size
+	spark.image_blend = c_black
+	spark.image_alpha = 0.7
+	enemy.state_type = "tumble"
+	}
+  }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	intangible = 0;
+	no_flash = 0;
+}

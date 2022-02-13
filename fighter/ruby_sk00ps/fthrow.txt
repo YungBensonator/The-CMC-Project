@@ -1,0 +1,123 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "fthrow";
+    timer = 0;
+    time = 64;
+    sprite_index = fthrow_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.timer_speed = 0;
+    target.alarm[0] = 100;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; sound_play(rubyswing3); break;
+	case 8: image_index = 4; break;
+	case 10: image_index = 5; break;
+	case 12: image_index = 6; break;
+	case 14: image_index = 7; break;
+	case 16: image_index = 8; sound_play(swingsnd3); break;
+	case 19: image_index = 9; break;
+	case 22: image_index = 10; break;
+	case 25: image_index = 11; break;
+	case 28: sprite_index = fthrow2_sprite; image_index = 0; break;
+	case 31: image_index = 1; break;
+	case 34: image_index = 2; break;
+	case 37: image_index = 3; sound_play(rubyswing3); break;
+	case 40: image_index = 4; break;
+	case 43: image_index = 5; break;
+	case 46: image_index = 6; break;
+	case 49: image_index = 7; break;
+	case 52: image_index = 8; break;
+	case 55: image_index = 9; break;
+	case 58: image_index = 10; break;
+	case 61: image_index = 11; break;
+    }
+	if timer = 6 {
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_yscale *= 0.9*size;
+	sound_play(choose(attack_voice4,attack_voice5,attack_voice6));
+	sound_play(rubyswing2);
+	stilt_eff = instance_create(x+6*(1-facing*2),y,obj_spark)
+	stilt_eff.sprite_index = stilt_fx
+	stilt_eff.image_xscale = 0.08*(1-facing*2)*size;
+	stilt_eff.image_yscale = 0.08*size;
+	stilt_eff.image_speed = 0
+	stilt_eff.image_alpha = 1
+	stilt_eff.depth = depth - 0.1
+	stilt_eff.snap = self.id
+	create_hitbox(3,30+facing*120,1,0,19,5,slash3,obj_spark_slash3,1,1,20,0,self.id,4,3);
+	proj.x = target.x
+	proj.y = target.y-5*size;
+	}
+	if timer >= 8 {
+	stilt_eff.image_alpha -= 0.2;
+	}
+	if timer = 16 {
+	create_hitbox(3,30+facing*120,3,0,19,5,punch3,obj_spark_hit3,1,1,20,0,self.id,4,3);
+	proj.x = target.x
+	proj.y = target.y-5*size;
+	}
+	if timer = 34 {
+	gunblast_eff = instance_create(x+20*(1-facing*2)*size,y-30*size,obj_spark)
+	gunblast_eff.sprite_index = gunblast_fx
+	gunblast_eff.image_xscale = 0.08*(1-facing*2)*size;
+	gunblast_eff.image_yscale = 0.08*size;
+	gunblast_eff.image_speed = 0.7
+	gunblast_eff.image_alpha = 1
+	gunblast_eff.depth = depth - 0.1
+	gunblast_eff.snap = self.id
+	spark = instance_create(x+20*(1-facing*2)*size,y-30*size,obj_spark_shockwave);
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.8;
+	spark.image_xscale *= 0.1*size;
+	spark.image_yscale *= 0.4*size;
+	sound_play(choose(fthrow_voice1,fthrow_voice2,fthrow_voice3,no_voice));
+	sound_play(rubydash);
+	create_hitbox(3,30+facing*120,1,0,19,5,slash3,obj_spark_slash3,1,1,20,0,self.id,4,3);
+	proj.x = target.x
+	proj.y = target.y-5*size;
+	}
+	if timer = 37 {
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_yscale *= 0.9*size;
+	sound_play(choose(attack_voice4,attack_voice5,attack_voice6));
+	sound_play(rubyswing2);
+	stilt_eff = instance_create(x+6*(1-facing*2),y,obj_spark)
+	stilt_eff.sprite_index = stilt_fx
+	stilt_eff.image_xscale = -0.08*(1-facing*2)*size;
+	stilt_eff.image_yscale = 0.08*size;
+	stilt_eff.image_speed = 0
+	stilt_eff.image_alpha = 1
+	stilt_eff.depth = depth - 0.1
+	stilt_eff.snap = self.id
+	create_hitbox(3,30+facing*120,6,4,19,5,slash3,obj_spark_slash3,1,1,20,0,self.id,4,3);
+	proj.x = target.x
+	proj.y = target.y-5*size;
+	}
+	if timer >= 39 {
+	stilt_eff.image_alpha -= 0.2;
+	}
+	if timer < 37 {
+		target.speed = 0;
+		target.gravity = 0;
+		target.gravity_lock = 1;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

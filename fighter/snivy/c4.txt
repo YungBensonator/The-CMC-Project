@@ -1,0 +1,82 @@
+// Snivy leech seed
+absorb2 = 1;
+
+
+
+if ( captured )
+{
+stick=1
+depth = target.depth - 1;
+if ( target . attack_type == "final_smash")
+  {
+  instance_create ( x , y , obj_spark_effect );
+  instance_destroy();
+  exit;
+  }
+if ( !instance_exists ( attacker ) || !instance_exists ( target ) )
+  {
+  instance_create ( x , y , obj_spark_effect );
+  instance_destroy();
+  exit;
+  }
+if ( target . state_type == "shielding") && timer < 2
+{
+  instance_create ( x , y , obj_spark_effect );
+  instance_destroy();
+  exit;
+}
+x = target . x;
+y = target . y - 15 * target . size;
+
+if ( target . facing != last_facing )
+  {
+  last_facing = target . facing;
+  flop += 1;
+  }
+
+if ( flop >= 4 )
+  {
+  instance_create ( x , y , obj_spark_effect );
+  instance_destroy();
+  exit;
+  }
+
+if ( timer mod 32 == 30 )
+  {
+  sound_play ( attacker.leech_sound );
+  instance_create ( x , y , obj_spark_effect );
+  attacker.id.damage_given+=1;
+  attacker.percent -= 1;
+  if ( attacker.percent < 0 ) attacker.percent = 0;
+  target.percent += 1;
+  }
+
+exit;
+}
+
+image_index = timer mod 4;
+image_speed = 0;
+
+if ( target == -1 || target == attacker )
+  {
+
+  if ( timer mod 3 == 0 )
+    {
+    create_homing_bubble ( 0.6 , 0.6 , 0 , 0 , self.id  , 2 );
+    }
+  }
+  else
+  {
+  captured = 1;
+  last_facing = target . facing;
+  flop = 0;
+  image_index = 0;
+  image_speed = 0.25;
+  timer = 0;
+  time = 320;
+  parry_nodestroy = 1;
+  exit;
+  }
+
+if ( vspeed < 1 ) vspeed += 0.0625;
+if ( vspeed == 1 ) instance_destroy();

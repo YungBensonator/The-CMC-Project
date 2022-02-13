@@ -1,0 +1,129 @@
+if ( time != -1 )
+  {
+state_type = "attack";
+attack_type = "hold";
+timer = 0;
+time = -1;
+hspeed = 0;
+vspeed = 0;
+timer_speed=1;
+target.attack_type = "none"
+    pummel = -1;
+  }
+if ( attacking && pummel == -1 )
+ {
+   attacking = 0;
+   pummel = 0;
+ }
+if ( pummel == -1 )
+ {
+if facing = 0 
+{
+    if( moveright = 1)
+	{
+		attack_type = "fthrow";
+		grabtemp = 0;
+	}
+   else 
+	{
+	if (moveleft = 1)
+	{
+		attack_type = "bthrow";
+		grabtemp = 0;
+	}
+	}
+}
+		
+if facing = 1 
+{
+    if (moveleft = 1)
+	{
+		attack_type = "fthrow";
+		grabtemp = 0;
+	}
+   else
+	{ 
+	if (moveright = 1)
+	{
+		attack_type = "bthrow";
+		grabtemp = 0;
+	}
+	}
+}
+
+
+	if (moveup = 1)
+	{	
+		attack_type = "uthrow";
+		grabtemp = 0;
+	}
+	if (movedown = 1)
+	{
+		attack_type = "dthrow";
+		grabtemp = 0;
+		movedown = 0; 
+	}
+  }
+else
+ { 
+pummel += 1;
+    if ( pummel == 10 ) // replace 5 with the frame in which we pummel
+   {
+    temp_timer = target.timer;
+    temp_time = target.time;
+    create_hitbox ( 1 , 361 , 1 , 1 , 4 , 6 , punch1 , obj_spark_hit1 , 0.8 , 0.8 , 15 , 17 , self.id , 2 , 0 );
+    create_hitbox ( 1 , 361 , 1 , 1 , 4 , 6 , punch1 , obj_spark_hit1 , 0.8 , 0.8 , 44 , 17 , self.id , 2 , 0 );
+	//image_speed = 0;
+   }
+    if ( pummel == 11 ) // replace 6 with the frame after the one in which we pummel
+   {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+   }
+    if ( pummel >= 17 )
+   {
+    sprite_index = grab_sprite;
+	//image_speed = 0;
+	//image_index = 3;
+   }
+    if ( pummel >= 30 ) // replace 15 with the frame in which pummel ends and we get back to hold
+   {
+    pummel = -1;
+   }
+ }
+if target.state_type != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }
+
+  hspeed = 0;
+  vspeed = 0;
+  gravity = 0;
+  gravity_lock = 1;
+  
+  if ( air >= 0 && temp != -1 && (special = 1) && nbtimer = 0  )
+      {
+		  special = 0;
+		  nbtimer = 17;
+		blaster = create_projectile ( 100 , 0 , 4 , 0 , 6 , 10 , shock2 , obj_spark_shock , xsize+0.002 , ysize+0.002 , -60 , 85 , self.id , 9999 , gasterblaster );
+		blaster.sprite_index = blaster_sprite;
+		blaster.facing = facing;
+		blaster.image_index = 0;
+		blaster.image_speed = 0.2 ;
+		blaster.hspeed = 6*(1-facing*2)*size;
+		blaster.vspeed = 10;
+      }
+	  
+if (countertemp = 1)
+{
+		attack_type = "fthrow";
+		grabtemp = 0;
+		intangible = 0;
+}
+if (countertemp > 1)
+{
+	countertemp = 0;
+}

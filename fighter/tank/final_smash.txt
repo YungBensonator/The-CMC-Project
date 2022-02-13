@@ -1,0 +1,172 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "shielding" || state_type =="jump")
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = final_smash_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 302;
+  timer_speed = 1;
+  intangible=1
+  finalsmashedcounter+=1;
+
+  spark = instance_create ( 0 , 0 , obj_camerazoom );
+  spark.camera_l = x - 5.44;
+  spark.camera_r = x + 21.44;
+  spark.camera_u = y - 59.28 - actual_height;
+  spark.camera_d = y + 67.28;
+  spark.camera_boundary_zoom = 80;
+  spark.alarm[0] = 54;
+
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 54;
+  sound_play(fs1_sound)
+  }
+    switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 4: image_index = 1; sound_play(fs2_sound); break;
+    case 8: image_index = 2; break;
+    case 12: image_index = 3; break;
+    case 16: image_index = 4; break;
+    case 20: image_index = 5; break;
+    case 24: image_index = 6; break;
+    case 28: image_index = 7; break;
+    case 32: image_index = 8; sound_play(final_charge_sound); break;
+    case 254: image_index = 7; sound_play(fs2_sound); break;
+    case 260: image_index = 6; break;
+    case 266: image_index = 5; break;
+    case 272: image_index = 4; break;
+    case 278: image_index = 3; break;
+    case 284: image_index = 2; break;
+    case 290: image_index = 1; break;
+    case 296: image_index = 0; break;
+      }
+
+
+  spark.camera_l = x - 5.44;
+  spark.camera_r = x + 21.44;
+  spark.camera_u = y - 59.28 - actual_height;
+  spark.camera_d = y + 67.28;
+  
+  vspeed=0;
+  gravity=0;
+  gravity_lock=1;
+  fast_fall=0;
+  fast_fall_temp=0;
+  air_move=0;
+
+
+  if timer = 36{
+  sound_play(taunt_sound);
+  preludetodeath1 = instance_create(x+15.96*(1-facing*2)*size,y-34.44*size,obj_spark);
+  preludetodeath1.sprite_index = fs_flash;
+  preludetodeath1.image_xscale = 0.3 * size;
+  preludetodeath1.image_yscale = 0.3 * size;
+  preludetodeath1.image_speed = 1;
+  preludetodeath1.image_index = 0;
+  preludetodeath1.snap=self.id;
+  preludetodeath1.depth=depth-1;
+  preludetodeath2 = instance_create(x+18.76*(1-facing*2)*size,y-100.24*size,obj_spark);
+  preludetodeath2.sprite_index = fs_flash2;
+  preludetodeath2.image_xscale = 0.1 * size;
+  preludetodeath2.image_yscale = 0.1 * size;
+  preludetodeath2.image_speed = 1;
+  preludetodeath2.image_index = 0;
+  preludetodeath2.snap=self.id;
+  preludetodeath2.depth=depth-1;
+  preludetodeath3 = instance_create(x+22.40*(1-facing*2)*size,y-100.24*size,obj_spark);
+  preludetodeath3.sprite_index = fs_flash2;
+  preludetodeath3.image_xscale = 0.1 * size;
+  preludetodeath3.image_yscale = 0.1 * size;
+  preludetodeath3.image_speed = 1;
+  preludetodeath3.image_index = 0;
+  preludetodeath3.snap=self.id;
+  preludetodeath3.depth=depth-1;
+  }
+
+
+
+
+  if timer >= 54 && timer <254 && !instance_exists(duster) {
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.depth=depth-1;
+    duster.image_xscale=0.6*(1-facing*2)*size;
+    duster.image_yscale=0.35*(1-facing*2)*size;
+  }
+
+  if timer = 54 {
+  sound_play(final_beam_sound);
+  sound_stop(final_charge_sound);
+  bigbeamu=create_projectile(1,29+122*facing,3,0,0,1,blitztank_beam_hit_sound_3,obj_spark_special2,2.6 , 2.2 , 31.84 , 34.72, self.id, 200, char_custom2);
+  bigbeamu.alarm[0]=200;
+  bigbeamu.tanker=self.id;
+  bigbeamu.maxtime=200;
+  bigbeamu.sprite_index=beam2_sprite;
+  bigbeamu.di=0;
+  bigbeamu.sdi=0;
+  bigbeamu.image_speed=0.5;
+  bigbeamu.depth=depth-1;
+  bigbeamu.image_alpha=0.9;
+  bigbeamu.hit_stun=12*size;
+  bigbeamu.truetanktime=self.id;
+  bigbeamu.ungrazable = 1;
+  if ai && global.gs_rules = "Challenge"{
+  bigbeamu.damage=15*size;
+  bigbeamu.modetemp=1;
+  }
+  }
+
+  bigbeamu.x=x+31.84*(1-facing*2)*size;
+  bigbeamu.y=y-34.72*size;
+  if timer < 246{
+  if bigbeamu.image_index>=17{
+  bigbeamu.image_index=5;
+  }
+  if timer = 242 && ai && global.gs_rules = "Challenge"{
+  beamer=create_projectile(100,77+26*facing,7,10,0,60,shock3,obj_spark_special2,999 , 999 , 31.84 , 34.72, self.id, 4, no_script);
+  beamer.image_alpha=0;
+  beamer.sprite_index=beam2_sprite;
+  beamer.image_speed=0;
+  beamer.image_index=17;
+  beamer.alarm[0]=4;
+  beamer.ungrazable = 1;
+  bigbeamu.hit=2;
+  }
+  if timer = 242 && (!ai || (ai && global.gs_rules != "Challenge") ){
+  bigbeamu.bkb=6*size;
+  bigbeamu.kbg=6.8*size;
+  bigbeamu.damage=1.5*size;
+  bigbeamu.sfx=shock3;
+  bigbeamu.hitlag_frames=60;
+  bigbeamu.image_xscale=31*(1-facing*2)*size;
+  bigbeamu.image_yscale=24*size;
+  }
+  }
+  if timer =246{
+  bigbeamu.image_index=8;
+  bigbeamu.hit=2
+  }
+  if timer >=246{
+  bigbeamu.image_alpha-=0.1;
+  }
+
+  beamer.proj_destroy=0;
+  bigbeamu.proj_destroy=0;
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  final_lasts = 900;
+  timer = 0;
+  time = -1;
+  }

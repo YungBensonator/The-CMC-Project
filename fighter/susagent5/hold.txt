@@ -1,0 +1,108 @@
+if ( time != -1 )
+  {
+    state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    sprite_index = grab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.attack_type = "none"
+    timer_speed=1;
+    pummel = -1;
+  }
+    
+target.timer_speed=1;
+if ( attacking && pummel == -1 )
+ {
+   attacking = 0;
+   pummel = 0;
+   image_speed = 0;
+   image_index = 0;
+ }
+if ( pummel == -1 )
+ {
+if facing = 0 {
+    if moveright = 1
+    attack_type = "fthrow";
+    else if moveleft = 1
+    attack_type = "bthrow";
+    target.facing = 0
+    }
+if facing = 1 {
+    if moveleft = 1
+    attack_type = "fthrow";
+    else if moveright = 1
+    attack_type = "bthrow";
+    target.facing = 0
+    }
+if moveup = 1 
+    attack_type = "uthrow";
+if movedown = 1 {
+    attack_type = "dthrow";
+    movedown = 0; }
+ }
+else
+ { 
+pummel += 1;
+    if ( pummel == 8 ) // replace 5 with the frame in which we pummel
+   {
+    temp_timer = target.timer;
+    temp_time = target.time;
+    sound_play2 (punch2);
+    snatchedspark.image_xscale=0.7*(1-facing*2)*size;
+    snatchedspark.image_yscale=0.7*size;
+    create_projectile ( 1 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_special1 , 0.89 , 1.00 , 15.30 , 13.50 , self.id , 2 , 0 );
+    proj.x=target.x;
+    proj.y=target.y-(target.actual_height/2);
+   }
+    if ( pummel == 9 ) // replace 6 with the frame after the one in which we pummel
+   {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+   }
+    if ( pummel = 14 )
+   {
+    sprite_index = grab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    snatchedspark.image_xscale=0.9*(1-facing*2)*size;
+    snatchedspark.image_yscale=0.9*size;
+   }
+   
+   if ( pummel >= 15 ) // replace 15 with the frame in which pummel ends and we get back to hold
+   {
+    pummel = -1;
+   }
+ }
+if target.state_type != "grabbed"  {
+    target.timer=0;
+    target.time=15;
+    target=0;
+    state_type = "flinch";
+    time = 15;
+    timer = 0;
+    pummel=-1;}
+
+else{
+stabspark[0].alarm[0]=3;
+     stabspark[1].alarm[0]=3;
+     stabspark[2].alarm[0]=3;
+     snatchedspark.alarm[0]=3;
+     target.x=stabspark[0].x+44.1*(1-facing*2)*size;
+     target.y=y-18.90*size+(target.actual_height/2);
+     if !instance_exists(snatchedspark){
+     snatchedspark = instance_create( stabspark[0].x+31.5*(1-facing*2)*size,stabspark[0].y, obj_spark)
+     snatchedspark.number=-number;
+     snatchedspark.sprite_index=grabeff2_sprite;
+     snatchedspark.image_index=0;
+     snatchedspark.image_speed=0;
+     snatchedspark.image_xscale=0.9*(1-facing*2)*size;
+     snatchedspark.image_yscale=0.9*size;
+     snatchedspark.depth=depth-2;
+     }
+}

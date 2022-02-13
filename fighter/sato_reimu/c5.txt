@@ -1,0 +1,46 @@
+priority = 5
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+no_clash = 1
+proj_destroy = 0;
+//sprite_index = -1;
+
+
+
+if (!instance_exists(proj1))
+{
+	sound_play(b_sound)
+    proj1 = instance_create(x+12-facing*24,y-10,obj_spark)
+    proj1.image_xscale = (0.9-facing*1.8)*size
+    proj1.image_yscale = 0.9*size
+    proj1.image_speed = 0.15
+    proj1.snap = self.id
+    proj1.x_snap = size*(12-facing*24)
+    proj1.y_snap = 10*size
+	proj1.sprite_index = attacker.id.yingyang2_sprite;
+	proj1.alarm[0] = alarm[0];
+	rotatenumber = 1;
+	if(hspeed > 0)
+	{proj1.image_xscale = 0.5;}
+	if(hspeed < 0)
+	{proj1.image_xscale = -0.5;}
+	proj1.image_yscale = 0.5;
+	proj1.x = x;
+	proj1.y = y;
+}
+
+if(timer > 1)
+{
+	rotatenumber += 1;
+	if(hspeed > 0)
+	{proj1.image_xscale = 0.5;}
+	if(hspeed < 0)
+	{proj1.image_xscale = -0.5;}
+	proj1.image_yscale = 0.5;
+	proj1.x = x;
+	proj1.y = y;
+}
+
+if(hspeed = 0){proj1.sprite_index = -1}
+
+proj1.image_angle = rotatenumber-facing*(rotatenumber*2)

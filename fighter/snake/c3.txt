@@ -1,0 +1,38 @@
+moving_object = 1;
+if !on_floor && !on_platform && hit = 0 {     
+    if vspeed < 6
+    vspeed += 0.25
+    }
+else {                  
+    if hit < 2 && (vspeed > 0 || timer >= time+1) {
+        spark = instance_create(x,y,obj_spark_explode1)
+        spark.image_xscale *= 1.2;
+        spark.image_yscale = spark.image_xscale;
+	create_projectile ( 14 , 90 , 5 , 7.2 , 15 , 8 , explodehit3,obj_spark_fire1 , 1.25 , 1.25 , 0 , 0 , attacker.id , 6, -1 )
+        sound_play(snake.grenade_explode_sound)
+        instance_destroy() }
+    }
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.usmash_proj_sprite
+    hspeed = 0.25 - attacker.id.facing*.5
+    vspeed = -6 - attacker.smash_charge/20
+    image_speed = 0;
+    image_index =0;
+    visible=1
+    snake = attacker.id
+    }
+if abs(vspeed) < 1 && hit = 0      
+    timer += 1
+if collision_point(x+sign(hspeed),y,obj_wall,1,1)    
+    hspeed = -hspeed*0.8
+if hit = 0 {
+    if vspeed > 0.5
+        image_index = 1
+    }
+if frac(timer/5) = 0
+effect_create_below(ef_smoke,x,y,0,c_white)
+if hit = 1 {
+    sound_play(snake.grenade_explode_sound)
+    spark = instance_create(x,y,obj_spark_explode1)
+    hit = 2
+}

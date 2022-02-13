@@ -1,0 +1,42 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" )
+  {
+    state_type = "attack";
+    attack_type = "taunt";
+    timer = 0;
+    time = 65;
+    sprite_index = taunt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	sound_play(taunt_voice);
+	}
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 20: image_index = 4; break;
+	case 25: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 35: image_index = 7; break;
+	case 40: image_index = 8; break;
+	case 45: image_index = 9; break;
+	case 50: image_index = 10; break;
+	case 55: image_index = 1; break;
+	case 60: image_index = 0; break;
+      }
+	if timer = 51 && taunt {
+		timer = 9;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

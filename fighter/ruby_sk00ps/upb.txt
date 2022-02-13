@@ -1,0 +1,411 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+    state_type = "air_attack";
+    attack_type = "upb";
+    timer = 0;
+    time = 37;
+    sprite_index = upb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    air_move = 0;
+	movetemp = 0
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 8: image_index = 3; break;
+	case 11: image_index = 4; break;//
+	case 16: image_index = 5; break;
+	case 20: image_index = 6; break;
+	case 22: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 28: image_index = 9; break;
+	case 30: image_index = 10; break;
+	//case 35: image_index = 11; break;
+    }
+	if ( timer = 8 )
+      {
+	sound_play(choose(rubygunblast1,rubygunblast2,rubygunblast3,no_voice));
+	sound_play(rubydash);
+	create_hitbox(5,43+facing*94,5,9.5,19,9,punch3,obj_spark_hit4,1,1,20,35,self.id,3,2);
+	hitbox.charge_dmg = 0.8;
+	hitbox.charge_hitlag = 1.3;
+	hitbox.shake_type = 1;
+	hitbox.shake_ampl = 0.7;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	gunblast_eff = instance_create(x-20*(1-facing*2),y-20,obj_spark)
+	gunblast_eff.sprite_index = gunblast_fx
+	gunblast_eff.image_xscale = -0.08*(1-facing*2)*size;
+	gunblast_eff.image_yscale = 0.08*size;
+	gunblast_eff.image_speed = 0.7
+	gunblast_eff.image_alpha = 1
+	gunblast_eff.depth = depth - 0.1
+	gunblast_eff.snap = self.id
+	gunblast_eff.image_angle = 50*(1-facing*2);
+	spark = instance_create(x-13*(1-facing*2)*size,y-13*size,obj_spark_shockwave);
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.8;
+	spark.image_xscale *= 0.2*size;
+	spark.image_yscale *= 0.8*size;
+    }
+	if timer >= 8 && timer <= 19 {
+		speed = 10*(1-facing*2);
+		direction = 60*(1-facing*2);
+		image_alpha -= 0.2;
+		gravity_lock = 1;
+		gravity = 0;
+	}
+	if timer >= 8 && timer <= 19 && timer mod 2 = 0 {
+        petals2 = instance_create(x-20*(1-facing*2),y,obj_spark)
+        petals2.sprite_index = choose(petal_fx2,petal_fx3)
+        petals2.image_xscale = size*0.2
+        petals2.image_yscale = size*0.2
+        petals2.image_speed = 0.4
+        petals2.image_alpha = 1
+        petals2.depth = 1
+        petals2.snap = 0
+}
+	if timer = 19 {
+		speed = 0.5;
+	}
+	if timer >= 18{
+		image_alpha +=0.2;
+	}
+	if timer = 20 {
+		speed = 0.3;
+	}
+	if timer = 21 {
+		speed = 0;
+	}
+	if timer >= 21 && timer <= 30 {
+		speed = 0;
+		gravity = 0;
+		gravity_lock = 1;
+		if attacking || smash {
+			interrupt = 1
+			falltemp = 1;
+		image_alpha = 1;
+		}
+	}
+	//go diagonally up
+	if timer >= 21 && timer <= 30 && (special && moveup) {
+		sound_stop(rubygunblast1)
+		sound_stop(rubygunblast2)
+		sound_stop(rubygunblast3)
+		timer = 200
+		time = 237
+		image_alpha = 1;
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+	}
+	//go left/right
+	if timer >= 21 && timer <= 30 && (special && !moveup)  {
+		sound_stop(rubygunblast1)
+		sound_stop(rubygunblast2)
+		sound_stop(rubygunblast3)
+		timer = 100
+		time = 133
+		image_alpha = 1;
+		sprite_index = upb_sprite2;
+		image_index = 0;
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+	}
+	switch ( timer )
+      {
+	case 102: image_index = 1; break;
+	case 104: image_index = 2; break;
+	case 108: image_index = 3; break;
+	case 111: image_index = 4; break;//
+	case 116: image_index = 5; break;
+	case 125: image_index = 6; break;
+	case 127: image_index = 7; break;
+	case 129: image_index = 8; break;
+	//case 35: image_index = 11; break;
+    }
+	if ( timer = 104 )
+      {
+	sound_play(choose(rubygunblast1,rubygunblast2,rubygunblast3,no_voice));
+	sound_play(rubydash);
+	create_hitbox(5,43+facing*94,5,9.5,19,9,punch3,obj_spark_hit4,1,1,20,15,self.id,3,2);
+	hitbox.charge_dmg = 0.8;
+	hitbox.charge_hitlag = 1.3;
+	hitbox.shake_type = 1;
+	hitbox.shake_ampl = 0.7;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	gunblast_eff = instance_create(x-20*(1-facing*2),y-20,obj_spark)
+	gunblast_eff.sprite_index = gunblast_fx
+	gunblast_eff.image_xscale = -0.08*(1-facing*2)*size;
+	gunblast_eff.image_yscale = 0.08*size;
+	gunblast_eff.image_speed = 0.7
+	gunblast_eff.image_alpha = 1
+	gunblast_eff.depth = depth - 0.1
+	gunblast_eff.snap = self.id
+	spark = instance_create(x-13*(1-facing*2)*size,y-13*size,obj_spark_shockwave);
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.8;
+	spark.image_xscale *= 0.2*size;
+	spark.image_yscale *= 0.8*size;
+    }
+	if timer >= 104 && timer <= 112 {
+		speed = 10*(1-facing*2);
+		direction = 0*(1-facing*2);
+		image_alpha -= 0.2;
+		gravity_lock = 1;
+		gravity = 0;
+	}
+	if timer >= 104 && timer <= 112 && timer mod 2 = 0 {
+        petals2 = instance_create(x-20*(1-facing*2),y,obj_spark)
+        petals2.sprite_index = choose(petal_fx2,petal_fx3)
+        petals2.image_xscale = size*0.2
+        petals2.image_yscale = size*0.2
+        petals2.image_speed = 0.4
+        petals2.image_alpha = 1
+        petals2.depth = 1
+        petals2.snap = 0
+}
+	if timer = 112 {
+		speed = 0.5;
+	}
+	if timer >= 111{
+		image_alpha +=0.2;
+	}
+	if timer = 113 {
+		speed = 0.3;
+	}
+	if timer = 114 {
+		speed = 0;
+	}
+	if timer >= 114 && timer <= 123 {
+		speed = 0;
+		gravity = 0;
+		gravity_lock = 1;
+		if attacking || smash {
+			interrupt = 1
+			falltemp = 1;
+		image_alpha = 1;
+		}
+	}
+	if timer >= 114 && timer <= 123 && special && !moveup && movetemp = 0 {
+		timer = 300
+		time = 333
+		image_alpha = 1;
+		sprite_index = upb_sprite2;
+		image_index = 0;
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+	movetemp = 1;
+		sound_stop(rubygunblast1)
+		sound_stop(rubygunblast2)
+		sound_stop(rubygunblast3)
+	}
+	if timer >= 114 && timer <= 123 && (special && moveup) {
+		timer = 200
+		time = 237
+		sprite_index = upb_sprite;
+		image_index = 0;
+		image_alpha = 1;
+		if ( moveright )
+		facing = 0;
+		if ( moveleft )
+		facing = 1;
+		sound_stop(rubygunblast1)
+		sound_stop(rubygunblast2)
+		sound_stop(rubygunblast3)
+	}
+	switch ( timer )
+      {
+	case 202: image_index = 1; break;
+	case 204: image_index = 2; break;
+	case 208: image_index = 3; break;
+	case 211: image_index = 4; break;//
+	case 216: image_index = 5; break;
+	case 220: image_index = 6; break;
+	case 222: image_index = 7; break;
+	case 224: image_index = 8; break;
+	case 228: image_index = 9; break;
+	case 230: image_index = 10; break;
+	//case 35: image_index = 11; break;
+    }
+	if ( timer = 208 )
+      {
+	sound_play(choose(rubygunblast1,rubygunblast2,rubygunblast3,no_voice));
+	sound_play(rubydash);
+	create_hitbox(5,43+facing*94,5,9.5,19,9,punch3,obj_spark_hit4,1,1,20,35,self.id,3,2);
+	hitbox.charge_dmg = 0.8;
+	hitbox.charge_hitlag = 1.3;
+	hitbox.shake_type = 1;
+	hitbox.shake_ampl = 0.7;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	gunblast_eff = instance_create(x-20*(1-facing*2),y-20,obj_spark)
+	gunblast_eff.sprite_index = gunblast_fx
+	gunblast_eff.image_xscale = -0.08*(1-facing*2)*size;
+	gunblast_eff.image_yscale = 0.08*size;
+	gunblast_eff.image_speed = 0.7
+	gunblast_eff.image_alpha = 1
+	gunblast_eff.depth = depth - 0.1
+	gunblast_eff.snap = self.id
+	gunblast_eff.image_angle = 50*(1-facing*2);
+	spark = instance_create(x-13*(1-facing*2)*size,y-13*size,obj_spark_shockwave);
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.8;
+	spark.image_xscale *= 0.2*size;
+	spark.image_yscale *= 0.8*size;
+    }
+	if timer >= 208 && timer <= 219 {
+		speed = 10*(1-facing*2);
+		direction = 60*(1-facing*2);
+		image_alpha -= 0.2;
+		gravity_lock = 1;
+		gravity = 0;
+	}
+	if timer >= 208 && timer <= 219 && timer mod 2 = 0 {
+        petals2 = instance_create(x-20*(1-facing*2),y,obj_spark)
+        petals2.sprite_index = choose(petal_fx2,petal_fx3)
+        petals2.image_xscale = size*0.2
+        petals2.image_yscale = size*0.2
+        petals2.image_speed = 0.4
+        petals2.image_alpha = 1
+        petals2.depth = 1
+        petals2.snap = 0
+}
+	if timer = 219 {
+		speed = 0.5;
+	}
+	if timer >= 218{
+		image_alpha +=0.2;
+	}
+	if timer = 220 {
+		speed = 0.3;
+	}
+	if timer = 221 {
+		speed = 0;
+	}
+	if timer >= 221 && timer <= 230 {
+		speed = 0;
+		gravity = 0;
+		gravity_lock = 1;
+		if attacking || smash {
+			interrupt = 1
+			falltemp = 1;
+		image_alpha = 1;
+		}
+	}
+	if timer >= 221 && timer <= 230 && special  {
+		timer = 300
+		time = 333
+		image_alpha = 1;
+		sprite_index = upb_sprite2;
+		image_index = 0;
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+	movetemp = 1;
+		sound_stop(rubygunblast1)
+		sound_stop(rubygunblast2)
+		sound_stop(rubygunblast3)
+	}
+	switch ( timer )
+      {
+	case 302: image_index = 1; break;
+	case 304: image_index = 2; break;
+	case 308: image_index = 3; break;
+	case 311: image_index = 4; break;//
+	case 316: image_index = 5; break;
+	case 325: image_index = 6; break;
+	case 327: image_index = 7; break;
+	case 329: image_index = 8; break;
+	//case 35: image_index = 11; break;
+    }
+	if ( timer = 304 )
+      {
+	sound_play(choose(rubygunblast1,rubygunblast2,rubygunblast3,no_voice));
+	sound_play(rubydash);
+	create_hitbox(5,43+facing*94,5,9.5,19,9,punch3,obj_spark_hit4,1,1,20,15,self.id,3,2);
+	hitbox.charge_dmg = 0.8;
+	hitbox.charge_hitlag = 1.3;
+	hitbox.shake_type = 1;
+	hitbox.shake_ampl = 0.7;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	gunblast_eff = instance_create(x-20*(1-facing*2),y-20,obj_spark)
+	gunblast_eff.sprite_index = gunblast_fx
+	gunblast_eff.image_xscale = -0.08*(1-facing*2)*size;
+	gunblast_eff.image_yscale = 0.08*size;
+	gunblast_eff.image_speed = 0.7
+	gunblast_eff.image_alpha = 1
+	gunblast_eff.depth = depth - 0.1
+	gunblast_eff.snap = self.id
+	spark = instance_create(x-13*(1-facing*2)*size,y-13*size,obj_spark_shockwave);
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.8;
+	spark.image_xscale *= 0.2*size;
+	spark.image_yscale *= 0.8*size;
+    }
+	if timer >= 304 && timer <= 312 {
+		speed = 10*(1-facing*2);
+		direction = 0*(1-facing*2);
+		image_alpha -= 0.2;
+		gravity_lock = 1;
+		gravity = 0;
+	}
+	if timer >= 304 && timer <= 312 && timer mod 2 = 0 {
+        petals2 = instance_create(x-20*(1-facing*2),y,obj_spark)
+        petals2.sprite_index = choose(petal_fx2,petal_fx3)
+        petals2.image_xscale = size*0.2
+        petals2.image_yscale = size*0.2
+        petals2.image_speed = 0.4
+        petals2.image_alpha = 1
+        petals2.depth = 1
+        petals2.snap = 0
+}
+	if timer =312 {
+		speed = 0.5;
+	}
+	if timer >= 311{
+		image_alpha +=0.2;
+	}
+	if timer = 313 {
+		speed = 0.3;
+	}
+	if timer = 314 {
+		speed = 0;
+	}
+	if timer >= 314 && timer <= 323 {
+		speed = 0;
+		gravity = 0;
+		gravity_lock = 1;
+		if attacking || smash {
+			interrupt = 1
+			falltemp = 1;
+		image_alpha = 1;
+		}
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "fall";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

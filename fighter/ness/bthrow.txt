@@ -1,0 +1,64 @@
+if time = -1{
+hspeed = 0;
+state_type = "attack";
+attack_type = "bthrow";
+image_speed = 0;
+sprite_index = bthrow_sprite;
+image_index=0;
+timer = 0;
+time = 46;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+target.depth = depth + 1;
+target.state_type = "air_flinch";
+}
+switch ( timer )
+  {
+  case 1: image_index = 1; break;
+  case 22: image_index = 6; break;
+  case 24: image_index = 7; break;
+  case 25: image_index = 8; break;
+  case 35: image_index = 11; shakex = 0; shakey = 1; break;
+  case 36: shakey = 0; break;
+  case 42: image_index = 12; break;
+  case 44: image_index = 13; break;
+  }
+if ( timer >= 1 && timer < 22 )
+  shakey = ( timer mod 2 ) * 1.5;
+if ( timer >= 25 && timer < 35 )
+  {
+  shakex = lengthdir_y ( 6 - 12 * facing , ( timer - 25 ) / ( 35 - 25 ) * 180 );
+  shakey = lengthdir_y ( 3 , ( timer - 25 ) / ( 35 - 25 ) * 180 );
+  }
+    state_type = "attack";
+    if ( timer == 1 ) sound_play ( psi_sound4 );
+    if timer >= 0 && timer < 25 {
+        target.x = x + ( 1 - facing * 2 ) * size * ( lengthdir_x ( 21 , -45 + ( timer - 1 ) / ( 24 - 1 ) * 270 ) );
+        target.y = y - 14 * size + lengthdir_y ( size * 14 , -45 + ( timer - 1 ) / ( 24 - 1 ) * 270 );
+        target.sprite_angle = ( timer - 1 ) / ( 24 - 1 ) * 360 * ( 1 - facing * 2 );
+    }
+    if timer = 2 || timer = 6 || timer = 11 || timer = 16 {
+        spark = create_spark(14-timer*1.25,13+random(5),psi_sprite,0.5,0.25,0.25)
+        spark.depth = -2
+        spark.x = target.x;
+        spark.y = target.y - target.actual_height * 0.5;
+    }
+    if timer = 2 || timer = 13 {
+        //sound_play(psi_sound3)
+    }
+    if timer = 25 {
+	    target.x = x -(13 - facing*26)*size
+        target.y = y - 12*size
+        play_attack_voice()
+        //sound_play(psi_sound3)
+        create_throw_box(12,150-facing*120,3.8,10,1,1,-1,obj_spark_effect,0.7,0.7,-12,15,self.id,1);
+        hitbox.shake_ampl = 0.4 }
+        
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

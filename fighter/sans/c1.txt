@@ -1,0 +1,97 @@
+if(stepnum = 2)
+{
+	///step 2/////////////////////////////////////
+	image_xscale = 0.5;
+	image_yscale = 0.5;
+	sans = attacker;
+	proj_destroy = 0
+	absorb = 1  // This attack may be absorbed by PSI magnet
+	if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+		sprite_index = sans.id.bonerise_sprite
+		image_speed = 0.25;
+		visible=1;
+		proj_hits = 1
+		
+		
+		}
+		//hit = 0;
+	if attack_success = 1 && timer = time {
+	time += 1
+	attack_success=2;
+	sans.id.attack_hits-=1;
+	}
+	visible=1
+	
+	image_blend =c_white
+	
+	if (timer = time && proj_hits <= 14) 
+	{
+	proj_hits+=1
+	hit = 0
+	launch =0
+	attack_success=0
+	target.hitby=0
+	
+	timer = 0
+	time = 2
+	}
+	
+	if (sans.id.timer = 80 && proj_hits<14)
+	{proj_hits=14}
+	if (sans.id.timer > 90) 
+	{proj_hits=15}
+	if (image_index >= image_number-image_speed*2 )
+	{instance_destroy()}
+
+}
+else
+{/// step 1 ///////////////////////////////////////////////////////////
+if timer <= 1  {         // Initialize sprite and speed during frame 1
+	hit = 2;
+	proj_destroy = 1;
+	absorb = 0;
+	absorb2 = 0;
+	vspeed = 5000;
+    image_speed = 0.25;
+    visible =1
+    priority = 2
+    }
+absorb2 = 1
+absorb = 1
+if timer = 42
+damage -= 1
+moving_object = 1;
+
+if ( timer = 2&& !is_on_floor(self) )
+{
+instance_destroy();
+}
+
+
+
+if (is_on_floor(self) )
+{
+    hit=2
+	vspeed = 0;
+//sprite_index = attacker.id.bonerise_sprite;
+
+
+if timer = 2
+{
+  poison = create_projectile(20,0,0,0,0,0,punch2,obj_spark_hit3,1,1,0,0,attacker.id,500,attacker.karmic_retribution);
+  poison.sprite_index = sans.id.bonerise_sprite;
+  poison.image_speed = 0.25;
+  //poison.visible = 0;
+  bones = create_projectile(.5 , 361 , 2 , 0 , 0 , 0 , punch1 , obj_spark_hit1 , 1 , 1 , 0 ,0 , attacker.id , 25, attacker.bonerise );
+  bones.absorb = 0;
+  bones.absorb2 = 0;
+  bones.moving_object = 0;
+  bones.hit = 0;
+  //bones.image_speed = .25;
+  bones.stepnum = 2;
+}
+if(bones.hit != 0){bones.hit = 0;}
+}
+}
+
+

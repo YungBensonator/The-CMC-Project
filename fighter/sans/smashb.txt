@@ -1,0 +1,294 @@
+air_move = 0
+ if state_type = "stand" || state_type = "crouch" || state_type = "run" || state_type = "jump" {
+    hspeed = 0
+    state_type = "air_attack";
+    attack_type = "smashb";
+    image_speed = 0;
+    sprite_index = sideb_sprite;
+    image_index= 0;
+    timer = 0;
+    time = 20;
+    timer_speed=1;
+	sidebhover += 1;
+	canceltemp = 1;
+	extemp = 1
+	stancetemp = 0;
+}
+if canceltemp = 1
+{
+
+
+if timer = 2
+    sound_play(sideb_sound1)
+	
+if timer = 7 {
+    instance_create(x+2-facing*4,y-13*size,obj_spark_effect)
+    spark = instance_create(x,y,obj_spark_shockwave)
+    spark.image_xscale *= 0.7*size
+    spark.image_yscale *= 0.1*size
+    spark.image_blend = c_red
+    spark.image_alpha = 0.8
+}
+if sprite_index = sideb_sprite {
+    state_type = "air_attack";
+    temp_fall_speed = 0;
+    if timer = 2
+        image_speed = 0.25
+	if (sidebhover <= 0)
+	{
+		if timer <= 20 && vspeed > 0
+		{
+			vspeed = 0
+		}
+	}
+
+	if timer > 6 && timer < 16 && timer_speed > 0 {
+		if (sidebhover <= 2)
+		{
+			vspeed = 0
+		}
+		image_index= 6;
+        if timer < 25
+            hspeed =  (6-facing*12)*size
+        else
+            hspeed = (6-facing*12)*size 
+        if instance_exists(spark) {
+            spark.x = x + 15*size*(1-facing*2)
+            spark.y = y - size*11
+        }
+		
+
+    
+	}
+    if timer = 22 {
+        image_index = 7
+        image_speed = 0.2
+        duster = instance_create(x + size*(1-facing*2)*6,y,obj_dust_effect);
+        duster.facing = 1-facing; 
+    }
+    if timer >= 12
+    {
+        if(!facing)
+        {
+            if ( air = 0 )
+                hspeed -= 0.8; 
+            else
+                hspeed -= 0.8;
+            if hspeed < 0
+                hspeed = 0;
+        }
+        else
+        {
+            if ( air = 0 )
+                hspeed += 0.8;
+            else
+                hspeed += 0.1;
+            if hspeed > 0
+                hspeed = 0;
+        }
+    }
+} 
+///cb edits start
+if timer = 40 
+{
+	hspeed = 0;
+}
+
+if (timer > 10 && canceltemp != 0)
+{
+	if (moveup && attacking)
+	{///scancel u
+		    hspeed = 0;
+            sprite_index = sideb_upper_sprite
+            image_index = 0.7
+            image_speed = 0.35
+            timer = 70
+            time = 102
+			canceltemp = 0;
+			stancetemp = 1;
+	}
+	if ((!moveup && !movedown) && attacking)
+	{///scancel s
+			hspeed =  (3-facing*6);
+			timer = 0;
+			time = 42;
+			sprite_index = nair_sprite;
+			image_speed = 0;
+			image_index = 0;
+			vspeed -= 0.1;	
+			canceltemp = 0;
+			stancetemp = 2;	
+	}
+	if (movedown && attacking)
+	{///scancel d
+			hspeed = 0;
+            sprite_index = sideb_spike_sprite
+            image_index = 0.7
+            image_speed = 0.35
+            timer = 70
+            time = 102
+			canceltemp = 0;
+			stancetemp = 3;
+	}
+}
+
+if ( air >= 0 && timer > 5 && temp != -1 && ( special || movejump || shieldup))
+      {
+		air_move = 1;
+		interrupt = 1;
+		if shieldup = 1 
+		{
+			state_type = "stand"
+			timer = 0
+			time = -1
+			attack_type = "none"
+			//shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+			exit;
+        }
+      }  
+
+	
+///cb edits end
+ 
+if timer > 100 && timer < 115 {
+    vspeed -= grav*GRAV_MUL*size*0.3
+    air_move = 0
+}
+if image_index >= image_number-image_speed
+    image_speed = 0  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	hspeed = 0;
+    temp_fall_speed = 0
+    attack_type = "none";
+	state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 7;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+}
+
+	if (timer >= 5)
+	{
+		image_index = 2;
+	}
+}
+ 
+ ///stance moves
+ 
+if (stancetemp = 1)
+{/// stance u
+	if (image_index >= 4 && timer < 90 )
+	{image_index = 5}	
+	if (sidebhover <= 2)
+	{
+		vspeed = 0
+	}
+	if timer = 74 
+	{
+
+        spark = instance_create(x + size*(1-facing*2)*14, y - size*18, obj_spark)
+        spark.sprite_index = sideb_effect_sprite2
+        spark.image_xscale = size*0.75
+        spark.image_yscale = size*0.75
+        spark.image_speed = 0.5
+        sound_play(electric_sound2)
+        create_hitbox(3,70+facing*40,5.5,0.1,18,2,electric3,obj_spark_shock,1.4,1.3,7,12,self.id,8,3)
+        hitbox.hit_stun = 15
+        hitbox.shield_stun = 0.1
+        hspeed = 0
+		time = 90
+    }
+	if ( air >= 0 && timer >= 0 && temp != -1 && (special || movejump) && hitbox.hit > 0 )
+      {
+    air_move = 1;
+    interrupt = 1;
+      } 
+}
+	
+if (stancetemp = 2)
+{/// stance s
+	if (sidebhover <= 2)
+	{
+		vspeed = 0
+	}
+	if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 7: image_index = 4; break;
+	case 11: image_index = 5; break;
+	case 13: image_index = 6; break;
+	case 15: image_index = 7; break;
+	case 16: image_index = 8; break;
+	case 17: image_index = 9; break;
+	case 26: image_index = 10; break;
+	case 29: image_index = 11; break;
+	case 32: image_index = 12; break;
+	case 35: image_index = 13; break;
+	case 38: image_index = 14; break;
+      }
+
+    if ( timer = 7 )
+      {
+	play_attack_voice();
+	sound_play(attack_sound2);
+	create_hitbox(5,44+facing*92,0,0,8,3,kick2,obj_spark_hit4,0.65,0.8,21,17,self.id,5,2);
+	hitbox.hit_stun = 6;
+	hitbox.di = 0.2;
+	create_hitbox2(4,44+facing*92,3.5,0,7,3,kick2,obj_spark_hit4,0.55,0.8,10,16,self.id,5,2);
+	hitbox2.hit_stun = 6;
+	hitbox2.di = 0.2;
+      }
+
+  }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 7;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+	if ( air >= 0 && timer >= 0 && temp != -1 && (special || movejump) && hitbox.hit > 0 )
+      {
+    air_move = 1;
+    interrupt = 1;
+      } 
+} 
+
+if (stancetemp = 3)
+{/// stance d
+	if (sidebhover <= 2)
+	{
+		vspeed = 0
+	}
+	if timer = 74 
+	{
+        spark = instance_create(x + size*(1-facing*2)*14, y - size*10, obj_spark)
+        spark.sprite_index = sideb_effect_sprite
+        spark.image_xscale = size*0.75
+        spark.image_yscale = -size*0.75
+        spark.image_speed = 0.5
+		sound_play(attack_sound3)
+        create_hitbox(7,368,1,0,1,1,-1,obj_spark_effect,0.8,0.8,5,25,self.id,1)
+        hitbox.hit_stun = 2
+    }
+if ( air >= 0 && timer >= 75 && temp != -1 && (special || movejump) )
+      {
+    air_move = 1;
+    interrupt = 1;
+      } 
+}
