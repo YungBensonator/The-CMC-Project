@@ -1,0 +1,170 @@
+
+
+
+if not_pass = 0{
+
+if global.gs_form[number-1] = 1{
+english_va = 1
+
+	upb_voice = upb_voiceEN
+	sideb_voice = sideb_voiceEN
+	downb_voice = downb_voiceEN
+	nair_voice = nair_voiceEN
+	bayoen_voice = bayoen_voiceEN
+	taunt_voice = taunt_voiceEN
+	die_voice1 = die_voice1EN
+	die_voice2 = die_voice2EN
+	starko_voice = starko_voiceEN
+	entry_voice = entry_voiceEN
+    win_voice = win_voiceEN
+	
+}
+
+not_pass = 1
+}
+
+
+no_hurtbox = 1;
+
+
+if cantusedownb > 0
+cantusedownb -=1
+
+if grab_cooldown > 0
+grab_cooldown -= 1
+
+if ( air == 0 ) cantsideb = 0;
+
+
+if sprite_index = stand_sprite
+image_speed = 0.1
+
+if air = 0 or state_type = "flinch" or state_type = "air_flinch"
+sidebtemp = 0
+
+if air = 0 or state_type = "flinch" or state_type = "air_flinch"
+cantupb = 0
+
+
+if state_type = "crouch"{
+if notcrouch = 1 {
+image_index = 0
+notcrouch = 0}
+if image_index >= 1
+image_speed = 0
+
+}
+
+
+if state_type != "crouch" and notcrouch = 0
+notcrouch = 1
+
+if state_type != "run" and notrun = 0
+notrun = 1
+
+
+if runtimer = -30 && runtimer < -20 && state_type = "run" {
+sprite_index = turn_sprite
+image_index = 0
+image_speed = 0
+sound_play(turn_sound)
+}
+if runtimer >= -29 && runtimer < -20 && state_type = "run" {
+sprite_index = turn_sprite
+image_index = 0
+image_speed = 0
+}
+if runtimer = -20 && state_type = "run" {
+sprite_index = run_sprite
+image_index = 0
+image_speed = 0.0625
+}
+
+if sprite_index = run_sprite or sprite_index = walk_sprite
+image_speed = 0.1
+
+if (runtimer >= 60 && runtimer < 90 && dash_end == 0) and (state_type == "run"){
+sprite_index = brake_sprite;
+}
+
+if sprite_index = brake_sprite and air > 0
+sprite_index = jump_sprite
+
+
+if state_type = "out"{
+with (global.obj_puyo_puyo_arle){
+if originalOwner = other.id
+instance_destroy();
+}
+
+}
+
+
+
+
+//if state_type = "run" and sprite_index = run_sprite and image_index >=9
+//image_index = 6
+
+if state_type = "run" and notrun = 0{
+image_index = 0
+notrun = 1}
+
+
+
+
+
+
+
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+	MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.depth = -100
+	MeterHud.image_speed = 0
+	MeterHud.sprite_index = meter_sprite;
+}
+MeterHud.image_speed = 0
+MeterHud.sprite_index = meter_sprite;
+MeterHud.image_index = puyo_queue[0];
+
+
+if (!instance_exists(MeterHudCi)){  
+    MeterHudCi = instance_create ( hud_x, hud_y, obj_custom_gfx);
+	MeterHudCi.draw_script = hudThing_draw_script;
+    MeterHudCi.step_script = hudThing_step_script;
+    MeterHudCi.owner = self.id;
+    MeterHudCi.keepmain = self.keepmain;
+	MeterHudCi.depth = -100
+	MeterHudCi.image_speed = 0
+	MeterHudCi.sprite_index = meter_sprite;
+}
+MeterHudCi.image_speed = 0
+MeterHudCi.sprite_index = meter_spriteCi;
+MeterHudCi.image_index = puyo_queue[1];
+
+
+if (!instance_exists(MeterBG)){  
+    MeterBG = instance_create ( hud_x, hud_y, obj_custom_gfx);
+	MeterBG.draw_script = hudThing_draw_script;
+    MeterBG.step_script = hudBG_step_script;
+    MeterBG.owner = self.id;
+    MeterBG.keepmain = self.keepmain;
+	MeterBG.depth = -95
+	MeterBG.image_speed = 0
+	MeterBG.sprite_index = meter_bg_sprite;
+}
+MeterBG.image_speed = 0
+MeterBG.sprite_index = meter_bg_sprite;
+MeterBG.image_index = 0
+/////////////////Meter Stop/////////////////////////////////////
+
+
+
+
+

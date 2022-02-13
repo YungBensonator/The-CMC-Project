@@ -1,0 +1,49 @@
+if state_type = "run" || state_type = "stand" {
+        hspeed *= 0.5;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0;
+        sprite_index = utilt_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 26;
+        timer_speed=1;
+        attacking = 0
+}
+if timer < time {
+    switch ( timer )
+    {
+	case 6: image_index = 1; break;
+	case 8: image_index = 2; image_xscale *= 1.1; image_yscale *= 1.1; break;
+	case 10: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 24: image_index = 5; break;
+	case 26: image_index = 6; break;
+    }
+            if timer = 8 {
+                hspeed = (1-facing*2)*size
+                sound_play(attacksnd1);
+                sound_play(choose(attack_voice4,attack_voice2,attack_voice3))
+                create_hitbox(10,80+facing*20,4.3,6.8,13,4,punch4,obj_spark_hit2,0.7,1.2,16,20,self.id,6,2);
+                hitbox.di = 0.5
+                hitbox.hit_stun = 10;
+                create_hitbox2(9,70+facing*40,4,6.8,11,4,punch4,obj_spark_hit1,0.6,0.6,10,13,self.id,4,1);
+				duster = instance_create(x + 10 *(1-facing*2) * size, y,obj_dust_effect)
+				duster.facing = 1-facing;
+                duster.image_alpha = 0.75;
+                duster.image_xscale *= 0.7 * size;
+                duster.image_yscale *= 0.5 * size;
+				hitbox2.hit_stun = 10;
+                }
+            if timer = 11
+            hspeed = 0
+			
+			if (timer = 26) {interrupt = 1}
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    interrupt = 0;
+}

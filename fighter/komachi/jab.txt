@@ -1,0 +1,81 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "jab";
+        image_speed = 0;
+        sprite_index = jab_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 22;
+        timer_speed=1;
+		temp = 0
+}
+     if timer < time {
+	if hitbox.hit {temp = 1}
+		switch (timer)
+		{
+		//active 2
+		case 1:  image_index = 0; break;
+		case 3:  image_index = 1; break;
+		case 5:  image_index = 2; break;
+		case 7:  image_index = 3; break;
+		case 9:  image_index = 4; break;
+		case 11: image_index = 5; break;
+		case 13: image_index = 6; break;
+		case 15: image_index = 7; break;
+		case 17: image_index = 8; break;
+		case 19: image_index = 9; break;
+		case 21: image_index = 10; break;
+		}
+	/*if ( timer == 1 ) { // just fuck my indenting up
+		  gfx_ef_whiff ( x + ( 28 * (1- facing *2)) * size , y - actual_height * 0.75 , 0.5 , 1 , 180 * facing );
+ 		 //gfx_ef_whiffspark ( x + 40 - 80 * facing , y - actual_height * 0.5 , 0.75 );
+	}*/
+            if timer = 5 {
+                sound_play(attacksnd1);
+                create_hitbox(1,70+facing*40,2.35,2.8,6,2,punch1,obj_spark_hit1,0.55,1.25,14,26,self.id,3,1); 
+                }
+				
+	    if timer >= 5 && timer < 13 && attacking = 1 && grab && temp = 1 {
+		attacking = 0
+		state_type = "stand"
+		attack_type = "none"
+		timer = 0
+		time = -1
+		char_grab();
+		}
+	    /*if timer = 3
+		hitbox.hitbox_x = 15 * (1- facing *2)
+	    if timer = 4
+		hitbox.hitbox_x = 11 * (1- facing *2)
+	    if timer = 5
+		hitbox.hitbox_x = 7 * (1- facing *2)*/
+		
+		if timer >= 21 && attacking = 1 && (temp = 0 || (temp = 1 && !grab)) {
+			state_type = "attack";
+			attack_type = "jab";
+			image_speed = 0;
+			sprite_index = jab_sprite;
+			image_index=0;
+			timer = 0;
+			time = 22;
+			timer_speed=1;
+			temp = 0;
+			/*if ( ai && random(11)>4 )
+			{
+			attacking=0;
+			}*/
+		}
+		
+		 if timer >= 15 && (moveup || movedown || moveleft || moveright || movejump) 
+		{
+		   interrupt = 1;
+		}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

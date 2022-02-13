@@ -1,0 +1,112 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        if ktimer > 0{
+        sprite_index=gdash_attack_sprite;
+        canceltemp=0;
+        }
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+        if moveleft{
+        facing=1;
+        }
+        if moveright{
+        facing=0;
+        }
+        image_angle = ( 1 - facing * 2 ) * 292;
+        sound_stop(activevoice);
+        activevoice=choose(atk_voice,atk2_voice,atk3_voice,hah_voice,howaboutthis_voice);
+}
+
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 9: image_index = 1; break;
+    case 12: image_index = 2; break;
+    case 15: image_index = 3; break;
+    case 35: image_index = 1; break;
+}
+if timer < time {
+    fast_fall=0;
+    fast_fall_temp=0;
+    dashattackeff.x=x+2.10+size;
+    dashattackeff.y=y + size - 18.9;
+    dashattackeff.depth=depth+1;
+    if timer < 12{
+    vspeed=0;
+    hspeed=0;
+    }
+    if timer >= 15 && timer < 35{
+    hspeed = 2-facing*4;
+    vspeed=10;
+    if dashattackeff.image_index>=2{
+    dashattackeff.image_index=0;
+    }
+    }
+    if timer >= 15 && timer < 35 && timer mod 4 = 0{
+    if image_index=4{
+    image_index=3;
+    }
+    else {image_index=4;
+    }
+    }
+    if !instance_exists (dashattackeff)&&timer <35 && timer >15{
+    dashattackeff = instance_create(x+2.10+size, y + size - 18.9, obj_spark)
+    dashattackeff.sprite_index = dash_attack_aura_sprite;
+    dashattackeff.image_xscale = 0.2*( 1 - facing * 2 )*size;
+    dashattackeff.image_yscale = size*0.2;
+    dashattackeff.image_speed=1;
+    dashattackeff.alarm[0]=20;
+    dashattackeff.image_angle = ( 1 - facing * 2 ) * 292;    
+    }
+    if timer = 15{
+    sound_play(upb_sound);
+    sound_play(activevoice);
+    dashattackeff = instance_create(x+2.10+size, y + size - 18.9, obj_spark)
+    dashattackeff.sprite_index = dash_attack_aura_sprite;
+    dashattackeff.image_xscale = 0.2*( 1 - facing * 2 )*size;
+    dashattackeff.image_yscale = size*0.2;
+    dashattackeff.image_speed=1;
+    dashattackeff.alarm[0]=20;
+    dashattackeff.image_angle = ( 1 - facing * 2 ) * 292;
+        create_hitbox(9,60+facing*60,5,7,8,7,FriezaHitSFX5,obj_spark_hit2,1.77 , 0.79 , 0 , 18.20,self.id,20,2);
+        hitbox.shake_ampl = 0.75;
+        hitbox.hit_stun = 1.1;
+        hitbox.image_angle = ( 1 - facing * 2 ) * 292;
+        if ktimer > 0{
+        hitbox.hit_stun=19*size;
+        hitbox.dir=292+(-44)*facing;
+        hitbox.bkb=8*size;
+        hitbox.kbg=8*size;
+        }
+        }
+
+
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=18;
+                sound_stop(dair_sound);
+                sound_play(land_sound);
+            }
+        if ktimer > 0 && (canceltemp = 1 && (movejump || attacking = 1 || special = 1 || (grab = 1 && dashy < 2 && air > 0) ) && (timer >= 15 && timer <= 35)){
+            interrupt = 1;
+}
+        }  
+if timer >= 37 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    sound_stop(dair_sound);
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

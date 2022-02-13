@@ -1,0 +1,171 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_sprite
+		//if air > 0
+		//sprite_index = b_sprite2
+        image_index=0
+        timer = 0
+        time = 32
+		hspeed = 0
+		if !ai
+		special = 1
+		isUp = 0
+		isDown = 0
+		isBack = 0
+		isNormal = 0
+}
+
+if ( timer < time )
+    {
+switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	
+
+
+      }
+	if timer = 1
+	     sound_play(b_voice);
+	
+	if timer = 14 and special = 1
+	timer = 13
+	
+    if timer = 15{
+	sound_play(upb_sound);
+	
+	
+	for (i=0; i<=maxPuyos; i+=1){
+	if !instance_exists(puyo[i]){
+	currentPuyo = i
+	i = maxPuyos
+	}
+	
+	}
+	
+	if moveup
+	isUp = 1
+	else if movedown
+	isDown = 1
+	else if (moveright and facing = 1) or (moveleft and facing = 0)
+	isBack = 1
+	else
+	isNormal = 1
+	
+	for (i=0; i<=1; i+=1)
+	{
+	
+	if isNormal{
+	firstX = x + 18
+	secondX = x - 18
+	firstY = y - 60
+	secondY = y - 60
+	
+	thirdX = x + 36
+	fourthX = x + 0
+	thirdY = y - 60
+	fourthY = y - 60
+	}
+	else if isBack{
+	firstX = x + 36
+	secondX = x + 0
+	firstY = y - 60
+	secondY = y - 60
+	
+	thirdX = x + 18
+	fourthX = x - 18
+	thirdY = y - 60
+	fourthY = y - 60
+	}
+	else if isUp{
+	firstX = x + 18
+	secondX = x + 0
+	firstY = y - 60-16
+	secondY = y - 60-16
+	
+	thirdX = x + 18
+	fourthX = x + 0
+	thirdY = y - 60
+	fourthY = y - 60
+	}
+	else if isDown{
+	firstX = x + 18
+	secondX = x + 0
+	firstY = y - 60
+	secondY = y - 60
+	
+	thirdX = x + 18
+	fourthX = x + 0
+	thirdY = y - 60-16
+	fourthY = y - 60-16
+	}
+	
+	if i = 0{
+	
+	if facing = 0
+	puyo[currentPuyo] = instance_create(firstX, firstY, global.obj_puyos[puyo_queue[i]])
+	else
+	puyo[currentPuyo] = instance_create(secondX, secondY, global.obj_puyos[puyo_queue[i]])
+	}
+	//create_projectile(2,20+facing*140,5,2,10,2,magic1,obj_spark_hit4,0,0,18,60,self.id,999999,char_custom1);
+	if i = 1{
+	if facing = 0
+	puyo[currentPuyo] = instance_create(thirdX, thirdY, global.obj_puyos[puyo_queue[i]])
+	else
+	puyo[currentPuyo] = instance_create(fourthX, fourthY, global.obj_puyos[puyo_queue[i]])
+	}
+	
+	//create_projectile(2,20+facing*140,5,2,10,2,magic1,obj_spark_hit4,0,0,36,60,self.id,999999,char_custom1);
+	puyo[currentPuyo].sprite_index = puyo_sprite;
+	puyo[currentPuyo].image_speed = 0
+	puyo[currentPuyo].image_index = puyo_queue[i]
+	puyo[currentPuyo].image_xscale = 1
+	puyo[currentPuyo].image_yscale = 1
+	puyo[currentPuyo].image_alpha = 1
+	puyo[currentPuyo].facing = facing
+	puyo[currentPuyo].hspeed = 0
+	puyo[currentPuyo].vspeed = 2
+	puyo[currentPuyo].depth = depth +1.5
+	puyo[currentPuyo].puyo_type = puyo_queue[i]
+	puyo[currentPuyo].is_puyo = 1
+	puyo[currentPuyo].facing = facing
+	puyo[currentPuyo].alarm[0] = 99999999
+	puyo[currentPuyo].originalOwner = self.id
+	with (puyo[currentPuyo]){x = floor(x/18)*18;}
+	
+	/*
+	with (puyo[currentPuyo]){
+	do{
+    x -= 1;
+     }
+     until x mod 18 = 0
+	}
+	*/
+	
+	currentPuyo += 1
+	if currentPuyo > maxPuyos
+	maxPuyos += 1
+	}
+	
+	
+	puyo_queue[0] = choose(0,1,2,3)
+	puyo_queue[1] = choose(0,1,2,3)
+    }
+
+	
+  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

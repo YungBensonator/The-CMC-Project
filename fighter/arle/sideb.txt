@@ -1,0 +1,83 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = sideb_sprite
+        image_index=0
+        timer = 0
+        time = 51
+		hspeed = 0
+		if !ai
+		special = 1
+		leTimer = 0
+}
+
+if ( timer < time )
+    {
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 46: image_index = 8; break;
+	
+
+
+      }
+	if timer = 1
+	     sound_play(sideb_voice);
+	
+    if timer = 8{
+	icecircle = create_projectile(0,361,0,0,0,0,-1,-1,0,0,18,35,self.id,180,-1);
+	icecircle.sprite_index = icecircle_sprite;
+	icecircle.image_speed = 0.3
+	icecircle.image_index = 0
+	icecircle.image_xscale = image_xscale
+	icecircle.image_yscale = image_yscale
+	icecircle.image_alpha = 1
+	icecircle.facing = facing
+	icecircle.hspeed = 1.1-facing*2.2
+	icecircle.depth = depth -0.5
+	icecircle.hit = 2
+    }
+	
+	if timer <=19 and timer > 16 and special = 1 and leTimer <170{
+	leTimer +=1
+	timer = 16
+	}
+    
+	if timer = 20{
+	icicle = create_projectile(9,285-facing*30,4.5,3.5,10,7,ice1,obj_spark_ice2,0,0,0,0,self.id,60,char_custom3);
+	icicle.sprite_index = icicle_sprite;
+	icicle.x = icecircle.x
+	icicle.y = icecircle.y
+	icicle.image_speed = 0
+	icicle.image_index = 0
+	icicle.image_xscale = image_xscale
+	icicle.image_yscale = image_yscale
+	icicle.image_alpha = 1
+	icicle.facing = facing
+	icicle.hspeed = 2-facing*4
+	icicle.vspeed = 3.5
+	icicle.depth = depth -1
+	
+	with (icecircle){instance_destroy();}
+    }
+	
+  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

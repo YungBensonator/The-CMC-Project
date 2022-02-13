@@ -1,0 +1,43 @@
+if state_type = "jump"  {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "glide_attack";
+        image_speed = 0.35;
+        sprite_index = glide_attack_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 24;
+        timer_speed=1;
+        lcancel = 1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 5 {
+                sound_play(attack_sound4);
+                play_attack_voice()
+                create_hitbox(14,70+facing*40,6.4,7.1,20,10,fire3,obj_spark_fire1,0.9,0.8,20,7,self.id,3,3);
+                create_hitbox2(12,50+facing*80,6.6,6.7,17,9,punch3,obj_spark_slash3,0.8,0.8,9,9,self.id,4,2);
+            }
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14;
+				movejump = 0;
+				holdjump = 0;
+				}
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = max_jumps
+        state_type = "fall";
+    else {
+        state_type = "jump";
+        if air < max_jumps-1
+        air+=1
+    }
+    timer = 0;
+    time =-1;
+    }
+        

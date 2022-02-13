@@ -1,0 +1,216 @@
+///////////////////////////////////////////// my edits start
+if(instance_exists ( CardMeter ) && (state_type = "flinch" || state_type = "air_flinch" || state_type = "respawn"))
+{with (CardMeter) {instance_destroy();}}
+
+///variables
+floatspeedv = 4;
+floatspeedh = 4;
+maxfloattime = 150;
+///
+
+ 
+if (state_type = "flinch" || state_type = "air_flinch" || state_type = "tumble" || state_type = "edge" || state_type = "grabbed" || state_type = "out" || state_type = "respawn" || state_type = "entry" )
+{
+		floattemp = 1;
+}
+
+
+
+if (( (moveup && special)&& state_type != "attack" && floattime > 0 && floattemp != 0) && state_type != "tumble" && state_type != "air_flinch" && state_type != "edge" && state_type != "grabbed" && state_type != "dodge" && state_type != "air_dodge" && state_type != "ukemi" && state_type != "locked" && state_type != "broken" && sprite_index != fall_sprite && sprite_index != flinch_sprite && attack_type != "b" )
+{
+	floattemp = 0;
+} 
+if floattemp = 0 
+{ 
+	if (taunt)
+	{
+	attack_type = "taunt";
+	}
+	if (shieldup = 1)
+	{
+		floattemp = 1;
+	}
+
+	gravity = 0;
+    gravity_lock = 1;
+	if moveup
+	{
+	vspeed -= 0.3
+	}
+	if movedown
+	{
+	vspeed += 0.3
+	}
+	if moveleft
+	{
+	hspeed -= 0.3
+	}
+	if moveright
+	{
+	hspeed += 0.3
+	}
+	if (!moveright || !moveleft)
+	{
+		if hspeed > 0
+		{
+		hspeed -= 0.1;
+		}
+		if hspeed < 0
+		{
+		hspeed += 0.1;
+		}
+	}
+		if (!moveup || !movedown )
+	{
+		if vspeed < 0
+		{
+		vspeed += 0.1; 
+		}
+		if vspeed > 0
+		{
+		vspeed -= 0.1; 
+		}
+	}
+	if hspeed > floatspeedh
+	{
+		hspeed = floatspeedh
+	}
+	if vspeed > floatspeedv
+	{
+		vspeed = floatspeedv
+	}
+		if hspeed < -floatspeedh
+	{
+		hspeed = -floatspeedh
+	}
+	if vspeed < -floatspeedv
+	{
+		vspeed = -floatspeedv
+	}
+}
+
+if (floattime > 0 && ((air > 0 && floattemp = 0) || (hover_timer > 0 && vspeed = 0)))
+{
+floattime -= 1
+}
+
+
+if ( sprite_index == jump_sprite && floattemp == 0 )
+{
+	sprite_index = hover_sprite;
+}
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+}
+
+MeterHud.sprite_index = meter_sprite;
+if(floattime = maxfloattime){MeterHud.image_index = 55;} else {MeterHud.image_index = floattime*56/maxfloattime;}
+MeterHud.image_speed = 0;
+
+/////////////////Meter Stop/////////////////////////////////////
+
+if (enemy.state_type = "respawn"){
+temp_spawn += 1
+}
+if air = 0 
+{
+	hover_time = 9999;
+	candash = 1 + kaioken;
+	if(floattime < maxfloattime ){floattime += 1;} 
+	if (moveup != 1) { floattemp = 1;}
+	upbtemp = 0;
+}
+
+if ((floattime <= 0 && air > 0) || state_type = "out" || state_type = "respawn" ) 
+{
+	floattemp = 2;
+	hover = 0;
+	hover_time = 0;
+	hover_timer = 0;
+}
+///////////////////////////////////////////// my edits stop
+
+///Komachi Bombs
+if sayonara > 0
+{nuke = 1;}
+if sayonara <= 0
+{nuke = 0;}
+
+if attack_type != "downb" || (state_type != "attack" && state_type != "air_attack")
+{sayonara = 0;}
+
+if(instance_exists(spiritfloat) || instance_exists(spiritbomb) || instance_exists(spiritrush))
+{bombs_exist = 1;}
+if(!instance_exists(spiritfloat) && !instance_exists(spiritbomb) && !instance_exists(spiritrush))
+{bombs_exist = 0;}
+
+//Boat Slide
+if slippery >= 1
+{
+slippery -= 1
+}
+if slippery > 0
+{fric = 0.6;}
+else
+{fric = 0.95;}
+
+///Dair Cooldown
+if daircooldown >= 1
+{
+daircooldown -= 1;
+}
+if ((daircooldown <= 0) || (air = 0))
+{
+	daircooldown = 0;
+}
+
+
+if shottimer1 >= 1
+{
+shottimer1 -= 1;
+}
+
+if shottimer1 <= 0
+{
+	shottimer1 = 0;
+}
+
+if sidetime >= 1
+{
+sidetime -= 1
+}
+
+if sidetime <= 0
+{
+	sidetime = 0;
+}
+
+
+///Jump Sprite Polish
+
+if sprite_index = walk_sprite {
+	image_speed = 2.5;
+	}
+
+
+if state_type = "land" || state_type = "respawn" || state_type = "edge" || state_type = "stand" {
+    can_sideb = 1;
+	}
+if ( sprite_index == walk_sprite )
+image_speed = 0.13;
+
+if state_type = "entry" || state_type = "respawn" || state_type = "out" || state_type = "dead" {
+btemp = 0
+}
+if btemp < 0
+btemp = 0
+if attack_type != "b"
+btemp -= 0.04

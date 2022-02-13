@@ -1,0 +1,166 @@
+if state_type = "stand" || state_type = "run" {
+    hspeed = 0;
+    attacking = 1;
+    state_type = "attack";
+    attack_type = "jab";
+    image_speed = 0;
+    with(blur){
+ instance_destroy();
+ }
+    if ktimer < 1{
+    sprite_index = jab_sprite;
+    image_index=1;
+    timer = 0;
+    time = 26;}
+    wack+=1;
+    if ktimer > 0{
+    sprite_index = gjab1_sprite;
+    image_index=0;
+    timer = 100;
+    time = 126;
+    }
+    timer_speed=1;
+    canceltemp=0;
+    sound_stop(activevoice);
+    activevoice=choose(atk_voice,atk2_voice,atk3_voice,hah_voice,howaboutthis_voice);
+}
+    switch(timer){
+    case 1: blur = create_itmpnt_blur(/*Attacker*/self.id, /*Texture*/blur_texture, /*Start frame*/1, /*Apex Frame*/3, /*End frame*/10, /*CCW*/1, /*girth*/8, 15);
+        blur.index = 0; 
+        blur.image_index = 0;
+        blur.v_squish=15; break;
+    case 4: blur.index = 1; blur.image_index = 1; break;
+    case 8: blur.index = 2; blur.image_index = 2; break;
+    case 11: blur.index = 3; blur.image_index = 3; break;
+    case 14: blur.index = 4; blur.image_index = 4; blur.v_squish=26; blur.h_squish=15; blur.push_x = 14 * size * (1-facing*2); break;
+    case 22: with (blur){
+                    instance_destroy();
+                } break;
+    }
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 4: image_index = 1; break;
+    case 8: image_index = 2; break;
+    case 11: image_index = 3; break;
+    case 14: image_index = 4; break;
+    case 22: image_index = 5; break;
+    case 53: image_index = 7; break;
+    case 56: image_index = 8; break;
+    case 64: image_index = 9; break;
+    case 68: image_index = 10; break;
+    case 100: image_index = 0; break;
+    case 104: image_index = 1; break;
+    case 108: image_index = 2; break;
+    case 111: image_index = 3; break;
+    case 114: image_index = 4; break;
+    case 122: image_index = 5; break;
+    case 128: image_index = 6; break;
+    case 200: image_index = 0; break;
+    case 204: image_index = 1; break;
+    case 208: image_index = 2; break;
+    case 211: image_index = 3; break;
+    case 217: image_index = 4; break;
+    case 222: image_index = 5; break;
+    case 300: image_index = 0; break;
+    case 304: image_index = 1; hspeed=1.5-facing*3; break;
+    case 308: image_index = 2; break;
+    case 313: image_index = 3; break;
+    case 317: image_index = 4; break;
+    case 321: image_index = 5; break;
+
+}
+if timer < time{
+if timer < 14{
+blur.depth=depth-1;
+blur.image_alpha-=0.02;}
+if timer >= 14{
+blur.depth=depth+1;
+blur.image_alpha-=0.25;}
+if timer = 8 {
+    sound_play(activevoice);
+    create_hitbox(2,70+facing*40,2.5,0.2,4,4,FriezaHitSFX2,obj_spark_hit1,1.44 , 0.64 , 21.70 , 10.50,self.id,3,1);
+    hitbox.di = 0.4 
+    hitbox.hit_stun = 9;
+    image_index = 2;
+    }
+
+if (timer = 6) && ai = 1 { 
+if random(10)>3 || attack_success
+    attacking = 1
+else
+    attacking = 0
+}
+if (timer = 9) && ai = 1 && random(10)>1.4
+    attacking = 1
+if timer >= 8 && timer < 18 && attacking = 1 && (attack_success) {
+    time = 75
+    timer = 50
+    image_index = 6;
+}
+if timer = 56  {
+    sound_play(beamshot_sound);
+    create_projectile ( 3,36+108*facing,7,2.4,6,4, FriezaHitSFXBeam , obj_spark_special1 , 0.1 , 0.1, 19.60 , 16.80 , self.id , 15 , no_script );
+    proj.di = 0.4
+    proj.hit_stun = 4;
+    proj.hspeed=8-facing*16;
+    proj.vspeed=0;
+    proj.can_reflect=1;
+    proj.moving_object=1;
+    proj.absorb=1;
+    proj.sprite_index=jab_kiblast_sprite;
+    proj.image_speed=0.5;
+}
+
+if timer = 111 {
+    sound_play(activevoice);
+    sound_play(atk_sound);
+    create_hitbox(2,70+facing*40,1.5,0.2,4,4,FriezaHitSFX1,obj_spark_hit1,0.70 , 0.31 , 15.40 , 13.30,self.id,11,1);
+    hitbox.di = 0.4 
+    hitbox.hit_stun = 9;
+    }
+if timer = 208 {
+    sound_play(atk_sound);
+    create_hitbox(2,70+facing*40,2.5,0.2,4,4,FriezaHitSFX2,obj_spark_hit1,0.82 , 0.35 , 12.60 , 15.40,self.id,9,1);
+    hitbox.di = 0.4 
+    hitbox.hit_stun = 9;
+    }
+if timer = 308 {
+    sound_play(atk_sound);
+    create_hitbox(2,70+facing*40,5,3,4,4,FriezaHitSFX3,obj_spark_hit2,0.57 , 0.88 , 11.90 , 13.30,self.id,9,1);
+    hitbox.di = 0.4 
+    hitbox.hit_stun = 26;
+    hitbox.weight_kb=1;
+    }
+
+
+if timer >= 111 && timer < 128 && attacking = 1 && (attack_success) {
+    timer = 200
+    time = 234;
+    image_index = 0;
+    attacking=0;
+    attack_success=0;
+    sprite_index=gjab2_sprite;
+    hspeed=2*(1-facing*2);
+}
+if timer >= 208 && timer < 217 && attacking = 1 && (attack_success) {
+    timer = 300
+    time = 334;
+    image_index = 0;
+    hittemp=0;
+    attacking=0;
+    attack_success=0;
+    sprite_index=gjab3_sprite;
+    canceltemp=0;
+}
+        if ktimer > 0 && (canceltemp = 1 && (movejump || (attacking = 1 && (movedown || moveup || moveleft || moveright)) || special = 1 ) && (timer >= 308 && timer < 317)){
+            interrupt = 1;
+}
+}
+
+if timer >= time-1 && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,397 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "shielding" || state_type="jump")
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  if ktimer < 1{
+  sprite_index = final_smash_sprite;
+  timer = 0;
+  time = 790;
+  sound_stop(activevoice);
+  activevoice=choose(atk_voice,atk2_voice,atk3_voice,hah_voice,howaboutthis_voice,youwontsurvive_voice,youworm_voice,doubledose_voice);}
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 55;
+  if ktimer >0{
+  sprite_index = gssmash_sprite;
+  timer = 1000;
+  time = 1660;
+  sound_stop(activevoice);
+  activevoice=choose(shallwebegin_voice,strongest_voice,planettodust_voice,deathwish_voice,littleserious_voice,exersion_voice,myfullpower_voice,theend_voice,diebyme_voice,youwontsurvive_voice,youmiserableinsect_voice,deadly_voice,deadly2_voice,iwillendyou_voice);}
+  timer_speed = 1;
+  intangible = 1; 
+  target=0;
+  target1=0;
+  hitchecktemp=0;
+  depth=0;
+  
+  }
+  percent=hitchecktemp;
+    switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 20: image_index = 1; break;
+    case 25: image_index = 2; break;
+    case 40: image_index = 3; break;
+    case 45: image_index = 4; break;
+    case 50: image_index = 5; break;
+    case 55: image_index = 6; break;
+    case 60: image_index = 7; break;
+    case 120: image_index = 8; break;
+    case 125: image_index = 9; break;
+    case 130: image_index = 10;break;
+    case 135: image_index = 11; break;
+    case 140: image_index = 12; break;
+    case 205: image_index = 14; break;
+    case 210: image_index = 15; break;
+    case 215: image_index = 16; break;
+    case 220: image_index = 17; break;
+    case 225: image_index = 18; break;
+    case 230: image_index = 19; break;
+    case 235: image_index = 21; break;
+    case 765: image_index = 20; break;
+    case 770: image_index = 22; break;
+    case 775: image_index = 23; break;
+    case 1000: image_index = 0; break;
+    case 1006: image_index = 1; break;
+    case 1011: image_index = 2; break;
+    case 1016: image_index = 3; break;
+    case 1021: image_index = 1; break;
+    case 1026: image_index = 2; break;
+    case 1031: image_index = 3; break;
+    case 1036: image_index = 1; break;
+    case 1041: image_index = 2; break;
+    case 1046: image_index = 3; break;
+    case 1051: image_index = 1; break;
+    case 1056: image_index = 2; break;
+    case 1061: image_index = 3; break;
+    case 1066: image_index = 1; break;
+    case 1071: image_index = 2; break;
+    case 1076: image_index = 3; break;
+    case 1081: image_index = 4; break;
+    case 1086: image_index = 5; break;
+    case 1091: image_index = 6; break;
+    case 1096: image_index = 7; image_angle=315*( 1 - facing * 2 ); supernova.letsagomurder=1; sound_play(ball_fire_sound); sound_play(activevoice); break;
+    case 1630: image_index = 8; image_angle=0*( 1 - facing * 2 ); break;
+      }
+ if timer < time{
+ if supernova.letsagomurder=2 && supernova.alarm[0]=1{
+ timer = 1629;
+ }
+ hspeed=0;
+ vspeed=0;
+ air_move=0;
+ fast_fall=0;
+ fast_fall_temp=0;
+ gravity_lock=1;
+ asidecree.x=x;
+ asidecree.y=y;
+ thisiswhere.x=x+23.8*( 1 - facing * 2 )*size;
+ thisiswhere.y=y-27.8*size;
+ youdie.x=x+23.8*( 1 - facing * 2 )*size;
+ youdie.y=y-27.8*size;
+ ButNo.x=x+14.50*( 1 - facing * 2 ) * size;
+ ButNo.y=y - 21*size;
+ seriously.x=x;
+ seriously.y=y;
+ thinkyoucandie.x=x+23.80*( 1 - facing * 2 ) * size;
+ thinkyoucandie.y=y-27.80*size
+ if timer = 1000 && air = 0{
+  image_alpha=0;
+  teleportfx = instance_create(x* size , y * size, obj_spark);
+  teleportfx.sprite_index = teleport_sprite;
+  teleportfx.image_xscale = 0.2*( 1 - facing * 2 )*size;
+  teleportfx.image_yscale = size*0.2;
+  teleportfx.image_alpha=0.8;
+  teleportfx.image_speed=1;
+  teleportfx.depth=depth-1;
+  teleportfx.image_index=0;
+  sound_play(teleport_sound);
+ }
+if air = 0 && timer = 1005{
+ image_alpha=1;
+  teleportfx = instance_create(x* size , y * size, obj_spark);
+  teleportfx.sprite_index = teleport_sprite;
+  teleportfx.image_xscale = 0.2*( 1 - facing * 2 )*size;
+  teleportfx.image_yscale = size*0.2;
+  teleportfx.image_alpha=0.8;
+  teleportfx.image_speed=1;
+  teleportfx.depth=depth-1;
+  teleportfx.image_index=0;
+  y-=150;
+ }
+ if timer = 1006{
+ sound_play(ball_finalbeam_charge_sound);
+ supernova=create_projectile ( 1,86+8*facing,4,0,2,4, explosion1 , obj_spark_special1 , 0, 0, 0 , 10 , self.id , 604 , char_custom10 );
+ supernova.sprite_index = supernova_sprite;
+ supernova.image_speed=0.20;
+ supernova.alarm[0]=604;
+ supernova.depth=depth+2;
+ supernova.hit=2;
+ supernova.tempchecking=0;
+ supernova.hit_lag=30;
+ supernova.di=0.5;
+ supernova.image_alpha=0.9;
+ camerazoomstuff = instance_create ( 0 , 0 , obj_camerazoom );
+ camerazoomstuff.camera_l = x - 8;
+ camerazoomstuff.camera_r = x + 8;
+ camerazoomstuff.camera_u = y - 4 - actual_height;
+ camerazoomstuff.camera_d = y + 4;
+ camerazoomstuff.camera_boundary_zoom = 1120;
+ camerazoomstuff.alarm[0] = 90;
+ }
+ if timer < 1066{
+ supernova.y-=3*(timer/1000)*size;
+ supernova.image_xscale+=0.05*( 1 - facing * 2 ) * size;
+ supernova.image_yscale+=0.05*size;
+ }
+ if !instance_exists(asidecree) && timer >=25 && timer < 770{
+    asidecree = instance_create(x , y, obj_spark)
+    asidecree.sprite_index = fs_charge_sprite;
+    asidecree.image_xscale = 0.2*( 1 - facing * 2 ) * size;
+    asidecree.image_yscale = 0.2;
+    asidecree.image_alpha=0.8;
+    asidecree.image_speed=0.5;
+    asidecree.depth=depth+1;
+ }
+ if timer = 770{
+ with (asidecree){
+  instance_destroy();
+ }
+ }
+ if asidecree.image_index>=4{
+  asidecree.image_index=0;
+ }
+  if timer <770 && timer >=750{
+ asidecree.image_alpha-=0.05;
+ }
+  if timer = 60{
+    sound_play(finalbeam_sound);
+    sound_play(activevoice);
+    thisiswhere = create_projectile ( 1,63+54*facing,7,1.2,-1,80, FriezaHitSFXBeam , obj_spark_special1 , 2 , 1.5 , 23.80 , 27.80 , self.id , 338 , no_script );
+    thisiswhere.sprite_index = fs_beam_sprite;
+    thisiswhere.image_speed=0.5;
+    thisiswhere.alarm[0]=338;
+    thisiswhere.hit_stun=60;
+    thisiswhere.image_index=0;
+    thisiswhere.image_alpha=0.8;
+    thisiswhere.di=0;
+    thisiswhere.sdi=0;
+    thisiswhere.priority=6;
+    thisiswhere.parry_nodestroy=1;
+    thisiswhere.reflect=0;
+    thisiswhere.absorb=0;
+    thisiswhere.absorb2=0;
+  }
+  if timer >= 60 && timer < 111{
+  if thisiswhere.hit=1{
+  thisiswhere.timer=0;
+  }
+  if timer mod 5 = 0{
+  thisiswhere.hit=0;
+  }
+  if timer mod 4 = 0{
+  if image_index=7{
+  image_index=8;
+  }
+  else {
+  image_index=7;
+  }
+  }
+  }
+  if timer = 139{
+  sound_stop(activevoice);
+  activevoice=choose(atk_voice,atk2_voice,atk3_voice,hah_voice,howaboutthis_voice,youwontsurvive_voice,youworm_voice,doubledose_voice,shallwebegin_voice);
+  }
+  if timer = 140{
+    sound_play(finalbeam_sound);
+    sound_play(activevoice);
+    youdie = create_projectile ( 1,63+54*facing,7,1.2,-1,80, FriezaHitSFXBeam , obj_spark_special1 , 2 , 1.5 , 23.80 , 27.80 , self.id , 338 , no_script );
+    youdie.sprite_index = fs_beam_sprite;
+    youdie.image_speed=0.5;
+    youdie.alarm[0]=338;
+    youdie.hit_stun=60;
+    youdie.image_index=0;
+    youdie.image_alpha=0.8;
+    youdie.di=0;
+    youdie.sdi=0;
+    youdie.priority=6;
+    youdie.parry_nodestroy=1;
+    youdie.reflect=0;
+    youdie.absorb=0;
+    youdie.absorb2=0;
+  }
+  if youdie.hit = 1{
+  hitchecktemp+=1;
+  }
+  if timer = 219 {
+  if hitchecktemp = 0{
+  timer = 769;}
+  else{
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 436;
+  }
+  }
+  if timer >= 140 && timer < 191{
+  if youdie.hit=1{
+  youdie.timer=0;
+  }
+  if timer mod 5 = 0{
+  youdie.hit=0;
+  }
+  if timer mod 4 = 0{
+  if image_index=12{
+  image_index=13;
+  }
+  else {
+  image_index=12;
+  }
+  }
+  }
+  if timer = 235{
+    ButNo = instance_create(x+14.50*( 1 - facing * 2 ) * size , y - 21 * size, obj_spark)
+    ButNo.sprite_index = fs_beam_charge_sprite;
+    ButNo.image_xscale = 0;
+    ButNo.image_yscale = 0;
+    ButNo.image_alpha=0.8;
+    ButNo.image_speed=0.25;
+    sound_play(finalbeam_charge_sound);
+  }
+  if timer >= 235 &&  timer < 275{
+  ButNo.image_xscale+=0.01*( 1 - facing * 2 )*size;
+  ButNo.image_yscale+=0.01*size;
+  }
+  if timer = 299{
+  background = instance_create(x, y , obj_spark)
+  background.sprite_index = but_who_cares_sprite;
+  background.image_speed=0;
+  background.depth=-19999;
+  background.image_xscale = 8;
+  background.image_yscale = size*8;
+  background.alarm[0]=84;
+  background.image_alpha=0.05;
+  }
+  if timer < 319{
+    background.image_alpha+=0.05;
+  }
+  if timer = 371{
+  seriously = instance_create(x, y , obj_spark)
+  seriously.sprite_index = final_smash2_sprite;
+  seriously.image_speed=0;
+  seriously.depth=-20000;
+  seriously.image_xscale = 0.7*( 1 - facing * 2 )*size;
+  seriously.image_yscale = size*0.7;
+  seriously.alarm[0]=6;
+  please = instance_create(x+14.50* size , y - 21 * size, obj_spark)
+  please.sprite_index = fs_beam_charge2_sprite;
+  please.image_xscale = 0.4;
+  please.image_yscale = 0.4;
+  please.image_alpha=0.8;
+  please.image_speed=0;
+  please.alarm[0]=6;
+  please.depth=-20000;
+  if facing = 1{
+  please.x=x-50* size;
+  }
+  please.snap=self.id;
+  }
+  if timer = 230{
+  sound_stop(activevoice);
+  activevoice=choose(littleserious_voice,exersion_voice,myfullpower_voice,theend_voice,diebyme_voice,youwontsurvive_voice,youmiserableinsect_voice,deadly_voice,deadly2_voice,iwillendyou_voice);
+  sound_play(charge_voice);
+  }
+  if timer = 383{
+    sound_stop(charge_voice);
+    sound_stop(finalbeam_charge_sound);
+    sound_play(finalbeam_sound);
+    sound_play(activevoice);
+    thinkyoucandie = create_projectile ( 0.5,26+128*facing,2,0,-1,2, FriezaHitSFXBeam , obj_spark_special1 , 4 , 4 , 23.80 , 27.80 , self.id ,972 , no_script );
+    thinkyoucandie.sprite_index = fs_beam_sprite;
+    thinkyoucandie.image_speed=0.5;
+    thinkyoucandie.alarm[0]=972;
+    thinkyoucandie.hit_stun=5;
+    thinkyoucandie.image_index=0;
+    thinkyoucandie.image_alpha=0.8;
+    thinkyoucandie.di=0;
+    thinkyoucandie.sdi=0;
+    thinkyoucandie.priority=6;
+    thinkyoucandie.parry_nodestroy=1;
+    thinkyoucandie.reflect=0;
+    thinkyoucandie.absorb=0;
+    thinkyoucandie.absorb2=0;
+    thinkyoucandie.depth=depth-1;
+  }
+  if ( (timer >= 60 && timer < 111) || (timer >= 140 && timer < 191) || (timer >= 383 && timer < 695)) && (thisiswhere.image_index >=17 ||youdie.image_index >=17 ||thinkyoucandie.image_index >=17){
+  thinkyoucandie.image_index=7;
+  thisiswhere.image_index=7;
+  youdie.image_index=7;
+  }
+  if timer = 111 || timer = 191 || timer = 695{
+  thinkyoucandie.sprite_index=fs_beam_retract_sprite;
+  thinkyoucandie.hit=2;
+  thinkyoucandie.image_speed=0.2;
+  thinkyoucandie.image_index=0;
+  thisiswhere.sprite_index=fs_beam_retract_sprite;
+  thisiswhere.hit=2;
+  thisiswhere.image_speed=0.2;
+  thisiswhere.image_index=0;
+  youdie.sprite_index=fs_beam_retract_sprite;
+  youdie.hit=2;
+  youdie.image_speed=0.2;
+  youdie.image_index=0;
+  }
+  if timer = 133 || timer = 213 ||  timer =717{
+  with (thisiswhere){
+  instance_destroy();
+  }
+  with (youdie){
+  instance_destroy();
+  }
+  with (thinkyoucandie){
+  instance_destroy();
+  }
+  }
+  if timer >= 383 && timer < 695{
+  thinkyoucandie.image_xscale+=0.0128*( 1 - facing * 2 )*size;
+  if timer = 689{
+  thinkyoucandie.bkb=7;
+  thinkyoucandie.kbg=18;
+  thinkyoucandie.hitlag_frames=2;
+  thinkyoucandie.hit_stun=20;
+  }
+  if timer mod 4 = 0{
+  if image_index=21{
+  image_index=20;
+  }
+  else {
+  image_index=21;
+  }
+  }
+  if timer mod 6 = 0{
+  thinkyoucandie.hit=0;
+  }
+  if thinkyoucandie.image_index >= 27{
+  thinkyoucandie.image_index=3;
+  }
+  }
+  }
+  if thinkyoucandie.hit =1{
+  thinkyoucandie.timer=0;
+  }
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  final_lasts = 900;
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,131 @@
+moving_object = 0;
+absorb2 = 1;
+absorb=1;
+ if alarm[0]=179{
+                deathball2 = instance_create(x+size, y + size, obj_spark)
+                deathball2.sprite_index = attacker.deathball_back_sprite;
+                deathball2.image_speed=0;
+                deathball2.alarm[0]=2;
+                deathball2.depth=depth+2;
+                deathball2.image_alpha=0.9;
+                deathball2.image_blend=c_black;
+ }
+
+if (attacker.state_type="flinch" || attacker.state_type="air_flinch")&& attacker.attack_type="ssmash"{
+with (deathball2){
+instance_destroy();
+}
+with (deathball3){
+instance_destroy();
+}
+with (deathballland){
+instance_destroy();
+}
+instance_destroy();
+}
+
+if ( collision_rectangle ( x -19.60 , y - 3 , x + 23.80  , y + 0 , obj_floor , 1 , 1 ) ){
+    on_floor = 1;
+}
+else{
+on_floor=0;
+}
+if ( vspeed >= 0 && collision_rectangle ( x -19.60 , y - 3 , x + 23.80  , y + 0 , obj_platform , 1 , 1 ) ){
+    on_platform = 1;
+}
+else {
+on_platform=0;
+}
+
+
+
+            if tempchecking=1{
+            if image_index >=12{
+                manky+=1;
+            }
+            if !instance_exists(deathball3){
+                deathball3 = create_projectile ( 2,320+(-100)*facing,3.5,0,2,4, explosion1 , obj_spark_special1 , 0.6 , 0.6, 0 , 0 , attacker.id , 180 , no_script );
+                deathball3.sprite_index = attacker.deathball_sprite;
+                deathball3.image_speed=0;
+                deathball3.depth=depth+1;
+                deathball3.hit=0;
+                deathball3.hit_stun=10;
+                deathball3.di=0.5;
+                deathball3.image_alpha=0;
+                deathball3.priority=4;
+            }
+            deathball2.x+=1.5-facing*3;
+            deathball2.y+=2;
+            deathball3.x=x;
+            deathball3.y=y;
+            timermodreplacement+=1;
+            if timermodreplacement=10{
+            deathball3.hit=0;
+            timermodreplacement=0;
+            }
+            }
+            deathball2.image_index=image_index;
+            deathball2.image_xscale=image_xscale;
+            deathball2.image_yscale=image_yscale;
+            deathball3.image_index=image_index;
+            deathball3.image_xscale=image_xscale;
+            deathball3.image_yscale=image_yscale;
+            deathball3.alarm[0]=alarm[0];
+            if deathball3.hit =1{
+            timer=0;
+            }
+    if image_index>=26 && sprite_index=attacker.deathball_sprite{
+       image_index=12;
+    }
+
+if tempchecking < 1 && attacker.attack_type !="ssmash" {
+with (dsmashaura){
+instance_destroy();
+}
+instance_destroy();
+}
+
+if attacker.attack_type="ssmash" && attacker.dabonem=0 && attacker.ktimer = 0{
+image_xscale += 0.01*( 1 - facing * 2 );
+image_yscale += 0.01;
+}
+
+if on_floor=1 || on_platform=1 && manky >= 25{
+if tempchecking=1{
+with (deathball2){
+instance_destroy();
+}
+with (deathball3){
+instance_destroy();
+}
+                sprite_index=attacker.deathball_pillar_sprite;
+                deathballland = create_projectile ( floor(5+(dab/5)),35+110*facing,9+floor(dab/60),6+floor(dab/15),4+floor(dab/15*2),12+floor(dab/5), explosion1 , obj_spark_special1 , 0.2, 0.2, 0 , 0 , attacker.id , 24 , no_script );
+                deathballland.sprite_index = attacker.deathball_land_sprite;
+                deathballland.image_speed=0.25;
+                deathballland.depth=depth+2;
+                deathballland.x=x;
+                deathballland.y=y;
+                deathballland.image_xscale=image_xscale/4;
+                deathballland.image_yscale=image_yscale/4;
+                depth=0;
+                deathballland.di=0.3;
+                deathballland.depth=1;
+                deathballland.alarm[0]=24;
+image_index=0;
+alarm[0]=48;
+tempchecking=2;
+with (attacker){
+sound_play(ball_explode_sound);
+}
+}
+if deathballland.hit=1 || attack_shielded=1{
+deathballland.timer=1;
+}
+hit=2;
+image_speed=0.5;
+vspeed=0;
+hspeed=0;
+}
+if alarm[0]>2{
+deathball2.alarm[0]=2;
+}

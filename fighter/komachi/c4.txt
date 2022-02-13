@@ -1,0 +1,52 @@
+//Komachi (Dair Bladeshot)
+
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+
+custom = attacker
+dir = 90 - sign ( hspeed ) * 30;
+if timer = 1 {
+    sprite_index = attacker.id.bladeshot_sprite
+    if image_speed != 0.5
+        image_speed = 0.2;
+    visible =1
+    spark.speed = 0
+
+    dir = 25+facing*130
+    }
+image_xscale = 0.35;
+image_yscale = 0.35;
+moving_object = 1;
+
+if hit!=0
+visible = 0
+
+if hit != 1 
+	{
+	after_image(1,c_white,0.11)
+	after_image(2,c_white,0.1)
+	after_image(3,c_white,0.09)
+	after_image(4,c_white,0.08)
+	after_image(5,c_white,0.07)
+	after_image(6,c_white,0.06)
+	after_image(7,c_white,0.05)
+	after_image(8,c_white,0.04)
+	after_image(9,c_white,0.03)
+	after_image(10,c_white,0.02)
+	after_image(11,c_white,0.01)
+	}
+
+if ((collision_point(x,y+((sign(vspeed))-5),obj_platform,1,1)))
+{
+  instance_destroy();
+}
+
+if ( on_floor || on_platform )
+  {
+  instance_destroy();
+  }
+  
+  if (collision_point(x+sign(hspeed),y,obj_wall,1,1))
+  {
+	instance_destroy();
+  }

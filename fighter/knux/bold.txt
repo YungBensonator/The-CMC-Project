@@ -1,0 +1,159 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" {
+    attacking = 0
+    special = 0
+    attack_type = "b"
+    spark2 = -99
+    spark = -100
+    tempcharge = 0
+    if charge < 145 {
+        state_type = "air_attack";
+        hspeed = 0;
+        sprite_index = b_sprite;
+        temp = 0
+        sound_play(charge_sound)
+        time = 145;
+        image_speed = 0.3 }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.4;
+        sprite_index = b_punch_sprite;
+        temp = 1
+        time = 57
+        air_move = 0
+        tempcharge = charge
+        charge = 145
+        }
+        image_speed = 0.3;
+        image_index=0;
+        timer = 0;
+        timer_speed=1;
+        attack_success = 0
+}
+if temp=1 { 
+    if timer = 5 {
+        if charge > 139 {
+            spark = instance_create(x,y,obj_down_impact)
+            spark.image_xscale = 0.8 }
+        if charge >= 140
+            super_armor = 1
+        //tempcharge = charge
+        //charge = 0
+        //fully_charged = 0
+    }
+    if timer = 10 {
+        tempcharge = charge        
+        sound_play(attack_voice3)
+        if charge >= 65
+            sound_play(attack_sound3)
+        else if charge >= 40
+            sound_play(attack_sound2)
+        else
+            sound_play(attack_sound1)
+        create_hitbox(9+20*tempcharge/145,25+facing*130,1.6+(tempcharge/27)*1.1,1.5+(tempcharge/22)*1.1,13+round(1.1*tempcharge/7),4+ceil(1.1*tempcharge/13),punch2*(tempcharge<35) + punch3*((tempcharge>=35) && (tempcharge<105)) + punch4*(tempcharge>=105),obj_spark_hit1,1.4,0.8,0,20,self.id,5,3);
+        // fully charged: 29 damage, 7.507 bkb, 8.75 kbg, 36 shield damage, 17 hitlag frames
+        hitbox.shake_ampl = 0.9
+        if charge >= 145
+            hitbox.armor_break = 1
+        fully_charged = 0
+        charge = 0
+    }
+    if timer > 10 && timer < 18
+        hspeed = (1-facing*2)*0.5
+    if timer = 24 {
+        if tempcharge >= 65
+            sound_play(attack_sound3)
+        else if tempcharge >= 40
+            sound_play(attack_sound2)
+        else
+            sound_play(attack_sound1)
+        create_hitbox(5+tempcharge/15,25+facing*130,2+tempcharge/38,1.5+tempcharge/28,10+round(tempcharge/15),4+ceil(tempcharge/27),punch2*(tempcharge<35) + punch3*((tempcharge>=35) && (tempcharge<105)) + punch4*(tempcharge>=105),obj_spark_hit4,1.5,0.8,0,20,self.id,5,3);
+        hitbox.shake_ampl = 0.9
+    }
+    if timer = 18
+        hspeed = 0
+    if timer = 14
+        super_armor = 0
+    }
+else {
+    if timer = 1 || timer=20 || timer = 40 || timer = 60 || timer = 80 || timer = 100 || timer = 120 || timer = 140 {
+        image_blend = c_red
+        sound_play(swing_sound)
+        }
+    if timer = 3 || timer=22 || timer = 42 || timer = 62 || timer = 82 || timer = 102 || timer = 122 || timer = 142 {
+        image_blend = c_white
+        hspeed = 0
+        }
+    if air = 0 && ai && timer >= 30 && distance_to_object(enemy) < 29 && random(20)>17 {
+			runtimer = 0
+            sprite_index = roll_sprite
+			image_index = 0
+            attack_type = "none"
+            state_type = "dodge"
+            if instance_exists(spark2)
+            with spark2 instance_destroy()
+            timer = 0
+            time = 29 }
+    if shieldup = 1 && air = 0 {
+        flashing = true
+        alarm[7] = 3
+        state_type = "stand"
+        timer = 0
+        time = -1
+        attack_type = "none"
+        //shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+	exit;
+        }
+    if air = 0 && (moveleft = 1 || moveright = 1) {
+			runtimer = 0
+            sound_stop(swing_sound)
+            image_blend = c_white
+            attack_type = "none"
+            state_type = "dodge"
+            sprite_index = roll_sprite
+			image_index = 0
+            sound_play(roll_dodge_snd)
+            shieldup = 0
+            timer = 0
+            time = 29
+            facing = moveright
+            }
+    charge+=1
+    if special = 1 {
+        state_type = "air_attack";
+        hspeed *= 0.4;
+        sprite_index = b_punch_sprite;
+        temp = 1
+        time = 57
+        timer = 0
+        air_move = 0
+        tempcharge = charge
+        image_index = 0
+        image_speed = 0.3
+        image_blend = c_white
+        }
+    if charge >= 145 {
+        sound_stop(charge_sound)
+        speed = 0    
+        attack_type = "none"
+        state_type = "stand"
+        timer = 0
+        time = -1
+        image_blend = c_white
+        fully_charged = 1
+        charge = 145
+    }
+}
+if timer = time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    timer = 0;
+    time =-1;
+    image_blend = c_white
+    }
+        

@@ -1,0 +1,83 @@
+if(attack_type != "b")
+{
+	if instance_exists(rok) with rok instance_destroy();
+}
+
+if(state_type = "flinch" || state_type = "air_flinch")
+{
+	flashing = 0;
+}
+
+if ( sidebtimer > 0 ) 
+  sidebtimer -= 1;
+
+if sprite_index != bp4_sprite
+	sound_stop(ba_sound);
+
+if ( state_type == "jump" && sprite_index == mid_jump_sprite )
+{
+image_index += 0.25;
+if ( image_index = 4 )
+image_index -= 4;
+}
+
+if ( state_type == "dodge" && sprite_index == roll_sprite )
+{
+image_speed = 0;
+if ( timer >= 18 && timer <= 30 )
+{
+sprite_index = crouch_sprite;
+image_index = 0;
+}
+switch (timer)
+{
+case 2: image_index = 3; break;
+case 4: image_index = 2; break;
+case 6: image_index = 1; break;
+case 8: image_index = 0; break;
+case 10: image_index = 3; break;
+case 12: image_index = 2; break;
+case 14: image_index = 1; break;
+case 16: image_index = 0; break;
+}
+}
+if attack_type = "sideb" && hspeed > 0  && next_to_rwall && state_type = "air_attack"
+{
+glide = 0;
+moveright = 0;
+moveleft = 0;
+movejump = 0;
+holdjump = 0;
+intangible = 0;
+hspeed = 0;
+vspeed = 0;
+gravity = 0;
+attack_type = "wall_cling";
+sprite_index = wall_cling_sprite;
+image_index= 0;
+image_angle = 0;
+sprite_angle = 0;
+walljump_lock = 0;
+facing = 0;
+exit;
+}
+if attack_type = "sideb" && hspeed < 0  && next_to_lwall && state_type = "air_attack"
+{
+glide = 0;
+moveright = 0;
+moveleft = 0;
+movejump = 0;
+holdjump = 0;
+intangible = 0;
+hspeed = 0;
+vspeed = 0;
+gravity = 0;
+attack_type = "wall_cling";
+sprite_index = wall_cling_sprite;
+image_index= 0;
+image_angle = 0;
+sprite_angle = 0;
+walljump_lock = 0;
+facing = 1;
+exit;
+}

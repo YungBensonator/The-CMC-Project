@@ -1,0 +1,245 @@
+//Initial bury / aerial jump bury
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" {
+    attacking = 0
+    special = 1
+    attack_type = "b"
+    if air > 0 {
+    state_type = "air_attack";
+    sprite_index = b2_sprite;
+    temp = 1
+    time = 85;
+    }
+    else {
+    state_type = "attack";
+    sprite_index = b1_sprite;
+    temp = 0
+    time = 45;
+    }
+    hspeed = 0;
+    air_move = 0
+    image_speed = 0;
+    image_index=0;
+    timer = 0;
+    timer_speed=1;
+    attack_success = 0
+    temp2 = 0
+}
+
+if temp=0 { 
+     switch (timer) {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 13: image_index = 5; break;
+	case 16: image_index = 6; break;
+	case 19: image_index = 7; break;
+	case 22: image_index = 8; break;
+	case 25: image_index = 9; break;
+	case 28: image_index = 10; break;
+	case 31: image_index = 11; break;
+	case 34: image_index = 12; break;
+	case 35: sprite_index = hole_sprite; image_index = 0; break;
+	}
+
+	if timer = 13 {
+	sound_play(dsmash_sound);
+	sound_play(break_sound);
+	sound_play(attack_voice1);
+	create_hitbox(5,270,7,0,20,5,punch1,obj_spark_hit2,0.9,0.9,3,10,self.id,15,3);
+        hitbox.hit_stun=15
+	entryspark = instance_create(x,y-1,obj_spark);
+	entryspark.sprite_index = hole_entry_sprite;
+	entryspark.image_index = 0;
+	entryspark.image_speed = 0.25;
+	entryspark.x = x;
+	entryspark.y = y-1;
+	}
+
+	if timer = 18 || timer = 23 || timer = 28
+	sound_play(break_sound)
+
+	if timer = 38 {
+	temp = 3
+	timer = 100
+	time = 120
+	}
+}
+
+if temp = 1 {
+    switch (timer) {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 13: image_index = 5; break;
+	case 15: image_index = 6; break;
+	case 17: image_index = 7; break;
+	case 19: image_index = 8; break;
+	case 21: image_index = 9; break;
+	case 23: image_index = 10; break;
+	case 25: image_index = 11; break;
+	case 27: image_index = 12; break;
+	case 29: image_index = 13; break;
+	case 31: sprite_index = b3_sprite; image_index = 0; break;
+	case 33: image_index = 1; break;
+	case 35: image_index = 2; break;
+	case 37: image_index = 3; break;
+	case 53: sprite_index = b4_sprite; image_index = 0; break;
+	case 55: image_index = 1; break;
+	case 58: image_index = 2; break;
+	case 61: image_index = 3; break;
+	case 64: image_index = 4; break;
+	case 67: image_index = 5; break;
+	case 70: image_index = 6; break;
+	case 73: image_index = 7; break;
+	case 76: image_index = 8; break;
+	case 77: sprite_index = hole_sprite; image_index = 0; break;
+	}
+
+	if timer < 13 {
+	vspeed = 0
+	hspeed = 0
+	air_move = 0
+	}
+
+	if timer = 39
+	timer = 30
+
+	if timer = 2
+	sound_play(spin_sound)
+
+	if timer = 10 {
+	sound_stop(spin_sound);
+	sound_play(dash_sound);
+	}
+	
+	if timer > 18 && timer < 41 {
+	    vspeed = 5;
+	    temp_fall_speed = 3.5;
+	    if timer = 31 {
+	    create_hitbox(5,270,6,0,15,5,punch1,obj_spark_hit2,0.7,1.4,4,21,self.id,11,3);
+	    sound_play(swing_sound);
+	    }
+		if air = 0 {
+		vspeed = 0
+		hspeed = 0
+		timer = 52
+		}
+	}
+
+	if timer = 53 {
+	sound_play(dsmash_sound);
+	sound_play(break_sound);
+	sound_play(attack_voice1);
+	create_hitbox(5,270,7,0,20,5,punch1,obj_spark_hit2,0.7,1,3,14,self.id,15,3);
+	hitbox.hit_stun=12
+	entryspark = instance_create(x,y-1,obj_spark);
+	entryspark.sprite_index = hole_entry_sprite;
+	entryspark.image_index = 0;
+	entryspark.image_speed = 0.25;
+	entryspark.x = x;
+	entryspark.y = y-1;
+	}
+
+	if timer = 58 || timer = 63 || timer = 68
+	sound_play(break_sound)
+
+	if timer = 80 {
+	temp = 3
+	state_type = "attack"
+	timer = 100
+	time = 120
+	}
+}
+
+//I think this is the moment Knuckles is in the ground?
+if temp = 3 {
+     switch (timer) {
+	case 130: image_index = 0; break;
+	case 133: image_index = 1; break;
+	case 136: image_index = 2; break;
+	case 139: image_index = 3; break;
+	case 142: image_index = 4; break;
+	case 145: image_index = 5; break;
+	case 148: image_index = 6; break;
+	case 151: image_index = 7; break;
+	case 154: image_index = 8; break;
+	case 157: image_index = 9; break;
+	case 160: image_index = 10; break;
+	case 163: image_index = 11; break;
+	case 166: image_index = 12; break;
+	case 169: image_index = 13; break;
+	case 172: image_index = 14; break;
+	case 176: sprite_index = crouch_sprite; image_index = 0; break;
+	}
+    if timer = 110 && temp2 < 15 {
+	timer = 101
+	temp2 += 1
+	}
+    if (timer = 111) || (timer < 110 && special = 0) {
+	timer = 130
+	time = 186
+	intangible = 0
+	super_armor = 1
+	if moveright
+	facing = 0
+	if moveleft
+	facing = 1
+	sprite_index = b5_sprite;
+	}
+
+	if timer < 110 {
+	intangible = 1
+	if moveleft
+	hspeed = -2.1
+	if moveright
+	hspeed = 2.1
+	}
+
+	if timer >= 130
+	hspeed = 0
+
+	if timer = 131 {
+	entryspark = instance_create(x,y-3,obj_spark);
+	entryspark.sprite_index = hole_exit_sprite;
+	entryspark.image_index = 0;
+	entryspark.image_speed = 0.25;
+	entryspark.x = x;
+	entryspark.y = y-3;
+	sound_play(break_sound);
+	sound_play(dsmash_voice);
+	}
+
+	if timer = 139 {
+	sound_play(swing_sound);
+	create_hitbox(10,85+facing*10,6.6,7,30,15,punch3,obj_spark_hit4,0.95,1,1,17,self.id,10,4);
+	}
+
+	if timer = 142
+	hitbox.hitbox_y = 36;
+
+	if timer = 145
+	hitbox.hitbox_y = 40;
+
+	if timer = 148
+	hitbox.hitbox_y = 44;
+
+	if timer = 150
+	super_armor = 0
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+	super_armor = 0;
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    timer = 0;
+    time =-1;
+    image_blend = c_white
+    }

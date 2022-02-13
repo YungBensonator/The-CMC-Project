@@ -1,0 +1,93 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0;
+if ktimer > 0{
+sprite_index = gdthrow_sprite;
+target.alarm[0] = 30;
+timer = 100;
+time = 160;
+ktimer +=100;
+}
+if ktimer = 0{
+sprite_index = dthrow_sprite;
+target.alarm[0] = 10;
+timer = 0;
+time = 48;
+}
+image_index=0;
+timer_speed=1;
+target.timer_speed = 0;
+sound_stop(activevoice);
+activevoice=youworm_voice;
+}
+if timer < time {
+
+      switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 5: image_index = 1; break;
+    case 10: image_index = 2; break;
+    case 13: image_index = 3; break;
+    case 39: image_index = 4; break;
+    case 100: image_index = 0; break;
+    case 105: image_index = 1; break;
+    case 110: image_index = 2; break;
+    case 120: image_index = 3; break;
+    case 124: image_index = 4; break;
+    case 128: image_index = 5; break;
+    case 132: image_index = 6; break;
+    case 152: image_index = 1; break;
+    case 158: image_index = 2; break;
+      }
+    if timer = 10{
+                sound_play(activevoice);
+                sound_play(deathbeam_sound);
+                laserbeam = create_projectile ( 7,326+(-112)*facing,4.5,2.2,3,30, FriezaHitSFXBeam , obj_spark_hit1 , 0.4 , 0.2, 17.5 , 17.5 , self.id , 8 , no_script );
+                laserbeam.sprite_index = death_beam_sprite;
+                laserbeam.image_speed=1;
+                laserbeam.alarm[0]=8;
+                laserbeam.depth=depth-1;
+                laserbeam.hit_stun=11;
+                laserbeam.di=0;
+                laserbeam.sdi=0;
+                laserbeam.image_index=0;
+                laserbeam.image_alpha=0.8;
+                laserbeam.image_angle=( 1 - facing * 2 ) * 351.05;
+    }
+    if laserbeam.hit=1{
+    laserbeam.timer=1;
+    }
+    if timer = 124{
+    downthrowspark = instance_create(x+28.95*( 1 - facing * 2 )*size, y * size, obj_spark)
+    downthrowspark.sprite_index = gdthrow_eff_sprite;
+    downthrowspark.image_xscale = 0.6*( 1 - facing * 2 )*size;
+    downthrowspark.image_yscale = size*0.6;
+    downthrowspark.image_speed=0.25;
+    downthrowspark.alarm[0]=20;
+    downthrowspark.image_alpha=1;
+    downthrowspark.depth=depth-1;
+    }
+    if timer = 128{
+    sound_play(activevoice);
+    sound_play(golden_end_sound);
+    create_projectile ( 7,326+(-112)*facing,4.5,2.2,3,50, FriezaHitSFXSideb , obj_spark_slash1 , 1.00 , 1.63 , 30.40 , 25.65 , self.id , 2 , no_script );
+    proj.di=0;
+    proj.sdi=0;
+    target.alarm[0]=52;
+    }
+    if timer > 100 && target.y>y+30{
+    target.timer=target.time;
+    }
+    
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

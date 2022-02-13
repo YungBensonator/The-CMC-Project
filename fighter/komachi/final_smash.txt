@@ -1,0 +1,336 @@
+/*
+Notes on Komachi Final Smash:
+She swings her scythe. If the first swing connects, kiss your soul goodbye.
+*/
+//-------------------------------------------------------------------------------------------------------------------------------
+///Short Life Expectancy
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = final_smash_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 321;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  air_move = 0;
+  vspeed = 0;
+  change = 0;
+  grab_edge = 0;
+  
+  afterlife = 0.2; //goodbye soul
+  
+	if air = 0 
+	{
+	duster = instance_create(x+5*size*(1-facing*2),y,obj_dust_effect);
+	duster.facing = 1-facing;
+	duster = instance_create(x-5*size*(1-facing*2),y,obj_dust_effect);
+	duster.facing = facing; 
+	} 
+}
+
+tempx = x + 30 * (1-facing*2) * size;
+tempy = y - 20 * size;
+
+
+if timer < time {
+	
+  switch ( timer )
+	  {
+		//powerup
+		case 1: image_index = 0; break;
+		case 3: image_index = 1; break;
+		
+		//final smash command slash
+		case 52: image_index = 2; break;
+		case 54: image_index = 3; break;
+		case 56: image_index = 4; break;
+		case 58: image_index = 5; break; 
+		case 60: image_index = 6; break; 
+		case 62: image_index = 7; break;
+		case 64: image_index = 8; break;
+		
+		//swing windup
+		case 210: image_index = 17; break;
+		case 212: image_index = 18; break;
+		case 214: image_index = 19; break;
+		case 216: image_index = 20; break;
+		case 218: image_index = 21; break;
+		case 220: image_index = 22; break;
+		case 222: image_index = 23; break;
+		case 224: image_index = 24; break;
+		
+		//swing
+		case 267: image_index = 25; break; 
+		case 270: image_index = 26; break; 
+		case 273: image_index = 27; break;
+		case 276: image_index = 28; break;
+		case 279: image_index = 29; break;
+		case 282: image_index = 30; break;
+		
+		//post swing
+		case 312: image_index = 31; break;
+		case 314: image_index = 32; break;
+		case 316: image_index = 33; break;
+		case 318: image_index = 34; break;
+	  }
+
+
+	if timer = 1
+	{
+		sound_play(final_smash_sound1);
+		sound_play(spellcard_sound);
+	}
+	
+//cinematic pause
+	if timer = 2 
+	{
+		spotlight = instance_create ( 0 , 0 , obj_freeze );
+		spotlight.dontpause = self.id;
+		spotlight.alarm[0] = 52;
+	}
+
+	if timer = 50 
+	{
+		spark = instance_create(x,y+1,obj_spark_shockwave)
+		spark.image_xscale *= size
+		spark.image_yscale *= size*0.5
+		spark.image_alpha = 1
+		spark.depth = 0
+		spark = instance_create(x,y+1,obj_spark_shockwave)
+		spark.image_xscale *= size*1.3
+		spark.image_yscale *= size*0.6
+		spark.image_alpha = 1
+		spark.depth = 0
+		spark.image_blend = c_fuchsia
+		spark = instance_create(0,0,obj_shakescreen3);
+		spark.ampl = 5
+		spark.xampl = 0
+		spark.time = 10
+	}
+
+	if timer = 53 {target1 = target;}
+	
+	if timer = 57
+	{
+		duster = instance_create(x + size*(10*facing-5),y,obj_dust_effect);
+		duster.facing = facing;
+		duster.image_xscale *= size
+		duster.image_yscale *= size*1.4
+		duster.image_speed *= 0.8
+	}
+	
+//final smash success check....fail's if misses	
+	if timer = 60 
+	{
+		//sound_play(attack_sound4);
+		attack_success = 0
+		//sound_play(sideb_voice2)
+		
+		if target1 > -1 && ((abs(target1.x - x + 20*size*(1-facing*2) > 16) || (abs(target1.y - y - 5) > 10))) 
+			{
+				target1.x = x + 20*size*(1-facing*2)
+				target1.y = y - size*5
+			}
+			
+		create_hitbox(1,23+facing*134,4.25,6.7,25,8,slash3,obj_spark_slash3,1.55,1,25,20,self.id,5,6);
+		hitbox.hit_stun = 150
+		hitbox.di=-1
+		hitbox.shake_kb = 0.5
+		hitbox.shake_ampl = 1.3/size
+		hitbox.shake_type = 1
+		hitbox.armor_break = 1
+		shaker.b = 0
+		shaker.size = 0.75
+		shaker.size_diff = 0.06
+		spark = instance_create(x,y+1,obj_spark_shockwave)
+		spark.image_xscale *= size*0.8
+		spark.image_yscale *= size*0.3
+		spark.image_alpha = 1
+		spark.depth = 0
+		spark.image_blend = c_fuchsia
+		spark = instance_create(0,0,obj_shakescreen3);
+		hspeed = 0
+	}
+
+if timer <= 68 
+	{
+		speed=0
+		gravity_lock = 2;
+	}
+	
+//end of final smash if failed	
+	if timer = 68 
+	{
+		hspeed = 0
+		attack_type = "none";
+		if air = 0
+		state_type = "stand";
+		else
+		state_type = "jump"
+		timer = 0;
+		time =-1;
+		smash_power = 0
+		intangible = 0
+		background_blend=c_white;
+	
+		if global.crowdcheering <= 0 
+		{
+		global.crowdcheering = 45
+		global.crowdtarget = self.id
+		FMODSoundPlay(crowd_nocontest)
+		}
+	}
+
+//final smash continues if check passes	
+	if timer >= 59 && attack_success = 1 && timer < 68 && instance_exists(target) 
+	{
+		sound_play ( final_smash_sound2 );
+		sound_play ( touhoujingle_sound );
+		
+		cinematic = instance_create ( 0 , 0 , obj_camerazoom );
+		cinematic.camera_l = x - 8;
+		cinematic.camera_r = x + 8;
+		cinematic.camera_u = y - 26 - actual_height;;
+		cinematic.camera_d = y + 4;
+		cinematic.camera_boundary_zoom = 50;
+		cinematic.alarm[0] = 60;
+		
+		spotlight2 = instance_create ( 0 , 0 , obj_freeze );
+		spotlight2.dontpause = self.id;
+		spotlight2.alarm[0] = 60;
+		
+		speed = 0
+		timer = 210
+		if instance_exists(target) 
+		{
+		   target1 = target
+		   target1.x = self.x+20-facing*40
+		   target1.y = y-1
+		   target1.speed=0
+		}
+	}
+	
+	if timer >= 210 && timer <= 269
+	{
+		gravity_lock = 2;
+		vspeed = 0;
+		speed = 0;
+	}
+	
+    if timer = 211 
+	{
+		FMODSoundPlay(crowd_combo2);
+		
+		soul = instance_create(target1.x+15*(1-facing*2), target1.y-10 , obj_spark );
+		soul.sprite_index = target1.flinch_sprite;
+		soul.image_xscale = target1.xsize * (1-target1.facing*2) * size;
+		soul.image_yscale = target1.ysize * size;
+		soul.image_blend = c_white;
+		soul.image_alpha = 0.7;
+		soul.depth = -9;
+		soul.image_speed = 0;
+		soul.image_index = 0;
+	}
+	
+    if timer >= 212 && timer <= 269 && instance_exists(target1) 
+	{
+		target1.time = 49;
+		target1.timer = 0;
+		target1.sprite_index= target1.flinch_sprite;
+        target1.state_type = "flinch";
+        target1.speed = 0;
+        target1.gravity_lock = 2;
+		target1.ignore_physics = 1;
+        target1.y = self.y;
+        target1.x = x + 30 * (1-facing*2)*size;
+		
+		soul.x += afterlife * (1-facing*2);
+		soul.y -= afterlife;
+    }
+	
+	if timer = 267
+	{sound_play(swoop_sound);}
+	
+//final smash final hit	
+	if timer = 270 
+	{
+		sound_play(final_smash_sound3);
+		sound_play(scythe_sound);
+		sound_play(finisher_sound);
+		sound_play(spiritblast_sound);
+		sound_play(sendoff_sound);
+		create_hitbox(65,25+facing*130,20,20,-1,26,slash3,obj_spark_slash3,2.5,2.5,40,25,self.id,3,6);
+		
+		spiritexplode = instance_create(x+30*(1-facing*2), y-20 , obj_spark );
+		spiritexplode.sprite_index = spiritexplode_sprite;
+		spiritexplode.image_xscale = 1 * (1-facing*2) * size;
+		spiritexplode.image_yscale = 1 * size;
+		spiritexplode.image_speed = 0.25;
+		spiritexplode.image_index = 0;
+		
+		spark2 = instance_create(x,y+1,obj_spark_shockwave);
+		spark2.image_xscale *= size*0.8;
+		spark2.image_yscale *= size*0.8;
+		spark2.image_alpha = 1;
+		spark2.depth = 0;
+		spark2.image_blend = c_fuchsia;
+		
+		spark = instance_create(0,0,obj_shakescreen3);
+		spark.ampl = 5;
+		spark.xampl = 0;
+		spark.time = 10;
+	}
+   
+   
+//wisp fx
+	if ( timer >= 210 && timer <= 269 )
+	{		
+		wisp = instance_create( soul.x, soul.y-20, obj_spark );
+		wisp.sprite_index = wisp_sprite;
+		wisp.image_xscale = 0.35 * (1-facing*2) * size;
+		wisp.image_yscale = 0.35 * size;
+		wisp.image_speed = 0;
+		wisp.image_index = 0;
+		wisp.depth = -10;
+		wisp.image_angle = random(360);
+		wisp.direction = random(360);
+		wisp.speed = 1 * (1-facing*2) * size;
+		wisp.alarm[0] = 15;
+		wisp.x = soul.x;
+		wisp.y = soul.y - 20;
+	}
+	if ( timer >= 220 && timer <= 269 && wisp.image_alpha > 0 )
+	{
+		wisp.image_alpha -= 0.2;
+	}
+	if ( timer = 270 )
+	{
+		with ( soul )
+		{
+		instance_destroy();
+		}
+		
+		with ( wisp )
+		{
+		instance_destroy();
+		}
+	}
+	
+}
+	
+if timer >= 320 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

@@ -1,0 +1,125 @@
+on_floor = 0;
+on_platform = 0;
+on_puyo = 0
+
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_floor , 1 , 1 ) )
+    y -= 1;
+if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_platform , 1 , 1 ) )
+	y -= 1;
+	
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , global.obj_puyo_puyo_arle , 1 , 1 ) )
+    y -= 1;
+
+if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+    on_floor = 1;
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+    on_platform = 1;
+	
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , global.obj_puyo_puyo_arle , 1 , 1 ) )
+    on_puyo = 1
+
+if ( on_floor || on_platform || on_puyo )
+  {
+vspeed = 0;
+
+if chainRight = 0
+if collision_point(x+18,(y-4),object_index,false,true){
+chainRightWith = collision_point(x+18,(y-4),object_index,false,true)
+if chainRightWith.vspeed = 0
+chainRight = 1
+}
+if chainLeft = 0
+if collision_point(x-18,(y-4),object_index,false,true){
+chainLeftWith = collision_point(x-18,(y-4),object_index,false,true)
+if chainLeftWith.vspeed = 0
+chainLeft = 1
+}
+if chainUp = 0
+if collision_point(x,(y-4)-16,object_index,false,true){
+chainUp = 1
+chainUpWith = collision_point(x,(y-4)-16,object_index,false,true)
+}
+if chainDown = 0
+if collision_point(x,(y-4)+16,object_index,false,true){
+chainDown = 1
+chainDownWith = collision_point(x,(y-4)+16,object_index,false,true)
+}
+
+chains = chainDown+chainUp+chainLeft+chainRight
+
+
+if chainDownWith.chains > 0
+chain_tempD = chainDownWith.chains
+
+if chainUpWith.chains > 0
+chain_tempU = chainUpWith.chains
+
+if chainRightWith.chains > 0
+chain_tempR = chainRightWith.chains
+
+if chainLeftWith.chains > 0
+chain_tempL = chainLeftWith.chains
+
+partial_chain = chain_tempL+chain_tempR+chain_tempU+chain_tempD + chains
+
+if partial_chain>= 4{
+if poptimer = 0
+poptimer = 6
+
+with (chainDownWith){
+if poptimer = 0
+poptimer = 6
+}
+with (chainUpWith){
+if poptimer = 0
+poptimer = 6
+}
+with (chainLeftWith){
+if poptimer = 0
+poptimer = 6
+}
+with (chainRightWith){
+if poptimer = 0
+poptimer = 6
+}
+}
+
+if poptimer > 0{
+with (chainDownWith){
+if poptimer = 0
+poptimer = 6
+}
+with (chainUpWith){
+if poptimer = 0
+poptimer = 6
+}
+with (chainLeftWith){
+if poptimer = 0
+poptimer = 6
+}
+with (chainRightWith){
+if poptimer = 0
+poptimer = 6
+}
+}
+
+
+  }
+  else{
+  vspeed = 2
+  }
+
+if poptimer > 0
+poptimer -= 1
+
+if poptimer <= 1 and poptimer != 0{
+sound_play(originalOwner.upb_sound);
+create_projectile(4+partial_chain,20+facing*140,5+partial_chain,3+partial_chain,18,7+partial_chain,magic2,obj_spark_explode1,0.9,0.9,0,10,originalOwner,12,-1);
+instance_destroy();
+
+}
+
+
+//x = floor(x/18)*18; //y = floor(y/64)*64
+

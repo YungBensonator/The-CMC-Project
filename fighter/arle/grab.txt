@@ -1,0 +1,53 @@
+if grab_cooldown>0 {break;}
+
+if state_type = "shielding" || state_type = "stand" {
+if runtimer <= 0 {
+        image_speed = 0.;
+        timer = 0;
+        time = 20;
+}
+else if runtimer > 0 {
+        image_speed = 0;
+        timer = -4;
+        time = 26;
+}
+        state_type = "attack";
+        attack_type = "grab";
+        sprite_index = grab_sprite;
+        image_index=0;
+        timer_speed=1;
+}
+if timer < time {
+switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+      }
+    if timer = 5{
+	sound_play(tornado_sound1);
+	effectjab = create_spark(30*size,0,self.id);
+	effectjab.sprite_index = wind_sprite_grab;
+    effectjab.image_speed = 0.31;
+	effectjab.image_alpha = 0.9;
+	effectjab.image_xscale = image_xscale*0.4;
+    effectjab.image_yscale = image_yscale*0.4;
+    effectjab.depth = depth - 0.5;
+	effectjab.snap = self.id
+	}
+
+            state_type = "attack";
+		hspeed *= 0.55;
+            if timer = 7 {
+                sound_play(swingsnd5);
+                script_execute(create_grab_box,30+(time=36),10,1.3+((time=36)*0.1),0.75,self.id,2+((time=36)*2));
+                }
+        }  
+if timer >= 27 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    runtimer = 0;
+    timer = 0;
+    time =-1;
+    }
+        

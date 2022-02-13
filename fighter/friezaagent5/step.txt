@@ -1,0 +1,300 @@
+if state_type = "stand"{
+image_speed = 0.1;
+}
+if sprite_index=run_sprite{
+image_speed = 0.22;
+}
+if sprite_index=walk_sprite{
+image_speed = 0.12;
+}
+if sprite_index=crouch_sprite && state_type="crouch"{
+image_speed=0;
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 4: image_index = 1; break;
+}
+} 
+
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "idle" || state_type = "land" || state_type = "shield" || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" ){
+upb = 0;
+hittemp=0;
+if state_type !="flinch" && state_type!="air_flinch"{
+dashy=0;
+}
+}
+if air > 0 && grab = 1 && dashy < 2 && state_type != "zair" && ktimer > 0{
+char_zair();
+}
+
+if sprite_index=land_sprite && state_type="land" && timer = 0{
+sound_play(land_sound);
+}
+if attack_type!="b"{
+    sound_volume(deathbeam_sound,1);
+    }
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud) && !ktime){
+	if instance_exists(MeterHudS)
+    		with MeterHudS instance_destroy();
+	if instance_exists(MeterHudS2)
+    		with MeterHudS2 instance_destroy();
+    MeterHud = instance_create ( hud_x+40, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.image_xscale = 1;
+	MeterHud.image_yscale = 1;
+}
+if(instance_exists(MeterHudS2) && MeterHudS2.image_index >= 3.6 && ktime)
+	MeterHudS2.image_index = 0
+if (!instance_exists(MeterHudS) && ktime){
+	if instance_exists(MeterHud)
+    		with MeterHud instance_destroy();
+    MeterHudS = instance_create ( hud_x+40, hud_y, obj_custom_gfx);
+    MeterHudS.step_script = hudThing_step_script;
+    MeterHudS.draw_script = hudThing_draw_script;
+    MeterHudS.owner = self.id;
+    MeterHudS.keepmain = self.keepmain;
+	MeterHudS.image_xscale = 1;
+	MeterHudS.image_yscale = 1;
+    MeterHudS2 = instance_create ( hud_x+40, hud_y, obj_custom_gfx);
+    MeterHudS2.sprite_index = meter_spriteS2
+    MeterHudS2.step_script = hudThing_step_script;
+    MeterHudS2.draw_script = hudThing_draw_script;
+    MeterHudS2.owner = self.id;
+    MeterHudS2.keepmain = self.keepmain;
+	MeterHudS2.image_xscale = 1;
+	MeterHudS2.image_yscale = 1;
+    MeterHudS2.image_speed = 0.9
+}
+if instance_exists(MeterHud){
+MeterHud.hudalpha = obj_game_control.hud_cover[number-1];
+if charge < 270{
+MeterHud.sprite_index = meter_sprite;
+MeterHud.image_index = (charge/280)*100*(57/100)}
+if charge >= 270 && charge < 280{
+MeterHud.sprite_index = meter_sprite;
+MeterHud.image_index = 55}
+if charge = 280{
+MeterHud.sprite_index = meter_spriteS;
+MeterHud.image_index = 0}
+MeterHud.image_speed = 0;
+if charge < 0 MeterHud.image_index = 0
+}
+if instance_exists(MeterHudS){
+MeterHudS.hudalpha = obj_game_control.hud_cover[number-1];
+MeterHudS.sprite_index = meter_spriteS;
+MeterHudS.image_index = (ktimer/ktime)*100*(57/100);
+MeterHudS.image_speed = 0;
+if ktimer < 0 MeterHudS.image_index = 0
+}
+if instance_exists(MeterHudS2)
+{
+MeterHudS2.hudalpha = obj_game_control.hud_cover[number-1];
+}
+
+
+if state_type="out"{
+ktimer=0;
+ktime = 0;
+}
+if ktimer > 0 && ktimer < 2100 && attack_type!="grab" && attack_type!="hold" && attack_type!="uthrow"  && attack_type!="dthrow" && attack_type!="fthrow"  && attack_type!="bthrow" && attack_type !="final_smash"{
+ktimer +=1;
+}
+
+/////////////////Meter Stop/////////////////////////////////////
+
+if ktimer > 0{
+    run_sprite=grun_sprite;
+    walk_sprite=gwalk_sprite;
+    stand_sprite=gstand_sprite;
+    jump_sprite=gjump_sprite;
+    mid_jump_sprite = gjump_sprite;
+    roll_sprite=groll_sprite;
+    shield_sprite=gshield_sprite;
+    air_dodge_sprite=gair_dodge_sprite;
+    flinch_sprite=gflinch_sprite;
+    flinch1_sprite=gflinch_sprite;
+    flinch2_sprite=gflinch2_sprite;
+    flinch3_sprite=gflinch3_sprite;
+    broken_sprite=gbroken_sprite;
+    crouch_sprite=gcrouch_sprite;
+    edge_sprite=gedge_sprite;
+    land_sprite=gland_sprite;
+    ukemi_sprite=gukemi_sprite;
+    parry_sprite=gshield_sprite;
+    down_sprite=gdown_sprite;
+    launched_sprite=glaunched_sprite;
+    tumble_sprite=gtumble_sprite;
+    item_forward_sprite = gitem_forward_sprite;
+    item_down_sprite = gitem_down_sprite;
+    item_up_sprite = gitem_up_sprite;
+    item_heavy_sprite = gitem_heavy_sprite;
+    item_swing_sprite = gitem_swing_sprite;
+    item_shoot_sprite = gitem_shoot_sprite;
+} 
+else{
+    run_sprite=frun_sprite;
+    walk_sprite=fwalk_sprite;
+    stand_sprite=fstand_sprite;
+    jump_sprite=fjump_sprite;
+    mid_jump_sprite = fjump_sprite;
+    roll_sprite=froll_sprite;
+    shield_sprite=fshield_sprite;
+    air_dodge_sprite=fair_dodge_sprite;
+    flinch_sprite=fflinch_sprite;
+    flinch1_sprite=fflinch_sprite;
+    flinch2_sprite=fflinch2_sprite;
+    flinch3_sprite=fflinch3_sprite;
+    broken_sprite=fbroken_sprite;
+    crouch_sprite=fcrouch_sprite;
+    edge_sprite=fedge_sprite;
+    land_sprite=fland_sprite;
+    ukemi_sprite=fukemi_sprite;
+    parry_sprite=fshield_sprite;
+    down_sprite=fdown_sprite;
+    launched_sprite=flaunched_sprite;
+    tumble_sprite=ftumble_sprite;
+    item_forward_sprite = fitem_forward_sprite;
+    item_down_sprite = fitem_down_sprite;
+    item_up_sprite = fitem_up_sprite;
+    item_heavy_sprite = fitem_heavy_sprite;
+    item_swing_sprite = fitem_swing_sprite;
+    item_shoot_sprite = fitem_shoot_sprite;
+}
+
+if state_type = "edge"{
+image_alpha=1;
+teleportfx.image_alpha=0;
+}
+if state_type="dodge" && air=0 && sprite_index!=edge_sprite && sprite_index!=edge_climb_sprite && sprite_index!=edge_attack_sprite{
+    sprite_index=air_dodge_sprite;
+    }
+if sprite_index = air_dodge_sprite{
+    switch (timer){
+    case 1: image_index = 0; teleportfx = instance_create(x* size , y * size, obj_spark);
+      teleportfx.sprite_index = teleport_sprite;
+      teleportfx.image_xscale = 0.2*( 1 - facing * 2 )*size;
+      teleportfx.image_yscale = size*0.2;
+      teleportfx.image_alpha=0.8;
+      teleportfx.image_speed=1;
+      teleportfx.depth=depth-1;
+      teleportfx.image_index=0;
+      image_alpha=0;
+      dudewhatwouldhappen=1;
+      sound_play(teleport_sound); break;
+    case 12: teleportfx = instance_create(x*size , y * size, obj_spark);
+      teleportfx.sprite_index = teleport_sprite;
+      teleportfx.image_xscale = 0.2*( 1 - facing * 2 )*size;
+      teleportfx.image_yscale = size*0.2;
+      teleportfx.image_alpha=0.8;
+      teleportfx.image_speed=1;
+      teleportfx.depth=depth-1;
+      teleportfx.image_index=0;
+      image_alpha=1;
+      dudewhatwouldhappen=0; break;
+    }
+}
+if state_type!="dodge" && dudewhatwouldhappen>0{
+image_alpha=1;
+dudewhatwouldhappen=0;
+}
+if attack_type!="upb" && movesthatcheck > 0{
+movesthatcheck=0;
+super_armor=0;
+}
+if ktimer > 2100{
+ktimer=2100;
+}
+if attack_type="none" || attack_type = "taunt" || timer=0{
+hittemp=0;
+hittemp2=0;
+}
+if state_type!="out"{
+inthelandofmemealot=0;
+}
+ if wack > 0 && attack_type!="stilt" && attack_type!="utilt" && attack_type!="jab" && attack_type!="uair" && attack_type!="fair" && attack_type!="bair"{
+ with(blur){
+ instance_destroy();
+ }
+ wack=0;
+ }
+if !instance_exists(hitstunchecker){
+	hitstunchecker=create_projectile ( 0,-1,-1,-1,2,2, -1 , -1 , -1 , -1, -1 , -1 , self.id , 999 , char_custom3 );
+    hitstunchecker.hit=2;
+    hitstunchecker.percentisepic=charge;
+    hitstunchecker.dingadangdong=0;}
+ 
+if (hitbox.hit = 1 || proj.hit=1) && ktimer > 0{
+	canceltemp += 1;
+}
+if canceltemp > 1{
+    canceltemp=1;
+}
+if (canceltemp = 1 && attack_type = "none") || ktimer<1 {
+    canceltemp=0;
+}
+
+/*
+if global.AntiCodeTheftAHAHAHAHAHAHA<2 && state_type!="enter"{
+image_index=0;
+timer = 0;
+time =701;
+ismellabitch=31;
+fs_music = tempmus_play2 ( attack_sound99 , 10740 , 1 );
+}
+if ismellabitch=31{
+if mrmilkman= 10740{
+fs_music = tempmus_play2 ( attack_sound99 , 10740 , 1 );
+mrmilkman=0;}
+if timer = 700{
+timer = 0;
+}
+if !instance_exists(theendofnuttery){
+    theendofnuttery = instance_create(x, y , obj_spark)
+    theendofnuttery.sprite_index = man_today_sucks_sprite;
+    theendofnuttery.image_speed=0.01;
+    theendofnuttery.depth=-20000;
+}
+    if !instance_exists(backgroundtoinsanity){
+    backgroundtoinsanity = instance_create(x, y , obj_spark)
+    backgroundtoinsanity.sprite_index = but_who_cares_sprite;
+    backgroundtoinsanity.image_speed=0.01;
+    backgroundtoinsanity.depth=-19999;
+}
+sprite_index = man_today_sucks_sprite;
+if air > 0{
+state_type="jump"}
+if air = 0{
+state_type="stand"}
+attack_type="none";
+mrmilkman+=1;
+hspeed=0;
+vspeed=0;
+invincible=1;
+gravity_lock=1;
+air_move=0;
+backgroundtoinsanity.image_xscale = 1.6;
+backgroundtoinsanity.image_yscale = size*1.6;
+theendofnuttery.image_xscale = 0.1;
+theendofnuttery.image_yscale = size*0.1;
+ignore_physics=1;
+target=0;
+xsize = 0.01;
+ysize = 0.01;
+image_speed=0.01;
+image_alpha=0;
+duster = instance_create ( 0 , 0 , obj_freeze );
+duster.dontpause = self.id;
+duster.alarm[0] = 5;
+  spark = instance_create ( 0 , 0 , obj_camerazoom );
+  spark.camera_l = x - 8;
+  spark.camera_r = x + 8;
+  spark.camera_u = y - 4 - actual_height;
+  spark.camera_d = y + 4;
+  spark.camera_boundary_zoom = 40;
+  spark.alarm[0] = 5;
+}*/
+

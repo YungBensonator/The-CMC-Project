@@ -1,0 +1,76 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "ssmash";
+    timer = 0;
+    time = 50;
+    sprite_index = ssmash_sprite;
+    image_speed = 0;
+    image_index = 0;
+    charge_frame = 15;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+	switch ( timer )
+      {
+	//active 10
+	case 1:  image_index = 0; break;
+	case 3:  image_index = 1; break;
+	case 5:  image_index = 2; break;
+	case 7:  image_index = 3; break;
+	case 9:  image_index = 4; break;
+	case 11: image_index = 5; break;
+	case 13: image_index = 6; break;
+	case 15: image_index = 7; break;
+	
+	case 23: image_index = 8; break;
+	case 26: image_index = 9; break;
+	case 29: image_index = 10; break;
+	case 32: image_index = 11; break;
+	case 35: image_index = 12; break;
+	case 39: image_index = 13; break;
+      }
+	  
+	  if timer = 16
+	{
+		instance_create(x-15*(1-facing*2)*size,y-35*size,obj_spark_effect);
+	}
+
+    if ( timer = 26 )
+      {
+	sound_play(ssmash_voice);
+	sound_play(attack_sound3);
+	sound_play(scythe_sound);
+	
+	create_hitbox(18,20+facing*140,6.8,6.4,21,12,slash3,obj_spark_slash2,1.2,1.2,36,8,self.id,2,4);
+		hitbox.charge_dmg = 0.9;
+		hitbox.shield_stun = 6;
+		hitbox.shake_ampl = 0.6;
+		hitbox.hit_stun = 12;
+	create_hitbox2(18,20+facing*140,6.8,6.4,21,12,slash3,obj_spark_slash2,1.4,1.4,30,28,self.id,2,4);
+		hitbox2.charge_dmg = 0.9;
+		hitbox2.shield_stun = 6;
+		hitbox2.shake_ampl = 0.6;
+		hitbox2.hit_stun = 12;
+	create_hitbox3(18,20+facing*140,6.8,6.4,21,12,slash3,obj_spark_slash2,1.2,1.2,16,48,self.id,2,4);
+		hitbox3.charge_dmg = 0.9;
+		hitbox3.shield_stun = 6;
+		hitbox3.shake_ampl = 0.6;
+		hitbox3.hit_stun = 12;
+		
+	screen_shake(3,7.5);
+	duster = instance_create(x-2*(1-facing*2),y,obj_dust_effect);
+	duster.image_alpha = 0.75;
+	duster.facing = facing;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

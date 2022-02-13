@@ -1,0 +1,76 @@
+if state_type = "jump" && ktimer > 0 && dashy < 2{
+state_type="air_attack"
+attack_type="zair";
+timer =0;
+time=30;
+sprite_index=run_sprite;
+image_index=0;
+image_speed=0.22;
+dashy+=1;
+if !moveup && !movedown {
+speedtemp=1;
+}
+if moveup{
+speedtemp=2;
+airdash.image_angle = ( 1 - facing * 2 ) * 30;
+}
+if movedown {
+speedtemp=3;
+airdash.image_angle = ( 1 - facing * 2 ) * 330;
+}
+if moveleft{
+facing=1;
+}
+if moveright{
+facing=0;
+}
+}
+if timer < time{
+if timer = 0{
+sound_play(airdash_sound);
+airdash = instance_create(x * size , y-10 * size, obj_spark);
+airdash.sprite_index = airdash_sprite;
+airdash.image_xscale = 0.2*( 1 - facing * 2 )*size;
+airdash.image_yscale = size*0.2;
+airdash.image_alpha=0.8;
+airdash.image_speed=1;
+airdash.depth=depth-1;
+airdash.image_index=0;
+if speedtemp=2{
+airdash.image_angle = ( 1 - facing * 2 ) * 30;
+}
+if speedtemp=3 {
+airdash.image_angle = ( 1 - facing * 2 ) * 330;
+}
+airdash.snap=self.id;
+}
+if timer < 25{
+if speedtemp=1{
+if timer > 5{
+if vspeed < 3{
+vspeed +=0.01;
+}
+}
+if timer <= 5{
+vspeed=-3;
+}
+if timer < 27{
+hspeed=4-facing*8;}
+if timer >= 27{
+hspeed-=0.1-facing*0.2;	
+}}
+if speedtemp=2{
+vspeed=-2.5;
+hspeed=4-facing*8;}
+if speedtemp=3{
+vspeed=2.5;
+hspeed=4-facing*8;}
+}
+if timer >=25{
+hspeed-=1-facing*2;
+vspeed*=0.5;
+}
+}
+if  timer > 10 && (movejump || attacking = 1 || special = 1 ) && grab = 0{
+            interrupt = 1;
+}

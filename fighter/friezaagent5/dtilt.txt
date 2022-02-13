@@ -1,0 +1,58 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        if ktimer < 1{
+        sprite_index = dtilt_sprite;}
+        if ktimer > 0{
+        sprite_index = gdtilt_sprite;    
+        }
+        image_index=0;
+        timer = 0;
+        time = 26;
+        timer_speed=1;
+        canceltemp=0;
+        sound_stop(activevoice);
+        activevoice=choose(atk_voice,atk2_voice,atk3_voice,hah_voice,howaboutthis_voice);
+}
+
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 12: image_index = 4; break;
+    case 16: image_index = 5; break;
+    case 19: image_index = 6; break;
+    case 22: image_index = 7; break;
+}
+
+
+        if timer < time {
+            state_type = "attack";
+            if timer = 9 {
+                sound_play(atk2_sound);
+                sound_play(activevoice);
+                create_hitbox(5,323+(-106)*facing,4,4,40,3.2,FriezaHitSFX2,obj_spark_hit1,0.65 , 0.70 , 10.50 , 10.50,self.id,7,2);
+                hitbox.hit_stun = 3*size;
+                hitbox.shield_stun = 3*size;
+                if ktimer > 0{
+                hitbox.hit_stun=10;
+                hitbox.hit_stun = 8*size;
+                hitbox.shield_stun = 8*size;
+                hitbox.shield_damage=80;
+                }
+            }
+        if ktimer > 0 && (canceltemp = 1 && (movejump || attacking = 1 || special = 1 ) && (timer >= 9 && timer < 16)){
+            interrupt = 1;
+}
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

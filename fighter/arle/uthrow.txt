@@ -1,0 +1,53 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = b_sprite2;
+image_index=0;
+timer = 0;
+time = 21;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 35
+}
+if timer < time {
+	if ( timer >= 0 && timer <= 3 )
+	{
+	target.x = x + 20 * size * (1-facing*2);
+	target.y = y;
+	}
+    switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	
+      }
+	  
+if timer = 10{
+    sound_play(downb_voice);
+	effectjab = create_spark(20*size,0,self.id);
+	effectjab.sprite_index = flame_sprite;
+    effectjab.image_speed = 0.31;
+	effectjab.image_alpha = 1;
+	effectjab.image_xscale = image_xscale;
+    effectjab.image_yscale = image_yscale;
+    effectjab.depth = depth - 0.5;
+	effectjab.snap = self.id
+	}
+
+	if timer = 12{
+	create_throw_box(7,90,5,2,12,2,fire1,obj_spark_fire1,1.1,1.45,20,30,self.id,4,4);
+	hitbox.charge_dmg = 0
+	
+	}
+
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

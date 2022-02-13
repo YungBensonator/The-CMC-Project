@@ -1,0 +1,181 @@
+if ( sidebtimer > 0 ) exit;
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    roundgo = 0;
+    force_edge_grab = 1;
+    air_move = 0;
+    temp1 = 0;
+    special = 1;
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 93;
+    sprite_index = land_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    temp = 0; //used for speed
+	
+	if ( moveright ) {facing = 0}
+	if ( moveleft ) {facing = 1}
+	
+	if ( air = 0 )
+	{
+	vspeed -= 2;
+	sbairtemp = 1;
+	}
+	else
+	{
+	//vspeed = 0;
+	sbairtemp = 2;
+	}
+
+slidetemp = 0
+  }
+
+if ( timer < 9 && sbairtemp = 2  && temp1 = 0)
+{
+//vspeed = 0;
+}
+
+
+if ( timer < time ) && temp1 = 0
+  {
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 40: image_index = 0; break;
+	case 44: image_index = 1; break;
+	case 47: image_index = 2; break;
+	case 50: image_index = 3; break;
+	case 54: image_index = 4; break;
+	case 57: image_index = 5; break;
+	case 60: image_index = 6; break;
+	case 64: image_index = 7; break;
+	case 67: image_index = 8; break;
+	case 70: image_index = 9; break;
+	case 74: image_index = 10; break;
+	case 77: image_index = 11; break;
+	case 80: image_index = 12; break;
+	case 84: image_index = 13; break;
+	case 87: image_index = 14; break;
+	case 90: image_index = 15; break;
+      }
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+
+    if ( temp = 0 && timer = 8 )
+      {
+	flashing = 1;
+	alarm[7] = 4;
+      }
+
+
+
+   if ( timer >= 9  && sprite_index != land_sprite && vspeed >= 0)
+      {
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    gravity = 0;
+    gravity_lock = 1;
+	vspeed = +0.4
+	if ( air = 0 )
+	{
+	sprite_index = land_sprite;
+	}
+      }
+    if ( timer = 9  )
+      {
+	roundgo += 1;
+	timer = 40;
+	sprite_index = glide_sprite;
+	
+	create_hitbox(3,25+facing*130,5.4,2.3,18,1,punch3,obj_spark_hit1,0.65,0.55,11,9,self.id,120,15);
+	hitbox.shield_stun = 8.5;
+	hitbox.armor_break = 1;
+
+	hspeed = size * (1-facing*2);
+
+	temp = 4;
+      }
+
+
+   if ( timer > 9 && (attacking || smash) )
+	temp1 = 1;
+
+
+    if ( timer >= 40 && timer <= 78 && slidetemp = 0)
+	hspeed = size * temp * (1-facing*2);
+
+
+    if ( timer >= 98 && air > 0 )
+      {
+
+	timer = 8;
+
+      }
+
+	  
+  }
+
+if ( temp1 = 0 && (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") || (!special && ((roundgo = 1 && timer > 45)||(roundgo > 1))) )
+  {
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = 11;
+	//hspeed = 0;
+	sidebtimer = 15;
+  }
+
+
+
+
+
+if ( air = 0 && timer >= 40 )
+	{
+	state_type = "attack";
+	//hspeed *= 0.98;
+	slidetemp = 1;
+	}
+
+
+
+if ( hspeed >= -0.01 && hspeed <= 0.01 && timer >= 40)
+	{
+	//hspeed = 0;
+	sprite_index = land_sprite;
+	}
+
+
+ if ( timer >= 10 && ( attacking || smash ) )
+      {
+	interrupt = 1;
+	//air = max_jumps;
+	//can_die = 1;
+	sidebtimer = 15
+      }
+
+      
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" && temp1 = 2 {
+    attack_type = "none";
+    if air = max_jumps
+        state_type = "fall";
+    else 
+	{
+        state_type = "jump";
+    }
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,82 @@
+alarm[0]=999;
+timer=0;
+can_reflect=0;
+hit=2;
+parry_nodestroy=1;
+absorb=0;
+absorb2=0;
+hspeed=0;
+vspeed=0;
+
+if attacker.percent > percentisepic{
+  dangit+=2+(attacker.percent-percentisepic)/2;
+
+  percentisepic=attacker.percent;
+}
+if attacker.percent < percentisepic{
+percentisepic = attacker.percent;
+}
+if attacker.state_type="out"{
+  dingadangdong=1;
+}
+if attacker.state_type!="out"{
+  if dingadangdong = 0{
+  attacker.charge=dangit;
+  }
+  if dingadangdong > 0{
+  dangit-=93;
+  attacker.ktimer = 0;
+  dingadangdong=0;
+  }
+}
+if (attacker.hitbox.hit=1 || attacker.hitbox2.hit=1 || attacker.hitbox3.hit=1 || attacker.hitbox4.hit = 1) && attacker.attack_shielded=0 && attacker.hittemp=0 && attacker.attack_type!="final_smash"{
+if attacker.attack_type != "jab" && attacker.attack_type != "stilt" && attacker.attack_type != "utilt" && attacker.attack_type != "uair"{
+attacker.dangit+=25;
+if ktimer > 0{
+ktimer -= 40;
+}}
+if attacker.attack_type = "jab" || attacker.attack_type = "stilt" || attacker.attack_type = "utilt" || attacker.attack_type = "uair"{
+dangit+=15;
+if ktimer > 0{
+ktimer -= 20;
+}}
+attacker.hittemp=1;
+}
+if attacker.proj.hit=1 && attacker.attack_shielded=0 && attacker.hittemp2=0 && attacker.attack_type!="final_smash" && attacker.proj.sidebhittemp < 4 {
+	dangit+=10;
+  if attacker.proj.sidebhittemp = 3
+     attacker.proj.sidebhittemp = 4;
+	if ktimer > 0{
+ktimer -= 20;
+}
+	attacker.hittemp2=1;
+}
+if dangit>280{
+dangit=280;
+}
+if dangit <0{
+dangit=0;
+}
+if attacker.ktimer > 0{
+dangit=0;
+}
+if (attacker.ktimer = attacker.ktime && attacker.ktimer > 0 && attacker.state_type!="flinch" && attacker.state_type!="air_flinch" && attacker.attack_type="none" && !instance_exists(obj_training)){
+with (attacker){
+  hahahtheinsanetrainridesagain=smash_power;
+  smash_power=0;
+	special=1;
+  attacking=1;
+  moveleft=0;
+  moveright=0;
+  moveup=0;
+  movedown=0;
+  }
+}
+if attacker.state_type="flinch" || attacker.state_type="air_flinch" && attacker.ktimer && attacker.ktimer = attacker.ktime{
+attacker.ktimer -=1;
+}
+if attacker.state_type="flinch" || attacker.state_type="air_flinch"{
+with(attacker){
+sound_stop(activevoice);
+activevoice=0;}
+}

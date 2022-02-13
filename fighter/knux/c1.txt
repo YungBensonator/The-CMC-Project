@@ -1,0 +1,94 @@
+moving_object=1;
+proj_destroy = 0
+if timer <= 1 && temp = 0 {
+	// Initialize sprite and speed during frame 1
+	temp2 = 0;
+    sprite_index = attacker.id.boulder_sprite
+    image_speed = 0;
+    visible=1;
+    temp = 0
+    proj_hits = 0
+    knux = attacker
+    if knux.temp=0
+    xspeed = 5-knux.facing*10
+    else
+    xspeed = 1-knux.facing*2
+    }
+if attack_success = 1 && timer = time {
+	image_speed = 0.25;
+//time += 1
+//attack_success=2;
+//attacker.id.attack_hits-=1;
+}
+
+if attack_success = 1
+{
+	image_speed = 0.25;
+	attack_success = 0;
+	hit = 2;
+	timer = time+1;
+//time += 1
+//attack_success=2;
+//attacker.id.attack_hits-=1;
+}
+
+if(image_speed == 0.25)
+{
+	if(temp2 = 0)
+	{
+	sound_play(knux.boulder_sound)
+	temp2 = 1;
+	}
+}
+
+
+if temp = 0 && hit = 0 {
+    moving_object = 1;
+    hspeed = xspeed
+    sprite_index = knux.boulder_mask_sprite
+    if (is_on_floor(self) && vspeed > 0) || collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+        timer = time+1
+        //temp = 1
+        sprite_index = knux.boulder_sprite
+        image_index=0
+    }
+    else if vspeed < 4.5
+        vspeed += 0.25
+}
+else
+    speed = 0
+visible=1
+//draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.85)
+if timer = time+1 && proj_hits <= 4 {
+//proj_hits+=1
+image_speed = 0.25
+if temp = 0
+image_index = 0
+sprite_index = knux.boulder_sprite
+//hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+temp = 1
+if proj_hits = 1 {
+	image_speed = 0.25;
+    sound_play(knux.boulder_sound)
+    damage = attacker.size*1.25
+    bkb= attacker.size*3.5
+    kbg = attacker.size*0.04
+    dir = 90
+    hitlag_frames = 1
+    shake_type=1
+    shake_ampl = 0.8
+    sfx = kick2
+    di = 1.3
+    shield_damage = 4
+    }
+timer = 0
+time = 3
+}
+if image_index >= image_number-image_speed
+instance_destroy()
+
+
+

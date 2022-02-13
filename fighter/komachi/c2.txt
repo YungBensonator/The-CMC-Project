@@ -1,0 +1,71 @@
+/*Servant Flier:
+While active, any attack will spawn a bat circle on hit.
+The circle then fires a set # of bat bullets that chases down the foe, leading to more pressure setups.
+The circle's location, the bullet's properties, and more are determined by which move spawned the circle.
+
+Example:
+- Dsmash & Fsmash's bullets have more damage, bkb, & kbg.
+- Usmash spawns the circle higher than normal, etc.
+- Some moves have the circle move
+
+The variables that edit the circle/bullet properties are found in step.
+The bullet functions are found in char_custom3.
+*/
+
+moving_object = 0;
+absorb = 0;
+absorb2 = 0;
+no_reflect = 1;
+visible=1;
+/*facing = attacker.facing;
+scale = attacker.scale;
+size = attacker.size;*/
+shoottimer = shoottime; //this & delay affect what frame the bullets comes out
+delaytimer = delaytime;
+shootspeed = shootspeed;
+	
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    facing = attacker.id.facing
+}	
+
+/*if ( next_to_rwall || next_to_lwall ) 
+{
+instance_create ( x , y , obj_smoke );
+instance_destroy() 
+}*/
+
+
+	
+hit = 2;
+image_speed = 0.3;
+hspeed = circlehspeed * (1-facing*2);
+vspeed = circlevspeed;
+		
+if (timer = shoottimer || timer = (shoottimer + delaytimer) || timer = (shoottimer + delaytimer *2))
+	{
+		bat = create_projectile(2,20+140*facing,2.5,3.5,15,5,fire2,obj_spark_fire1,0.2,0.2,0,0,attacker.id,9999,char_custom3)
+		bat.sprite_index = bat_sprite;
+		bat.ownerc = self.id;
+		bat.ownerc.facing = facing;
+		bat.image_xscale = 0.2*(1-facing*2)*size;
+		bat.image_yscale = 0.2*size;
+		bat.damage *= shootdmg;
+		bat.bkb *= shootbkb;
+		bat.kbg *= shootkbg;
+		bat.dir = shootangle;
+		bat.absorb = 0
+		bat.absorb2 = 0
+		bat.no_reflect = 1
+		bat.hit_stun = 8;
+		bat.shield_stun = 6;
+		bat.di = 0.3;
+		bat.shootspeed = shootspeed;
+		//bat.hspeed = 12*(1-facing*2);
+		//bat.vspeed = -12
+		//bat.hitlag_frames = 2			
+	}
+	
+	
+						
+if timer = time
+    instance_create ( x-10*(1-facing*2) , y-4 , obj_smoke );

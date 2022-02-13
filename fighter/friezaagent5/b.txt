@@ -1,0 +1,386 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" ) {
+    state_type = "air_attack";
+    attack_type = "b";
+    if ktimer < 1{
+    timer = 0;
+    time = 28;
+    sprite_index = b_sprite;
+    }
+    if ktimer > 0{
+    timer = 100;
+    time = 206;
+    sprite_index = gb_sprite;
+    }
+    image_speed = 0;
+    image_index = 0;
+    air_move = 0;
+    special=1;
+    hspeed=0;   
+    sound_stop(active_voice);
+    activevoice=laugh_voice;
+  }
+
+
+if ( timer < time )
+  { fast_fall=0;
+    fast_fall_temp=0;
+    if timer >= 100 && timer <205{
+    sound_volume(deathbeam_sound,0.1);
+    }
+    if timer = 205{
+    sound_volume(deathbeam_sound,1);
+    }
+    if timer < 19 && vspeed > 0.5{
+    vspeed=0.5;}
+    laserbeam.x=x+18.2*( 1 - facing * 2 )*size;
+    laserbeam.y=y-22.4*size;
+  	if ( moveright && timer = 0 )
+	facing = 0;
+    if ( moveleft && timer = 0 )
+	facing = 1;
+
+    switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 5: image_index = 1; break;
+    case 10: image_index = 3; break;
+    case 13: image_index = 2; break;
+    case 16: image_index = 3; break;
+    case 19: image_index = 4; special=0; break;
+    case 100: image_index = 0; break;
+    case 115: image_index = 1; break;
+    case 120: image_index = 2; break;
+    case 125: image_index = 3; break;
+    case 128: image_index = 4; sound_play(activevoice); break;
+    case 187: image_index = 2; break;
+    case 191: image_index = 2; break;
+      }
+    if timer >= 100 && timer < 187{
+    hspeed=0;
+    vspeed=0.2;
+    gravity_lock=1;
+    if frontbeam1.hit>0{
+    frontbeam1.timer=0;
+    }
+    if frontbeam2.hit>0{
+    frontbeam2.timer=0;
+    }
+    if frontbeam3.hit>0{
+    frontbeam3.timer=0;
+    }
+    if frontbeam4.hit>0{
+    frontbeam4.timer=0;
+    }
+    if backbeam1.hit>0{
+    backbeam1.timer=0;
+    }
+    if backbeam2.hit>0{
+    backbeam2.timer=0;
+    }
+    if backbeam3.hit>0{
+    backbeam3.timer=0;
+    }
+    if backbeam4.hit>0{
+    backbeam4.timer=0;
+    }
+    }
+    if timer >= 128 && timer < 173{
+    if timer mod 9 = 0{
+    if image_index=4{
+    image_index=3;
+    }
+    else{
+    image_index=4;
+    }
+    }
+    if !instance_exists(frontbeam1){
+        sound_play(deathbeam_sound);
+                frontbeam1 = create_projectile ( 1,59+62*facing,7,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, 12.60 , 21.70 , self.id , 14 , no_script );
+                frontbeam1.sprite_index = death_beam_sprite;
+                frontbeam1.depth=depth-1;
+                frontbeam1.hit_stun=10;
+                frontbeam1.di=0.3;
+                frontbeam1.sdi=0.3;
+                frontbeam1.image_index=0;
+                frontbeam1.image_alpha=0.8;
+                frontbeam1.image_angle = ( 1 - facing * 2 ) * 59.30+irandom_range(-20,20);
+                frontbeam1.epicman=choose(1,2)
+                if frontbeam1.epicman=1{
+                frontbeam1.image_xscale=0.4*( 1 - facing * 2 );
+                frontbeam1.image_yscale=0.2;
+                frontbeam1.sprite_index=gdeath_beam_sprite;
+                frontbeam1.time=14;
+                frontbeam1.alarm[0]=14;
+                frontbeam1.image_speed=0.5;}
+                if frontbeam1.epicman=2{
+                frontbeam1.image_xscale=0.2*( 1 - facing * 2 );
+                frontbeam1.image_yscale=0.2;
+                frontbeam1.sprite_index=gdeath_beam2_sprite;
+                frontbeam1.time=12;
+                frontbeam1.alarm[0]=12;
+                frontbeam1.image_speed=2;}
+    }
+    if !instance_exists(frontbeam2){
+        sound_play(deathbeam_sound);
+                frontbeam2 = create_projectile ( 1,18+114*facing,7,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, 14 , 17.50 , self.id , 14 , no_script );
+                frontbeam2.sprite_index = death_beam_sprite;
+                frontbeam2.depth=depth-1;
+                frontbeam2.hit_stun=10;
+                frontbeam2.di=0.3;
+                frontbeam2.sdi=0.3;
+                frontbeam2.image_index=0;
+                frontbeam2.image_alpha=0.8;
+                frontbeam2.image_angle = ( 1 - facing * 2 ) * 0+irandom_range(-20,20);
+                frontbeam2.epicman=choose(1,2)
+                if frontbeam2.epicman=1{
+                frontbeam2.image_xscale=0.4*( 1 - facing * 2 );
+                frontbeam2.image_yscale=0.2;
+                frontbeam2.sprite_index=gdeath_beam_sprite;
+                frontbeam2.time=14;
+                frontbeam2.alarm[0]=14;
+                frontbeam2.image_speed=0.5;}
+                if frontbeam2.epicman=2{
+                frontbeam2.image_xscale=0.2*( 1 - facing * 2 );
+                frontbeam2.image_yscale=0.2;
+                frontbeam2.sprite_index=gdeath_beam2_sprite;
+                frontbeam2.time=12;
+                frontbeam2.alarm[0]=12;
+                frontbeam2.image_speed=2;}
+}
+if !instance_exists(frontbeam3){
+    sound_play(deathbeam_sound);
+                frontbeam3 = create_projectile ( 1,307+(-74)*facing,5,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, 13.30 , 14.70 , self.id , 14 , no_script );
+                frontbeam3.sprite_index = death_beam_sprite;
+                frontbeam3.depth=depth-1;
+                frontbeam3.hit_stun=10;
+                frontbeam3.di=0.3;
+                frontbeam3.sdi=0.3;
+                frontbeam3.image_index=0;
+                frontbeam3.image_alpha=0.8;
+                frontbeam3.image_angle = ( 1 - facing * 2 ) * 307+irandom_range(-20,20);
+                frontbeam3.epicman=choose(1,2)
+                if frontbeam3.epicman=1{
+                frontbeam3.image_xscale=0.4*( 1 - facing * 2 );
+                frontbeam3.image_yscale=0.2;
+                frontbeam3.sprite_index=gdeath_beam_sprite;
+                frontbeam3.time=14;
+                frontbeam3.alarm[0]=14;
+                frontbeam3.image_speed=0.5;}
+                if frontbeam3.epicman=2{
+                frontbeam3.image_xscale=0.2*( 1 - facing * 2 );
+                frontbeam3.image_yscale=0.2;
+                frontbeam3.sprite_index=gdeath_beam2_sprite;
+                frontbeam3.time=12;
+                frontbeam3.alarm[0]=12;
+                frontbeam3.image_speed=2;}
+}
+if !instance_exists(frontbeam4){
+    sound_play(deathbeam_sound);
+                frontbeam4 = create_projectile ( 1,270*facing,4,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, 10.50 , 13.30 , self.id , 14 , no_script );
+                frontbeam4.sprite_index = death_beam_sprite;
+                frontbeam4.depth=depth-1;
+                frontbeam4.hit_stun=10;
+                frontbeam4.di=0.3;
+                frontbeam4.sdi=0.3;
+                frontbeam4.image_index=0;
+                frontbeam4.image_alpha=0.8;
+                frontbeam4.image_angle = ( 1 - facing * 2 ) * 270+irandom_range(-20,20);
+                frontbeam4.epicman=choose(1,2)
+                if frontbeam4.epicman=1{
+                frontbeam4.image_xscale=0.4*( 1 - facing * 2 );
+                frontbeam4.image_yscale=0.2;
+                frontbeam4.sprite_index=gdeath_beam_sprite;
+                frontbeam4.time=14;
+                frontbeam4.alarm[0]=14;
+                frontbeam4.image_speed=0.5;}
+                if frontbeam4.epicman=2{
+                frontbeam4.image_xscale=0.2*( 1 - facing * 2 );
+                frontbeam4.image_yscale=0.2;
+                frontbeam4.sprite_index=gdeath_beam2_sprite;
+                frontbeam4.time=12;
+                frontbeam4.alarm[0]=12;
+                frontbeam4.image_speed=2;}
+}
+
+
+    if !instance_exists(backbeam1){
+        sound_play(deathbeam_sound);
+                backbeam1 = create_projectile ( 1,121+(-62)*facing,7,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, -17.50 , 18.90 , self.id , 14 , no_script );
+                backbeam1.sprite_index = death_beam_sprite;
+                backbeam1.depth=depth-1;
+                backbeam1.hit_stun=10;
+                backbeam1.di=0.3;
+                backbeam1.sdi=0.3;
+                backbeam1.image_index=0;
+                backbeam1.image_alpha=0.8;
+                backbeam1.image_angle = ( 1 - facing * 2 ) * 121+irandom_range(-20,20);
+                backbeam1.epicman=choose(1,2)
+                if backbeam1.epicman=1{
+                backbeam1.image_xscale=0.4*( 1 - facing * 2 );
+                backbeam1.image_yscale=0.2;
+                backbeam1.sprite_index=gdeath_beam_sprite;
+                backbeam1.time=14;
+                backbeam1.alarm[0]=14;
+                backbeam1.image_speed=0.5;}
+                if backbeam1.epicman=2{
+                backbeam1.image_xscale=0.2*( 1 - facing * 2 );
+                backbeam1.image_yscale=0.2;
+                backbeam1.sprite_index=gdeath_beam2_sprite;
+                backbeam1.time=12;
+                backbeam1.alarm[0]=12;
+                backbeam1.image_speed=2;}
+    }
+    if !instance_exists(backbeam2){
+        sound_play(deathbeam_sound);
+                backbeam2 = create_projectile ( 1,162+(-114)*facing,7,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, -18.90 , 12.60 , self.id , 14 , no_script );
+                backbeam2.sprite_index = death_beam_sprite;
+                backbeam2.depth=depth-1;
+                backbeam2.hit_stun=10;
+                backbeam2.di=0.3;
+                backbeam2.sdi=0.3;
+                backbeam2.image_index=0;
+                backbeam2.image_alpha=0.8;
+                backbeam2.image_angle = ( 1 - facing * 2 ) * 180+irandom_range(-20,20);
+                backbeam2.epicman=choose(1,2)
+                if backbeam2.epicman=1{
+                backbeam2.image_xscale=0.4*( 1 - facing * 2 );
+                backbeam2.image_yscale=0.2;
+                backbeam2.sprite_index=gdeath_beam_sprite;
+                backbeam2.time=14;
+                backbeam2.alarm[0]=14;
+                backbeam2.image_speed=0.5;}
+                if backbeam2.epicman=2{
+                backbeam2.image_xscale=0.2*( 1 - facing * 2 );
+                backbeam2.image_yscale=0.2;
+                backbeam2.sprite_index=gdeath_beam2_sprite;
+                backbeam2.time=12;
+                backbeam2.alarm[0]=12;
+                backbeam2.image_speed=2;}
+}
+if !instance_exists(backbeam3){
+    sound_play(deathbeam_sound);
+                backbeam3 = create_projectile ( 1,233+74*facing,5,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, -18.20 , 10.50 , self.id , 14 , no_script );
+                backbeam3.sprite_index = death_beam_sprite;
+                backbeam3.depth=depth-1;
+                backbeam3.hit_stun=10;
+                backbeam3.di=0.3;
+                backbeam3.sdi=0.3;
+                backbeam3.image_index=0;
+                backbeam3.image_alpha=0.8;
+                backbeam3.image_angle = ( 1 - facing * 2 ) * 233+irandom_range(-20,20);
+                backbeam3.epicman=choose(1,2)
+                if backbeam3.epicman=1{
+                backbeam3.image_xscale=0.4*( 1 - facing * 2 );
+                backbeam3.image_yscale=0.2;
+                backbeam3.sprite_index=gdeath_beam_sprite;
+                backbeam3.time=14;
+                backbeam3.alarm[0]=14;
+                backbeam3.image_speed=0.5;}
+                if backbeam3.epicman=2{
+                backbeam3.image_xscale=0.2*( 1 - facing * 2 );
+                backbeam3.image_yscale=0.2;
+                backbeam3.sprite_index=gdeath_beam2_sprite;
+                backbeam3.time=12;
+                backbeam3.alarm[0]=12;
+                backbeam3.image_speed=2;}
+}
+if !instance_exists(backbeam4){
+    sound_play(deathbeam_sound);
+                backbeam4 = create_projectile ( 1,270*facing,4,2,3,38, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, -14.70 , 9.80 , self.id , 14 , no_script );
+                backbeam4.sprite_index = death_beam_sprite;
+                backbeam4.depth=depth-1;
+                backbeam4.hit_stun=10;
+                backbeam4.di=0.3;
+                backbeam4.sdi=0.3;
+                backbeam4.image_index=0;
+                backbeam4.image_alpha=0.8;
+                backbeam4.image_angle = ( 1 - facing * 2 ) * 270+irandom_range(-20,20);
+                backbeam4.epicman=choose(1,2)
+                if backbeam4.epicman=1{
+                backbeam4.image_xscale=0.4*( 1 - facing * 2 );
+                backbeam4.image_yscale=0.2;
+                backbeam4.sprite_index=gdeath_beam_sprite;
+                backbeam4.time=14;
+                backbeam4.alarm[0]=14;
+                backbeam4.image_speed=0.5;}
+                if backbeam4.epicman=2{
+                backbeam4.image_xscale=0.2*( 1 - facing * 2 );
+                backbeam4.image_yscale=0.2;
+                backbeam4.sprite_index=gdeath_beam2_sprite;
+                backbeam4.time=12;
+                backbeam4.alarm[0]=12;
+                backbeam4.image_speed=2;}
+}
+frontbeam1.x=x+12.6*( 1 - facing * 2 )*size;
+frontbeam1.y=y-21.7*size;
+frontbeam2.x=x+14*( 1 - facing * 2 )*size;
+frontbeam2.y=y-17.5*size;
+frontbeam3.x=x+13.3*( 1 - facing * 2 )*size;
+frontbeam3.y=y-14.7*size;
+frontbeam4.x=x+10.5*( 1 - facing * 2 )*size;
+frontbeam4.y=y-13.3*size;
+backbeam1.x=x-17.5*( 1 - facing * 2 )*size;
+backbeam1.y=y-18.9*size;
+backbeam2.x=x-18.9*( 1 - facing * 2 )*size;
+backbeam2.y=y-12.6*size;
+backbeam3.x=x-18.2*( 1 - facing * 2 )*size;
+backbeam3.y=y-10.5*size;
+backbeam4.x=x-14.7*( 1 - facing * 2 )*size;
+backbeam4.y=y-9.8*size;
+}
+    if (timer = 7 || timer = 8) && special=1 && epichecker < 80{
+    timer = 7;
+    epichecker+=1;
+    if epichecker > 40 && (shieldup){
+    if epichecker < 60{
+    epichecker=41;}
+    if epichecker < 80 && epichecker > 60{
+    epichecker=61;}
+    special=0;
+    timer=time;
+    }
+    }
+    if epichecker mod 20 = 0 && timer < 9 && epichecker > 19{
+    flashy = instance_create(x+18.20*( 1 - facing * 2 )*size , y-22.40*size, obj_spark)
+    flashy.sprite_index = death_beam_circle_sprite;
+    flashy.image_xscale = 0.1*( 1 - facing * 2 ) * size;
+    flashy.image_yscale = 0.1;
+    flashy.image_alpha=0.8;
+    flashy.image_speed=0.5;
+    flashy.depth=depth-1;
+    flashy.snap=self.id;
+    sound_play(deathbeamcharge_sound);
+    }
+    if timer = 8{
+    sound_play(activevoice);
+    }
+    if timer = 10{
+    hittemp2=0;
+    sound_stop(deathbeamcharge_sound);
+    sound_play(deathbeam_sound);
+                laserbeam = create_projectile ( 1.5,28+124*facing,7,1.2,3,28, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, 18.20 , 22.40 , self.id , 8 , no_script );
+                laserbeam.sprite_index = death_beam_sprite;
+                laserbeam.image_speed=1;
+                laserbeam.alarm[0]=8;
+                laserbeam.depth=depth-1;
+                laserbeam.hit_stun=10;
+                laserbeam.di=0.6;
+                laserbeam.sdi=0.4;
+                laserbeam.image_index=0;
+                laserbeam.image_alpha=0.8;
+                if epichecker < 39{
+                laserbeam.hit_stun=3;
+                laserbeam.hitlag_frames=3;
+                }
+    }
+    if timer < 18 && laserbeam.hit > 0{
+    laserbeam.timer=1;
+    }
+    if timer = 18 && epichecker > 19{
+    timer = 9;
+    epichecker-=20;
+    }
+	}
+ 
+
+

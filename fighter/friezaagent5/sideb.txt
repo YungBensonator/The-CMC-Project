@@ -1,0 +1,182 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" ) && !instance_exists(deathslicer) && !instance_exists(deathslicer2){
+    state_type = "air_attack";
+    attack_type = "sideb";
+    if ktimer < 1{
+    timer = 0;
+    time = 43;
+    sprite_index = sideb_sprite
+    hspeed=0;
+    sound_play(deathsaucer_start_sound);
+    deathslicerbackground1 = instance_create(x-12.60*size , y-25.20*size, obj_spark)
+    deathslicerbackground1.sprite_index = death_slicereff_sprite;
+    deathslicerbackground1.image_speed=1;
+    deathslicerbackground1.alarm[0]=14;
+    deathslicerbackground1.depth=depth;
+    deathslicerbackground1.image_xscale=0.8;
+    deathslicerbackground1.image_yscale=0.2;
+    deathslicerbackground1.image_alpha=0;
+    specialchecking = 0;
+    }
+    if ktimer > 0{
+    timer = 100;
+    time = 163;
+    sprite_index = gsideb_sprite
+    image_speed = 0;
+    image_index = 0;
+    hspeed=0;
+    air_move=0;
+    }
+    image_speed = 0;
+    image_index = 0;
+    special=0;
+    myspecialmonkeykiller=0;
+    checktheloop=0;
+    sound_stop(activevoice);
+    activevoice=choose(atk_voice,atk2_voice,atk3_voice,hah_voice,howaboutthis_voice);
+  }
+
+if ( timer < time )
+  {fast_fall=0;
+   fast_fall_temp=0;
+
+    switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 5: image_index = 1; break;
+    case 10: image_index = 2; break;
+    case 15: image_index = 3; sound_play(deathsaucer_sound); deathslicer.image_alpha=1; deathslicer.heckalot=1; deathslicerbackground1.image_alpha=1; deathslicer.hit = 0; with (deathslicerbackground1){instance_destroy();} break;
+    case 18: image_index = 4; break;
+    case 28: image_index = 5; break;
+    case 38: image_index = 6; sound_play(deathsaucer_sound); deathslicer2.image_alpha=1; deathslicer2.heckalot=1; deathslicer2.hit = 0; with (deathslicerbackground2){instance_destroy();}  break;
+    case 41: image_index = 7; break;
+    case 100: image_index = 0; break;
+    case 110: image_index = 1; break;
+    case 115: image_index = 2; break;
+    case 118: image_index = 3; break;
+    case 121: image_index = 4; break;
+    case 124: image_index = 5; break;
+      }
+    if timer >=120 && special > 0{
+    myspecialmonkeykiller+=1;
+    }
+    if timer = 127 && myspecialmonkeykiller > 0 && checktheloop<9{
+    myspecialmonkeykiller=0;
+    special=0;
+    timer=115;
+    checktheloop+=1;
+    }
+    if timer = 114 || timer = 15 || timer = 38{
+    sound_play(activevoice)
+    }
+    if timer = 118{
+        sound_play(deathbeam_sound);
+                laserbeam = create_projectile ( 3,28+124*facing,7,1.2,3,18, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, 23.80 , 16.80 , self.id , 8 , no_script );
+                laserbeam.sprite_index = gdeath_beam_sprite;
+                laserbeam.image_speed=1;
+                laserbeam.alarm[0]=8;
+                laserbeam.depth=depth-1;
+                laserbeam.hit_stun=10;
+                laserbeam.di=0.6;
+                laserbeam.sdi=0.4;
+                laserbeam.image_index=0;
+                laserbeam.image_alpha=0.8;
+    }
+
+    if timer = 124{
+        sound_play(deathbeam_sound);
+                laserbeam2 = create_projectile ( 3,28+124*facing,7,1.2,3,18, FriezaHitSFXBeam , obj_spark_special1 , 0.4 , 0.2, 21.70 , 15.40 , self.id , 8 , no_script );
+                laserbeam2.sprite_index = gdeath_beam_sprite;
+                laserbeam2.image_speed=1;
+                laserbeam2.alarm[0]=8;
+                laserbeam2.depth=depth-1;
+                laserbeam2.hit_stun=10;
+                laserbeam2.di=0.6;
+                laserbeam2.sdi=0.4;
+                laserbeam2.image_index=0;
+                laserbeam2.image_alpha=0.8;
+    }
+    if timer < 128 && vspeed > 0.5{
+    vspeed=0.5;}
+    laserbeam.x=x+23.8*( 1 - facing * 2 )*size;
+    laserbeam.y=y-16.8*size;
+    laserbeam2.x=x+21.7*( 1 - facing * 2 )*size;
+    laserbeam2.y=y-15.4*size;
+    if timer < 15{
+    deathslicer.x=x-12.60*( 1 - facing * 2 )*size;
+    deathslicer.y=y-25.20*size;
+    deathslicerbackground1.timer=0;
+    deathslicerbackground1.alarm[0]=318;
+    }
+    if timer < 38{
+    deathslicer2.x=x+8.40*( 1 - facing * 2 )*size;
+    deathslicer2.y=y-26.60*size;
+    deathslicerbackground2.x=x+8.40*( 1 - facing * 2 )*size;
+    deathslicerbackground2.y=y-26.60*size;
+    deathslicer.timer=0;
+    deathslicer.alarm[0]=318;
+    if vspeed > 0.5{
+    vspeed=0.5;}
+    }
+    if timer = 20{
+    deathslicerbackground2.image_index=0;
+    }
+    if timer = 5 {
+    deathslicer = create_projectile ( 1.5,28+124*facing,6,1.2,3,12, slash1 , obj_spark_hit1 , 0.1 , 0.025, -12.60 , 25.20 , self.id , 318 , char_custom4 );
+    deathslicer.sprite_index = death_slicer_sprite;
+    deathslicer.image_speed=0.5;
+    deathslicer.alarm[0]=318;
+    deathslicer.depth=depth-1;
+    deathslicer.hit_stun=10;
+    deathslicer.image_index=0;
+    deathslicer.image_alpha=0;
+    deathslicer.memer=0;
+    deathslicer.hit=2;
+    deathslicer.facingvar=facing;
+    deathslicer.heckalot=0;
+    deathslicer.maxtime=318;
+    deathslicer.no_clash=1;
+    deathslicer.sidebhittemp = 3;
+    }
+    if timer <= 28 && timer >= 17 && special=1{
+    specialchecking +=1;
+    }
+    if timer = 22 && specialchecking = 0{
+    timer = 40;
+    time += 10;
+    }
+    if timer = 23{
+    deathslicerbackground2 = instance_create(x+8.40*size , y-26.60*size, obj_spark)
+    deathslicerbackground2.sprite_index = death_slicereff_sprite;
+    deathslicerbackground2.image_speed=1;
+    deathslicerbackground2.alarm[0]=37;
+    deathslicerbackground2.depth=depth+2;
+    deathslicerbackground2.image_xscale=0.8;
+    deathslicerbackground2.image_yscale=0.2;
+    deathslicerbackground2.image_alpha=0;
+    sound_play(deathsaucer_start_sound);
+    deathslicer2 = create_projectile ( 1.5,28+124*facing,6,1.2,3,12, slash1 , obj_spark_hit1 , 0.1 , 0.025, 8.40 , 26.60 , self.id , 318 , char_custom4 );
+    deathslicer2.sprite_index = death_slicer_sprite;
+    deathslicer2.image_speed=0.5;
+    deathslicer2.alarm[0]=318;
+    deathslicer2.depth=depth+1;
+    deathslicer2.hit_stun=10;
+    deathslicer2.image_index=0;
+    deathslicer2.image_alpha=0;
+    deathslicer2.memer=0;
+    deathslicer2.hit=2;
+    deathslicer2.facingvar=facing;
+    deathslicer2.heckalot=0;
+    deathslicer2.maxtime=318;
+    deathslicer2.no_clash=1;
+    deathslicer2.sidebhittemp = 3;
+    }
+    if timer < 38{
+    deathslicer.image_alpha+=0.1;
+    deathslicer2.image_alpha+=0.1;
+    deathslicerbackground1.image_alpha+=0.06;
+    deathslicerbackground2.image_alpha+=0.06;
+    }
+    }
+ 
+
+

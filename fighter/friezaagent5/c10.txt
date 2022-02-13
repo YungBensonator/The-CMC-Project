@@ -1,0 +1,131 @@
+if ( collision_rectangle ( x -168*attacker.size , y - 180.00*attacker.size , x + 168*attacker.size  , y - 0 , obj_floor , 1 , 1 ) ){
+    on_floor = 1;
+}
+else{
+on_floor=0;
+}
+if ( vspeed >= 0 && collision_rectangle ( x -168*attacker.size , y - 180.00*attacker.size , x + 168*attacker.size  , y - 0 , obj_platform , 1 , 1 ) ){
+    on_platform = 1;
+}
+else {
+on_platform=0;
+}
+
+
+superroho.image_index=image_index;
+superroho.x=x;
+superroho.y=y;
+superroho.image_xscale=image_xscale/(1.2*( 1 - facing * 2 ));
+superroho.image_yscale=image_yscale/1.2;
+if letsagomurder=1 && on_platform=0 && on_floor=0{
+	vspeed=2;
+	hspeed=1*( 1 - facing * 2 );
+	superroho.vspeed=2;
+	superroho.hspeed=1*( 1 - facing * 2 );
+	superhitta.vspeed=2;
+	superhitta.hspeed=1*( 1 - facing * 2 );
+   if !instance_exists(superhitta){
+   superhitta = create_projectile ( 4,86+8*facing,2,0,-1,4, explodehit1 , obj_spark_special1 , 4 , 4, 0 , 0 , attacker.id , 600 , no_script );
+   superhitta.sprite_index = attacker.supernova_sprite;
+   superhitta.image_speed=0;
+   superhitta.image_alpha=0;
+   superhitta.priority=5;
+   superhitta.di=0;
+   superhitta.sdi=0;
+   }
+   superroho.alarm[0]=alarm[0];
+   superhitta.alarm[0]=alarm[0];
+   superroho.depth=depth+1;
+   if superhitta.hit>0{
+   superhitta.timer=1;
+   }
+   if alarm[0] mod -12 = 0{
+   superhitta.hit=0;
+   }
+}
+if letsagomurder = 1 && (on_platform = 1 || on_floor = 1){
+	image_index=0;
+	letsagomurder=2;
+	vspeed=0;
+	hspeed=0;
+	superroho.vspeed=0;
+	superroho.hspeed=0;
+	superhitta.vspeed=0;
+	superhitta.hspeed=0;
+	alarm[0]=120;
+}
+if letsagomurder=2{
+	if !instance_exists(dusty){
+   dusty = instance_create(x+size, y + size, obj_spark);
+   dusty.sprite_index = attacker.supernovadust_sprite;
+   dusty.image_speed=0.5;
+   dusty.image_alpha=1;
+   dusty.priority=5;
+   dusty.image_xscale=5;
+   dusty.image_yscale=4;
+   dusty.depth=depth-1;
+   with (attacker){
+   sound_play(explosivesound);
+   }
+}
+if !instance_exists(superhitta){
+   superhitta = create_projectile ( 6,320+(-100)*facing,3.5,0,-1,24, explodehit2 , obj_spark_special1 , 4 , 4, 0 , 0 , attacker.id , 120 , no_script );
+   superhitta.sprite_index = attacker.supernova_land_sprite;
+   superhitta.image_speed=0;
+   superhitta.image_alpha=0;
+   superhitta.priority=5;
+   superhitta.di=0;
+   superhitta.sdi=0;
+   }
+if alarm[0] mod -24 = 0 && alarm[0] > 28{
+	superhitta.hit=0;
+}
+if alarm[0]<=28{
+superhitta.bkb=11;
+superhitta.kbg=13;
+superhitta.damage=16;
+superhitta.dir=60+facing*60;
+if alarm[0]=4{
+                deathballland = instance_create(x, y, obj_spark);
+                deathballland.sprite_index = attacker.supernova_landimpact_sprite;
+                deathballland.image_speed=0.25;
+                deathballland.depth=depth+2;
+                deathballland.x=x;
+                deathballland.y=y;
+                deathballland.image_xscale=image_xscale;
+                deathballland.image_yscale=image_yscale;
+                depth=0;
+                deathballland.depth=1;
+                with(attacker){
+                sound_play(ball_explode_sound);}
+                hit=2;
+                image_alpha=0;
+                sound_play(explode_big);
+}
+}
+if image_index>=10{
+image_index=4;
+}
+}
+
+if letsagomurder > 1{
+    sprite_index = attacker.supernova_land_sprite;
+    visible=1;
+    image_alpha=0.9;
+    image_speed=0.2;
+}
+if alarm[0]=1{
+	superhitta.alarm[0]=1;
+	dusty.alarm[0]=1;
+    superroho.alarm[0]=1;
+
+}
+superhitta.sprite_index=sprite_index;
+superhitta.image_speed=image_speed;
+superhitta.image_index=image_index;
+superhitta.x=x;
+superhitta.y=y;
+superhitta.vspeed=vspeed;
+superhitta.hspeed=hspeed;
+superhitta.image_xscale=image_xscale;
+superhitta.image_yscale=image_yscale;

@@ -1,0 +1,83 @@
+//if cantupb>0 {break;}
+
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch"{
+        if air > 0
+        state_type = "air_attack"
+        else
+        state_type = "attack"
+        attack_type = "upb"
+        image_speed = 0
+        sprite_index = upb_sprite
+        image_index=0
+        timer = 0
+        time = 29
+		canceltemp = 0
+		special = 0
+		attacking = 0
+	if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack"
+
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+      }	
+
+	
+
+
+if timer = 1{
+	sound_play(upb_voice);
+	}
+	
+	
+if timer = 12{
+if instance_exists(puyoUpb){with (puyoUpb) {instance_destroy()}}
+    sound_play(upb_sound);
+    puyoUpb = create_projectile (0,361,0,0,0,0,-1,-1,0,0,0,0,self.id,900,char_custom2);
+    puyoUpb.sprite_index = upb_sprite2;
+	puyoUpb.vspeed = 0
+	puyoUpb.image_xscale = image_xscale
+	puyoUpb.image_yscale = image_yscale
+	puyoUpb.alarm[0] = 900
+	puyoUpb.state = "normal"
+	puyoUpb.size = size
+	puyoUpb.image_speed = 0
+	puyoUpb.image_alpha = 1
+	puyoUpb.hit = 2
+	
+	vspeed = -9
+}
+
+
+if timer > 16
+force_edge_grab = 1
+	
+
+
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "fall";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    //cantupb = 1
+}

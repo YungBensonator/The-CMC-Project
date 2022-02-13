@@ -1,0 +1,80 @@
+if state_type = "jump"
+  {
+    state_type = "air_attack";
+    attack_type = "nair";
+    sprite_index = nair_sprite;
+    image_index = 0;
+    image_speed = 0;
+    timer = 0;
+    time = 36;
+    timer_speed=1;
+	play_attack_voice()
+
+
+
+  }
+
+if ( timer < time )
+  {
+    state_type = "air_attack";
+switch ( timer )
+      {
+	case 10: image_index = 1; break;
+	case 15: image_index = 2; break;
+	case 20: image_index = 3; break;
+	case 25: image_index = 4; break;
+
+
+      }
+    
+	
+	
+	if timer = 1{
+	sound_play(nair_voice);
+	effectjab = create_spark(0*size,16,self.id);
+	effectjab.sprite_index = nair_sprite_eff;
+    effectjab.image_speed = 0.19;
+	effectjab.image_alpha = 1.0;
+	effectjab.image_xscale = image_xscale;
+    effectjab.image_yscale = image_yscale;
+    effectjab.depth = depth - 0.5;
+	effectjab.snap = self.id
+	}
+	
+	if timer = 11{
+	effectjab = create_spark(0*size,16,self.id);
+	effectjab.sprite_index = nair_sprite_eff2;
+    effectjab.image_speed = 0.35;
+	effectjab.image_alpha = 1.0;
+	effectjab.image_xscale = image_xscale*1.5;
+    effectjab.image_yscale = image_yscale*1.5;
+    effectjab.depth = depth - 0.5;
+	effectjab.snap = self.id
+	}
+    
+    if ( timer = 13 ) {
+	create_hitbox(7,10+facing*160,3.95,2,1.75,4,magic3,obj_spark_hit1,1.6,1.6,0,16,self.id,5,4);
+	hitbox.hit_stun = 5
+	hitbox.di = 0
+    }
+	
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=15; }
+
+
+  }
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+
+  image_index = 0;
+  timer = 0;
+  time = -1;
+}

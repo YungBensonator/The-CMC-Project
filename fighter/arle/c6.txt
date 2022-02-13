@@ -1,0 +1,71 @@
+moving_object = 1;
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 0
+
+
+
+
+on_floor = 0;
+on_platform = 0;
+next_to_lwall = 0;
+next_to_rwall = 0;
+
+while ( collision_line ( x , y , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x , y - actual_height , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) )
+    x -= 1;
+while ( collision_line ( x , y , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x , y - actual_height , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) ) 
+    x += 1;
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_floor , 1 , 1 ) )
+    y -= 1;
+if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_platform , 1 , 1 ) )
+	y -= 1;
+	
+if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , projectile_box , 1 , 1 ) )
+	y -= 1;
+
+
+if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+    on_floor = 1;
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+    on_platform = 1;
+	
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , projectile_box , 1 , 1 ) )
+    on_puyo = 1
+
+
+if ( collision_line ( x + 1 , y , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x + 1 , y - actual_height , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) ) 
+  next_to_rwall = 1;
+if ( collision_line ( x - 1 , y , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x - 1 , y - actual_height , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) )  
+  next_to_lwall = 1;
+
+
+
+if ( timer >= 1 )
+    vspeed += 0.5;
+	
+if ( vspeed > 2 )
+    vspeed = 2;
+
+if ( on_floor || on_platform || on_puyo )
+  {
+    vspeed = 0;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,73 @@
+// homing batbullets
+
+moving_object = 1;
+image_angle = direction+facing*180;
+proj_destroy = 0;
+
+if timer = 0{
+hit = 2;
+visible = 0;
+direction = 180*ownerc.facing;
+image_speed = 0.2;
+image_xscale = 0.2*(1-ownerc.facing*2)*size;
+}
+
+absorb = 0
+absorb2 = 0
+no_reflect = 1
+
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    hit = 0;
+    sprite_index =  attacker.id.bat_sprite;
+    speed = shootspeed;
+    direction = 180*ownerc.facing;
+    image_speed = 0.2;
+	//image_xscale = (1 - batcircle.facing *2);
+    visible = 1;
+    create_homing_bubble(12,12,0,0,self.id,5);
+    }
+if timer > 1 && timer < time-10 && (target = -1 || target = attacker) && frac(timer/6)=0
+    create_homing_bubble(9,9,0,0,self.id,6);
+	
+if hit != 1 {after_image(10,c_red,0.1);}
+	
+if target != -1 && target!= attacker && ((target.x > x && hspeed > 0) || (target.x < x && hspeed < 0)) {
+    var prev_hspeed;
+    var prev_vspeed;
+    prev_hspeed = hspeed;
+    prev_vspeed = vspeed;
+    var dir_to_target;
+    dir_to_target = point_direction(x,y,target.x,target.y-7*target.size);
+    if dir_to_target < 0
+        dir_to_target += 360
+    if dir_to_target >= 360
+        dir_to_target -= 360
+    if direction >= 360
+        direction -= 360;
+    if direction < 0
+        direction += 360;
+    speed = shootspeed * 0.8219; //changes bullet speed. Original was 3.
+    /*
+    if dir_to_target <= direction + 180 || (dir_to_target < 90 && direction >= 270)
+        direction += 1.55
+    else if abs(dir_to_target - direction) > 3 || (dir_to_target > 270 && direction <= 90)
+        direction -= 1.55
+    */
+    if direction >= 270 || direction < 90 {
+        if direction-(direction>270)*360 < dir_to_target-(dir_to_target>270)*360
+            direction+=2   
+        else if direction != dir_to_target
+            direction-=2       
+    }
+    else {
+        if direction < dir_to_target
+            direction+=2
+        else if direction != dir_to_target
+            direction-=2       
+    }
+    
+    
+}
+
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || (is_on_floor(self) && vspeed >= 0) || under_ceiling) && hit = 0
+instance_destroy()

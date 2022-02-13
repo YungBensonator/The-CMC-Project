@@ -1,0 +1,83 @@
+if (state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch") 
+  {
+	if bombs_exist < 1
+	{	
+		exit;
+	}	
+	else
+	{
+	bombs_exist = 1;
+	}  
+	  
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  timer = 0;
+  time = 19;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  if moveright = 1 facing = 0;
+  if moveleft = 1 facing = 1;
+  sparksize = 1;
+  sayonara = 0; //makes Komachi's Neutral B Spirits explode...causing misery and woe to those who didn't pay the boat fees.
+  }
+
+if (timer < time){
+	switch ( timer )
+	  {
+		case 1:  image_index = 6; break;
+		case 3:  image_index = 7; break;
+		case 5:  image_index = 8; break;
+		case 7:  image_index = 9; break;
+		case 9:  image_index = 10; break;
+		case 11: image_index = 11; break;
+		case 13: image_index = 12; break;
+		case 15: image_index = 13; break;
+		case 17: image_index = 14; break;
+	  }
+
+	if (timer = 2)
+		{
+			sound_play(downb_sound);
+		}
+	
+	if (timer = 3)
+		{
+			sayonara = 1;
+			
+			sound_play(downb_sound2);
+			sound_play(downb_sound3);
+			spark = instance_create(x+(3 * (1-facing*2))*size,y-15.5*size,obj_spark_shockwave)
+			spark.image_xscale *= sparksize*size;
+			spark.image_yscale *= sparksize*size;
+			spark.image_blend = c_blue;
+			spark.image_alpha = 1;
+			spark.snap = self.id;
+			
+			if ((movejump || moveleft || moveright || moveup || attacking || smash || grab || shielding || (special && attack_type != "downb")))
+				{interrupt = 1;}
+		}
+	
+	if (timer >= 9 && (movejump || moveleft || moveright || moveup || attacking || smash || grab || shielding || (special && attack_type != "downb")))
+	{interrupt = 1;}
+}
+
+  if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    sayonara = 0;
+	
+	if air = 0
+	{ 
+	if movedown {state_type = "crouch";}
+	else {state_type = "stand";}
+	}
+    else
+    state_type = "jump"
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

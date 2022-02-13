@@ -1,0 +1,82 @@
+moving_object = 1;
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 0
+
+
+
+
+on_floor = 0;
+on_platform = 0;
+next_to_lwall = 0;
+next_to_rwall = 0;
+
+while ( collision_line ( x , y , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x , y - actual_height , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) )
+    x -= 1;
+while ( collision_line ( x , y , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x , y - actual_height , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) ) 
+    x += 1;
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_floor , 1 , 1 ) )
+    y -= 1;
+if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_platform , 1 , 1 ) )
+	y -= 1;
+
+if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+    on_floor = 1;
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+    on_platform = 1;
+if ( collision_line ( x + 1 , y , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x + 1 , y - actual_height , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) ) 
+  next_to_rwall = 1;
+if ( collision_line ( x - 1 , y , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x - 1 , y - actual_height , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) )  
+  next_to_lwall = 1;
+
+
+
+if ( timer >= 1 )
+    vspeed += 0.3;
+	
+if ( vspeed > 4.2 )
+    vspeed = 4.2;
+
+if ( on_floor || on_platform )
+  {
+    vspeed = 0;
+  }
+
+
+if state = "normal" and timer >12{
+image_index = 0
+if collision_rectangle(x - (sprite_width*0.35)*size,y-(sprite_height*0.8)*size,x + (sprite_width*0.35)*size,y,player,true,true){
+zaPlayah = collision_rectangle(x - (sprite_width*0.35)*size,y-(sprite_height*0.8)*size,x + (sprite_width*0.35)*size,y,player,true,true)
+countdown = 7
+notYet = 1
+sound_play(attacker.upb_sound);
+state = "trigger"
+}
+}
+
+if state = "trigger"{
+image_index = 1
+if notYet = 1
+with (zaPlayah){
+state_type = "jump"
+attack_type = "none";
+timer = 0
+vspeed = -7
+other.notYet = 0
+}
+
+if countdown > 0
+countdown -= 1
+
+if countdown <= 0
+state = "normal"
+
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,147 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump"  and cantupb = 0{
+	//vspeed = -0.1
+	state_type = "air_attack";
+	attack_type = "upb";
+	sprite_index = sideb_sprite_start;
+	image_index = 0;
+	image_speed = 0;
+	timer = 0;
+	time = 200;
+	special = 0;
+	chargeb = 0;
+	}
+if ( ai )
+  {
+  if ( offstage )
+    {
+    var a;
+    a = instance_nearest ( x , y , obj_edge );
+    moveleft = 0;
+    moveright = 0;
+    if ( a . x < x )
+      moveleft = 1;
+      else
+      moveright = 1;
+    moveup = 1;
+    }
+  }
+if timer < time {
+	state_type = "air_attack";
+
+switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+      }
+if timer = 1{
+
+	sound_play(upb_voice);
+	vspeed = - 4
+	hspeed = 2-facing*4
+	}	  
+
+	if timer = 13 {
+		sprite_index = upb_sprite;
+		image_speed = 0.33
+		image_index = 0
+		}
+	if timer > 12 && moveup = 1 && movedown = 0 {
+		if moveleft = 1 || moveright = 1
+		chargeb += 1.25;
+		else
+		chargeb += 2.25;
+		vspeed -= 0.5;
+		}
+	if timer > 12 && movedown = 1 && moveup = 0 {
+		chargeb += 0.5;
+		vspeed += 0.25;
+		}
+	if vspeed < -4 {
+		vspeed = -4;
+		}
+	if vspeed > 1.5 {
+		vspeed = 1.5;
+		}
+	if timer > 1 && moveright = 1 && moveleft = 0 {
+		hspeed += 0.5;
+		chargeb += 1;
+		}
+	if timer > 1 && moveleft = 1 && moveright = 0 {
+		hspeed -= 0.5;
+		chargeb += 1;
+		}
+	if hspeed > 3 {
+		hspeed = 3;
+		}
+	if hspeed < -3 {
+		hspeed = -3;
+		}
+	if timer > 12 && moveup = 0 && movedown = 0 && moveright = 0 && moveleft = 0 {
+		hspeed *= 0.96;
+		vspeed *= 0.6;
+		chargeb += 0.5;
+		}
+	if hspeed > 0 {
+		facing = 0;
+		}
+	if hspeed < 0 {
+		facing = 1;
+		}
+	if facing = 0 && hspeed < 0.1 {
+		facing = 0
+		}
+	if facing = 1 && hspeed < 0.1 {
+		facing = 1
+		}
+	if chargeb > 175 {
+		timer = 199;
+		hspeed = 0
+		vspeed = 0
+		}
+	if timer > 12 && air = 0 {
+		state_type = "land";
+		attack_type = "none";
+		sprite_index = land_sprite;
+		image_index = 0;
+		image_speed = 0;
+		timer = 0;
+		time = 25;
+		}
+	if ( ai && !offstage) {
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		timer = 0;
+		time = -1;
+		}
+	if timer > 25 && vspeed > 0 {
+		force_edge_grab = 1;
+		}
+	
+	if  special = 1 and (moveleft or moveright)
+     {
+         //state_type = "stand";
+         //attack_type = "none";
+         //timer = 0;
+         //time = -1;
+		 camefromupb = 1
+		 cantupb = 1
+         char_sideb();
+     } 
+     
+	
+	}
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump"
+    timer = 0;
+    time =-1;
+	cantupb = 1
+}
+
+	

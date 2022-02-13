@@ -1,0 +1,161 @@
+if cantusedownb > 0
+cantusedownb -=1
+
+no_hurtbox = 1
+
+
+if air = 0
+savedy = y
+
+if air = 0 
+cantupb = 0
+
+if state_type != "air_attack" and attack_type != "sideb" and attack_type != "upb"
+camefromupb = 0
+
+
+if downtimerr >0
+downtimerr -=1
+if downforwardtimerr>0
+downforwardtimerr -=1
+
+if ancientbeam >0
+ancientbeam -=1
+
+if downbacktimerr>0
+downbacktimerr -=1
+
+if phonecall >0
+phonecall -=1
+
+if air = 0 and facing = 0{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveright and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveright and !movedown and ancientbeam = 0
+ancientbeam = 15
+
+if downtimerr>0 and movedown and moveleft and downbacktimerr = 0{
+downbacktimerr = 15
+facing = 0}
+
+
+if downbacktimerr > 0 and moveleft and !movedown and phonecall = 0{
+phonecall = 15
+facing = 0}
+
+}
+
+if air = 0 and facing = 1{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveleft and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveleft and !movedown and ancientbeam = 0
+ancientbeam = 15
+
+
+if downtimerr>0 and movedown and moveright and downbacktimerr = 0{
+downbacktimerr = 15
+facing = 1}
+
+
+
+if downbacktimerr > 0 and moveright and !movedown and phonecall = 0{
+phonecall = 15
+facing = 1}
+
+}
+
+
+
+if state_type = "stand" and sprite_index = stand_sprite{
+image_speed = 0.25
+
+if image_index = 7{
+effect_create_above(ef_smokeup,x+((-10+facing*20)*size),y,0,c_silver)
+}
+
+}
+
+
+
+
+if state_type = "crouch"{
+if notcrouch = 1 {
+image_index = 0
+notcrouch = 0}
+if image_index >= 7
+image_speed = 0
+
+}
+
+
+if state_type != "crouch" and notcrouch = 0
+notcrouch = 1
+
+if state_type != "run" and notrun = 0
+notrun = 1
+
+
+if runtimer = -30 && runtimer < -20 && state_type = "run" {
+sprite_index = turn_sprite
+image_index = 0
+image_speed = 0
+sound_play(turn_sound)
+}
+if runtimer >= -29 && runtimer < -20 && state_type = "run" {
+sprite_index = turn_sprite
+image_index = 0
+image_speed = 0
+}
+if runtimer = -20 && state_type = "run" {
+sprite_index = run_sprite
+image_index = 0
+image_speed = 0.0625
+}
+
+if state_type = "run" and sprite_index = run_sprite and image_index >=6
+image_index = 3
+
+if state_type = "run" and notrun = 0{
+image_index = 0
+notrun = 1}
+
+
+
+if state_type = "jump" and sprite_index = jump_sprite and image_index >=4
+image_index = 1
+if state_type = "jump" and sprite_index = mid_jump_sprite and image_index >=9
+image_index = 6
+
+if state_type = "shielding"{
+//if movedown
+//sprite_index = shield_crouch_sprite
+//else
+//sprite_index = shield_sprite
+
+if image_index >= 3{
+image_speed = 0
+image_index = 3
+}
+
+}
+
+
+if state_type = "flinch" or state_type = "air_flinch"{
+if image_index >= 4{
+image_speed = 0
+image_index = 4}
+}
+
+if sprite_index = flinch_sprite or sprite_index = flinch2_sprite{
+if image_index >= 4{
+image_speed = 0
+image_index = 4}
+}
