@@ -1,0 +1,68 @@
+rule_time_draw();
+
+d3d_set_projection_ortho (0,0,1280,720,0);
+
+
+if (core_suppress_type == 5) {
+	draw_sprite_ext(chesed_sprite, 0 , 640 , 152, 0.96 , 0.96 , 0 , c_white , 1 );
+	draw_sprite_ext(chesed_glow_sprite, 0 , 640 , 152, 0.96 , 0.96 , core_suppress_a*90 - 90 , c_white , 0.95 );
+	if (core_suppress_level >= 1) {
+		draw_sprite_ext(chesed_glow_sprite, 0 , 640 , 152, 0.96 , 0.96 , core_suppress_b*90 - 90 , c_white , 0.95 );
+	}
+	if (core_suppress_level >= 2) {
+		draw_sprite_ext(chesed_glow_sprite, 0 , 640 , 152, 0.96 , 0.96 , core_suppress_c*90 - 90 , c_white , 0.95 );
+	}
+}
+if (core_suppress_type == 4) {
+	if (core_suppress_level >= 1) {
+		draw_set_color(make_color_rgb(255, 16, 0));
+		draw_set_alpha(0.2);
+		draw_rectangle(0,0,1280,720,false);
+	}
+	with (all) image_blend = make_color_rgb(255, 16, 16);
+}
+if (core_suppress_type == 1) {
+	if (core_suppress_level >= 1) {
+		draw_set_color(make_color_rgb(0, 0, 0));
+		draw_set_alpha(0.1);
+		draw_rectangle(0,0,1280,720,false);
+		background_index = 0;
+	}
+}
+if (core_suppress_type == 0) {
+	if (core_suppress_level >= 1) {
+		draw_set_color(make_color_rgb(0, 255, 0));
+		draw_set_alpha(0.09);
+		draw_rectangle(0,0,1280,720,false);
+	}
+}
+
+
+d3d_set_projection_ortho ( view_xview[0] , view_yview[0] , view_wview[0] , view_hview[0] , view_angle[0] );
+
+/*
+if (!nodraw && core_suppress_type == 2 && core_suppress_level >= 1) {
+	//view_xview[0] = view_xview[5+core_suppress_a];
+	//view_yview[0] = view_yview[5+core_suppress_a];
+	//view_wport[0] = view_wport[5+core_suppress_a];
+	//view_hport[0] = view_hport[5+core_suppress_a];
+
+	view_xview[0] = view_xview[6];
+	view_yview[0] = view_yview[6] + view_hview[6] / 2;
+	view_hview[0] = view_hview[6]/2;
+	view_yport[0] = 360;
+	view_wport[0] = view_wport[6];
+	view_hport[0] = view_hport[6]/2;
+
+	nodraw = 1;
+	screen_redraw();
+	nodraw = 0;
+
+	view_xview[0] = view_xview[5];
+	view_yview[0] = view_yview[5];
+	view_hview[0] = view_hview[5]/2;
+	view_yport[0] = view_yport[5];
+	view_wport[0] = view_wport[5];
+	view_hport[0] = view_hport[5]/2;
+}
+*/

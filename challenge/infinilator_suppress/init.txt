@@ -1,0 +1,72 @@
+rule_stock_display = 0;
+
+
+bar_scroll = -16;
+
+//upbeat = 0;
+//recordtimer_minutes = 0;
+//recordtimer_seconds = 0;
+//recordtimer_frames = 0;
+
+t_minutes = 60;
+t_seconds = 0;
+t_frames = 0;
+
+disable_cameramoving = 1
+
+
+// Game state types:
+// countdown - wait till timer begins.
+// idle - mid-game.
+// success - we completed the test.
+// failure - we failed the test.
+// menu - choose whether or not to retry. To recognize if we failed or not, use upbeat variable (0 failed, 1 success, 2 new record).
+state_type = "countdown";
+timer = 0;
+time = 120;
+
+// In Target test, we omit entry animations.
+for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  {
+  if ( global.gs_character[i] == 0 ) continue;
+  (fighter_slot[i,0]).timer = 0;
+  (fighter_slot[i,0]).state_type = "stand";
+  }
+global . match_playing = 0;
+
+
+core_suppress_beat[0] = false;
+core_suppress_beat[1] = false;
+core_suppress_beat[2] = false;
+core_suppress_beat[3] = false;
+core_suppress_beat[4] = false;
+core_suppress_beat[5] = false;
+core_suppress_beat[6] = false;
+core_suppress_beat[7] = false;
+core_suppress_beat[8] = false;
+
+core_suppress_stage = 0;
+doorhighlight = -1;
+
+if (file_exists("challenge\infinilator_suppress\fight\icon.png")) {
+	file = file_text_open_read("challenge\infinilator_suppress\fight\icon.png");
+	j = 0;
+
+	while (j == 0) {
+		temp = file_text_read_real(file);
+		if (temp > 0) core_suppress_beat[temp-1] = true;
+		file_text_readln(file);
+		if (file_text_eof(file)) j = 1;
+	}
+	file_text_close(file);
+}
+
+if (core_suppress_beat[0] && core_suppress_beat[1] && core_suppress_beat[2] && core_suppress_beat[3]) {
+	core_suppress_stage = 1;
+}
+if (core_suppress_beat[4] && core_suppress_beat[5] && core_suppress_beat[6]) {
+	core_suppress_stage = 2;
+}
+if (core_suppress_beat[7] && core_suppress_beat[8]) {
+	core_suppress_stage = 3;
+}

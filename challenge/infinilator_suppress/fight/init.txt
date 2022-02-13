@@ -1,0 +1,53 @@
+rule_stock_display = 1;
+//global.gs_rules = "Stock";
+
+bar_scroll = -16;
+
+//upbeat = 0;
+//recordtimer_minutes = 0;
+//recordtimer_seconds = 0;
+//recordtimer_frames = 0;
+
+t_minutes = 10;
+t_seconds = 0;
+t_frames = 0;
+
+
+// Game state types:
+// pre-countdown - in Smash 64, game waited a little while before settings fighters on stage
+//                 and starting the countdown. This is it.
+// countdown - 3, 2, 1... This is where players are supposed to play their entry animations.
+// idle - game state itself.
+// over - GAME!
+state_type = "pre-countdown";
+timer = 0;
+time = 2;
+
+// Players' entry timers. Game sets them up in a way to make them display while countdown lasts.
+for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  {
+  if ( global.gs_character[i] == 0 ) continue;
+  (fighter_slot[i,0]).timer = -2 - i * 10;
+  (fighter_slot[i,0]).state_type = "entry";
+  }
+
+db_challenge[global.current_challenge] = "infinilator_suppress";
+
+core_saved = 0;
+
+
+chesed_sprite = cspr_add('challenge/infinilator_suppress/fight/chesed.png',1,1,0,1,0,58,58);
+chesed_glow_sprite = cspr_add('challenge/infinilator_suppress/fight/chesed_glow.png',1,1,0,1,0,30,60);
+
+sprite_start = chesed_sprite;
+sprite_end = chesed_glow_sprite;
+
+
+meltdown0_sound = sound_add("challenge/infinilator_suppress/fight/malkuth.ogg", 0, 1);
+meltdown1_sound = sound_add("challenge/infinilator_suppress/fight/yesod.ogg", 0, 1);
+meltdown2_sound = sound_add("challenge/infinilator_suppress/fight/netzach.ogg", 0, 1);
+meltdown3_sound = sound_add("challenge/infinilator_suppress/fight/hokma.ogg", 0, 1);
+hokmapause_sound = sound_add("challenge/infinilator_suppress/fight/hokma_pause.ogg", 0, 1);
+
+sound_start = meltdown0_sound;
+sound_end = hokmapause_sound;

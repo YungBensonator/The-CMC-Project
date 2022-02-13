@@ -1,0 +1,318 @@
+// Target test main script!
+
+if ( global.gs_player[1] == 1 ){
+obj_game_control.camera_mode = 0
+
+// Camera.
+
+if ( camera_mode == -1 )
+  exit;
+
+var xx, yy, w, h, dir, d, zoom, boundary_zoom, camera_speed, camera_smooth;
+camera_speed = CAMERA_SPEED;
+camera_smooth = CAMERA_SMOOTH;
+if ( global.gs_rules == "Multiman" )
+  {
+  camera_speed = 18;
+  camera_smooth = 12;
+  }
+
+if ( camera_boundary_zoom == 0 )
+  boundary_zoom = 320;
+  else
+  boundary_zoom = camera_boundary_zoom * 0.84;
+
+if ( camera_mode == 2 || camera_boundary_zoom == 0 )
+  {
+  camera_l = camera_boundary_l;
+  camera_u = camera_boundary_u;
+  camera_r = camera_boundary_r;
+  camera_d = camera_boundary_d;
+  }
+  
+d = 0;
+if ( instance_exists ( obj_training ) )
+if ( obj_training.show )
+  d = 1;
+if ( d || camera_mode == 1 || camera_mode == 3 || camera_mode == 4 )
+  {
+  camera_l = ( obj_game_control.fighter_slot [ camera_mode == 4 , 0 ] ) . x;
+  camera_u = ( obj_game_control.fighter_slot [ camera_mode == 4 , 0 ] ) . y - ( obj_game_control.fighter_slot [ camera_mode == 4 , 0 ] ) . actual_height * 0.4;
+  camera_r = camera_l;
+  camera_d = camera_u;
+  boundary_zoom = point_distance ( 0 , 0 , ( obj_game_control.fighter_slot [ camera_mode == 4 , 0 ] ) . actual_width , ( obj_game_control.fighter_slot [ camera_mode == 4 , 0 ] ) . actual_height );
+  boundary_zoom += 80;
+  camera_l += 96;
+  camera_r -= 96;
+  camera_u += 64;
+  camera_d -= 64;
+  if ( camera_mode == 3 || camera_mode == 4 )
+    {
+    camera_speed = 64;
+    camera_smooth = 3;
+    }
+  }
+  
+if ( instance_exists ( obj_camerazoom ) )
+  {
+  camera_l = obj_camerazoom.camera_l;
+  camera_u = obj_camerazoom.camera_u;
+  camera_r = obj_camerazoom.camera_r;
+  camera_d = obj_camerazoom.camera_d;
+  if ( obj_camerazoom.camera_boundary_zoom != 0 )
+    boundary_zoom = obj_camerazoom.camera_boundary_zoom * 1.2;
+  }
+  
+/*camera_l -= 128;
+camera_r += 128;
+camera_u -= 96;
+camera_d += 96;*/
+camera_l -= 100;
+camera_r += 100;
+camera_u -= 16;
+camera_d += 16;
+camera_d += ( view_wview[0] / 1280 ) * 96;
+
+if ( camera_l < camera_boundary_l ) camera_l = camera_boundary_l;
+//if ( camera_l < 0 ) camera_l = 0;
+if ( camera_r > camera_boundary_r ) camera_r = camera_boundary_r;
+//if ( camera_r > camera_boundary_r ) camera_r = camera_boundary_r;
+if ( camera_u < camera_boundary_u ) camera_u = camera_boundary_u;
+if ( camera_d > camera_boundary_d ) camera_d = camera_boundary_d;
+
+xx = ( camera_l + camera_r ) / 2;
+yy = ( camera_u + camera_d ) / 2;
+d = point_distance ( camera_x , camera_y , xx , yy );
+if ( d <= camera_speed )
+  {
+  camera_x = xx;
+  camera_y = yy;
+  }
+  else
+  {
+  dir = point_direction ( camera_x , camera_y , xx , yy );
+  camera_x += lengthdir_x ( camera_speed , dir );
+  camera_y += lengthdir_y ( camera_speed , dir );
+  }
+x = ( camera_x + x * camera_smooth ) / ( camera_smooth + 1 );
+y = ( camera_y + y * camera_smooth ) / ( camera_smooth + 1 );
+
+w = camera_r - camera_l;
+h = camera_d - camera_u;
+
+if ( w/h < 1.78 )
+  {
+  // calculate new l and r
+  camera_l = xx - ( h / 2 ) * 1.78;
+  camera_r = xx + ( h / 2 ) * 1.78;
+  }
+  else
+  {
+  // calculate new u and d
+  camera_u = yy - ( w / 2 ) * 0.5625;
+  camera_d = yy + ( w / 2 ) * 0.5625;
+  }
+  
+zoom = point_distance ( camera_l , camera_u , camera_r , camera_d );
+if ( zoom < boundary_zoom ) zoom = boundary_zoom;
+camera_zoom = ( camera_zoom * camera_smooth + zoom ) / ( camera_smooth + 1 );
+
+view_wview[0] = camera_zoom * 0.872;
+view_hview[0] = camera_zoom * 0.49;
+view_xview[0] = x - view_wview[0] / 2;
+view_yview[0] = y - view_hview[0] / 2;
+
+if ( view_xview[0] < camera_boundary_l ) view_xview[0] = camera_boundary_l;
+if ( view_yview[0] < camera_boundary_u ) view_yview[0] = camera_boundary_u;
+if ( view_xview[0] + view_wview[0] > camera_boundary_r ) view_xview[0] = camera_boundary_r - view_wview[0];
+if ( view_yview[0] + view_hview[0] > camera_boundary_d ) view_yview[0] = camera_boundary_d - view_hview[0];
+
+if ( view_wview[0] > camera_boundary_r - camera_boundary_l )
+  {
+  view_xview[0] = camera_boundary_l;
+  view_wview[0] = camera_boundary_r - camera_boundary_l;
+  view_hview[0] = view_wview[0] * 0.5625;
+  }
+  
+if ( view_hview[0] > camera_boundary_d - camera_boundary_u )
+  {
+  view_yview[0] = camera_boundary_u
+  view_hview[0] = camera_boundary_d - camera_boundary_u;
+  //view_wview[0] = view_hview[0] * 1.78;
+  }
+  
+view_xview[0] = round ( view_xview[0] );
+view_yview[0] = round ( view_yview[0] );
+view_wview[0] = round ( view_wview[0] );
+view_hview[0] = round ( view_hview[0] );
+
+camera_u = camera_y-1;
+camera_d = camera_y+1;
+camera_l = camera_x-1;
+camera_r = camera_x+1;
+
+
+
+
+obj_game_control.camera_mode = -1
+
+
+}
+
+// OBV part
+if ( time != -1 )
+  timer += 1;
+  
+// Ending them, states.
+if ( timer >= time && time != -1 )
+  {
+  switch ( state_type )
+    {
+    case "countdown":
+      graphic_timer = HUDANIM_Go;
+      global . match_playing = 1;
+      state_type = "idle";
+      time = -1;
+      break;
+    case "failure":
+      graphic_timer = -1;
+      upbeat = 0;
+      if ( global.gs_gamemode == "Classic" )
+        {
+        obj_classic.upbeat = upbeat;
+        rules_stagecomplete();
+        }
+        else
+        {
+        state_type = "menu";
+        menu_alpha = 0;
+        time = -1;
+		victory = 0
+		script_execute ( rule_end_script );
+        }
+      break;
+    case "complete":
+      graphic_timer = -1;
+      if ( upbeat == 2 )
+        {
+        bonus_minutes = recordtimer_minutes;
+        bonus_seconds = recordtimer_seconds;
+        bonus_frames = recordtimer_frames;
+        bonus_nickname = pdat[0].tag_str;
+        var i, a;
+        for ( i = 0 ; i < fps_measure_num ; i += 1 )
+          a += fps_measure [ i ];
+        a /= fps_measure_num;
+        bonus_avgfps = round ( a );
+        //record_save_1 ( pdat[0].char_id , 288 );
+        }
+      if ( global.gs_gamemode == "Classic" )
+        {
+        obj_classic.upbeat = upbeat;
+        rules_stagecomplete();
+        }
+        else
+        {
+        state_type = "menu";
+        menu_alpha = 0;
+        time = -1;
+		victory = 1
+		script_execute ( rule_end_script );
+        }
+      break;
+    }
+  }
+
+if ( state_type == "idle" )
+  {
+  // Classic mode timeout
+  if ( global.gs_gamemode == "Challenge" )
+    {
+    t_frames -= 1;
+    if ( t_frames < 0 )
+      {
+      t_frames += 60;
+      t_seconds -= 1;
+      if ( t_seconds < 0 )
+        {
+        t_seconds += 60;
+        t_minutes -= 1;
+        }
+      }
+    if ( t_seconds == 0 && t_minutes == 0 )
+      {
+      FMODInstanceStop ( global.bgm_instance );
+      graphic_timer = HUDANIM_Failure;
+      state_type = "failure";
+      global . match_playing = -1;
+      timer = 0;
+      time = 150;
+      exit;
+      }
+    }
+  
+  // Exit reached!
+  var a;
+  a = 1;
+  with (player){
+	  if ( x >= 4608 && air == 0 )
+    a = 0;
+  }
+  
+  if ( a == 0 )
+    {
+    FMODInstanceStop ( global.bgm_instance );
+    if ( recordtimer_minutes < bonus_minutes )
+      graphic_timer = HUDANIM_Record;
+      else
+    if ( recordtimer_minutes == bonus_minutes && recordtimer_seconds < bonus_seconds )
+      graphic_timer = HUDANIM_Record;
+      else
+    if ( recordtimer_minutes == bonus_minutes && recordtimer_seconds == bonus_seconds && recordtimer_frames < bonus_frames )
+      graphic_timer = HUDANIM_Record;
+      else
+      graphic_timer = HUDANIM_Success; 
+    if ( graphic_timer == HUDANIM_Record )
+      {
+      crowd_call ( 0 , 100 );
+      upbeat = 2;
+      }
+      else
+      {
+      crowd_call ( 0 , 75 );
+      upbeat = 1;
+      }
+    if ( global.gs_gamemode == "Classic" && bonus_minutes == 15 )
+      graphic_timer = HUDANIM_Success;
+    graphic_timer = HUDANIM_Success; 
+    state_type = "complete";
+    global . match_playing = -1;
+    timer = 0;
+    time = 150;
+    exit;
+    } 
+    
+  recordtimer_frames += 1;
+  if ( recordtimer_frames >= 60 )
+    {
+    if ( fps_measure_num < 900 )
+      {
+      fps_measure [ fps_measure_num ] = fps;
+      fps_measure_num += 1;
+      }
+    recordtimer_frames -= 60;
+    recordtimer_seconds += 1;
+    }
+  if ( recordtimer_seconds >= 60 )
+    {
+    recordtimer_seconds -= 60;
+    recordtimer_minutes += 1;
+    } 
+  if ( recordtimer_minutes >= 15 )
+    {
+    recordtimer_minutes = 14;
+    recordtimer_frames = 59;
+    recordtimer_seconds = 59;
+    }  
+  }
+  

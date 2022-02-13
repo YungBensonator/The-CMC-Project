@@ -1,0 +1,266 @@
+custom_rules = 1 //we want a normal stock match
+
+switch (core_suppress_type) {
+	case 0: stage = "sdmlibrary"; break;
+	case 1: stage = "rcastle"; break;
+	case 2: stage = "netherworld"; break;
+	case 3: stage = "gardenofsun"; break;
+	case 4: stage = "jusyugioh"; break;
+	case 5: stage = "hinamizawaschool"; break;
+	case 6: stage = "portalmk"; break;
+	case 7: stage = "nuclearfurnace"; break;
+	case 8: stage = "reimaden"; break;
+	default: stage = "rcastle";
+}
+
+set_settings = 1 //wether we want to use the stuff below or not
+
+_items = 0         //no items
+_hazard = 0        //enabling hazards
+_fs = 0            //no final smash(set to 1 to enable)
+_player_stocks = 3 //number of stocks a player has
+
+allow_2p = 1      //allow 2 players
+
+_versus_theme = 2 //use vs theme music instead of stage music
+
+global.gs_teams = 1;
+
+
+fighter_a = irandom_range(1, db_charnum);
+fighter_b = irandom_range(1, db_charnum);
+
+for (i = 0; i < 100; i+=1) {
+	blacklist[i] = "";
+}
+
+blacklist[0] = "boss_apocalypse";
+blacklist[1] = "boss_azero";
+blacklist[2] = "boss_marietta";
+blacklist[3] = "boss_mash_dracula";
+blacklist[4] = "boss_sato_goliathdoll";
+blacklist[5] = "boss_sato_hime";
+blacklist[6] = "boss_thwomp";
+blacklist[7] = "gallantmon";
+blacklist[8] = "sans_tp";
+blacklist[9] = "toehoe";
+blacklist[10] = "gg_supreme_bass";
+blacklist[11] = "gg_ssonder";
+blacklist[12] = "boss_marx";
+blacklist[13] = "boss_delusion";
+blacklist[14] = "thypersonic";
+blacklist[15] = "o547";
+blacklist[16] = "whitenight";
+blacklist[17] = "duncan";
+blacklist[18] = "kangfu";
+blacklist[19] = "plent";
+blacklist[20] = "ragnaunlimited_cogu";
+blacklist[21] = "deoxys";
+blacklist[22] = "necoarcnrvnqsrchaosbyathorment";
+blacklist[23] = "googly";
+blacklist[24] = "ronald";
+blacklist[25] = "piggodagent5";
+blacklist[26] = "kingagent5";
+blacklist[27] = "boss_redmist";
+blacklist[28] = "boss_arbiter";
+blacklist[29] = "arle";
+blacklist[30] = "metalman";
+blacklist[31] = "sato_kyoko";
+blacklist[32] = "hand";
+
+//Tough fighters
+tfighter[0] = "fnfrog";
+tfighter[1] = "iris";
+tfighter[2] = "ozero";
+tfighter[3] = "sato_yamcha";
+tfighter[4] = "ciel_milla";
+tfighter[5] = "ciel_mugetsu";
+tfighter[6] = "chopper";
+tfighter[7] = "oleva";
+tfighter[8] = "rash";
+tfighter[9] = "taigabysato";
+tfighter[10] = "ciel_goomba";
+tfighter[11] = "yoko";
+tfighter[12] = "slkdoom";
+tfighter[13] = "hecate";
+tfighter[14] = "mchnika";
+tfighter[15] = "spiderman";
+tfighter[16] = "ichigo";
+tfighter[17] = "hyde_cogu";
+tfighter[18] = "alucard";
+tfighter[19] = "meiling_cogu";
+tfighter[20] = "ciel_kfm";
+tfighter[21] = "sigma_mash";
+tfighter[22] = "ptbravo_misako";
+tfighter[23] = "ptbravo_kyoko";
+tfighter[24] = "ciel_koa";
+tfighter[25] = "iris";
+tfighter[26] = "bladeedit";
+tfighter[27] = "koishi";
+tfighter[28] = "ciel_sorrel";
+tfighter[29] = "ciel_schmietta";
+tfighter[30] = "numemon";
+tfighter[31] = "ciel_maitokiha";
+tfighter[32] = "marumaro";
+tfighter[33] = "koishi";
+tfighter[34] = "volnutt_mash";
+tfighter[35] = "thanos";
+tfighter[36] = "agatha";
+tfighter[37] = "susagent5";
+tfighter[38] = "kumagawa";
+tfighter[39] = "sato_miguelrios";
+tfighter[40] = "lloyd_cogu";
+tfighter[41] = "ragna_cogu";
+tfighter[42] = "ciel_cloudcsw";
+tfighter[43] = "lucemon";
+
+
+
+
+
+for (i = 0; i < 100; i+=1) {
+	if ( fighter_a == fighter_get_dbid_no_fail(blacklist[i]) ) {
+		fighter_a -= 1;
+		i = -1;
+	}
+}
+for (i = 0; i < 100; i+=1) {
+	if ( fighter_b == fighter_get_dbid_no_fail(blacklist[i]) ) {
+		fighter_b -= 1;
+		i = -1;
+	}
+}
+
+
+if (core_suppress_type == 8) {
+
+set_enemy_challenge(      //setting our current enemy
+1,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+tfighter[irandom(43)],                  //Setting fighter were fighting
+2,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+0                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+set_enemy_challenge(      //setting our current enemy
+2,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+tfighter[irandom(43)],                  //Setting fighter were fighting
+1,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+0                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+set_enemy_challenge(      //setting our current enemy
+3,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+"boss_arbiter",                  //Setting fighter were fighting
+1,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+1                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+}
+else if (core_suppress_type == 7 || core_suppress_type == 5) {
+
+set_enemy_challenge(      //setting our current enemy
+1,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+tfighter[irandom(43)],                  //Setting fighter were fighting
+2,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+1                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+set_enemy_challenge(      //setting our current enemy
+2,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+db_charname[fighter_b, 1],                  //Setting fighter were fighting
+1,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+1                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+}
+else if (core_suppress_type == 6) {
+
+set_enemy_challenge(      //setting our current enemy
+1,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+db_charname[fighter_a, 1],                  //Setting fighter were fighting
+2,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+0                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+set_enemy_challenge(      //setting our current enemy
+2,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+db_charname[fighter_b, 1],                  //Setting fighter were fighting
+1,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+0                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+set_enemy_challenge(      //setting our current enemy
+3,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+"boss_redmist",                  //Setting fighter were fighting
+1,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+1                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+}
+else {
+
+set_enemy_challenge(      //setting our current enemy
+1,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+db_charname[fighter_a, 1],                  //Setting fighter were fighting
+2,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+1                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+set_enemy_challenge(      //setting our current enemy
+2,                         //this is their ID, start at 1, for 2 player enabled reminder the max should be 4
+db_charname[fighter_b, 1],                  //Setting fighter were fighting
+1,                         //Setting the stocks
+1,                         //Setting the size
+0,                         //Setting if metal or not
+0,                         //Setting the palette number
+0,                         //Setting the alt number( 0 = default)
+"none",                    //Setting the assist it has (set "none" for none)
+1                          //Setting the team it is, enemies use 1, players 0, 2+ are third parties
+);
+
+}

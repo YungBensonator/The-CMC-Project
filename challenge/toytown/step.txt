@@ -1,0 +1,275 @@
+// Target test main script!
+//global.gs_can_pause = 0;
+// OBV part
+if ( time != -1 )
+  timer += 1;
+
+disable_cameramoving = 1
+obj_game_control.disable_cameramoving = 1
+  
+// Ending them, states.
+if ( timer >= time && time != -1 )
+  {
+  switch ( state_type )
+    {
+    case "countdown":
+      graphic_timer = HUDANIM_Go;
+      global . match_playing = 1;
+      state_type = "idle";
+      time = -1;
+      break;
+    case "failure":
+      graphic_timer = -1;
+      upbeat = 0;
+      if ( global.gs_gamemode == "Classic" )
+        {
+        obj_classic.upbeat = upbeat;
+        rules_stagecomplete();
+        }
+        else
+        {
+        state_type = "menu";
+        menu_alpha = 0;
+        time = -1;
+		victory = 0
+		script_execute ( rule_end_script );
+        }
+      break;
+    case "complete":
+      graphic_timer = -1;
+      if ( upbeat == 2 )
+        {
+        bonus_minutes = recordtimer_minutes;
+        bonus_seconds = recordtimer_seconds;
+        bonus_frames = recordtimer_frames;
+        bonus_nickname = pdat[0].tag_str;
+        var i, a;
+        for ( i = 0 ; i < fps_measure_num ; i += 1 )
+          a += fps_measure [ i ];
+        a /= fps_measure_num;
+        bonus_avgfps = round ( a );
+        //record_save_1 ( pdat[0].char_id , 288 );
+        }
+      if ( global.gs_gamemode == "Classic" )
+        {
+        obj_classic.upbeat = upbeat;
+        rules_stagecomplete();
+        }
+        else
+        {
+        state_type = "menu";
+        menu_alpha = 0;
+        time = -1;
+		victory = 1
+		script_execute ( rule_end_script );
+        }
+      break;
+    }
+  }
+
+if ( state_type == "idle" )
+  {
+  // Classic mode timeout
+  if ( global.gs_gamemode == "Challenge" )
+    {
+    t_frames -= 1;
+    if ( t_frames < 0 )
+      {
+      t_frames += 60;
+      t_seconds -= 1;
+      if ( t_seconds < 0 )
+        {
+        t_seconds += 60;
+        t_minutes -= 1;
+        }
+      }
+    if ( t_seconds == 0 && t_minutes == 0 )
+      {
+      FMODInstanceStop ( global.bgm_instance );
+      graphic_timer = HUDANIM_Failure;
+      state_type = "failure";
+      global . match_playing = -1;
+      timer = 0;
+      time = 150;
+      exit;
+      }
+    }
+  
+  var a, kumamon_start, lucemon_start, numemon_start, boss_start;
+  with (player){
+	  
+	  if number = 1{
+		die_cap = 350;
+	  }
+	  if number = 2{
+		die_cap = 300;
+	  }
+	  
+	  if match_loaded = 1
+	  exit;
+	  
+	  if x >= 2912 and x <= 3520 and y <= 704{
+	  kumamon_start = 1
+	  }
+	  
+	  if x >= 7488 and x <= 8288 and y <= 512 and air = 0
+	  lucemon_start = 1
+	  
+	  if x >= 7552 and x <= 8288 and y <= 2528 and y >= 2240
+	  numemon_start = 1
+	  
+	  /*
+      if x <= 352*0.75 and x >= 224*0.75 and y >= 1344*0.75 and y <= 1472*0.75{
+	  obj_game_control.super_secret_exit = 1
+	  obj_game_control.victory_variable = 1
+	  }
+      
+      if x >= 7040*0.75 and y <= 352*0.75 and y >= 160*0.75 and air = 0{
+	  boss_start = 1
+	  }
+      
+	  
+	  
+	  
+	  
+	  */
+	   
+  }
+  
+  
+  
+  if kumamon_start = 1 and kumamon_match = 0{
+
+  kumamon_match = 1
+  stop_music();
+  midmatch_fighter_load(1, "kumamon", 0, 0, "Get ready to rumble!", 3296 , 448, 300, 1)
+
+  global.gs_charactertheme = "kumamon";
+  play_music( string ( db_stagename [ global . gs_stage , 0 ] ) , 0 , global.gs_charactertheme );
+  global.gs_charactertheme = "";
+  
+  with (player){
+	  hspeed = 0
+	  vspeed = 0
+	  speed = 0
+	  state_type = "entry"
+	  attack_type = "none"
+	  timer = -1
+	  time = 300
+	  char_entry();
+  }
+  
+  match_loaded = 1
+  }
+  
+  if lucemon_start = 1 and lucemon_match = 0{
+
+  lucemon_match = 1
+  stop_music();
+  midmatch_fighter_load(1, "lucemon", 0, 0, "Something has emerged.", 7808 , 224, 300, 1)
+  //midmatch_fighter_load(2, "metalseadramon", 0, 0, "Something has emerged.", 7712 , 480, 300, 1)
+
+  global.gs_charactertheme = "lucemon";
+  play_music( string ( db_stagename [ global . gs_stage , 0 ] ) , 0 , global.gs_charactertheme );
+  global.gs_charactertheme = "";
+  
+  with (player){
+	  hspeed = 0
+	  vspeed = 0
+	  speed = 0
+	  state_type = "entry"
+	  attack_type = "none"
+	  timer = -1
+	  time = 300
+	  char_entry();
+  }
+  
+  match_loaded = 1
+  }
+  
+  
+  if numemon_start = 1 and numemon_match = 0{
+
+  numemon_match = 1
+  stop_music();
+  midmatch_fighter_load(1, "numemon", 0, 0, "Face the true king of Toy Town!", 8195 , 2464, 300, 1)
+
+  global.gs_charactertheme = "numemon";
+  play_music( string ( db_stagename [ global . gs_stage , 0 ] ) , 0 , global.gs_charactertheme );
+  global.gs_charactertheme = "";
+  
+  with (player){
+	  hspeed = 0
+	  vspeed = 0
+	  speed = 0
+	  state_type = "entry"
+	  attack_type = "none"
+	  timer = -1
+	  time = 300
+	  char_entry();
+  }
+  
+  match_loaded = 1
+  }
+  
+  
+  
+  
+  
+
+  if ( victory_variable == 1 )
+    {
+    FMODInstanceStop ( global.bgm_instance );
+    if ( recordtimer_minutes < bonus_minutes )
+      graphic_timer = HUDANIM_Record;
+      else
+    if ( recordtimer_minutes == bonus_minutes && recordtimer_seconds < bonus_seconds )
+      graphic_timer = HUDANIM_Record;
+      else
+    if ( recordtimer_minutes == bonus_minutes && recordtimer_seconds == bonus_seconds && recordtimer_frames < bonus_frames )
+      graphic_timer = HUDANIM_Record;
+      else
+      graphic_timer = HUDANIM_Success; 
+    if ( graphic_timer == HUDANIM_Record )
+      {
+      crowd_call ( 0 , 100 );
+      upbeat = 2;
+      }
+      else
+      {
+      crowd_call ( 0 , 75 );
+      upbeat = 1;
+      }
+    if ( global.gs_gamemode == "Classic" && bonus_minutes == 15 )
+      graphic_timer = HUDANIM_Success;
+    graphic_timer = HUDANIM_Success; 
+    state_type = "complete";
+    global . match_playing = -1;
+    timer = 0;
+    time = 150;
+    exit;
+    } 
+    
+  recordtimer_frames += 1;
+  if ( recordtimer_frames >= 60 )
+    {
+    if ( fps_measure_num < 900 )
+      {
+      fps_measure [ fps_measure_num ] = fps;
+      fps_measure_num += 1;
+      }
+    recordtimer_frames -= 60;
+    recordtimer_seconds += 1;
+    }
+  if ( recordtimer_seconds >= 60 )
+    {
+    recordtimer_seconds -= 60;
+    recordtimer_minutes += 1;
+    } 
+  if ( recordtimer_minutes >= 15 )
+    {
+    recordtimer_minutes = 14;
+    recordtimer_frames = 59;
+    recordtimer_seconds = 59;
+    }  
+  }

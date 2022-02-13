@@ -1,0 +1,286 @@
+// Target test main script!
+//global.gs_can_pause = 0;
+// OBV part
+if ( time != -1 )
+  timer += 1;
+  
+disable_cameramoving = 1
+obj_game_control.disable_cameramoving = 1
+
+// Ending them, states.
+if ( timer >= time && time != -1 )
+  {
+  switch ( state_type )
+    {
+    case "countdown":
+      graphic_timer = HUDANIM_Go;
+      global . match_playing = 1;
+      state_type = "idle";
+      time = -1;
+      break;
+    case "failure":
+      graphic_timer = -1;
+      upbeat = 0;
+      if ( global.gs_gamemode == "Classic" )
+        {
+        obj_classic.upbeat = upbeat;
+        rules_stagecomplete();
+        }
+        else
+        {
+        state_type = "menu";
+        menu_alpha = 0;
+        time = -1;
+		victory = 0
+		script_execute ( rule_end_script );
+        }
+      break;
+    case "complete":
+      graphic_timer = -1;
+      if ( upbeat == 2 )
+        {
+        bonus_minutes = recordtimer_minutes;
+        bonus_seconds = recordtimer_seconds;
+        bonus_frames = recordtimer_frames;
+        bonus_nickname = pdat[0].tag_str;
+        var i, a;
+        for ( i = 0 ; i < fps_measure_num ; i += 1 )
+          a += fps_measure [ i ];
+        a /= fps_measure_num;
+        bonus_avgfps = round ( a );
+        //record_save_1 ( pdat[0].char_id , 288 );
+        }
+      if ( global.gs_gamemode == "Classic" )
+        {
+        obj_classic.upbeat = upbeat;
+        rules_stagecomplete();
+        }
+        else
+        {
+        state_type = "menu";
+        menu_alpha = 0;
+        time = -1;
+		victory = 1
+		script_execute ( rule_end_script );
+        }
+      break;
+    }
+  }
+
+if ( state_type == "idle" )
+  {
+  // Classic mode timeout
+  if ( global.gs_gamemode == "Challenge" )
+    {
+    t_frames -= 1;
+    if ( t_frames < 0 )
+      {
+      t_frames += 60;
+      t_seconds -= 1;
+      if ( t_seconds < 0 )
+        {
+        t_seconds += 60;
+        t_minutes -= 1;
+        }
+      }
+    if ( t_seconds == 0 && t_minutes == 0 )
+      {
+      FMODInstanceStop ( global.bgm_instance );
+      graphic_timer = HUDANIM_Failure;
+      state_type = "failure";
+      global . match_playing = -1;
+      timer = 0;
+      time = 150;
+      exit;
+      }
+    }
+  
+  var a, plantman_start, bubsy_start, axl_start, boss_start;
+  with (player){
+	  
+	  if number = 1{
+		die_cap = 350;
+	  }
+	  if number = 2{
+		die_cap = 300;
+	  }
+	  
+	  if match_loaded = 1
+	  exit;
+      
+      if x >= 7040*0.75 and y <= 352*0.75 and y >= 160*0.75 and air = 0{
+	  boss_start = 1
+	  }
+      	  
+	  if x >= 4928*0.75 and x <= 5216*0.75 and y <= 672*0.75 and y >= 384*0.75{
+	  plantman_start = 1
+	  }
+	  
+	  if x <= 384*0.75 and x >= 288*0.75 and y <= 416*0.75 and y >= 32*0.75
+	  bubsy_start = 1
+	  
+	  if x >= 5600*0.75 and x <= 6336*0.75 and y <= 1216*0.75 and y >= 768*0.75
+	  axl_start = 1
+	   
+  }
+  
+  
+  if boss_start = 1 and boss_match = 0 and plantman_match = 0{
+
+  boss_match = 1
+  stop_music();
+  midmatch_fighter_load(1, "volnutt_mash", 0, 0, "Cheaters must be punished.", 7500*0.75 , 319*0.75, 300, 1)
+
+  global.gs_charactertheme = "lobster";
+  play_music( string ( db_stagename [ global . gs_stage , 0 ] ) , 0 , global.gs_charactertheme );
+  global.gs_charactertheme = "";
+  
+  with (player){
+	  if number = 1{
+	  hspeed = 0
+	  vspeed = 0
+	  speed = 0
+	  state_type = "entry"
+	  attack_type = "none"
+	  timer = -1
+	  time = 300
+	  char_entry();
+	  }
+  }
+  
+  match_loaded = 1
+	  
+  }
+  
+  if plantman_start = 1 and plantman_match = 0 and boss_start = 0{
+
+  plantman_match = 1
+  stop_music();
+  midmatch_fighter_load(1, "petey", 0, 0, "WARNING! WARNING! WARNING!", 5152*0.75 , 672*0.75, 300, 1)
+
+  global.gs_charactertheme = "petey";
+  play_music( string ( db_stagename [ global . gs_stage , 0 ] ) , 0 , global.gs_charactertheme );
+  global.gs_charactertheme = "";
+  
+  with (player){
+	  hspeed = 0
+	  vspeed = 0
+	  speed = 0
+	  state_type = "entry"
+	  attack_type = "none"
+	  timer = -1
+	  time = 300
+	  char_entry();
+  }
+  
+  match_loaded = 1
+  }
+  
+  
+  
+  if bubsy_start = 1 and bubsy_match = 0{
+
+  bubsy_match = 1
+  stop_music();
+  midmatch_fighter_load(1, "bubsy", 0, 0, "What could pawsibly go wrong?", 128*0.75 , 448*0.75, 300, 1)
+
+  global.gs_charactertheme = "bubsy";
+  play_music( string ( db_stagename [ global . gs_stage , 0 ] ) , 0 , global.gs_charactertheme );
+  global.gs_charactertheme = "";
+  
+  with (player){
+	  hspeed = 0
+	  vspeed = 0
+	  speed = 0
+	  state_type = "entry"
+	  attack_type = "none"
+	  timer = -1
+	  time = 300
+	  char_entry();
+  }
+  
+	match_loaded = 1
+  }
+  
+  
+  if axl_start = 1 and axl_match = 0{
+
+  axl_match = 1
+  stop_music();
+  midmatch_fighter_load(1, "axl_mash", 0, 0, "WARNING! WARNING! WARNING!", 6272*0.75 , 1216*0.75, 300, 1)
+
+  global.gs_charactertheme = "axl_mash";
+  play_music( string ( db_stagename [ global . gs_stage , 0 ] ) , 0 , global.gs_charactertheme );
+  global.gs_charactertheme = "";
+  
+  with (player){
+	  hspeed = 0
+	  vspeed = 0
+	  speed = 0
+	  state_type = "entry"
+	  attack_type = "none"
+	  timer = -1
+	  time = 300
+	  char_entry();
+  }
+  
+	match_loaded = 1
+  }
+  
+
+  if ( victory_variable == 1 )
+    {
+    FMODInstanceStop ( global.bgm_instance );
+    if ( recordtimer_minutes < bonus_minutes )
+      graphic_timer = HUDANIM_Record;
+      else
+    if ( recordtimer_minutes == bonus_minutes && recordtimer_seconds < bonus_seconds )
+      graphic_timer = HUDANIM_Record;
+      else
+    if ( recordtimer_minutes == bonus_minutes && recordtimer_seconds == bonus_seconds && recordtimer_frames < bonus_frames )
+      graphic_timer = HUDANIM_Record;
+      else
+      graphic_timer = HUDANIM_Success; 
+    if ( graphic_timer == HUDANIM_Record )
+      {
+      crowd_call ( 0 , 100 );
+      upbeat = 2;
+      }
+      else
+      {
+      crowd_call ( 0 , 75 );
+      upbeat = 1;
+      }
+    if ( global.gs_gamemode == "Classic" && bonus_minutes == 15 )
+      graphic_timer = HUDANIM_Success;
+    graphic_timer = HUDANIM_Success; 
+    state_type = "complete";
+    global . match_playing = -1;
+    timer = 0;
+    time = 150;
+    exit;
+    } 
+    
+  recordtimer_frames += 1;
+  if ( recordtimer_frames >= 60 )
+    {
+    if ( fps_measure_num < 900 )
+      {
+      fps_measure [ fps_measure_num ] = fps;
+      fps_measure_num += 1;
+      }
+    recordtimer_frames -= 60;
+    recordtimer_seconds += 1;
+    }
+  if ( recordtimer_seconds >= 60 )
+    {
+    recordtimer_seconds -= 60;
+    recordtimer_minutes += 1;
+    } 
+  if ( recordtimer_minutes >= 15 )
+    {
+    recordtimer_minutes = 14;
+    recordtimer_frames = 59;
+    recordtimer_seconds = 59;
+    }  
+  }

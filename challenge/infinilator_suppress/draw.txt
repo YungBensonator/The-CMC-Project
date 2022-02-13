@@ -1,0 +1,109 @@
+//rule_time_draw();
+
+if state_type = "countdown"{
+d3d_set_projection_ortho ( 0,0,1280,720,0);
+draw_set_color(c_black)
+draw_set_alpha(1)
+draw_rectangle(0,0,1280,720,false)
+d3d_set_projection_ortho ( view_xview[0] , view_yview[0] , view_wview[0] , view_hview[0] , view_angle[0] );
+}
+
+
+d3d_set_projection_ortho (0,0,1280,720,0);
+
+draw_set_font(fnt_menu2);
+draw_set_halign(fa_center);
+draw_set_valign(fa_middle);
+
+p = obj_game_control.fighter_slot[0, 0];
+
+if (doorhighlight >= 0) {
+	i = doorhighlight;
+	d3d_set_projection_ortho ( view_xview[0] , view_yview[0] , view_wview[0] , view_hview[0] , view_angle[0] );
+	
+	draw_text_transformed_color((doors[i,0]+0.5)*32*tile_scale - 0.4, (doors[i,1]+1)*32*tile_scale - 60.4, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,0]+0.5)*32*tile_scale - 0.4, (doors[i,1]+1)*32*tile_scale - 59.6, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,0]+0.5)*32*tile_scale + 0.4, (doors[i,1]+1)*32*tile_scale - 60.4, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,0]+0.5)*32*tile_scale + 0.4, (doors[i,1]+1)*32*tile_scale - 59.6, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,0]+0.5)*32*tile_scale, (doors[i,1]+1)*32*tile_scale - 60, "[SHIELD] Open", 0.25, 0.25, 0, c_white, c_white, c_white, c_white, 1);
+	
+	draw_text_transformed_color((doors[i,2]+0.5)*32*tile_scale - 0.4, (doors[i,3]+1)*32*tile_scale - 60.4, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,2]+0.5)*32*tile_scale - 0.4, (doors[i,3]+1)*32*tile_scale - 59.6, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,2]+0.5)*32*tile_scale + 0.4, (doors[i,3]+1)*32*tile_scale - 60.4, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,2]+0.5)*32*tile_scale + 0.4, (doors[i,3]+1)*32*tile_scale - 59.6, "[SHIELD] Open", 0.25, 0.25, 0, c_black, c_black, c_black, c_black, 1);
+	draw_text_transformed_color((doors[i,2]+0.5)*32*tile_scale, (doors[i,3]+1)*32*tile_scale - 60, "[SHIELD] Open", 0.25, 0.25, 0, c_white, c_white, c_white, c_white, 1);
+	
+	d3d_set_projection_ortho (0,0,1280,720,0);
+}
+draw_set_halign(fa_left);
+
+for (i = 0; i < 9; i+=1) {
+	if (p.x >= exitdoors[i,0]*32*tile_scale
+	&& p.x <= (exitdoors[i,0]+1 + (i == 4))*32*tile_scale
+	&& p.y >= exitdoors[i,1]*32*tile_scale
+	&& p.y <= (exitdoors[i,1]+1)*32*tile_scale
+	) {
+		tempcore = i;
+		tempalpha += 0.04;
+	}
+}
+
+
+
+if (tempalpha > 1) tempalpha = 1;
+
+if (tempalpha > 0) {
+		tempalpha -= 0.02;
+		draw_set_color(make_color_rgb(245, 33, 22));
+		draw_set_alpha(0.92*tempalpha);
+		draw_rectangle(12,596,1268,708,false);
+		draw_rectangle(20,588,1260,595,false);
+		draw_triangle(12,596,20,588,20,596,false);
+		draw_triangle(1269,596,1261,588,1261,596,false);
+		
+		draw_rectangle(48,548,532,587,false);
+		draw_rectangle(56,540,524,547,false);
+		draw_triangle(48,548,56,540,56,548,false);
+		draw_triangle(532,548,525,540,525,548,false);
+		
+		draw_set_color(0);
+		draw_rectangle(28,620,1252,692,false);
+		draw_rectangle(64,552,516,588,false);
+		
+		tempcolor = c_white;
+		temptitle = "UNKNOWN";
+		tempdesc = "UNKNOWN";
+		switch (tempcore) {
+			case 0: temptitle = "Malkuth"; tempdesc = "Fighter moveset error detected."; break;
+			case 1: temptitle = "Hod"; tempdesc = "Fighter training error detected."; break;
+			case 2: temptitle = "Yesod"; tempdesc = "Screen resolution error detected."; break;
+			case 3: temptitle = "Netzach"; tempdesc = "Health regeneration error detected."; break;
+			case 4: temptitle = "Tiphereth"; tempdesc = "Hitbox error detected."; break;
+			case 5: temptitle = "Chesed"; tempdesc = "Knockback direction error detected."; break;
+			case 6: temptitle = "Gebura"; tempdesc = "Red Mist returns."; break;
+			case 7: temptitle = "Hokma"; tempdesc = "Time flow anomaly detected."; break;
+			case 8: temptitle = "Binah"; tempdesc = "An arbiter awakens."; break;
+			case 9: temptitle = "Kether"; tempdesc = "Suppression of multiple sephiras."; break;
+		}
+		tempbeat = "";
+		if (core_suppress_beat[tempcore]) tempbeat = "COMPLETE";
+		draw_text_transformed_color(71, 567, string(temptitle) + " core suppression", 1, 1, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(71, 569, string(temptitle) + " core suppression", 1, 1, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(73, 567, string(temptitle) + " core suppression", 1, 1, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(73, 569, string(temptitle) + " core suppression", 1, 1, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(72, 568, string(temptitle) + " core suppression", 1, 1, 0, tempcolor, tempcolor, tempcolor, tempcolor, 1);
+
+		draw_text_transformed_color(31, 647, string(tempdesc) + "#Press SHIELD to start.", 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(31, 649, string(tempdesc) + "#Press SHIELD to start.", 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(33, 647, string(tempdesc) + "#Press SHIELD to start.", 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(33, 649, string(tempdesc) + "#Press SHIELD to start.", 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(32, 648, string(tempdesc) + "#Press SHIELD to start.", 0.8, 0.8, 0, tempcolor, tempcolor, tempcolor, tempcolor, 1);
+
+		draw_text_transformed_color(1119, 647, tempbeat, 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(1119, 649, tempbeat, 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(1121, 647, tempbeat, 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(1121, 649, tempbeat, 0.8, 0.8, 0, c_black, c_black, c_black, c_black, 1);
+		draw_text_transformed_color(1120, 648, tempbeat, 0.8, 0.8, 0, tempcolor, tempcolor, tempcolor, tempcolor, 1);
+}
+
+d3d_set_projection_ortho ( view_xview[0] , view_yview[0] , view_wview[0] , view_hview[0] , view_angle[0] );

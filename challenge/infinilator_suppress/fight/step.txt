@@ -1,0 +1,1064 @@
+rule_stock_step();
+
+if (core_suppress_type == 8) {
+	for (i = 1; i <= 2; i+=1) {
+		if (obj_score_control.stocks[i] <= 0) {
+			if (obj_score_control.stocks[0] > 0) {
+				obj_score_control.out[i] = 0;
+				obj_game_control.fighter_slot[i, 0].state_type = "out";
+				obj_game_control.fighter_slot[i, 0].timer = 0;
+				obj_game_control.fighter_slot[i, 0].time = 10;
+				obj_game_control.fighter_slot[i, 0].x = obj_game_control.fighter_slot[3, 0].x;
+				obj_game_control.fighter_slot[i, 0].y = obj_game_control.fighter_slot[3, 0].y + 8 + obj_game_control.fighter_slot[i, 0].actual_height;
+			}
+			else {
+				obj_score_control.out[i] = 1;
+			}
+		}
+	}
+}
+
+if ((obj_score_control.stocks[1] <= 0 && obj_score_control.stocks[2] <= 0) || obj_score_control.stocks[0] <= 0) {
+	if (core_suppress_type == 2) window_set_region_scale(1, 1);
+	if (core_suppress_type == 7) global.frameskip_active = saveframeskip;
+}
+
+wincondition = (core_suppression != 6 && core_suppression != 8 && obj_score_control.stocks[1] <= 0 && obj_score_control.stocks[2] <= 0) || ((core_suppression == 6 || core_suppression == 8) && obj_score_control.stocks[3] <= 0)
+
+if (wincondition && !core_suppress_beat[core_suppress_type] && !core_saved) {
+	core_saved = 1;
+	
+	file = file_text_open_append("challenge\infinilator_suppress\fight\icon.png");
+	file_text_write_real(file, core_suppress_type+1);
+	file_text_writeln(file);
+	file_text_close(file);
+	
+	for (i = sprite_start; i <= sprite_end; i += 1) {
+		if (sprite_exists(i)) spr_delete(i);
+		sprite_start = -1;
+		sprite_end = -2;
+	}
+}
+
+if (core_suppress_timer < 2) core_suppress_timer += 1;
+if (core_suppress == 0 && core_suppress_timer >= 2) {
+	core_suppress_level = 0;
+	switch (core_suppress_type) {
+		case 0:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/0" , 0 , 0 );
+			
+			temp = obj_game_control.fighter_slot[0, 0];
+			savemove[0] = 0;
+			for (i = 0; i < 9; i+=1) {
+				temp0 = 0;
+				switch (i) {
+					case 0: temp0 = temp.jab_script; break;
+					case 1: temp0 = temp.stilt_script; break;
+					case 2: temp0 = temp.utilt_script; break;
+					case 3: temp0 = temp.dtilt_script; break;
+					case 4: temp0 = temp.dash_attack_script; break;
+					case 5: temp0 = temp.ssmash_script; break;
+					case 6: temp0 = temp.usmash_script; break;
+					case 7: temp0 = temp.dsmash_script; break;
+					case 8: temp0 = temp.grab_script; break;
+				}
+				temp1[i] = temp0;
+				savemove[i] = temp0;
+			}
+			for (i = 0; i < 9; i+=1) {
+				switch (i) {
+					case 0: temp.jab_script = temp1[irandom(8)]; break;
+					case 1: temp.stilt_script = temp1[irandom(8)]; break;
+					case 2: temp.utilt_script = temp1[irandom(8)]; break;
+					case 3: temp.dtilt_script = temp1[irandom(8)]; break;
+					case 4: temp.dash_attack_script = temp1[irandom(8)]; break;
+					case 5: temp.ssmash_script = temp1[irandom(8)]; break;
+					case 6: temp.usmash_script = temp1[irandom(8)]; break;
+					case 7: temp.dsmash_script = temp1[irandom(8)]; break;
+					case 8: temp.grab_script = temp1[irandom(8)]; break;
+				}
+			}
+			
+			for (i = 0; i < 5; i+=1) {
+				temp0 = 0;
+				switch (i) {
+					case 0: temp0 = temp.nair_script; break;
+					case 1: temp0 = temp.fair_script; break;
+					case 2: temp0 = temp.bair_script; break;
+					case 3: temp0 = temp.uair_script; break;
+					case 4: temp0 = temp.dair_script; break;
+				}
+				temp1[i] = temp0;
+				savemove[i+9] = temp0;
+			}
+			for (i = 0; i < 5; i+=1) {
+				switch (i) {
+					case 0: temp.nair_script = temp1[irandom(4)]; break;
+					case 1: temp.fair_script = temp1[irandom(4)]; break;
+					case 2: temp.bair_script = temp1[irandom(4)]; break;
+					case 3: temp.uair_script = temp1[irandom(4)]; break;
+					case 4: temp.dair_script = temp1[irandom(4)]; break;
+				}
+			}
+			
+			for (i = 0; i < 4; i+=1) {
+				temp0 = 0;
+				switch (i) {
+					case 0: temp0 = temp.b_script; break;
+					case 1: temp0 = temp.sideb_script; break;
+					case 2: temp0 = temp.upb_script; break;
+					case 3: temp0 = temp.downb_script; break;
+				}
+				temp1[i] = temp0;
+				//savemove[i+14] = temp0;
+			}
+			for (i = 0; i < 4; i+=1) {
+				switch (i) {
+					case 0: temp.b_script = temp1[2]; break;
+					case 1: temp.sideb_script = temp1[3]; break;
+					case 2: temp.upb_script = temp1[0]; break;
+					case 3: temp.downb_script = temp1[1]; break;
+				}
+			}
+			break;
+		case 1:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/6" , 0 , 0 );
+			
+			temp = obj_game_control.fighter_slot[0, 0];
+			temp.hod_core_offense = temp.offense;
+			temp.hod_core_weight = temp.weight;
+			temp.hod_core_walk_speed = temp.walk_speed;
+			temp.hod_core_run_speed = temp.run_speed;
+			temp.hod_core_run_start_speed = temp.run_start_speed;
+			
+			temp.hod_core_air_speed = temp.air_speed;
+			temp.hod_core_air_accel = temp.air_accel;
+			temp.hod_core_jump_speed = temp.jump_speed;
+			temp.hod_core_mid_jump_speed = temp.mid_jump_speed;
+			
+			temp.hod_core_fric = temp.fric;
+			temp.hod_core_run_accel = temp.run_accel;
+			break;
+		case 2:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/2" , 0 , 0 );
+			
+			view_wview[5] = view_wview[0];
+			view_hview[5] = view_hview[0];
+			view_xview[5] = view_xview[0];
+			view_yview[5] = view_yview[0];
+			view_xport[5] = view_xport[0];
+			view_yport[5] = view_yport[0];
+			view_wport[5] = view_wport[0];
+			view_hport[5] = view_hport[0];
+			
+			view_wview[6] = view_wview[0];
+			view_hview[6] = view_hview[0];
+			view_xview[6] = view_xview[0];
+			view_yview[6] = view_yview[0];
+			view_xport[6] = view_xport[0];
+			view_yport[6] = view_yport[0];
+			view_wport[6] = view_wport[0];
+			view_hport[6] = view_hport[0];
+			
+			view_visible[6] = 1;
+			window_set_region_scale(1.5, 1);
+			break;
+		case 3:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/4" , 0 , 0 );
+			break;
+		case 4:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/8" , 0 , 0 );
+			
+			obj_score_control.stocks[0] = 4;
+			obj_score_control.stocks[1] = 4;
+			obj_score_control.stocks[2] = 3;
+			break;
+		case 5:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/10" , 0 , 0 );
+			
+			core_suppress_a = irandom(3);
+			core_suppress_b = -1;
+			core_suppress_c = -1;
+			obj_score_control.stocks[0] = 4;
+			obj_score_control.stocks[1] = 3;
+			obj_score_control.stocks[2] = 2;
+			break;
+		case 6:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/a" , 0 , 0 );
+			
+			obj_score_control.stocks[0] = 5;
+			obj_score_control.stocks[1] = 4;
+			obj_score_control.stocks[2] = 2;
+			break;
+		case 7:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/13" , 0 , 0 );
+			
+			saveframeskip = global.frameskip_active;
+			global.frameskip_active = 4;
+			set_automatic_draw(0);
+			obj_score_control.stocks[0] = 5;
+			obj_score_control.stocks[1] = 5;
+			obj_score_control.stocks[2] = 4;
+			break;
+		case 8:
+			core_suppress = 1;
+			stop_music();
+			play_music( "challenge_infinilator_suppress/a" , 0 , 0 );
+			
+			obj_score_control.stocks[0] = 5;
+			obj_score_control.stocks[1] = 5;
+			obj_score_control.stocks[2] = 5;
+			break;
+	}
+}
+
+
+
+if (core_suppress == 1) {
+	switch (core_suppress_type) {
+		case 0:
+			core_suppress_timer += 1;
+			
+			if (core_suppress_level == 0) {
+				if (obj_score_control.stocks[1] <= 1) {
+					core_suppress_level = 1;
+					sound_play(meltdown0_sound);
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/1" , 0 , 0 );
+					
+					temp = obj_game_control.fighter_slot[0, 0];
+					for (i = 0; i < 9; i+=1) {
+						temp0 = 0;
+						switch (i) {
+							case 0: temp0 = temp.jab_script; break;
+							case 1: temp0 = temp.stilt_script; break;
+							case 2: temp0 = temp.utilt_script; break;
+							case 3: temp0 = temp.dtilt_script; break;
+							case 4: temp0 = temp.dash_attack_script; break;
+							case 5: temp0 = temp.ssmash_script; break;
+							case 6: temp0 = temp.usmash_script; break;
+							case 7: temp0 = temp.dsmash_script; break;
+							case 8: temp0 = temp.grab_script; break;
+						}
+						temp1[i] = temp0;
+					}
+					for (i = 0; i < 9; i+=1) {
+						switch (i) {
+							case 0: temp.jab_script = temp1[irandom(8)]; break;
+							case 1: temp.stilt_script = temp1[irandom(8)]; break;
+							case 2: temp.utilt_script = temp1[irandom(8)]; break;
+							case 3: temp.dtilt_script = temp1[irandom(8)]; break;
+							case 4: temp.dash_attack_script = temp1[irandom(8)]; break;
+							case 5: temp.ssmash_script = temp1[irandom(8)]; break;
+							case 6: temp.usmash_script = temp1[irandom(8)]; break;
+							case 7: temp.dsmash_script = temp1[irandom(8)]; break;
+							case 8: temp.grab_script = temp1[irandom(8)]; break;
+						}
+					}
+					
+					for (i = 0; i < 5; i+=1) {
+						temp0 = 0;
+						switch (i) {
+							case 0: temp0 = temp.nair_script; break;
+							case 1: temp0 = temp.fair_script; break;
+							case 2: temp0 = temp.bair_script; break;
+							case 3: temp0 = temp.uair_script; break;
+							case 4: temp0 = temp.dair_script; break;
+						}
+						temp1[i] = temp0;
+					}
+					for (i = 0; i < 5; i+=1) {
+						switch (i) {
+							case 0: temp.nair_script = temp1[irandom(4)]; break;
+							case 1: temp.fair_script = temp1[irandom(4)]; break;
+							case 2: temp.bair_script = temp1[irandom(4)]; break;
+							case 3: temp.uair_script = temp1[irandom(4)]; break;
+							case 4: temp.dair_script = temp1[irandom(4)]; break;
+						}
+					}
+					
+					for (i = 0; i < 4; i+=1) {
+						temp0 = 0;
+						switch (i) {
+							case 0: temp0 = temp.b_script; break;
+							case 1: temp0 = temp.sideb_script; break;
+							case 2: temp0 = temp.upb_script; break;
+							case 3: temp0 = temp.downb_script; break;
+						}
+						temp1[i] = temp0;
+					}
+					for (i = 0; i < 4; i+=1) {
+						switch (i) {
+							case 0: temp.b_script = temp1[2]; break;
+							case 1: temp.sideb_script = temp1[3]; break;
+							case 2: temp.upb_script = temp1[0]; break;
+							case 3: temp.downb_script = temp1[1]; break;
+						}
+					}
+				}
+				
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						a = after_image(2, c_green, 0.1);
+						
+						a.depth = depth - 1;
+					}
+				}
+			}
+			else {
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						image_blend = c_yellow;
+						
+						a = after_image(2, c_green, 0.5);
+						
+						a.image_xscale *= 1.01;
+						a.image_yscale *= 1.01;
+						a.depth = depth - 1;
+					}
+				}
+				
+				if (core_suppress_timer >= 60) {
+					temp = obj_game_control.fighter_slot[0, 0];
+					for (i = 0; i < 9; i+=1) {
+						temp1[i] = savemove[i];
+					}
+					for (i = 0; i < 9; i+=1) {
+						switch (i) {
+							case 0: temp.jab_script = temp1[irandom(8)]; break;
+							case 1: temp.stilt_script = temp1[irandom(8)]; break;
+							case 2: temp.utilt_script = temp1[irandom(8)]; break;
+							case 3: temp.dtilt_script = temp1[irandom(8)]; break;
+							case 4: temp.dash_attack_script = temp1[irandom(8)]; break;
+							case 5: temp.ssmash_script = temp1[irandom(8)]; break;
+							case 6: temp.usmash_script = temp1[irandom(8)]; break;
+							case 7: temp.dsmash_script = temp1[irandom(8)]; break;
+							case 8: temp.grab_script = temp1[irandom(8)]; break;
+						}
+					}
+					
+					for (i = 0; i < 5; i+=1) {
+						temp1[i] = savemove[i+9];
+					}
+					for (i = 0; i < 5; i+=1) {
+						switch (i) {
+							case 0: temp.nair_script = temp1[irandom(4)]; break;
+							case 1: temp.fair_script = temp1[irandom(4)]; break;
+							case 2: temp.bair_script = temp1[irandom(4)]; break;
+							case 3: temp.uair_script = temp1[irandom(4)]; break;
+							case 4: temp.dair_script = temp1[irandom(4)]; break;
+						}
+					}
+					
+					for (i = 0; i < 4; i+=1) {
+						temp1[i] = savemove[i+14];
+					}
+					for (i = 0; i < 4; i+=1) {
+						switch (i) {
+							case 0: temp.b_script = temp1[2]; break;
+							case 1: temp.sideb_script = temp1[3]; break;
+							case 2: temp.upb_script = temp1[0]; break;
+							case 3: temp.downb_script = temp1[1]; break;
+						}
+					}
+					core_suppress_timer = 0;
+				}
+			}
+			break;
+		case 1:
+			core_suppress_timer += 1;
+			
+			if (core_suppress_level == 0) {
+				if (obj_score_control.stocks[1] <= 1) {
+					core_suppress_level = 1;
+					sound_play(meltdown2_sound);
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/7" , 0 , 0 );
+				}
+				
+				if (core_suppress_timer >= 6) {
+					with (obj_game_control.fighter_slot[0, 0]) {
+						if ((state_type == "attack" || state_type == "air_attack") && alarm[1] <= 0) {
+							if ( timer_speed != 0 ) {
+								last_shakex = shakex;
+								last_shakey = shakey;
+								last_image_index = image_index;
+								last_image_speed = image_speed;
+								image_speed = 0;
+								timer_speed = 0;
+								
+								if ( speed == 0 ) last_speed = 0;
+								else {
+									last_speed = speed;
+									last_dir = direction;
+									speed = 0;
+								}
+							}
+							
+							alarm[1] = 2;
+						}
+					}
+					core_suppress_timer = 0;
+				}
+				
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						image_blend = c_gray;
+						
+						a = after_image(2, c_orange, 0.4);
+						
+						a.image_xscale *= 1.01;
+						a.image_yscale *= 1.01;
+						a.depth = depth - 5;
+					}
+				}
+				
+				temp = obj_game_control.fighter_slot[0, 0];
+				
+				temp.offense = temp.hod_core_offense * 0.8;
+				temp.weight = temp.hod_core_weight - 0.05;
+				temp.walk_speed = temp.hod_core_walk_speed * 0.8;
+				temp.run_speed = temp.hod_core_run_speed * 0.8;
+				temp.run_start_speed = temp.hod_core_run_start_speed * 0.8;
+				
+				temp.air_speed = temp.hod_core_air_speed * 0.8;
+				temp.air_accel = temp.hod_core_air_accel * 0.8;
+				temp.jump_speed = temp.hod_core_jump_speed * 0.9;
+				temp.mid_jump_speed = temp.hod_core_mid_jump_speed * 0.9;
+				
+				temp.fric = temp.hod_core_fric * 0.8;
+				temp.run_accel = temp.hod_core_run_accel * 0.8;
+				
+				with (attack_box) {
+					if (hod_core_suppress == 0 && number == 1) {
+						hod_core_suppress = 1;
+						bkb *= 0.9;
+						kbg *= 0.9;
+						shield_damage *= 0.8;
+						image_xscale *= 0.96;
+						image_yscale *= 0.96;
+					}
+				}
+				with (projectile_box) {
+					if (hod_core_suppress == 0 && number == 1) {
+						hod_core_suppress = 1;
+						bkb *= 0.9;
+						kbg *= 0.9;
+						shield_damage *= 0.8;
+						image_xscale *= 0.96;
+						image_yscale *= 0.96;
+					}
+				}
+				with (proj_child) {
+					if (hod_core_suppress == 0 && number == 1) {
+						hod_core_suppress = 1;
+						bkb *= 0.9;
+						kbg *= 0.9;
+						shield_damage *= 0.8;
+						image_xscale *= 0.96;
+						image_yscale *= 0.96;
+					}
+				}
+			}
+			else {
+				
+				if (core_suppress_timer >= 3) {
+					with (obj_game_control.fighter_slot[0, 0]) {
+						if ((state_type == "attack" || state_type == "air_attack") && alarm[1] <= 0) {
+							if ( timer_speed != 0 ) {
+								last_shakex = shakex;
+								last_shakey = shakey;
+								last_image_index = image_index;
+								last_image_speed = image_speed;
+								image_speed = 0;
+								timer_speed = 0;
+								
+								if ( speed == 0 ) last_speed = 0;
+								else {
+									last_speed = speed;
+									last_dir = direction;
+									speed = 0;
+								}
+							}
+							
+							alarm[1] = 2;
+						}
+					}
+					core_suppress_timer = 0;
+				}
+				
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						image_blend = c_gray;
+						
+						if (x < view_xview[0] + view_wview[0]/3) a = after_image(2, c_red, 0.6);
+						else if (x < view_xview[0] + 2*view_wview[0]/3) a = after_image(2, c_green, 0.6);
+						else a = after_image(2, c_blue, 0.6);
+						
+						a.x += 8;
+						a.y += 8;
+						a.image_xscale *= 1.01;
+						a.image_yscale *= 1.01;
+						a.depth = depth - 5;
+					}
+				}
+				
+				temp = obj_game_control.fighter_slot[0, 0];
+				
+				temp.offense = temp.hod_core_offense * 0.6;
+				temp.weight = temp.hod_core_weight - 0.1;
+				temp.walk_speed = temp.hod_core_walk_speed * 0.6;
+				temp.run_speed = temp.hod_core_run_speed * 0.6;
+				temp.run_start_speed = temp.hod_core_run_start_speed * 0.6;
+				
+				temp.air_speed = temp.hod_core_air_speed * 0.6;
+				temp.air_accel = temp.hod_core_air_accel * 0.6;
+				temp.jump_speed = temp.hod_core_jump_speed * 0.8;
+				temp.mid_jump_speed = temp.hod_core_mid_jump_speed * 0.8;
+				
+				temp.fric = temp.hod_core_fric * 0.6;
+				temp.run_accel = temp.hod_core_run_accel * 0.6;
+				
+				with (attack_box) {
+					if (hod_core_suppress == 0 && number == 1) {
+						hod_core_suppress = 1;
+						bkb *= 0.7;
+						kbg *= 0.7;
+						shield_damage *= 0.6;
+						image_xscale *= 0.8;
+						image_yscale *= 0.8;
+						priority = 1;
+					}
+				}
+				with (projectile_box) {
+					if (hod_core_suppress == 0 && number == 1) {
+						hod_core_suppress = 1;
+						bkb *= 0.7;
+						kbg *= 0.7;
+						shield_damage *= 0.6;
+						image_xscale *= 0.8;
+						image_yscale *= 0.8;
+						priority = 1;
+					}
+				}
+				with (proj_child) {
+					if (hod_core_suppress == 0 && number == 1) {
+						hod_core_suppress = 1;
+						bkb *= 0.7;
+						kbg *= 0.7;
+						shield_damage *= 0.6;
+						image_xscale *= 0.8;
+						image_yscale *= 0.8;
+						priority = 1;
+					}
+				}
+			}
+			break;
+		case 2:
+			core_suppress_timer += 1;
+			
+			if (core_suppress_level == 0) {
+				if (obj_score_control.stocks[1] <= 1) {
+					core_suppress_level = 1;
+					sound_play(meltdown1_sound);
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/3" , 0 , 0 );
+					
+					window_set_region_scale(2, 1);
+					
+					view_visible[5] = 1;
+					view_visible[6] = 1;
+					view_visible[7] = 1;
+				}
+				
+				if (core_suppress_timer >= 5) {
+					view_wview[5] = view_wview[0];
+					view_hview[5] = view_hview[0];
+					view_xview[5] = view_xview[0] - 1 + random(2);
+					view_yview[5] = view_yview[0];
+					
+					view_wview[6] = view_wview[0];
+					view_hview[6] = view_hview[0];
+					view_xview[6] = view_xview[0] - 1 + random(2);
+					view_yview[6] = view_yview[0];
+					view_xport[6] = view_xport[0];
+					view_yport[6] = view_yport[0];
+					view_wport[6] = view_wport[0]-random(2) + 1;
+					view_hport[6] = view_hport[0]-random(2) + 1;
+					core_suppress_timer = 0;
+					core_suppress_a = irandom(1);
+				}
+				
+				view_xview[0] = view_xview[5+core_suppress_a];
+				view_yview[0] = view_yview[5+core_suppress_a];
+				view_wport[0] = view_wport[5+core_suppress_a];
+				view_hport[0] = view_hport[5+core_suppress_a];
+				
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						image_blend = c_gray;
+						
+						a = after_image(2, c_white, 0.5);
+						
+						a.x += 0.5 - random(1);
+						a.y += 0.5 - random(1);
+						a.image_xscale *= 1 + random(0.01);
+						a.image_yscale *= 1 + random(0.01);
+						a.depth = depth - 5;
+					}
+				}
+			}
+			else {
+				obj_game_control.hud_visible = 0;
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						image_blend = c_gray;
+						
+						if (x < view_xview[0] + view_wview[0]/3) a = after_image(2, c_red, 0.6);
+						else if (x < view_xview[0] + 2*view_wview[0]/3) a = after_image(2, c_green, 0.6);
+						else a = after_image(2, c_blue, 0.6);
+						
+						a.x += 8 - random(16);
+						a.y += 8 - random(16);
+						a.image_xscale *= 1.02 + random(0.04);
+						a.image_yscale *= 1.02 + random(0.04);
+						a.depth = depth - 5;
+					}
+				}
+				
+				if (core_suppress_timer >= 5) {
+					view_wview[5] = view_wview[0];
+					view_hview[5] = view_hview[0];
+					view_xview[5] = view_xview[0] - 32 + random(64);
+					view_yview[5] = view_yview[0];
+					
+					view_wview[6] = view_wview[0];
+					view_hview[6] = view_hview[0];
+					view_xview[6] = view_xview[0] - 48 + random(96);
+					view_yview[6] = view_yview[0];
+					view_xport[6] = view_xport[5] - 32 + random(128);
+					view_yport[6] = view_yport[5] + 270 - random(30);
+					view_wport[6] = view_wport[5]-random(10);
+					view_hport[6] = view_hport[5]/3-random(10);
+					view_wview[6] = view_wview[0];
+					
+					view_wview[7] = view_wview[0];
+					view_hview[7] = view_hview[0];
+					view_xview[7] = view_xview[0] - 48 + random(96);
+					view_yview[7] = view_yview[0];
+					view_xport[7] = view_xport[5] - 32 + random(128);
+					view_yport[7] = view_yport[5] + 450 + random(30);
+					view_wport[7] = view_wport[5]-random(10);
+					view_hport[7] = view_hport[5]/3-random(10);
+					core_suppress_timer = 0;
+					core_suppress_a = irandom(1);
+				}
+				
+				view_yport[0] = view_yport[7];
+				view_hport[0] = view_hport[7];
+				
+				if (core_suppress_timer == 2 || core_suppress_timer == 4) {
+					i = ds_map_find_first(global.__allsoundsPlaying);
+					while (i != ds_map_find_last(global.__allsoundsPlaying)) {
+						j = ds_map_find_value(global.__allsoundsPlaying, i);
+						if (random(1) < 0.5) FMODInstanceSetFrequency(j,FMODInstanceGetFrequency(j) * random_range(0.6, 0.95));
+						else FMODInstanceSetFrequency(j,FMODInstanceGetFrequency(j) / random_range(0.6, 0.95));
+						
+						i = ds_map_find_next(global.__allsoundsPlaying, i);
+					}
+				}
+			}
+			break;
+		case 3:
+			if (core_suppress_level == 0) {
+				if (obj_score_control.stocks[1] <= 1) {
+					core_suppress_level = 1;
+					sound_play(meltdown2_sound);
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/5" , 0 , 0 );
+					
+					obj_game_control.fighter_slot[0, 0].percent += 50;
+				}
+			}
+			else {
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						image_blend = c_gray;
+						
+						a = after_image(2, c_green, 0.7);
+						
+						a.image_xscale *= 1.01;
+						a.image_yscale *= 1.01;
+						a.depth = depth - 3;
+					}
+				}
+			}
+			
+			with (player) {
+				if (number == 1) {
+					if (percent < netzach_core_percent) percent = netzach_core_percent;
+					netzach_core_percent = percent;
+				}
+			}
+			break;
+		case 4:
+			if (core_suppress_level == 0) {
+				if (obj_score_control.stocks[1] <= 2) {
+					core_suppress_level = 1;
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/9" , 0 , 0 );
+				}
+				
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						a = after_image(2, c_red, 0.2);
+						
+						a.image_xscale *= 1.01;
+						a.image_yscale *= 1.01;
+						a.depth = depth - 10;
+					}
+				}
+				
+				with (attack_box) {
+					if (core_meltdown == 0) {
+						core_meltdown = 1;
+						damage *= 1.25;
+						bkb *= 1.15;
+						kbg *= 1.15;
+						shield_damage *= 1.25;
+						hitbox_x += -4 + random(8);
+						hitbox_y += -4 + random(8);
+						image_xscale *= 0.9 + random(0.2);
+						image_yscale *= 0.9 + random(0.2);
+					}
+				}
+				with (projectile_box) {
+					if (core_meltdown == 0) {
+						core_meltdown = 1;
+						damage *= 1.25;
+						bkb *= 1.15;
+						kbg *= 1.15;
+						shield_damage *= 1.25;
+						x += -4 + random(8);
+						y += -4 + random(8);
+						direction += -4 + random(8);
+					}
+				}
+				with (proj_child) {
+					if (core_meltdown == 0) {
+						core_meltdown = 1;
+						damage *= 1.25;
+						bkb *= 1.15;
+						kbg *= 1.15;
+						shield_damage *= 1.25;
+						x += -4 + random(8);
+						y += -4 + random(8);
+						direction += -4 + random(8);
+					}
+				}
+			}
+			else {
+				with (all) {
+					if (object_index != obj_spark && visible == 1 && sprite_index > 0 && image_alpha > 0) {
+						a = after_image(2, c_red, 0.7);
+						
+						a.x += -0.5 + random(1);
+						a.y += -0.5 + random(1);
+						a.image_xscale *= 1.01;
+						a.image_yscale *= 1.01;
+						a.depth = depth - 10;
+					}
+				}
+				
+				with (attack_box) {
+					if (core_meltdown == 0) {
+						core_meltdown = 1;
+						damage *= 1.5;
+						bkb *= 1.25;
+						kbg *= 1.25;
+						shield_damage *= 1.5;
+						hitbox_x += -8 + random(16);
+						hitbox_y += -8 + random(16);
+						image_xscale *= 0.7 + random(0.6);
+						image_yscale *= 0.7 + random(0.6);
+					}
+				}
+				with (projectile_box) {
+					if (core_meltdown == 0) {
+						core_meltdown = 1;
+						damage *= 1.5;
+						bkb *= 1.25;
+						kbg *= 1.25;
+						shield_damage *= 1.5;
+						x += -16 + random(32);
+						y += -16 + random(32);
+						direction += -11.25 + random(22.5);
+					}
+				}
+				with (proj_child) {
+					if (core_meltdown == 0) {
+						core_meltdown = 1;
+						damage *= 1.5;
+						bkb *= 1.25;
+						kbg *= 1.25;
+						shield_damage *= 1.5;
+						x += -16 + random(32);
+						y += -16 + random(32);
+						direction += -11.25 + random(22.5);
+					}
+				}
+			}
+			break;
+		case 5:
+			if (core_suppress_level == 0) {
+				if (obj_score_control.stocks[1] <= 2) {
+					core_suppress_level = 1;
+					
+					core_suppress_a = irandom(3);
+					core_suppress_b = irandom(2);
+					if (core_suppress_b >= core_suppress_a) core_suppress_b += 1;
+				}
+			}
+			else if (core_suppress_level == 1) {
+				if (obj_score_control.stocks[1] <= 1) {
+					core_suppress_level = 2;
+					
+					core_suppress_a = irandom(3);
+					core_suppress_b = irandom(2);
+					core_suppress_c = irandom(1);
+					if (core_suppress_b >= core_suppress_a) core_suppress_b += 1;
+					if (core_suppress_c >= core_suppress_a) core_suppress_c += 1;
+					if (core_suppress_c >= core_suppress_b) core_suppress_c += 1;
+					if (core_suppress_c == core_suppress_a) core_suppress_c += 1;
+				}
+			}
+				
+			with (attack_box) {
+				if (chesed_core_suppress == 0 && number >= 2) {
+					if (((other.core_suppress_a == 0 || other.core_suppress_b == 0 || other.core_suppress_c == 0) && (
+					(string(attacker.attack_type) == "fair" && !attacker.facing) ||
+					(string(attacker.attack_type) == "bair" && attacker.facing) ||
+					(string(attacker.attack_type) == "stilt" && !attacker.facing) ||
+					(string(attacker.attack_type) == "ssmash" && !attacker.facing) ||
+					(string(attacker.attack_type) == "sideb" && !attacker.facing) ||
+					(string(attacker.attack_type) == "jab" && !attacker.facing))
+					) || ((other.core_suppress_a == 1 || other.core_suppress_b == 1 || other.core_suppress_c == 1) && (
+					(string(attacker.attack_type) == "uair") ||
+					(string(attacker.attack_type) == "utilt") ||
+					(string(attacker.attack_type) == "usmash") ||
+					(string(attacker.attack_type) == "upb"))
+					) || ((other.core_suppress_a == 2 || other.core_suppress_b == 2 || other.core_suppress_c == 2) && (
+					(string(attacker.attack_type) == "fair" && attacker.facing) ||
+					(string(attacker.attack_type) == "bair" && !attacker.facing) ||
+					(string(attacker.attack_type) == "stilt" && attacker.facing) ||
+					(string(attacker.attack_type) == "ssmash" && attacker.facing) ||
+					(string(attacker.attack_type) == "sideb" && attacker.facing) ||
+					(string(attacker.attack_type) == "jab" && attacker.facing))
+					) || ((other.core_suppress_a == 3 || other.core_suppress_b == 3 || other.core_suppress_c == 3) && (
+					(string(attacker.attack_type) == "dair") ||
+					(string(attacker.attack_type) == "dtilt") ||
+					(string(attacker.attack_type) == "dsmash") ||
+					(string(attacker.attack_type) == "downb"))
+					)
+					) {
+						chesed_core_suppress = 1;
+						damage *= 3;
+						bkb *= 1.3;
+						kbg *= 1.3;
+						shield_damage *= 3;
+						hitlag_frames *= 2;
+					}
+				}
+			}
+			with (projectile_box) {
+				if (chesed_core_suppress == 0 && number >= 2) {
+					if (((other.core_suppress_a == 0 || other.core_suppress_b == 0 || other.core_suppress_c == 0) && (
+					(string(attacker.attack_type) == "fair" && !attacker.facing) ||
+					(string(attacker.attack_type) == "bair" && attacker.facing) ||
+					(string(attacker.attack_type) == "stilt" && !attacker.facing) ||
+					(string(attacker.attack_type) == "ssmash" && !attacker.facing) ||
+					(string(attacker.attack_type) == "sideb" && !attacker.facing) ||
+					(string(attacker.attack_type) == "jab" && !attacker.facing))
+					) || ((other.core_suppress_a == 1 || other.core_suppress_b == 1 || other.core_suppress_c == 1) && (
+					(string(attacker.attack_type) == "uair") ||
+					(string(attacker.attack_type) == "utilt") ||
+					(string(attacker.attack_type) == "usmash") ||
+					(string(attacker.attack_type) == "upb"))
+					) || ((other.core_suppress_a == 2 || other.core_suppress_b == 2 || other.core_suppress_c == 2) && (
+					(string(attacker.attack_type) == "fair" && attacker.facing) ||
+					(string(attacker.attack_type) == "bair" && !attacker.facing) ||
+					(string(attacker.attack_type) == "stilt" && attacker.facing) ||
+					(string(attacker.attack_type) == "ssmash" && attacker.facing) ||
+					(string(attacker.attack_type) == "sideb" && attacker.facing) ||
+					(string(attacker.attack_type) == "jab" && attacker.facing))
+					) || ((other.core_suppress_a == 3 || other.core_suppress_b == 3 || other.core_suppress_c == 3) && (
+					(string(attacker.attack_type) == "dair") ||
+					(string(attacker.attack_type) == "dtilt") ||
+					(string(attacker.attack_type) == "dsmash") ||
+					(string(attacker.attack_type) == "downb"))
+					)
+					) {
+						chesed_core_suppress = 1;
+						damage *= 3;
+						bkb *= 1.3;
+						kbg *= 1.3;
+						shield_damage *= 3;
+						hitlag_frames *= 2;
+					}
+				}
+			}
+			with (proj_child) {
+				if (chesed_core_suppress == 0 && number >= 2) {
+					if (((other.core_suppress_a == 0 || other.core_suppress_b == 0 || other.core_suppress_c == 0) && (
+					(string(attacker.attack_type) == "fair" && !attacker.facing) ||
+					(string(attacker.attack_type) == "bair" && attacker.facing) ||
+					(string(attacker.attack_type) == "stilt" && !attacker.facing) ||
+					(string(attacker.attack_type) == "ssmash" && !attacker.facing) ||
+					(string(attacker.attack_type) == "sideb" && !attacker.facing) ||
+					(string(attacker.attack_type) == "jab" && !attacker.facing))
+					) || ((other.core_suppress_a == 1 || other.core_suppress_b == 1 || other.core_suppress_c == 1) && (
+					(string(attacker.attack_type) == "uair") ||
+					(string(attacker.attack_type) == "utilt") ||
+					(string(attacker.attack_type) == "usmash") ||
+					(string(attacker.attack_type) == "upb"))
+					) || ((other.core_suppress_a == 2 || other.core_suppress_b == 2 || other.core_suppress_c == 2) && (
+					(string(attacker.attack_type) == "fair" && attacker.facing) ||
+					(string(attacker.attack_type) == "bair" && !attacker.facing) ||
+					(string(attacker.attack_type) == "stilt" && attacker.facing) ||
+					(string(attacker.attack_type) == "ssmash" && attacker.facing) ||
+					(string(attacker.attack_type) == "sideb" && attacker.facing) ||
+					(string(attacker.attack_type) == "jab" && attacker.facing))
+					) || ((other.core_suppress_a == 3 || other.core_suppress_b == 3 || other.core_suppress_c == 3) && (
+					(string(attacker.attack_type) == "dair") ||
+					(string(attacker.attack_type) == "dtilt") ||
+					(string(attacker.attack_type) == "dsmash") ||
+					(string(attacker.attack_type) == "downb"))
+					)
+					) {
+						chesed_core_suppress = 1;
+						damage *= 3;
+						bkb *= 1.3;
+						kbg *= 1.3;
+						shield_damage *= 3;
+						hitlag_frames *= 2;
+					}
+				}
+			}
+			break;
+		case 6:
+			if (core_suppress_level == 0) {
+				if (obj_game_control.fighter_slot[3, 0].boss_phase >= 0) {
+					core_suppress_level = 1;
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/11" , 0 , 0 );
+				}
+			}
+			else if (core_suppress_level == 1) {
+				if (obj_game_control.fighter_slot[3, 0].boss_phase >= 2) {
+					core_suppress_level = 2;
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/12" , 0 , 0 );
+				}
+			}
+			break;
+		case 7:
+			core_suppress_timer += 1;
+			
+			if (core_suppress_level == 0) {
+				room_speed = 90;
+				core_suppress_a = 1;
+				
+				if (obj_score_control.stocks[1] <= 3) {
+					core_suppress_level = 1;
+					sound_play(meltdown3_sound);
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/14" , 0 , 0 );
+				}
+			}
+			else if (core_suppress_level == 1) {
+				room_speed = 120;
+				core_suppress_a = 2;
+				
+				if (obj_score_control.stocks[1] <= 2) {
+					core_suppress_level = 2;
+					sound_play(meltdown3_sound);
+				}
+			}
+			else if (core_suppress_level == 2) {
+				room_speed = 180;
+				core_suppress_a = 3;
+				
+				if (obj_score_control.stocks[1] <= 1) {
+					core_suppress_level = 3;
+					sound_play(meltdown3_sound);
+				}
+			}
+			else {
+				room_speed = 600;
+				core_suppress_a = 5;
+			}
+			
+			if (core_suppress_timer > core_suppress_a) {
+				core_suppress_timer = 0;
+				screen_redraw();
+				screen_refresh();
+			}
+			
+			if (obj_game_control.pausing_player >= 0) {
+				sound_play(hokmapause_sound);
+				with (obj_game_control.fighter_slot[0, 0]) {
+					screen_shake(10, 30);
+					percent += 100;
+					sound_play(fly_voice1);
+					intangible = 0;
+					invincible = 0;
+					create_projectile(0, 362, 7, 7, -1, 12, specialhit, obj_spark_hit4, 1, 1, 0, 8, enemy.id, 2, no_script);
+					proj.priority = 5;
+				}
+				obj_game_control.pausing_player = -1;
+			}
+			break;
+		case 8:
+			if (core_suppress_level == 0) {
+				if (obj_game_control.fighter_slot[3, 0].boss_phase >= 1) {
+					core_suppress_level = 1;
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/15" , 0 , 0 );
+				}
+			}
+			else if (core_suppress_level == 1) {
+				if (obj_game_control.fighter_slot[3, 0].boss_phase >= 2) {
+					core_suppress_level = 2;
+					
+					stop_music();
+					play_music( "challenge_infinilator_suppress/16" , 0 , 0 );
+				}
+			}
+			break;
+	}
+}
