@@ -1,0 +1,100 @@
+//this is run every frame in the game, make sure to optimize it!!!!!
+
+if obj_game_control.state_type != "idle"
+exit;
+
+if state_type = "flinch" {
+    speed *= 0.87
+
+    if has_hit <= 0 {
+		
+        if prepare_to_die = 1 {
+
+            image_index = 0
+
+        }
+        if prepare_to_die = 0 {
+
+            state_type = "stand"
+
+        }
+        else if dead = 0 {
+            sound_play2(magic1)
+            alarm[8] = 15
+            alpha_add = -0.08
+            dead = 1
+        }
+
+        has_hit = 0
+    }
+
+    has_hit -= 1
+}
+
+if target.x < x
+    facing = 1
+else
+    facing = 0
+
+if state_type = "stand" {
+    image_index = 0
+
+    speed = 0
+
+    if timer <= 1
+    turnlag = 15
+
+    if facing = target.facing {
+        if turnlag > 0
+        turnlag -= 1
+
+        if turnlag = 0 {
+            speed = 0
+            state_type = "walk"
+            timer = 0
+        }
+    }
+}
+
+if state_type = "walk" {
+    image_index = 1
+
+    direction = point_direction(x, y, target.x, target.y)
+    if speed < 1.4
+    speed += 0.1
+
+    if facing != target.facing {
+        speed = 0
+        state_type = "stand"
+        timer = 0
+    }
+
+}
+
+if state_type != "flinch" {
+    if !instance_exists(proj) {
+        if projlag = 0 {
+                create_projectile(7, angle_correct(30) , 5.6 , 6.5 , -1, 1, kick2, obj_spark_hit2, 0.75, 0.75, 0, 8, 99, 20, no_script);
+                proj.teresa = self.id
+                proj.priority = 0
+                proj.execute_on_hit = "teresa.projlag = 20"
+        }
+    }
+    else if instance_exists(proj) {
+        proj.x = x
+        proj.y = y - 8
+    }
+}
+
+image_alpha += alpha_add
+
+if image_alpha <= 0
+instance_destroy();
+
+image_xscale = base_xscale - (facing * (base_xscale * 2))
+image_yscale = base_yscale
+
+timer += 1
+
+if projlag > 0
+projlag -= 1

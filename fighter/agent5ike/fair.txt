@@ -1,0 +1,75 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0;
+        sprite_index = fair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 38;
+        timer_speed=1;
+}
+switch ( timer )
+      {
+  case 1: image_index = 0; break;
+  case 5: image_index = 1; break;
+  case 9: image_index = 2; break;
+  case 11: image_index = 3; break;
+  case 15: image_index = 4; break;
+  case 18: image_index = 5; break;
+      }
+  switch (timer){
+      case 5: swordeff = create_sword_trail(self.id, 9, 30, sword_texture); swordeff.image_index=1; break;
+      case 9: swordeff.index+=1; swordeff.end_decay = 1; break;
+      case 11: swordeff.index+=1; break;
+      case 15: swordeff.index += 1; break;
+      case 18: swordeff.index += 1; break;
+      case 20: swordeff.end_decay = 2.5; break;
+      case 22: swordeff.end_decay = 3; break;
+      case 24: with (swordeff) { instance_destroy(); } break;
+    }
+if ( timer < time )
+  {
+
+    if ( timer = 4 ) 
+      {
+    play_attack_voice()
+      }
+    if ( timer = 11 ) 
+	{
+	sound_play(attack_sound3);
+	create_hitbox(13,35+facing*110,7,1.3,12,9,IkeSlashAndDash1,obj_spark_slash1,0.92 , 0.84 , 1.76 , 54.56,self.id,9,1);
+      }
+    if timer = 15{
+            hitbox.image_xscale=1.01*size;
+            hitbox.image_yscale=1.05*size;
+            hitbox.hitbox_x=20.24*( 1 - facing * 2)*size;
+            hitbox.hitbox_y=45.76*size;
+      }
+    if timer = 18{
+            hitbox.image_xscale=1.20*size;
+            hitbox.image_yscale=1.24*size;
+            hitbox.hitbox_x=29.92*( 1 - facing * 2)*size;
+            hitbox.hitbox_y=20.24*size;
+      }
+
+
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=15;}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+

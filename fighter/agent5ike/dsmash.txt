@@ -1,0 +1,68 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 56;
+        timer_speed=1;
+        charge_frame = 13;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch (timer){
+	    case 1: image_index = 0; break;
+	    case 5: image_index = 1; break;
+	    case 10: image_index = 2; break;
+	    case 14: image_index = 1; sound_play(attack_sound2); break;
+      case 16: image_index = 4; sound_play(dsmash_voice);  break;
+      case 23: facing=!facing break;
+	    case 24: image_index = 1; break;
+      case 27: image_index = 2; break;
+      case 30: image_index = 1; sound_play(attack_sound2); break;
+      case 32: image_index = 4; break;
+      case 52: image_index = 0; facing=!facing; break;
+      }
+    switch (timer){
+      case 5: swordeff = create_sword_trail(self.id, 9, 30, sword_texture); swordeff.index=0; swordeff.end_decay = 1; break;
+      case 10: swordeff.index += 1; break;
+      case 14: swordeff.index += 1; break;
+      case 16: swordeff.index += 1; swordeff.end_decay = 1.5; break;
+      case 18: swordeff.end_decay = 2; break;
+      case 20: swordeff.end_decay = 2.5; break;
+      case 23: with (swordeff) { instance_destroy(); } swordeff2 = create_sword_trail(self.id, 9, 30, sword_texture); swordeff2.index=0; swordeff2.end_decay = 1; break;
+      case 27: swordeff2.index += 1; break;
+      case 30: swordeff2.index += 1; break;
+      case 32: swordeff2.index += 1; swordeff.end_decay = 1.5; break;
+      case 34: swordeff2.end_decay = 2; break;
+      case 36: swordeff2.end_decay = 2.5; break;
+      case 38: with (swordeff2) { instance_destroy(); } break;
+
+
+    }
+    swordeff2.depth=depth-1;
+    swordeff.depth=depth+1;
+    if timer = 16 || timer = 32{    
+    create_hitbox(16,343+(-146)*facing,6.1,4.1,19,8,IkeSlashAndDash2,obj_spark_slash2,1.03 , 0.40 , 24.64 , 3.52,self.id,5,2);
+    hitbox.image_angle = ( 1 - facing * 2 ) * 347.29;
+    screen_shake(1,1);
+    sound_play(sword_slam_sound);
+    if timer = 32{
+    hitbox.damage=19;
+    }
+    }
+
+
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  { 
+    state_type = "crouch";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        

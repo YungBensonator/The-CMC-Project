@@ -1,0 +1,106 @@
+//This is run when a collision with a projectile or a hitbox happens
+//as the above says, this is basically read when a hitbox hits you. it ddoes stuff
+
+if (blocking = 0 and dead = 0){
+
+with(other) {
+
+    attacked = other
+
+    // Disabled hitbox can't hit people.
+    if (hit == 2) exit;
+    // Can't hit intangible people
+    if (attacked.intangible > 0) exit;
+
+    // Can't hit itself
+    if (attacker = 99) exit;
+
+    // Can't hit people whom we have already hit.
+    if (attacker.hit_enemy[attacked.temp_id_for_player] == 1 and object_index = attack_box) exit;
+    if object_index = projectile_box {
+        if (hit_enemy[attacked.temp_id_for_proj] == 1 && hit > 0) exit;
+        if (hit_enemy[attacked.temp_id_for_proj] < 0) exit;
+    }
+
+    // Ground only hitboxes are, like their name implies, ground only.
+    if (ground_only && attacked.air) exit;
+    // Can't throw a player we are not holding.
+    if (throw &&attacker.target != attacked.id) exit;
+
+    // Round the base hitlag.
+    hitlag_frames = round(hitlag_frames);
+
+    // Check the hit_enemy flag.
+    scr_enemy_hitenemyflag();
+
+    // Calculate the damage output.
+    scr_enemy_damagecalc();
+
+    // Calculate the knockback.
+    scr_enemy_kbcalc();
+
+    // Play the sound.
+    scr_enemy_sfxplay();
+
+    // Combo continue.
+    scr_enemy_combocounter();
+
+    // Calculate the knockback direction.
+    scr_enemy_dirget();
+
+    // Screen shake.
+    scr_enemy_screenshake();
+
+    // Create the hit gfx
+    scr_enemy_hitgfx();
+
+    // Check the attack success flag.
+    attacker.attack_success = 1;
+    attacker.target = attacked.id;
+
+    with(other) {
+
+        other.attacker.target = self.id
+        speed = other.kb
+        direction = dir
+        hp -= other.dmg;
+
+        has_hit = 10 + other.hit_stun
+        state_type = "flinch"
+        sprite_index = flinch_sprite
+
+        countdownD = 5
+        countdownS = 5
+
+        if hp <= 0 {
+            prepare_to_die = 1
+        }
+
+        apply_hitlag_on_self();
+
+        // Lock the attacker into hitlag.
+        if other.object_index = attack_box {
+            apply_hitlag_on_the_player();
+        }
+
+    }
+
+    create_damage_popup(other.x - 20 + random(40), other.y - 10 - random(25), dmg)
+
+    if execute_on_hit != ""
+    execute_string(execute_on_hit)
+
+}
+
+}else if other.hit < 1 and has_hit <= 0 and other.attacker != 99 and blocking = 1 and dead = 0{
+	
+	other.hit = 1
+	other.attacker.target = self.id
+	sound_play2(hitshield)
+	instance_create(other.x,other.y,other.gfx)
+	
+	speed = 0
+	
+	
+	
+}

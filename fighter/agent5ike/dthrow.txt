@@ -1,0 +1,93 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0;
+sprite_index = uthrow_sprite;
+image_index=2;
+timer = 0;
+time = 39;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 29;
+temperatemp=14.96*size;
+      swordy = instance_create(x-18.16*(1-facing*2)*size, y-19.36*size, obj_spark);
+      swordy.sprite_index = upb2_sprite;
+      swordy.image_xscale = 0.88*( 1 - facing * 2 )*size;
+      swordy.image_yscale = 0.88*size;
+      swordy.image_alpha=1;
+      swordy.image_angle=270*(1-facing*2);
+      swordy.image_speed=0;
+      swordy.depth=depth-1;
+      swordy.image_index=0;
+      swordy.snap=self.id;
+      swordy.alarm[0]=8;
+}
+air_move=0;
+fast_fall=0;
+fast_fall_temp=0;
+hspeed=0;
+vspeed=0;
+gravity_lock=1;
+switch ( timer ) {
+    case 1: image_index = 2; break;
+    case 2: image_index = 1; break;
+    case 4: image_index = 0; break;
+    case 8: image_index = 0; sprite_index=crouch_sprite; xrd=x; yrc=y; break;
+    case 11: image_index = 0; sprite_index=jump_sprite; break;
+    case 14: image_index = 1; break;
+    case 29: image_index = 0; sprite_index=crouch_sprite; break;
+    }
+if timer < time {
+    if timer < 8{
+    if image_index=2{
+    target.x=x+14.96*(1-facing*2)*size;
+    target.y=y-34.32+(target.actual_height/2)*size;
+    }
+    if image_index=1{
+    target.x=x+7.04*(1-facing*2)*size;
+    target.y=y-43.12+(target.actual_height/2)*size;
+    }
+}
+if timer =4{
+create_throw_box(3,270,1,0,4,0,punch2,obj_spark_hit2,1.05 , 1.40 , 14.96 , 18.48,self.id,1);
+}
+if timer < 29{
+target.state_type="air_flinch";
+target.timer=0;
+target.time=3;
+}
+if timer >= 4 && timer < 7{
+target.x=x+temperatemp*(1-facing*2)*size;
+target.y=y-(34.32-(8.58*(timer-4)))+(target.actual_height/2)*size;
+temperatemp-=3.74*size;
+}
+if timer >7 && timer < 29{
+target.sprite_index=target.down_sprite;
+target.image_index=0;
+target.x=xrd;
+target.y=yrc;
+}
+if timer> 11 && timer < 23{
+state_type="air_attack";
+y-=4*size;
+}
+if timer >24 && timer <= 29{
+y+=8*size;
+}
+        if timer = 29 {
+        y=yrc;
+        x=xrd;
+        create_throw_box(4,270,8.2,8.5,1,1,kick3,obj_spark_hit2,1.34 , 0.68 , 1.76 , 0,self.id,1);
+        hitbox.hit_stun = 17; }
+        if timer = 30{
+        state_type="attack";
+        }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

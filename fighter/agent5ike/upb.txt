@@ -1,0 +1,214 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    attacking = 0;
+    special = 0;
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 220;
+    timer_speed=1;
+    xemout=x;
+    yemout=y;
+    armortemp=1;
+    loopcheck=0;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+    switch ( timer )
+    {
+    case 1: image_index = 0; break;
+    case 8: image_index = 1; break;
+    case 16: image_index = 2; heavy_armor=999; break;
+    case 31: image_index = 5; break;
+    case 34: image_index = 4; break;
+    case 37: image_index = 5; break;
+    case 40: image_index = 4; break;
+    case 42: image_index = 6; heavy_armor=0; armortemp=0; sound_stop(upb1_sound); sound_play(upb2_sound); break;
+    case 44: image_index = 7; break;
+    case 46: image_index = 8; break;
+    case 48: image_index = 9; break;
+    case 50: image_index = 6; break;
+    case 52: image_index = 7; break;
+    case 54: image_index = 8; break;
+    case 56: image_index = 9; break;
+    case 58: image_index = 6; break;
+    case 60: image_index = 7; break;
+    case 62: image_index = 8; break;
+    case 64: image_index = 9; break;
+    case 66: image_index = 10;  break;
+    case 200: image_index = 11; break;
+    case 204: image_index = 12; break;
+    case 208: image_index = 13; break;
+    case 212: image_index = 14; break;
+    case 216: image_index = 15; break;
+      }
+    switch (timer){
+      case 40: swordeff = create_sword_trail(self.id, 9, 30, sword_texture); swordeff.index=1; swordeff.end_decay = 2; break;
+      case 42: swordeff.index += 1; break;
+      case 44: swordeff.index += 1; break;
+      case 46: swordeff.index += 1; break;
+      case 48: swordeff.index += 1; break;
+      case 50: swordeff.index += 1; break;
+      case 52: swordeff.index += 1; break;
+      case 54: swordeff.index += 1; break;
+      case 56: swordeff.index += 1; break;
+      case 58: swordeff.index += 1; break;
+      case 60: swordeff.index += 1; break;
+      case 62: swordeff.index += 1; break;
+      case 64: swordeff.index += 1; break;
+      case 66: with (swordeff) { instance_destroy(); } break;
+    }
+    if timer >= 66 && timer < 200 && !instance_exists(blurstandin){
+      blurstandin = instance_create(x+30.80*(1-facing*2)*size, y-7.04*size, obj_spark);
+      blurstandin.sprite_index = sword_eff;
+      blurstandin.image_xscale = 0.2*( 1 - facing * 2 )*size;
+      blurstandin.image_yscale = size*0.1;
+      blurstandin.image_alpha=1;
+      blurstandin.image_angle=270*(1-facing*2);
+      blurstandin.image_speed=0;
+      blurstandin.depth=depth+1;
+      blurstandin.image_index=0;
+      blurstandin.snap=self.id;
+      blurstandin.alarm[0]=132;
+    }
+    if timer = 65{
+    sound_stop(upb2_sound);
+    sound_play(attack_sound2);
+    }
+        if timer < time {
+    if timer = 16{
+    sound_play(upb_voice);
+    sound_play(upb1_sound);
+    aetherblade=create_projectile ( 4,91+(-2)*facing,9,0,6,1, IkeSlashAndDash , obj_spark_slash2 , 0.88 , 0.88, 12.32 , 34.32 , self.id , 26 , char_custom2 );
+    aetherblade.vspeed=-8*size;
+    aetherblade.sprite_index=upb2_sprite;
+    aetherblade.use_palette=number;
+    aetherblade.sdi=0;
+    aetherblade.di=0;
+    aetherblade.hit_stun=40;
+    aetherblade.alarm[0]=26;
+    aetherblade.maxtime=26;
+    aetherblade.hit=0;
+    aetherblade.size=size;
+    aetherblade.weighed_kb=1;
+    aetherblade.hit=2;
+    create_hitbox(6,92+(-4)*facing,11,1.1,6,3,IkeSlashAndDash1,obj_spark_slash2,1.20 , 1.66 , 20.24 , 23.76,self.id,2,2);
+    hitbox.hit_stun=40;
+    hitbox.di=0;
+    hitbox.sdi=0;
+    hitbox.weighed_kb=1;
+    }
+    if timer = 200{
+    create_hitbox(6,60+60*facing,6,4,20,12,IkeSlashAndDash2,obj_spark_slash2,1.26 , 1.16 , 21.12 , 13.20,self.id,7,2);
+    hitbox.hit_stun=8;
+    }
+    if timer = 42 || timer = 50 || timer = 58{
+    create_hitbox(1,90,3,1.1,6,1.5,IkeSlashAndDash,obj_spark_slash1,1.5 , 1.5 , -6.16 , 31.68,self.id,8,2);
+    hitbox.hit_stun=20;
+    hitbox.di=0;
+    hitbox.sdi=0.1;
+    hitbox.weighed_kb=1;
+    }
+    if timer >= 42 && timer < 66{
+    if image_index=6{
+        hitbox.hitbox_x=-6.16*( 1 - facing * 2)*size;
+        hitbox.hitbox_y=31.68*size;
+        hitbox.dir=20+140*facing;
+        hitbox.bkb=3*size;
+    }
+    if image_index=7{
+        hitbox.hitbox_x=13.20*( 1 - facing * 2)*size;
+        hitbox.hitbox_y=24.64*size;
+        hitbox.dir=90;
+        hitbox.bkb=3*size;
+    }
+    if image_index=8{
+        hitbox.hitbox_x=7.04*( 1 - facing * 2)*size;
+        hitbox.hitbox_y=0;
+        hitbox.dir=90;
+        hitbox.bkb=5*size;
+    }
+    if image_index=9{
+        hitbox.hitbox_x=-16.72*( 1 - facing * 2)*size;
+        hitbox.hitbox_y=9.68*size;
+        hitbox.dir=60+60*facing;
+        hitbox.bkb=4*size;
+    }
+    }
+    if timer = 66 {
+    if loopcheck=0{
+    loopcheck+=1;
+    if moveleft{
+       hspeed=-2.5*size; 
+    }
+    if moveright{
+    hspeed=2.5*size;
+    }
+    }
+    if (moveleft || hspeed < 0){
+    create_hitbox(3,254+32*facing,8,1.5,6,2,IkeSlashAndDash1,obj_spark_slash1,1.44 , 2.65 , 26.40 , 38.72,self.id,133,4);
+    hitbox.hit_stun=20;   
+    }
+    if (moveright || hspeed >= 0){
+    create_hitbox(3,286+(-32)*facing,8,1.5,6,2,IkeSlashAndDash1,obj_spark_slash1,1.62 , 3.09 , 23.76 , 41.36,self.id,132,4);
+    hitbox.hit_stun=20;   
+    }
+    }
+    if timer >=31 && timer < 41{
+    y-=18.90909090909091*size;
+    }
+    if timer >= 66 && timer < 199{
+    vspeed=20*size;
+    air_move=0;
+    force_edge_grab = 1;
+    if moveleft && hspeed >-2.5*size{
+    hspeed-=0.5*size;
+    }
+    if moveright && hspeed < 2.5*size{
+    hspeed+=0.5*size;
+    }
+    if air = 0{
+    timer=199;
+    sound_play(sword_slam_sound);
+    with(hitbox){instance_destroy();}
+    with(blurstandin){instance_destroy();}
+    }
+    if timer = 198{
+    timer = 62;
+    with(hitbox){instance_destroy();}
+    with(blurstandin){instance_destroy();}
+    }
+    }
+    if timer >=200{
+    state_type="attack";
+    hspeed=0;
+    vspeed=0;
+    }
+    if timer < 66{
+    force_edge_grab = 0;
+    gravity=0;
+    gravity_lock=1;
+    vspeed=0;
+    hspeed=0;
+    air_move=0;
+    x=xemout;
+    if timer <31 && timer >41
+    y=yemout;
+    }
+
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

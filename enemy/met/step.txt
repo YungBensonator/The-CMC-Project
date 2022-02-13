@@ -1,0 +1,176 @@
+//this is run every frame in the game, make sure to optimize it!!!!!
+
+//well if all your goal is make a simple enemy using the mfairy or this one as a base, this should do the job pretty well.
+//I suggest not dabbling with the onhit.txt and the flinch state unless you know what youre doing
+
+if obj_game_control.state_type != "idle"
+exit;
+
+on_floor = 0;
+on_platform = 0;
+next_to_lwall = 0;
+next_to_rwall = 0;
+on_ceil = 0;
+
+actual_width = 10
+
+while (collision_line(x, y - 2, x + actual_width, y - 2, obj_leftwall, 1, 1) || collision_line(x, y - actual_height, x + actual_width, y - ac2, obj_leftwall, 1, 1))
+    x -= 1;
+while (collision_line(x, y - 2, x - actual_width, y - 2, obj_rightwall, 1, 1) || collision_line(x, y - actual_height, x - actual_width, y - ac2, obj_rightwall, 1, 1))
+    x += 1;
+while (collision_rectangle(x - 2, y - 8, x + 2, y + 2, obj_floor, 1, 1))
+    y -= 1;
+if (vspeed >= 0)
+    while (collision_rectangle(x - 2, y - 8, x + 2, y + 2, obj_platform, 1, 1))
+        y -= 1;
+while (collision_rectangle(x - 2, y - sprite_height * 0.5 - 4, x + 2, y - sprite_height - 2, obj_ceiling, 1, 1))
+    y += 1;
+if (collision_rectangle(x - 2, y - 8, x + 2, y + 3, obj_floor, 1, 1))
+    on_floor = 1;
+if (vspeed >= 0 && collision_rectangle(x - 2, y - 8, x + 2, y + 3, obj_platform, 1, 1))
+    on_platform = 1;
+if (collision_line(x, y - 2, x + actual_width, y - 2, obj_leftwall, 1, 1) || collision_line(x + 1, y - actual_height, x + actual_width + 1, y - sprite_height * 0.5 - 1, obj_leftwall, 1, 1))
+    next_to_lwall = 1;
+if (collision_line(x, y - 2, x - actual_width, y - 2, obj_rightwall, 1, 1) || collision_line(x - 1, y - actual_height, x - actual_width - 1, y - sprite_height * 0.5 - 1, obj_rightwall, 1, 1))
+    next_to_rwall = 1;
+if (collision_rectangle(x - 2, y - sprite_height - 4, x + 2, y - sprite_height * 0.5 - 1, obj_ceiling, 1, 1))
+    on_ceil = 1;
+
+if state_type = "flinch" {
+    image_index = 1
+    speed = 0
+
+    if (!on_floor and!on_platform)
+        vspeed += 0.3;
+
+    if (on_floor || on_platform || on_ceil) and countdownD <= 0 and prepare_to_die = 0 {
+        direction = -direction
+        countdownD = 10
+    }
+
+    if countdownD > 0
+    countdownD -= 1
+
+    if (speed != 0 && (next_to_lwall || next_to_rwall)) and countdownS <= 0 {
+        direction = -direction + 180
+        countdownS = 10
+        facing = !facing
+    }
+
+    if has_hit <= 0 {
+
+        if prepare_to_die = 0 {
+
+            state_type = "stand"
+
+        }
+        else if dead = 0 {
+            if on_floor or on_platform {
+				hspeed = 0
+				speed = 0
+				vspeed = 0
+				dead = 1
+				state_type = "death"
+				timer = 0
+                //sound_play2(magic1)
+                //alarm[8] = 15
+                //alpha_add = -0.08
+                //dead = 1
+            }
+
+        }
+
+        has_hit = 0
+    }
+
+    has_hit -= 1
+
+}
+
+if countdownS > 0
+countdownS -= 1
+
+if countdownCI > 0
+countdownCI -= 1
+
+///standing behavior, player out of vision
+if state_type = "stand" {
+	blocking = 1
+    image_index = 0
+
+    speed = 0
+    image_speed = 0
+    if target.x < x
+    facing = 1
+    else
+        facing = 0
+
+    
+    if distance_to_object(target) < 120  and timer >= 120{
+        speed = 0
+        state_type = "attack"
+        timer = 0
+    }
+}
+
+//bandicam 10 minutes limit dies of cringe, anyways continuing, we're making it all in the same attack state to simplify
+
+if state_type = "attack" {
+	blocking = 0
+    image_index = 1
+    speed = 0
+    image_speed = 0
+    
+	if timer = 30{
+        //im setting that blank script just for demonstration purposes.
+        shot = create_projectile(5,10+facing*160,3,4,10,8,magic1,obj_spark_hit1,2,2,00,10,99,30,enemy_custom);
+        shot.sprite_index = shot_sprite
+        shot.direction = point_direction(shot.x, shot.y, target.x, target.y - target.actual_height * 0.5)
+        shot.speed = 5
+        shot.image_angle = 0
+		shot.moving_object = 0;
+    }
+	
+	if timer = 80{
+		state_type = "stand"
+	}
+    
+
+}
+
+
+
+if state_type = "death" {
+    speed = 0
+    image_speed = 0
+    image_index = 1
+
+    
+
+    if timer = 1 {
+        alarm[8] = 30
+        speed = 0
+        image_alpha = -0.03
+    }
+
+}
+
+
+if has_hit >= 0
+has_hit -= 1
+
+
+//dont touch this stuff down here- 
+image_alpha += alpha_add
+
+//tf is this doin here, oh right its a workaround for a bug, anyways
+if image_alpha <= 0
+instance_destroy();
+
+image_xscale = base_xscale - (facing * (base_xscale * 2))
+image_yscale = base_yscale
+
+timer += 1
+
+if endlag > 0
+endlag -= 1

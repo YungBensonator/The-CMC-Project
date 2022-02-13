@@ -1,0 +1,211 @@
+//this is run every frame in the game, make sure to optimize it!!!!!
+
+if obj_game_control.state_type != "idle"
+exit;
+
+on_floor = 0;
+on_platform = 0;
+next_to_lwall = 0;
+next_to_rwall = 0;
+on_ceil = 0;
+
+actual_width = 4
+
+while (collision_line(x, y - 2, x + actual_width, y - 2, obj_leftwall, 1, 1) || collision_line(x, y - actual_height, x + actual_width, y - ac2, obj_leftwall, 1, 1))
+    x -= 1;
+while (collision_line(x, y - 2, x - actual_width, y - 2, obj_rightwall, 1, 1) || collision_line(x, y - actual_height, x - actual_width, y - ac2, obj_rightwall, 1, 1))
+    x += 1;
+while (collision_rectangle(x - 2, y - 8, x + 2, y + 2, obj_floor, 1, 1))
+    y -= 1;
+if (vspeed >= 0)
+    while (collision_rectangle(x - 2, y - 8, x + 2, y + 2, obj_platform, 1, 1))
+        y -= 1;
+while (collision_rectangle(x - 2, y - sprite_height * 0.5 - 4, x + 2, y - sprite_height - 2, obj_ceiling, 1, 1))
+    y += 1;
+
+if (collision_rectangle(x - 2, y - 8, x + 2, y + 3, obj_floor, 1, 1))
+    on_floor = 1;
+if (vspeed >= 0 && collision_rectangle(x - 2, y - 8, x + 2, y + 3, obj_platform, 1, 1))
+    on_platform = 1;
+if (collision_line(x, y - 2, x + actual_width, y - 2, obj_leftwall, 1, 1) || collision_line(x + 1, y - actual_height, x + actual_width + 1, y - sprite_height * 0.5 - 1, obj_leftwall, 1, 1))
+    next_to_lwall = 1;
+if (collision_line(x, y - 2, x - actual_width, y - 2, obj_rightwall, 1, 1) || collision_line(x - 1, y - actual_height, x - actual_width - 1, y - sprite_height * 0.5 - 1, obj_rightwall, 1, 1))
+    next_to_rwall = 1;
+if (collision_rectangle(x - 2, y - sprite_height - 4, x + 2, y - sprite_height * 0.5 - 1, obj_ceiling, 1, 1))
+    on_ceil = 1;
+
+if (!on_floor and!on_platform)
+    vspeed += 0.3;
+
+if (vspeed > 2.4) and state_type != "flinch"
+vspeed = 2.4;
+
+if (on_floor || on_platform) and state_type != "flinch" {
+    vspeed = 0;
+}
+
+if state_type = "flinch" {
+    sprite_index = flinch_sprite
+    speed -= 0.03
+
+    if (on_floor || on_platform || on_ceil) and countdownD <= 0 and prepare_to_die = 0 {
+        direction = -direction
+        countdownD = 10
+    }
+
+    if countdownD > 0
+    countdownD -= 1
+
+    if (speed != 0 && (next_to_lwall || next_to_rwall)) and countdownS <= 0 {
+        direction = -direction + 180
+        countdownS = 10
+        facing = !facing
+    }
+
+    if has_hit <= 0 {
+
+        if prepare_to_die = 0 {
+
+            if on_floor or on_platform
+            state_type = "stand"
+            else
+                state_type = "jump"
+        }
+        else if dead = 0 {
+            if on_floor or on_platform {
+                sound_play2(magic1)
+                alarm[8] = 15
+                alpha_add = -0.08
+                dead = 1
+            }
+
+        }
+
+        has_hit = 0
+    }
+
+    has_hit -= 1
+
+}
+
+if countdownS > 0
+countdownS -= 1
+
+if countdownCI > 0
+countdownCI -= 1
+
+if state_type = "stand" {
+    if on_floor or on_platform
+    sprite_index = stand_sprite
+    else
+        state_type = "jump"
+
+    hspeed = 0
+    image_speed = 0.18
+    if target.x < x
+    facing = 1
+    else
+        facing = 0
+
+    if distance_to_object(target) < 180 and endlag <= 30 {
+        hspeed = 0
+        state_type = "walk"
+        timer = 0
+    }
+}
+
+if state_type = "walk" {
+    if on_floor or on_platform
+    sprite_index = walk_sprite
+    else
+        state_type = "jump"
+
+    if target.x < x
+    facing = 1
+    else
+        facing = 0
+
+    hspeed = 1.4 - facing * 2.8
+    image_speed = 0.25
+
+    if distance_to_object(target) < 90 and endlag <= 0 and timer >= 5{
+        hspeed = 0
+        state_type = "prepare"
+        timer = 0
+
+    }
+}
+
+if state_type = "jump" {
+    if on_floor or on_platform {
+        state_type = "stand"
+        timer = 0
+    } else
+        sprite_index = jump_sprite
+}
+
+if state_type = "prepare" {
+    sprite_index = prepare_sprite
+    hspeed = 0
+    image_speed = 0
+    switch (timer) {
+    case 15: image_index = 1; break;
+    case 30: image_index = 2; break;
+    case 45:
+        state_type = "attack";
+        timer = 0;
+        break;
+    }
+
+}
+
+if state_type = "attack" {
+    sprite_index = attack_sprite
+
+    if target.x < x
+    facing = 1
+    else
+        facing = 0
+
+    if timer <= 10
+    hspeed = 4 - facing * 8
+    image_speed = 0.25
+
+    if !instance_exists(proj) and endlag <= 0 {
+        create_projectile(5,10+facing*160,4.5,7,1,2,kick2,obj_spark_hit1,0.6,0.6,abs(place_x(55)),-place_y(56),99,5,no_script);
+        proj.funnya = self.id
+        proj.execute_on_hit = "funnya.endlag = 60"
+        proj.priority = 0
+    }
+    else if instance_exists(proj) {
+        proj.x = x + place_x(55)
+        proj.y = y + place_y(56)
+    }
+
+    if timer = 15 {
+        hspeed *= 0.2
+    }
+	
+	if timer = 15 {
+        hspeed *= 0.1
+    }
+
+    if timer = 30 {
+        hspeed = 0
+        state_type = "stand"
+    }
+
+}
+
+image_alpha += alpha_add
+
+if image_alpha <= 0
+instance_destroy();
+
+image_xscale = base_xscale - (facing * (base_xscale * 2))
+image_yscale = base_yscale
+
+timer += 1
+
+if endlag > 0
+endlag -= 1

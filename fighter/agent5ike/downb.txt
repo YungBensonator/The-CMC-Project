@@ -1,0 +1,160 @@
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 59;
+    sprite_index = shield_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    slide = 0
+    air_move = 0
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 101: sprite_index = jab_sprite; image_index = 11; break;
+	case 104: image_index = 12; break;
+	case 107: image_index = 4; sprite_index=dash_attack_sprite; break;
+      }
+    switch (timer){
+      case 1: swordeff = create_sword_trail(self.id, 9, 30, sword_texture); swordeff.index=1; break;
+      case 101: swordeff.index += 1; break;
+      case 104: swordeff.index += 1; break;
+      case 107: swordeff.index += 1; break;
+      case 110: swordeff.end_decay = 2; break;
+      case 113: swordeff.end_decay = 3; break;
+      case 116: swordeff.end_decay = 4; break;
+      case 119: with (swordeff) { instance_destroy(); } break;
+    }
+swordeff.depth=depth-1;
+    if timer >=80{
+    hspeed=0;
+    vspeed=0;
+    gravity=0;
+    gravity_lock=1;
+    }
+    if ( timer = 8 )
+      {
+	sound_play(counter_sound);
+	instance_create(x+18*(1-facing*2)*size,y-35*size,obj_spark_effect);
+      }
+    if timer = 9{
+    sound_play(downb1_sound);
+     }
+    if ( timer >= 9 && timer <= 36 )
+      {
+	if ( timer mod 4 >= 0 && timer mod 4 <= 1 )
+	    image_alpha = 0.2;
+	else
+	    image_alpha = 1;
+	intangible = 1;
+	if ( place_meeting(x,y,attack_box) ) {
+	    temp = instance_nearest(x,y,attack_box);
+	    if ( temp.hit <= 1 && temp.attacker != self.id && ( team_attack || temp.attacker == 99 || temp.attacker.team != team ) ) {
+	    duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause =self.id;
+        duster.alarm[0] = 27;
+	    timer = 80;
+	    time = 125;
+	    sound_play(downb2_sound);
+		intangible = 1;
+	    image_alpha = 1;
+	    hspeed = 0;
+	    vspeed = 0;
+	    temp.attacker.timer_speed = 0;
+	    save_damage = temp.damage*1.2
+	    save_kb = temp.bkb*1.2
+	    save_kbg = temp.kbg*1.2
+	    if save_damage > 70
+	    save_damage = 70
+	    if save_damage < 10
+	    save_damage = 10
+	    if save_kb > 16
+	    save_kb = 16
+	    if save_kb< 4
+	    save_kb = 4
+	    if save_kbg > 9
+	    save_kbg = 9
+	    if save_kbg< 2
+	    save_kbg = 2
+            for ( i = 0 ; i < 12 ; i += 1 ) temp.attacker.alarm[i] = -1;
+	    temp.attacker.alarm[1] = 13;
+	    if ( x < temp.attacker.x )
+		facing = 0;
+	    else
+		facing = 1;
+	    }
+	  }
+	else
+	if ( place_meeting(x,y,projectile_box) )
+	  {
+	    temp = instance_nearest(x,y,projectile_box);
+	    if ( temp.hit <= 1 && temp.attacker != self.id && ( team_attack || temp.attacker == 99 || temp.attacker.team != team ) ) {
+	    duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause =self.id;
+        duster.alarm[0] = 27;
+	    timer = 80;
+	    time = 125;
+	    sound_play(downb2_sound);
+		intangible = 1;
+	    image_alpha = 1;
+	    hspeed = 0;
+	    vspeed = 0;
+	    save_damage = temp.damage*1.2
+	    save_kb = temp.bkb*1.2
+	    save_kbg = temp.kbg*1.2
+	    if save_damage > 70
+	    save_damage = 70
+	    if save_damage < 10
+	    save_damage = 10
+	    if save_kb > 16
+	    save_kb = 16
+	    if save_kb< 4
+	    save_kb = 4
+	    if save_kbg > 9
+	    save_kbg = 9
+	    if save_kbg< 2
+	    save_kbg = 2
+	    if ( x < temp.x )
+		facing = 0;
+	    else
+		facing = 1;
+	    if temp.priority!=5 && temp.attacker.attack_type!="final_smash"{
+	    with(temp){instance_destroy();}
+	    }
+	    }
+	  }
+      }
+    if ( timer = 37 )
+      {
+	intangible = 0;
+	image_alpha = 1;
+      }
+
+
+
+    if ( timer = 107 ) {
+	create_hitbox(save_damage,30+facing*120,save_kb,save_kbg,save_damage*2,7,IkeSlashAndDash2,obj_spark_slash2,2.06 , 1.66 , 24.64 , 16.72,self.id,2,5);
+	hitbox.hit_stun = 6;
+ }
+	if timer = 120
+	intangible = 0
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    intangible = 0
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

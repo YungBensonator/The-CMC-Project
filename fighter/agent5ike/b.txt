@@ -1,0 +1,176 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 155;
+		hspeed = 0;
+        special=1;
+        chargevar=0;
+        rando=0;
+        armortemp=1;
+}
+
+    switch ( timer ) {
+    case 1: image_index = 0; break;
+    case 6: image_index = 1; break;
+    case 12: image_index = 2; if chargevar <2 {sound_play(b1_sound);} break;
+    case 110: image_index = 3; sound_stop(b1_sound); break;
+    case 113: image_index = 4; with(swordeff){instance_destroy();} break;
+    case 143: image_index = 3; break;
+    case 147: image_index = 2; break;
+    case 151: image_index = 1; break;
+    }
+depth=0;
+if ( timer < time )
+    {
+    if timer < 113{
+    swordeff.alarm[0]=3;
+    }
+    if timer = 99{
+    timer=12;
+    }
+    if timer >=12 && timer < 100{
+    chargevar+=2;
+    if chargevar mod 18 = 0{
+    rando=irandom_range(1,4);
+    exploder = instance_create(x,y, obj_spark_explode1);
+    exploder.image_xscale=0.3*size;
+    exploder.image_yscale=0.3*size;
+    if rando=1{
+    exploder.x=x+1.76*(1-facing*2)*size; 
+    exploder.y=y-39.60*size;
+    }
+    if rando=2{
+    exploder.x=x+8.80*(1-facing*2)*size; 
+    exploder.y=y-36.96*size;
+    }
+    if rando=3{
+    exploder.x=x+15.84*(1-facing*2)*size; 
+    exploder.y=y-35.20*size;
+    }
+    if rando=4{
+    exploder.x=x+24.64*(1-facing*2)*size; 
+    exploder.y=y-32.56*size;
+    }
+    sound_play(explode_small);
+    }
+    if !instance_exists(swordeff) {
+      swordeff = instance_create(x+place_x(30)*size, y+place_y(22)*size, obj_spark);
+      if facing=1{
+      swordeff.x=x+place_x(29)*size
+      }
+      swordeff.sprite_index = b_sword_sprite;
+      swordeff.image_xscale = 0.8*( 1 - facing * 2 )*size;
+      swordeff.image_yscale = 0.8*size;
+      swordeff.image_alpha=0;
+      swordeff.image_speed=0;
+      swordeff.depth=-5;
+      swordeff.image_index=0;
+      swordeff.snap=self.id;
+      swordeff.image_blend=c_orange;
+      swordeff.alarm[0]=3;
+    }
+    swordeff.image_alpha=0;
+    swordeff.image_alpha=(chargevar/2)/100;
+    if chargevar>= 200{
+    heavy_armor=13*size;
+    }
+    if shieldup=1{
+    chargevar=0;
+    heavy_armor=0;
+    armortemp=0;
+    timer=0;
+    time=-1;
+    attack_type="none";
+    if air = 0{
+    state_type="dodge";
+    }
+    else{
+    state_type="air_dodge";
+    }
+    }
+    }
+    if timer >=12 && timer < 100 && (special = 0 || chargevar>=240){
+    timer = 100;
+    }
+    if timer = 101{
+    if moveleft{
+    facing=1;
+    }
+    if moveright{
+    facing=0;
+    }
+    }
+    if timer = 113 || timer = 118 || timer = 123 {
+            if (timer < 118 && chargevar<180) || (chargevar >= 180 && chargevar < 240 && timer < 123) || chargevar>=240{
+            firepillar=create_projectile ( 10,90,7,5.7,6,1, explodehit2 , obj_spark_fire1 , 0.3 , 0.5, 20 , 0 , self.id , 10 , char_custom1 );
+            firepillar.di = 0.4;
+            firepillar.image_speed=1;
+            firepillar.hit_stun = 8;
+            firepillar.depth=-5;
+            firepillar.hspeed=0;
+            firepillar.vspeed=0;
+            firepillar.can_reflect=1;
+            firepillar.absorb=1;
+            firepillar.sprite_index=b_eff_sprite;
+            firepillar.image_alpha=0.6;
+            firepillar.alarm[0]=10;
+            firepillar.maxtime=10;
+            }
+            if timer = 113{
+            sound_play(explode_big);
+            if air =0{
+            screen_shake(3,3);
+            }
+            if chargevar<180{
+            sound_play(b2_sound);
+            }
+            }
+            if chargevar>=180 && timer = 113{
+            firepillar.damage=35*size;
+            sound_play(b3_sound);
+            if chargevar< 240{
+            percent+=10;
+            }
+            if chargevar>=240{
+            percent+=23;
+            }
+            }
+            if chargevar>=180 && timer = 118{
+            sound_play(explode_big);
+            if air =0{
+            screen_shake(3,3);
+            }
+            firepillar.damage=31*size;
+            firepillar.x=x+50*(1-facing*2)*size;
+            firepillar.image_xscale=0.25*(1-facing*2)*size;
+            firepillar.image_yscale=0.417*size;
+            }
+            if chargevar>=240 && timer = 123{
+            sound_play(explode_big);
+            sound_play(b4_sound);
+            if air =0{
+            screen_shake(3,3);
+            }
+            firepillar.damage=27*size;
+            firepillar.x=x+80*(1-facing*2)*size;
+            firepillar.image_xscale=0.2*(1-facing*2)*size;
+            firepillar.image_yscale=0.333*size;
+            }
+    }
+  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
