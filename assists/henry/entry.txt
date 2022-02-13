@@ -1,0 +1,76 @@
+owner.assistmeter = 0
+if ( timer == 0 )
+{
+state_type = "entry"
+if owner.minihenry_distraction=1 || db_charname[global.gs_character[owner.number-1],1] ="archive"//configuracion: personajes 8-bits
+{sprite_index = henry_archive_sprite 
+image_xscale =sign(owner.image_xscale)
+image_yscale =1}
+else if owner.henry_distraction=1 ||db_charname[global.gs_character[owner.number-1],1] ="luigi"//configuracion: personajes que invoquen a Henry solamente
+{sprite_index = henry_sprite;
+image_xscale = .125*sign(owner.image_xscale)
+image_yscale = .125}
+else if owner.ellie_distraction=1 ||db_charname[global.gs_character[owner.number-1],1] ="peach"//configuracion: personajes que invoquen a Ellie solamente
+{sprite_index = ellie_sprite;
+image_xscale = .125*sign(owner.image_xscale)
+image_yscale = .125}
+else if owner.charles_distraction=1 ||db_charname[global.gs_character[owner.number-1],1] ="mario"//configuracion: personajes que invoquen a Charles solamente
+{sprite_index = charles_sprite;
+image_xscale = .125*sign(owner.image_xscale)
+image_yscale = .125}
+else //por defecto invocarán tanto a Ellie ,a Henry o a Charles
+{sprite_index = choose(henry_sprite,ellie_sprite,charles_sprite);
+image_xscale = .125*sign(owner.image_xscale)
+image_yscale = .125}
+image_speed=(0.5/44)*image_number
+image_index = 0;
+time = 500
+equipo=owner.team
+//if instance_number(henry)<=1
+//if !owner.ai (para testeos)
+tempmus_stop(track_id);
+track_id = tempmus_play("assists/henry/cumbia.mp3",500);
+track_id=-1
+//track_id = cumbia
+mode=1}
+
+if timer < time {
+with player
+{if attack_type="taunt" and time=-1
+{assistmeter-=1
+if air=0
+hspeed=0
+else
+{hspeed*=0.85
+air_move=0}}
+if team!=other.equipo and (state_type="stand"||state_type="run"||state_type="crouch"||state_type="jump") and air=0
+{state_type="air_attack"
+attack_type="taunt"
+hspeed=0
+timer=-other.time+other.timer-percent-1
+time=-1
+if sprite_exists (henrytaunt_sprite)//sprite bonus
+{sprite_index=henrytaunt_sprite
+image_index=other.image_index/other.image_number*image_number
+image_speed=0.5/other.image_number*image_number}
+else if sprite_exists (taunt_sprite)//taunt base
+sprite_index=taunt_sprite
+else if sprite_exists (win_sprite)//plan B
+sprite_index=win_sprite
+else if sprite_exists (stand_sprite)//plan C
+sprite_index=stand_sprite
+else //plan D
+sprite_index=ukemi_sprite
+if image_speed=0
+image_speed=0.5}}
+}
+if ( timer >= time-1 || !instance_exists(owner))
+  {with player
+{	if attack_type="taunt"
+{	    attack_type = "none";
+	    state_type = "stand";}}
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

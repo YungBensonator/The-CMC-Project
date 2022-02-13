@@ -1,0 +1,32 @@
+if ( timer == 0 )
+{
+state_type = "action"
+sprite_index = Cockroach_sprite;
+image_speed = 0;
+image_index = 0;
+image_xscale = .5*sign(owner.image_xscale)
+image_yscale = .5
+time = 1
+}
+
+if timer < time {
+image_speed=0.5
+fiesta=create_homing_bubble(timer/10,timer/10,0,8,owner.id,2)
+with player
+{if place_meeting(x,y,other.fiseta) and team!=owner.team
+{state_type="air_attack"
+attack_type="taunt"
+timer=-other.timer-percent
+time=0
+if Cockroachtaunt_sprite
+sprite_index=Cockroachtaunt_sprite
+else
+sprite_index=taunt_sprite}}
+}
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,112 @@
+// Step script because your topless body is being stepped over.
+owner.assistmeter = 0;
+if ( ignore_physics > 0 )
+{
+  moving_object = 0;
+  ignore_physics -= 1;
+}
+else
+{
+  moving_object = 1;
+  on_floor = 0;
+  on_platform = 0;
+  while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_floor , 1 , 1 ) )
+    y -= 1;
+  if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_platform , 1 , 1 ) )
+      y -= 1;
+  if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+    on_floor = 1;
+  if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+    on_platform = 1;
+}
+if ( state_type == "hurt" && damage >= 10 && drip = 0 )
+{
+  drip = 1;
+  xshake = 0;
+  yshake = 0;
+  state_type = "end";
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+}
+if ( hitstun > 0 )
+{
+  state_type = "hurt";
+  if ( sprite_index != ImposterHahaFuniAmongUsJoke_hurt_sprite[amogus] )
+  {
+    last_sprite_index = sprite_index;
+    last_image_index = image_index;
+    last_timer = timer;
+    sprite_index = ImposterHahaFuniAmongUsJoke_hurt_sprite[amogus];
+    image_index = 0;
+  }
+  xshake = -1 + random ( 2 );
+  yshake = -1 + random ( 1 );
+  xshake *= max ( 7 , 1 + hitstun * 0.25 );
+  yshake *= max ( 7 , 1 + hitstun * 0.25 );
+  if ( kb > 0 )
+    kb -= 1.4;
+  if ( kb < 0 )
+    kb = 0;
+  if ( hc < 1 )
+    hc += 0.2;
+  xshake += lengthdir_x ( hc * kb * 2 , dir );
+  yshake += lengthdir_y ( hc * kb * 2 , dir );
+  hitstun -= 1;
+  if ( hitstun == 0 )
+  {
+    xshake = 0;
+    yshake = 0;
+    sprite_index = last_sprite_index;
+    image_index = last_image_index;
+    state_type = "action";
+    timer = last_timer;
+    damage = 0;
+  }
+}
+timer += timer_speed;
+
+// Depths of the amogus memes.
+if ( on_floor || on_platform )
+  depth = -2;
+else
+  depth = 0;
+
+// Killing the imposter off camera.
+if ( y > obj_game_control.death_d )
+  instance_destroy();
+
+// Imposter status profile.
+if ( state_type == "entry" )
+  assist_entry();
+if ( state_type == "action" )
+{
+  assist_action();
+  var i;
+  if ( timer >= 51 && timer < 109 && hitstun == 0 )
+  {
+    i = stage_hitbox_nostun ( x - 10 , y - 30 , x + 10 , y );
+    if ( i > 0 && i.attacker.id != owner.id )
+    {
+      hc = 0;
+      if ( x < i.x )
+        facing = 1;
+      else
+        facing = 0;
+      hitstun = i.hitlag_frames + 3;
+      kb = i.kbg + i.bkb;
+      dir = i.dir;
+      if ( dir >= 360 )
+      {
+        if ( x < i.x )
+          dir = 150;
+        else
+          dir = 30;
+      }
+      damage += i.damage;
+    }
+  }
+}
+if ( state_type == "end" )
+  assist_end();

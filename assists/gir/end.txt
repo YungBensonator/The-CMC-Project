@@ -1,0 +1,54 @@
+if ( timer == 0 )
+{
+sprite_index = gir_stand_sprite;
+hspeed = 0;
+image_speed = 0;
+image_index = 0;
+gravity = 0
+time = 129
+}
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 0; break;
+case 15: sprite_index = gir_leave_sprite; image_index = 0; break;
+case 20: sprite_index = gir_leave_sprite; image_index = 1; break;
+case 28: image_index = 2; break;
+}
+if timer = 26 {
+sound_play(gir_power_sound);
+sound_play(choose(gir_leave1_sound,gir_leave2_sound,gir_leave3_sound,gir_leave4_sound));
+}
+if timer >= 24 {
+after_image ( 4 , c_blue , .78 );
+}
+if timer = 28
+{
+sprite_index = gir_leave_sprite;
+image_speed = 0;
+image_index = 2;
+direction = 57+66*facing;
+speed = 3.4;
+vspeed -= 2.4;
+}
+
+if timer >=28
+{
+direction = 57+66*facing;
+speed = 4.57;
+vspeed -= 0.543;
+}
+
+if ( timer >= 128 )
+{
+visible = 1;
+state_type = "ded";
+timer = 0;
+time = -1;
+
+//execute_string(deinit_script)
+instance_destroy()
+}

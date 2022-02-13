@@ -1,0 +1,39 @@
+if ( timer == 0 )
+{
+	state_type = "entry"
+	sprite_index = groudon_stand_sprite;
+	image_speed = 0;
+	image_index = 0;
+	sprite_scale = 1.5;
+	image_xscale = sprite_scale*(1-facing*2);
+	image_yscale = sprite_scale;
+	visible = 0;
+
+	timer = 0;
+	time = 31;
+}
+
+if timer = 1
+{
+	spark = instance_create(x - 0 * (1-facing*2) * size, y,obj_spark)
+	spark.sprite_index = groudon_entry_sprite;
+	spark.image_xscale = 0.8 * size;
+	spark.image_yscale = 0.8 * size;
+	spark.image_speed = 0.3;
+	spark.depth = 1;
+}
+
+if ( timer = 15 )
+{
+	sound_play ( groudon_entry_sound )
+	instance_create ( x - 2 * (1-facing*2) * size, y - 5 * size, obj_pokespawn );
+	visible = 1;
+}
+
+if ( timer >= 30 )
+{
+	sprite_index = groudon_stand_sprite;
+	state_type = "action";
+	timer = 0;
+	time = -1;
+}

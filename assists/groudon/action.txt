@@ -1,0 +1,107 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 61;
+    sprite_index = groudon_stand_sprite;
+    image_speed = 0.3;
+    image_index = 0;
+  }
+
+if ( timer < time )
+{
+	if timer = 18
+	{
+		sound_play( groudon_roar_sound );
+	}
+	
+	if timer = 21
+	{
+		sprite_index = groudon_roar_sprite;
+		image_speed = 0;
+		image_index = 0;
+		
+		if !instance_exists(weather_sun)
+		{
+			weather_sun = create_projectile(0,361,0,0,0,0,kick3,obj_spark_hit1,0.4,0.4,10,25,owner.id,1800,assist_custom);
+			weather_sun.sprite_index = groudon_drought_sprite;
+			weather_sun.image_index = 0;
+			weather_sun.image_speed = 0.15;
+			weather_sun.image_xscale = 500;
+			weather_sun.image_yscale = 500;
+			weather_sun.image_alpha = 0.25;
+			weather_sun.vspeed = 0;
+			weather_sun.hspeed = 0;
+			weather_sun.facing = facing;
+			weather_sun.gravity = 0;
+			weather_sun.depth = -15;
+			
+			weather_sun.priority = 6;
+			weather_sun.absorb = 0;
+			weather_sun.absorb2 = 0;
+			weather_sun.no_reflect = 1;
+			weather_sun.alarm[0] = 1800;
+			weather_sun.hit = 2;
+			
+			weather_sun.exploded = 0;
+			weather_sun.weather_bonus = 1.5;
+			weather_sun.boostphase = 0;
+			
+			weather_sun.ogatk_box_damage = 0;
+			weather_sun.ogatk_box_bkb = 0;
+			weather_sun.ogatk_box_kbg = 0;
+			weather_sun.ogatk_box_shield_damage = 0;
+			weather_sun.ogatk_box_hitlag_frames = 0;
+			weather_sun.ogatk_box_hit_stun = 0;
+			weather_sun.ogatk_box_shield_stun = 0;
+			weather_sun.ogatk_box_di = 0;
+			weather_sun.ogatk_box_priority = 0;
+			
+			weather_sun.ogproj_box_damage = 0;
+			weather_sun.ogproj_box_bkb = 0;
+			weather_sun.ogproj_box_kbg = 0;
+			weather_sun.ogproj_box_shield_damage = 0;
+			weather_sun.ogproj_box_hit_stun = 0;
+			weather_sun.ogproj_box_shield_stun = 0;
+			
+			weather_sun.bkb_scale = 0;
+			weather_sun.kbg_scale = 0;
+			weather_sun.hitlag_scale = 0;
+			weather_sun.atkstun_scale = 10;
+			weather_sun.projstun_scale = 10;
+			
+			weather_sun.custom_script = custom_script;
+			weather_sun.read_custom_script = 1;
+		}
+	}
+
+	if timer > 21 and timer < 50
+	{
+		shaker = instance_create(x,y,obj_shakescreen3);
+		shaker.ampl = 12;
+		shaker.xampl = 0;
+		shaker.time = 5;
+	}
+	
+	if timer < 50 and !instance_exists(spark)
+	{
+		spark = instance_create(x-0+facing*0,y-24,obj_spark_effect2);
+		spark.depth = depth -1;
+	}
+
+	if timer = 50 
+	{
+		sprite_index = groudon_stand_sprite;
+		image_speed = 0;
+		image_index = 0.3;
+	}
+}
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

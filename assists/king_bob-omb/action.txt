@@ -1,0 +1,57 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 140;
+    sprite_index = kingbomb_walk_sprite;
+    image_speed = 0.25;
+    image_index = 0;
+	repeated = 0
+	jumpattempt = 10
+  }
+
+if ( timer < time )
+  {
+  
+
+  
+ 
+if timer <= 100{
+hspeed=1.5-facing*3;
+}
+if timer > 100{
+hspeed=0;
+sprite_index = kingbomb_stand_sprite;
+}
+  }
+if timer = 130{
+image_alpha=0;
+sound_play(kingbomb_boom_sound);
+
+dank=create_projectile ( 5 , 362 , 7 , 4 , 110 , 10 , explodehit4,obj_spark_fire1 , 3.71 , 3.19 , -2.80 , 25.20 , owner.id , 4 , no_script );
+dank2=create_projectile ( 5 , 362 , 7 , 4 , 110 , 10 , explodehit4,obj_spark_fire1 , 3.45 , 3.22 , -2.80 , 25.20 , owner.id , 4 , no_script );
+dank.hit_attacker = 1;
+dank2.hit=2;
+dank2.sprite_index=kingbomb_boom_sprite;
+dank2.image_speed=1;
+dank.x=dank2.x+(-0.70-facing*(-1.4));
+dank.y=dank2.y;
+dank2.image_xscale=0.7;
+dank2.image_yscale=0.7;
+}
+if timer = 136{
+  dank.alarm[0]=0;
+  dank2.alarm[0]=0;
+}
+   
+   
+
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

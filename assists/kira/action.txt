@@ -1,0 +1,88 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 150;
+    image_speed = 0;
+    image_index = 0;
+	target = -99
+	repeated = 40
+  }
+
+if ( timer < time )
+  {
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+    case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+	
+	
+	case 100: image_index = 9; break;
+	case 104: image_index = 10; break;
+	case 108: image_index = 11; break;
+	case 112: image_index = 12; break;
+	case 116: image_index = 13; break;
+	case 120: image_index = 14; break;
+	case 124: image_index = 15; break;
+	case 128: image_index = 16; break;
+	case 132: image_index = 17; break;
+	case 136: image_index = 18; break;
+      }
+	  
+    if ( target > -1 && target != noone && target != -99 && target != owner.id ) and targetlock = 0
+      {
+	  targetlock = target
+      }
+    if  !instance_exists ( proj ) and targetlock = 0
+      {
+      create_homing_bubble ( 50 , 30 , 0 , 0 , self.id , 5 );
+      }
+	  
+	if timer = 32{
+	draw_number = 1
+	death_timer = 60 * 40
+	}
+	
+	if timer > 32{
+	death_timer -= 1
+	}
+	
+	if timer = 93 and repeated != 0{
+	timer = 33
+	repeated -= 1
+	}
+	
+	if death_timer <= 30 and timer > 32 and timer < 98{
+	timer = 99
+	}
+	
+	if death_timer <= 0 and timer > 98
+	draw_number = 0
+	  
+	
+	if timer = 128{
+	create_projectile(1,285-facing*30,13,5,15,3,slash3,obj_spark_hit4,1.5,1.5,0,0,owner.id,5,-1);
+	proj.x = targetlock.x
+	proj.y = targetlock.y
+	proj.hit_stun = 60
+	}
+
+
+
+ 
+
+  }
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

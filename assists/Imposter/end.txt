@@ -1,0 +1,32 @@
+// End script because you got killed while scanning, ohh noes...
+if ( timer == 0 )
+{
+  state_type = "end";
+  if ( drip )
+  {
+    sprite_index = ImposterHahaFuniAmongUsJoke_dead_sprite[amogus];
+    image_speed = 0;
+    image_index = 0;
+    sound_play(ImposterHahaFuniAmongUsJoke_kill_sound);
+  }
+  time = 100;
+}
+if ( drip )
+{
+  switch ( timer )
+  {
+    case 36: image_index = 1; break;
+    case 39: image_index = 2; break;
+  }
+}
+if ( !drip || ( drip && timer >= 60 ) )
+  image_alpha -= 0.05;
+if ( image_alpha <= 0 || timer >= time - 1 )
+{
+  visible = 0;
+  state_type = "ded";
+  timer = 0;
+  time = -1;
+  //execute_string ( deinit_script );
+  instance_destroy();
+}

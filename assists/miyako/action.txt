@@ -1,0 +1,72 @@
+if (timer == 0)
+{
+    state_type = "action";
+    attack_type = "atk1";
+    timer = 0;
+    time = 36;
+    sprite_index = miyako_attack_sprite;
+    image_speed = 0;
+    image_index = 0;
+    repeated = 0;
+    gravity = 0;
+}
+if (timer < time)
+{
+    switch (timer)
+    {
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break;
+		case 12: image_index = 4; break;
+		case 15: image_index = 5; break; //hitbox
+		case 18: image_index = 6; break;
+		case 21: image_index = 7; break;
+		case 24: image_index = 8; break;
+		case 27: image_index = 9; break;
+		case 30: image_index = 10; break;
+		case 33: image_index = 11; break;
+    }
+	if timer == 9
+	{
+		sound_play(miyako_dash_snd);
+		sound_play(miyako_attack_snd);
+		
+		attackVisual = instance_create(x,y-15,obj_spark);
+		attackVisual.image_speed = 0.5;
+		attackVisual.image_index = 0;
+		attackVisual.sprite_index = miyako_attackVFX_sprite;
+		attackVisual.alarm[0] = 3000;
+		attackVisual.image_xscale = 0.4-facing*0.8;
+		attackVisual.image_yscale = 0.4;
+		
+        attackVFX = create_projectile(8,22+facing*136,4.8,8.5,7,7,kick3,obj_spark_hit3,1.6,0.8,abs(place_x(80)),-place_y(39),owner.id,6,-1);
+        // attackVFX.sprite_index = -1;
+        attackVFX.image_speed = 0;
+        attackVFX.image_index = 0;
+        
+        attackVFX.hit = 0;
+        attackVFX.image_alpha = 1;
+        attackVFX.exploded = 0;
+        attackVFX.vspeed = 0;
+        attackVFX.hspeed = 0;
+        attackVFX.facing = facing;
+        attackVFX.gravity = 0;
+        attackVFX.number = 1;
+        attackVFX.armor_break = 1;
+        attackVFX.shake_ampl = 8;
+	}
+	if (timer >= 9 && timer <= 15)
+	{
+		x += 6-facing*12;
+		attackVisual.x += 6-facing*12;
+		attackVFX.x += 6-facing*12;
+	}
+}
+
+if (timer >= time-1)
+{
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+}

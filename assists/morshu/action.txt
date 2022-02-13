@@ -1,0 +1,63 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 70;
+    sprite_index = morshu_stand_sprite;
+    image_speed = 0;
+    image_index = 0;
+  }
+
+if ( timer < time )
+  {
+    
+	if timer < 40 and !instance_exists(spark){
+	spark = instance_create(x-0+facing*0,y-24,obj_spark_effect2)
+	spark.depth = depth -1
+	sprite_index = morshu_stand_sprite
+	}
+
+    if timer = 26 
+      {
+	sound_play(bombs_sound);
+      }
+    if timer = 42 
+      {
+	  sprite_index = morshu_atk_sprite
+	sound_play(itemgetsnd);
+	new_item = instance_create(x+25-facing*50,y-110,global.itm_kind[31]);
+	new_item.hspeed = 2.25-facing*4.5
+      }
+/*
+    if timer = 46 
+      {
+	  sprite_index = morshu_atk_sprite
+	sound_play(itemgetsnd);
+	new_item = instance_create(x+5-facing*10,y-90,global.itm_kind[31]);
+	new_item.hspeed = 2.25-facing*4.5
+      }
+    if timer = 50 
+      {
+	  sprite_index = morshu_atk_sprite
+	sound_play(itemgetsnd);
+	new_item = instance_create(x+20-facing*40,y-70,global.itm_kind[31]);
+	new_item.hspeed = 2.25-facing*4.5
+      }
+*/
+    if timer = 69
+      {
+	sound_play(mmm_sound);
+      }
+  }
+
+   
+
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,38 @@
+if ( timer == 0 )
+{
+state_type = "entry"
+sprite_index = gir_fall_sprite;
+image_speed = 0;
+image_index = 0;
+image_xscale = .81-facing*1.62
+image_yscale = .81
+time = 61
+y -= 70
+image_alpha = 0;
+vspeed = 5
+}
+
+image_alpha += 0.05
+
+switch (timer)
+{
+case 2: image_index = 1; break;
+case 28: sprite_index = gir_land_sprite; image_index = 0; vspeed = 0; break;
+case 30: image_index = 1; break;
+}
+if timer = 1 {
+sound_play(choose(gir_entry1_sound, gir_entry2_sound, gir_entry3_sound, gir_entry4_sound, gir_attack1_sound, gir_attack2_sound, gir_attack3_sound, gir_attack4_sound));
+}
+
+if (on_floor || on_platform)
+{
+vspeed = 0;
+}
+
+if ( timer >= 31 )
+{
+sprite_index = gir_stand_sprite;
+state_type = "action";
+timer = 0;
+time = -1;
+}

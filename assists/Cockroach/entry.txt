@@ -1,0 +1,51 @@
+owner.assistmeter = 0
+if ( timer == 0 )
+{track_id=-1
+state_type = "entry"
+if db_charname[global.gs_character[owner.number-1],1] ="archive"
+{sprite_index = Cockroach_archive_sprite
+image_xscale =sign(owner.image_xscale)
+image_yscale =1}
+else
+{sprite_index = Cockroach_sprite;
+image_xscale = .220*sign(owner.image_xscale)
+image_yscale = .231}
+image_speed=(0.5/44)*image_number
+image_index = 0;
+time = 1000
+equipo=owner.team
+//if instance_number(Cockroach)<=1
+//if !owner.ai (para testeos)
+track_id = tempmus_play("assists/Cockroach/Music.mp3",500);
+//track_id = Music
+mode=1}
+
+if timer < time {
+with player
+{if team!=other.equipo and (state_type="stand"||state_type="run"||state_type="crouch")
+{state_type="air_attack"
+attack_type="taunt"
+hspeed=0
+timer=-other.time+other.timer-percent-1
+time=-1
+if sprite_exists (Cockroachtaunt_sprite)
+{sprite_index=Cockroachtaunt_sprite
+image_index=other.image_index/other.image_number*image_number
+image_speed=0.5/other.image_number*image_number}
+else if sprite_exists (taunt_sprite)
+sprite_index=taunt_sprite
+else
+sprite_index=win_sprite
+if image_speed=0
+image_speed=0.5}}
+}
+if ( timer >= time-1 || !instance_exists(owner))
+  {with player
+{	if attack_type="taunt"
+{	    attack_type = "none";
+	    state_type = "stand";}}
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,52 @@
+with (player){
+     if blazing >= 1{
+		 if blazedSave = 0{
+		     savedDefense = defense
+			 savedOffense = offense
+			 savedWeight = weight
+			 blazedSave = 1
+			 
+		    }
+		 if blazedSave = 1{
+		     blazingOffense = savedOffense + 0.5*blazing
+			 blazingDefense = savedDefense - 0.25*blazing
+			 blazingWeight = savedWeight - 0.05*blazing
+			 
+		     tempOffense = blazingOffense//savedOffense + 0.499*blazing
+			 tempDefense = blazingDefense//savedDefense - 0.249*blazing
+			 tempWeight = blazingWeight//savedWeight - 0.05*blazing
+			 
+			 //if offense != savedOffense and offense != blazingOffense and offense != tempOffense
+			 //tempOffense = offense + 0.499*blazing
+			 offense = tempOffense
+			 
+			 //if defense != savedDefense and defense != blazingDefense and defense != tempDefense
+			 //tempDefense = defense + 0.499*blazing
+			 defense = tempDefense
+			 
+			 weight = blazingWeight
+			}
+		 blazingTimer -= 1
+		 
+		 if blazingTimer <= 0{
+			 defense = 1//savedDefense
+			 offense = 1//savedOffense
+			 weight = savedWeight
+			 blazedSave = 0
+			 blazing = 0
+		 }
+		 
+		 repeat ( 2 )
+		 {
+			 aaa = after_image ( 2 , c_red , .25 );
+			 aaa.image_xscale *= 1 + 0.15*blazing;
+			 aaa.image_yscale *= 1 + 0.15*blazing;
+			 aaa.x += -1 + floor ( random ( 3+blazing ) );
+			 aaa.y += -1 + floor ( random ( 3+blazing ) );
+		 }
+		 
+		 
+		 
+		 
+		}
+	}

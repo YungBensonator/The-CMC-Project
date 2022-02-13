@@ -1,0 +1,41 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 81;
+    sprite_index = aru_stand_sprite;
+    image_speed = 0;
+    image_index = 0;
+  }
+
+if ( timer < time )
+  {
+    
+	if timer < 30 and !instance_exists(spark){
+	spark = instance_create(x-0+facing*0,y-24,obj_spark_effect2)
+	spark.depth = depth -1
+	}
+	
+    if timer = 30 
+      {
+	  sprite_index = aru_atk_sprite
+	sound_play(aru_voice);
+	sound_play(itemgetsnd);
+	theitem = choose(0,2,4,10,11,13,15,17,20,23,38)
+	
+	new_item = instance_create(x+25-facing*50,y-25,global.itm_kind[theitem]);
+	new_item.hspeed = 1.5-facing*3
+      }
+  }
+   
+   
+
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

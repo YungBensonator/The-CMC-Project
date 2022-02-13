@@ -1,0 +1,70 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 61;
+    sprite_index = hammerbro_stand_sprite;
+    image_speed = 0.3;
+    image_index = 0;
+	repeated = 0
+	jumpattempt = 10
+  }
+
+if ( timer < time )
+  {
+  
+  jumpattempt -= 1
+  
+  if jumpattempt <= 0{
+  if random(10) > 9.3 and vspeed = 0{
+  vspeed = -3.2
+  jumpattempt = 10
+  }
+  }
+  
+  if timer = 6 or timer = 9 or timer = 36 or timer = 39{
+    sprite_index = hammerbro_atk_sprite
+    hammer = create_projectile(2,45+facing*90,6,1.5,6,1,kick3,obj_spark_hit1,0.4,0.4,10,25,owner.id,72,assist_custom);
+	hammer.number = number
+	hammer.sprite_index = hammerbro_hammer_sprite;
+	//bottle.x = x
+	//bottle.y = y-25*size
+	hammer.image_speed = 0
+	hammer.image_index = 0
+	hammer.image_xscale = image_xscale
+	hammer.image_yscale = image_yscale
+	//hammer.alarm[0] = 99999;
+	hammer.hit = 0
+	hammer.image_alpha = 1
+	hammer.exploded = 0
+	hammer.vspeed = -5
+	hammer.hspeed = 2-facing*4
+	hammer.facing = facing
+	hammer.gravity = 0.24
+	//hammer.custom_script = custom_script
+	//hammer.read_custom_script = 1
+  
+  }
+
+  
+  if timer = 46 and repeated < 4{
+  timer = 1
+  repeated += 1
+  }
+	
+    if timer = 15 or timer = 45 
+	  sprite_index = hammerbro_stand_sprite
+
+  }
+   
+   
+
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

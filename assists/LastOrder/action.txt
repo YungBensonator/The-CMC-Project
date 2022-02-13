@@ -1,0 +1,91 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 101;
+    image_speed = 0.3;
+    image_index = 0;
+	target = -99
+	targetlock = -99
+	sprite_index = last_order_assist_run
+	
+	donezo = 0
+  }
+
+if ( timer < time )
+  {
+switch ( timer )
+      {
+	
+	case 205: image_index = 1; break;
+	case 255: image_index = 0; break;
+	
+	
+      }
+	
+	
+	
+	if timer = 99 and donezo <= 5{
+		donezo += 1
+		timer = 10
+	}
+	
+	
+	if timer < 99{
+		hspeed = 2-facing*4
+		
+		//if  !instance_exists ( ciii ) and target <= -1{
+		//	ciii = create_homing_bubble ( 2 , 2 , 30 , 25 , owner.id , 3 );
+		//    }
+			
+	    if target <= -1 or target = owner.id{
+			if collision_circle(x+22-facing*44,y-22,22,player,true,true)
+			target = collision_circle(x+22-facing*44,y-22,22,player,true,true)
+		}
+		
+		if ( target > -1 && target != noone && target != -99 && target != owner.id ){
+			hspeed = 0
+			image_index = 0
+			image_speed = 0
+			sprite_index = last_order_assist_grab
+			timer = 199
+			time = 271
+			
+		}
+	}
+	
+	
+	if timer = 205{
+		x = target.x-20+facing*40
+		y = target.y
+		
+	}
+	
+	if timer >= 200 and timer <= 204
+	move_towards_point(target.x,target.y,3)
+	
+	if timer >= 205 and timer < 255{
+		depth = target.depth - 1
+		hspeed = 0
+		target.x = x+20-facing*40
+		target.y = y
+	}
+	
+	if timer >= 205 and timer <= 255 and timer mod 10 = 5{
+    create_projectile ( 1 , 90 , 1 , 1 , 5 , 9 , shock1 , obj_spark_shock , 3 , 3 , 30 , 30 , owner.id , 5 , -1 );
+	proj.x = target.x
+	proj.y = target.y - 20
+	proj.hit_stun = 15
+	
+	}
+	
+
+  }
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

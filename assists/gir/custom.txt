@@ -1,0 +1,32 @@
+proj_destroy = 0;
+absorb2 = 0;
+moving_object = 1;
+if ( timer <= 1 && hit = 0 )
+  {
+    visible = 1;
+  }
+if ( hit_attacker )
+    exit;
+if ( ( !is_on_floor(self) || vspeed < 0 ) && hit = 0 )
+  {
+    if ( vspeed < 4.5 )
+	vspeed += 0.1;
+  }
+else
+  {
+    sound_play(explosion_sound);
+    instance_create(x,y,obj_spark_explode1);
+    shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 2.5;
+    shaker.time = 8;
+    instance_destroy();
+  }
+if ( hit > 0 || collision_point(x+sign(hspeed),y,obj_wall,1,1) )
+  {
+    sound_play(explosion_sound);
+    instance_create(x,y,obj_spark_explode1);
+    shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 2.5;
+    shaker.time = 8;
+    instance_destroy();
+  }

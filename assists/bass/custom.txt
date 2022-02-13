@@ -1,0 +1,53 @@
+if proyectil=1
+{moving_object =1
+absorb = -1
+proj_destroy = 0
+if proj_hits =0
+image_speed=0.5
+if proj_hits=0
+hspeed=8*exe;
+gravity=0.25*exe
+	if on_floor||is_on_platform
+	vspeed=0
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    image_speed = 0.8;
+    visible=1;
+    temp = 1
+    proj_hits = 1
+    image_xscale*=sign(exe)}
+	
+if (place_meeting(x,y+vspeed,obj_floor) and !place_meeting(x,y,obj_floor))||(place_meeting(x,y+vspeed,obj_platform) and !place_meeting(x,y,obj_platform))
+{if place_meeting(x,y+vspeed,obj_floor) and !place_meeting(x,y,obj_floor)
+y+=distance_to_object(obj_floor)
+else if place_meeting(x,y+vspeed,obj_platform) and !place_meeting(x,y,obj_platform)
+y+=distance_to_object(obj_platform)
+vspeed=0
+gravity=0}
+else if !position_meeting(x,y+0.5,obj_floor) and !position_meeting(x,y+0.5,obj_platform)
+gravity=0.5
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+if image_index>=image_number-image_speed
+image_index=2
+visible=1
+if timer = time+1 && proj_hits <= 5 {
+proj_hits+=1
+hspeed=0
+if proj_hits = 5 {
+damage = 8
+bkb = 6.5*attacker.size
+kbg = 3.5*attacker.size
+sfx = shock3
+gfx = obj_spark_shock
+bloom = 5 }
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+timer = 0
+time = 7
+//image_index = image_number-8
+}}

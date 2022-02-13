@@ -1,0 +1,56 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 60;
+    sprite_index = gull_stand_sprite;
+    image_speed = 0;
+    image_index = 0;
+  }
+
+if ( timer < time )
+  {
+    
+	if timer < 30 and !instance_exists(spark){
+	spark = instance_create(x-0+facing*0,y-24,obj_spark_effect2)
+	spark.depth = depth -1
+	}
+	
+    if timer = 30 
+      {
+	  if owner.target.x < x
+	  facing = 1
+	  else
+	  facing = 0
+      sound_play(swingsnd2);
+	  sprite_index = gull_atk_sprite
+	  direction = point_direction(x,y,owner.target.x,owner.target.y)
+	  speed = 7.7
+	  vspeed -= 1.7
+	  gravity = 0.17
+      }
+	if timer > 30 and !instance_exists(proj){
+		create_projectile(7,angle_correct(7),3.5,7,7,7,kick3,obj_spark_hit3,0.77,0.77,0,20,owner.id,7,-1);
+	}
+	if instance_exists(proj){
+		proj.x = x
+		proj.y = y - 20
+	}
+	
+  }
+   
+   
+
+
+if ( timer >= time-1)
+  {
+	speed = 0
+	gravity = 0
+	vspeed = 0
+	hspeed = 0
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,122 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 120;
+    image_speed = 0;
+    image_index = 0;
+	target = -99
+	sprite_index = kae_blazing
+  }
+
+if ( timer < time )
+  {
+switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	
+	case 205: image_index = 1; break;
+	case 210: image_index = 2; break;
+	case 215: image_index = 3; break;
+	
+	case 60: sprite_index = kae_walk; break;
+	case 60: image_index = 0; break;
+	case 60: image_speed = 0.3; break;
+	
+      }
+	
+	if timer = 15 and !instance_exists(global.blazingStatus){
+	global.blazingStatus = create_projectile(0,361,0,0,0,0,-1,-1,0,0,0,0,owner.id,9999999,assist_custom);
+	global.blazingStatus.x = 10
+	global.blazingStatus.y = 10
+	global.blazingStatus.hit = 2
+	global.blazingStatus.alarm[0] = 9999999
+	}
+	if timer = 15{
+	sound_play(kae_voice)
+	owner.blazing += 1
+	owner.blazingTimer = 60 * 12
+	tp_spark = create_spark(0,0,self.id);
+	tp_spark.x = owner.x
+	tp_spark.y = owner.y
+	tp_spark.sprite_index = kae_fire_eff;
+    tp_spark.image_speed = 0.5;
+	tp_spark.image_alpha = 0.7;
+    tp_spark.image_xscale = image_xscale * 1.2
+    tp_spark.image_yscale = image_yscale * 1.2
+    tp_spark.depth = owner.depth - 0.1;
+	tp_spark.snap = owner.id
+	}
+	
+	if timer = 60{
+	if targetlock.x < x
+	facing = 1
+	else if targetlock.x > x
+	facing = 0
+	
+	move_towards_point(targetlock.x,targetlock.y,8)
+	}
+	
+	if timer > 60 and timer < 75 and locked = 0
+	move_towards_point(targetlock.x,targetlock.y,8)
+	
+	if distance_to_point(targetlock.x,targetlock.y) <= 20 and timer < 75 and timer >60{
+	locked = 1
+	timer = 75
+	speed = 0
+	}
+	
+	if timer = 75
+	speed = 0
+	
+	if timer = 77 and locked = 1{
+	timer = 199
+	time = 260
+	sprite_index = kae_blazing
+	image_speed = 0
+	}
+	
+	if timer = 215 and locked = 1{
+	targetlock.blazing += 1
+	targetlock.blazingTimer = 60 * 12
+	
+	tp_spark = create_spark(0,0,self.id);
+	tp_spark.x = targetlock.x
+	tp_spark.y = targetlock.y
+	tp_spark.sprite_index = kae_fire_eff;
+    tp_spark.image_speed = 0.5;
+	tp_spark.image_alpha = 0.7;
+    tp_spark.image_xscale = image_xscale * 1.2
+    tp_spark.image_yscale = image_yscale * 1.2
+    tp_spark.depth = targetlock.depth - 0.1;
+	tp_spark.snap = targetlock.id
+	
+	}
+	
+	  
+    if ( target > -1 && target != noone && target != -99 && target != owner.id ) and targetlock = 0
+      {
+	  targetlock = target
+      }
+    if  !instance_exists ( proj ) and targetlock = 0
+      {
+      create_homing_bubble ( 50 , 30 , 0 , 0 , self.id , 5 );
+      }
+	  
+	
+
+
+
+ 
+
+  }
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

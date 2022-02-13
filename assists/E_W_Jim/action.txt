@@ -1,0 +1,70 @@
+if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 49;
+    image_speed = 0;
+    image_index=1
+  }
+
+  switch (timer){
+    case 1: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 19: image_index = 3; break;
+    case 24: image_index = 4; break;
+    case 29: image_index = 5; break;
+
+}
+
+if ( timer < time )
+  {
+
+if timer = 4{   
+bulleteff = instance_create( x,y,obj_spark );
+bulleteff.attacker=owner.id;
+bulleteff.x=x+18.9*(1-kingpin*2);
+bulleteff.y=y-32.1;
+bulleteff.sprite_index=EarthWormJim_bullet_sprite;
+bulleteff.image_index=0;
+bulleteff.image_xscale=0.7;
+bulleteff.image_yscale=0.7;
+bulleteff.image_speed=0.3;
+bulleteff.alarm[0]=15;
+bulleteff.depth=depth-1;
+}
+
+
+if timer = 19{
+sound_play(choose(EarthWormJim_shot_voice1,EarthWormJim_shot_voice2,EarthWormJim_shot_voice3,EarthWormJim_shot_voice4));
+bullet=create_projectile ( 7 , 34+112*kingpin , 8 , 3 , 12 , 5 , magic1,obj_spark_hit1, 0.7 , 0.7 , 18.9 , 32.1 , owner.id , 160 , assist_custom );
+bullet.image_speed=0.25;
+bullet.image_index=0;
+bullet.sprite_index = EarthWormJim_bullet_sprite;
+bullet.image_xscale=0.7*(1-kingpin*2);
+bullet.vspeed=0;
+bullet.hit_stun=5;
+bullet.depth=depth-1;
+bullet.image_alpha=1;
+bullet.reflect=0;
+bullet.hspeed=0;
+bullet.hit=2;
+}
+if timer < 35 && bulleteff.image_index=1.8{
+bulleteff.image_index=0;
+}
+if timer = 35{
+bullet.hspeed=6*(1-kingpin*2);
+bullet.hit=0;
+}
+   
+}
+
+
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

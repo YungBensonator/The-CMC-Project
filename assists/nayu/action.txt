@@ -1,0 +1,88 @@
+// Action //
+if ( timer == 0 )
+{
+  state_type = "action";
+  attack_type = "attack";
+  sprite_index = nayu_attack_sprite;
+  image_speed = 0;
+  image_index = 0;
+  time = 61;
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 33: image_index = 4; break;
+    case 36: image_index = 5; break;
+    case 39: image_index = 6; break;
+    case 42: image_index = 7; break;
+    case 45: image_index = 8; break;
+    case 48: image_index = 9; break;
+  }
+  if ( timer < 33 && !on_floor && !on_platform )
+  {
+    state_type = "entry";
+    sprite_index = nayu_entry_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    vspeed = 0;
+    timer = 1;
+    time = 31;
+    temp = 0;
+  }
+  if ( timer = 33 )
+  {
+    hspeed = 1 - facing * 2;
+    vspeed = -3.5;
+    sound_play ( choose ( nayu_attack_voice1, nayu_attack_voice2, nayu_attack_voice3, nayu_attack_voice4 ) );
+  }
+  if ( timer = 36 )
+  {
+    sound_play ( nayu_tornado_sound );
+    tornado = create_projectile ( 2 , 90 , 2.5 , 0 , 6 , 1 , water2 , obj_spark_water , 0.4 , 0.4 , 10 , -10 , owner.id , 60 , assist_custom );
+    tornado.max_hits = 9;
+    tornado.di = 0;
+    tornado.weight_kb = 1;
+    tornado.sprite_index = nayu_tornado_effect;
+    tornado.image_index = 0;
+    tornado.image_speed = 0.45;
+    tornado.image_alpha = 0.75;
+    tornado.image_xscale = image_xscale * ( 1 - facing * 2 );
+    tornado.image_yscale = image_yscale * 2;
+    tornado.hspeed = 3 * ( 1 - facing * 2 );
+    tornado.facing = facing;
+    tornado.depth = depth - 1;
+  }
+  if ( timer >= 38 )
+    vspeed += 0.15;
+  if ( vspeed > 3.5 )
+    vspeed = 3.5;
+  if ( timer = 48 )
+    attack_type = "none";
+  if ( attack_type == "none" )
+  {
+    if ( hspeed != 0 && ( next_to_lwall || next_to_rwall ) )
+      hspeed = 0;
+    if ( on_floor || on_platform )
+    {
+      sound_play ( nayu_land_sound );
+      splash = instance_create ( x - 2.5 * ( 1 - facing * 2 ) , y , obj_spark );
+      splash.sprite_index = nayu_splash_effect;
+      splash.image_xscale = image_xscale * ( 1 - facing * 2 );
+      splash.image_yscale = image_yscale;
+      splash.image_speed = 0.45;
+      splash.image_alpha = 0.75;
+      splash.depth = depth - 1;
+      state_type = "end";
+      hspeed = 0;
+      vspeed = 0;
+      timer = 0;
+    }
+  }
+}
+if ( timer >= time - 1 )
+  timer -= 10;

@@ -1,0 +1,129 @@
+///Assist: Groudon
+/*
+Ability: Drought - Boosts the power of fire attacks by 50%. In CMC+, a fire attack is anything with the fire hit fx. (Example: Shana Dair)
+For moves without a fire hit fx despite having fire special effects (Example: Shana DownB), changes were made to still give them a bonus.
+Still a work in progress, but is solid as is (inb4 exploit is found).
+*/
+
+if timer < time
+{
+	//Attack Box Sun Buff
+	if instance_exists(attack_box)
+	{
+		if attack_box.gfx == obj_spark_fire1
+		{
+			if attack_box.boostphase = 0 //Save hitbox power
+			{
+				ogatk_box_damage = attack_box.damage;
+				ogatk_box_bkb = attack_box.bkb;
+				ogatk_box_kbg = attack_box.kbg;
+				ogatk_box_shield_damage = attack_box.shield_damage;
+				ogatk_box_hitlag_frames = attack_box.hitlag_frames;
+				ogatk_box_hit_stun = attack_box.hit_stun;
+				ogatk_box_shield_stun = attack_box.shield_stun;
+				ogatk_box_di = attack_box.di;
+				ogatk_box_priority = attack_box.priority;
+				size = attacker.size;
+				
+				//Needed so multihits that link into each other don't get screwed over
+				if ogatk_box_bkb >= 7 {bkb_scale = 1;}
+				else {bkb_scale = 0;}
+				
+				if ogatk_box_kbg >= 4 {kbg_scale = 1;}
+				else {kbg_scale = 0;}
+				
+				if ogatk_box_hitlag_frames >= 14 {hitlag_scale = 1;}
+				else {hitlag_scale = 0;}
+				
+				attack_box.boostphase += 1;
+			}
+			
+			if attack_box.boostphase = 1 //Boost hitbox power
+			{
+				attack_box.damage = ogatk_box_damage * weather_bonus * size;
+				attack_box.bkb = ogatk_box_bkb * ( 1 + ( (weather_bonus - 1) * bkb_scale ) ) * size;
+				attack_box.kbg = ogatk_box_kbg * ( 1 + ( (weather_bonus - 1) * kbg_scale ) ) * size;
+				attack_box.hitlag_frames = round(ogatk_box_hitlag_frames * ( 1 + ( (weather_bonus - 1) * hitlag_scale ) ) * size);
+				attack_box.shield_damage = round(ogatk_box_shield_damage * weather_bonus * size);
+				attack_box.hit_stun = ogatk_box_hit_stun + (weather_bonus * atkstun_scale) * size;
+				attack_box.shield_stun = ogatk_box_shield_stun + (weather_bonus * atkstun_scale) * size;
+				attack_box.di = ogatk_box_di / weather_bonus * size;
+				attack_box.priority = (ogatk_box_priority + 1) * size;
+				
+				attack_box.boostphase += 1;
+			}
+		}
+	}
+
+	//Projectile Box Sun Buff - manually adjusted numbers atm cuz they want to act dumb
+	if instance_exists(projectile_box)
+	{
+		if projectile_box.gfx == obj_spark_fire1
+		{
+			if projectile_box.boostphase = 0 //Save hitbox power
+			{
+				ogproj_box_damage = projectile_box.damage;
+				ogproj_box_bkb = projectile_box.bkb;
+				ogproj_box_kbg = projectile_box.kbg;
+				ogproj_box_shield_damage = projectile_box.shield_damage;
+				ogproj_box_hitlag_frames = projectile_box.hitlag_frames;
+				ogproj_box_hit_stun = projectile_box.hit_stun;
+				ogproj_box_shield_stun = projectile_box.shield_stun;
+				ogproj_box_di = projectile_box.di;
+				ogproj_box_priority = projectile_box.priority;
+				size = attacker.size;
+				
+				//Needed so multihits that link into each other don't get screwed over
+				if ogproj_box_bkb >= 7 {bkb_scale = 1;}
+				else {bkb_scale = 0;}
+				
+				if ogproj_box_kbg >= 4 {kbg_scale = 1;}
+				else {kbg_scale = 0;}
+				
+				if ogproj_box_hitlag_frames >= 14 {hitlag_scale = 1;}
+				else {hitlag_scale = 0;}
+				
+				projectile_box.boostphase += 1;
+			}
+			
+			if projectile_box.boostphase = 1 //Boost hitbox power
+			{
+				projectile_box.damage = ogproj_box_damage * weather_bonus * size;
+				projectile_box.bkb = ogproj_box_bkb * ( 1 + ( (weather_bonus - 1) * bkb_scale ) ) * size;
+				projectile_box.kbg = ogproj_box_kbg * ( 1 + ( (weather_bonus - 1) * kbg_scale ) ) * size;
+				projectile_box.hitlag_frames = round(ogproj_box_hitlag_frames * ( 1 + ( (weather_bonus - 1) * hitlag_scale ) ) * size);
+				projectile_box.shield_damage = round(ogproj_box_shield_damage * weather_bonus * size);
+				projectile_box.hit_stun = ogproj_box_hit_stun + (weather_bonus * projstun_scale) * size;
+				projectile_box.shield_stun = ogproj_box_shield_stun + (weather_bonus * projstun_scale) * size;
+				projectile_box.di = ogproj_box_di / weather_bonus * size;
+				projectile_box.priority = (ogproj_box_priority + 1) * size;
+				
+				projectile_box.boostphase += 1;
+			}
+		}
+	}
+	
+	//Adds Drought Buff to non-attack/proj box moves (example: Shana's DownB)
+	if instance_exists(player)
+	{
+		if (db_charname[global.gs_character[player.number-1],1] == "shana")
+		{
+			with(player)
+			{
+				if (state_type = "air_attack" || state_type = "attack" ) && attack_type = "downb" && state_type != "flinch" && attack_type != "air_flinch" 
+				{
+					flamehand = create_projectile(0.25,361,0,0,5,0,fire1,obj_spark_fire1,0.875,0.85,20,19.5,self.id,1,no_script);
+					flamehand.no_reflect = 1;
+					flamehand.absorb = 0;
+					flamehand.absorb2 = 0;
+					flamehand.shield_stun = 5;
+				}
+			}
+		}
+	}
+}
+
+if timer >= time-1
+{
+	instance_destroy();
+}

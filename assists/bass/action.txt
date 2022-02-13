@@ -1,0 +1,99 @@
+if arma=0{if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 76;
+    sprite_index = blastcharge2;
+    image_speed=0.5
+    image_speed = 0;
+    image_index = 0;
+sound_play(cargando)
+  }
+if timer < time {
+if image_index>=image_number-image_speed and sprite_index= blastcharge2
+image_index=2
+if sprite_index!=disparando
+image_speed=0.25
+if timer >= 30 and timer < 75
+{if timer=30
+{sound_stop(cargando)
+sprite_index=disparando
+image_index=0
+image_speed=0.5}
+sound_play(shot)
+repeat (choose(6,7,8,9))
+{air = create_projectile(1.5*tamano,180*!facing,0,0,9,1,choose(shock1,shock2,fire1,fire2,explodehit1,explodehit2),choose(obj_spark_shock,obj_spark_fire1,obj_spark_explode1,obj_spark_explode2),0.3*tamano,0.3*tamano,(random(250)+8)*tamano,(random(80)*tamano),owner.id,2,0);
+air.di=0
+air.sprite_index = choose(balaV,balaA);
+air.image_xscale *= sign(image_xscale)
+air.depth-=90}
+}}
+}
+if arma=1{
+if timer = 0
+  {sound_play(cargando)
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 40;
+    sprite_index = darkblast;
+    image_speed=0.5
+    image_speed = 0;
+    image_index = 0;
+  }
+image_speed=0.25
+if timer=20
+{sound_stop(cargando)
+sound_play(weel)
+rueda=create_projectile(3*tamano,45+90*facing,0,0,18,5,choose(shock1,shock2),obj_spark_shock,tamano,tamano,10*tamano,20*tamano,owner.id,1000,assist_custom);
+rueda.di=0
+rueda.sprite_index=darkweel
+rueda.proyectil=1
+rueda.exe=tamano*sign(image_xscale)}
+}
+if arma=2
+{if timer = 0
+  {
+    state_type = "action";
+    attack_type = "atk1"
+    timer = 0;
+    time = 76;
+    sprite_index = blastcharge2;
+    image_speed=0.5
+    image_speed = 0;
+    image_index = 0;
+sound_play(cargando)
+  }
+if timer < time {
+if image_index>=image_number-image_speed and sprite_index= blastcharge2
+image_index=2
+if sprite_index!=retrocede
+image_speed=0.25
+else if image_index>=image_number-image_speed and sprite_index= retrocede
+image_index=4
+if timer >= 30 and timer < 75
+{if timer=30
+{sound_stop(cargando)
+sprite_index=retrocede
+image_index=0
+image_speed=0.5
+hspeed=-5*sign(image_xscale)}
+sound_play(shot)
+repeat (choose(3,4,5,6))
+{air = create_projectile(2*tamano,180*facing,0,0,9,1,choose(shock1,shock2,fire1,fire2,explodehit1,explodehit2),choose(obj_spark_shock,obj_spark_fire1,obj_spark_explode1,obj_spark_explode2),0.3*tamano,0.3*tamano,(random(210)+8)*tamano,(random(50)*tamano),owner.id,2,0);
+air.y+=(abs(air.x-x)/2)
+air.di=0
+air.sprite_index = choose(balaV,balaA);
+air.image_xscale *= sign(image_xscale)
+air.depth-=90}
+}}
+}
+if ( timer >= time-1)
+  {
+    state_type = "end";
+    attack_type = "none";
+    timer = 0;
+    time =  2;
+    speed=0
+  }
