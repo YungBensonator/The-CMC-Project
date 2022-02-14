@@ -1,0 +1,138 @@
+// Set the camera boundaries + maximal zoom level. Minimal zoom level is determined by camera boundaries.
+globalvar tile_scale;
+
+tile_scale = 0.9
+temp_stage_name = "sample_course3"
+
+
+//YOU DONT NEED TO CHANGE ANYTHING BELOW
+
+camera_boundary_l = 0;
+camera_boundary_u = 0;
+camera_boundary_r = 800;
+camera_boundary_d = 80 * 32;
+camera_boundary_zoom = 560;
+//global.gs_can_pause = 0;
+
+// Set the players' starting position and respawn point.
+disable_default_tileset_collisions = 1
+player_spawn_x [ 0 ] = 224;
+player_spawn_y [ 0 ] = 736;
+player_spawn_x [ 1 ] = 224;
+player_spawn_y [ 1 ] = 736;
+player_spawn_x [ 2 ] = 224;
+player_spawn_y [ 2 ] = 736;
+player_spawn_x [ 3 ] = 224;
+player_spawn_y [ 3 ] = 736;
+player_spawn_x [ 4 ] = 224;
+player_spawn_y [ 4 ] = 736;
+player_spawn_x [ 5 ] = 224;
+player_spawn_y [ 5 ] = 736;
+respawn_x = 164;
+respawn_y = 736;
+mode = 0
+global.gs_altstage = 0
+
+
+// Install BG.
+
+stage_install_bg_object();
+stage_control = obj_stage_bg.id;
+stage_control.mode = 0;
+with ( stage_control )
+  {
+  temp_stage_name = other.temp_stage_name
+  slope1_msk = stage_msk_add ( "stage/"+string(temp_stage_name)+"/slope1.png" );
+  slope2_msk = stage_msk_add ( "stage/"+string(temp_stage_name)+"/slope2.png" );
+  slope3_msk = stage_msk_add ( "stage/"+string(temp_stage_name)+"/slope3.png" );
+  
+  
+  door_sprite = stage_spr_add ( "stage/"+string(temp_stage_name)+"/door.png" , 1 , 16 , 63 );
+  
+  tenshi_sprite = stage_spr_add ( "stage/"+string(temp_stage_name)+"/tenshi_strip4.png" , 4 , 29 , 58 );
+  tewi_sprite = stage_spr_add ( "stage/"+string(temp_stage_name)+"/tewi_strip4.png" , 4 , 16 , 50 );
+  
+  slope4_msk = stage_msk_add ( "stage/"+string(temp_stage_name)+"/slope4.png" );
+  
+  bg_pixel = bg_add ( "stage/"+string(temp_stage_name)+"/tileset.png" );
+  bg_pixel2 = bg_add ( "stage/"+string(temp_stage_name)+"/pixel_collision.png" );
+  
+  background_index[0] = bg_add ( "stage/"+string(temp_stage_name)+"/rem_back.png" );;
+  
+  
+  
+  
+  var ci;
+  ci = "";
+  if ( temp_loading )
+  ci = temp_directory + "\";
+  le_file = ci+"stage/"+string(temp_stage_name)+"/tile.map"
+  le_file2 = ci+"stage/"+string(temp_stage_name)+"/custom_collision.txt"
+  le_file3 = ci+"stage/"+string(temp_stage_name)+"/custom_enemy.txt"
+  le_file4 = ci+"stage/"+string(temp_stage_name)+"/custom_door.txt"
+  le_file5 = ci+"stage/"+string(temp_stage_name)+"/custom_pole.txt"
+  
+  
+  
+  
+  /*
+  tenshi = instance_create ( 3168*tile_scale , 1504*tile_scale , obj_npc );
+  tenshi.sprite_index = tenshi_sprite;
+  tenshi.depth = 6;
+  tenshi.image_xscale = 0.7;
+  tenshi.image_yscale = 0.7;
+  tenshi.image_speed = 0.1
+  tenshi.dialogue = "Tenshi: If you see some suspicious looking walls, BREAK THEM ahahaha."
+  */
+  /*
+  tewi = instance_create ( 256*tile_scale , 1504*tile_scale , obj_npc2 );
+  tewi.sprite_index = tewi_sprite;
+  tewi.depth = 6;
+  tewi.image_xscale = 0.7;
+  tewi.image_yscale = 0.7;
+  tewi.image_speed = 0.1
+  tewi.dialogue = "cutscenes/eiki_level/start.txt"
+  */
+  
+  
+  
+  
+  load_enemy_database();//make sure to call this on the init of your planned usage content!!!!!!!
+  load_enemy_assets("mfairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("fairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("sfairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("kedama");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("gfairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("met");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("rumia");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("mole");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("fallingspike");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("toyagumon");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("toyagumonb");//make sure to call this on the init of your planned usage content!
+  
+  
+  event_user(2);
+  
+  event_user(0);
+  
+  
+  /*
+  with (obj_floor){visible = 1}
+  with (obj_leftwall){visible = 1}
+  with (obj_rightwall){visible = 1}
+  with (obj_ceiling){visible = 1}
+  with (obj_platform){visible = 1}
+  */
+  
+  
+  }
+
+if ( global . gs_altstage > 0 )
+  camera_boundary_d = camera_boundary_u + ( camera_boundary_r - camera_boundary_l ) / 16 * 9;
+
+// Set the death boundaries.
+
+death_l = camera_boundary_l - 48;
+death_u = camera_boundary_u - 48;
+death_r = camera_boundary_r + 48;
+death_d = camera_boundary_d + 48;

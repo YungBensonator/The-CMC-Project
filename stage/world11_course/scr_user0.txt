@@ -1,0 +1,108 @@
+// Layout generation.
+// empty space - empty space
+
+map[0,0] = 0;
+ti[0,0] = 0;
+tx[0,0] = 0;
+ty[0,0] = 0;
+
+var str, c, o, i, xx, yy, tn;
+w = 0;
+h = 0;
+//event_user(2);
+
+file = file_text_open_read(le_file)
+
+//file = file_text_open_read ( "stage/race2fin/layout.txt" );
+h = file_text_read_real ( file );
+file_text_readln ( file );
+
+//room_height = h*32
+
+/*
+obj_game_control.camera_boundary_l = 0;
+obj_game_control.camera_boundary_u = 0;
+obj_game_control.camera_boundary_d = h * 32;
+obj_game_control.death_l = -32;
+obj_game_control.death_u = -32;
+obj_game_control.death_d = obj_game_control.camera_boundary_d + 32;
+*/
+
+obj_game_control.player_spawn_x [ 0 ] = file_text_read_real ( file ) * 1*tile_scale;
+file_text_readln ( file );
+obj_game_control.player_spawn_y [ 0 ] = file_text_read_real ( file ) * 1*tile_scale;
+file_text_readln ( file );
+
+for (i = 1; i <= 5; i+= 1){
+	obj_game_control.player_spawn_x [ i ] = obj_game_control.player_spawn_x [ 0 ]
+	obj_game_control.player_spawn_y [ i ] = obj_game_control.player_spawn_y [ 0 ]
+	
+}
+
+
+yy = 0;
+while ( yy < h )
+  {
+  str = file_text_read_string ( file );
+  w = string_length ( str );
+  for ( i = 1 ; i <= w ; i += 1 )
+    {
+    c = string_char_at ( str , i );
+    tn = ord ( c );
+    if ( tn == 32 )
+      {
+      map[i-1,yy] = 0;
+      }
+      else
+      {
+      map[i-1,yy] = 1;
+      ti[i-1,yy] = tn - 33;
+      tn -= 33;
+      tx[i-1,yy] = tn mod 9;
+      ty[i-1,yy] = floor ( tn / 9 );
+      }
+    }
+  file_text_readln ( file );
+  yy += 1;
+  }
+file_text_close ( file );
+
+for ( x = w - 1 ; x >= 0 ; x -= 1 )
+for ( y = h - 1 ; y >= 0 ; y -= 1 )
+  {
+  if ( map[x,y] == 0 )
+    continue;
+    
+	if upside_down = 1{
+		erm = h//32
+		epic_y = erm - y
+		addendun = 0
+		
+		pingas = tile_add( bg_pixel , 0 + tx[x,y] * 32 , 0 + ty[x,y] * 32 , 32 , 32 , x * (32*tile_scale) , (epic_y*(32*tile_scale))+addendun , 10 );
+		tile_set_scale(pingas,tile_scale,-tile_scale)
+	}else{
+		//pingas = tile_add( bg_pixel , 0 + tx[x,y] * 32 , 0 + ty[x,y] * 32 , 32 , 32 , x * 32 , y * 32 , 10 );
+		pingas = tile_add( bg_pixel , 0 + tx[x,y] * 32 , 0 + ty[x,y] * 32 , 32 , 32 , x * (32*tile_scale) , y * (32*tile_scale) , 10 );
+		tile_set_scale(pingas,tile_scale,tile_scale)
+		
+		
+	}
+	
+    //tile_add( bg_pixel , 1 + tx[x,y] * 34 , 1 + ty[x,y] * 34 , 32 , 32 , x * 24 - 4 , y * 24 - 4 , 9 );
+    //pingas = tile_add( bg_pixel , 0 + tx[x,y] * 32 , 0 + ty[x,y] * 32 , 32 , 32 , x * 32 , y * 32 , 10 );
+	//tile_set_scale(pingas,1,-1)
+	
+  }
+
+obj_game_control.camera_boundary_l = 0;
+obj_game_control.camera_boundary_u = 0;
+obj_game_control.camera_boundary_d = h * 32*tile_scale;
+obj_game_control.camera_boundary_r = w * 32*tile_scale;
+obj_game_control.death_l = -32;
+obj_game_control.death_u = -32;
+obj_game_control.death_r = obj_game_control.camera_boundary_r + 32;
+obj_game_control.death_d = obj_game_control.camera_boundary_d + 32;
+
+
+
+event_user(1);

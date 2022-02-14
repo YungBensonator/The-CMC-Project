@@ -1,0 +1,57 @@
+// loading the credits file
+
+//show_message ( "we will try to read the file" );
+
+// number of the credit events - this is how many times the game will spawn the names or some shit like that you know
+credit_events = 0;
+// type of a credit entry
+// 0 - blank - nothing will be spawned
+// 1 - ordinary entry
+// 2 - category
+credit_type[0] = 0;
+// string of a credit entry - doesn't matter for blank type entries
+credit_text[0] = "";
+
+var file, str;
+
+// we open the file with credits data
+if ( temp_loading )
+  file = file_text_open_read ( temp_directory + "/stage/credits/credits.txt" );
+  else
+  file = file_text_open_read ( working_directory + "/stage/credits/credits.txt" );
+
+// while the file hasn't ended yet...
+while ( !file_text_eof ( file ) )
+  {
+  // we read a line
+  str = file_text_read_string ( file );
+  // then move on to the next line, so we can read it in the next iteration of the loop
+  file_text_readln ( file );
+  // if the line is blank, we mark the event as empty and move on
+  if ( str == "" )
+    {
+    // just push the credit_events number further, the type is 0 by default
+    credit_events += 1;
+    continue;
+    }
+  // if the line begins with a ~, it means it's a category name
+  if ( string_char_at ( str , 1 ) == '~' )
+    {
+    // remove the first character in the string (this is always ~ here - it's not supposed to be displayed)
+    str = string_delete ( str , 1 , 1 );
+    // mark the credit type as 2
+    credit_type[credit_events] = 2;
+    }
+    else
+  // if the line begins with anything else, it's a normal credits entry
+    credit_type[credit_events] = 1;
+  // get the rest of the string (without an optional ~) to the variable
+  credit_text[credit_events] = str;
+  // push the iterator
+  credit_events += 1;
+  }
+
+// after we are done with the file, we close it
+file_text_close(file);
+
+//show_message ( "we did read the file" );

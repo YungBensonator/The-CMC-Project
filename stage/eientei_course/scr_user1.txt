@@ -1,0 +1,627 @@
+// Layout generation.
+// empty space - empty space
+
+map[0,0] = 0;
+ti[0,0] = 0;
+tx[0,0] = 0;
+ty[0,0] = 0;
+
+var str, c, o, i, xx, yy, tn;
+w = 0;
+h = 0;
+
+show_debug_message("before opening le_file2")
+
+
+file = file_text_open_read(le_file2)
+
+h = file_text_read_real ( file );
+file_text_readln ( file );
+
+
+obj_game_control.player_spawn_x [ 0 ] = file_text_read_real ( file ) * 1*tile_scale;
+file_text_readln ( file );
+obj_game_control.player_spawn_y [ 0 ] = file_text_read_real ( file ) * 1*tile_scale;
+file_text_readln ( file );
+
+for (i = 1; i <= 5; i+= 1){
+	obj_game_control.player_spawn_x [ i ] = obj_game_control.player_spawn_x [ 0 ]
+	obj_game_control.player_spawn_y [ i ] = obj_game_control.player_spawn_y [ 0 ]
+	
+}
+
+show_debug_message("after setting player spawn points")
+
+yy = 0;
+while ( yy < h )
+  {
+  show_debug_message("durng the while in the collisions one")
+  str = file_text_read_string ( file );
+  w = string_length ( str );
+  for ( i = 1 ; i <= w ; i += 1 )
+    {
+    c = string_char_at ( str , i );
+    tn = ord ( c );
+    if ( tn == 32 )
+      {
+      map[i-1,yy] = 0;
+      }
+      else
+      {
+      map[i-1,yy] = 1;
+      ti[i-1,yy] = tn - 33;
+      tn -= 33;
+      tx[i-1,yy] = tn mod 10;
+      ty[i-1,yy] = floor ( tn / 10 );
+      }
+    }
+  file_text_readln ( file );
+  yy += 1;
+  }
+file_text_close ( file );
+
+
+
+for ( x = w - 1 ; x >= 0 ; x -= 1 )
+for ( y = h - 1 ; y >= 0 ; y -= 1 )
+  {
+  if ( map[x,y] == 0 )
+    continue;
+  switch ( ti[x,y] )
+    {
+    // top left
+    case 0: 
+      map[x,y] = 1;
+      break;
+    // / top
+    case 1:
+      map[x,y] = 2;
+      break;
+    // \ top right
+    case 2:
+      map[x,y] = 3;
+      break;
+    // \ top with 2 walls
+    case 3:
+      map[x,y] = 4;
+      break;
+    // / <
+    case 4:
+      map[x,y] = 5;
+      break;
+    // =
+    case 5:
+      map[x,y] = 6;
+      break;
+    // >
+    case 6:
+      map[x,y] = 7;
+      break;
+    // left
+    case 10:
+      map[x,y] = 8;
+      break;
+    // full block
+    case 11:
+      map[x,y] = 9;
+      break;
+    // right
+    case 12:
+      map[x,y] = 10;
+      break;
+    // mid with 2 walls
+    case 13:
+      map[x,y] = 11;
+      break;
+    // sloped left
+    case 14:
+      map[x,y] = 12;
+      break;
+    // slope right
+    case 15:
+      map[x,y] = 13;
+      break;
+    // bottom left
+    case 20:
+      map[x,y] = 14;
+      break;
+    // bottom
+	case 21:
+	  map[x,y] = 15
+	  break;
+	// bottom right
+	case 22:
+	  map[x,y] = 16
+	  break;
+	// bottom with 2 walls
+	case 23:
+	  map[x,y] = 17
+	  break;
+	// slop down left
+	case 24:
+	  map[x,y] = 18
+	  break;
+	// slope down right
+	case 25:
+	  map[x,y] = 19
+	  break;
+	// stairs
+    case 16:
+      map[x,y] = 20;
+      break;
+	//spikes
+	case 17:
+      map[x,y] = 21;
+      break;
+	//platform
+	case 26:
+      map[x,y] = 22;
+      break;
+	//breakable block
+	case 27:
+      map[x,y] = 23;
+      break;
+	//lockedwalls
+	case 30: case 31: case 32: case 33: 
+	case 34: case 35: case 36: case 37:
+	  map[x,y] = 24
+	  break;
+	// keys
+	case 40: case 41: case 42: case 43: 
+	case 44: case 45: case 46: case 47:
+	  map[x,y] = 25
+	  break;
+	//all around lava block
+	case 7:
+      map[x,y] = 26;
+      break;
+	//lava bottom
+	case 8:
+      map[x,y] = 27;
+      break;
+	//lava roof
+	case 9:
+      map[x,y] = 28;
+      break;
+	//spring floor
+	case 18:
+      map[x,y] = 29;
+      break;
+	//spring ceiling
+	case 19:
+      map[x,y] = 30;
+      break;
+	//spring right wall
+	case 28:
+      map[x,y] = 31;
+      break;
+	//spring left wall
+	case 29:
+      map[x,y] = 32;
+      break;
+	//belt right
+	case 38:
+      map[x,y] = 33;
+      break;
+	//belt left
+	case 39:
+      map[x,y] = 34;
+      break;
+	//water
+	case 48:
+      map[x,y] = 35;
+      break;
+	//ladder+platform
+	case 49:
+      map[x,y] = 36;
+      break;
+	// nothingness
+    default:
+      map[x,y] = 0;
+      break;
+    }
+	
+  
+  if ( ti[x,y] >= 30 and ti[x,y] <= 37 ) or ( ti[x,y] >= 40 and ti[x,y] <= 47 )
+    {
+	
+	if upside_down = 1{
+		erm = h//32
+		epic_y = erm - y
+		addendun = 0
+		
+		pingas = tile_add( bg_pixel2 , 0 + tx[x,y] * 32 , 0 + ty[x,y] * 32 , 32 , 32 , x * (32*tile_scale) , (epic_y*(32*tile_scale))+addendun , 11 );
+		tile_set_scale(pingas,tile_scale,-tile_scale)
+	}else{
+		pingas = tile_add( bg_pixel2 , 0 + tx[x,y] * 32 , 0 + ty[x,y] * 32 , 32 , 32 , x * (32*tile_scale) , y * (32*tile_scale) , 11 );
+		tile_set_scale(pingas,tile_scale,tile_scale)
+	}
+		
+    //tile_add( bg_pixel2 , 0 + tx[x,y] * 32 , 0 + ty[x,y] * 32 , 32 , 32 , x * (32*tile_scale) , y * (32*tile_scale) , 11 );
+    }
+  
+	
+	
+  }
+
+for ( x = 0 ; x < w ; x += 1 )
+for ( y = 0 ; y < h ; y += 1 )
+  {
+  if ( map[x,y] == 0 )
+    continue;
+  switch ( map[x,y] )
+    {
+    case 1:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      
+	  
+      break;
+    case 2:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+    case 3:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      break;
+    case 4:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      break;
+    case 5:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+    case 6:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+	case 7:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+	case 8:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      break;
+    case 9:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+    case 10:
+      o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      break;
+    case 11:
+      o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      break;
+    case 12:
+      o = instance_create ( x * (32*tile_scale) - 1 , y * (32*tile_scale) , obj_floor );
+      o.sprite_index = slope1_msk;
+	  o.image_xscale = (32*tile_scale)/24
+	  o.image_yscale = (32*tile_scale)/24
+      break;
+    case 13:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.sprite_index = slope2_msk;
+	  o.image_xscale = (32*tile_scale)/24
+	  o.image_yscale = (32*tile_scale)/24
+      break;
+    case 14:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+    case 15:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+    case 16:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      break;
+	case 17:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      break;
+	case 18:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + 1 , obj_ceiling );
+      o.sprite_index = slope3_msk;
+	  o.image_xscale = (32*tile_scale)/24
+	  o.image_yscale = (32*tile_scale)/24
+      break;
+	case 19:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + 1 , obj_ceiling );
+      o.sprite_index = slope4_msk;
+	  o.image_xscale = (32*tile_scale)/24
+	  o.image_yscale = (32*tile_scale)/24
+      break;
+	case 20:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_stairs );
+      o.image_yscale = (32*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+      break;
+	case 21:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_spikes );
+	  o.sprite_index = spr_platform
+      o.image_yscale = (16*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+      break;
+	case 22:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_platform );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+	case 23:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_break_block );
+	  o.depth = 10
+	  o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = (32*tile_scale) / 16;
+	  o.image_alpha = 1
+	  o.visible = 0
+	  with (o){
+	  my_tile = tile_layer_find(10,x,y)
+	  my_tile2 = tile_layer_find(9,x,y)
+	  my_floor = instance_create ( x , y , obj_floor );
+      my_floor.image_xscale = (32*tile_scale) / 16;
+	  my_floor.image_yscale = 1*tile_scale;
+      my_leftw = instance_create ( x , y + 1 , obj_leftwall );
+      my_leftw.image_yscale = (32*tile_scale) / 16;
+	  my_leftw.image_xscale = 1*tile_scale;
+      my_rightw = instance_create ( x + (16*tile_scale) , y + 1 , obj_rightwall );
+      my_rightw.image_yscale = (32*tile_scale) / 16;
+	  my_rightw.image_xscale = 1*tile_scale;
+      my_ceil = instance_create ( x , y + (16*tile_scale) , obj_ceiling );
+      my_ceil.image_xscale = (32*tile_scale) / 16;
+	  my_ceil.image_yscale = 1*tile_scale;
+	  }
+      break;
+	case 24:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_locked_block );
+	  o.depth = 11
+	  o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = (32*tile_scale) / 16;
+	  o.image_alpha = 1
+	  o.my_type = 38-ti[x,y]
+	  o.visible = 0
+	  with (o){
+	  my_tile = tile_layer_find(11,x,y)
+	  my_tile2 = tile_layer_find(9,x,y)
+	  my_floor = instance_create ( x , y , obj_floor );
+      my_floor.image_xscale = (32*tile_scale) / 16;
+	  my_floor.image_yscale = 1*tile_scale;
+      my_leftw = instance_create ( x , y + 1 , obj_leftwall );
+      my_leftw.image_yscale = (32*tile_scale) / 16;
+	  my_leftw.image_xscale = 1*tile_scale;
+      my_rightw = instance_create ( x + (16*tile_scale) , y + 1 , obj_rightwall );
+      my_rightw.image_yscale = (32*tile_scale) / 16;
+	  my_rightw.image_xscale = 1*tile_scale;
+      my_ceil = instance_create ( x , y + (16*tile_scale) , obj_ceiling );
+      my_ceil.image_xscale = (32*tile_scale) / 16;
+	  my_ceil.image_yscale = 1*tile_scale;
+	  }
+      break;
+	case 25:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_locked_key );
+	  o.depth = 11
+	  o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = (32*tile_scale) / 16;
+	  o.image_alpha = 1
+	  o.my_type = 48-ti[x,y]
+	  o.visible = 0
+	  with (o){
+	  my_tile = tile_layer_find(11,x,y)
+	  my_tile2 = tile_layer_find(9,x,y)
+	  }
+      break;
+	case 26:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + 1 , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) + 8 , y * (32*tile_scale) + 1 , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + 8 , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) + 4 , y * (32*tile_scale) - 3 , obj_spikes_fire );
+      o.mask_index = spr_solid;
+	  o.image_xscale = (24*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) - 3 , y * (32*tile_scale) + 4 , obj_spikes_fire );
+      o.mask_index = spr_solid;
+      o.dir = 180;
+	  o.image_yscale = (24*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) + 20 , y * (32*tile_scale) + 4 , obj_spikes_fire );
+      o.mask_index = spr_solid;
+      o.dir = 0;
+	  o.image_yscale = (24*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) + 4 , y * (32*tile_scale) + 20 , obj_spikes_fire );
+      o.mask_index = spr_solid;
+	  o.image_xscale = (24*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      o.dir = 270;
+      break;
+    case 27:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_spikes_fire );
+	  o.sprite_index = spr_platform
+      o.image_yscale = (16*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+      break;
+	case 28:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_spikes_fire );
+	  o.sprite_index = spr_platform
+      o.image_yscale = (16*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+	  o.dir = 270;
+	case 29:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_launchpad );
+      o.sprite_index = spr_solid;
+	  o.image_yscale = (16*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+      o.hs = 0;
+      o.vs = -12;
+      break;
+	case 30:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_launchpad );
+      o.sprite_index = spr_solid;
+	  o.image_yscale = (16*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+      o.hs = 0;
+      o.vs = 16;
+	case 31:
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_launchpad );
+      o.sprite_index = spr_solid;
+	  o.image_yscale = (32*tile_scale) / 16;
+      o.image_xscale = (16*tile_scale) / 16;
+	  o.visible = 0
+      o.hs = 10;
+      o.vs = 0;
+      break;
+	case 32:
+	  o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_launchpad );
+      o.sprite_index = spr_solid;
+	  o.image_yscale = (32*tile_scale) / 16;
+      o.image_xscale = (16*tile_scale) / 16;
+	  o.visible = 0
+      o.hs = -10;
+      o.vs = 0;
+      break;
+	case 33:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) - 4 , obj_belt );
+	  o.sprite_index = spr_platform
+      o.image_yscale = (16*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+	  o.set_speed = 4
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+	case 34:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) - 4 , obj_belt );
+	  o.sprite_index = spr_platform
+      o.image_yscale = (16*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+	  o.set_speed = -4
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_floor );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_leftwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+      o = instance_create ( x * (32*tile_scale) + (16*tile_scale) , y * (32*tile_scale) , obj_rightwall );
+      o.image_yscale = (32*tile_scale) / 16;
+	  o.image_xscale = 1*tile_scale;
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) + (16*tile_scale) , obj_ceiling );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+	case 35:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_water );
+	  o.sprite_index = spr_platform
+      o.image_yscale = (32*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+      break;
+	case 36:
+      o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_stairs );
+      o.image_yscale = (32*tile_scale) / 16;
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.visible = 0
+	  o = instance_create ( x * (32*tile_scale) , y * (32*tile_scale) , obj_platform );
+      o.image_xscale = (32*tile_scale) / 16;
+	  o.image_yscale = 1*tile_scale;
+      break;
+  }
+
+
+  }

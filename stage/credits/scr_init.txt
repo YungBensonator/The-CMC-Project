@@ -1,0 +1,125 @@
+var pl, pu, pr, pd;
+
+camera_boundary_l = 0;
+camera_boundary_u = 0;
+camera_boundary_r = 352;
+camera_boundary_d = 198;
+camera_boundary_zoom = 0;
+pl = camera_boundary_l + 40;
+pu = camera_boundary_d - 40;
+pr = camera_boundary_r - 40;
+pd = camera_boundary_d - 16;
+death_l = -128;
+death_u = -128;
+death_r = camera_boundary_r + 128;
+death_d = camera_boundary_d + 128;
+player_spawn_x [ 0 ] = camera_boundary_r * 0.25;
+player_spawn_y [ 0 ] = pu - 192;
+player_spawn_x [ 1 ] = camera_boundary_r * 0.75;
+player_spawn_y [ 1 ] = pu - 192;
+player_spawn_x [ 2 ] = 0;
+player_spawn_y [ 2 ] = 0;
+player_spawn_x [ 3 ] = 0;
+player_spawn_y [ 3 ] = 0;
+player_spawn_x [ 4 ] = 0;
+player_spawn_y [ 4 ] = 0;
+player_spawn_x [ 5 ] = 0;
+player_spawn_y [ 5 ] = 0;
+respawn_x = camera_boundary_r * 0.5;
+respawn_y = 96;
+background_index[0] = bg_add ( "stage/credits/bg.png" );
+background_index[1] = bg_add ( "stage/credits/a.png" );
+background_index[2] = bg_add ( "stage/credits/stars.png" );
+background_index[3] = bg_add ( "stage/credits/t.png" );
+/*global.msk_stg[0] = stage_msk_add ( 'stage/debug/m_floor.png' , 1 , 1 , 0 , 0 , 0 );
+global.msk_stg[1] = stage_msk_add ( 'stage/debug/m_lwall.png' , 1 , 1 , 0 , 0 , 0 );
+global.msk_stg[2] = stage_msk_add ( 'stage/debug/m_rwall.png' , 1 , 1 , 0 , 0 , 0 );
+global.msk_stg[3] = stage_msk_add ( 'stage/debug/m_ceiling.png' , 1 , 1 , 0 , 0 , 0 );
+global.msk_stg[4] = stage_msk_add ( 'stage/debug/m_platform.png' , 1 , 1 , 0 , 0 , 0 );*/
+
+if file_exists("fighter/"+string(db_charname[global.gs_character[0],1+global.gs_form[0]*3])+"/promoart.png")
+global.spr_promo = sprite_add("fighter/"+string(db_charname[global.gs_character[0],1+global.gs_form[0]*3])+"/promoart.png",1,0,0,00,00);
+else if file_exists(temp_directory+"/fighter/"+string(db_charname[global.gs_character[0],1+global.gs_form[0]*3])+"/promoart.png")
+global.spr_promo = sprite_add(temp_directory+"/fighter/"+string(db_charname[global.gs_character[0],1+global.gs_form[0]*3])+"/promoart.png",1,0,0,00,00);
+
+global.msk_stg[0] = spr_add_alpha ( 'stage/credits/congratulations.png' , 1 , 0 , 0 , 960*0.5 , 160 );
+sprite_set_offset ( global.msk_stg[0] , sprite_get_width(global.msk_stg[0])*0.5 , sprite_get_height(global.msk_stg[0])*0.5 );
+global.msk_stg[1] = spr_add_alpha ( 'stage/credits/wowincredible.png' , 1 , 0 , 0 , 960*0.5 , 160 );
+sprite_set_offset ( global.msk_stg[1] , sprite_get_width(global.msk_stg[1])*0.5 , sprite_get_height(global.msk_stg[1])*0.5 );
+global.msk_stg[2] = spr_add_alpha ( 'stage/credits/thanksforplaying.png' , 1 , 0 , 0 , 960*0.5 , 160 );
+sprite_set_offset ( global.msk_stg[2] , sprite_get_width(global.msk_stg[2])*0.5 , sprite_get_height(global.msk_stg[2])*0.5 );
+
+instance_create ( pl - 1 + 21 * 0.5 , pu , obj_edge_left );
+instance_create ( pr - 21 * 0.5 , pu , obj_edge_right );
+
+var o;
+o = instance_create ( pl , pu , obj_floor );
+o.x += 21 * 0.5;
+o.image_xscale = ( pr - pl - 42 * 0.5 ) / 16;
+o.visible = 0;
+o = instance_create ( pl + 21 * 0.5 , pu , obj_leftwall );
+o.image_yscale = ( pd - pu ) / 16;
+o.visible = 0;
+o = instance_create ( pr - 16 - 21 * 0.5 , pu , obj_rightwall );
+o.image_yscale = ( pd - pu ) / 16;
+o.visible = 0;
+o = instance_create ( pl , pd - 16 , obj_ceiling );
+o.x += 21 * 0.5;
+o.image_xscale = ( pr - pl - 42 * 0.5 ) / 16;
+o.visible = 0;
+//o = instance_create ( 0 , 0 , obj_platform );
+//o.visible = 1;
+
+o = instance_create ( pl , pu , obj_stage_bgd );
+o . depth = 6;
+o . sprite_index = bg_add ( 'stage/credits/platform.png' , 0 , 0 );
+o . y -= 13 * 0.5;
+o . image_xscale = 0.5;
+o . image_yscale = 0.5;
+
+o = instance_create ( pl , pu , obj_stage_bgd );
+o . depth = -1;
+o . sprite_index = bg_add ( 'stage/credits/platformmg.png' , 0 , 0 );
+o . y -= 13 * 0.5;
+o . image_xscale = 0.5;
+o . image_yscale = 0.5;
+
+o = instance_create ( pl , pu , obj_stage_bgd );
+o . depth = -6;
+o . sprite_index = bg_add ( 'stage/credits/platformfg.png' , 0 , 0 );
+o . y -= 13 * 0.5;
+o . image_xscale = 0.5;
+o . image_yscale = 0.5;
+
+o = instance_create ( 0 , 0 , obj_shadow_display);
+o . depth = -7;
+o . light_source = 180;
+o . light_source_y = 0;
+o = instance_create ( p1+40, pu , obj_shadow);
+o . sprite_index = spr_add_alpha ('stage/credits/shadowmask.png',1,0,0,0,0);
+o . image_xscale = 0.5;
+o . image_yscale = 0.5;
+o . y -= 13*0.5;
+o . image_alpha = 0.45;
+
+stage_install_bg_object();
+with ( obj_stage_bg )
+  {
+  main_bg = 1;
+  var i;
+  sparkles_num = 96;
+  for ( i = 0 ; i < sparkles_num ; i += 1 )
+    {
+    sparkles_dir[i] = random ( 360 );
+    sparkles_dis[i] = 36 + random ( 96 );
+    sparkles_y[i] = random ( 2540 );
+    sparkles_ds[i] = -1 + random ( 2 );
+    }
+  //obj = instance_create ( 0 , 0 , obj_mplatform );
+  //direction = 0;
+  //obj2 = instance_create ( 0 , 0 , obj_mplatform );
+  credit_speed = 1;
+  event_user(0);
+  }
+
+d3d_start();

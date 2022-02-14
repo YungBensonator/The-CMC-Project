@@ -1,0 +1,156 @@
+// Set the camera boundaries + maximal zoom level. Minimal zoom level is determined by camera boundaries.
+mode = 0
+global.gs_altstage = 0
+
+globalvar tile_scale;
+
+tile_scale = 0.60
+
+camera_boundary_l = 0;
+camera_boundary_u = 0;
+camera_boundary_r = 800;
+camera_boundary_d = 450;
+camera_boundary_zoom = 560;
+//global.gs_can_pause = 0;
+
+// Set the players' starting position and respawn point.
+//193*24,54 * 24
+
+player_spawn_x [ 0 ] = 224;
+player_spawn_y [ 0 ] = 736;
+player_spawn_x [ 1 ] = 224;
+player_spawn_y [ 1 ] = 736;
+player_spawn_x [ 2 ] = 224;
+player_spawn_y [ 2 ] = 736;
+player_spawn_x [ 3 ] = 224;
+player_spawn_y [ 3 ] = 736;
+player_spawn_x [ 4 ] = 224;
+player_spawn_y [ 4 ] = 736;
+player_spawn_x [ 5 ] = 224;
+player_spawn_y [ 5 ] = 736;
+respawn_x = 164;
+respawn_y = 736;
+
+// Install BG.
+
+stage_install_bg_object();
+stage_control = obj_stage_bg.id;
+stage_control.mode = 0;
+with ( stage_control )
+  {
+  slope1_msk = stage_msk_add ( "stage/world11_course/slope1.png" );
+  slope2_msk = stage_msk_add ( "stage/world11_course/slope2.png" );
+  slope3_msk = stage_msk_add ( "stage/world11_course/slope3.png" );
+  
+  
+  tenshi_sprite = stage_spr_add ( "stage/world11_course/tenshi_strip4.png" , 4 , 29 , 58 );
+  tewi_sprite = stage_spr_add ( "stage/world11_course/tewi_strip4.png" , 4 , 16 , 50 );
+  aya_sprite = stage_spr_add ( "stage/world11_course/aya_strip4.png" , 4 , 14 , 53 );
+  yuugi_sprite = stage_spr_add ( "stage/world11_course/yuugi_strip4.png" , 4 , 18 , 52 );
+  epic_sprite = stage_spr_add ( "stage/world11_course/epic.png" , 1 , 0 , 0 );
+  global.world11_course_crouch_mash = stage_spr_add ( "stage/world11_course/crawl_mask.png" , 1 , 12 , 15 );
+  
+  slope4_msk = stage_msk_add ( "stage/world11_course/slope4.png" );
+  
+  bg_pixel = bg_add ( "stage/world11_course/tileset.png" );
+  bg_pixel2 = bg_add ( "stage/world11_course/pixel_collision.png" );
+  bg_psycho = bg_add ( "stage/world11_course/bg.png" );
+  bg_exit = bg_add ( "stage/world11_course/exit.png" );
+  bg_border = bg_add ( "stage/world11_course/border.png" )
+  
+  background_index[0] = bg_add ( "stage/world11_course/rem_back.png" );;
+  
+  
+  
+  
+  var ci;
+  ci = "";
+  if ( temp_loading )
+  ci = temp_directory + "\";
+  le_file = ci+"stage/world11_course/custom.txt"
+  le_file2 = ci+"stage/world11_course/custom_collision.txt"
+  le_file3 = ci+"stage/world11_course/custom_enemy.txt"
+  le_file4 = ci+"stage/world11_course/custom_door.txt"
+  disable_default_tileset_collisions = 1
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /*
+  
+  
+  
+  
+  
+  
+  instance_create(5664*0.75,832*0.75,global.itm_kind[22]);
+  instance_create(5600*0.75,1728*0.75,global.itm_kind[24]);
+  instance_create(192*0.75,1664*0.75,global.itm_kind[38]);
+  instance_create(1600*0.75,576*0.75,global.itm_kind[17]);
+  */
+  
+  
+  
+  load_enemy_database();//make sure to call this on the init of your planned usage content!!!!!!!
+  load_enemy_assets("mfairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("fairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("sfairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("kedama");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("gfairy");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("met");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("fallingspike");//make sure to call this on the init of your planned usage content!
+  load_enemy_assets("mole");//make sure to call this on the init of your planned usage content!
+  
+  /*
+  spawn_enemy(480*0.75 , 1120*0.75, "kedama");
+  spawn_enemy(768*0.75 , 1184*0.75, "kedama");
+  spawn_enemy(1056*0.75 ,1216*0.75, "kedama");
+  spawn_enemy(1216*0.75 ,1120*0.75, "fairy");
+  spawn_enemy(1408*0.75 ,1216*0.75, "mfairy");
+  spawn_enemy(3584*0.75 , 1120*0.75, "sfairy");
+  spawn_enemy(3520*0.75 , 864*0.75, "gfairy");
+  spawn_enemy(4416*0.75 , 864*0.75, "gfairy");
+  */
+  
+  
+  
+  tenshi = instance_create ( 6336*tile_scale , 96*tile_scale , obj_flagpole );
+  //tenshi.sprite_index = tenshi_sprite;
+  tenshi.depth = 6;
+  tenshi.image_xscale = 24/16;
+  tenshi.image_yscale = 10*24/16;
+  tenshi.visible = 0
+  
+  
+  
+  the_scaler = 0.75
+  event_user(2);
+  
+  event_user(0);
+  
+  
+  /*
+  with (obj_floor){visible = 1}
+  with (obj_leftwall){visible = 1}
+  with (obj_rightwall){visible = 1}
+  with (obj_ceiling){visible = 1}
+  with (obj_platform){visible = 1}
+  */
+  
+  
+  }
+
+if ( global . gs_altstage > 0 )
+  camera_boundary_d = camera_boundary_u + ( camera_boundary_r - camera_boundary_l ) / 16 * 9;
+
+// Set the death boundaries.
+
+death_l = camera_boundary_l - 48;
+death_u = camera_boundary_u - 48;
+death_r = camera_boundary_r + 48;
+death_d = camera_boundary_d + 48;
