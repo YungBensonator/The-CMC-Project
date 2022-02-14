@@ -1,0 +1,90 @@
+if ai_timer >= time-2
+ai_state="idle"
+
+if air = 0 {
+	
+//This first conditional will check if the character will grab an item
+if collision_rectangle(x-13,y-13,x+10,y,item,0,0) && hold_item = 0 && instance_nearest(x,y-5,item).holder = 0 && instance_nearest(x,y-5,item).grab > 0 {
+        attack_type = "none";
+        state_type = "land";
+        sprite_index=land_sprite;
+        timer = 0;
+        time = 3;
+        hold_item = 1;
+        held_item = instance_nearest(x,y-5,item);
+        held_item.holder = id;
+        held_item.state_type = "held"
+        sound_play(itemgetsnd);
+        attacking = 0;
+        exit
+        }  
+
+else if distance_to_object(enemy) < 50 and (enemy.state_type = "attack" or enemy.state_type = "air_attack") and shield_hp >= 30{
+	state_type = "shielding"
+	attack_type = "none"
+}
+
+else {
+
+if distance_to_object(enemy) < 30{
+	
+	if enemy.state_type = "shielding" and ( (facing = 0 and enemy.x <= x+30*size and enemy.x >= x) or (facing = 1 and enemy.x >= x-30*size and enemy.x <= x) )
+	    attack_type = "sideb"
+	else if ( (facing = 0 and enemy.x >= x-30*size and enemy.x <= x) or (facing = 1 and enemy.x <= x+30*size and enemy.x >= x) ){
+		if enemy.percent < 70
+		attack_type = "jab"
+		else
+		attack_type = "usmash"
+	}else if enemy.percent < 90{
+		if ( (facing = 0 and enemy.x <= x+10*size and enemy.x >= x) or (facing = 1 and enemy.x >= x-10*size and enemy.x <= x) )
+		attack_type = "b"
+	    else
+        attack_type = choose("stilt", "dtilt", "utilt")
+	}else if held_item = -1{
+		if smash_power >= global.gs_fs_charge && enemy.air = 0 {
+            if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+            facing=1-facing;
+            attack_type = "final_smash" 
+		}else if ( (facing = 0 and enemy.x >= x-30*size and enemy.x <= x) or (facing = 1 and enemy.x <= x+30*size and enemy.x >= x) )
+		attack_type = "dsmash"
+	    else
+		attack_type = "ssmash"
+	}else{
+		attack_type = choose("itemfthrow","itemuthrow") 
+	}
+	
+}else if distance_to_object(enemy) < 90
+	if ( (facing = 0 and target.x <= x+90*size and target.x >= x) or (facing = 1 and target.x >= x-90*size and target.x <= x) ) and cantusedownb = 0
+		attack_type = "downb"
+	else{
+	    ai_action = "approach"
+		if timerToDashAttack = 0
+	    timerToDashAttack = 30
+	}
+}
+
+
+}else if air >= 1{
+	if distance_to_object(enemy) < 45{
+	
+	if offstage && enemy.y > y-5
+        attack_type = choose("dair","downb")
+	else if !offstage and enemy.state_type = "shielding" and ( (facing = 0 and enemy.x <= x+30*size and enemy.x >= x) or (facing = 1 and enemy.x >= x-30*size and enemy.x <= x) )
+	    attack_type = "sideb"
+	else if !offstage and enemy.y > y-15 and distance_to_object(enemy) < 40
+	    attack_type = "b"
+	else if ( (facing = 0 and enemy.x >= x-45*size and enemy.x <= x) or (facing = 1 and enemy.x <= x+45*size and enemy.x >= x) ) and enemy.y >= y - 15*size
+		attack_type = "bair"
+	else if enemy.y <= y - 15
+	    attack_type = "uair"
+	else if enemy.percent >= 50 and ( (facing = 0 and enemy.x <= x+40*size and enemy.x >= x) or (facing = 1 and enemy.x >= x-40*size and enemy.x <= x) ) and enemy.y >= y - 15*size
+	    attack_type = "fair"
+	else if held_item = -1
+	    attack_type = choose("nair", "fair")
+	else
+		attack_type = "itemfthrow" 
+	
+	}
+	
+}
+

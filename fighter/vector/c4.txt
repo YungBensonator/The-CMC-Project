@@ -1,0 +1,230 @@
+if ( timer <= 1 )
+  {
+	sprite_index = owner.bubble_gum_sprite;
+	size = owner.size;
+	image_xscale = 0.3 * (1-owner.facing*2) * size;
+	image_yscale = 0.3 * size;
+	image_index = 0;
+    image_speed = 0;
+    visible = 1;
+	depth = -8;
+	image_alpha = 1;
+	hp = 20;
+	temp = 0; //Used to check if it's in idle, hit or destroy phase.
+	temp2 = 0; //Used for startup
+	launch_time = 0;
+	moving_object = 0;
+  }
+
+time = 610;
+alarm[0] = 610;
+
+if ( timer <= 16 )
+{
+x = owner.id.x + 19 * (1-owner.facing*2) * owner.id.size + owner.id.hspeed;
+y = owner.id.y - 35 * owner.id.size + owner.id.vspeed;
+
+image_xscale += 0.05 * (1-owner.facing*2) * size;
+image_yscale += 0.05 * size;
+}
+
+if ( timer = 16 )
+{
+moving_object = 1;
+image_speed = 0.2;
+temp2 = 1;
+}
+
+//-------------------------------------------------------------------------------IDLE-------------------------------------------------
+if ( temp = 0 )
+{
+image_speed = 0.2;
+speed = 0;
+timer += 1;
+
+if ( hp <= 10 || timer >= time - 70 )
+	{
+	image_blend = merge_color ( c_red , c_white , 0.5 - lengthdir_y ( 0.5 , ( timer - 39 ) * 10 ) );
+	}
+}
+
+//HIT
+if ( place_meeting ( x , y , attack_box ) && temp2 = 1 )
+{
+obj = instance_nearest ( x , y , attack_box );
+if ( obj.hit < 2 && obj.bubblebumhit != 1 )
+	{
+	obj.bubblebumhit = 1;
+	hp -= obj.damage;
+	sound_play2(obj.sfx);
+	instance_create(obj.x,obj.y,obj.gfx);
+	if ( obj.balloon_dir > 0 )
+	{
+	direction = obj.balloon_dir;
+	}
+	else
+	{
+	direction = obj.dir;
+	}
+	speed = 1 + obj.bkb;
+	launch_time = 5 + obj.bkb;
+	temp = 1;
+	
+	if ( instance_exists ( obj.owner.hitbox ) )
+		{
+		with ( obj.owner.hitbox )
+			{
+			hit = 1;
+			bubblebumhit = 1;
+			}
+		}
+	if ( instance_exists ( obj.owner.hitbox2 ) )
+		{
+		with ( obj.owner.hitbox2 )
+			{
+			hit = 1;
+			bubblebumhit = 1;
+			}
+		}
+	if ( instance_exists ( obj.owner.hitbox3 ) )
+		{
+		with ( obj.owner.hitbox3 )
+			{
+			hit = 1;
+			bubblebumhit = 1;
+			}
+		}
+	if ( instance_exists ( obj.owner.hitbox4 ) )
+		{
+		with ( obj.owner.hitbox4 )
+			{
+			hit = 1;
+			bubblebumhit = 1;
+			}
+		}
+	}
+}
+
+//HIT
+if ( place_meeting ( x , y , projectile_box ) && temp2 = 1 )
+{
+obj = instance_nearest ( x , y , projectile_box );
+if ( obj.hit < 2 && obj.bubblebumhit != 1 )
+	{
+	obj.bubblebumhit = 1;
+	hp -= obj.damage;
+	sound_play2(obj.sfx);
+	instance_create(obj.x,obj.y,obj.gfx);
+	if ( obj.balloon_dir > 0 )
+	{
+	direction = obj.balloon_dir;
+	}
+	else
+	{
+	direction = obj.dir;
+	}
+	speed = 1 + obj.bkb;
+	launch_time = 5 + obj.bkb;
+	temp = 1;
+	}
+}
+
+//-----------------------------------------------------------------------------GOT HIT-------------------------------------------------
+if ( temp = 1 )
+{
+image_speed = 0.5;
+
+if ( launch_time > 0 )
+	{
+	launch_time -= 1;
+	}
+
+if ( launch_time <= 0 )
+{
+speed *= 0.8;
+}
+
+if ( speed >= -0.5 && speed <= 0.5 && launch_time <= 0 && hp > 0 )
+	{
+	temp = 0;
+	launch_time = 0;
+	}
+
+if ( is_on_floor(self) && vspeed > 0 )
+{
+vspeed *= -1;
+launch_time = 10;
+}
+if ( under_ceiling && vspeed < 0 )
+{
+vspeed *= -1;
+launch_time = 10;
+}
+if ( next_to_lwall && hspeed < 0 )
+{
+hspeed *= -1;
+launch_time = 10;
+}
+if ( next_to_rwall && hspeed > 0 )
+{
+hspeed *= -1;
+launch_time = 10;
+}
+
+if ( hp > 0 )
+	{
+	timer += 1;
+	}
+
+if ( hp > 0 && hp <= 10 )
+	{
+	image_blend = merge_color ( c_red , c_white , 0.5 - lengthdir_y ( 0.5 , ( timer - 39 ) * 10 ) );
+	}
+
+if ( hp <= 0 )
+	{
+	image_blend = merge_color ( c_red , c_white , 0.5 - lengthdir_y ( 0.5 , ( timer - 39 ) * 10 ) );
+	
+	if ( place_meeting ( x , y , player ) && launch_time <= 3 )
+		{
+		obj = instance_nearest ( x , y , player );
+		if ( obj.intangible != 1 )
+			{
+			temp = 2;
+			}
+		}
+	if ( launch_time <= 0 )
+		{
+		temp = 2;
+		}
+	}
+}
+
+if ( temp = 2 || timer >= time - 10 )
+{
+vspeed = 0;
+temp = 3;
+
+sound_play ( explode_big );
+
+eff = instance_create ( x , y , obj_spark );
+eff.sprite_index = owner.bubble_gum_burst_sprite;
+eff.image_index = 0;
+eff.image_speed = 0.3;
+eff.depth = depth - 1;
+eff.image_xscale = image_xscale;
+eff.image_yscale = image_yscale;
+
+proj = create_projectile( 18 , 362 , 7.5 , 6 , 60 , 15 , fire3 , obj_spark_fire1 , 3 , 3 , 0 , 8 , owner.id , 20 , -1 );
+proj.hit_attacker = 1;
+eff2 = instance_create ( x , y - 8 * size , obj_spark_explode1 );
+eff2.image_xscale = 1.7 * size;
+eff2.image_yscale = eff2.image_xscale;
+
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 5;
+shaker.xampl = 0;
+shaker.time = 9;
+
+instance_destroy();
+}

@@ -1,0 +1,63 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 30;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  sprite_index = sideb_sprite;
+  image_index = 1;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 1;
+  }
+
+switch ( timer )
+  {
+  case 6: image_index = 0;  break;
+  }
+
+if ( timer = 6 )
+{
+	if ( !instance_exists (bubble_gum_bomb2) )
+	{
+	sound_play ( upb_sound );
+	
+	bubble_gum_bomb2 = instance_create( x , y , obj_spark);
+	bubble_gum_bomb2.sprite_index = bubble_gum_sprite;
+	bubble_gum_bomb2.x = x + 19 * (1-facing*2) * size;
+	bubble_gum_bomb2.y = y - 35 * size;
+	bubble_gum_bomb2.loop = 999999;
+	bubble_gum_bomb2.script = char_custom4;
+	bubble_gum_bomb2.owner = self.id;
+	bubble_gum_bomb2.keepmain = self.keepmain;
+	}
+	else
+	{
+	instance_create ( x + 19 * (1-facing*2) * size , y - 35 * size , obj_smoke );
+	}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+  timer = 0;
+  time = -1;
+  }

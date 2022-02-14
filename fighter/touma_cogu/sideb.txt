@@ -1,0 +1,211 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" and sidebtemp < 3 {
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = ssmash_sprite
+        image_index=0
+        timer = 0
+        time = 30
+		attack_success = 0
+		cum = 0
+		sidebtemp += 1
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack"
+	switch (timer)
+	{
+		case 0: image_index = 0; break;
+		case 1: image_index = 1; break;
+		case 3: image_index = 2; break;
+		case 5: image_index = 3; break;
+		case 8: image_index = 4; break;
+		case 11: image_index = 5; break;
+		case 15: image_index = 6; break;
+		case 18: image_index = 7; break;
+		case 21: image_index = 8; break;
+		case 24: image_index = 9; break;
+		
+		case 50: image_index = 0; break;
+		case 53: image_index = 1; break;
+		case 56: image_index = 2; break;
+		case 63: image_index = 3; break;
+		case 68: image_index = 4; break;
+		
+		case 100: image_index = 0; break;
+		case 101: image_index = 1; break;
+		case 103: image_index = 2; break;
+		case 105: image_index = 3; break;
+		case 108: image_index = 4; break;
+		case 111: image_index = 5; break;
+		case 115: image_index = 6; break;
+		case 118: image_index = 7; break;
+		case 121: image_index = 8; break;
+		case 124: image_index = 9; break;
+		
+		case 150: image_index = 0; break;
+		case 153: image_index = 1; break;
+		case 156: image_index = 3; break;
+		case 159: image_index = 4; break;
+		case 162: image_index = 3; break;
+		case 165: image_index = 4; break;
+		case 168: image_index = 3; break;
+		case 170: image_index = 2; break;
+		case 173: image_index = 3; break;
+		case 178: image_index = 4; break;
+	}
+	
+	vspeed = 0
+	gravity = 0
+	air_move = 0
+	
+	
+	
+	if timer = 5 {
+	create_hitbox ( 5 , angle_correct(90) , 0 , 0 , 20 , 1 , punch3 , obj_spark_hit4 , 0.56 , 0.79 , 15.12 , 12.96 , self.id , 6 , 2 );
+	sound_play(swingsnd3);
+	sound_play(sideb_voice);
+	hspeed = 9 * (1-facing*2)
+	imaginebreaker = create_spark(-66,45,self.id);
+    imaginebreaker.sprite_index = sidebeffect_sprite;
+    imaginebreaker.image_speed = 1.3;
+    imaginebreaker.image_alpha = 1;
+    imaginebreaker.image_xscale = 0.35 * (1-facing*2);
+    imaginebreaker.image_yscale = 0.35;
+    imaginebreaker.depth = depth - 0.1;
+    imaginebreaker.snap = self.id
+	imaginebreaker.image_blend = make_color_rgb(255,0,255);
+	sound_play(sidebwoosh_sound);
+	}
+	
+	if timer = 11 {
+		hspeed = 0
+	}
+	
+	if attack_success = 1 and timer < 11 {
+		cum = 1
+	}
+	
+	if attack_success = 1 and timer < 56 {
+		target.x = x + 7 * (1-facing*2)
+		target.y = y
+	}
+	
+	if timer = 11 and cum = 1 {
+		timer = 50
+		time = 70
+		sprite_index = sideb_sprite
+		image_index = 0
+		hspeed = 0
+	}
+	
+	if timer = 56 {
+			create_hitbox ( 5 , angle_correct(25) , 5 , 4 , 20 , 8 , ibsound , obj_spark_darkness , 0.56 , 0.79 , 15.12 , 12.96 , self.id , 6 , 2 );
+	imaginebreaker = create_spark(-37,74,self.id);
+    imaginebreaker.sprite_index = sidebeffect2_sprite;
+    imaginebreaker.image_speed = 1;
+    imaginebreaker.image_alpha = 0.9;
+    imaginebreaker.image_xscale = 0.7 * (1-facing*2);
+    imaginebreaker.image_yscale = 0.7;
+    imaginebreaker.depth = depth - 0.1;
+    imaginebreaker.snap = self.id
+	imaginebreaker.image_blend = make_color_rgb(255,0,255);
+	screen_shake(3,3);
+	sound_play(sideb2_voice);
+	sound_play(sidebkill_sound);
+	}
+	
+	if timer = 1 and laststand = 1 {
+		timer = 100
+		time = 147
+		sound_play(busta_voice);
+		sound_play(epic_sound);
+		effect_create_above(ef_ring,x + 1,y - 20,1.5,c_purple)
+		super_armor = 1
+		attack_success = 0
+		cum = 0
+
+	}
+	
+	if timer = 105 {
+		create_hitbox ( 5 , angle_correct(90) , 0 , 0 , 20 , 2 , punch3 , obj_spark_hit4 , 0.56 , 0.79 , 15.12 , 12.96 , self.id , 6 , 2 );
+	sound_play(swingsnd3);
+	sound_play(sideb_voice);
+	hspeed = 12 * (1-facing*2)
+	imaginebreaker = create_spark(-66,45,self.id);
+    imaginebreaker.sprite_index = sidebeffect_sprite;
+    imaginebreaker.image_speed = 1.3;
+    imaginebreaker.image_alpha = 1;
+    imaginebreaker.image_xscale = 0.35 * (1-facing*2);
+    imaginebreaker.image_yscale = 0.35;
+    imaginebreaker.depth = depth - 0.1;
+    imaginebreaker.snap = self.id
+	imaginebreaker.image_blend = make_color_rgb(255,0,255);
+	sound_play(sidebwoosh_sound);
+	hitbox.hit_stun = 65
+	}
+	/*
+	
+	if timer > 105 and timer < 111 {
+	create_hitbox ( 2 , angle_correct(90) , 0 , 0 , 20 , 2 , punch3 , obj_spark_hit4 , 0.56 , 0.79 , 15.12 , 12.96 , self.id , 6 , 2 );
+	hitbox.di = 0
+	}
+     */
+
+	  if attack_success = 1 and timer > 100 and timer < 156 {
+		cum = 1
+	}
+	
+	if attack_success = 1 and timer > 100 and timer < 170 {
+		target.x = x + 7 * (1-facing*2)
+		target.y = y
+	}
+	
+	if timer = 111 {
+		hspeed = 0
+	}
+	
+	if timer = 111 and cum = 1 {
+		timer = 150
+		time = 200
+		sprite_index = sideb_sprite
+		image_index = 0
+		hspeed = 0
+	}
+	
+	if timer = 170 {
+			create_hitbox ( 15 , angle_correct(25) , 7 , 6 , 20 , 8 , ibsound , obj_spark_darkness , 0.56 , 0.79 , 15.12 , 12.96 , self.id , 6 , 2 );
+	imaginebreaker = create_spark(-37,140,self.id);
+    imaginebreaker.sprite_index = sidebeffect2_sprite;
+    imaginebreaker.image_speed = 1;
+    imaginebreaker.image_alpha = 0.9;
+    imaginebreaker.image_xscale = 1.3 * (1-facing*2);
+    imaginebreaker.image_yscale = 1.3;
+    imaginebreaker.depth = depth - 0.1;
+    imaginebreaker.snap = self.id
+	imaginebreaker.image_blend = make_color_rgb(255,0,255);
+	screen_shake(7,-9);
+	sound_play(impacto_voice);
+	sound_play(vroom_sound);
+	super_armor = 0
+	}
+	  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	if sidebtemp >= 3
+	state_type = "fall"
+	
+    attack_type = "none";
+	super_armor = 0
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

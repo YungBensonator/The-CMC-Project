@@ -1,0 +1,61 @@
+priority = 5;
+absorb = 0;
+absorb2 = 0;
+moving_object = 0;
+
+no_clash = 1;
+no_reflect = 1;
+proj_destroy = 0;
+parry_nodestroy = 1;
+clankWithHitbox = 1;
+grazehp = 100;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.firebreath_effect_sprite;
+	image_xscale = 0.8 * (1-facing*2) * size;
+	image_yscale = 0.8 * size;
+	image_index = 0;
+    image_speed = 0.5;
+    visible = 1;
+	depth = -8;
+	image_alpha = 0.85;
+  }
+
+time = 30;
+alarm[0] = 30;
+
+x = attacker.id.x + 15 * (1-facing*2) * attacker.id.size + attacker.id.hspeed;
+y = attacker.id.y - 31 * attacker.id.size + attacker.id.vspeed;
+
+if ( timer < time - 15 )
+{
+	if ( timer mod 2 = 0 )
+	{
+	hit = 0;
+	bubblebumhit = 0;
+	}
+}
+
+if ( timer = time - 15 )
+{
+weight_kb = 0;
+damage = 5 * attacker.id.size;
+dir = angle_correct(30);
+bkb = 5 * attacker.id.size;
+kbg = 7 * attacker.id.size;
+hitlag = 10;
+sfx = fire3;
+hit = 0;
+bubblebumhit = 0;
+}
+
+if ( image_index >= 8 )
+{
+hit = 2;
+}
+
+if ( image_index >= 12 || attacker.id.attack_type != "sideb" )
+{
+instance_destroy();
+}

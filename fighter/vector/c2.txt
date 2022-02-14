@@ -1,0 +1,97 @@
+if ( timer <= 1 )
+  {
+	sprite_index = owner.bubble_gum_sprite;
+	size = owner.size;
+	image_xscale = 0.3 * (1-owner.facing*2) * size;
+	image_yscale = 0.3 * size;
+	image_index = 0;
+    image_speed = 0;
+    visible = 1;
+	depth = -8;
+	image_alpha = 1;
+	temp = 0;
+	temp2 = 0;
+	got_hit = 0;
+  }
+
+time = 120;
+alarm[0] = 120;
+
+if ( temp2 = 0 )
+{
+x = owner.id.x + 2 * (1-owner.facing*2) * owner.id.size + owner.id.hspeed;
+y = owner.id.y - 71 * owner.id.size + owner.id.vspeed;
+}
+
+if ( owner.id.attack_type != "upb" )
+{
+temp2 = 1;
+
+if ( timer < time - 20 )
+	{
+	timer = time - 20;
+	}
+
+}
+
+if ( temp2 = 1 && temp = 0)
+{
+moving_object = 1;
+vspeed = -2 * size;
+}
+
+if ( timer <= 8 )
+{
+image_xscale += 0.05 * (1-owner.facing*2) * size;
+image_yscale += 0.05 * size;
+}
+
+if ( place_meeting ( x , y , attack_box ) && temp = 0 )
+{
+obj = instance_nearest ( x , y , attack_box );
+if ( obj.hit != 2 )
+	{
+	sound_play2(obj.sfx)
+	instance_create(obj.x,obj.y,obj.gfx);
+	got_hit = 1;
+	}
+}
+
+if ( place_meeting ( x , y , projectile_box ) && temp = 0 )
+{
+obj = instance_nearest ( x , y , projectile_box );
+if ( obj.hit != 2 )
+	{
+	sound_play2(obj.sfx)
+	instance_create(obj.x,obj.y,obj.gfx);
+	got_hit = 1;
+	}
+}
+
+if ( ( ( timer >= time - 10 ) || got_hit = 1 ) && temp = 0 )
+{
+vspeed = 0;
+temp = 1;
+sprite_index = owner.bubble_gum_burst_sprite;
+image_index = 0;
+image_speed = 0.3;
+
+sound_play ( explode_big );
+
+proj = create_projectile( 12 , 362 , 7 , 4.5 , 25 , 10 , fire3 , obj_spark_fire1 , 2.5 , 2.5 , 0 , 8 , owner.id , 20 , -1 );
+eff = instance_create ( x , y - 8 * size , obj_spark_explode1 );
+eff.image_xscale = 1.4 * size;
+eff.image_yscale = eff.image_xscale;
+
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 5;
+shaker.xampl = 0;
+shaker.time = 9;
+}
+
+if ( temp = 1 && image_index >= 3 )
+{
+instance_destroy();
+}
+
+timer += 1;

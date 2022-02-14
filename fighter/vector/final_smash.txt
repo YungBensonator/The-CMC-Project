@@ -1,0 +1,248 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = final_smash_sprite;
+  timer = 0;
+  time = 480;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  
+  freeze = instance_create ( 0 , 0 , obj_freeze );
+  freeze.dontpause = black_bg;
+  freeze.dontpause = spotlight_eff;
+  freeze.dontpause = vector_dummy;
+  freeze.dontpause = self.id;
+  freeze.alarm[0] = 100;
+  }
+
+gravity_lock = 2;
+hspeed = 0;
+vspeed = 0;
+
+switch ( timer )
+  {
+  case 4: image_index = 1;  break;
+  case 8: image_index = 2;  break;
+  
+  case 80: sprite_index = b_sprite; vector_dummy.sprite_index = b_sprite; image_index = 0; vector_dummy.image_index = 0; break;
+  case 83: image_index = 1; vector_dummy.image_index = 1; break;
+  case 83: image_index = 2; vector_dummy.image_index = 2; break;
+  
+  case 423: image_index = 1; vector_dummy.image_index = 1; break;
+  case 426: image_index = 2; vector_dummy.image_index = 2; break;
+  case 429: image_index = 3; vector_dummy.image_index = 3; break;
+  }
+
+if ( timer = 8 )
+{
+sound_play ( taunt_voice );
+}
+
+//----------------------------------------------------------------------SPAWN SPARKS-----------------------------------------------------------------------
+if ( timer = 20 )
+{
+black_bg = instance_create( x , y , obj_spark);
+black_bg.sprite_index = final_smash_blackbg_sprite;
+black_bg.image_xscale = 300;
+black_bg.image_yscale = 300;
+black_bg.image_alpha = 0;
+black_bg.image_index = 0;
+black_bg.image_speed = 0;
+black_bg.depth = -12.9;
+black_bg.script = char_custom10;
+black_bg.owner = self.id;
+black_bg.keepmain = self.keepmain;
+}
+
+if ( timer >= 20 && timer <= 30 )
+{
+black_bg.image_alpha += 0.05;
+}
+
+if ( timer = 60 )
+{
+sound_play ( spotlight_sound );
+
+spotlight_eff = instance_create( x , y , obj_spark);
+spotlight_eff.sprite_index = spotlight_effect_sprite;
+spotlight_eff.image_xscale = 2 * size;
+spotlight_eff.image_yscale = 2 * size;
+spotlight_eff.x = x;
+spotlight_eff.y = y;
+spotlight_eff.image_alpha = 0.85;
+spotlight_eff.image_index = 0;
+spotlight_eff.image_speed = 0;
+spotlight_eff.depth = -13.1;
+spotlight_eff.script = char_custom10;
+spotlight_eff.owner = self.id;
+spotlight_eff.keepmain = self.keepmain;
+
+vector_dummy = instance_create( x , y , obj_spark);
+vector_dummy.sprite_index = final_smash_sprite;
+vector_dummy.image_xscale = xsize * (1-facing*2) * size;
+vector_dummy.image_yscale = ysize * size;
+if ( facing = 0 )
+	{
+	vector_dummy.x = x;
+	}
+if ( facing = 1 )
+	{
+	vector_dummy.x = x + 1 * size;
+	}
+vector_dummy.y = y;
+vector_dummy.image_alpha = 1;
+vector_dummy.image_index = image_index;
+vector_dummy.image_speed = 0;
+vector_dummy.depth = -13;
+vector_dummy.loop = 999999;
+vector_dummy.number = number;
+vector_dummy.script = char_custom10;
+vector_dummy.owner = self.id;
+vector_dummy.keepmain = self.keepmain;
+}
+
+if ( instance_exists ( vector_dummy ) )
+{
+if ( facing = 0 )
+	{
+	vector_dummy.x = x;
+	}
+if ( facing = 1 )
+	{
+	vector_dummy.x = x + 1 * size;
+	}
+vector_dummy.y = y;
+vector_dummy.image_xscale = xsize * (1-facing*2) * size;
+vector_dummy.image_yscale = ysize * size;
+}
+
+if ( timer = 70 )
+{
+sound_play ( microphone_sound );
+}
+
+if ( timer = 100 )
+{
+image_speed = 0.2;
+vector_dummy.image_speed = 0.2;
+
+sound_play ( final_smash_voice );
+}
+
+if ( timer >= 100 && timer <= 400 )
+{
+if ( image_index < 2 )
+	{
+	image_index += 2;
+	}
+if ( vector_dummy.image_index < 2 )
+	{
+	vector_dummy.image_index += 2;
+	}
+}
+
+//----------------------------------------------------------------------PROJECTILES-----------------------------------------------------------------------
+
+if ( timer = 100 || timer = 140 || timer = 180 || timer = 220 || timer = 260 || timer = 300 || timer = 340 )
+{
+proj = create_projectile( 5 , 90 , 2.9 , 0 , -1 , 100 , shock3 , obj_spark_shock , 1 , 1 , 0 , 20 , self.id , 11 , char_custom1 );
+proj.weight_kb = 1;
+
+for ( i = 0; i < 10; i += 1 )
+	{
+	music_note_eff = instance_create( x + 18 * (1-facing*2) * size , y - 35 * size , obj_spark);
+	music_note_eff.sprite_index = music_notes_sprite;
+	music_note_eff.image_xscale = 0.9 * size;
+	music_note_eff.image_yscale = 0.9 * size;
+	music_note_eff.image_alpha = 1;
+	music_note_eff.image_index = irandom(14);
+	music_note_eff.image_speed = 0;
+	music_note_eff.speed = 5;
+	music_note_eff.direction = random(360);
+	music_note_eff.depth = -13.6;
+	music_note_eff.script = char_custom11;
+	music_note_eff.owner = self.id;
+	music_note_eff.keepmain = self.keepmain;
+	}
+}
+
+if ( timer = 380 )
+{
+proj = create_projectile( 5 , 362 , 8 , 8 , -1 , 10 , shock3 , obj_spark_shock , 1 , 1 , 0 , 20 , self.id , 11 , char_custom1 );
+
+for ( i = 0; i < 10; i += 1 )
+	{
+	music_note_eff = instance_create( x + 18 * (1-facing*2) * size , y - 35 * size , obj_spark);
+	music_note_eff.sprite_index = music_notes_sprite;
+	music_note_eff.image_xscale = 0.9 * size;
+	music_note_eff.image_yscale = 0.9 * size;
+	music_note_eff.image_alpha = 1;
+	music_note_eff.image_index = irandom(14);
+	music_note_eff.image_speed = 0;
+	music_note_eff.speed = 5;
+	music_note_eff.direction = random(360);
+	music_note_eff.depth = -13.6;
+	music_note_eff.script = char_custom11;
+	music_note_eff.owner = self.id;
+	music_note_eff.keepmain = self.keepmain;
+	}
+}
+
+//----------------------------------------------------------------------DESPAWN STUFF-----------------------------------------------------------------------
+
+if ( timer >= 440 && black_bg.image_alpha > 0 )
+{
+black_bg.image_alpha -= 0.05;
+}
+
+if ( timer >= 440 && spotlight_eff.image_alpha > 0 )
+{
+spotlight_eff.image_alpha -= 0.1;
+}
+
+if ( timer >= 440 && black_bg.image_alpha <= 0 )
+{
+with ( black_bg ) { instance_destroy(); }
+}
+
+if ( timer >= 440 && spotlight_eff.image_alpha <= 0 )
+{
+with ( vector_dummy ) { instance_destroy(); }
+with ( spotlight_eff ) { instance_destroy(); }
+}
+
+if ( timer = 420 )
+{
+image_speed = 0;
+vector_dummy.image_speed = 0;
+
+sprite_index = final_smash_sprite2;
+image_index = 0;
+
+vector_dummy.sprite_index = final_smash_sprite2;
+vector_dummy.image_index = 0;
+}
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,51 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "fthrow";
+image_speed = 0;
+sprite_index = ssmash_sprite;
+image_index=0;
+timer = 0;
+time = 37;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 47
+}
+if timer < time {
+	 switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 5: image_index = 1; break;
+	case 7: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 19: image_index = 6; break;
+	case 22: image_index = 7; break;
+	case 25: image_index = 8; break;
+	case 28: image_index = 9; break;
+      }
+	  
+	  if timer = 9 {
+		create_hitbox ( 11 , angle_correct(30) , 6.7 , 5.7 , 20 , 12 , punch3 , obj_spark_hit4 , 0.56 , 0.79 , 15.12 , 12.96 , self.id , 9 , 2 );
+		sound_play(swingsnd2);
+		sound_play(grunt_voice3);
+	  }
+	  
+	  if timer >= 9 and timer < 19 {
+		  hspeed = 4.2 * (1-facing*2)
+	  }
+	  
+	  if timer = 19 {
+		  hspeed = 0
+	  }
+	  
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none"
+    state_type = "stand"
+    timer = 0
+    time =-1
+    }
+        

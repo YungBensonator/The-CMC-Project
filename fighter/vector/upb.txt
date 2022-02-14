@@ -1,0 +1,75 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  shieldup = 0;
+  attack_type = "upb";
+  time = 100;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 1;
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+  }
+
+gravity_lock = 2;
+
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 6: image_index = 3;  break;
+  case 9: image_index = 2;  break;
+  }
+
+if ( timer > 25 )
+{
+force_edge_grab = 1;
+}
+
+if ( timer <= 14 )
+{
+hspeed = 0;
+vspeed = 0;
+}
+
+if ( timer = 6 )
+{
+sound_play ( upb_sound );
+bubble_gum_bomb = instance_create( x , y , obj_spark);
+bubble_gum_bomb.sprite_index = bubble_gum_sprite;
+bubble_gum_bomb.x = x + 2 * (1-facing*2) * size;
+bubble_gum_bomb.y = y - 71 * size;
+bubble_gum_bomb.loop = 999999;
+bubble_gum_bomb.script = char_custom2;
+bubble_gum_bomb.owner = self.id;
+bubble_gum_bomb.keepmain = self.keepmain;
+}
+
+if ( timer >= 14 )
+{
+vspeed = -2 * size;
+}
+
+if ( timer >= 14 && ( shieldup = 1 || !instance_exists ( bubble_gum_bomb ) ) )
+{
+timer = 99;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

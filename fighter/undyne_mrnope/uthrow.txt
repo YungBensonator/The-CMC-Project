@@ -1,0 +1,74 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = upb_sprite;
+image_index=0;
+timer = 0;
+time = 50;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 35
+}
+if timer < time {
+
+    switch ( timer )
+      {
+	case 1: image_index = 1; break;
+	case 3: image_index = 2; break;
+	case 5: image_index = 3; break;
+	case 7: image_index = 4; break;
+	case 11: image_index = 5; break;
+	case 14: image_index = 6; break;
+	case 18: image_index = 7; break;
+      }
+
+
+    if timer = 4 {
+		sound_play(b_sound)
+		sound_play(b_sound)
+		sound_play(b_sound)
+		aroww1 = script_execute(create_projectile,4,90,4.2,5.9,9,7,slash2,obj_spark_hit4,0.8,0.8,26,150,self.id,44,undyne_mrnope_spear)
+		proj.use_palette = number
+		aroww2 = script_execute(create_projectile,4,90,4.2,5.9,9,7,slash2,obj_spark_hit4,0.8,0.8,-26,120,self.id,44,undyne_mrnope_spear)
+		proj.use_palette = number
+		aroww3 = script_execute(create_projectile,4,90,4.2,5.9,9,7,slash2,obj_spark_hit4,0.8,0.8,68,120,self.id,44,undyne_mrnope_spear)
+		proj.use_palette = number
+		//proj.hspeed = 9-facing*18
+    }
+if timer >= 42 {
+aroww1.vspeed = 4
+aroww1.hspeed = 0
+aroww1.image_angle = -90*(1-facing*2)
+aroww2.vspeed = 0
+aroww2.hspeed = 4*(1-facing*2)
+aroww2.image_angle = 360*(1-facing*2)
+aroww3.vspeed = 0
+aroww3.hspeed = -4*(1-facing*2)
+aroww3.image_angle = 180*(1-facing*2)
+}
+
+	if timer >= 7 && timer < 23 {
+	target.y -= 10
+	storey = target.y
+	storex = target.x
+	}
+
+	if ( timer >= 23 && timer <= time )
+	{
+	target.y = storey
+	target.x = storex
+	}
+    if timer = 7 {
+        create_throw_box(4,105-facing*30,0,0,3,4,slash3,obj_spark_hit4,0.75,2.5,26,23,self.id,1);
+        hitbox.hit_stun = 50
+    }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

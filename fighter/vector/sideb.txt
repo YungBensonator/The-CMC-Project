@@ -1,0 +1,52 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "sideb";
+  time = 80;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  sprite_index = sideb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 12: image_index = 2;  break;
+  }
+
+if ( timer = 12 )
+{
+sound_play ( firebreath_sound );
+firebreath = create_projectile( 1 , angle_correct(90) , 2.1 , 0 , -1 , 5 , fire1 , obj_spark_fire1 , 1 , 1 , 15 , 31 , self.id , 30 , char_custom3 );
+firebreath.weight_kb = 1;
+firebreath.di = -1;
+firebreath.balloon_dir = angle_correct(3);
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+  timer = 0;
+  time = -1;
+  }

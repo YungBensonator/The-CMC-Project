@@ -1,0 +1,88 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        if ( cantsideb ) exit;
+        vspeed -= 0.1
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = sideb_sprite
+        image_index=0
+        timer = 0
+        time = 34
+        temp=0
+        timer_speed=1
+        attack_success=0
+	target = -1
+        hspeed = 0
+        air_move = 0
+	gay = 0
+        temp = 0
+    }
+switch ( timer )
+  {
+  case 9: image_index = 1; break;
+  case 12: image_index = 2; break;
+  case 101: image_index = 3; break;
+  case 104: image_index = 4; break;
+  case 107: image_index = 5; break;
+  case 110: image_index = 6; break;
+  case 113: image_index = 7; break;
+  }
+
+if timer = 18 {
+        sound_play(sideb_sound)
+instance_create(x+8-facing*16,y-16,obj_spark_effect)
+aimage = after_image(8, c_yellow, 0.75);
+        create_homing_bubble(2.1,0.6,42,14,self.id,time-timer);
+}
+
+	homing_bubble.x = x + 38*(1-facing*2);
+	homing_bubble.y = y + -14;
+
+	if target.intangible = 0 && target.attack_type != "final_smash" && timer < 99  && timer >= 20 && target >= 0 {
+	gay = 1
+	timer = 100
+	time = 130
+	if facing = 1
+	facing = 0
+	else
+	if facing = 0
+	facing = 1
+	x = target.x - 60*(1-facing*2)
+	hspeed = 6.5*(1-facing*2)
+	}
+	if timer = 104 {
+	create_hitbox(9.75,20+facing*140,6,0,4,9,slash3,obj_spark_slash2,1.6,1.6,28,18,self.id,4,1);
+    		hitbox.hit_stun = 13
+	freezecd = 72
+	}
+	if hitbox.hit || attack_success
+	interrupt = 1
+
+	if timer >= 100 && timer <= 104
+	ignore_physics = 1
+	else
+	ignore_physics = 0
+
+		if (instance_exists(aimage)) {
+			if (aimage.image_xscale > 0) aimage.image_xscale += 0.02;
+			else aimage.image_xscale -= 0.02;
+			aimage.image_yscale += 0.02;
+			aimage.image_alpha -= 0.075;
+		}
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

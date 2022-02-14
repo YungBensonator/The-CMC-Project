@@ -1,0 +1,275 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 1;
+  attack_type = "downb";
+  time = 100;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 1;
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+
+  temp = 0;
+  temp2 = 0;
+  temp3 = 0; //Used for max charge spark.
+  spin_dash_charge = 0;
+  turn_delay = 10;
+  spin_speed_penalty = 0;
+  spin_dash_airtime = 0;
+  spin_dash_airtemp = 0;
+  speed_rampup = 6;
+  }
+
+switch ( timer )
+  {
+  case 1: image_index = 1;  break;
+  case 2: image_index = 2;  break;
+  case 3: image_index = 3;  break;
+  case 4: image_index = 4;  break;
+  case 5: image_index = 5;  break;
+  case 6: image_index = 6;  break;
+  }
+
+//-----------------------------------------------------------------------------CHARGE-------------------------------------------------------------
+if ( temp = 0 )
+{
+	if ( timer = 6 )
+	{
+	sound_play ( spinning_sound );
+	sprite_index = downb_sprite3;
+	}
+
+	if ( timer >= 6 )
+	{
+	image_speed = 0.25 + (spin_dash_charge/200);
+	}
+
+	if ( ( timer mod 10 = 0 ) && air = 0 )
+	{
+	duster = instance_create(x - 18 * (1-facing*2) * size, y ,obj_dust_effect)
+	duster.image_alpha = 0.85;
+	duster.image_xscale = 0.3 * (1-facing*2) * size;
+	duster.image_yscale = 0.3 * size;
+	}
+
+	if ( spin_dash_charge = 60 && temp3 = 0 )
+	{
+	instance_create( x - 8 * (1-facing*2) * size , y - 25 * size , obj_spark_effect);
+	temp3 = 1;
+	}
+
+	if ( timer >= 6 && spin_dash_charge < 60 )
+	{
+	spin_dash_charge += 1;
+	}
+
+	if ( timer >= 6 && special = 0 )
+	{
+	sound_stop ( spinning_sound );
+	sound_play ( spin_letgo_sound );
+	timer = 0;
+	time = 70 + (spin_dash_charge*2);
+	temp = 1;
+	create_hitbox( 5 + (spin_dash_charge/20) , angle_correct(45) , 5.5 + (spin_dash_charge/30) , 5 + (spin_dash_charge/30) , 10 + (spin_dash_charge/5) , 5 + (spin_dash_charge/20) , slash3 ,obj_spark_slash3, 1.25 , 1.25 , 0.95 , 15.20 , self.id , 70 + (spin_dash_charge*2) , 1 );
+	hitbox.alarm[0] = 60 + (spin_dash_charge*2);
+	hitbox.balloon_dir = angle_correct(20);
+	}
+
+	if ( timer >= 90 )
+	{
+	timer = 10;
+	}
+	
+	//JUMP
+	if ( air = 0 && movejump = 1 )
+	{
+	temp2 = 1;
+	temp = 1;
+	movejump = 0;
+	special = 0;
+	timer = 0;
+	time = 30;
+	air_move = 1;
+	sound_play ( jump_sound );
+	vspeed = -6 * size;
+	spin_dash_airtemp = 2;
+	}
+
+}
+
+//-----------------------------------------------------------------------------LAUNCH-------------------------------------------------------------
+if ( temp = 1 )
+{
+after_image(3,c_lime,0.3);
+image_speed = 0.35 + (spin_dash_charge/200);
+force_edge_grab = 1;
+
+//MOVEMENT
+if ( temp2 = 0 )
+{
+	if ( facing = 0 )
+	{
+	hspeed = max( 3 + (spin_dash_charge/30) + speed_rampup - spin_speed_penalty * size , 0 );
+	}
+	if ( facing = 1 )
+	{
+	hspeed = min( -3 - (spin_dash_charge/30) - speed_rampup + spin_speed_penalty * size , 0 );
+	}
+
+if ( speed_rampup > 0 )
+{
+speed_rampup -= 0.5;
+}
+
+//TURN LEFT
+if ( facing = 0 && moveleft = 1 && turn_delay = 0 && air = 0 )
+{
+sound_play ( spin_letgo_sound );
+facing = 1;
+spin_speed_penalty = 6;
+turn_delay = 10;
+if ( instance_exists ( hitbox ) ) { with ( hitbox ) instance_destroy(); }
+create_hitbox( 5 + (spin_dash_charge/20) , angle_correct(45) , 5.5 + (spin_dash_charge/30) , 5 + (spin_dash_charge/30) , 10 + (spin_dash_charge/5) , 5 + (spin_dash_charge/20) , slash3 ,obj_spark_slash3, 1.25 , 1.25 , 0.95 , 15.20 , self.id , 70 + (spin_dash_charge*2) , 1 );
+hitbox.alarm[0] = 60 + (spin_dash_charge*2);
+hitbox.balloon_dir = angle_correct(20);
+}
+
+//TURN RIGHT
+if ( facing = 1 && moveright = 1 && turn_delay = 0 && air = 0 )
+{
+sound_play ( spin_letgo_sound );
+facing = 0;
+spin_speed_penalty = 6;
+turn_delay = 10;
+if ( instance_exists ( hitbox ) ) { with ( hitbox ) instance_destroy(); }
+create_hitbox( 5 + (spin_dash_charge/20) , angle_correct(45) , 5.5 + (spin_dash_charge/30) , 5 + (spin_dash_charge/30) , 10 + (spin_dash_charge/5) , 5 + (spin_dash_charge/20) , slash3 ,obj_spark_slash3, 1.25 , 1.25 , 0.95 , 15.20 , self.id , 70 + (spin_dash_charge*2) , 1 );
+hitbox.alarm[0] = 60 + (spin_dash_charge*2);
+hitbox.balloon_dir = angle_correct(20);
+}
+
+//TURN DELAY DECREASE
+if ( turn_delay > 0 )
+{
+turn_delay -= 1;
+}
+
+//JUMP
+if ( air = 0 && movejump = 1 && spin_dash_airtemp = 1 && temp2 = 0 )
+{
+movejump = 0;
+sound_play ( jump_sound );
+spin_speed_penalty = 3;
+vspeed = -6 * size;
+spin_dash_airtemp = 2;
+}
+
+//SPEED PENALTY RESET ON LAND
+if ( spin_speed_penalty > 0 && air = 0 )
+{
+spin_speed_penalty -= 1;
+}
+
+//AIR TEMP ON FIRST TIME LAND
+if ( air = 0 && spin_dash_airtemp = 0 )
+{
+spin_dash_airtemp = 1;
+}
+
+//RESET AIR TIME ON EARLY LAND
+if ( air = 0 && spin_dash_airtime > 0 )
+{
+spin_dash_airtime = 0;
+}
+
+}
+
+//AIR TIMER ON JUMP
+if ( air > 0 && spin_dash_airtemp = 2 )
+{
+spin_dash_airtime += 1;
+}
+
+//TRANSITION TO SKID/AIR END
+	if ( ( timer >= time - 5 || spin_dash_airtime = 5 || shieldup = 1 || ( spin_dash_airtemp != 2 && movejump = 1 ) ) && air > 0 )
+	{
+	if ( instance_exists ( hitbox ) ) { with ( hitbox ) instance_destroy(); }
+	timer = 0;
+	time = 30;
+	air_move = 1;
+	hspeed *= 0.8;
+	temp = 3;
+	}
+
+	if ( ( timer >= time - 5 || shieldup = 1 ) && air = 0 )
+	{
+	if ( instance_exists ( hitbox ) ) { with ( hitbox ) instance_destroy(); }
+	state_type = "attack";
+	sprite_index = downb_sprite4;
+	image_index = 0;
+	image_speed = 0;
+	timer = 0;
+	time = 20 + (spin_dash_charge/5);
+	temp = 2;
+	sound_play ( skid_sound );
+	}
+
+}
+
+//-------------------------------------------------------------------------------SKID-------------------------------------------------------------
+if ( temp = 2 )
+{
+hspeed *= 0.99;
+
+	if ( timer mod 5 = 0 )
+	{
+	duster = instance_create(x + 5 * (1-facing*2) * size, y ,obj_dust_effect)
+	duster.image_alpha = 0.85;
+	duster.image_xscale = 0.1 * (1-facing*2) * size;
+	duster.image_yscale = 0.1 * size;
+	}
+}
+
+//------------------------------------------------------------------------------AIR END-----------------------------------------------------------
+if ( temp = 3 )
+{
+after_image(3,c_lime,0.3);
+force_edge_grab = 1;
+
+if ( air = 0 )
+{
+	state_type="land";
+	attack_type="none";
+	sprite_index = land_sprite;
+	timer = 0;
+	time = 8;
+}
+
+if ( attacking || special || grab || movejump || shieldup || smash )
+	{
+	interrupt = 1;
+	}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+  timer = 0;
+  time = -1;
+  }

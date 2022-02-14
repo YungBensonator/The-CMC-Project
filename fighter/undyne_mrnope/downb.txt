@@ -1,0 +1,41 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        if air > 0 vspeed -= 0.1;
+        temp = air > 0
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0;
+        sprite_index = shield_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 50;
+        timer_speed=1;
+        special = 0;
+}
+            if timer = 1
+                sound_play(downb_voice);
+            if timer = 10 || timer = 17  || timer = 25 {
+        	sprite_index = air_dodge_sprite;
+                spear = create_projectile(0,361,0,0,0,0,-1,obj_spark_shock,xsize,ysize,3,11,self.id,45,undyne_mrnope_downbspear)
+		proj.use_palette = number
+				spear = proj;
+                sound_play(attack_sound1);        
+            }
+            if (special = 1 || ai && random(10)>6.5) && timer = 31 {
+                special = 0;
+                timer = 9
+                image_index = 2.7
+            }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        
