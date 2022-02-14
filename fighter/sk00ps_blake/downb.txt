@@ -1,0 +1,66 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        attack_type = "downb"
+        image_speed = 0
+        state_type = "air_attack"
+        image_index=0
+        sprite_index = downb_sprite
+        timer = 0
+        time = 28
+		hspeed = 0
+	special = 1;
+	clonetemp = 0;
+}
+if ( timer < time )
+    {
+	
+    switch ( timer )
+    {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 11: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 22: image_index = 6; break;
+	case 25: image_index = 7; break;
+    }
+	if timer = 10 && special = 1 {
+	clonetemp = 1;
+	}
+	if timer = 11 {
+	speed = 4*(1-facing*2);
+	direction = 180*(1-facing*2);
+	sound_play(downb_snd);
+	}
+	/*if timer = 11 {	
+	stoneclone = create_projectile(1, 361, 0.1, 0, 0.1, 1, -1, -1, .155, .155, 0, 0, self.id, 120, char_custom2);
+	stoneclone.sprite_index = stoneclone_sprite
+	stoneclone.mask_index = no_mask;
+	}*/
+	if timer = 11 && clonetemp = 0 && !instance_exists(flameclone) {	
+	sound_play(choose(downb_voice1,downb_voice2,downb_voice3));
+	flameclone = create_projectile(6, 90, 5, 5, 50, 1, -1, -1, .155, .155, 0, 0, self.id, 120, char_custom3);
+	flameclone.sprite_index = flameclone_sprite
+	flameclone.image_speed = 0.5;
+	}
+	if timer = 11 && clonetemp = 1 && !instance_exists(shadowclone) {	
+	sound_play(choose(downb2_voice1,downb2_voice2,downb2_voice3));
+	shadowclone = create_projectile(6, 90, 5, 5, 50, 1, -1, -1, .085, .085, 0, 0, self.id, 60, char_custom4);
+	shadowclone.sprite_index = shadowclone_sprite
+	shadowclone.image_speed = 0.5;
+	shadowclone.mask_index = no_mask;
+	}
+
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	speed = 0;
+}
+        

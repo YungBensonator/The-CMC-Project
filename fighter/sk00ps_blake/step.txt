@@ -1,0 +1,78 @@
+///////////////////////////////////Crouch thing for crouching and getting up from crouch visually
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(6,timer) //replace the 12 by the number the last case you add below has
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+        case 9: image_index = 3; break;
+        case 12: image_index = 4; break;
+        case 15: image_index = 5; break;
+        case 18: image_index = 6; break;
+        case 21: image_index = 7; break;
+        case 24: image_index = 8; break;
+        case 27: image_index = 9; break;
+        case 30: image_index = 10; break;
+        case 33: image_index = 11; break;
+		//put as many cases as frames your crouch animation has
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+    image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+    image_index = 2;
+}
+//copypaste this conditional for every frame your crouch animation has, changing the number of the crouchgetuptimer from 12 to whichever corresponds to that frame's switch case number, and the image_index number to the frame number itself.
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch thing for crouching and getting up from crouch visually
+
+if sprite_index = walk_sprite && image_index >= 10 {
+	image_index = 2;
+}
+if sprite_index = run_sprite && image_index >= 10 {
+	image_index = 2;
+}
+if (sprite_index = jump_sprite || sprite_index = mid_jump_sprite) && image_index >= 10 {
+	image_index = 7;
+}
+
+if clonetimer >= 1 {
+	clonetimer -= 1;
+} 
+if clonetimer = 1 {
+	effect_create_above(ef_ring,x,y - 22.57 * size ,0.1,c_black)
+}
+if sprite_index = flinch_sprite || sprite_index = flinch_sprite2 || sprite_index = flinch_sprite2 || sprite_index = launched_sprite || sprite_index != nair_sprite {
+	if (instance_exists(nair_swish)) {with (nair_swish){instance_destroy();}}
+}
+if air = 0 {
+	sidebtemp = 0;
+}
