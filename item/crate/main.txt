@@ -1,0 +1,125 @@
+~~INIT:
+if ( current_month == 12 )
+  {
+  crate_spr = ispr_add_alpha ( "item/crate/gift.png" , 1 , 0 , 0 , 20 , 27 );
+  crateh_spr = ispr_add_alpha ( "item/crate/gift.png" , 1 , 0 , 0 , 20 , 45 );
+  }
+  else
+  {
+  crate_spr = ispr_add_alpha ( "item/crate/crate.png" , 1 , 0 , 0 , 19 , 19 );
+  crateh_spr = ispr_add_alpha ( "item/crate/crate.png" , 1 , 0 , 0 , 19 , 38 );
+  }
+cratep_spr = ispr_add_alpha ( "item/crate/crate2.png" , 1 , 0 , 0 , 2 , 19 );
+~~DEINIT:
+if ( sprite_exists ( crate_spr ) )
+  spr_delete ( crate_spr );
+if ( sprite_exists ( crateh_spr ) )
+  spr_delete ( crateh_spr );
+if ( sprite_exists ( cratep_spr ) )
+  spr_delete ( cratep_spr );
+~~ENTER:
+sprite_index = obj_items_control.crate_spr;
+sprite_air = obj_items_control.crate_spr;
+sprite_held = obj_items_control.crateh_spr;
+mask_index = obj_items_control.crateh_spr;
+air_spr_y = -19;
+type = "heavy";
+hit_timer = 0;
+hp = 24;
+collision_type = 1;
+shadow = 16;
+~~LAND:
+hp = 0;
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -3 + floor ( random ( 7 ) );
+  shakey = -3 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+if ( hp <= 0 )
+  {
+  var explosive;
+  explosive = 0;
+  if ( random ( 10 ) < 1 )
+    {
+    explosive = 1;
+    }
+  sound_play ( cratebreaksnd );
+  var i, o;
+  if ( explosive == 1 )
+    {
+    sound_play ( explode_big );
+    instance_create ( x , y - 19 , obj_spark_explode1 );
+    create_projectile ( 14 , 365 , 7 , 5.7 , 74 , 20 , explodehit2 , obj_spark_fire1 , 2 , 2 , 0 , 19 , 99 , 7 , -1 );
+    proj.hit_attacker = 1;
+    }
+    else
+    {
+    var ii;
+    for ( ii = -1 ; ii <= 1 ; ii += 1 )
+      {
+      o = itemcreate_crate ( x , y - 19 );
+      if ( o > 0 )
+        {
+        o.hspeed = ii;
+        o.vspeed = -3;
+        }
+      }
+    o = instance_create ( x , y - 19 , obj_spark_hit4 );
+    o.image_xscale *= 3;
+    o.image_yscale *= 3;
+    o.image_angle = random ( 360 );
+    }
+  repeat ( 6 )
+    {
+    instance_create ( x - 25 + random ( 50 ) , y - 44 + random ( 50 ) , obj_smoke_front );
+    }
+  repeat ( 8 )
+    {
+    o = instance_create ( x , y - 19 , obj_spark );
+    o.depth = -5;
+    o.image_speed = 0;
+    o.sprite_index = obj_items_control.cratep_spr;
+    o.speed = 2 + random ( 6 );
+    o.direction = random(360);
+    o.image_xscale = 1;
+    o.image_yscale = 1;
+    o.angle_add = -10 + random ( 20 );
+    o.alpha_add = -1/30;
+    o.alarm[0] = 30;
+    o.gravity = 0.5;
+    o.gravity_direction = 270;
+    o.vspeed -= 3;
+    o.speed *= 1 + explosive * 2;
+    }
+  instance_destroy();
+  exit;
+  }
+
+if ( thrown > 0 )
+  {
+  custom_land = 1;
+  }
+  else
+  {
+  custom_land = 0;
+  }
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+create_projectile ( 10 , 364 , 6.5 , 4.8 , 12 , 12 , kick3 , obj_spark_hit3 , 1.4 , 1.4 , 0 , 19 , thrown , 6 , -1 );
+hp = 0;
+~~HIT:
+if ( hit_timer > 0 ) exit;
+hit_timer = vermin.hitlag_frames + 3;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+hp -= vermin.damage;
+object_stun ( vermin , vermin.hitlag_frames );
+~~END OF FILE

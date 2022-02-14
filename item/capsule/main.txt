@@ -1,0 +1,79 @@
+~~INIT:
+
+capsule_spr = ispr_add_alpha ( "item/capsule/capsule.png" , 1 , 0 , 0 , 4 , 8 );
+egg_spr = ispr_add_alpha ( "item/capsule/egg.png" , 1 , 0 , 0 , 7 , 8 );
+
+~~DEINIT:
+
+if ( sprite_exists ( capsule_spr ) )
+  spr_delete ( capsule_spr );
+if ( sprite_exists ( egg_spr ) )
+  spr_delete ( egg_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.capsule_spr;
+sprite_air = obj_items_control.capsule_spr;
+sprite_held = obj_items_control.capsule_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -6;
+image_xscale = 0.75;
+image_yscale = 0.75;
+collision_type = 2;
+shadow = 4;
+
+~~LAND:
+if ( thrown > 0 )
+  {
+  event_user(9);
+  }
+
+~~STEP:
+if ( thrown > 0 )
+  {
+  can_pick_up = 0.5;
+  custom_land = 1;
+  }
+  else
+  {
+  can_pick_up = 1;
+  custom_land = 0;
+  }
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+event_user(9);
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin == thrown ) exit;
+event_user(9);
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+event_user(9);
+
+~~CUSTOM:
+if ( random ( 10 ) < 1 )
+  {
+  sound_play ( explode_big );
+  instance_create ( x , y - 6 , obj_spark_explode1 );
+  create_projectile ( 20 , 365 , 6 , 5.2 , 74 , 20 , explodehit2 , obj_spark_fire1 , 1 , 1 , 0 , 6 , thrown , 7 , -1 );
+  proj.hit_attacker = 1;
+  instance_destroy();
+  exit;
+  }
+create_projectile ( 5 , 90 - sign ( hspeed ) * 45 , 6 , 1.2 , -1 , 7 , punch2 , -1 , 1 , 1 , 0 , 6 , thrown , 5 , -1 );
+instance_create ( x , y - 6 , obj_spark_hit1 );
+var o;
+o = itemcreate_capsule ( x , y - 6 );
+o.hit_timer = 7;
+instance_destroy();
+
+~~END OF FILE
