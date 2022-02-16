@@ -1,0 +1,160 @@
+if ( time == -1 )
+{
+	hspeed = 0;
+	state_type = "air_attack";
+	attack_type = "bthrow";
+	image_speed = 1/3;
+	image_index = 0;
+	sprite_index = jump_sprite;
+	timer = 0;
+	time = 52;
+	timer_speed = 1;
+	target.timer_speed = 0;
+	target.alarm[0] = 50;
+	air_move = 0;
+	
+	///Projectile Initialization Variables - Streamlines creation of more complex circular projectile patterns. ( Complete Circle: bulletshift * bullettotal = 360 )
+	bullettype = 4; //Bullet type referenced in custom scripts with multiple projectile types.
+	bulletcount = 0; //Initial bullet count. This increases during loops.
+	bullettotal = 3; //Total number of bullets created. Loop max. Don't set this too high or performance will RIP!
+	bulletscale = 0.25; //Resizes bullet.
+
+	bulletstartdir = -50; //Initial bullet direction.  Use negative numbers for downward angles.
+	bulletshift = -5 * (1-bulletflip*2); //Shifts the direction of the next bulletcount by this amount.
+	bulletdirshift = bulletstartdir + bulletcount*bulletshift; //Used in direction/angle calculation.
+	bulletflip = 0; //Used when creating circular-like bullet patterns starting from vertical center rather than the side
+	bulletgrab = 1; //Custom variable for editing bullet script when same bullettype is used differently in another move. Can rename.
+
+	bulletdmg = 0;
+	bulletdir = 361;
+	bulletbkb = 0;
+	bulletkbg = 0;
+	bulletshielddmg = 5;
+	bullethitlag = 0;
+	bulletsound = fire3;
+	bulletspark = obj_spark_fire1;
+	bulletxscale = 0.5;
+	bulletyscale = 0.5;
+	bulletx = 0;
+	bullety = 30;
+	bullettime = 99;
+	bulletid = self.id;
+	bulletscript = char_custom1;
+
+	bullethit = 0;
+	bullethitstun = 0;
+	bulletblockstun = 0;
+	bulletdi = 1;
+
+	bulletangle = ( ( facing=0 )*( ( 0 + bulletdirshift ) + facing*( 180 - bulletdirshift*2 ) ) ) + ( ( facing=1 )*( 180 - bulletdirshift ) )
+	bulletspeed = 5;
+	rotatespeed = 0;
+	bulletcharge = 0;
+	explodetime = 99;
+}
+
+switch (timer)
+{
+	case 100: sprite_index = fair2_sprite; image_index = 0; image_speed = 0; break;
+	case 102: image_index = 1; break;
+	case 104: image_index = 2; break;
+	case 106: image_index = 3; break;
+	case 110: image_index = 4; break;
+	case 112: image_index = 5; break;
+	case 114: image_index = 6; break;
+	case 116: image_index = 3; break;
+	case 118: image_index = 2; break;
+	case 120: image_index = 1; break;
+	case 122: image_index = 0; break;
+}
+
+if timer <= 9
+{
+	if image_index > 2 {image_index = 0;}
+}
+
+if timer < 112
+{
+	fast_fall = 0
+	fast_fall_temp = 0;
+	gravity = 0;
+	gravity_lock = 1;
+}
+
+if timer = 1
+{
+	direction = 45+facing*90;
+	speed = 6 * size;
+}
+
+if timer = 2
+{
+	facing = !facing;
+	timer = 99;
+	time = 124;
+}
+
+if timer = 112
+{
+	sound_play(charge_sound);
+	if ( random ( 2 ) < 1 ) {sound_play( choose( special_voice5, special_voice8, special_voice11, special_voice13 ) );}
+}
+
+if ( timer = 112 + bulletcount*2 ) && ( bulletcount < bullettotal )
+{
+	sound_play(shoot_sound2);
+
+	bullety = 30-(bulletcount*5);
+	create_projectile(bulletdmg,bulletdir,bulletbkb,bulletkbg,bulletshielddmg,bullethitlag,bulletsound,bulletspark,bulletxscale,bulletyscale,bulletx,bullety,bulletid,bullettime,bulletscript);
+	proj.bullettype = bullettype;
+	proj.bulletcount = bulletcount;
+	proj.bulletstartpos = bulletstartpos;
+	proj.bulletshift = bulletshift;
+	proj.bulletdirshift = bulletdirshift;
+	proj.bulletscale = bulletscale;
+	
+	proj.bulletdmg = bulletdmg;
+	proj.bulletdir = bulletdir;
+	proj.bulletbkb = bulletbkb;
+	proj.bulletkbg = bulletkbg;
+	proj.bulletshielddmg = bulletshielddmg;
+	proj.bullethitlag = bullethitlag;
+	proj.bulletsound = bulletsound;
+	proj.bulletspark = bulletspark;
+	proj.bulletxscale = bulletxscale;
+	proj.bulletyscale = bulletyscale;
+	proj.bulletx = bulletx;
+	proj.bullety = bullety;
+	proj.bullettime = bullettime;
+	proj.bulletid = bulletid;
+	
+	proj.hit = bullethit;
+	proj.facing = facing;
+	proj.hit_stun = bullethitstun;
+	proj.shield_stun = bulletblockstun;
+	proj.di = bulletdi;
+	
+	proj.direction = bulletangle;
+	proj.bulletspeed = bulletspeed;
+	proj.rotatespeed = rotatespeed;
+	proj.explodetime = explodetime;
+	proj.bulletgrab = bulletgrab; //for throw
+	
+	bulletcount += 1;
+}
+
+if timer = 116
+{
+	speed *= 0.5;
+}
+
+if ( timer >= time - 1 )
+{
+	attack_type = "none";
+	if ( air > 0 )
+		state_type = "jump";
+	else
+		state_type = "stand";
+	timer = 0;
+	time = -1;
+}

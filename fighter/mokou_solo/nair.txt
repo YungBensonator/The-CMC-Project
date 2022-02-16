@@ -1,0 +1,87 @@
+if ( state_type = "jump" )
+{
+	//hspeed = 0;
+	vspeed -= 0.1;
+	state_type = "air_attack";
+	attack_type = "nair";
+	sprite_index = nair1_sprite;
+	image_speed = 0;
+	image_index= 0;
+	timer = 0;
+	time = 32;
+	timer_speed= 1;
+}
+
+switch ( timer )
+{
+	case 1:	 image_index = 1; break;
+	case 2:  image_index = 2; break;
+	case 3:  image_index = 3; break;
+	
+	case 7: sprite_index = nair2_sprite; image_index = 0; break;
+	case 9: image_index = 1; break;
+	case 11: image_index = 2; break;
+	case 13: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 22: image_index = 6; break;
+	case 27: image_index = 7; break;
+	case 30: image_index = 8; break;
+	//case 38: image_index = 9; break;
+	//case 41: image_index = 10; break;
+	//case 44: image_index = 11; break;
+}
+
+if timer < time 
+{	
+	if timer = 3
+	{
+		if ( random ( 2 ) < 1 ) {sound_play( choose( attack_voice1, attack_voice3 ) );}
+		sound_play(swing_sound1);
+		create_hitbox(3,35+facing*110,4.6,0,8,4,mokouhit1,obj_spark_hit4, 0.59 , 0.83 , 11.60 , 8 , self.id , 8 , 3 );
+		hitbox.hit_stun = 8;
+		hitbox.di = -1;
+		create_hitbox2(3,35+facing*110,4.6,0,8,4,mokouhit1,obj_spark_hit4, 0.5 , 0.5 , 2.90 , 9.30 , self.id , 8 , 3 );
+		hitbox2.hit_stun = 8;
+		hitbox2.di = -1;
+		
+		percent += selfdmg;
+		lifemeter += selfdmg * lifemetergain;
+	}
+	
+	if timer = 13
+	{
+		if ( random ( 2 ) < 1 ) {sound_play( choose( attack_voice2, attack_voice4 ) );}
+		sound_play(swing_sound1);
+		create_hitbox(6,30+facing*120,5.9,3.55,8,6,mokouhit2,obj_spark_hit4, 0.59 , 0.81 , 10.40 , 7, self.id , 9 , 2 );
+		hitbox.hit_stun = 9;
+		hitbox.shake_ampl = 0.75;
+		create_hitbox2(6,30+facing*120,5.9,3.55,8,6,mokouhit2,obj_spark_hit4, 0.5 , 0.5 , -1.8 , 10.90 , self.id , 9 , 2 );
+		hitbox2.hit_stun = 9;
+		hitbox2.shake_ampl = 0.75;
+		
+		percent += selfdmg;
+		lifemeter += selfdmg * lifemetergain;
+	}
+
+	if air = 0 
+	{
+		shakex = 0;
+		shakey = 0;
+		state_type="land";
+		attack_type="none";
+		sprite_index = land_sprite;
+		timer= 0;
+		time= 7; 
+	}
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+	state_type = "jump";
+	attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 6;
+	timer = 0;
+	time = -1;
+}

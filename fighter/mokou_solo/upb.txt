@@ -1,0 +1,327 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( upbtemp && !upbflytemp ) {exit;}
+
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" ) && ( upbtemp = 0 || ( upbflytemp && upbtemp ) )
+{
+	//vspeed = -0.1
+	state_type = "air_attack";
+	attack_type = "upb";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	image_speed = 0;
+	timer = 0+upbflytemp*8;
+	time = 18;
+	special = 1;
+	air_move = 1;
+	upbfly = 0;
+	charging = 0+upbflytemp*8;
+	chargecheck = 7;
+	chargemax = 8;
+	
+	bullethelltimer = 0; //Shoots when this is zero.
+	bullethelltime = 5; //Delay between single shots.
+	bulletpattern = 0; //Delay between several rounds of rapidfire shots.
+	bulletpatternmax = 5;
+	bulletpatterntimer = 0; //Shoots when this is zero.
+	bulletpatterntime = 120; 
+	
+	//Fly Variables
+	maxflyspeedv = 4;
+	maxflyspeedh = 4;
+	flyaccel = 0.2;
+	flybrake = 0.08;
+	
+	//Blur Variables
+	phoenixwingscale = 0.55
+	phoenixwingxshift = 0
+	phoenixwingyshift = 10
+	phoenixwingtime = 999
+	phoenixwingspeed = 0.75
+	phoenixwingzoom = 1
+	
+	//Blur Variables
+	phoenixwing2_scale = 0.25
+	phoenixwing2_xshift = -16
+	phoenixwing2_yshift = 35
+	phoenixwing2_time = 999
+	phoenixwing2_speed = 0
+	phoenixwing2_zoom = 1
+	wingflip = 0
+	wingfliptimer = 0
+	wingfliptime = 1
+	wingflipspeed = 0.75
+	
+	//hmovetemp = -1;
+}
+
+if ( ai )
+{
+	if ( offstage )
+	{
+		var a;
+		a = instance_nearest ( x , y , obj_edge );
+		moveleft = 0;
+		moveright = 0;
+		if ( a . x < x )
+		moveleft = 1;
+		else
+		moveright = 1;
+		moveup = 1;
+	}
+	if ( !offstage ) 
+	{
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		timer = 0;
+		time = -1;
+	}
+}
+
+switch ( timer )
+{
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+}
+
+if timer < time 
+{
+	if timer > 25 && air > 0
+	{
+		force_edge_grab = 1;
+	}
+	
+	//Charging
+	if timer < ( chargecheck + 1 ) && special
+	{
+		charging += 1;		
+	}
+	if timer < ( chargecheck + 1 ) && !special
+	{
+		special = 0;
+	}
+	
+	//UpB Jump
+	if ( timer = 0 && air = 0 )
+	{
+		hspeed = 0;
+		air_move = 1;
+	}
+	
+	if timer = 3
+	{
+		create_hitbox(8,60+facing*60,7.5,2.5,25,8,mokouexplode6,obj_spark_fire1,0.9,0.8,0,11,self.id,3,5);
+		hitbox.hit_stun = 12;
+		
+		instance_create(x,y+2,obj_down_impact);
+		sound_play(mokouexplosion1);
+		instance_create(x+(1-facing*2)*size*4,y-12*size,obj_spark_effect);
+		instance_create(x,y+4,obj_spark_explode1);
+		shaker = instance_create(x,y,obj_shakescreen2);
+		shaker.ampl = 1.5;
+		shaker.time = 8;
+	}
+	
+	if timer = 4
+	{
+		vspeed = (-8.5+nobullet)*size
+		sound_play(upb_sound)
+	}
+	
+	if timer >= 8 && timer <= 16 && charging >= chargemax
+	{
+		if ( nobullet = 0 && floattime > 0 )
+		{
+			special = 0;
+			sprite_index = upb_sprite;
+			image_index = 0;
+			image_speed = 1/3;
+			upbfly = 1;
+			timer = 100;
+			time = 999;
+		}
+		else
+			upbfly = 0;
+	}
+	
+	if timer >= 100 && ( upbfly )
+	{
+		//Red Bull
+		if ( !instance_exists(phoenixwing) )
+		{
+			phoenixwing = create_blur(x,y,self.id);
+			if !blueflame {phoenixwing.sprite_index = phoenixwing_sprite;}
+			if blueflame {phoenixwing.sprite_index = phoenixwingblue_sprite;}
+			phoenixwing.image_xscale = (phoenixwingscale*size)*(1-facing*2);
+			phoenixwing.image_yscale = (phoenixwingscale*size);
+			phoenixwing.x = x + ( phoenixwingxshift )*size*(1-facing*2);
+			phoenixwing.y = y - phoenixwingyshift*size;
+			phoenixwing.image_index = 0;
+			phoenixwing.image_speed = phoenixwingspeed;
+			phoenixwing.image_alpha = 1
+			phoenixwing.alarm[0] = phoenixwingtime;
+			phoenixwing.snap = self.id;
+			phoenixwing.depth = phoenixwingzoom;
+		}
+		
+		if ( !instance_exists(phoenixwing2) )
+		{
+			phoenixwing2 = create_blur(x,y,self.id);
+			if !blueflame {phoenixwing2.sprite_index = phoenixwing2_sprite;}
+			if blueflame {phoenixwing2.sprite_index = phoenixwingblue2_sprite;}
+			phoenixwing2.image_xscale = (phoenixwing2_scale*size)*(1-facing*2);
+			phoenixwing2.image_yscale = (phoenixwing2_scale*size);
+			phoenixwing2.x = x + ( phoenixwing2_xshift )*size*(1-facing*2);
+			phoenixwing2.y = y - phoenixwing2_yshift*size;
+			phoenixwing2.image_index = 5;
+			phoenixwing2.image_speed = phoenixwing2_speed;
+			phoenixwing2.image_alpha = 1
+			phoenixwing2.alarm[0] = phoenixwing2_time;
+			phoenixwing2.snap = self.id;
+			phoenixwing2.depth = phoenixwing2_zoom;
+		}
+
+		//Fly Stuff
+		gravity = 0;
+		gravity_lock = 1;
+		image_angle = 0;
+		
+		if floattime > 0 {floattime -= 1;}
+		
+		if floattime <= 0
+		{
+			if floattime <= 0 {floattime = 0;}
+			timer = time-1;
+		}
+		
+		if ( floattime > 0 )
+		{
+			if timer = time-2
+			timer = 100
+		}
+		
+		//Fly Direction
+		if moveup {vspeed -= flyaccel}
+		if movedown {vspeed += flyaccel}
+		if moveleft {hspeed -= flyaccel}
+		if moveright {hspeed += flyaccel}
+		
+		if hspeed > maxflyspeedh {hspeed = maxflyspeedh}
+		if hspeed < -maxflyspeedh {hspeed = -maxflyspeedh}
+		if vspeed > maxflyspeedv {vspeed = maxflyspeedv}
+		if vspeed < -maxflyspeedv {vspeed = -maxflyspeedv}
+		
+		if (!moveright || !moveleft)
+		{
+			if hspeed > 0 {hspeed -= flybrake}
+			if hspeed < 0 {hspeed += flybrake}
+		}
+		if (!moveup || !movedown )
+		{
+			if vspeed < 0 {vspeed += flybrake}
+			if vspeed > 0 {vspeed -= flybrake}
+		}
+		
+		//Fly Facing
+		if moveright || moveleft
+		{
+			if hmovetemp = -1
+			{
+				if instance_exists(phoenixwing) {with(phoenixwing){instance_destroy();}}
+				if instance_exists(phoenixwing2) {with(phoenixwing2){instance_destroy();}}
+				
+				//Red Bull
+				if ( !instance_exists(phoenixwing) )
+				{
+					phoenixwing = create_blur(x,y,self.id);
+					if !blueflame {phoenixwing.sprite_index = phoenixwing_sprite;}
+					if blueflame {phoenixwing.sprite_index = phoenixwingblue_sprite;}
+					phoenixwing.image_xscale = (phoenixwingscale*size)*(1-facing*2);
+					phoenixwing.image_yscale = (phoenixwingscale*size);
+					phoenixwing.x = x + ( phoenixwingxshift )*size*(1-facing*2);
+					phoenixwing.y = y - phoenixwingyshift*size;
+					phoenixwing.image_index = 0;
+					phoenixwing.image_speed = phoenixwingspeed;
+					phoenixwing.image_alpha = 1
+					phoenixwing.alarm[0] = phoenixwingtime;
+					phoenixwing.snap = self.id;
+					phoenixwing.depth = phoenixwingzoom;
+				}
+
+				if ( !instance_exists(phoenixwing2) )
+				{
+					phoenixwing2 = create_blur(x,y,self.id);
+					if !blueflame {phoenixwing2.sprite_index = phoenixwing2_sprite;}
+					if blueflame {phoenixwing2.sprite_index = phoenixwingblue2_sprite;}
+					phoenixwing2.image_xscale = (phoenixwing2_scale*size)*(1-facing*2);
+					phoenixwing2.image_yscale = (phoenixwing2_scale*size);
+					phoenixwing2.x = x + ( phoenixwing2_xshift )*size*(1-facing*2);
+					phoenixwing2.y = y - phoenixwing2_yshift*size;
+					phoenixwing2.image_index = 5;
+					phoenixwing2.image_speed = phoenixwing2_speed;
+					phoenixwing2.image_alpha = 1
+					phoenixwing2.alarm[0] = phoenixwing2_time;
+					phoenixwing2.snap = self.id;
+					phoenixwing2.depth = phoenixwing2_zoom;
+				}
+			}
+			
+			if moveleft 
+			{
+				facing = 0; 
+				if hmovetemp = 0 {hmovetemp = -1;}
+				else {hmovetemp = 1;}
+			}
+			if moveright 
+			{
+				facing = 1; 
+				if hmovetemp = 1 {hmovetemp = -1;}
+				else {hmovetemp = 0;}
+			}
+		}
+		
+		//Fly Interrupt
+		if attacking || ( special && !moveleft && !moveright && !moveup )  || ( special && ( moveleft || moveright ) && sidebtemp = 0 ) || smash || shieldup || grab || ( movejump && air < max_jumps-1 )
+		{
+			upbflytemp = 1;
+			interrupt = 1;
+		}
+		
+		//Image Loop
+		if phoenixwing.image_index >= 21 {phoenixwing.image_index = 0;}
+		if image_index > 7 {image_index = 4;}
+		
+		wingfliptimer += wingflipspeed;
+		if wingfliptimer >= wingfliptime
+		{
+			phoenixwing2.image_index += 1-wingflip*2
+			wingfliptimer = 0
+		}
+		if phoenixwing2.image_index >= 5
+		{
+			wingflip = 1;
+		}
+		if phoenixwing2.image_index <= 0
+		{
+			wingflip = 0;
+		}
+	}
+}
+
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+	upbtemp = 1;
+	upbflytemp = 1;
+	upbfly = 0;
+	charging = 0;
+	if instance_exists(phoenixwing) {with(phoenixwing){instance_destroy();}}
+	if instance_exists(phoenixwing2) {with(phoenixwing2){instance_destroy();}}
+	attack_type = "none";
+	if air = 0
+		state_type = "stand";
+	else
+		state_type = "jump"
+	timer = 0;
+	time =-1;
+}
