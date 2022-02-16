@@ -1,0 +1,139 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type = "jump" )
+{
+	//hspeed = 0;
+	vspeed -= 0.1;
+	state_type = "air_attack";
+	attack_type = "dair";
+	sprite_index = dair_sprite;
+	image_speed = 0;
+	image_index= 0;
+	timer = 0;
+	time = 15;
+	timer_speed= 1;
+	looped = 0;
+	
+	if moveright = 1 facing = 0;
+	if moveleft = 1 facing = 1;
+	
+	//Blur Variables
+	ssmashflamescale = 0.25
+	ssmashflamexshift = -26
+	ssmashflameyshift = 33
+	ssmashflameindex = 0
+	ssmashflametime = 16
+	ssmashflamespeed = 1
+	ssmashflamealpha = 1
+	ssmashflameangle = 315 * (1-facing*2)
+	ssmashflamezoom = -2
+}
+
+switch ( timer )
+{
+	case 3:	 image_index = 1; break;
+	case 6:	 image_index = 0; break;
+	case 9: image_index = 2; break;
+	case 12: image_index = 3; break;
+}
+
+if timer < time 
+{
+	if timer = 6
+	{
+		vspeed = -1;
+	}
+	
+	if timer >= 8 && !instance_exists(ssmashflame)
+	{
+		ssmashflame = create_blur(x,y,self.id);
+		if !blueflame {ssmashflame.sprite_index = ssmashflame_sprite;}
+		if blueflame  {ssmashflame.sprite_index = ssmashflameblue_sprite;}
+		ssmashflame.image_xscale = (ssmashflamescale*size)*(1-facing*2);
+		ssmashflame.image_yscale = (ssmashflamescale*size);
+		ssmashflame.x = x + ssmashflamexshift *size*(1-facing*2);
+		ssmashflame.y = y - ssmashflameyshift*size;
+		ssmashflame.image_index = 0;
+		ssmashflame.image_speed = ssmashflamespeed;
+		ssmashflame.image_alpha = ssmashflamealpha;
+		ssmashflame.image_angle = ssmashflameangle;
+		ssmashflame.alarm[0] = ssmashflametime;
+		ssmashflame.snap = self.id;
+		ssmashflame.depth = ssmashflamezoom;
+	}
+	
+	if ssmashflame.image_index > 9 { ssmashflame.image_index = 6; }
+	if ssmashflame.image_index < 6 { ssmashflame.image_index = 9; }
+	
+	if timer = 9 && looped = 0
+	{
+		sound_play( choose( mid_voice2, mid_voice4, special_voice5, special_voice8, special_voice11, special_voice13 ) );
+		sound_play(swingsnd3);
+		create_hitbox(14,340-facing*140,5.25,3,16,12,mokouhit4,obj_spark_fire1, 0.78 , 0.82 , 7.20 , 9.60 ,self.id,54,3);
+		hitbox.image_angle = ( 1 - facing * 2 ) * 167.16;
+		hitbox.hit_stun = 10;
+		hitbox.shield_stun = -3;
+		
+		direction = 335-facing*130;
+		speed = 7;
+		
+		percent += selfdmg;
+		lifemeter += selfdmg * lifemetergain;
+	}
+	
+	if timer >= 9 || looped > 0
+	{
+		air_move = 0;
+	}
+	
+	if timer >= 13 && looped < 9
+	{
+		timer = 8;
+		looped += 1;
+	}
+	
+	if looped >= 4
+	{
+		hitbox.kbg = 1*size;
+	}
+	
+	if ( timer > 1 && hitbox.hit > 0 && attack_shielded = 0 )
+	{
+		if movejump && air < max_jumps-1 
+		{
+			air_move = 1;
+			interrupt = 1;
+		}
+		
+		if special && moveup
+		{
+			timer = 0;
+			time = -1;
+			state_type = "stand";
+			char_upb();
+		}
+	}
+	
+	if air = 0 
+	{
+		shakex = 0;
+		shakey = 0;
+		hspeed *= 0.85;
+		state_type="land";
+		attack_type="none";
+		sprite_index = land_sprite;
+		timer= 0;
+		time= 16 - (attack_success*4) + (attack_shielded*4); 
+	}
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+	state_type = "jump";
+	attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 6;
+	timer = 0;
+	time = -1;
+}

@@ -1,0 +1,181 @@
+if ( state_type = "jump" )
+{
+	//hspeed = 0;
+	vspeed -= 0.1;
+	state_type = "air_attack";
+	attack_type = "bair";
+	sprite_index = bair_sprite;
+	image_speed = 0;
+	image_index= 0;
+	timer = 0;
+	time = 39-nobullet*10;
+	timer_speed= 1;
+	
+	///Spark Variables
+	bairexplosionscale = 0.5
+	bairexplosionxshift = -15
+	bairexplosionyshift = 10
+	bairexplosiontime = 24
+	bairexplosionspeed = 1
+	bairexplosionzoom = -2
+	
+	///Projectile Initialization Variables - Streamlines creation of more complex circular projectile patterns. ( Complete Circle: bulletshift * bullettotal = 360 )
+	bullettype = 3; //Bullet type referenced in custom scripts with multiple projectile types.
+	bulletcount = 0; //Initial bullet count. This increases during loops.
+	bullettotal = 1; //Total number of bullets created. Loop max. Don't set this too high or performance will RIP!
+	bulletstartdir = 20; //Initial bullet direction. Use negative numbers for downward angles.
+	bulletshift = 0; //Shifts the direction of the next bulletcount by this amount.
+	bulletdirshift = bulletstartdir - bulletcount*bulletshift; //Used in direction calculation.
+	bulletscale = 0.25; //Resizes bullet.
+	bulletdmg = 6.5;
+	bulletdir = 156-facing*132;
+	bulletbkb = 5.5;
+	bulletkbg = 7;
+	bulletshielddmg = 6;
+	bullethitlag = 10;
+	bulletsound = mokouexplode6;
+	bulletspark = obj_spark_fire1;
+	bulletxscale = 0.25;
+	bulletyscale = 0.25;
+	bulletx = -15;
+	bullety = 10;
+	bullettime = 99;
+	bulletid = self.id;
+	bulletscript = char_custom1;
+	bullethit = 0;
+	bulletfacing = facing;
+	bullethitstun = 0;
+	bulletblockstun = 0;
+	bulletdi = 1;
+	bulletdirection = 200+facing*140;
+	bulletspeed = 6;
+	rotatespeed = 0;
+	explodetime = 0;
+}
+
+switch ( timer )
+{
+	case 2:	 image_index = 1; break;
+	case 4:	 image_index = 2; break;
+	case 6:  image_index = 3; break;
+	case 9:  image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 15: image_index = 6; break;
+	case 18: image_index = 7; break;
+	case 21: image_index = 8; break;
+	case 24: image_index = 9; break;
+	case 27: image_index = 10; break;
+	case 30: image_index = 11; break;
+	case 33: image_index = 12; break;
+	case 36: image_index = 13; break;
+	//case 39: image_index = 14; break;
+	//case 42: image_index = 15; break;
+}
+
+if timer < time 
+{
+	if timer = 15
+	{
+		if nobullet = 1
+		{
+			percent += selfdmg;
+			lifemeter += selfdmg * lifemetergain;
+		}
+		
+		if ( random ( 2 ) < 1 ) {sound_play( choose( mid_voice2, mid_voice4, special_voice5, special_voice8, special_voice11, special_voice13 ) );}
+		sound_play(mokouexplosion2);
+		
+		create_hitbox(10,220+facing*90,6.6,4.9,25,15,mokouexplode3,obj_spark_fire1, 0.7 , 0.7 , -15, 10 ,self.id,3,3);
+		hitbox.shake_ampl = 0;
+        hitbox.shield_stun = 2.5;
+		
+		direction = 45+facing*90;
+		speed = 4.5;
+		
+		///Spark
+		bairexplosion = create_blur(x,y,self.id);
+		if !blueflame {bairexplosion.sprite_index = bairexplosion_sprite;}
+		if blueflame {bairexplosion.sprite_index = bairexplosionblue_sprite;}
+		bairexplosion.image_xscale = (bairexplosionscale*size)*(1-facing*2);
+		bairexplosion.image_yscale = (bairexplosionscale*size);
+		bairexplosion.x = x + bairexplosionxshift*size*(1-facing*2);
+		bairexplosion.y = y - bairexplosionyshift*size;
+		bairexplosion.image_index = 0;
+		bairexplosion.image_speed = bairexplosionspeed;
+		bairexplosion.alarm[0] = bairexplosiontime;
+		//bairexplosion.snap = self.id;
+		bairexplosion.depth = bairexplosionzoom;
+	}
+	
+	if timer = 16 && !hitbox.hit && floattime >= spellcost
+	{
+		floattime -= spellcost;
+		spellcosttimer = spellcosttime;
+		
+		///Projectile Loop....for one projectile. May edit the bullettotal in the future for lols.
+		var i;
+		for (i = 0; i < bullettotal; i += 1)
+		{
+			bulletcount = i;
+			
+			create_projectile(bulletdmg,bulletdir,bulletbkb,bulletkbg,bulletshielddmg,bullethitlag,bulletsound,bulletspark,bulletxscale,bulletyscale,bulletx,bullety,bulletid,bullettime,bulletscript);
+			proj.bullettype = bullettype;
+			proj.bulletcount = bulletcount;
+			proj.bulletstartdir = bulletstartdir;
+			proj.bulletshift = bulletshift;
+			proj.bulletscale = bulletscale;
+			proj.bulletdirshift = bulletdirshift;
+			proj.bulletdir = bulletdir;
+			proj.bulletdirection = bulletdirection;
+			proj.bulletspeed = bulletspeed;
+			proj.hit = bullethit;
+			proj.facing = bulletfacing;
+			proj.hit_stun = bullethitstun;
+			proj.shield_stun = bulletblockstun;
+			proj.di = bulletdi;
+			proj.bulletdmg = bulletdmg;
+			proj.bulletbkb = bulletbkb;
+			proj.bulletkbg = bulletkbg;
+			proj.bulletshielddmg = bulletshielddmg;
+			proj.bullethitlag = bullethitlag;
+			proj.bulletsound = bulletsound;
+			proj.bulletspark = bulletspark;
+			proj.bulletxscale = bulletxscale;
+			proj.bulletyscale = bulletyscale;
+			proj.bulletx = bulletx;
+			proj.bullety = bullety;
+			proj.bullettime = bullettime;
+			proj.bulletid = bulletid;
+		}
+	}
+	
+	if timer >= 15
+	{
+		fast_fall = 0;
+		fast_fall_temp = 0;
+		air_move = 0;
+	}
+	
+	if air = 0 
+	{
+		facing = !facing;
+		shakex = 0;
+		shakey = 0;
+		state_type="land";
+		attack_type="none";
+		sprite_index = land_sprite;
+		timer= 0;
+		time= 13; 
+	}
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+	facing = !facing;
+	state_type = "jump";
+	attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 6;
+	timer = 0;
+	time = -1;
+}
