@@ -1,0 +1,110 @@
+
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        if ( downbtemp != 0) exit;
+		state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+	    sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+		time = 58
+		downbtemp = 1
+		temp = 0
+		
+		
+		
+}
+if ( timer < time )
+    {
+	
+
+	
+    switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 14: image_index = 3; break;
+	case 19: image_index = 4; break;
+	case 24: image_index = 5; break;
+	case 26: image_index = 6; break;
+	case 28: image_index = 7; break;
+	
+	
+    }
+	
+
+}
+
+
+if timer = 8 {
+create_hitbox(4,angle_correct(48),8.5,0,8,3,punch2,obj_spark_hit1,0.8,1.0,15,20,self.id,8,3);
+hitbox.hit_stun = 10;
+hitbox.di = 0;
+hitbox.weight_kb = 1;
+sound_play(downb_voice);
+}
+
+if timer = 8 {
+hspeed = (4 - facing*8)
+vspeed = -8.2;
+}
+
+if timer = 26 {
+    punchring = create_spark(15,20,self.id);
+    punchring.sprite_index = powahdunk_sprite;
+    punchring.image_speed = 1;
+    punchring.image_alpha = 1;
+    punchring.image_xscale = image_xscale*0.6;
+    punchring.image_yscale = image_yscale*0.6;
+    punchring.depth = depth - 0.1;
+    punchring.snap = self.id
+	}
+
+if timer = 26 {
+create_hitbox(12,angle_correct(350),5,6,24,12,punch4,obj_spark_hit1,1.5,1.5,0,19,self.id,8,3);
+sound_play(swingsnd3);
+    powerdunk = create_spark(19,10,self.id);
+    powerdunk.sprite_index = powahdunk2_sprite;
+    powerdunk.image_speed = 0.7;
+    powerdunk.image_alpha = 0.9;
+    powerdunk.image_xscale = image_xscale*0.6;
+    powerdunk.image_yscale = image_yscale*0.6;
+    powerdunk.depth = depth - 0.1;
+    powerdunk.snap = self.id
+
+
+
+}
+
+if timer > 26
+{
+hspeed = (4 - facing*8)
+vspeed = 3.5
+}
+
+ if timer > 8 && air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14;
+				with (powerdunk) {instance_destroy()}
+				with (punchring) {instance_destroy()}
+				
+
+				}
+
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	
+}
+        

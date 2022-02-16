@@ -1,0 +1,186 @@
+
+if state_type = "jump" || state_type = "stand" || state_type = "shielding" {
+    special = 1
+    attacking = 0
+    timer = 0
+    attack_type = "b"
+	if air > 0 {
+    state_type = "air_attack"
+	}
+	else
+	{
+	state_type = "attack"
+	}
+    image_speed = 0
+	if air = 0 {
+    sprite_index = b_sprite}
+	else
+	{
+	sprite_index = b2_sprite
+	}
+    image_index=0
+	if air = 0
+	{
+    time = 24
+	}
+	else
+	{
+    time = 30
+	}
+    timer_speed=1
+    if air = 0
+    hspeed = 0
+    else
+    hspeed*=0.3
+	if air > 0
+	{
+	vspeed -= 0.3
+	}
+}
+    
+if timer < time 
+{
+
+if sprite_index = b2_sprite
+{
+switch (timer)
+{
+		case  3: 
+		image_index =  1; 
+		if btemp = 0
+{
+		sound_play(choose(b_voice,b2_voice));
+}
+		break;
+		case  6: image_index =  2; break;
+		case  9: image_index =  3; break;
+		case 12: image_index =  4; bfire.image_index = 1; break;
+		case 13: bfire.image_index = 2; break;
+		case 14: bfire.image_index = 3; break;
+		case 15: image_index = 5; bfire.image_index = 4; break;
+		case 16: bfire.image_index = 5; break;
+		case 17: bfire.image_index = 6; break;
+		case 18: image_index = 6; bfire.image_index = 7; break;
+		case 19: bfire.image_index = 8; break;
+		case 20: bfire.image_index = 9; break;
+		case 21: bfire.image_speed = 1; break;
+}
+}
+
+if sprite_index = b_sprite
+{
+switch (timer)
+{
+		case  3: 
+		image_index =  1; 
+		if !instance_exists(bshot)
+{
+		
+}
+		break;
+		case  6: image_index =  2; break;
+		case  9: image_index =  3; break;
+		case 10: bfire.image_index = 1; break;
+		case 11: bfire.image_index = 2; break;
+		case 12: image_index =  4; bfire.image_index = 3; break;
+		case 13: bfire.image_index = 4; break;
+		case 14: bfire.image_index = 5; break;
+		case 15: image_index =  5; bfire.image_index = 6; break;
+		case 16: bfire.image_index = 7; break;
+		case 17: bfire.image_index = 8; break;
+		case 18: image_index =  6; bfire.image_index = 9; break;
+}
+}
+
+
+if sprite_index = b_sprite && !instance_exists(bshot)
+{
+
+if timer = 1 {
+sound_play(choose(b_voice,b2_voice));
+}
+
+
+if timer = 6
+{
+
+bfire = instance_create(x,y,obj_spark);
+bfire.sprite_index = b_effect_sprite;
+bfire.image_index = 0;
+bfire.image_speed = 0;
+bfire.image_xscale = 0.39*(1-facing*2)*size;
+bfire.image_yscale = 0.39*size;
+bfire.snap = self.id
+bfire.depth = depth - 1;
+bfire.x = x + (1 - facing * 2) *size;
+bfire.y = y - 42*size ; 
+}
+
+
+
+
+if timer = 9
+{
+firethingyshockwave = instance_create(x+27*(1-facing*2),y,obj_spark_shockwave);
+firethingyshockwave.image_blend = c_yellow;
+sound_play2(fire1);
+bshot = create_projectile (5,25+facing*130,4,5,10,5,fire2,obj_spark_fire1,1.0,1.0,27,0,self.id,70,char_custom1);
+bshot.type = 0;
+bshot.sprite_index = bproj_sprite;
+}
+}
+
+if sprite_index = b2_sprite && !instance_exists(bshot)
+{
+
+
+if timer = 6
+{
+
+bfire = instance_create(x,y,obj_spark);
+bfire.sprite_index = b_effect_sprite;
+bfire.image_index = 0;
+bfire.image_speed = 0;
+bfire.image_xscale = 0.39*(1-facing*2)*size;
+bfire.image_yscale = 0.39*size;
+bfire.snap = self.id
+bfire.depth = depth - 1;
+bfire.x = x + (1 - facing * 2) *size;
+bfire.y = y - 42*size ; 
+}
+
+	if timer = 9
+	{
+
+	sound_play2(fire1);
+firethingyshockwave = instance_create(x+27*(1-facing*2),y,obj_spark_shockwave);
+firethingyshockwave.image_blend = c_yellow;
+	bshot = create_projectile (7,25+facing*130,5,6,14,7,fire2,obj_spark_fire1,1.0,1.0,30,0,self.id,15,char_custom1);
+	bshot.type = 1;
+	bshot.sprite_index = airbproj_sprite;
+	}
+}
+
+if state_type = "air_attack" && air = 0 
+{
+                state_type="land";
+                attack_type="none";
+                time=25;
+                sprite_index = land_sprite;
+                timer=0;
+            }
+
+}	
+
+
+	
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air=0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+    }

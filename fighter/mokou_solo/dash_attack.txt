@@ -7,7 +7,7 @@ if state_type = "stand" || state_type = "run"
 	image_speed = 0;
 	image_index = 0;
 	timer = 0;
-	time = 48;
+	time = 58;
 	timer_speed = 1;
 	if moveright = 1 facing = 0;
 	if moveleft = 1 facing = 1;
@@ -73,9 +73,9 @@ if timer < time
 	
 	if timer = 12
 	{
-		create_hitbox(12,25+facing*130,5.6,6.7,18,8,mokouexplode6,obj_spark_fire1, 0.96 , 0.96 , 10.80 , 12.40 , self.id ,6,5);
+		create_hitbox(12,25+facing*130,3.6,7.35,12,8,mokouexplode6,obj_spark_fire1, 0.96 , 0.96 , 10.80 , 12.40 , self.id ,6,5);
 		hitbox.shield_stun = 4;
-		create_hitbox2(12,35+facing*110,5.6,6.5,13,8,mokouexplode6,obj_spark_fire1, 0.96 , 0.96 , 7.20 , 28.40, self.id ,6,5);
+		create_hitbox2(12,35+facing*110,3.6,7.35,13,8,mokouexplode6,obj_spark_fire1, 0.96 , 0.96 , 7.20 , 28.40, self.id ,6,5);
 		hitbox2.shield_stun = 4;
 		
 		percent += selfdmg;
@@ -112,9 +112,39 @@ if timer < time
 		case 27: if instance_exists(arcflame){ with(arcflame){instance_destroy();}} ; break;
 	}
 }
+if (attack_success) && (dontrepeat = 0 && temp_spawn >= 2) && target.percent > 130 {
+				dontrepeat = 1;
+				killspark = instance_create(enemy.x-235,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(100,100);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 35;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 96;
+				spark.alarm[0] = 80;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 80
+				}	
+				
 	
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
 {
+	dontrepeat = 0
 	attack_type = "none";	
 	state_type = "stand";
 	sprite_index = stand_sprite;
