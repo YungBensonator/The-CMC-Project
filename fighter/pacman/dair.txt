@@ -1,0 +1,148 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "dair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dair_sprite;
+  timer = 0;
+  time = 80;
+  timer_speed = 1;
+  temp = 0;
+  }
+
+if ( temp )
+  {
+  switch ( timer )
+    {
+    case 1:
+      if ( random ( 10 ) < 5 )
+        sound_play ( choose ( attack_voice5 , attack_voice6 ) );
+      sprite_index = dair2_sprite;
+      image_index = 0;
+      break;
+    case 7:
+      if ( moveright ) hspeed = 2 * size;
+      if ( moveleft ) hspeed = -2 * size;
+      vspeed = -6.7 * size;
+      image_index = 1;
+      break;
+    case 14: image_index = 2; break;
+    case 21: image_index = 3; break;
+    }
+
+  if ( timer < 7 )
+    {
+    hspeed = 0;
+    vspeed = 0;
+    }
+  
+  if ( timer > 8 && air == 0 )
+    {
+    sprite_index = land_sprite;
+    state_type = "land";
+    attack_type = "none";
+    timer = 0;
+    time = 16;
+    }
+  
+  if ( timer >= time - 1 )
+    {
+    attack_type = "none";
+    if ( air > 0 )
+      state_type = "jump";
+      else
+      state_type = "stand";
+    timer = 0;
+    time = -1;
+    }
+  exit;
+  }
+
+if ( timer > 10 && timer < 75 )
+  {
+  if ( timer mod 3 == 0 )
+    after_image ( 4 , c_white , .7 );
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 8: image_index = 2; break;
+  case 10:
+    hspeed = 0;
+    air_move = 0;
+    image_index = 3;
+    vspeed = 5;
+    fall_lock = -50;
+    create_hitbox ( 11 , 250 + facing * 40 , 6.2 , 5.4 , 30 , 11 , kick3 , obj_spark_hit4 , 0.6 , 0.5 , 0 , 15.20 , self.id , 50 , 2 );
+    break;
+  case 14:
+    hitbox.dir = 270;
+    break;
+  case 75: image_index = 2; break;
+  case 78: image_index = 1; break;
+  }
+
+if ( timer > 10 && timer < 75 )
+  {
+  hspeed = 0;
+  if ( moveright )
+    hspeed = size * 1.1;
+  if ( moveleft ) 
+    hspeed = -size * 1.1;
+  if ( attack_success )
+    temp = 2;
+  }
+
+if ( air == 0 )
+  {
+  if ( timer > 10 && timer < 75 )
+    {
+    temp = 2;
+    }
+    else
+    {
+    sprite_index = land_sprite;
+    state_type = "land";
+    attack_type = "none";
+    timer = 0;
+    time = 16;
+    }
+  }
+
+if ( temp == 2 )
+  {
+  //if ( air > 0 )
+  //  air = 1;
+  sound_play ( dair_sound );
+  air_move = 0;
+  fall_lock = 1;
+  with ( hitbox ) instance_destroy();
+  screen_shake ( 4 , 3 );
+  instance_create ( x , y , obj_down_impact );
+  hspeed = 0;
+  vspeed = 0;
+  air_move = 0;
+  timer = 0;
+  time = 28;
+  temp = 1;
+  exit;
+  }
+
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

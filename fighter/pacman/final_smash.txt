@@ -1,0 +1,282 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 6;
+  sprite_index = entry2_sprite;
+  timer = 0;
+  time = 240;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  tempmus_play2 ( fs_sound , 280 , 1 );
+  
+  spark = instance_create ( 0 , 0 , obj_camerazoom );
+  spark.camera_l = x - 8;
+  spark.camera_r = x + 8;
+  spark.camera_u = y - 4 - actual_height;
+  spark.camera_d = y + 4;
+  spark.camera_boundary_zoom = 120;
+  spark.alarm[0] = 189;
+
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 189;
+  
+  temp = 0;
+  attack_success = 0;
+  }
+  
+gravity_lock = 2;
+speed = 0;
+  
+if ( temp == 4 )
+  {
+  switch ( timer )
+    {
+    case 10: image_index = 1; break;
+    case 12: image_index = 2; break;
+    case 14: image_index = 3; break;
+    case 20: image_index = 4; break;
+    case 22: image_index = 5; break;
+    case 24: image_index = 6; break;
+    }
+  if ( timer == 10 || timer == 20 )
+    sound_play ( upb_sound );
+  if ( timer >= 30 )
+    {
+    smash_power = 0;
+    attack_type = "none";
+    intangible = 0;
+    if ( air > 0 )
+      state_type = "jump"; 
+      else
+      state_type = "stand";
+    timer = 0;
+    time = -1;
+    }
+  exit;
+  }
+
+if ( temp > 0 )
+  {
+  if ( ai && temp >= 1 && temp <= 3 )
+    {
+    moveright = 0;
+    moveleft = 0;
+    moveup = 0;
+    movedown = 0;
+    var sepa, bound_u, bound_l, bound_r, bound_d;
+    sepa = 8;
+    if ( global.gs_ai[number-1] < 4 )
+      sepa = 50;
+      else
+    if ( global.gs_ai[number-1] < 7 )
+      sepa = 20;
+    if ( timer mod sepa == 0 )
+      {
+      if ( random ( 5 ) < 1 )
+        {
+        temp = choose ( 1 , 2 , 3 );
+        facing = choose ( 0 , 1 );
+        }
+      bound_u = 0;
+      bound_r = 0;
+      bound_l = 0;
+      bound_d = 0;
+      if ( x < obj_game_control.camera_boundary_l + 48 )
+        bound_l = 1;
+      if ( x > obj_game_control.camera_boundary_r + 48 )
+        bound_r = 1;
+      if ( y < obj_game_control.camera_boundary_u + 32 )
+        bound_u = 1;
+      if ( y > obj_game_control.camera_boundary_d - 64 )
+        bound_d = 1;
+      if ( bound_l || next_to_lwall )
+        {
+        facing = 0;
+        }
+      if ( bound_r || next_to_rwall )
+        {
+        facing = 1;
+        }
+      if ( bound_u || ( under_ceiling && temp == 2 ) )
+        {
+        facing = choose ( 0 , 1 );
+        temp = choose ( 1 , 3 );
+        }
+      if ( bound_d || ( ( on_floor || on_platform ) && temp == 3 ) )
+        {
+        temp = 2;
+        }
+      if ( !collision_line ( x , y , x , obj_game_control.death_d , obj_terrain , 1 , 1 ) )
+        {
+        if ( under_ceiling && temp == 2 )
+          {
+          facing = choose ( 0 , 1 );
+          temp = choose ( 1 , 3 );
+          }
+        if ( next_to_rwall )
+          {
+          if ( under_ceiling )
+            facing = 1;
+            else
+            temp = 2;
+          }
+        if ( next_to_lwall )
+          {
+          if ( under_ceiling )
+            facing = 0;
+            else
+            temp = 2;
+          }
+        if ( !under_ceiling && !next_to_rwall && !next_to_lwall )
+          {
+          if ( x < ( obj_game_control.camera_boundary_l + obj_game_control.camera_boundary_r ) * 0.5 )
+            facing = 0;
+            else
+            facing = 1;
+          }
+        }
+        else
+        {
+        if ( random ( 10 ) < global.gs_ai[number-1] && !bound_l && !bound_r && !bound_u && !bound_d )
+          {
+          if ( enemy.x < x )
+            facing = 1;
+            else
+            facing = 0;
+          if ( enemy.y < y - 24 && ( abs ( x - enemy.x ) < 20 || random ( 3 ) < 1 ) )
+            temp = 2;
+            else
+          if ( enemy.y > y + 32 && ( abs ( x - enemy.x ) < 20 || random ( 2 ) < 1 ) )
+            temp = 3;
+            else
+            temp = 1;
+          }
+        }
+      }
+    }
+  
+  if ( timer >= time - 30 )
+    {
+    sprite_index = entry2_sprite;
+    image_angle = 0;
+    image_index = 0;
+    image_speed = 0;
+    temp = 4;
+    timer = 0;
+    time = 30;
+    exit;
+    }
+  if ( timer mod 12 == 0 )
+    sound_play ( wakka_sound );
+  
+  if ( timer mod 3 == 0 )
+    {
+    var d, l;
+    d = random ( 360 );
+    l = random ( 16 );
+    spark = instance_create ( x + lengthdir_x ( l , d ) , y - actual_height * 0.5 + lengthdir_y ( l , d ) , obj_spark );
+    spark.image_xscale *= 0.05 + random ( 0.1 );
+    spark.image_yscale = spark.image_xscale;
+    spark.alpha_add = -1/60;
+    spark.alarm[0] = 59;
+    spark.angle_add = random ( 360 );
+    spark.sprite_index = spr_light;
+    spark.image_speed = 0;
+    }
+    
+  if ( attack_success )
+    {
+    sound_play ( b_sound );
+    attack_success = 0;
+    }
+  if ( timer mod 30 == 1 )
+    {
+    create_hitbox ( 18 , 30 + facing * 120 , 8 , 7 , 80 , 10 , slash3 , obj_spark_slash5 , 1.4 , 1.4 , 0 , 18 , self.id , 30 , 6 );
+    }
+  if ( temp == 1 )
+    {
+    hspeed = 3 * size * ( 1 - facing * 2 );
+    image_angle = 0;
+    hitbox.dir = 30 + facing * 120;
+    }
+  if ( temp == 2 )
+    {
+    vspeed = -3 * size;
+    image_angle = 90 * ( 1 - facing * 2 );
+    hitbox.dir = 90;
+    }
+  if ( temp == 3 )
+    {
+    vspeed = 3 * size;
+    image_angle = -90 * ( 1 - facing * 2 );
+    hitbox.dir = 270;
+    }
+  if ( moveright )
+    {
+    temp = 1;
+    facing = 0;
+    }
+  if ( moveleft )
+    {
+    temp = 1;
+    facing = 1;
+    }
+  if ( moveup )
+    {
+    temp = 2;
+    }
+  if ( movedown )
+    {
+    temp = 3;
+    }
+  exit;
+  }
+  
+switch ( timer )
+  {
+  case 62: image_index = 5; break;
+  case 64: image_index = 4; break;
+  case 66: image_index = 3; break;
+  case 126: image_index = 2; break;
+  case 128: image_index = 1; break;
+  case 130: image_index = 0; break;
+  }
+  
+if ( timer == 62 || timer == 126 )
+  {
+  sound_play ( upb_sound );
+  }
+
+if ( timer == 189 )
+  {
+  timer = 0;
+  time = 720;
+  temp = 1;
+  sprite_index = entry_sprite;
+  image_speed = 0.5;
+  exit;
+  }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    intangible = 0;
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+    }

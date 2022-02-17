@@ -1,0 +1,47 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "uthrow";
+  image_speed = 0.25;
+  image_index = 0;
+  sprite_index = uthrow_sprite;
+  timer = 0;
+  time = 45;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  sound_play ( uthrow_voice );
+  }
+
+if ( timer <= 3 )
+{
+target.x = x + 16 * size * (1-facing*2);
+target.y = y;
+}
+if ( timer >= 4 && timer <= 8 )
+{
+target.x = x + 8 * size * (1-facing*2);
+target.y = y;
+}
+if ( timer >= 12 && timer <= 16 )
+{
+target.x = x;
+target.y = y - 10 * size;
+}
+
+switch ( timer )
+  {
+  case 4: sound_play ( swingsnd5 ); target.depth = depth - 1; break;
+  case 16:
+    create_throw_box ( 7 , 105 - facing * 30 , 6.2 , 4.1 , 14 , 1 , slash2 , obj_spark_slash2 , 0.7 , 0.7 , 0 , 13 , self.id , 2 );
+    break;
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
