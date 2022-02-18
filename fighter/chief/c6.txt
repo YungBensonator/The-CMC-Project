@@ -1,0 +1,111 @@
+//Plasma Grenade 
+ignore_physics = 1;
+absorb = 0
+absorb2 = 1
+if timer <= 1 && hit = 0 
+{         // Initialize sprite and speed during frame 1
+    sound_play ( attacker.ssmash_sound );
+    snd1 = attacker.plasma_sticky;
+    snd2 = attacker.plasma_explode;
+    snd3 = attacker.plasma_det;	
+    hspeed = (attacker.gtemp - attacker.facing*(attacker.gtemp *2))*attacker.size;
+    visible = 1
+    sprite_index = attacker.plasmagrenade_sprite;
+    facing = attacker.facing;
+    dirr = 1 - facing * 2;
+    hit = 2;
+    sticky = 0;
+    exploded = 0;
+    temp = 0; //target
+	ignore_physics = 1;
+}
+moving_object = 1;
+
+if sticky > 0 {
+if ( facing )
+    image_xscale = 1;
+if ( !facing )
+    image_xscale = -1;
+}
+
+if ( sticky = 0 ||  sticky = 3  )
+  {
+    if ( timer mod 2 == 0 )
+      {
+	after_image ( 2 , c_white , .5 );
+	if ( sticky = 0 ){create_homing_bubble(0.5,0.35,0,0,attacker.id,2);}
+	proj.destroy = 0;
+	proj.target = 0;
+      }
+    if ( proj.target > 0 && !proj.target.intangible )
+      {
+	temp = proj.target;
+	sticky = 1;
+	instance_create ( x , y , obj_spark_shockwave );
+	if (attacker.attack_success = 0)
+	{	
+	create_projectile (2,90-20*dirr,3,0,5,2,fire2,obj_spark_hit2,0.6,0.6,0,0,attacker.id,4,no_script);
+	}
+	else
+	{
+	target.percent += 4
+	}
+      }
+  }
+if ( sticky = 1 )
+  {
+    sticky = 2;
+    sound_play(snd1);
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+    time = 120;
+  }
+if ( sticky = 2 )
+  {
+    x = temp.x+10*(1-facing*2)*temp.size;
+    y = temp.y-temp.actual_height * 0.5;
+    facing = temp.facing;
+  }
+  
+
+if ( sticky = 2 && timer = 60 )  
+    sound_play(snd3);
+	
+if ( timer = time - 1 && !exploded )
+  {
+    sound_play(snd2);
+    exploded = 1;
+    create_projectile(8,90-55*dirr,7,3,30,10,fire3,obj_spark_shock2,3,3,0,5,attacker.id,4,no_script);
+    //instance_create(x,y,obj_spark_explode2);
+    plasma1= instance_create(x ,y, obj_custom_gfx);
+    plasma1.attacker = self.id;
+    plasma1.step_script = attacker.trans_step;
+    plasma1.draw_script = attacker.trans_draw;
+    plasma1.plasma1 = -1;
+    plasma1.sprite_index = attacker.bd_fx;
+    plasma1.image_speed = 1.8;
+    plasma1.image_index = 0;
+    plasma1.owner = attacker.id;
+    plasma1.keepmain = attacker.keepmain;
+    screen_shake(1,8);
+    sticky = 0
+	//attacker.grenade_count -= 1;
+    instance_destroy();
+  }
+  
+  if (!is_on_floor(self.id))
+  {
+    vspeed += 0.3;
+	hspeed = hspeed;
+  }
+else if( is_on_floor(self.id) && sticky != 2)
+{
+    //vspeed = 0;
+	hspeed = 0;
+	sticky = 3;
+}
+if (vspeed > 4.5)
+{
+    vspeed = 4.5
+}

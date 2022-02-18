@@ -1,0 +1,56 @@
+shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield)
+if ( air == 0 ) {cantsideb = 0;}
+if (air == 0) { charge = 0;}
+
+
+
+
+if(dbtimer > 0 &&  !instance_exists (gren) ) {dbtimer -= 1}
+if(dbtimer < 0) {dbtimer = 0}
+
+
+
+if(shottemp = 2)
+{
+	bshot_sprite = bshot1_sprite;
+	bwalk_sprite = bwalk1_sprite;
+	bcrouch1_sprite = bcrouch1_sprite;
+}
+if(shottemp = 1)
+{
+	bshot_sprite = bshot2_sprite;
+	bwalk_sprite = bwalk2_sprite;
+	bcrouch1_sprite = bcrouch2_sprite;
+}
+
+if (sprite_index == shield_sprite){
+
+if (!instance_exists(shieldH)){
+    shieldH= instance_create(x ,y, obj_custom_gfx);
+    shieldH.step_script = shieldH_step;
+    shieldH.draw_script = shieldH_draw;
+    shieldH.shieldH = -1;
+    shieldH.sprite_index = shield_halo;
+    shieldH.image_speed = 1;
+    shieldH.image_index = 1;
+    shieldH.owner = self.id;
+    shieldH.keepmain = self.keepmain;
+
+}
+else{
+	
+	if(shieldH.image_index >= 45)
+	shieldH.image_index = 20;
+
+}
+
+}
+
+else{
+if(shieldH.image_index < 45)
+shieldH.image_index = 45;
+
+}
+
+
+if (instance_exists(sniper) && attack_type != "sideB") {with sniper instance_destroy();}

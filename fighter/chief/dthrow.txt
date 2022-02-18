@@ -1,0 +1,65 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0.3;
+sprite_index = dthrow_sprite;
+image_index=0;
+timer = 0;
+time = 70;
+timer_speed=1;
+combo_target = target;
+target.timer_speed = 0;
+target.alarm[0] = 70;
+}
+if timer < time {
+    state_type = "attack";
+    if ( timer < 3 ) {
+        target.x = x + 6 - facing * 12;
+        target.y = y - 2;
+        }
+     if ( timer >= 3 && timer < 6 ) {
+        target.x = x + 4 - facing * 8;
+        target.y = y - 1;
+        }
+     if ( timer >= 6 && timer <= 58 ) {
+        target.x = x + 4 - facing * 8;
+        target.y = y;
+        target.sprite_index = target.down_sprite;
+        target.image_index = 0;
+        target.sprite_angle = 0;
+        target.techlock = 1;
+	target.gethit = 0;
+        }
+     if ( timer = 5 ) {
+        //create_hitbox(2,368,6,0,0,12,kick2,obj_spark_hit3,0.75,0.4,14,6,self.id,3,2);
+        //hitbox.di = -1;
+        combo_hits += 1;
+        sound_play2 ( kick2 );
+        target.percent += round ( 2 * size );
+        instance_create ( x + 6 * ( 1 - facing * 2 ) * size , y - 18 * size , obj_spark_hit3 )
+        screen_shake(1,2);
+        }
+     if ( timer = 14 || timer = 26 || timer = 38 || timer = 42 || timer = 50 ) {
+	image_speed = 0.15;
+        combo_hits += 1;
+        sound_play ( b_sound );
+        sound_play2 ( kick1 );
+        target.percent += round ( 1 * size );
+        instance_create ( x + 16 * ( 1 - facing * 2 ) * size , y - 8 * size , obj_spark_hit1 )
+        screen_shake(1,2);
+        }
+     if ( timer = 58 ) {
+        sound_play ( b_sound );
+        create_projectile(1,368,4,0,8,1,kick1,obj_spark_hit1,0.8,0.8,8,20,self.id,30,mach_bullet); 
+        proj.direction = 270;
+        proj.speed = 7;
+	proj.di = -1;
+        }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
