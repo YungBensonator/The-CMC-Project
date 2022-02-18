@@ -1,0 +1,473 @@
+~~INIT:
+uhand_1_spr = ispr_add_alpha ( "item/uhand/hand.png" , 1 , 0 , 0 , 2 , 31 );
+uhand_2_spr = ispr_add_alpha ( "item/uhand/center.png" , 1 , 0 , 0 , 1 , 5 );
+uhand_3_spr = ispr_add_alpha ( "item/uhand/sucker.png" , 1 , 0 , 0 , 1 , 22 );
+//uhand_snd = isound_add ( "item/fireflower/launch.wav" , 0 , 0 );
+
+~~DEINIT:
+if ( sprite_exists ( uhand_1_spr ) )
+  spr_delete ( uhand_1_spr );
+if ( sprite_exists ( uhand_2_spr ) )
+  spr_delete ( uhand_2_spr );
+if ( sprite_exists ( uhand_3_spr ) )
+  spr_delete ( uhand_3_spr );
+
+~~ENTER:
+sprite_index = -1;
+sprite_air = -1;
+sprite_held = -1;
+spr_1 = obj_items_control.uhand_1_spr;
+spr_2 = obj_items_control.uhand_2_spr;
+spr_3 = obj_items_control.uhand_3_spr;
+air_spr_y = 0;
+type = "batter";
+image_xscale = 1;
+image_yscale = 1;
+hit_timer = 0;
+shadow = 8;
+
+batter_jab = 1;
+batter_stilt = 0;
+batter_dash = 0;
+batter_ssmash = 0;
+batter_nair = 1;
+batter_fair = 0;
+
+extend = 0;
+pro_angle = 0;
+pro_angle2 = 0;
+xs = 0.5;
+ys = 0.5;
+
+lag_timer = 0;
+
+
+~~LAND:
+instance_create ( x , y - 4 , obj_smoke_front );
+instance_destroy();
+
+
+~~STEP:
+//if ( held <= 0 )
+  //sprite_angle = 0;
+if ( pro_angle2 > 0 )
+  pro_angle2 -= 1;
+  else
+  extend = 0;
+
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  extend = 0;
+  collision_type = 2;
+  can_pick_up = 0.5;
+  
+  if ( on_floor && on_platform && speed < 0.1 )
+    {
+    thrown = -99;
+    }
+  }
+  else
+  {
+  collision_type = 0;
+  can_pick_up = 1;
+  }
+if ( lag_timer > 0 )
+  lag_timer -= 1;
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+if ( y < other.y )
+  vspeed = -3;
+  else
+  vspeed = choose ( 0 , 1 );
+thrown = -99;
+
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 8;
+last_hit_proj = create_projectile ( 8 , 90 - sign ( hspeed ) * 45 , 7 + min ( 1.7 , speed * 0.2 ) , 0.6 , 22 , 6 , kick3 , obj_spark_hit3 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~CUSTOM:
+if ( speed == 0 )
+  {
+  speed = last_speed;
+  direction = last_direction;
+  }
+  else
+  {
+  last_speed = speed;
+  last_direction = direction;
+  }
+moving_object = 1;
+vspeed -= 0.1;
+image_angle = direction + 90;
+time = 28;
+if ( timer > 2 && timer < 14 )
+  {
+  if ( random ( 40 ) < 1 )
+    instance_create ( x , y , obj_smoke );
+  }
+if ( timer > 18 )
+  {
+  hit = 2;
+  image_alpha -= 0.08;
+  }
+if ( image_alpha < 0 )
+  instance_destroy();
+
+
+~~PLAYER EVENT:
+if ( timer == -1 )
+  {
+  sound_play_pitch ( swingsnd2 , 0.8 );
+  sprite_index = item_shoot_sprite;
+  image_index = 0;
+  state_type = "air_attack";
+  timer_speed = 1;
+  timer = 0;
+  time = 42;
+  image_speed = item_shoot_frame / 8;
+  var o;
+  o = instance_create ( x , y , obj_down_impact );
+  o.image_blend = sim_color;
+  vspeed = 0;
+  hspeed = 0;
+  held_item.air_hand = ( air > 0 );
+  attacking = 1;
+  if ( held_item.lag_timer )
+    held_item.lag_timer2 = 16;
+  }
+if ( sprite_index = item_shoot_sprite && image_index = item_shoot_frame )
+{
+image_speed = 0;
+}
+switch ( timer )
+  {
+  case 1: shakey = 1; image_yscale *= 0.93; image_xscale /= 0.93; break;
+  case 2: shakey = 1.5; image_yscale *= 0.9; image_xscale /= 0.9; break;
+  case 3: shakey = 0.5; image_yscale *= 0.98; image_xscale /= 0.98; break;
+  case 4: shakey = 0; break;
+  case 11: shakex = lengthdir_x ( -1 , held_item.pro_angle ); shakey = lengthdir_y ( -1 , held_item.pro_angle ); break;
+  case 12: shakex /= 0.8; shakey /= 0.8; break;
+  case 13: shakex *= 0.8; shakey *= 0.8; break;
+  case 14: shakex *= 0.5; shakey *= 0.5; break;
+  case 15: shakex = 0; shakey = 0; break;
+  }
+if ( timer == 6 && held_item.lag_timer2 )
+  {
+  timer = 5;
+  held_item.lag_timer2 -= 1;
+  }
+if ( air == 0 )
+  {
+  hspeed *= 0.8;
+  if ( timer >= 10 && timer < 40 && timer mod 8 == 0 )
+    {
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.facing = facing;
+    duster.image_xscale *= 0.3 * size;
+    duster.image_yscale *= 0.3 * size;
+    duster.hspeed = size * ( -1+facing*2) * ( 2-random(1.5) );
+    }
+  }
+  else
+  {
+  held_item.air_hand = 1;
+  air_move = 0;
+  if ( timer < 10 )
+    {
+    hspeed = 0;
+    vspeed = 0;
+    gravity_lock = 1;
+    }
+    else
+  if ( timer < 28 )
+    {
+    if ( vspeed > fall_speed * 0.5 - grav * GRAV_MUL ) vspeed = fall_speed * 0.5 - grav * GRAV_MUL;
+    }
+  if ( timer >= 10 && timer < 40 && timer mod 8 == 0 )
+    {
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.facing = facing;
+    duster.image_xscale *= 0.2 * size;
+    duster.image_yscale *= 0.2 * size;
+    duster.image_alpha *= 0.6;
+    duster.hspeed = size * ( -1+facing*2) * ( 2-random(1.5) );
+    }
+  }
+
+if ( timer == 10 )
+  {
+  sound_play ( swingsnd5 );
+  instance_create ( held_item.x , held_item.y , obj_spark_effect );
+  if ( analog_control )
+    {
+    if ( point_distance ( holdx , holdy , 0 , 0 ) < 0.3 )
+      held_item.pro_angle = 180 * facing;
+      else
+      {
+      held_item.pro_angle = point_direction ( 0 , 0 , holdx , holdy );
+      if ( facing == 0 && held_item.pro_angle > 95 && held_item.pro_angle < 265 )
+        facing = 1;
+      if ( facing == 1 && ( held_item.pro_angle < 85 || held_item.pro_angle > 275 ) )
+        facing = 0;
+      }
+    }
+    else
+    {
+    if ( moveup )
+      {
+      if ( moveright )
+        held_item.pro_angle = 45;
+        else
+      if ( moveleft )
+        held_item.pro_angle = 135;
+        else
+        held_item.pro_angle = 90;
+      }
+      else
+    if ( movedown )
+      {
+      if ( moveright )
+        held_item.pro_angle = 315;
+        else
+      if ( moveleft )
+        held_item.pro_angle = 225;
+        else
+        held_item.pro_angle = 270;
+      }
+      else
+    if ( moveleft )
+      held_item.pro_angle = 180;
+      else
+    if ( moveright )
+      held_item.pro_angle = 0;
+      else
+      held_item.pro_angle = 180 * facing;
+    if ( held_item.pro_angle > 90 && held_item.pro_angle < 270 )
+      facing = 1;
+    if ( held_item.pro_angle < 90 || held_item.pro_angle > 270 )
+      facing = 0;
+    }
+  held_item.pro_angle2 = 30;
+  // create enemy detecting bubble
+  create_homing_bubble ( 1 , 1 , 0 , 0 , self.id , 16 );
+  proj.precise = 1;
+  }
+if ( timer >= 10 && timer < 40 )
+  {
+  held_item.pextend = held_item.extend;
+  held_item.extend = lengthdir_y ( -1 , (timer-10)*6 );
+  }
+if ( timer >= 10 && timer < 40 )
+  {
+  var x1, y1, x2, y2, o, b;
+  x1 = ( xprevious - x ) + held_item.x + lengthdir_x ( 8 + 97 * held_item.xs * ( 0.2 + held_item.pextend * 1.3 ) , held_item.pro_angle );
+  y1 = ( yprevious - y ) + held_item.y + lengthdir_y ( 8 + 97 * held_item.xs * ( 0.2 + held_item.pextend * 1.3 ) , held_item.pro_angle );
+  x2 = held_item.x + lengthdir_x ( 8 + 97 * held_item.xs * ( 0.2 + held_item.extend * 1.3 ) , held_item.pro_angle );
+  y2 = held_item.y + lengthdir_y ( 8 + 97 * held_item.xs * ( 0.2 + held_item.extend * 1.3 ) , held_item.pro_angle );
+  proj.x = x2;
+  proj.y = y2;
+  
+  // the hand will grab the ledges
+  if ( air != 0 )
+    o = collision_circle ( x2 , y2 , 24 , obj_edge , 0 , 1 );
+  if ( o > 0 )
+    {
+    if ( o.object_index == obj_edge_left || o.object_index == obj_edge_right )
+    if ( o.cotaken[0] == 0 )
+      {
+      enforce_ledge_grab = o;
+      CAN_ledge = 2;
+      force_edge_grab = 2;
+      held_item.extend = 0;
+      held_item.pro_angle2 = 0;
+      exit;
+      }
+    }
+  // the hand will bounce away from the terrain
+  b = 0;
+  if ( collision_line ( x1 , y1 , x2 , y2 , obj_floor , 1 , 1 ) )
+    b = 1;
+    else
+  if ( collision_line ( x1 , y1 , x2 , y2 , obj_wall , 1 , 1 ) )
+    b = 1;
+    else
+  if ( collision_line ( x1 , y1 , x2 , y2 , obj_ceiling , 1 , 1 ) )
+    b = 1;
+    else
+  if ( y1 <= y2 )
+  if ( collision_line ( x1 , y1 , x2 , y2 , obj_platform , 1 , 1 ) )
+    b = 1;
+  if ( b )
+    {
+    sound_play ( thud1_sound );
+    screen_shake ( 3 , 3 );
+    instance_create ( (x1+x2)*0.5 , (y1+y2)*0.5 , obj_spark_effect );
+    instance_create ( (x1+x2)*0.5 , (y1+y2)*0.5 , obj_spark_shockwave );
+    if ( held_item.pro_angle > 270 )
+      held_item.pro_angle -= 360;
+    time = 140 - ( timer - 10 );
+    timer = 100;
+    exit;
+    }
+  // the hand will interact with enemies
+  if ( target > 0 )
+    {
+    sound_play ( catchsnd );
+    instance_create ( (x2+target.x)*0.5 , (y2+target.y-target.actual_height*0.5)*0.5 , obj_grab_spark );
+    create_projectile ( 0 , 361 , 1 , 1 , -1 , 38 , -1 , -1 , 6 , 6 , 0 , 0 , self.id , 3 , no_script );
+    proj.only_hit = target;
+    proj.x = target.x;
+    proj.y = target.y;
+    held_item.target_x = target.x - ( actual_width + target.actual_width ) * ( 1 - facing * 2 );
+    held_item.target_y = target.y;
+    held_item.boost = 0;
+    held_item.sextend = point_distance ( x , y , held_item.target_x , held_item.target_y );
+    /*target.state_type = "air_flinch";
+    target.timer = 0;
+    target.time = 30;
+    target.timer_speed = 0;
+    target.gravity = 0;
+    target.speed = 0;
+    target.slide = 0;
+    target.alarm[1] = 30;
+    target.last_speed = 0;
+    target.last_direction = 0;
+    target.sprite_index = target.flinch_sprite;
+    target.image_index = 0;
+    target.image_speed = 0;*/
+    timer = 200;
+    time = 230;
+    }
+  }
+if ( timer == 40 )
+  {
+  held_item.extend = 0;
+  }
+  
+if ( timer >= 100 && timer < 200 )
+  {
+  held_item.extend *= 0.84;
+  held_item.pro_angle = ( 180 * facing + held_item.pro_angle ) * 0.5;
+  shakex = 0;
+  shakey = 0;
+  }
+if ( timer >= 200 && timer < 230 )
+  {
+  speed = 0;
+  slide = 0;
+  fast_fall = 0;
+  fast_fall_temp = 0;
+  gravity_lock = 1;
+  shakex = 0;
+  shakey = 0;
+  if ( point_distance ( x , y , held_item.target_x , held_item.target_y ) < held_item.boost )
+    {
+    x = held_item.target_x;
+    y = held_item.target_y;
+    held_item.boost = timer;
+    timer = 229;
+    }
+    else
+    {
+    var dd;
+    dd = point_direction ( x , y , held_item.target_x , held_item.target_y );
+    x += lengthdir_x ( held_item.boost , dd );
+    y += lengthdir_y ( held_item.boost , dd );
+    held_item.boost += 1;
+    }
+  //x = ( x*7 + held_item.target_x ) * 0.125;
+  //y = ( y*7 + held_item.target_y ) * 0.125;
+  held_item.extend = min ( held_item.extend * 0.95 , point_distance ( held_item.target_x , held_item.target_y , x , y ) / held_item.sextend );
+  held_item.pro_angle = point_direction ( held_item.x , held_item.y , target.x , target.y-target.actual_height*0.5 );
+  }
+if ( timer == 229 )
+  {
+  x = held_item.target_x;
+  y = held_item.target_y;
+  if ( attacking )
+    {
+    create_projectile ( 7 , 30 + facing * 120 , 6.8 , 6.2 , -1 , 5 , kick3 , obj_spark_hit4 , 6 , 6 , 1 , 1 , self.id , 3 , 1 );
+    //hitbox.hitbox_x = ( actual_width + target.actual_width ) * ( 1 - facing * 2 );
+    //hitbox.hitbox_y = actual_height * 0.5;
+    proj.only_hit = target;
+    proj.x = target.x;
+    proj.y = target.y;
+    state_type = "air_flinch";
+    timer = 0;
+    time = 22;
+    attack_type = "none";
+    hspeed = -3.5 + facing * 7;
+    vspeed = -5;
+    }
+    else
+    {
+    held_item.lag_timer = 16;
+    if ( held_item.boost > 200 )
+      {
+      if ( target.alarm[1] > 0 )
+        target.alarm[1] = max ( 1 , target.alarm[1] - ( 229 - held_item.boost ) );
+        else
+        target.alarm[2] = max ( 1 , target.alarm[2] - ( 229 - held_item.boost ) );
+      }
+    }
+  }
+if ( timer >= time - 1 )
+  {
+  held_item.extend = 0;
+  held_item.pro_angle2 = 0;
+  }
+
+
+~~DRAW:
+var cx, cy, angle;
+if ( held > 0 )
+  {
+  angle = sprite_angle;
+  cx = x;
+  cy = y;
+  }
+  else
+  {
+  angle = sprite_angle + 90;
+  cx = x + lengthdir_x ( -9 , angle );
+  cy = -10 + y + lengthdir_y ( -9 , angle );
+  }
+if ( pro_angle2 )
+  angle = pro_angle;
+cx += shakex;
+cy += shakey;
+draw_sprite_ext ( spr_1 , 0 , cx , cy , xs , ys , angle + 10 + extend * 50 , c_white , 1 );
+draw_sprite_ext ( spr_1 , 0 , cx , cy , xs , -ys , angle - 10 - extend * 50 , c_white , 1 );
+draw_sprite_ext ( spr_2 , 0 , cx , cy , xs * ( 0.2 + extend * 1.3 ) , ys * ( 2.8 - extend * 1.6 ) , angle , c_white , 1 );
+cx += lengthdir_x ( 97 * xs * ( 0.2 + extend * 1.3 ) , angle );
+cy += lengthdir_y ( 97 * xs * ( 0.2 + extend * 1.3 ) , angle );
+draw_sprite_ext ( spr_3 , 0 , cx , cy , xs , ys , angle - 10 - extend * 45 , c_white , 1 );
+draw_sprite_ext ( spr_3 , 0 , cx , cy , xs , -ys , angle + 10 + extend * 45 , c_white , 1 );
+
+
+~~END OF FILE

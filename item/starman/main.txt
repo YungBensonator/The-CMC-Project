@@ -1,0 +1,139 @@
+~~INIT:
+starman_spr = ispr_add_alpha ( "item/starman/starman.png" , 1 , 0 , 0 , 9 , 9 );
+~~DEINIT:
+if ( sprite_exists ( starman_spr ) )
+  spr_delete ( starman_spr );
+~~ENTER:
+sprite_index = obj_items_control.starman_spr;
+sprite_air = obj_items_control.starman_spr;
+sprite_held = obj_items_control.starman_spr;
+air_spr_y = -9;
+if ( x < ( obj_items_control.camera_boundary_l + obj_items_control.camera_boundary_r ) * 0.5 )
+  {
+  hs = 1;
+  }
+  else
+  {
+  hs = -1;
+  }
+activate = 40;
+mode = 0;
+target = noone;
+track_id = -1;
+weight = 0;
+flash = 0;
+~~LAND:
+vs = -4;
+~~STEP:
+flash += 1;
+if ( flash >= 2 )
+  image_blend = c_ltgray;
+  else
+  image_blend = c_white;
+if ( flash >= 4 )
+  flash = 0;
+if ( !global.match_playing && mode == 0 )
+  {
+  hspeed = 0;
+  vspeed = 0;
+  exit;
+  }
+if ( activate > 0 )
+  {
+  hspeed = 0;
+  vspeed = 0;
+  activate -= 1;
+  exit;
+  }
+flash = 0;
+if ( mode == 1 )
+  {
+  visible = 0;
+  speed = 0;
+  x = target.x;
+  y = target.y - 900;
+  target.invincible = max ( target.invincible , 5 );
+  if ( timer mod 10 == 0 )
+    {
+    target.flashing = 1;
+    target.alarm[7] = 2;
+    }
+  if ( timer mod 3 == 0 )
+    {
+    var o;
+    o = instance_create ( target.x - target.actual_width + random ( target.actual_width * 2 ) , target.y - random ( target.actual_height ) , obj_spark );
+    o.image_xscale *= 0.05 + random ( 0.1 );
+    o.image_yscale = o.image_xscale;
+    o.image_angle = random(360);
+    o.image_speed = 0.5;
+    o.angle_add = -30 + random(60);
+    o.sprite_index = global.spark_sprite2;
+    }
+  //if ( timer mod 2 == 0 )
+    {
+    var o;
+    o = instance_create ( target.x - target.actual_width + random ( target.actual_width * 2 ) , target.y - random ( target.actual_height ) , obj_spark );
+    o.image_blend = merge_color ( c_yellow , c_red , random ( 0.5 ) );
+    o.image_xscale = 0.05 + random ( 0.05 );
+    o.image_yscale = o.image_xscale;
+    o.image_angle = random(360);
+    o.image_speed = 0;
+    o.angle_add = -30 + random(60);
+    o.sprite_index = spr_light;
+    o.alpha_add = -1/20;
+    o.alarm[0] = 19;
+    }
+  if ( target.status_cancel || timer >= 630 || ( !global.match_playing && !instance_exists ( obj_training ) ) )
+    {
+    if ( track_id > -1 )
+      tempmus_stop ( track_id );
+    instance_destroy();
+    }
+  exit;
+  }
+
+if ( timer mod 5 == 0 )
+  {
+  after_image ( 4 , c_white , .2 );
+  after.y -= 9;
+  after_image ( 6 , c_white , .2 );
+  after.y -= 9;
+  }
+custom_land = 1;
+can_pick_up = 0;
+if ( hs > 0 && next_to_rwall )
+  {
+  hs = -1;
+  }
+if ( hs < 0 && next_to_lwall )
+  {
+  hs = 1;
+  }
+vs += 0.125;
+if ( on_floor || on_platform )
+  vs = -4;
+hspeed = hs;
+vspeed = vs;
+
+~~PLAYER CONTACT:
+if ( mode == 1 ) exit;
+if ( activate > 0 ) exit;
+instance_create ( x , y - 8 , obj_spark_shockwave );
+with ( item )
+  {
+  if ( object_index == other.object_index )
+  if ( target == other.vermin )
+    {
+    with ( other ) instance_destroy();
+    exit;
+    }
+  }
+timer = 0;
+track_id = tempmus_play ( "item/starman/starman.ogg" , 630 );
+mode = 1;
+if ( vermin.boss != 0 )
+  target = vermin.boss;
+  else
+  target = vermin;
+visible = 0;
+~~END OF FILE

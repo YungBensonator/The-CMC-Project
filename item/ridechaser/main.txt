@@ -1,0 +1,334 @@
+~~INIT:
+ridechaser_spr = ispr_add_alpha ( "item/ridechaser/ridechaser.png" , 1 , 0 , 0 , 40 , 40 );
+rideshot_spr = ispr_add_alpha ( "item/ridechaser/rideshot.png" , 3 , 0 , 0 , 25 , 8 );
+rcdash_snd = isound_add ( "item/ridechaser/dash.wav" , 0 , 0 );
+rcidle_snd = isound_add ( "item/ridechaser/sidebloop.wav" , 0 , 0 );
+rcshoot_snd = isound_add ( "item/ridechaser/shoot.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( ridechaser_spr ) )
+  spr_delete ( ridechaser_spr );
+if ( sprite_exists ( rideshot_spr ) )
+  spr_delete ( rideshot_spr );
+~~ENTER:
+sprite_index = obj_items_control.ridechaser_spr;
+sprite_air = obj_items_control.ridechaser_spr;
+sprite_held = obj_items_control.ridechaser_spr;
+image_speed = 0;
+image_index = 1;
+air_spr_y = -1;
+image_xscale = 0.7 * (1-held.facing*2);
+image_yscale = 0.7;
+shadow = 3;
+
+~~LAND:
+instance_create ( x , y - 4 , obj_smoke_front );
+instance_destroy();
+
+~~STEP:
+if ( !mode ) exit;
+if ( held.timer_speed != 0 )
+if ( held.state_type != "air_flinch" && held.state_type != "flinch" && held.state_type != "tumble" )
+if ( held.attack_type != "item_batter_jab" && held.attack_type != "edge_attack" && held.attack_type != "edge_roll"
+  && held.attack_type != "edge_jump" )
+  {
+  hitbox = -99;
+  hitbox2 = -99;
+  held.state_type = "air_attack";
+  held.attack_type = "item_batter_jab";
+  held.timer = -1;
+  held.time = 600;
+  }
+  
+if ( timer > 690 || held.status_cancel )
+  {
+  instance_destroy();
+  }
+  
+x = held.x
+y = held.y  
+
+image_xscale = 0.7 * (1-held.facing*2);
+image_yscale = 0.7 * (1-held.facing*2);
+
+sprite_angle = 0;
+
+held.depth = depth - 1;
+
+if held.timer >= 599
+{
+explospark = instance_create(x,y,obj_spark_explode1);
+explospark.image_xscale *= 2.5*size
+explospark.image_yscale *= 2.5*size
+explospark.depth = depth - 2;
+}
+
+if dashtimer > 0 
+{
+if cos(timer*pi)>0.5
+        after_image(6,c_white,0.6)
+}
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+dashing = 0;
+dashtimer = 0;
+
+
+~~CUSTOM:
+moving_object = 1;
+sprite_index = obj_items_control.rideshot_spr;
+mask_index = spr_item_mask2;
+image_speed = 0.5;
+if ( on_floor || on_platform || under_ceiling || next_to_rwall || next_to_lwall || timer == time - 2 )
+  {
+  instance_destroy();
+  }
+
+~~PICK:
+mode = 1;
+timer = 0;
+
+
+~~DESTROY:
+temp_timer = 0
+sound_stop(obj_items_control.rcidle_snd);
+
+
+~~PLAYER EVENT:
+heavy_armor = 10;
+if ( vehicle_sprite <= 0 )
+	{
+	sprite_index = fall_sprite;
+	}
+	else
+	{
+	sprite_index = vehicle_sprite
+	}
+max_speed = 4;
+if ( timer == 0 )
+  {
+  timer = 0;
+  hitbox = -1;
+  hitbox2 = -1;
+  hitbox3 = -1;
+  }
+  
+shakex = - 5 * (1-facing*2) * size;
+shakey = - 10 * size;  
+  
+  if ( hspeed < -0.25 )
+    facing = 1;
+  if ( hspeed > 0.25 )
+    facing = 0;
+  if ( moveright )
+    facing = 0;
+  if ( moveleft )
+    facing = 1;
+
+sprite_angle = 0;
+image_angle = 0;
+	
+if ( ai )
+  {
+  if ( ai_level > 3 )
+    {
+
+            if ai = 1  { // tanks flacon
+                if offstage = 0 {
+                    if enemy.x >= x {
+                        moveright=1
+                        moveleft = 0 }
+                    else { moveleft = 1
+                        moveright = 0 }
+                    if enemy.y > y+2 {
+                        movedown = 1
+                        moveup = 0 }
+                    if enemy.y < y-38 {
+                        moveup = 1
+                        movedown = 0 }
+                    }
+            if offstage = 1 {
+                //movedown = 0
+                    moveup = 1
+                if x < ( obj_items_control.camera_boundary_l + obj_items_control.camera_boundary_r ) * 0.5 {
+                    moveright = 1
+                    moveleft = 0  }
+                else {
+                    moveleft = 1
+                    moveright =0 }
+                }
+        }
+    }
+  }
+  
+if dashing = 0
+{
+temp_timer += 1
+
+if temp_timer = 1
+sound_loop(obj_items_control.rcidle_snd);
+
+
+if ( movedown )
+  {
+  dropthrough = 14;
+  }
+if ( moveright )
+  {
+  if ( air == 0 )
+    {
+    if ( hspeed < max_speed * size)
+      hspeed = max_speed * size;
+      else
+      {
+      if ( hspeed > max_speed )
+        hspeed = ( hspeed + max_speed * size ) * 0.5;
+      }
+    }
+    else
+    {
+    if ( hspeed < max_speed * size )
+      hspeed += 0.5 * size;
+      else
+      hspeed -= 0.5 * size;
+    }
+  }
+  else
+if ( moveleft )
+  {
+  if ( air == 0 )
+    {
+    if ( hspeed > -max_speed * size )
+      hspeed = -max_speed * size;
+      else
+      {
+      if ( hspeed < -max_speed * size )
+        hspeed = ( hspeed - max_speed * size ) * 0.5;
+      }
+    }
+    else
+    {
+    if ( hspeed > -max_speed * size )
+      hspeed -= 0.5 * size;
+      else
+      hspeed += 0.5 * size;
+    }
+  }
+  else
+  {
+  if ( air == 0 )
+    {
+    if ( abs ( hspeed ) > fric * 0.25 * size )
+      {
+      if ( hspeed > 0 )
+        hspeed -= fric * 0.25 * size;
+        else
+        hspeed += fric * 0.25 * size;
+      }
+      else
+      hspeed = 0;
+    }
+    else
+    {
+    if ( abs ( hspeed ) > air_accel * size )
+      {
+      if ( hspeed > 0 )
+        hspeed -= 0.5 * size;
+        else
+        hspeed += 0.5 * size;
+      }
+      else
+      hspeed = 0;
+    }
+  }
+}
+
+if ( ( movejump || ( moveup && jumptype == 1 ) ) && air = 0 )
+  {
+  spark = instance_create ( x , y , obj_spark_shockwave );
+  spark.image_yscale *= 0.35;
+  spark.image_xscale *= 0.7;
+  air = 1;
+  y -= 2;
+  vspeed = -6.3;
+  }
+
+if attacking = 1 and shoottimer = 0
+{
+shoottimer = 22;
+//temp_timer = 0
+//sound_stop(obj_items_control.rcidle_snd);
+sound_play( obj_items_control.rcshoot_snd);
+
+spark = instance_create ( x + 22.40 * ( 1 - facing * 2 ) , y - 5.60 , obj_spark_shockwave );
+spark.image_yscale *= 0.4;
+spark.image_xscale *= 0.2;
+
+create_projectile ( 5 , 25+facing*130 , 4.6 , 5.7 , 33 , 0 , shock3 , obj_spark_shock , 0.5 , 0.5 , 0 , 0 , self.id , 70 , char_item );
+proj.hspeed = 7 * ( 1 - facing * 2 );
+proj.item_parent = held_item.object_index;
+proj.x = held_item.x + 22.40 * ( 1 - facing * 2 );
+proj.y = held_item.y - 5.60;
+proj.mask_index = spr_item_mask2;
+proj.image_xscale = 0.7 * ( 1 - facing * 2 );
+proj.image_yscale = 0.7;
+proj.image_index = 0;
+}
+
+if shoottimer > 0
+{
+shoottimer -= 1;
+}
+
+if special = 1 and dashing = 0
+{
+dashing = 1
+}
+
+if dashing = 1 and dashtimer = 0
+{
+dashtimer = 40;
+}
+
+if dashtimer = 40
+{
+temp_timer = 0
+sound_stop(obj_items_control.rcidle_snd);
+duster = instance_create(x,y,obj_dust_effect);
+duster.facing = facing;
+sound_play( obj_items_control.rcdash_snd);
+}
+
+if ( dashtimer > 0 )
+  {
+  hspeed = 7 * (1-facing*2);
+  }
+
+if dashtimer > 0 
+{
+dashtimer -= 1;
+
+if cos(timer*pi)>0.5{
+    after_image(6,c_white,0.6)
+	
+	with (held_item){
+		
+		//after_image(6,c_white,0.6)
+	}
+	
+}
+
+}
+
+if dashtimer = 0 and dashing = 1
+{
+dashing = 0;
+}
+
+~~END OF FILE

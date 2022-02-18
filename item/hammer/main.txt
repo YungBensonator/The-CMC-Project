@@ -1,0 +1,228 @@
+~~INIT:
+hammer_spr = ispr_add_alpha ( "item/hammer/hammer.png" , 1 , 0 , 0 , 13 , 23 );
+hammerh_spr = ispr_add_alpha ( "item/hammer/hammer2.png" , 1 , 0 , 0 , 1 , 13 );
+hammer_snd = isound_add ( "item/hammer/ground.wav" , 0 , 0 );
+
+
+~~DEINIT:
+if ( sprite_exists ( hammer_spr ) )
+  spr_delete ( hammer_spr );
+if ( sprite_exists ( hammerh_spr ) )
+  spr_delete ( hammerh_spr );
+
+
+~~ENTER:
+sprite_index = obj_items_control.hammer_spr;
+sprite_air = obj_items_control.hammer_spr;
+sprite_held = obj_items_control.hammerh_spr;
+air_spr_y = -24;
+image_xscale = 0.75;
+image_yscale = 0.75;
+shadow = 5;
+track_id = -1;
+
+
+~~DESTROY:
+if ( track_id > -1 )
+  tempmus_stop ( track_id );
+
+
+~~STEP:
+if ( !mode ) exit;
+if ( held.timer_speed != 0 )
+if ( held.state_type != "air_flinch" && held.state_type != "flinch" && held.state_type != "tumble" )
+if ( held.attack_type != "item_batter_jab" && held.attack_type != "edge_attack" && held.attack_type != "edge_roll"
+  && held.attack_type != "edge_jump" )
+  {
+  hitbox = -99;
+  hitbox2 = -99;
+  held.state_type = "air_attack";
+  held.attack_type = "item_batter_jab";
+  held.timer = -1;
+  held.time = 600;
+  }
+if ( timer > 690 || held.status_cancel )
+  {
+  instance_destroy();
+  }
+
+~~PICK:
+track_id = tempmus_play ( "item/hammer/hammer.ogg" , 860 );
+mode = 1;
+timer = 0;
+
+
+~~PLAYER EVENT:
+sprite_index = item_swing_sprite;
+if ( timer == 0 || timer == 14 )
+  {
+  sound_play ( obj_items_control.hammer_snd );
+  image_index = item_swing_frame;
+  image_speed = 0;
+  timer = 0;
+  hitbox = -1;
+  hitbox2 = -1;
+  hitbox3 = -1;
+  }
+if ( timer == 7 )
+  {
+  image_index = hammer_swing_frame;
+  image_speed = 0;
+  }
+if ( timer == 1 || timer == 8 )
+  {
+  create_hitbox ( 19 , 72 , 6 , 7.25 , 54 , 20 , heavy_spike , obj_spark_hit3 , 0.55 , 0.9 , 0 , 0 , self.id , 4 , 5 );
+  create_hitbox2 ( 19 , 108 , 6 , 7.25 , 54 , 20 , heavy_spike , obj_spark_hit3 , 0.55 , 0.9 , 0 , 0 , self.id , 4 , 5 );
+  create_hitbox3 ( 12 , 362 , 5 , 7.25 , 30 , 18 , kick3 , obj_spark_hit4 , 1.5 , 0.6 , 0 , 0 , self.id , 4 , 5 );
+  }
+if ( timer == 0 || timer == 7 || timer == 14 )
+  {
+  if ( hspeed < -0.25 )
+    facing = 1;
+  if ( hspeed > 0.25 )
+    facing = 0;
+  if ( moveright )
+    facing = 0;
+  if ( moveleft )
+    facing = 1;
+  }
+
+if ( instance_exists ( hitbox ) )
+  {
+  hitbox.hitbox_x = held_item.x + lengthdir_x ( 26 , held_item.sprite_angle ) - x + 6;
+  hitbox.hitbox_y = held_item.y + lengthdir_y ( 26 , held_item.sprite_angle ) - y;
+  hitbox.hitbox_y *= -1;
+  }
+if ( instance_exists ( hitbox2 ) )
+  {
+  hitbox2.hitbox_y = hitbox.hitbox_y;
+  hitbox2.hitbox_x = held_item.x + lengthdir_x ( 26 , held_item.sprite_angle ) - x - 6;
+  }
+if ( instance_exists ( hitbox3 ) )
+  {
+  hitbox3.hitbox_x = held_item.x + lengthdir_x ( 12 , held_item.sprite_angle ) - x;
+  hitbox3.hitbox_y = held_item.y + lengthdir_y ( 12 , held_item.sprite_angle ) - y;
+  hitbox3.hitbox_y *= -1;
+  hitbox3.image_angle = held_item.sprite_angle;
+  }
+
+sprite_angle = 0;
+image_angle = 0;
+shakex = 0;
+shakey = 0;
+
+if ( ai )
+  {
+  if ( ai_level > 3 )
+    {
+
+            if ai = 1  { // tanks flacon
+                if offstage = 0 {
+                    if enemy.x >= x {
+                        moveright=1
+                        moveleft = 0 }
+                    else { moveleft = 1
+                        moveright = 0 }
+                    if enemy.y > y+2 {
+                        movedown = 1
+                        moveup = 0 }
+                    if enemy.y < y-38 {
+                        moveup = 1
+                        movedown = 0 }
+                    }
+            if offstage = 1 {
+                //movedown = 0
+                    moveup = 1
+                if x < ( obj_items_control.camera_boundary_l + obj_items_control.camera_boundary_r ) * 0.5 {
+                    moveright = 1
+                    moveleft = 0  }
+                else {
+                    moveleft = 1
+                    moveright =0 }
+                }
+        }
+    }
+  }
+if ( movedown )
+  {
+  dropthrough = 14;
+  }
+if ( moveright )
+  {
+  if ( air == 0 )
+    {
+    if ( hspeed < walk_speed * size )
+      hspeed = walk_speed * size;
+      else
+      {
+      if ( hspeed > walk_speed * size )
+        hspeed = ( hspeed + walk_speed * size ) * 0.5;
+      }
+    }
+    else
+    {
+    if ( hspeed < air_speed * size )
+      hspeed += air_accel * size;
+      else
+      hspeed -= air_accel * size;
+    }
+  }
+  else
+if ( moveleft )
+  {
+  if ( air == 0 )
+    {
+    if ( hspeed > -walk_speed * size )
+      hspeed = -walk_speed * size;
+      else
+      {
+      if ( hspeed < -walk_speed * size )
+        hspeed = ( hspeed - walk_speed * size ) * 0.5;
+      }
+    }
+    else
+    {
+    if ( hspeed > -air_speed * size )
+      hspeed -= air_accel * size;
+      else
+      hspeed += air_accel * size;
+    }
+  }
+  else
+  {
+  if ( air == 0 )
+    {
+    if ( abs ( hspeed ) > fric * 0.125 * size )
+      {
+      if ( hspeed > 0 )
+        hspeed -= fric * 0.125 * size;
+        else
+        hspeed += fric * 0.125 * size;
+      }
+      else
+      hspeed = 0;
+    }
+    else
+    {
+    if ( abs ( hspeed ) > air_accel * size )
+      {
+      if ( hspeed > 0 )
+        hspeed -= air_accel * size;
+        else
+        hspeed += air_accel * size;
+      }
+      else
+      hspeed = 0;
+    }
+  }
+if ( ( movejump || ( moveup && jumptype == 1 ) ) && air == 0 )
+  {
+  spark = instance_create ( x , y , obj_spark_shockwave );
+  spark.image_yscale *= 0.35;
+  spark.image_xscale *= 0.7;
+  air = 1;
+  y -= 2;
+  vspeed = -jump_speed;
+  }
+
+~~END OF FILE

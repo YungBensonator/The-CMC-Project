@@ -1,0 +1,81 @@
+~~INIT:
+ 
+pigbag_grounded_spr = ispr_add_alpha ( "item/pigbag/pigbag_grounded.png" , 1 , 0 , 1 , 6 , 10 );
+pigbag_air_spr = ispr_add_alpha ( "item/pigbag/pigbag_air.png" , 1 , 0 , 1 , 37 , 19 );
+~~DEINIT:
+ 
+if ( sprite_exists ( pigbag_grounded_spr ) )
+   spr_delete ( pigbag_grounded_spr );
+if ( sprite_exists ( pigbag_air_spr ) )
+   spr_delete ( pigbag_air_spr );
+ 
+~~ENTER:
+ 
+sprite_index = obj_items_control.pigbag_grounded_spr;
+sprite_air = obj_items_control.pigbag_grounded_spr;
+sprite_held = obj_items_control.pigbag_grounded_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -8;
+image_xscale = 0.75;
+image_yscale = 0.75;
+collision_type = 2;
+weight = 0.25;
+shadow = 5;
+state_type = "UNOPENED";
+xx = x;
+yy = y;
+i = 0;
+ 
+~~LAND:
+if ( thrown > 0 )
+{
+    state_type = "OPEN";
+    speed = 0;
+}
+ 
+ 
+~~STEP:
+if (held > 0)
+{
+    if (facing > 0)
+        {
+        sprite_angle = 140;
+        }
+    else
+        {
+        sprite_angle = 35;
+        }
+    facing = held.facing;
+}
+ 
+if (thrown > 0){
+	hspeed = 2;
+    if (i <= 30){
+        i = i + 1;
+    }
+   
+    if (i >= 30 && state_type = "UNOPENED"){
+        xx = x;
+        yy = y;
+        state_type = "OPEN";
+    }
+}
+ 
+if (state_type = "OPEN")
+{
+    sprite_angle = 0;
+    x=xx;
+    y=yy;
+    sprite_air = obj_items_control.pigbag_air_spr;
+    sprite_index = obj_items_control.pigbag_air_spr;
+    sprite_held = obj_items_control.pigbag_air_spr;
+    image_index = 0;
+    image_xscale = (1-facing*2);
+}
+ 
+ 
+~~HIT:
+ 
+ 
+~~PLAYER CONTACT:

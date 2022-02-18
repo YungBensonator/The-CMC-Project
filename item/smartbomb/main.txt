@@ -1,0 +1,256 @@
+~~INIT:
+smartbomb_spr = ispr_add_alpha ( "item/smartbomb/smartbomb.png" , 1 , 0 , 0 , 11 , 11 );
+smartbomb_msk = ispr_add_alpha ( "item/smartbomb/mask.png" , 1 , 0 , 0 , 11 , 21 );
+
+smartbomb_endglow_spr = ispr_add_alpha ( "item/smartbomb/endglow.png" , 1 , 0 , 0 , 0 , 0 );
+sprite_set_offset ( smartbomb_endglow_spr , sprite_get_width(smartbomb_endglow_spr)*0.5 , sprite_get_height(smartbomb_endglow_spr)*0.5 );
+smartbomb_endglow_scale = 320 / sprite_get_width(smartbomb_endglow_spr);
+
+smartbomb_base_spr = ispr_add_alpha ( "item/smartbomb/base.png" , 15 , 0 , 0 , 0 , 0 );
+sprite_set_offset ( smartbomb_base_spr , sprite_get_width(smartbomb_base_spr)*0.5 , sprite_get_height(smartbomb_base_spr)*0.5 );
+smartbomb_base_scale = 256 / sprite_get_width(smartbomb_base_spr);
+
+smartbomb_explosion_spr = ispr_add_alpha ( "item/smartbomb/explosion.png" , 18 , 0 , 0 , 0 , 0 );
+sprite_set_offset ( smartbomb_explosion_spr , sprite_get_width(smartbomb_explosion_spr)*0.5 , sprite_get_height(smartbomb_explosion_spr)*0.5 );
+smartbomb_explosion_scale = 256 / sprite_get_width(smartbomb_explosion_spr);
+
+smartbomb_shockwave_spr = ispr_add_alpha ( "item/smartbomb/shockwave.png" , 1 , 0 , 0 , 0 , 0 );
+sprite_set_offset ( smartbomb_shockwave_spr , sprite_get_width(smartbomb_shockwave_spr)*0.5 , sprite_get_height(smartbomb_shockwave_spr)*0.5 );
+smartbomb_shockwave_scale = 256 / sprite_get_width(smartbomb_shockwave_spr);
+
+smartbomb_explosion_snd = isound_add ( "item/smartbomb/explosion.wav" , 0 , 0 );
+smartbomb_blink_snd = isound_add ( "item/smartbomb/blink.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( smartbomb_spr ) )
+  spr_delete ( smartbomb_spr );
+if ( sprite_exists ( smartbomb_endglow_spr ) )
+  spr_delete ( smartbomb_endglow_spr );
+if ( sprite_exists ( smartbomb_base_spr ) )
+  spr_delete ( smartbomb_base_spr );
+if ( sprite_exists ( smartbomb_explosion_spr ) )
+  spr_delete ( smartbomb_explosion_spr );
+if ( sprite_exists ( smartbomb_shockwave_spr ) )
+  spr_delete ( smartbomb_shockwave_spr );
+~~ENTER:
+sprite_index = obj_items_control.smartbomb_spr;
+sprite_air = obj_items_control.smartbomb_spr;
+sprite_held = obj_items_control.smartbomb_spr;
+mask_index = obj_items_control.smartbomb_msk;
+
+sprite_base = obj_items_control.smartbomb_base_spr;
+scale_base = obj_items_control.smartbomb_base_scale;
+sprite_explosion = obj_items_control.smartbomb_explosion_spr;
+scale_explosion = obj_items_control.smartbomb_explosion_scale;
+sprite_endglow = obj_items_control.smartbomb_endglow_spr;
+scale_endglow = obj_items_control.smartbomb_endglow_scale;
+sprite_shockwave = obj_items_control.smartbomb_shockwave_spr;
+scale_shockwave = obj_items_control.smartbomb_shockwave_scale;
+
+explosion_snd = obj_items_control.smartbomb_explosion_snd;
+blink_snd = obj_items_control.smartbomb_blink_snd;
+
+air_spr_y = -11 * 0.7;
+type = "toss";
+hit_timer = 0;
+hp = 1;
+collision_type = 1;
+shadow = 6.5;
+image_xscale = 0.7;
+image_yscale = image_xscale;
+start_scale = image_xscale;
+can_pick_up = 1;
+
+~~LAND:
+hp = 0;
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -3 + floor ( random ( 7 ) );
+  shakey = -3 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+
+if ( thrown >= 0 )
+  {
+  sprite_angle = 0;
+  image_angle = 0;
+  if ( next_to_rwall || next_to_lwall || under_ceiling )
+    {
+    hp = 0;
+    }
+  }
+
+if ( hp <= 0 )
+  {
+  sound_play ( explosion_snd );
+  instance_create ( x , y , obj_shakescreen2 );
+  spark = instance_create ( x , y + air_spr_y , obj_spark_shockwave );
+  spark.image_xscale *= 1.1;
+  spark.image_yscale *= 1.1;
+  spark.image_blend = merge_color ( c_blue , c_aqua , 0.3 );
+  if ( thrown < 0 )
+    thrown = 99;
+  //create_projectile ( 18 , 90 - 30 * sign ( hspeed ) , 4 , 3.2 , 32 , 10 , freeze3 , obj_spark_freeze , 1.4 , 1.4 , 0 , -air_spr_y , thrown , 5 , -1 );
+  var o;
+  o = create_projectile ( 0 , 90 , 4 , 4 , 10 , 10 , fire1 , obj_spark_explosion , 1 , 1 , 0 , -air_spr_y , thrown , 500 , char_item );
+  o.hit = 2;
+  o.no_clash = 1;
+  o.type = 0;
+  o.alarm[0] = 500;
+  o.real_time = 150;
+  o.time = o.real_time + 50;
+  o.item_parent = object_index;
+  with ( o )
+    {
+    scale_base_1 = 0.1;
+    scale_base_2 = 0.8;
+    scale_hitbox_1 = 0.4;
+    scale_hitbox_2 = 4.3;
+    hitbox_frequency = 5;
+    hitbox = noone;
+    attacker = other.thrown;
+    
+    sprite_explosion = other.sprite_explosion;
+    scale_explosion = other.scale_explosion;
+    sprite_endglow = other.sprite_endglow;
+    scale_endglow = other.scale_endglow;
+    sprite_shockwave = other.sprite_shockwave;
+    scale_shockwave = other.scale_shockwave;
+    
+    basedraw = instance_create ( x , y , obj_spark );
+    basedraw.alarm[0] = 2;
+    basedraw.sprite_index = other.sprite_base;
+    basedraw.base_scale = other.scale_base;
+    basedraw.image_xscale = 0.1 * basedraw.base_scale;
+    basedraw.image_yscale = 0.1 * basedraw.base_scale;
+    basedraw.depth = -5;
+    basedraw.loop = 400;
+    basedraw.image_speed = 0.5;
+    basedraw.image_alpha = 0.8;
+    }
+  instance_destroy();
+  exit;
+  }
+
+if ( thrown > 0 )
+  {
+  custom_land = 1;
+  }
+  else
+  {
+  custom_land = 0;
+  }
+~~CUSTOM:
+switch ( type )
+  {
+  // explosion base
+  case 0:
+    // 0-real_time - we increase the size of basedraw
+    if ( timer >= 0 && timer < real_time ) 
+      {
+      var t, s;
+      t = timer / real_time;
+      // various times - small hits with big di potential
+      if ( timer mod hitbox_frequency == 1 )
+        {
+        screen_shake ( 2 , 4 );
+        if ( instance_exists ( hitbox ) )
+          {
+          with ( hitbox )
+            instance_destroy();
+          }
+        hitbox = create_projectile( 1 , 362 , 2 , 0 , -1 , 6 , explodehit1 , obj_spark_fire1 , 1 , 1 , 0 , 0 , attacker , 6 , no_script );
+        hitbox.hit_attacker = 1;
+        hitbox.di = 1.2;
+        hitbox.parent = noone;
+        }
+      // range scaling of the hitbox dependent on time
+      if ( instance_exists ( hitbox ) )
+        {
+        s = lerp ( scale_hitbox_1 , scale_hitbox_2 , t );
+        hitbox.image_xscale = s;
+        hitbox.image_yscale = s;
+        hitbox.x = x;
+        hitbox.y = y;
+        }
+      // sprite scaling
+      s = lerp ( scale_base_1 , scale_base_2 , t ) * basedraw.base_scale;
+      basedraw.image_xscale = s;
+      basedraw.image_yscale = s;
+      basedraw.x = x - 1 + random ( 2 );
+      basedraw.y = y - 1 + random ( 2 );
+      basedraw.alarm[0] = 2;
+      }
+    // real_time-real_time+4 - disappearance of basedraw
+    if ( timer >= real_time && timer < real_time + 4 )
+      {
+      var t, a;
+      t = ( timer - real_time ) / 4;
+      a = lerp ( 1 , 0 , t );
+      basedraw.x = x;
+      basedraw.y = y;
+      basedraw.image_alpha = a;
+      basedraw.alarm[0] = 2;
+      }
+    // real_time - final hit with actual knockback
+    if ( timer == real_time )
+      {
+      screen_shake ( 10 , 12 );
+      if ( instance_exists ( hitbox ) )
+        {
+        with ( hitbox )
+          instance_destroy();
+        }
+      hitbox = create_projectile( 1 , 362 , 7.2 , 6.5 , -1 , 9 , fire1 , obj_spark_impact , 1 , 1 , 0 , 0 , attacker , 3 , no_script );
+      hitbox.hit_attacker = 1;
+      hitbox.parent = noone;
+      hitbox.image_xscale = scale_hitbox_2;
+      hitbox.image_yscale = scale_hitbox_2;
+      spark = instance_create ( x , y , obj_spark );
+      spark.sprite_index = sprite_explosion;
+      spark.image_speed = 0.5;
+      spark.image_xscale = scale_explosion * 0.5;
+      spark.image_yscale = spark.image_xscale;
+      spark.depth = -5;
+      
+      spark = instance_create ( x , y , obj_spark );
+      spark.sprite_index = sprite_endglow;
+      spark.image_speed = 0;
+      spark.image_xscale = scale_endglow * 0.6;
+      spark.image_yscale = spark.image_xscale;
+      spark.alpha_add = -1/70;
+      spark.alarm[0] = 69;
+      }
+    if ( timer >= real_time + 4 )
+      {
+      with ( basedraw )
+        instance_destroy();
+      instance_destroy();
+      }
+    break;
+  }
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( thrown > 0 && !item_candamageatk ( thrown ) ) exit;
+hp = 0;
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 3;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+hp = 0;
+object_stun ( vermin , vermin.hitlag_frames );
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( vermin.speed < 1 ) exit;
+if ( vermin == thrown ) exit;
+//hp = 0;
+~~END OF FILE

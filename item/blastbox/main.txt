@@ -1,0 +1,87 @@
+~~INIT:
+blastbox_spr = ispr_add_alpha ( "item/blastbox/blastbox.png" , 1 , 0 , 0 , 19 , 19 );
+blastboxh_spr = ispr_add_alpha ( "item/blastbox/blastbox.png" , 1 , 0 , 0 , 19 , 38 );
+
+~~DEINIT:
+if ( sprite_exists ( blastbox_spr ) )
+  spr_delete ( blastbox_spr );
+if ( sprite_exists ( blastboxh_spr ) )
+  spr_delete ( blastboxh_spr );
+
+~~ENTER:
+sprite_index = obj_items_control.blastbox_spr;
+sprite_air = obj_items_control.blastbox_spr;
+sprite_held = obj_items_control.blastboxh_spr;
+mask_index = obj_items_control.blastboxh_spr;
+air_spr_y = -19;
+type = "heavy";
+hit_timer = 0;
+hp = 30;
+collision_type = 1;
+shadow = 16;
+
+~~LAND:
+hspeed = 0;
+
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -1 + floor ( random ( 7 ) );
+  shakey = -1 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+if ( thrown > 0 )
+{
+hspeed *= 0.93;
+}
+
+if ( hp <= 0 )
+{
+sound_play ( explode_big );
+explode = instance_create ( x , y - 19 , obj_spark_explode1 );
+explode.image_xscale = 1.5
+explode.image_yscale = 1.5
+create_projectile ( 30 , 365 , 7 , 5.7 , 74 , 20 , explodehit2 , obj_spark_fire1 , 2.5 , 2.5 , 0 , 19 , 99 , 7 , -1 );
+proj.hit_attacker = 1;
+spark = instance_create(x - 5 * (1-facing*2), y -15, obj_spark_shockwave)
+spark.image_xscale = 0.6;
+spark.image_yscale = 0.05;
+spark.depth = -1;
+spark2 = instance_create(x - 5 * (1-facing*2), y - 15, obj_spark_shockwave)
+spark2.image_xscale = 1;
+spark2.image_yscale = 0.07;
+spark2.depth = -1;
+spark3 = instance_create(x - 5 * (1-facing*2), y - 15, obj_spark_shockwave)
+spark3.image_xscale = 1.5;
+spark3.image_yscale = 0.09;
+spark3.depth = -1;
+shaker = instance_create(x,y,obj_shakescreen3);
+shaker.ampl = 20;
+shaker.xampl = 2;
+shaker.time = 20;
+instance_destroy();
+exit;
+}
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin == thrown ) exit;
+create_projectile ( 14 , 364 , 6.5 , 4.8 , 12 , 12 , kick3 , obj_spark_hit3 , 1.4 , 1.4 , 0 , 19 , thrown , 6 , -1 );
+hspeed = 0;
+vspeed = -2;
+thrown = -99;
+
+~~HIT:
+if ( hit_timer > 0 ) exit;
+hit_timer = vermin.hitlag_frames + 3;
+hp -= vermin.damage;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+object_stun ( vermin , vermin.hitlag_frames );
+if ( vermin.gfx == obj_spark_fire1 )
+hp -= 30;
+~~END OF FILE

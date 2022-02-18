@@ -1,0 +1,48 @@
+~~INIT:
+shroom_spr = ispr_add_alpha ( "item/shroom/shroom.png" , 1 , 0 , 0 , 8 , 8 );
+~~DEINIT:
+if ( sprite_exists ( shroom_spr ) )
+  spr_delete ( shroom_spr );
+~~ENTER:
+sprite_index = obj_items_control.shroom_spr;
+sprite_air = obj_items_control.shroom_spr;
+sprite_held = obj_items_control.shroom_spr;
+air_spr_y = -7;
+shadow = 6;
+if ( x < ( obj_items_control.camera_boundary_l + obj_items_control.camera_boundary_r ) * 0.5 )
+  {
+  hspeed = 1.5;
+  image_xscale = 1;
+  }
+  else
+  {
+  hspeed = -1.5;
+  image_xscale = -1;
+  }
+
+~~STEP:
+custom_land = 1;
+can_pick_up = 0;
+if ( hspeed > 0 && next_to_rwall )
+  {
+  hspeed = -1.5;
+  }
+if ( hspeed < 0 && next_to_lwall )
+  {
+  hspeed = 1.5;
+  }
+image_xscale = sign ( hspeed );
+
+~~PLAYER CONTACT:
+sound_play ( mush_up_sound );
+if suika_unlock = 0 and !instance_exists(obj_training){
+	suika_unlock = 1
+}
+
+
+instance_create ( x , y - 8 , obj_spark_shockwave );
+vermin.size_target *= 1.5;
+if ( vermin.size_target >= 2 ) vermin.size_target = 2;
+vermin.size_transformation = 900;
+instance_destroy();
+~~END OF FILE

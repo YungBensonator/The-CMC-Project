@@ -1,0 +1,138 @@
+~~INIT:
+
+pokeball_spr = ispr_add_alpha ( "item/pokeball/pokeball.png" , 2 , 0 , 0 , 8 , 17 );
+pokeball_snd = isound_add ( "item/pokeball/open.wav" , 0 , 0 );
+pokeball_snd2 = isound_add ( "item/pokeball/land.wav" , 0 , 0 );
+
+~~DEINIT:
+
+if ( sprite_exists ( pokeball_spr ) )
+  spr_delete ( pokeball_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.pokeball_spr;
+sprite_air = obj_items_control.pokeball_spr;
+sprite_held = obj_items_control.pokeball_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -7;
+image_xscale = 0.75;
+image_yscale = 0.75;
+collision_type = 0;
+//weight = 0.25;
+shadow = 5;
+
+custom_land_snd = obj_items_control.pokeball_snd2;
+
+~~LAND:
+if ( thrown > 0 )
+  {
+  can_pick_up = 0;
+  event_user(9);
+  }
+
+~~PICK:
+collision_type = 2;
+
+~~STEP:
+if ( thrown > 0 )
+  {
+  can_pick_up = 0.5;
+  custom_land = 1;
+  }
+  else
+  {
+  can_pick_up = 1;
+  custom_land = 0;
+  }
+
+if ( held > 0 )
+  facing = held.facing;
+
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+if ( y > other.y )
+  vspeed = 1;
+  else
+if ( y < other.y )
+  vspeed = -6;
+  else
+  vspeed = choose ( -3 , 0 );
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 18;
+var d;
+d = point_direction ( 0 , 0 , hspeed , vspeed );
+if ( d > 60 && d < 120 )
+  {
+  last_hit_proj = create_projectile ( 4 , 363 , 4 + min ( 1.7 , speed * 0.2 ) , 2.1 , 10 , 10 , punch1 , obj_spark_hit1 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+  vspeed *= -1;
+  hspeed *= -0.3;
+  }
+  else
+if ( d < 330 && d > 210 )
+  {
+  last_hit_proj = create_projectile ( 4 , 363 , 3 + min ( 1.7 , speed * 0.2 ) , 2.4 , 10 , 10 , punch1 , obj_spark_hit1 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+  vspeed *= -1;
+  hspeed *= -0.3;
+  }
+  else
+  {
+  last_hit_proj = create_projectile ( 4 , 90 - sign ( hspeed ) * 45 , 5 + min ( 1.7 , speed * 0.2 ) , 2.7 , 10 , 10 , punch1 , obj_spark_hit1 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+  hspeed *= -0.3;
+  vspeed = -3;
+  }
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin.damage > 3 )
+  {
+  object_stun ( vermin , 8 );
+  hit_timer = 9;
+  hspeed *= -0.3;
+  vspeed = -3;
+  //thrown = -99;
+  object_stun ( self.id , 6 );
+  }
+
+~~CUSTOM:
+sound_play ( obj_items_control.pokeball_snd );
+instance_create ( x , y - 6 , obj_spark_shockwave );
+instance_create ( x , y - 6 , obj_pokespawn );
+var a;
+a = instance_create ( x , y , obj_spark );
+a.sprite_index = sprite_index;
+a.image_index = 1;
+a.image_speed = 0;
+a.alarm[0] = 30;
+a.image_xscale = image_xscale;
+a.image_yscale = image_yscale;
+a.depth = depth;
+a.alpha_add = -0.03125;
+assist_load ( x , y , pokeball_randomize() , facing , thrown.number );
+instance_destroy();
+
+~~END OF FILE

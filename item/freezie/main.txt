@@ -1,0 +1,135 @@
+~~INIT:
+freezie_spr = ispr_add_alpha ( "item/freezie/body.png" , 1 , 0 , 0 , 14 , 15 );
+freezie_shard_spr = ispr_add_alpha ( "item/freezie/shard.png" , 3 , 0 , 0 , 9 , 8 );
+freezie_msk = ispr_add_alpha ( "item/freezie/mask.png" , 1 , 0 , 0 , 14 , 27 );
+freezie_snd = isound_add ( "item/freezie/hit.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( freezie_spr ) )
+  spr_delete ( freezie_spr );
+if ( sprite_exists ( freezie_shard_spr ) )
+  spr_delete ( freezie_shard_spr );
+if ( sprite_exists ( freezie_msk ) )
+  spr_delete ( freezie_msk );
+~~ENTER:
+sprite_index = obj_items_control.freezie_spr;
+sprite_air = obj_items_control.freezie_spr;
+sprite_held = obj_items_control.freezie_spr;
+sprite_shard = obj_items_control.freezie_shard_spr;
+mask_index = obj_items_control.freezie_msk;
+freezie_snd = obj_items_control.freezie_snd;
+air_spr_y = -16 * 0.65;
+type = "toss";
+hit_timer = 0;
+hp = 1;
+collision_type = 1;
+shadow = 6.5;
+image_xscale = 0.65;
+image_yscale = image_xscale;
+start_scale = image_xscale;
+can_pick_up = 1;
+dir = choose ( -1 , 1 );
+
+~~LAND:
+hp = 0;
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -3 + floor ( random ( 7 ) );
+  shakey = -3 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+
+if ( thrown >= 0 )
+  {
+  sprite_angle = 0;
+  image_angle = 0;
+  if ( next_to_rwall || next_to_lwall || under_ceiling )
+    {
+    hp = 0;
+    }
+  }
+  else
+if ( held < 0 )
+  {
+  if ( on_floor || on_platform )
+    {
+    hspeed = sign ( dir );
+    if ( !collision_line ( x + sign(hspeed) * 3 , y - 5 , x + sign(hspeed) * 3 , y + 5 , obj_pavement , 1 , 1 ) )
+      {
+      hspeed *= -1;
+      dir *= -1;
+      }
+    }
+    else
+    {
+    hspeed = 0;
+    }
+  }
+
+if ( hp <= 0 )
+  {
+  sound_play ( freezie_snd );
+  instance_create ( x , y , obj_shakescreen2 );
+  spark = instance_create ( x , y + air_spr_y , obj_spark_shockwave );
+  spark.image_xscale *= 1.1;
+  spark.image_yscale *= 1.1;
+  spark.image_blend = merge_color ( c_blue , c_aqua , 0.3 );
+  var i;
+  for ( i = random ( 18 ) ; i < 360 ; i += 18 )
+    {
+    spark = instance_create ( x , y + air_spr_y , obj_spark );
+    spark.image_index = choose ( 0 , 1 , 2 );
+    spark.sprite_index = sprite_shard;
+    spark.image_speed = 0;
+    spark.alarm[0] = 18;
+    spark.alpha_add = -1/19;
+    spark.angle_add = -20 + random ( 40 );
+    spark.image_angle = random ( 360 );
+    spark.direction = i - 10 + random ( 20 );
+    spark.speed = 4 + random ( 3 );
+    spark.gravity = 0.25;
+    spark.gravity_direction = 270;
+    spark.image_xscale = image_xscale - 0.2 + random ( 0.3 );
+    spark.image_yscale = spark.image_xscale;
+    spark.image_xscale *= choose ( -1 , 1 );
+    spark.image_yscale *= choose ( -1 , 1 );
+    }
+  if ( thrown < 0 )
+    thrown = 99;
+  create_projectile ( 18 , 90 - 30 * sign ( hspeed ) , 4 , 3.2 , 32 , 10 , freeze3 , obj_spark_freeze , 1.4 , 1.4 , 0 , -air_spr_y , thrown , 5 , -1 );
+  instance_destroy();
+  exit;
+  }
+
+if ( thrown > 0 )
+  {
+  custom_land = 1;
+  }
+  else
+  {
+  custom_land = 0;
+  }
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( thrown > 0 && !item_candamageatk ( thrown ) ) exit;
+hp = 0;
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 3;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+hp = 0;
+object_stun ( vermin , vermin.hitlag_frames );
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( vermin.speed < 1 ) exit;
+if ( vermin == thrown ) exit;
+//hp = 0;
+~~END OF FILE

@@ -1,0 +1,39 @@
+~~INIT:
+heartcontainer_spr = ispr_add_alpha ( "item/heart/heart.png" , 8 , 0 , 0 , 11 , 11 );
+~~DEINIT:
+if ( sprite_exists ( heartcontainer_spr ) )
+  spr_delete ( heartcontainer_spr );
+~~ENTER:
+sprite_index = obj_items_control.heartcontainer_spr;
+sprite_air = obj_items_control.heartcontainer_spr;
+sprite_held = obj_items_control.heartcontainer_spr;
+air_spr_y = -9;
+weight = 0.04;
+max_fall_speed = 2;
+image_xscale = 1.2;
+image_yscale = 1.2;
+shadow = 10;
+~~STEP:
+if ( on_floor || on_ground )
+  {
+  image_speed = 0;
+  if ( image_index != 0 )
+    {
+    if ( image_index > 4 )
+      image_index += 1;
+      else
+      image_index -= 1;
+    if ( image_index >= 8 ) image_index = 0;
+    if ( image_index < 0 ) image_index = 0;
+    }
+  }
+  else
+  {
+  image_speed = 0.25;
+  }
+~~PICK:
+sound_play ( healitem1 );
+held.held_item = -1;
+heal_player ( held , 100 );
+instance_destroy();
+~~END OF FILE

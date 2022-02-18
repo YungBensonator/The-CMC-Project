@@ -1,0 +1,148 @@
+~~INIT:
+jumpman_spr = ispr_add_alpha ( "item/jumpman/jumpman.png" , 3 , 0 , 0 , 9 , 8 );
+jumpman_hammerin_spr = ispr_add_alpha ( "item/jumpman/hammerin.png" , 2 , 0 , 0 , 7 , 21 );
+jumpman_jump_snd = isound_add ( "item/jumpman/jump.wav" , 0 , 0 );
+jumpman_swing1_snd = isound_add ( "item/jumpman/swing1.wav" , 0 , 0 );
+jumpman_swing2_snd = isound_add ( "item/jumpman/swing2.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( jumpman_spr ) )
+  spr_delete ( jumpman_spr );
+if ( sprite_exists ( jumpman_hammerin_spr ) )
+  spr_delete ( jumpman_hammerin_spr );
+~~ENTER:
+sprite_index = obj_items_control.jumpman_spr;
+sprite_air = obj_items_control.jumpman_spr;
+sprite_held = obj_items_control.jumpman_spr;
+//sprite_jumpman = obj_items_control.jumpman_spr;
+sprite_hammerin = obj_items_control.jumpman_hammerin_spr;
+jump_snd = obj_items_control.jumpman_jump_snd;
+swing1_snd = obj_items_control.jumpman_swing1_snd;
+swing2_snd = obj_items_control.jumpman_swing2_snd;
+air_spr_y = -9;
+shadow = 9;
+hammering = 0;
+record = 0;
+alarm[0] = 900;
+if ( x < ( obj_items_control.camera_boundary_l + obj_items_control.camera_boundary_r ) * 0.5 )
+  {
+  hspeed = 1;
+  image_xscale = 1;
+  }
+else
+  {
+  hspeed = -1;
+  image_xscale = -1;
+  }
+var i;
+for ( i = 0 ; i < 32 ; i += 1 )
+  {
+  recordx[i] = x;
+  recordy[i] = y;
+  recordf[i] = 0;
+  }
+
+~~STEP:
+custom_land = 1;
+can_pick_up = 0;
+if ( hammering == 0 )
+  {
+  //sprite_index = sprite_jumpman;
+  if ( on_floor || on_platform )
+    {
+    image_index = ( alarm[0] mod 8 ) >= 4;
+    if ( alarm[0] mod 90 == 0 )
+      {
+      sound_play ( jump_snd );
+      vspeed = -3;
+      }
+    }
+    else
+    {
+    image_index = 2;
+    }
+  if ( hspeed > 0 && next_to_rwall )
+    {
+    hspeed = -1;
+    }
+  if ( hspeed < 0 && next_to_lwall )
+    {
+    hspeed = 1;
+    }
+  image_xscale = sign ( hspeed );
+  }
+  else
+  {
+  if ( string ( attacker.state_type ) == "out" )
+    {
+    instance_destroy();
+    exit;
+    }
+  hspeed = 0;
+  vspeed = 0;
+  sprite_index = sprite_hammerin;
+  image_index = ( alarm[0] mod 32 ) >= 16;
+  if ( image_xscale > 0 )
+    facing = 0;
+  else
+    facing = 1;
+  if ( alarm[0] mod 32 == 0 )
+    {
+    sound_play ( swing2_snd );
+    create_projectile(5,50+facing*80,9.5,4,6,7,kick3,obj_spark_hit4,0.8,0.8,0,24,attacker.id,16,no_script);
+    }
+  if ( alarm[0] mod 32 == 16 )
+    {
+    sound_play ( swing1_snd );
+    create_projectile(5,50+facing*80,9.5,4,6,7,kick3,obj_spark_hit4,0.8,0.8,24,8,attacker.id,16,no_script);
+    }
+  if ( instance_exists ( proj ) )
+    {
+    if ( image_index == 0 )
+      {
+      proj.x = x;
+      proj.y = y-22;
+      }
+    else
+      {
+      proj.x = x + 22 * image_xscale;
+      proj.y = y-4;
+      }
+    }
+  if ( record < 8 )
+    {
+    recordx[record] = attacker.x;
+    recordy[record] = attacker.y;
+    recordf[record] = attacker.facing;
+    record += 1;
+    }
+  else
+    {
+    x = recordx[0];
+    y = recordy[0];
+    if ( recordf[0] == 0 )
+      image_xscale = 1;
+    else
+      image_xscale = -1;
+    x -= image_xscale * 64;                                                
+    var i;
+    for ( i = 0 ; i < record ; i += 1 )
+      {
+      recordx[i] = recordx[i+1];
+      recordy[i] = recordy[i+1];
+      recordf[i] = recordf[i+1];
+      }
+    recordx[8] = attacker.x;
+    recordy[8] = attacker.y;
+    recordf[8] = attacker.facing;
+    }
+  }
+
+~~PLAYER CONTACT:
+if ( hammering == 0 )
+  {
+  hammering = 1;
+  attacker = vermin;
+  record = 0;
+  alarm[0] = 720;
+  }
+~~END OF FILE

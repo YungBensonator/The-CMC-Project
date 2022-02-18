@@ -1,0 +1,179 @@
+~~INIT:
+homerun_spr = ispr_add_alpha ( "item/homerun/homerun.png" , 1 , 0 , 0 , 3 , 24 );
+homerunh_spr = ispr_add_alpha ( "item/homerun/homerun2.png" , 1 , 0 , 0 , 2 , 3 );
+
+
+~~DEINIT:
+if ( sprite_exists ( homerun_spr ) )
+  spr_delete ( homerun_spr );
+if ( sprite_exists ( homerunh_spr ) )
+  spr_delete ( homerunh_spr );
+
+
+~~ENTER:
+sprite_index = obj_items_control.homerun_spr;
+sprite_air = obj_items_control.homerun_spr;
+sprite_held = obj_items_control.homerunh_spr;
+air_spr_y = -23;
+image_xscale = 0.75;
+image_yscale = 0.75;
+hit_timer = 0;
+type = "batter";
+shadow = 4;
+mask_index = spr_item_mask3;
+
+
+~~STEP:
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  collision_type = 3;
+  can_pick_up = 0.5;
+  
+  if ( on_floor && on_platform && speed < 0.1 )
+    {
+    thrown = -99;
+    }
+  }
+  else
+  {
+  collision_type = 0;
+  can_pick_up = 1;
+  }
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 18;
+last_hit_proj = create_projectile ( 12 , 90 - sign ( hspeed ) * 45 , 7 + min ( 1.7 , speed * 0.2 ) , 4.8 , 180 , 17 , kick3 , obj_spark_hit3 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin.damage > 4 )
+  {
+  object_stun ( vermin , 8 );
+  hit_timer = 9;
+  hspeed *= -0.3;
+  vspeed = -3;
+  thrown = -99;
+  object_stun ( self.id , 6 );
+  }
+
+
+~~PLAYER EVENT:
+if ( timer == -1 )
+  {
+  hspeed = 0;
+  sprite_index = item_swing_sprite;
+  image_index = 0;
+  switch ( attack_type )
+    {
+    case "item_batter_jab":
+      image_speed = item_swing_frame / 5;
+      time = 14;
+      break;
+    case "item_batter_stilt":
+    case "item_batter_dash":
+      image_speed = item_swing_frame / 8;
+      time = 17;
+      break;
+    case "item_batter_ssmash":
+      image_speed = 0;
+      time = 80;
+      break;
+    }
+  state_type = "air_attack";
+  timer_speed = 1;
+  timer = 0;
+  }
+
+switch ( attack_type )
+  {
+  case "item_batter_jab":
+    switch ( timer )
+      {
+      case 4:
+        sound_play ( swingsnd1 );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 7 , 45 + facing * 90 , 4.6 , 1.2 , 5 , 7 ,
+          kick2 , obj_spark_hit2 , 1.8 , 0.8 ,
+         0 , 0 , self.id , 4 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 8;
+        hitbox.hitbox_y = actual_height * 0.5;
+        break;
+      }
+    break;
+  case "item_batter_stilt":
+  case "item_batter_dash":
+    switch ( timer )
+      {
+      case 7:
+        sound_play ( swingsnd2 );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 11 , 30 + facing * 120 , 6 , 2 , 7 , 10 ,
+          kick3 , obj_spark_hit3 , 1.8 , 0.8 ,
+         0 , 0 , self.id , 4 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 8;
+        hitbox.hitbox_y = actual_height * 0.5;
+        break;
+      }
+    break;
+  case "item_batter_ssmash":
+    switch ( timer )
+      {
+      case 10:
+        var o;
+        o = instance_create ( held_item.x , held_item.y , obj_spark_effect );
+        o.depth -= 2;
+        break;
+      case 47:
+        image_index = 0;
+        image_speed = item_swing_frame / 3;
+        break;
+      case 50:
+        sound_play ( swingsnd3 );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 20 , 50 + facing * 80 , 20 , 1 , 60 , 28 ,
+          specialhit , obj_spark_hit4 , 1.9 , 0.9 ,
+         0 , 0 , self.id , 4 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 8;
+        hitbox.hitbox_y = actual_height * 0.5;
+        break;
+      }
+    break;
+  }
+~~END OF FILE

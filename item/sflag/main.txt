@@ -1,0 +1,157 @@
+~~INIT:
+sflag_spr = ispr_add_alpha ( "item/sflag/sflag.png" , 1 , 0 , 0 , 8 , 8 );
+sflag_snd = isound_add ( "item/sflag/pick.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( sflag_spr ) )
+  spr_delete ( sflag_spr );
+~~ENTER:
+sprite_index = obj_items_control.sflag_spr;
+sprite_air = obj_items_control.sflag_spr;
+sprite_held = obj_items_control.sflag_spr;
+mask_index = obj_items_control.sflag_spr;
+air_spr_y = -8;
+image_xscale = 2;
+image_yscale = 2;
+type = "batter";
+collision_type = 0;
+shadow = 12;
+mode = 0;
+almostthere = 240;
+raise = 0;
+
+batter_jab = 1;
+batter_stilt = 1;
+batter_dash = 1;
+batter_ssmash = 1;
+batter_udtiltsmash = 1;
+batter_nair = 0;
+batter_fair = 0;
+~~PICK:
+mode = 1;
+~~STEP:
+image_alpha = 1;
+sprite_angle = 0;
+image_angle = 0;
+image_yyscale = 1;
+if ( !mode )
+  {
+  if ( !on_floor && !on_platform )
+    {
+    if ( timer mod 4 == 0 )
+      {
+      var o;
+      o = after_image ( 12 , c_white , .2 );
+      o.alpha_add = - 0.2 / 12;
+      o.y -= 16;
+      }
+    }
+  raise = 0;
+  exit;
+  }
+if ( held.timer_speed != 0 )
+if ( held.state_type != "air_flinch" && held.state_type != "flinch" && held.state_type != "tumble" )
+  {
+  if ( held.attack_type == "jab" && held.attack_type != "edge_attack" && held.attack_type != "edge_roll"
+    && held.attack_type != "edge_jump" )
+    {
+    held.state_type = "air_attack";
+    held.attack_type = "item_batter_jab";
+    held.timer = -1;
+    held.time = 600;
+    }
+  if ( held.attack_type == "item_batter_jab" )
+    {
+    image_alpha = 0;
+    if ( raise < 1 )
+      raise += 0.25;
+    almostthere -= 1;
+    if ( almostthere < 0 )
+      {
+      sound_play ( obj_items_control.sflag_snd );
+      held.state_type = "stand";
+      held.attack_type = "none";
+      held.timer = 0;
+      held.time = -1;
+      instance_create ( 0 , 0 , obj_flashscreen );
+      switch ( global . gs_rules )
+        {
+        case "Stock":
+          if ( obj_score_control.stocks[held.number-1] < 99 )
+            obj_score_control.stocks[held.number-1] += 1;
+            else
+            obj_score_control.stocks[held.number-1] = 1; // hueeeee
+          break;
+        case "Time":
+          obj_score_control.points[held.number-1] += 1;
+          hudanim_p_score ( held.number-1 , 1 );
+          break;
+        case "Coin":
+          obj_score_control.points[held.number-1] += 500;
+          if ( obj_score_control.points[held.number-1] > 999 )
+            obj_score_control.points[held.number-1] = 999;
+          break;
+        case "DM":
+          obj_score_control.points[held.number-1] += 1;
+          hudanim_p_score ( held.number-1 , 1 );
+          break;
+        }
+      instance_destroy();
+      }
+    }
+  }
+  else
+  {
+  hspeed = held.hspeed * 0.6;
+  vspeed = held.vspeed * 0.6;
+  held.held_item = -1;
+  held = -99;
+  mode = 0;
+  }
+
+~~PLAYER EVENT:
+if ( timer == -1 )
+  {
+  state_type = "air_attack";
+  attack_type = "item_batter_jab";
+  timer_speed = 1;
+  timer = 0;
+  time = 250;
+  }
+
+sprite_index = item_heavy_sprite;
+image_index = 0;
+image_speed = 0;
+hspeed *= 0.5;
+if ( timer mod 2 == 0 )
+  {
+  var o;
+  o = instance_create ( x , y - actual_height * held_item.raise - 16 , obj_spark_effect );
+  o.sprite_index = global.spark_sprite2;
+  o.speed = 6;
+  o.image_xscale *= 0.6;
+  o.image_yscale *= 0.6;
+  o.direction = random ( 360 );
+  o.depth = depth + 2;
+  }
+~~DRAW:
+var xx;
+var yy;
+var i;
+if ( mode )
+  {
+  if ( instance_exists ( held ) )
+    {
+    if ( held.attack_type == "item_batter_jab" )
+      {
+      i = almostthere mod 2;
+      xx = held.x;
+      yy = held.y - held.actual_height * raise - 16;
+      draw_sprite_ext ( global.hit_wave_spark2 , 0 , xx , yy , 0.5 + i * 0.01 , 0.5 + i * 0.02 , 0 , c_white , 1 );
+      draw_sprite_ext ( spr_light , 0 , xx , yy , 1 + i * 0.04 , 1 + i * 0.02 , 0 , c_white , 1 );
+      draw_sprite_ext ( sprite_index , -1 , xx , yy , 2 , 2 , 0 , c_white , 1 );
+      }
+    }
+  }
+~~HIT:
+
+~~END OF FILE

@@ -1,0 +1,179 @@
+~~INIT:
+
+soccer_spr = ispr_add_alpha ( "item/soccer/soccer.png" , 1 , 0 , 0 , 8 , 8 );
+
+~~DEINIT:
+
+if ( sprite_exists ( soccer_spr ) )
+  spr_delete ( soccer_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.soccer_spr;
+sprite_air = obj_items_control.soccer_spr;
+sprite_held = obj_items_control.soccer_spr;
+
+air_spr_y = -8;
+shadow = 5;
+
+throw_speed = 8;
+max_fall_speed = 5;
+weight = 0.3;
+type = "none";
+custom_land = 1;
+can_pick_up = 0;
+
+rotate_angle = 0;
+image_xscale = 1;
+image_yscale = 1;
+grab = 0;
+
+predator = 0;
+
+collision_type = 1;
+
+~~LAND:
+if ( vspeed < 0 ) exit;
+if ( vspeed < 1.25 )
+  {
+  vspeed = 0;
+  hspeed *= 0.8;
+  if ( abs ( hspeed ) < 1 && next_speed == -1 )
+    predator = 0;
+  }
+  else
+  {
+  vspeed *= -0.8;
+  hspeed *= 0.85; 
+  }
+
+~~STEP:
+if ( hit_time > 0 )
+  {
+  hit_time -= 1;
+  if ( next_speed >= 0 )
+    {
+    shakex = 2*cos(hit_time*pi);
+    speed = 0;
+    }
+  exit;
+  }
+if ( next_speed >= 0 )
+  {
+  shakex = 0;
+  shakey = 0;
+  speed = next_speed;
+  direction = next_direction;
+  y -= 1;
+  next_speed = -1;
+  }
+if ( speed > 1.8 && abs(sin(timer*pi/2)) >= 0.9 && predator > 0 )
+    {
+    after_image(4,c_red,0.5);
+    after.y -= 8 * image_yscale;
+    }
+if ( abs(hspeed) < 0.03 )
+    hspeed = 0
+if hspeed > 0 
+    hspeed -= 0.025;
+else if hspeed < 0
+    hspeed += 0.025;
+
+if ( next_to_rwall && hspeed > 1 )
+  {
+  hspeed *= -0.75;
+  }
+if ( next_to_lwall && hspeed < -1 )
+  {
+  hspeed *= 0.75;
+  }
+
+sprite_angle -= hspeed * 2.5;
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( hit_time > 0 ) exit;
+if ( predator <= 0 )
+  {
+  if ( vermin.collision_type >= vermin.collision_type && vermin.thrown > 0 )
+    {
+    hit_time = 3;
+    predator = vermin.thrown;
+    if ( vermin.x < x )
+      hspeed = 6;
+      else
+      hspeed = -6;
+    vspeed = -5;
+    sprite_angle = 0;
+    rot_speed = 0;
+    spark = instance_create ( x , y - 12 , obj_spark_shockwave );
+    spark.image_yscale *= 0.35;
+    spark.image_xscale *= 0.7;
+    object_stun ( self.id , 4 );
+    }
+  exit;
+  }
+if ( vermin.collision_type >= vermin.collision_type )
+  {
+  hit_time = 3;
+  if ( x < vermin.x )
+    hspeed = -1 * max ( 2 , abs ( hspeed ) );
+  if ( x > vermin.x )
+    hspeed = 1 * max ( 2 , abs ( hspeed ) );
+  if ( x == vermin.x )
+    hspeed = choose ( -1 , 1 ) * max ( 2 , abs ( hspeed ) );
+  if ( y < vermin.y )
+    vspeed = -4;
+  if ( y > vermin.y )
+    vspeed = -2;
+  if ( y == vermin.y )
+    vspeed = choose ( -2 , -3 , -4 );
+  //thrown = -99;
+  object_stun ( self.id , 4 );
+  }
+
+~~PLAYER CONTACT:
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( predator ) ) exit;
+if ( predator > 0 && vermin.id != predator && hit_time <= 1 && speed > 1.8 )
+  {
+  hit_time = 7+round(abs(speed/3));
+  next_direction = 90;
+  if ( hspeed > 0 )
+    next_direction = 120;
+  if ( hspeed < 0 )
+    next_direction = 60;
+  next_speed = 6;
+  speed = 0;
+  dir = 90;
+  create_projectile(12+abs(speed)*1.1,362,5.5+speed/4,6.7+abs(speed/3.75),18+round(abs(speed)),5+round(abs(speed/3)),kick2,obj_spark_hit3,0.75,0.75,0,0,predator.id,2,no_script);
+  }
+
+~~HIT:
+if speed < 7 && hit_time <= 0 {
+    hitbox = vermin;
+    if hitbox <= 0
+        exit;
+    if hitbox.hit < 2 {
+        hasbeenhit = 1
+        if hitbox.dir <= 10
+            dir = 0
+        else if (hitbox.dir >= 170 && hitbox.dir <= 180)
+            dir = 180
+        else if hitbox.dir = 361 || hitbox.dir = 362
+            dir = 0 + (hitbox.x<x)*180
+        else
+            dir = hitbox.dir
+        next_speed = (vermin.bkb + vermin.kbg)/1.25
+        next_direction = dir
+        image_speed = 0.25
+        hit_time = hitbox.hitlag_frames
+        predator = hitbox.attacker.id
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 8 ) * 0.5 );
+object_stun ( vermin , vermin.hitlag_frames );
+        speed = 0
+    }
+}
+
+
+~~END OF FILE

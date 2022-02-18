@@ -1,0 +1,64 @@
+~~INIT:
+upshroom_spr = ispr_add_alpha ( "item/1up/shroom.png" , 1 , 0 , 0 , 8 , 8 );
+upshroom_snd = isound_add ( "item/1up/smb_1-up.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( upshroom_spr ) )
+  spr_delete ( upshroom_spr );
+~~ENTER:
+sprite_index = obj_items_control.upshroom_spr;
+sprite_air = obj_items_control.upshroom_spr;
+sprite_held = obj_items_control.upshroom_spr;
+air_spr_y = -7;
+shadow = 6;
+if ( x < ( obj_items_control.camera_boundary_l + obj_items_control.camera_boundary_r ) * 0.5 )
+  {
+  hspeed = 1.5;
+  image_xscale = 1;
+  }
+  else
+  {
+  hspeed = -1.5;
+  image_xscale = -1;
+  }
+
+~~STEP:
+custom_land = 1;
+can_pick_up = 0;
+if ( hspeed > 0 && next_to_rwall )
+  {
+  hspeed = -1.5;
+  }
+if ( hspeed < 0 && next_to_lwall )
+  {
+  hspeed = 1.5;
+  }
+image_xscale = sign ( hspeed );
+
+~~PLAYER CONTACT:
+sound_play ( obj_items_control.upshroom_snd );
+instance_create ( x , y - 8 , obj_spark_shockwave );
+switch ( global . gs_rules )
+        {
+        case "Stock":
+          if ( obj_score_control.stocks[vermin.number-1] < 99 )
+            obj_score_control.stocks[vermin.number-1] += 1;
+            else
+            obj_score_control.stocks[vermin.number-1] = 1; // hueeeee
+          break;
+        case "Time":
+          obj_score_control.points[vermin.number-1] += 1;
+          hudanim_p_score ( vermin.number-1 , 1 );
+          break;
+        case "Coin":
+          obj_score_control.points[vermin.number-1] += 500;
+          if ( obj_score_control.points[vermin.number-1] > 999 )
+            obj_score_control.points[vermin.number-1] = 999;
+          break;
+        case "DM":
+          obj_score_control.points[vermin.number-1] += 1;
+          hudanim_p_score ( vermin.number-1 , 1 );
+          break;
+        }
+
+instance_destroy();
+~~END OF FILE

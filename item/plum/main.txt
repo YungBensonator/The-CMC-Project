@@ -1,0 +1,241 @@
+~~INIT:
+plum_spr = ispr_add_alpha ( "item/plum/plum.png" , 1 , 0 , 0 , 18 , 16 );
+plum_impact_snd = isound_add ( "item/plum/impact.wav" , 0 , 0 );
+plum_stick_snd = isound_add ( "item/plum/stick.wav" , 0 , 0 );
+
+~~DEINIT:
+if ( sprite_exists ( plum_spr ) )
+  spr_delete ( plum_spr );
+
+~~ENTER:
+sprite_index = obj_items_control.plum_spr;
+sprite_air = obj_items_control.plum_spr;
+sprite_held = obj_items_control.plum_spr;
+mask_index = spr_item_mask3;
+
+custom_land_snd = obj_items_control.plum_impact_snd;
+plum_impact_snd = obj_items_control.plum_impact_snd;
+plum_stick_snd = obj_items_control.plum_stick_snd;
+
+image_xscale = 0.7;
+image_yscale = 0.7;
+air_spr_y = -20 * image_yscale;
+type = "heavy";
+hit_timer = 0;
+collision_type = 1;
+last_attacker = -99;
+last_attacker_timer = 0;
+sticked = noone;
+shadow = 9;
+hit_timer = 0;
+platform = noone;
+
+~~LAND:
+if ( sticked > 0 )
+  exit;
+sound_play ( plum_impact_snd );
+vspeed = min ( -2 , -vspeed );
+~~DESTROY:
+if ( instance_exists ( platform ) )
+  with ( platform )
+    instance_destroy();
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -3 + floor ( random ( 7 ) );
+  shakey = -3 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+
+if ( sticked > 0 )
+  {
+  if ( !instance_exists ( sticked ) || sticked.state_type = "out" )
+    {
+    with ( platform )
+      instance_destroy();
+    instance_destroy();
+    exit;
+    }
+
+  var slow, low;
+  slow = 0.7;
+  low = 0.7;
+  with ( sticked )
+    {
+    switch ( state_type )
+      {
+      case "run":
+        hspeed = sign ( hspeed ) * min ( abs ( hspeed ) , run_speed * size * slow );
+        break;
+      case "jump":
+        if ( vspeed < -jump_speed * low )
+          vspeed = -jump_speed * low;
+        break;
+      }
+    }
+  can_pick_up = 0;
+  collision_type = 0;
+  
+  var xx, yy;
+  xx = x;
+  yy = y;
+  item_stick_to_point ( sticked , 2 );
+  var d;
+  d = sprite_angle + 180;
+  sprite_angle -= 90;
+  sprite_angle = 0;
+  x += lengthdir_x ( 8 , d );
+  y += lengthdir_y ( 8 , d );
+  image_yyscale = abs ( image_yyscale );
+  depth = sticked.depth - 2;
+  if ( visible == 0 )
+    {
+    x = sticked.x + stick_x;
+    y = sticked.y + stick_y;
+    }
+    else
+    {
+    stick_x = x - sticked.x;
+    stick_y = y - sticked.y;
+    }
+  
+  if ( !instance_exists ( platform ) )
+    {
+    platform = instance_create ( x - 12 , y - 14 , obj_mplatform );
+    platform.visible = 0;
+    platform.image_xscale = 1.5;
+    platform.image_yscale = 0.25;
+    }
+  platform.x = round ( x - 12 );
+  platform.y = round ( y - 15 );
+  platform.exception = sticked;
+  platform.alarm[0] = 2;
+  with ( platform )
+    event_user(0);
+  }
+  else
+{
+  if ( !instance_exists ( platform ) )
+    {
+    platform = instance_create ( x - 12 , y - 14 , obj_mplatform );
+    platform.visible = 0;
+    platform.image_xscale = 1.5;
+    platform.image_yscale = 0.25;
+    }
+  platform.x = round ( x - 12 );
+  platform.y = round ( y - 15 );
+  platform.alarm[0] = 2;
+  platform.exception = noone;
+  with ( platform )
+    event_user(0);
+if ( last_attacker > 0 )
+  {
+  last_attacker_timer = max ( last_attacker_timer - 1 , 0 );
+  sprite_angle = 0;
+  can_pick_up = 0;
+  custom_land = 1;
+  if ( next_to_rwall && hspeed > 0 )
+    {
+    sound_play ( plum_impact_snd );
+    hspeed = -abs ( hspeed );
+    }
+  if ( next_to_lwall && hspeed < 0 )
+    {
+    sound_play ( plum_impact_snd );
+    hspeed = abs ( hspeed );
+    }
+  if ( under_ceiling && vspeed < 0 )
+    {
+    sound_play ( plum_impact_snd );
+    vspeed *= -0.5;
+    }
+  }
+  else
+  {
+  if ( thrown > 0 )
+    {
+    can_pick_up = 0;
+    last_attacker = thrown;
+    thrown = noone;
+    }
+    else
+  if ( held <= 0 )
+    {
+    sprite_angle = 0;
+    }
+    else
+    {
+	if ( instance_exists ( platform ) )
+       {
+       with ( platform )
+         instance_destroy();
+       platform = noone;
+       }
+    item_stick_to_point ( held , 0 );
+    y -= 6;
+    }
+  custom_land = 0;
+  }
+}
+
+if ( dying_timer < 120 )
+  {
+  if ( dying_timer mod 4 < 2 )
+    visible = 0;
+    else
+  if ( sticked < 0 )
+    visible = 1;
+  }
+~~PLAYER CONTACT:
+if ( hit_timer > 0 ) exit;
+if ( held > 0 ) exit;
+if ( sticked > 0 ) exit;
+if ( last_attacker < 0 ) exit;
+if ( vermin == last_attacker && last_attacker_timer > 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( last_attacker ) ) exit;
+create_projectile ( 12 , 90 , 4.5 , 2.4 , 12 , 12 , kick3 , obj_spark_hit3 , 2 , 2 , 0 , 19 , last_attacker , 6 , -1 );
+var v;
+v = vermin;
+with ( item )
+  {
+  if ( sprite_index != sprite_index )
+    continue;
+  if ( sticked == v )
+    {
+    v = -1;
+    break;
+    }
+  }
+if ( v == -1 )
+  {
+  hspeed *= -1;
+  vspeed *= -1;
+  hit_timer = 14;
+  sound_play ( plum_impact_snd );
+  exit;
+  }
+sticked = vermin;
+sound_play ( plum_stick_snd );
+hit_timer = 2;
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( sticked > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( vermin.attacker != 99 )
+  last_attacker = vermin.attacker;
+hit_timer = vermin.hitlag_frames + 3;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+object_stun ( vermin , vermin.hitlag_frames );
+if ( vermin.dir < 360 )
+  direction = vermin.dir;
+  else
+  direction = 90;
+speed = min ( 5 , vermin.bkb + vermin.kbg );
+hspeed *= 0.3;
+~~END OF FILE

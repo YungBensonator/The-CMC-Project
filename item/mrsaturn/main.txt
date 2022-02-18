@@ -1,0 +1,164 @@
+~~INIT:
+mrsaturnw_spr = ispr_add_alpha ( "item/mrsaturn/walk.png" , 11 , 0 , 0 , 12 , 16 );
+mrsaturnd_spr = ispr_add_alpha ( "item/mrsaturn/damage.png" , 7 , 0 , 0 , 12 , 14 );
+mrsaturn_snd = isound_add ( "item/mrsaturn/honk.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( mrsaturnw_spr ) )
+  spr_delete ( mrsaturnw_spr );
+if ( sprite_exists ( mrsaturnd_spr ) )
+  spr_delete ( mrsaturnd_spr );
+~~ENTER:
+sprite_index = obj_items_control.mrsaturnd_spr;
+sprite_air = obj_items_control.mrsaturnd_spr;
+sprite_held = obj_items_control.mrsaturnd_spr;
+sprite_walk = obj_items_control.mrsaturnw_spr;
+sprite_damage = obj_items_control.mrsaturnd_spr;
+mask_index = obj_items_control.mrsaturnd_spr;
+mrsaturn_snd = obj_items_control.mrsaturn_snd;
+honk = 1;
+air_spr_y = -( sprite_get_height ( sprite_walk ) - sprite_get_yoffset ( sprite_walk ) ) * 0.7 - 2;
+type = "toss";
+hit_timer = 0;
+collision_type = 1;
+shadow = 6.5;
+image_xscale = 0.7;
+image_yscale = image_xscale;
+start_scale = image_xscale;
+can_pick_up = 1;
+
+walk_countdown = 30;
+~~LAND:
+hspeed *= 0.5;
+vspeed = -abs ( vspeed ) * 0.75;
+if ( speed < 2 )
+  {
+  thrown = -99;
+  custom_land = 0;
+  }
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -3 + floor ( random ( 7 ) );
+  shakey = -3 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+
+walk_countdown = max ( walk_countdown - 1 , 0 );
+
+air_frame = ( air_frame + 0.5 ) mod 7;
+if ( thrown >= 0 )
+  {
+  sprite_index = sprite_air;
+  if ( hspeed > 0 && next_to_rwall )
+    {
+    hspeed *= -0.5;
+    }
+  if ( hspeed < 0 && next_to_lwall )
+    {
+    hspeed *= -0.5;
+    }
+  if ( under_ceiling )
+    {
+    vspeed = 0;
+    }
+  }
+  else
+if ( held < 0 )
+  {
+  if ( on_floor || on_platform )
+    {
+    walk_frame = ( walk_frame + 0.25 ) mod sprite_get_number ( sprite_walk );
+    honk = 1;
+    if ( abs ( hspeed ) <= 0.5 )
+      {
+      hspeed = sign ( image_xscale ) * 0.5;
+      if ( !collision_line ( x + sign(hspeed) * 3 , y - 5 , x + sign(hspeed) * 3 , y + 5 , obj_pavement , 1 , 1 ) )
+        {
+        hspeed = 0;
+        image_xscale *= -1;
+        }
+      }
+      else
+      {
+      hspeed = sign ( hspeed ) * ( abs ( hspeed ) - 0.5 );
+      }
+    }
+  }
+  else
+  {
+  sprite_index = sprite_air;
+  }
+
+if ( thrown > 0 )
+  {
+  sprite_air = sprite_damage;
+  sprite_index = sprite_air;
+  custom_land = 1;
+  }
+  else
+  {
+  sprite_air = sprite_damage;
+  if ( held > 0 )
+    sprite_index = sprite_damage;
+    else
+  if ( on_floor || on_platform )
+    sprite_index = sprite_walk;
+  custom_land = 0;
+  }
+if ( sprite_index == sprite_walk )
+  image_index = walk_frame;
+  else
+  image_index = air_frame;
+image_speed = 0;
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( thrown > 0 && vermin == thrown ) exit;
+hit_timer = 9;
+FMODSoundPlay ( koopa_hit );
+if ( honk )
+  {
+  sound_play_pitch ( mrsaturn_snd , 0.7 + random ( 0.6 ) );
+  //honk = 0;
+  }
+last_hit_proj = create_projectile ( 9 , 30 + facing * 150 , 3 + min ( 1.9 , speed * 0.2 ) , 2.4 , 90 , 7 , kick1 , obj_spark_hit2 , 1.3 , 1.3 , 0 , 8 , thrown , 3 , -1 );
+hspeed *= -0.11;
+vspeed = -3;
+thrown = -99;
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = vermin.hitlag_frames + 1;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+object_stun ( vermin , vermin.hitlag_frames );
+if ( vermin.dir < 360 )
+  {
+  direction = vermin.dir;
+  } 
+  else
+  {
+  direction = 90;
+  }
+speed = min ( 20 , ( 4 + ( vermin.bkb + vermin.kbg ) ) * 0.5 );
+if ( on_floor || on_platform )
+  vspeed = 0;
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( vermin.speed < 0.25 ) exit;
+if ( thrown <= 0 ) exit;
+hit_timer = 9;
+FMODSoundPlay ( koopa_hit );
+last_hit_proj = create_projectile ( 9 , 30 + facing * 150 , 3 + min ( 1.9 , speed * 0.2 ) , 2.4 , 90 , 7 , kick1 , obj_spark_hit2 , 1.3 , 1.3 , 0 , 8 , thrown , 3 , -1 );
+hspeed *= -0.11;
+vspeed = -3;
+thrown = -99;
+
+~~END OF FILE

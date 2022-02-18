@@ -1,0 +1,222 @@
+~~INIT:
+fireflower_spr = ispr_add_alpha ( "item/fireflower/flower.png" , 2 , 0 , 0 , 9 , 17 );
+fireflowerp_spr = ispr_add_alpha ( "item/fireflower/fire.png" , 8 , 0 , 0 , 16 , 84 );
+fireflower_snd = isound_add ( "item/fireflower/launch.wav" , 0 , 0 );
+
+~~DEINIT:
+if ( sprite_exists ( fireflower_spr ) )
+  spr_delete ( fireflower_spr );
+if ( sprite_exists ( fireflowerp_spr ) )
+  spr_delete ( fireflowerp_spr );
+
+
+~~ENTER:
+sprite_index = obj_items_control.fireflower_spr;
+sprite_air = obj_items_control.fireflower_spr;
+sprite_held = obj_items_control.fireflower_spr;
+air_spr_y = 0;
+type = "batter";
+image_xscale = 1;
+image_yscale = 1;
+hit_timer = 0;
+shadow = 8;
+
+batter_jab = 1;
+batter_stilt = 1;
+batter_dash = 0;
+batter_ssmash = 1;
+batter_nair = 0;
+batter_fair = 0;
+
+ammo = 240 + floor ( random ( 120 ) );
+animation = 10;
+
+
+~~LAND:
+instance_create ( x , y - 4 , obj_smoke_front );
+instance_destroy();
+
+
+~~STEP:
+if ( held <= 0 )
+  sprite_angle = 0;
+
+if ( animation > 0 )
+  {
+  image_index = 1;
+  animation -= 1;
+  }
+  else
+  {
+  image_index = 0;
+  }
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  collision_type = 2;
+  can_pick_up = 0.5;
+  
+  if ( on_floor && on_platform && speed < 0.1 )
+    {
+    thrown = -99;
+    }
+  }
+  else
+  {
+  collision_type = 0;
+  can_pick_up = 1;
+  }
+
+if ( ammo == 0 )
+  custom_land = 1;
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+if ( y < other.y )
+  vspeed = -3;
+  else
+  vspeed = choose ( 0 , 1 );
+thrown = -99;
+
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 18;
+last_hit_proj = create_projectile ( 3 , 90 - sign ( hspeed ) * 45 , 2 + min ( 1.7 , speed * 0.2 ) , 1.2 , 15 , 17 , fire1 , obj_spark_fire1 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin.damage > 2 )
+  {
+  object_stun ( vermin , 8 );
+  hit_timer = 9;
+  hspeed *= -0.3;
+  vspeed = -3;
+  thrown = -99;
+  object_stun ( self.id , 6 );
+  }
+
+
+~~CUSTOM:
+if ( speed == 0 )
+  {
+  speed = last_speed;
+  direction = last_direction;
+  }
+  else
+  {
+  last_speed = speed;
+  last_direction = direction;
+  }
+moving_object = 1;
+vspeed -= 0.1;
+image_angle = direction + 90;
+time = 28;
+if ( timer > 2 && timer < 14 )
+  {
+  if ( random ( 40 ) < 1 )
+    instance_create ( x , y , obj_smoke );
+  }
+if ( timer > 18 )
+  {
+  hit = 2;
+  image_alpha -= 0.08;
+  }
+if ( image_alpha < 0 )
+  instance_destroy();
+
+
+~~PLAYER EVENT:
+if ( timer == -1 )
+  {
+  sprite_index = item_shoot_sprite;
+  image_index = 0;
+  state_type = "air_attack";
+  timer_speed = 1;
+  timer = 0;
+  time = 20;
+  image_speed = item_shoot_frame / 5;
+  firedelay = 0;
+  playsample = 0;
+  attacking = 1;
+  }
+
+if ( air == 0 )
+  {
+  hspeed *= 0.8;
+  }
+
+if ( timer == 6 && attacking )
+  {
+  timer = 5;
+  }
+if ( timer == 5 )
+  {
+  animation = 2;
+  image_index = item_shoot_frame;
+  image_speed = image_number / 15;
+  item_posupdate();
+  if ( firedelay == 0 )
+    {
+    firedelay = 2;
+    if ( held_item.ammo == 0 )
+      {
+      instance_create ( held_item.x + 15 * ( 1 - facing * 2 ) , held_item.y - 5 , obj_smoke );
+      held_item.animation = 3;
+      exit;
+      }
+    if ( playsample == 0 )
+      {
+      sound_play_pitch ( obj_items_control.fireflower_snd , 0.95 + random ( 0.1 ) );
+      spark = instance_create ( held_item.x + 5 * ( 1 - facing * 2 ) , held_item.y - 5 , obj_spark_effect2 );
+      spark.image_xscale *= 0.3;
+      spark.image_yscale *= 0.3;
+      playsample = 3;
+      }
+      else
+      {
+      playsample -= 1;
+      }
+    create_projectile ( 1 , 35+facing*110 , 2 , 2 , 2 , 1 , fire1 , obj_spark_fire1 , 0.15 , 0.15 , 0 , 0 , self.id , 30 , char_item );
+    if ( playsample > 0 )
+      proj.dir = 361;
+    proj.can_combo = 0;
+    proj.hspeed = ( 1.45 + random ( 0.5 ) ) * ( 1 - facing * 2 );
+    proj.vspeed = 1.25 + random ( 0.5 );
+    proj.sprite_index = obj_items_control.fireflowerp_spr;
+    proj.item_parent = held_item.object_index;
+    proj.x = held_item.x + 5 * ( 1 - facing * 2 );
+    proj.y = held_item.y - 5;
+    proj.di = 0.25;
+    held_item.ammo -= 1;
+    held_item.animation = 4;
+    }
+    else
+    {
+    firedelay -= 1;
+    }
+  }
+~~END OF FILE

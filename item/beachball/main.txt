@@ -1,0 +1,162 @@
+~~INIT:
+
+attack_tracer  =  fighter_slot[0,0].id;
+send_fail = false;
+color_timer = 0;
+minigame = false;
+owner = 0;
+beachball_spr_red  = ispr_add_alpha("item/beachball/beachball_red.png",1,0,0,9,9);
+beachball_spr_blue = ispr_add_alpha("item/beachball/beachball_blue.png",1,0,0,9,9);
+beachball_spr = beachball_spr_red;
+z = -1;
+//Unload the sprites
+~~DEINIT:
+
+if (sprite_exists(beachball_spr)){
+   spr_delete(beachball_spr);
+}
+
+//Loads everything into their proper variables to display
+~~ENTER:
+
+sprite_index = obj_items_control.beachball_spr;
+sprite_air = obj_items_control.beachball_spr;
+sprite_held = obj_items_control.beachball_spr;
+
+throw_speed = 5;
+max_fall_speed = 2.1;
+weight = 0.18;
+can_pick_up = 0;
+
+
+predator = 0;
+
+collision_type = 1;
+
+air_spr_y = -9;
+
+
+~~LAND:
+z = 0;
+
+
+~~STEP:
+if (z > 0) z = z+1;
+if (z >= 20) z = 0;
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( on_platform ) exit;
+if ( on_floor) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) && temp < 9) exit;
+
+  
+  if (z == 0){
+   o = create_projectile ( 1 , 364 , 0 , 0 , 0 , 0 , kick3 , obj_spark_hit3 , 1 , 1 , 0 , 0 , attacker.id , 6 , -1 );
+   o.hit_attacker = 1;
+   hspeed = hspeed *-0.6;
+   vspeed = vspeed *-0.6;
+   if (vspeed == 0) vspeed = (attacker.facing * 0.4) - 0.2;
+   z = 1;
+}
+
+~~STEP:
+
+//Increase color timer.  Once this reaches timer_limit, the color of the ball changes in the mini game.
+if (color_timer != 0)
+	color_timer = color_timer + 1;
+
+//Switch the balll sprite
+if (color_timer > 30 && minigame){
+	color_timer = 0;
+	if (owner == 0){
+		//beachball_spr = beachball_spr_blue;
+		sprite_index = obj_items_control.beachball_spr_blue;
+		sprite_air   = obj_items_control.beachball_spr_blue;
+		owner = 1;
+	}
+	else{
+		//beachball_spr = beachball_spr_red;
+		sprite_index = obj_items_control.beachball_spr_red;
+		sprite_air   = obj_items_control.beachball_spr_red;
+		owner = 0;
+	}
+}
+
+if ( hit_time > 0 )
+  {
+  hit_time -= 1;
+  if ( next_speed >= 0 )
+    {
+    shakex = 2*cos(hit_time*pi);
+    speed = 0;
+    }
+  exit;
+  }
+if ( next_speed >= 0 )
+  {
+  shakex = 0;
+  shakey = 0;
+  speed = next_speed;
+  direction = next_direction;
+  y -= 1;
+  next_speed = -1;
+  }
+if ( speed > 1.8 && abs(sin(timer*pi/2)) >= 0.9 && predator > 0 )
+    {
+    after_image(4,c_red,0.5);
+    after.y -= 8 * image_yscale;
+    }
+if ( abs(hspeed) < 0.03 )
+    hspeed = 0
+if hspeed > 0 
+    hspeed -= 0.025;
+else if hspeed < 0
+    hspeed += 0.025;
+
+if ( next_to_rwall && hspeed > 1 )
+  {
+  hspeed *= -0.75;
+  }
+if ( next_to_lwall && hspeed < -1 )
+  {
+  hspeed *= 0.75;
+  }
+
+sprite_angle -= hspeed * 2.5;
+
+~~HIT:
+
+if (speed < 7 && hit_time <= 0) {
+    hitbox = vermin;
+    if hitbox <= 0
+        exit;
+    if hitbox.hit < 2 {
+        hasbeenhit = 1
+		//Determine KB direction.  Biased towards going up.
+        if (hitbox.dir >=30 && hitbox.dir < 60)
+            dir = 60;
+        else if (hitbox.dir >= 120 && hitbox.dir < 150)
+           dir = 120;
+        else
+           dir = hitbox.dir;
+        
+         next_speed = (vermin.bkb + vermin.kbg)/1.7;
+         next_direction = dir;
+         image_speed = 0.25;
+         hit_time = 0;
+         predator = hitbox.attacker.id
+		 
+		 if (hitbox.attacker.id == attack_tracer && color_timer == 0) {
+			 fail_tracer = true; 
+		 } else {	
+			
+			attack_tracer = hitbox.attacker.id;
+			color_timer = 1;
+		 }
+         hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 8 ) * 0.5 );
+         speed = 0
+    }
+}
+~~END OF FILE
