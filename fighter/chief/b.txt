@@ -1,19 +1,19 @@
 if state_type = "jump" || state_type = "stand" || state_type = "run" ||  state_type = "shielding" {
     special = 1
-    attacking = 0
     timer = 0
     attack_type = "b"
     state_type = "air_attack"
     image_speed = 0.35
     sprite_index = bshot1_sprite;
     image_index=0
-    time = 24
+    time = 35
     timer_speed=1
 	shottype = 0;
 	imtemp = 0;
 	tbtemp = 0;
 	lives -= 1;
 }
+if (timer < time -1){
 if(special = 0){interrupt = 1;}
 if( air = 0){hspeed *= .8}
 
@@ -75,10 +75,10 @@ if(shottype = 2)
         if moveright = 1 facing = 0;
         if moveleft = 1 facing = 1;
     }
-    if (timer = 9 && !shieldup) {
+    if ((timer = 9 && !shieldup) || timer = 11 && !shieldup) {
         sound_play(b_sound)
 		if(shottype = 1){
-script_execute(create_projectile,.60,361,0,0,5,0,kick1,obj_spark_hit1,0.8,0.8,7,23,self.id,45,c1_mach_bullet)
+	create_projectile(1,45,7,0.8,5,0,kick1,obj_spark_hit1,0.8,0.8,7,23,self.id,45,c1_mach_bullet)
     flash1= instance_create(x ,y, obj_custom_gfx);
     flash1.step_script = trans_step;
     flash1.draw_script = trans_draw;
@@ -91,7 +91,7 @@ script_execute(create_projectile,.60,361,0,0,5,0,kick1,obj_spark_hit1,0.8,0.8,7,
 }		
         else {
 
-	script_execute(create_projectile,.60,361,0,0,5,0,kick1,obj_spark_hit1,0.8,0.8,7,30,self.id,45,c1_mach_bullet)
+	create_projectile(1,angle_correct(45),7,0.8,5,0,kick1,obj_spark_hit1,0.8,0.8,7,30,self.id,45,c1_mach_bullet)
     flash1= instance_create(x ,y, obj_custom_gfx);
     flash1.step_script = trans_step;
     flash1.draw_script = trans_draw;
@@ -114,8 +114,8 @@ script_execute(create_projectile,.60,361,0,0,5,0,kick1,obj_spark_hit1,0.8,0.8,7,
         else
             special = 0
     }
-    if timer = 12 && special = 1 {
-        timer = 6
+    if timer = 25 && special = 1 {
+        timer = 3
     }
     if timer = 14 {
         if special = 0 {
@@ -134,7 +134,7 @@ script_execute(create_projectile,.60,361,0,0,5,0,kick1,obj_spark_hit1,0.8,0.8,7,
     }
 
 	if(taunt && tbtemp = 0){sound_play(tauntb_sound); tbtemp = 1;}
-
+}
 if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
     if air=0

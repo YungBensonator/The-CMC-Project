@@ -3,13 +3,14 @@ fast_fall_temp = 0
 if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" 
 {
         vspeed -= 0.1;
+		hspeed = 0
         state_type = "air_attack";
         attack_type = "sideb";
         image_speed = 0.25;
         sprite_index = sideb_1_sprite;
         image_index = 0;
         timer = 0;
-        time = 100;
+        time = 90;
         temp = 0;
         timer_speed = 1;
         special = 1;
@@ -87,9 +88,11 @@ if(timer > 32 && timer < 34 && special = 1)
 
 if(timer = 34)
 {
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
 	sprite_index = sideb_3_sprite;
 	sound_play(crfile_sound2)
-	create_projectile(20,70+facing*40,6.35,7.5,65,0,explodehit3,obj_spark_special2,0.8,0.8,12,27,self.id,18,c9_sniper);
+	create_projectile(20,70+facing*40,6.35,7.5,65,0,explodehit3,obj_spark_special2,0.8,0.8,13,40,self.id,25,c9_sniper);
 	proj.image_xscale *= 50;
 	proj.di = 0.45;
 	proj.priority = 5;
@@ -101,11 +104,55 @@ if(timer = 34)
 	if (instance_exists(sniper))
 	 {with sniper instance_destroy();}
 }
-
-if(air = 0){hspeed *= .8}
-
+  if(timer >= 34 && timer < 59){ 
+if ((instance_exists(sniper) && temp_spawn >= 2 && sideb.attack_success && target.state_type = "flinch" || target.state_type = "air_flinch") && dontrepeat = 0 && target.percent > 120){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+				killspark = instance_create(enemy.x-235,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 50;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(100,100);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 20
+				freezer2.alarm[0] = 120
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 90;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 65
+				time += 10
+				enemy.speed = temp_speed * 2.5
+				target.gravity = temp_grav + 1.5
+				dontrepeat = 1;
+				}
+				}
+if(air > 0){
+if( facing = 0){
+hspeed *= .8
+}
+if(facing = 1){
+hspeed *= -.8
+}
+}
 if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
-    attack_type = "none";
+    dontrepeat = 0;
+	attack_type = "none";
     if air > 0
         state_type = "jump";
     else

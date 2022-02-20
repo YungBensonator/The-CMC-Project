@@ -9,6 +9,7 @@ if ( state_type == "jump" || state_type == "run" || state_type == "stand" || sta
   time = 45;
   timer_speed = 1;
   charge_frame = 13;
+
   }
   
 if ( timer < time )
@@ -36,7 +37,7 @@ if ( timer < time )
     if ( timer = 20 )
       {
 	sound_play(brute_sound2)
-	create_projectile(0,0,0,0,0,0,0,0,0.8,0.8,-14,20.5,self.id,120,c4_grenade);
+	grene = create_projectile(0,0,0,0,0,0,0,0,0.8,0.8,-14,20.5,self.id,120,c4_grenade);
 	hspeed = (3 - facing*6)*size;
 	air_move = 0;
 
@@ -55,9 +56,46 @@ if ( timer < time )
 			}
   
   
-
+if ((instance_exists(grene) && target.state_type = "flinch" || target.state_type = "air_flinch") && dontrepeat = 0 && target.percent > 120 && temp_spawn >= 2){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+				killspark = instance_create(enemy.x-235,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 50;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(100,100);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 20
+				freezer2.alarm[0] = 160
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 90;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 35
+				enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 40
+				enemy.speed = temp_speed * 3.5
+				target.gravity = temp_grav + -1
+				time += 40;
+				gravity_lock = 1
+				dontrepeat = 1;
+				}
 if ( timer >= time - 1 )
   {
+  dontrepeat = 0
   attack_type = "none";
   state_type = "jump";
   timer = 0;
