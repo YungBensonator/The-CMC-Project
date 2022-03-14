@@ -1,0 +1,59 @@
+if ( state_type = "stand" || state_type = "crouch" || state_type = "run" )
+  {
+    hspeed = 0;
+    sprite_index = dtilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    state_type = "attack";
+    attack_type = "dtilt";
+    timer = 4;
+    time = 30;
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+  }
+switch ( timer )
+  {
+    case 4: image_index = 1; break;
+    case 8: image_index = 2; break;
+    case 12: image_index = 3; break;
+    case 16: image_index = 4; break;
+    case 20: image_index = 5; break;
+    case 24: image_index = 6; break;
+    case 28: image_index = 7; break;
+  }
+if ( timer < time ) {
+	state_type = "attack";
+	if timer = 8 {
+		if ( random ( 2 ) < 1 )
+		    play_attack_voice()
+		sound_play(swingsnd3);
+		create_hitbox(6,90,7,1,15,4,slash3,obj_spark_slash3,1,0.5,20,10,self.id,8,3);
+	}
+	if timer = 12 {
+                hitbox.dir = 175-facing*170;
+                hitbox.bkb = 4*size;
+		hitbox.kbg = 6*size;
+                hitbox.shield_damage = 14;
+                hitbox.hitbox_x = size * (-8+facing*16)
+                hitbox.hitbox_y = 10 * size;
+	}
+	if timer = 14 {
+		hitbox.bkb = 6*size;
+		hitbox.kbg = 7*size;
+		hitbox.dir = 150-facing*120;
+		hitbox.hitbox_x = size * (-18+facing*34)
+		hitbox.hitbox_y = 34 * size;
+	}
+	if image_index >= image_number - image_speed
+		image_speed = 0
+}
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

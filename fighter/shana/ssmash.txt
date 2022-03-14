@@ -1,0 +1,160 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "ssmash";
+    image_speed = 0;
+    sprite_index = ssmash_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 45;
+    timer_speed = 1;
+    charge_frame = 9;
+    xoff = 24; //Bigger is left
+    if facing = 1
+    xoff = 25
+    effscale = xsize/2
+    yoff = 52; //Bigger is up
+  }
+
+  if timer = 16 {
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = ssmash_effect_spr;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = depth - 0.1;
+  }
+  if timer = 17 {
+    eff.image_speed = 0;
+    eff.image_index = 1;
+  }
+  if timer = 18 {
+    eff.image_speed = 0;
+    eff.image_index = 2;
+  }
+  if timer = 19 {
+    eff.image_speed = 0;
+    eff.image_index = 3;
+  }
+  if timer = 20 {
+    eff.image_speed = 0;
+    eff.image_index = 4;
+  }
+  if timer = 23 {
+    eff.image_speed = 0;
+    eff.image_index = 5;
+  }
+  if timer = 26 {
+    eff.image_speed = 0;
+    eff.image_index = 6;
+  }
+  if timer = 29 {
+    eff.image_speed = 0;
+    eff.image_index = 7;
+  }
+  if timer = 32{
+    with (eff){
+      instance_destroy();
+    }
+  }
+  if (attack_type == "none"){
+    if (instance_exists(eff)){
+      with (eff){
+        instance_destroy();
+      }
+    }
+  }
+
+switch ( timer )
+  {
+  case 4: image_index = 1; break;
+  case 8: image_index = 2; break;
+  case 12: image_index = 3; break;
+  case 16: image_index = 4; break;
+  case 20: image_index = 5; break;
+  case 28: image_index = 6; break;
+  case 36: image_index = 7; break;
+  case 40: image_index = 8; break;
+  }
+if timer < time {
+	state_type = "attack";
+	if ( timer = 12 )
+	    {
+		sound_play(ssmash_voice);
+		hspeed = 1.5-facing*3;
+		duster = instance_create(x-12+facing*24,y,obj_dust_effect)
+		duster.facing = facing
+		duster.image_alpha = 0.75
+	    }
+	if ( timer = 14 )
+	    {
+		sound_play(flame_sound);
+		sound_play(flame2_sound);
+		sound_play(swingsnd3);
+	    }
+	if ( timer = 16 )
+		hspeed = 0;
+	if ( timer = 16 || timer = 18 || timer = 20 || timer = 22 )
+	    {
+		create_hitbox(1,90,1.5,0,3,0.1,fire1,obj_spark_fire1,1,1.2,30,20,self.id,1,1);
+		hitbox.di = 0;
+		hitbox.hit_stun = 2;
+		hitbox.shield_stun = 2;
+		hitbox.charge_dmg = 0;
+		hitbox.charge_kb = 0;
+	    }
+	if ( timer = 24 )
+	    {
+		create_hitbox(14,40+facing*100,7.1,6.4,8,6,fire3,obj_spark_fire1,1,1.2,30,20,self.id,3,2);
+		hitbox.hit_stun = 5;
+	    }
+}
+if (timer >= 24 && timer < 30){ 
+			if (attack_success) && (dontrepeat = 0 && temp_spawn >= 2) && target.percent > 110 {
+				dontrepeat = 1;
+				killspark = instance_create(enemy.x-235,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2;
+				sound_play(killscreen_voice);
+				screen_shake(300,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 30;
+				spark.camera_d = enemy.y - 30;
+				spark.camera_boundary_zoom = 130;
+				spark.alarm[0] = 80;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 80
+			
+				}	
+
+				}
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+    attack_type = "none";
+    if ( air > 0 )
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+    dontrepeat = 0;
+}
+    

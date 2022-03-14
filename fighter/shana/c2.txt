@@ -1,0 +1,90 @@
+absorb = -1;
+if ( timer <= 1 && temp = 0 )
+{
+  sprite_index = attacker.id.b_effect_spr2;
+  hspeed = 15 - attacker.id.facing*30;
+  image_speed = 0.5;
+  visible = 1;
+  maxtime = time;
+  hientemp = 0;
+  enemy_target_n = 0;
+  enemy_target[0] = noone;
+  var n;
+  n = 0;
+  temp = 1;
+}
+
+if ( maxtime > 0 ) maxtime -= 1;
+//if ( maxtime = 35 ) hit = 2;
+
+if ( timer = time + 1 && hit = 1 )
+{
+  attack_success = 0;
+  bkb -= 0.35 * attacker.id.size;
+  hspeed = 15 - attacker.id.facing * 30;
+  timer = 0;
+  time = maxtime;
+  alarm[0] = maxtime;
+}
+
+/*if ( timer = time + 1 && hit = 2 )
+{
+  hspeed = 15 - attacker.id.facing * 30
+  timer = 0
+  time = maxtime
+  alarm[0] = maxtime
+}
+
+if ( hit = 2 ) if ( image_alpha > 0 ) image_alpha -= 0.2;
+*/
+
+if ( attacker.id.hientemp = 1 ) hientemp = 1;
+
+if ( maxtime > 1 && hientemp = 0 )
+{
+  for ( n = 0; n < enemy_target_n; n += 1 )
+  {
+    with ( enemy_target[n] )
+    {
+      intangible = 1;
+      techlock = 1;
+      m = 1 + n;
+    }
+  }
+}
+
+if ( maxtime = 1 && hientemp = 1 )
+{
+  for ( n = 0; n < enemy_target_n; n += 1 )
+  {
+    with ( enemy_target[n] )
+    {
+      sprite_index = flinch_sprite;
+      sprite_angle = 0;
+      state_type = "flinch"; //"air_flinch";
+      speed = 0;
+      depth = -17;
+      gravity_lock = 1;
+      ignore_physics = 1;
+      intangible = 0;
+      with ( other )
+      {
+	other.x = attacker.id.x + 20 * other.m * ( 1 - 2* facing ) * other.size;
+	other.y = attacker.id.y - 3 * other.size;
+	shinpan = instance_create( other.x - 1 * ( 1 - other.facing * 2 ) * other.size, other.y - 16 * other.size, obj_spark );
+	shinpan . sprite_index = attacker.id.shinpan_effect_spr2;
+	shinpan . snap = other.id;
+	shinpan . image_speed = 0;
+	shinpan . depth = other.depth - 1;
+	shinpan . image_xscale = 0.3 + ( sprite_get_height ( other.sprite_index ) / ( 206 * 3 ) ) * other.size;
+	shinpan . image_yscale = shinpan.image_xscale;
+	shinpan . alarm[0] = 250;
+      }
+    }
+	
+	shana.enemy_target[n] = enemy_target[n]
+	shana.enemy_target_n = enemy_target_n
+  }
+}
+
+if ( maxtime = 0 ) instance_destroy();

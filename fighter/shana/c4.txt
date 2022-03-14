@@ -1,0 +1,38 @@
+absorb = -1
+if timer <= 1 && temp = 0 {
+    image_speed = 0.5;
+    image_alpha = 0.75;
+    visible = 1;
+    temp = 1
+    proj_hits = 1
+}
+if attack_success = 1 && timer = time {
+    time += 1
+    attack_success=2;
+    attacker.id.attack_hits-=1;
+}
+visible = 1
+sprite_index = attacker.id.final_smash_effect_spr
+draw_sprite_ext(attacker.id.final_smash_effect_spr,-1,x,y,image_xscale,image_yscale,0,c_white,0.85)
+if timer = time+1 && proj_hits <= 19 {
+    screen_shake ( 2 , 6 );
+    proj_hits += 1
+    hit = 0
+    launch = 0
+    attack_success=0
+    target.hitby=0
+    if proj_hits = 20 {
+	damage *= 0.75
+	dir = 25+facing*130;
+	bkb = 8.6*attacker.size
+	kbg = 7.8*attacker.size
+	sfx = explodehit3
+	gfx = obj_spark_fire1
+	bloom = 5
+    }
+    timer = 0
+    time = 5
+}
+if attacker.id.timer > 510 && proj_hits < 19 {
+    proj_hits = 19
+}

@@ -1,0 +1,364 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  state_type = "air_attack";
+  if charge < 150 {
+    downbtemp = 0;
+    sound_play(charge_sound);
+    timer = 0;
+    time = 150;
+  } else {
+    downbtemp = 1;
+    timer = 160;
+    time = 190;
+  }
+  hspeed *= 0.4;
+  timer_speed = 1;
+  }
+
+switch ( timer )
+  {
+  case 160: sprite_index = downb2_sprite; image_index=0; image_speed = 0; break;
+  case 164: image_index=1; break;
+  case 168: image_index=2; break;
+  case 172: image_index=3; break;
+  case 176: image_index=4; break;
+  case 180: image_index=5; break;
+  case 184: image_index=6; break;
+  
+  case 200: sprite_index = downb2_sprite; image_index=2; image_speed = 0; break;
+  case 203: image_index=3; break;
+  case 206: image_index=4; break;
+  case 209: image_index=2; break;
+  case 212: image_index=3; break;
+  case 215: image_index=4; break;
+  case 218: image_index=2; break;
+  case 221: image_index=3; break;
+  case 224: image_index=4; break;
+  case 227: image_index=2; break;
+  case 230: image_index=3; break;
+  case 233: image_index=4; break;
+  case 236: image_index=2; break;
+  case 239: image_index=3; break;
+  case 242: image_index=4; break;
+  case 245: image_index=2; break;
+  case 248: image_index=3; break;
+  case 251: image_index=4; break;
+  case 254: image_index=2; break;
+  case 257: image_index=3; break;
+  case 260: image_index=4; break;
+  case 263: image_index=2; break;
+  case 266: image_index=5; break;
+  case 270: image_index=6; break;
+  }
+
+//////PART 1//////
+if ( downbtemp = 0 )
+{
+if ( timer = 0 )
+{
+sprite_index = downb_sprite;
+image_index = 0;
+image_speed = 0.25;
+}
+
+if ( sprite_index = downb_sprite )
+{
+if ( image_index >= 2.5 ) image_index -= 1.5;
+}
+
+charge += 1
+
+if ( timer >= 4 && timer < 150 )
+	{
+		if ( air = 0 ) { hspeed = 0; }
+		if (!instance_exists(downbspark))
+		{
+			downbspark = instance_create(x+(7-facing*13)*size,y-17*size,obj_spark);
+			downbspark.snap = self.id;
+			downbspark.sprite_index = downb_effect_spr;
+			downbspark.image_xscale = size*(1-facing*2)*(charge/1800 + 0.025);
+			downbspark.image_yscale = size*(charge/1800 + 0.025);
+			downbspark.image_speed = 0.25;
+			downbspark.image_alpha = 0.75;
+			downbspark.depth = -3;
+		}
+		if ( timer = 4 || frac(timer/20) = 0 )
+		{
+		    duster = instance_create(x-2*(1-facing*2)*size,y-1*size,obj_dust_effect);
+		    duster.snap = self.id;
+		    duster.facing = facing;
+		    duster.image_blend = c_red;
+		    duster.image_xscale = 0.25*size;
+		    duster.image_yscale = 0.25*size;
+		    duster.depth = 0;
+		    duster = instance_create(x-2*(1-facing*2)*size,y-1*size,obj_dust_effect);
+		    duster.snap = self.id;
+		    duster.facing = facing;
+		    duster.image_blend = c_orange;
+		    duster.image_xscale = 0.15*size;
+		    duster.image_yscale = 0.15*size;
+		    duster.depth = 0;
+		}
+		if ( timer = 4 || frac(timer/40) = 0 )
+		    sound_play(flame2_sound);
+	}
+
+if ( instance_exists(downbspark) && timer >= 4 )
+{
+downbspark.image_xscale = size*(charge/1800 + 0.025);
+downbspark.image_yscale = size*(charge/1800 + 0.025);
+if downbspark.image_index > 3
+    downbspark.image_index = 0
+}
+
+if ( air = 0 && ai && timer >= 30 && distance_to_object(enemy) < 29 && random(20)>17 )
+	{
+		runtimer = 0;
+		sound_stop(charge_sound);
+		sprite_index = roll_sprite;
+		image_index = 0;
+		attack_type = "none";
+		state_type = "dodge";
+		if instance_exists(downbspark)
+		    with downbspark instance_destroy()
+		timer = 0;
+		time = 29;
+		facing = moveright;
+	}
+
+if ( shieldup = 1 && air = 0 )
+	{
+		sound_stop(charge_sound);
+		flashing = true;
+		alarm[7] = 3;
+		state_type = "shielding";
+		timer = 0;
+		time = -1;
+		attack_type = "none";
+		shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+		shield.p1 = self.id;
+	}
+
+if ( air = 0 && ( moveleft = 1 || moveright = 1 ) )
+	{
+		runtimer = 0;
+		sound_stop(charge_sound);
+		attack_type = "none";
+		state_type = "dodge";
+		sprite_index = roll_sprite;
+		image_index = 0;
+		sound_play(roll_dodge_snd);
+		if instance_exists(downbspark)
+		    with downbspark instance_destroy()
+		shieldup = 0;
+		timer = 0;
+		time = 29;
+		facing = moveright;
+	}
+
+if ( air > 0 && shieldup = 1 )
+{
+state_type="stand";
+sound_stop(charge_sound)	
+}
+
+if ( special = 1 )
+{
+downbtemp = 1;
+timer = 159;
+time = 190;
+special = 0;
+}
+
+if ( charge >= 150 )
+{
+sound_stop(charge_sound);
+speed = 0;
+attack_type = "none";
+state_type = "stand";
+timer = 0;
+time = -1;
+fully_charged = 1;
+}
+}
+//////PART 2//////
+if ( downbtemp = 1 )
+{
+if ( air = 0 ) { hspeed = 0; }
+
+if ( timer = 160 )
+{
+if ( instance_exists(downbspark) )
+{
+	with ( downbspark )
+	{
+	instance_destroy();
+	}
+}
+//sound_play ( choose ( downb_voice, downb_voice2 ) );
+fully_charged = 0;
+}
+
+if ( timer = 168 )
+{
+target = -99;
+downbbubble = create_homing_bubble(0.6,0.675,17,22,self.id,12);
+sound_play ( downb_sound );
+}
+
+if ( timer >= 168 && timer <= 180 )
+{
+if instance_exists(downbbubble)
+{
+downbbubble.x = x + (1-facing*2)*17*size;
+downbbubble.y = y - 22*size + vspeed;
+}
+if ( !instance_exists(downbhand) )
+{
+downbhand = instance_create(x,y,obj_spark);
+downbhand.sprite_index = hand_sprite;
+downbhand.x = x + 16 * (1-facing*2) * size;
+downbhand.y = y - 20 * size;
+downbhand.image_speed = 0.5;
+downbhand.image_alpha = 0.75;
+downbhand.image_xscale = 0.4 * (1-facing*2) * size;
+downbhand.image_yscale = 0.4 * size;
+downbhand.depth = -2;
+downbhand.snap = self.id;
+}
+if ( target > -1 && distance_to_object(target)<size*20 )
+	{
+		if ( target.state_type != "down" && target.intangible = 0 && target.attack_type != "final_smash" )
+		{
+			target1 = target;
+			target1.sprite_angle = 0;
+			target1.state_type = "air_flinch"
+			target1.facing = !facing;
+			target1.attack_type = "none";
+			target1.timer = 0;
+			target1.timer_speed = 0;
+			target1.alarm[0] = 2;
+			target1.depth = 2;
+			air_move = 0;
+			timer = 200;
+			time = 280;
+			image_index = 3;
+			target1.x = x + 20*size*(1-facing*2);
+			target1.y = y - 1 * size;
+			sound_play(catchsnd)
+			instance_create(target.x,target.y-9,obj_grab_spark)
+		}
+	}
+}
+
+if ( timer >= 175 && timer <= 180 )
+{
+downbhand.image_alpha -= 0.15
+if downbhand.image_alpha < 0
+downbhand.image_alpha = 0
+}
+
+if ( timer = 181 )
+{
+if instance_exists(downbbubble)
+{
+	with (downbbubble)
+	{
+	instance_destroy();
+	}
+}
+charge = 0;
+if ( instance_exists(downbhand) )
+{
+	with ( downbhand )
+	{
+	instance_destroy();
+	}
+}
+}
+
+if ( timer >= 200 && timer <= 270 && !instance_exists(downbhand) )
+{
+downbhand = instance_create(x,y,obj_spark);
+downbhand.sprite_index = hand_sprite;
+downbhand.x = x + 16 * (1-facing*2) * size;
+downbhand.y = y - 20 * size;
+downbhand.image_speed = 0.5;
+downbhand.image_alpha = 0.75;
+downbhand.image_xscale = 0.4 * (1-facing*2) * size;
+downbhand.image_yscale = 0.4 * size;
+downbhand.depth = -2;
+downbhand.snap = self.id;
+}
+if ( timer >= 265 && timer <= 270 )
+{
+downbhand.image_alpha -= 0.15
+if downbhand.image_alpha < 0
+downbhand.image_alpha = 0
+}
+
+if ( timer >= 200 && timer <= 270 )
+	{
+		hspeed = 0;
+		vspeed = 0;
+		gravity_lock = 1;
+		target1.x = x + 16 * size * ( 1 - facing * 2);
+        	target1.y = y - 12 * size;
+		target1.timer_speed = 0;
+		target1.alarm[0] = 2;
+		target1.state_type = "air_flinch"
+		target1.depth = depth + 1; //target1.depth = depth - 1; //FUCKING BITCH
+	}
+
+if ( timer = 200 || timer = 210 || timer = 220 || timer = 230 || timer = 240 || timer = 250 || timer = 260 || timer = 270 )
+{
+if ( charge < 50 )
+    target1.percent += 1;
+if ( charge >= 50 && charge < 100 )
+    target1.percent += 2;
+if ( charge >= 100 && charge < 150 )
+    target1.percent += 4;
+if ( charge >= 150 )
+    target1.percent += 6;
+target1.sprite_index = choose ( target1.flinch_sprite, target1.flinch2_sprite, target1.flinch3_sprite );
+FMODSoundPlay ( fire1 );
+}
+
+if ( timer = 271 )
+{
+if ( instance_exists(downbhand) )
+{
+	with ( downbhand )
+	{
+	instance_destroy();
+	}
+}
+create_hitbox(0,368,4,0,1,1,-1,-1,0.75,0.92,21.60,13.20,self.id, 1 , 1);
+if ( air > 0 )
+{
+	sprite_index = jump_sprite;
+	image_index = 1;
+	hspeed = -1.2 * (1-facing*2) * size;
+	vspeed = -3.7 * size;
+}
+charge = 0;
+}
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0 {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+    }
+    timer = 0;
+    time = -1;
+}

@@ -1,0 +1,41 @@
+if time = -1 {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "fthrow";
+    image_speed = 0.17;
+    sprite_index = special_land_sprite;
+    image_index = 0;
+    //target.timer_speed = 0;
+    //target.alarm[0] = 50;
+    timer = 0;
+    time = 34;
+    hspeed = 40-facing*80;
+  }
+if timer < time {
+  state_type = "attack";
+  if ( timer = 0 )
+  {
+    sound_play(smashb_sound);
+    create_projectile(9,0+facing*180,6,2,2,37,slash3,obj_spark_slash3,0.75,0.75,11,12,self.id,5,no_script);
+    target.techlock = 1
+    proj.di = -1;
+  }
+  if ( timer >= 1 )
+    hspeed*=0.5
+  if ( timer = 5 )
+  {
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+    instance_create(x+size*(10-facing*20),y-15*size,obj_spark_effect);
+  }
+  if ( proj.hit > 0 )
+  {
+    with ( proj ) instance_destroy();
+  }
+}
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+}
