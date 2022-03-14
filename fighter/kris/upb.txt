@@ -1,0 +1,90 @@
+if (state_type = "run" || state_type = "stand" || state_type = "jump") && noupb = 0 {
+    attacking = 0;
+    special = 1;
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 45;
+    timer_speed=1;
+	force_edge_grab = 1
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+
+        if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 5: image_index = 0; break;
+	case 10: image_index = 1; break;
+	case 15: image_index = 2; break;
+      }
+	if timer >= 1 && timer <= 14 {
+	gravity = 0
+	gravity_lock = 1
+	vspeed = 0
+    }
+	if timer >= 15 && timer <= 20 {
+	gravity = 0
+	gravity_lock = 1
+    }
+	if timer = 15 {
+	sound_play(ping);
+    if special = 0 || meter < 20{
+    vspeed = -6*size;
+    }
+    if special = 1 && meter >= 20 {
+    vspeed = -9*size;
+    special = 0
+    meter -= 20
+    }
+	}
+	if timer >= 35 && timer <= 45 && superwalljump = 1 
+		{
+        if ( next_to_rwall && ( movejump || moveleft ) && walljump_lock != 0 )
+          {
+	  vspeed = -size * mid_jump_speed;
+	  gravity_lock = 0
+	  gravity = 1
+          moveright = 0;
+          intangible = 0;
+          attack_type = "wall_jump";
+		sprite_index = wall_jump_sprite;
+        image_index= 0;
+          walljump_lock = 0;
+          facing = 1;
+	  superwalljump = 0;
+	  air = max_jumps-1;
+          exit;
+          }
+        if ( next_to_lwall && ( movejump || moveright ) && walljump_lock != 1 )
+          {
+	  vspeed = -size * mid_jump_speed;
+          moveleft = 0;
+          intangible = 0;
+          attack_type = "wall_jump";
+		  sprite_index = wall_jump_sprite;
+        image_index= 0;
+          walljump_lock = 1;
+          facing = 0;
+	  superwalljump = 0;
+	  air = max_jumps-1;
+          exit;
+          }
+        }
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

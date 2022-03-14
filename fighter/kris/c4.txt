@@ -1,0 +1,56 @@
+if ( random(5) > 4 )
+absorb2 = 0;
+if timer < 21{
+x = myx + attacker.size * (22-facing*44) + lengthdir_y(64,(timer/20)*180) * (-1+facing*2);}
+y = myy - 10;
+
+if ( timer < time )
+  {
+    if ( captured == noone )
+      {
+	if ( collision_rectangle(x-14,y-29,x+8,y+14,player,0,1) )
+	  {
+	    target = instance_nearest(x,y,player);
+	    if ( target != attacker.id && target.intangible == 0 )
+	      {
+		if ( target.state_type == "shielding" )
+		  {
+		    create_projectile ( 3 , 361 , 3 , 3 , 8 , 4 , kick1 , obj_spark_hit1 , 1 , 1 , 0 , 0 , attacker , 4 , no_script );
+		    proj.x = target.x;
+		    proj.y = target.y - target.actual_height * 0.5;
+		    captured = -6;
+		    exit;
+		  }
+		captured = target.id;
+		target.percent += 8;
+		target.state_type = "air_flinch";
+		target.attack_type = "none";
+		target.timer = 0;
+		target.time = alarm[0];
+		target.sprite_index = target.flinch_sprite;
+	      }
+	  }
+      }
+    else
+    if ( captured > -6 && captured.timer < captured.time )
+      {
+	captured.x = x;
+	captured.y = y + 20;
+	captured.hspeed = 0;
+	captured.vspeed = 0;
+      }
+  }
+
+if ( timer = time && captured > 0 )
+  {
+    captured.gethit = 0;
+    captured.intangible = 0;
+    with ( captured )
+      {
+	create_projectile(0,361,4,1,0,20,-1,obj_spark_effect,0.6,0.6,0,0,other.attacker.id,4,no_script);
+	captured = 0
+	proj.hitonce = 1;
+	proj.di = 0;
+	proj.sdi = 0;
+      }
+  }

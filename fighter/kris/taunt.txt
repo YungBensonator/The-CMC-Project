@@ -1,0 +1,93 @@
+// This is the script for Mach Rider's taunt action.
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+		if (movedown != 1 || moveup != 1 || moveleft != 1 || moveright != 1) {
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 70;
+		}
+		if ( movedown ) {
+        sprite_index = taunt_sprite2;
+		timer = 71;
+		time = 205;
+		image_speed = 0;
+		image_index = 0;
+		}
+        timer_speed=1;
+}
+if air > 0
+	time = 1
+if ( timer < time ) {
+switch ( timer )
+      {
+	case 1: sound_stop(thinking); break;
+	case 5: image_index = 1; break;
+	case 8: sound_play(thinking); break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 20: image_index = 4; break;
+	case 25: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 35: image_index = 7; break;
+	case 40: image_index = 8; break;
+	case 45: image_index = 9; break;
+	case 50: image_index = 10; break;
+	case 55: image_index = 11; break;
+	case 60: image_index = 12; break;
+	case 65: image_index = 13; break;
+      }
+	  if timer = 1 && instance_exists(obj_training) {
+		meter = 100;
+		interrupt = 1
+		}
+switch ( timer )
+      {
+	case 71: sound_stop(lancer_laugh); break;
+	case 75: image_index = 1; break;
+	case 80: image_index = 2; break;
+	case 85: image_index = 3; break;
+	case 90: image_index = 4; break;
+	case 95: image_index = 5; break;
+	case 100: image_index = 6; break;
+	case 105: image_index = 7; sound_play(lancer_laugh); break;
+	case 110: image_index = 8; break;
+	case 120: image_index = 7; break;
+	case 130: image_index = 8; break;
+	case 140: image_index = 7; break;
+	case 150: image_index = 8; break;
+	case 160: image_index = 7; break;
+	case 170: image_index = 8; break;
+	case 185: image_index = 7; break;
+	case 190: image_index = 8; break;
+	case 195: image_index = 7; break;
+	case 200: image_index = 9; break;
+	}
+	if ( timer = 80 )
+      {
+	create_hitbox(1,270,5,5,3,6,kris_hit_medium,obj_spark_hit1,1,0.4,16,0,self.id,5,1);
+	hitbox.hit_stun = 99;
+	hitbox.di = 0;
+	hitbox.weight_kb = 1;
+	if enemy.air = 0 {
+	hitbox.damage = 1*size;
+	hitbox.dir = 90
+	hitbox.bkb = 0*size;
+	hitbox.kbg = 0*size;
+	hitbox.shield_damage = round(0*size);
+	hitbox.hitlag_frames = round(0.1*size);
+	hitbox.hit_stun = 0;
+	hitbox.weight_kb = 1;
+	}
+      }
+		}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

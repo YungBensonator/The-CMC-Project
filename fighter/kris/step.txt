@@ -1,0 +1,206 @@
+no_hurtbox = 1;
+//percent=meter;
+if cantusedownb > 0
+cantusedownb -=1
+if jevil > 0
+jevil -=1
+if jev = 1 {
+    timerdab2+=1;
+	}
+
+if timerdab2 >= 60{
+    jev = 0;
+    timerdab2 = 0;
+}
+if rudebuster > 0
+rudebuster -=1
+if rude = 1 {
+    timerdab+=1;
+	}
+
+if timerdab >= 60{
+    rude = 0;
+    timerdab = 0;
+}
+if red = 1 {
+	rude = 1
+    timerdab1+=1;
+	}
+
+if timerdab1 >= 60{
+    red = 0;
+    timerdab1 = 0;
+}
+
+if meter = 0{
+	used = 0;
+}
+
+if air = 0 {
+	superwalljump = 1;
+	}
+
+if state_type = "out" {
+if courage = 0
+meter = 0
+else
+meter = 1
+}
+if sprite_index = stand_sprite
+image_speed = 0.2
+if sprite_index = jump_sprite
+{
+  if ( timer = 0 )
+    image_index = 0;
+}
+if sprite_index = hover_sprite {
+image_index = 3
+}
+if sprite_index = broken_sprite || sprite_index = land_sprite {
+mask_index = crouch_mask_sprite
+}
+
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.sprite_index = meter_sprite;
+	MeterHud.image_speed = 0;
+}
+
+if(MeterHud.image_index <= 0) {MeterHud.image_index = 0}
+if(meter >= maxmeter){MeterHud.image_index = 98;} else if (meter <= 0){MeterHud.image_index = 0;} else {MeterHud.image_index = meter*98/maxmeter;}
+
+
+if courage = 0{
+if hitbox.hit = 1 || hitbox2.hit = 1 || hitbox3.hit = 1 && attack_shielded = 0{
+
+if attack_type != "ssmash" && attack_type != "usmash" && attack_type != "dsmash" && attack_type != "sideb" && attack_type != "utilt" && attack_type != "uthrow" && attack_type != "bthrow" && attack_type != "fthrow" && attack_type != "dthrow" && attack_type != "dair" && attack_type != "uair" && attack_type != "dtilt" && attack_type != "stilt" && attack_type != "dash_attack" && attack_type != "nair" && attack_type != "bair" && attack_type != "fair" && attack_type != "jab" && attack_type != "hold" {
+meter += 0;
+}
+if attack_type = "ssmash" || attack_type = "usmash" && fifthteen > 0{
+meter +=15;
+fifthteen = 0;
+}
+if attack_type = "dair" || attack_type = "nair" && hitchecker > 0 {
+meter +=2;
+hitchecker = 0;
+}
+if attack_type = "bair" || attack_type = "dsmash" || attack_type = "fair" || attack_type = "fthrow" || attack_type = "uthrow" && eight > 0 {
+meter +=8;
+eight = 0;
+}
+if attack_type = "jab" && three > 0 {
+meter +=3;
+three = 0;
+}
+if attack_type = "dtilt" || attack_type = "uair" || attack_type = "stilt" || attack_type = "dash_attack" || attack_type = "utilt" && plez > 0 {
+meter +=5;
+plez=0;
+}
+if attack_type = "dthrow" && one > 0{
+meter +=1;
+one=0;
+}
+if attack_type = "bthrow" && four > 0 {
+meter += 4;
+four = 0;
+}
+if attack_type = "sideb"{
+meter+=0;
+}
+}
+max_jumps=3;
+weight = 0.25;
+walk_speed = 2.1;
+run_speed = 4.5;
+jump_speed = 7.75;
+    mid_jump_speed = 7.2;
+    short_hop_speed = 2.9;
+    air_speed = 2.5;
+}
+
+if meter >= maxmeter
+meter = maxmeter
+
+if meter < 0
+meter = 0
+
+if global . gs_form[number-1] = 1 {
+step_script = char_custom7;
+}
+
+if courage=0 && meter >= 65 && meter < maxmeter {
+b = after_image ( 3 , c_red , .25 );
+b.image_xscale *= 1.15;
+b.image_yscale *= 1.15;
+b.x += -1 + floor ( random ( 3 ) );
+b.y += -1 + floor ( random ( 3 ) );
+}
+if courage=0 && meter = maxmeter {
+c = after_image ( 3 , c_yellow , .25 );
+c.image_xscale *= 1.15;
+c.image_yscale *= 1.15;
+c.x += -1 + floor ( random ( 3 ) );
+c.y += -1 + floor ( random ( 3 ) );
+}
+
+
+
+if courage = 1{
+a = after_image ( 3 , c_blue , .25 );
+a.image_xscale *= 1.15;
+a.image_yscale *= 1.15;
+a.x += -1 + floor ( random ( 3 ) );
+a.y += -1 + floor ( random ( 3 ) );
+
+
+if meter > 0
+meter -= 1/60
+
+if state_type = "flinch" || state_type = "air_flinch"
+meter -= 4/60
+
+max_jumps=3;
+weight = 0.36;
+walk_speed = 1.2;
+run_speed = 3.1;
+jump_speed = 6;
+    mid_jump_speed = 5.75;
+    short_hop_speed = 2.45;
+    air_speed = 2;
+
+if meter <= 0 and state_type != "attack"  and state_type != "air_attack" {
+
+max_jumps=3;
+weight = 0.25;
+walk_speed = 2.1;
+run_speed = 4.5;
+jump_speed = 7.75;
+    mid_jump_speed = 7.2;
+    short_hop_speed = 2.9;
+    air_speed = 2.5;
+
+courageous = 1
+courage = 0
+}
+
+
+
+
+}
+if (enemy.state_type = "respawn"){
+	temp_spawn += 1
+}
+
+
+
+
+
+
