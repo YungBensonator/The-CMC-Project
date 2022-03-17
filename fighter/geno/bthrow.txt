@@ -1,0 +1,74 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "bthrow";
+image_speed = 0.25;
+sprite_index = bthrow_sprite;
+image_index=0;
+timer = 0;
+time = 44;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 28;
+}
+if timer < time {
+    state_type = "attack";
+    if timer = 2 {
+        target.x = x +1 - facing*2;
+        target.y = y-8;
+        }
+     if timer = 4 {
+        target.x = x -4 + facing*8;
+        target.y = y-8;
+        }
+     if timer = 8 {
+        target.x = x -10 + facing*20;
+        target.y = y-11;
+        }
+    if timer = 12 {
+	sound_play(usmash_sound)
+        create_hitbox(4,120-60*facing,6.5,0,8,2/size,-1,-1,0.5,0.4,-14,19,self.id,1,6);
+	hitbox.di = 0;
+        hitbox.hit_stun = 8;
+        hitbox.shake_kb = 0;
+        hitbox.shake_ampl = 1.85
+    }
+    if timer = 16 {
+        
+        create_projectile(2,130-facing*80,1.5,0,6,3,magic1,obj_spark_shock,1,1,-5,18,self.id,30,no_script); 
+        proj.direction = 140-random(10)-facing*100
+        proj.di = 0.35
+        proj.speed = 9.75 + (timer = 25)*.5
+    }
+if timer = 19{
+       
+        create_projectile(2,130-facing*80,1.5,0,6,3,magic2,obj_spark_shock,1,1,-5,18,self.id,30,no_script); 
+        proj.direction = 140-random(10)-facing*100
+        proj.di = 0.35
+        proj.speed = 9.75 + (timer = 25)*.5
+       
+    }
+if timer = 22 {
+       
+        create_projectile(2,130-facing*80,1.5,0,6,3,magic3,obj_spark_shock,1,1,-5,18,self.id,30,no_script); 
+        proj.direction = 140-random(10)-facing*100
+        proj.di = 0.35
+        proj.speed = 9.75 + (timer = 25)*.5
+       
+    }
+	if timer = 25 
+{
+       create_projectile(4,130-facing*80,6.5,5,6,30,magic4,obj_spark_shock,1,1,-5,18,self.id,30,no_script); 
+       proj.direction = 140-random(10)-facing*100
+        proj.di = 0.35
+        proj.speed = 9.75 + (timer = 25)*.5      
+}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    facing = 1-facing
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

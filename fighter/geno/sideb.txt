@@ -1,0 +1,158 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    whirltemp = 0
+    attacking = 0
+    attack_type = "sideb"
+	sound_play ( genowhirl_sound );
+	sound_play(skill)
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0;
+        sprite_index = sideb_sprite; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.4;
+        sprite_index = sideb_sprite;
+        }
+        image_speed = 0.25;
+        image_index=0;
+        timer = 0;
+        time = 65;
+        timer_speed=1;
+}
+	if timer > 23 && timer < 49 && special {
+	time = 90
+	whirltemp = -1
+	}
+	    if timer = 50 {
+                spark = instance_create(x,y-38,obj_spark_effect)
+		bicon = instance_create(x,y-38,obj_spark)
+		bicon.sprite_index = bicon_sprite;
+		bicon.image_index = 0;
+		bicon.image_speed = 0.4
+		bicon.alarm[0] = 14
+		bicon.image_xscale = 0.5 * (1-facing*2) * size
+		bicon.image_yscale = 0.5 * size
+		bicon.x = x * size
+		bicon.y = y - 38*size
+		/* icon = instance_create(x+1*(1-facing*2),y-45,obj_spark)
+		icon.sprite_index = icon_sprite;
+		icon.image_index = 0;
+		icon.image_speed = 0
+		icon.alarm[0] = 10
+		icon.image_xscale = 0.35 * (1-facing*2) * size
+		icon.image_yscale = 0.5 * size
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 45*size */
+		}
+	    if timer > 50 {
+		spark.x = x * size
+		spark.y = y - 38*size
+		bicon.x = x * size
+		bicon.y = y - 38*size
+		if bicon.image_index >= bicon.image_number - bicon.image_speed
+		bicon.image_index = 0
+		}
+	if timer = 49
+	special = 0
+//------------------strong---hit------//
+	if timer >= 50 && timer <= 54 && special && whirltemp = 0 {
+	sound_play(extrapower_sound)
+	sound_play(dsmash)
+        spark = instance_create(x,y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 1*size
+        spark.image_yscale *= 1*size
+        spark.image_blend = c_blue
+        spark.image_alpha = 0.9
+        spark = instance_create(x-2*size*(1-facing*2),y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.8*size
+        spark.image_yscale *= 0.8*size
+        spark.image_blend = c_yellow
+        spark.image_alpha = 0.8
+	whirltemp = 1
+	time = 90
+	}
+//-----------------meh-hit--------------------//
+	if timer > 54 && timer <= 58 && special && whirltemp = 0 {
+	sound_play(extrapower_sound)
+	sound_play(dsmash)
+        spark = instance_create(x,y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.8*size
+        spark.image_yscale *= 0.8*size
+        spark.image_blend = c_blue
+        spark.image_alpha = 0.9
+        spark = instance_create(x-2*size*(1-facing*2),y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.8*size
+        spark.image_yscale *= 0.8*size
+        spark.image_blend = c_yellow
+        spark.image_alpha = 0.8
+	whirltemp = 2
+	time = 90
+	}
+//-----------------babby-------------//
+	if timer > 58 && timer < 64 && special && whirltemp = 0 {
+	sound_play(extrapower_sound)
+	sound_play(dsmash)
+        spark = instance_create(x,y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.6*size
+        spark.image_yscale *= 0.6*size
+        spark.image_blend = c_blue
+        spark.image_alpha = 0.9
+        spark = instance_create(x-2*size*(1-facing*2),y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.6*size
+        spark.image_yscale *= 0.6*size
+        spark.image_blend = c_yellow
+        spark.image_alpha = 0.8
+	whirltemp = 3
+	time = 90
+	}
+//--------------malk-es-gay-------//
+if timer = 15 {
+		
+                spark = instance_create(x,y-38,obj_spark_effect)
+		micon = instance_create(x,y-38,obj_spark)
+		micon.sprite_index = micon_sprite;
+		micon.image_index = 0;
+		micon.image_speed = 0.5
+		micon.alarm[0] = 11
+		micon.image_xscale = 0.9 * (1-facing*2) * size
+		micon.image_yscale = 0.9 * size
+		micon.x = x +2* size
+		micon.y = y +1* size
+		micon.image_alpha= 0.60;
+		}
+  if instance_exists(micon) {
+             micon.x = x + 2*size;
+            micon.y = y + 1*size;
+        }
+        if timer = 23 {
+	    special = 0
+            sound_play(sideb_sound);
+            if air = 0 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing;
+                duster.image_xscale *= size*0.75
+                duster.image_yscale *= size*0.5
+            } else
+                hspeed = -(1-facing*2)*size;
+            disc = create_projectile(7,20+facing*140,4.7,1.3,10,0,shock2,obj_spark_shock,0.05,0.025,20,16,self.id,43,goku_projectile);
+	    disc.hit_script = char_custom7
+            vspeed *= 0.5;
+		disc.hit_stun = 7; }
+        if timer = 25
+            image_speed = 0.065
+    if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+        air_move = 0
+        state_type = "attack"
+        hspeed=0 
+    }
+	if image_index >= image_number - image_speed
+		image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+}

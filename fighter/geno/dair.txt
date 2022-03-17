@@ -1,0 +1,117 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+	 spark = -1;
+	temp = 0
+	attacking = 0
+	smash = 0
+	create_hurtbox_precise(self.id, 40,dair_mask)
+}
+        if timer < time {
+ switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 9: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 15: image_index = 6; break;
+	case 17: image_index = 7; break;
+	case 19: image_index = 8; break;
+	case 24: image_index = 9; break;
+	case 27: image_index = 10; break;
+	case 30: image_index = 11; break;
+
+      }
+            state_type = "air_attack";
+		 if timer > 0 && timer < 8 && (attacking = 1 || smash = 1)
+		temp = -1
+	    if timer = 4 {
+                spark = instance_create(x,y-38,obj_spark_effect)
+		aicon = instance_create(x,y-38,obj_spark)
+		aicon.sprite_index = aicon_sprite;
+		aicon.image_index = 0;
+		aicon.image_speed = 0.45
+		aicon.alarm[0] = 10
+		aicon.image_xscale = 0.5 * (1-facing*2) * size
+		aicon.image_yscale = 0.5 * size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		/* icon = instance_create(x+1*(1-facing*2),y-45,obj_spark)
+		icon.sprite_index = icon_sprite;
+		icon.image_index = 0;
+		icon.image_speed = 0
+		icon.alarm[0] = 10
+		icon.image_xscale = 0.35 * (1-facing*2) * size
+		icon.image_yscale = 0.5 * size
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 45*size */
+		}
+	    if timer > 4 {
+		spark.x = x * size
+		spark.y = y - 38*size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		if aicon.image_index >= aicon.image_number - aicon.image_speed
+		aicon.image_index = 0
+		}
+		if timer = 3 {
+                attacking = 0
+		smash = 0
+		}
+	    
+	    if timer > 4 && timer < 17 && temp = 0 && (attacking = 1 || smash = 1) {
+		temp = 1
+		sicon = instance_create(x,y-38,obj_spark)
+		sicon.sprite_index = sicon_sprite;
+		sicon.image_index = 0;
+		sicon.image_speed = 0.5
+		sicon.alarm[0] = 10
+		sicon.image_xscale = 0.8 * (1-facing*2) * size
+		sicon.image_yscale = 0.8 * size
+		sicon.x = x 
+		sicon.y = y - -10 *size
+		sound_play(extrapower_sound);
+		}
+ if instance_exists(sicon) {
+            sicon.x = x 
+		sicon.y = y - -10 *size
+        }
+	if timer=17{
+		
+                sound_play(attacksnd3);
+            if temp = 0 {
+                create_hitbox(9,362,5,6.2,6,8,kick3,obj_spark_hit4,0.75,1,0,-5,self.id,4,2);
+
+}
+	  if temp = 1 {
+               create_hitbox(13,362,6,5.5,6,8,kick3,obj_spark_hit4,0.65,0.65,0,-1,self.id,4,2);
+                create_hitbox2(15,270,6.75,5.75,19,9,punch4,obj_spark_hit3,0.8,0.8,0,-13,self.id,4,2);
+		
+}
+}
+        if image_index >= image_number - image_speed
+            image_speed = 0;
+        if air = 0 {
+            state_type="land";
+            attack_type="none";
+            sprite_index = land_sprite;
+            timer=0;
+            time=14; }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,33 @@
+proj_destroy = 0
+if timer = 0
+hit = 2
+if timer = 1 && hit = 2 {         // Initialize sprite and speed during frame 1
+    //hit = 0    
+    sprite_index = attacker.id.final_smash_bullet_sprite
+    image_index = 0
+    image_speed = 0.3
+    speed = 6
+    direction = 35 + attacker.facing*110
+    visible =1
+    hand = attacker
+}
+if hit > 0
+    time = 200 
+if timer = 18 {
+    speed = 0
+    hit = 0
+    if instance_exists(attacker)
+        with attacker sound_play(final_smash_sound2)
+    sound_play(explode_big)
+}
+if image_index >= image_number - image_speed
+    instance_destroy()
+/*if exploded=0 && (((hit = 0 && (timer = time-2 || collision_point(x,y,obj_wall,1,1) || is_on_floor(self))) || (hit > 0 && timer < time-1))) {
+    hit=2
+    exploded = 100
+    timer = time
+    instance_create(x,y,obj_spark_explode2)
+    sound_play(hand.boom_sound)
+    visible = 0
+}*/
+

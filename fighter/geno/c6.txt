@@ -1,0 +1,115 @@
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+proj_destroy = 0
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.projectile_sprite
+    hspeed = 7 - attacker.id.facing*14
+    image_speed = 0.3;
+    visible =1
+    maxtime = time
+    whirltemp = 0
+    show_message("start")
+    enemy_target_n = 0;
+    enemy_target[0] = noone;
+    var n;
+    n = 0
+    temp = 1
+    }
+
+if collision_point(x+hspeed,y,obj_wall,1,1) && hit = 0
+instance_destroy()
+
+if maxtime > 0
+maxtime -= 1
+
+if timer = time+1 && hit = 1 {
+attack_success=0
+    hspeed = 7 - attacker.id.facing*14
+    show_message("player hit")
+timer = 0
+time = maxtime
+alarm[0] = maxtime
+}
+if attacker.id.whirltemp = 1
+whirltemp = 1
+if attacker.id.whirltemp = 2
+whirltemp = 2
+if attacker.id.whirltemp = 3
+whirltemp = 3
+//-------------stronghit------------//
+if maxtime = 1 && whirltemp = 1 {
+    show_message("activation")
+for (n = 0; n < enemy_target_n; n += 1) {
+with ( enemy_target[n] ) 
+{
+    show_message("with player")
+    show_message("if other")
+with ( other ) 
+{
+
+show_message("full activation")
+create_projectile(20,30+facing*120,6.5,5.5,70,20,shock3,obj_spark_shock,1,1,1,1,attacker.id,5,no_script);
+proj.no_clash = 1;
+proj.priority = 5;
+proj.x = other.x;
+proj.y = other.y;
+//proj.sprite_index = sprite_index
+proj.depth = -66
+proj.only_hit = other.id
+ 
+}
+}
+}
+}
+//--------------------notsostronghit------------------//
+if maxtime = 1 && whirltemp = 2 {
+    show_message("activation")
+for (n = 0; n < enemy_target_n; n += 1) {
+with ( enemy_target[n] ) 
+{
+    show_message("with player")
+    show_message("if other")
+with ( other ) 
+{
+
+show_message("full activation")
+create_projectile(14,30+facing*120,5.5,4.5,70,20,shock3,obj_spark_shock,1,1,1,1,attacker.id,5,no_script);
+proj.no_clash = 1;
+proj.priority = 5;
+proj.x = other.x;
+proj.y = other.y;
+//proj.sprite_index = sprite_index
+proj.depth = -66
+proj.only_hit = other.id
+ 
+}
+}
+}
+}
+//----------------------malk--hit-----------------//
+if maxtime = 1 && whirltemp = 3 {
+    show_message("activation")
+for (n = 0; n < enemy_target_n; n += 1) {
+with ( enemy_target[n] ) 
+{
+    show_message("with player")
+    show_message("if other")
+with ( other ) 
+{
+
+show_message("full activation")
+create_projectile(7,30+facing*120,4.5,3.5,20,10,shock3,obj_spark_shock,1,1,1,1,attacker.id,5,no_script);
+proj.no_clash = 1;
+proj.priority = 5;
+proj.x = other.x;
+proj.y = other.y;
+//proj.sprite_index = sprite_index
+proj.depth = -66
+proj.only_hit = other.id
+ 
+}
+}
+}
+}
+if maxtime = 0
+instance_destroy()

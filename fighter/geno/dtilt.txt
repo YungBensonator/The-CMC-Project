@@ -1,0 +1,143 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 34;
+        timer_speed=1;
+	temp = 0
+	attacking = 0
+}
+        if timer < time {
+switch timer {
+	 	case 19: image_index = 1; break;
+		case 23: image_index = 2; break;
+	
+		}
+             state_type = "attack";
+	    if timer > 0 && timer < 2 && attacking = 1
+		temp = -1
+	    if timer = 3 {
+                spark = instance_create(x,y-38,obj_spark_effect)
+		aicon = instance_create(x,y-38,obj_spark)
+		aicon.sprite_index = aicon_sprite;
+		aicon.image_index = 0;
+		aicon.image_speed = 0.45
+		aicon.alarm[0] = 10
+		aicon.image_xscale = 0.5 * (1-facing*2) * size
+		aicon.image_yscale = 0.5 * size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		/* icon = instance_create(x+1*(1-facing*2),y-45,obj_spark)
+		icon.sprite_index = icon_sprite;
+		icon.image_index = 0;
+		icon.image_speed = 0
+		icon.alarm[0] = 10
+		icon.image_xscale = 0.35 * (1-facing*2) * size
+		icon.image_yscale = 0.5 * size
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 45*size */
+		}
+	    if timer > 3 {
+		spark.x = x * size
+		spark.y = y - 38*size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		if aicon.image_index >= aicon.image_number - aicon.image_speed
+		aicon.image_index = 0
+		}
+	  if timer = 2 {
+		attacking = 0
+	    }
+            if timer = 5 && ai && random(10)>5
+                attacking = 1
+	    if timer >= 3 && timer <= 9 && attacking && temp = 0 {
+		sound_play ( extrapower_sound );
+		temp = 1
+		}
+	    if timer = 9 {
+		spark2 = instance_create(x+18*(1-facing*2),y,obj_spark)
+		spark2.sprite_index = dtilt_effect
+		spark2.image_speed = 0.35
+		spark2.image_xscale = 0.7
+		if temp = 1
+		spark2.image_yscale = 0.35
+		if temp = 0
+		spark2.image_yscale = 0.7
+		}
+	    if timer > 9 && temp = 1 {
+		spark2.image_yscale = 0.35
+		spark3.image_yscale = 0.35;
+		}
+            if timer = 11 {
+                sound_play(psi_sound2);
+                create_hitbox(3,90,3,0,8,2/size,magic1,obj_spark_shock,0.5,0.7,19,7,self.id,3,3); 
+                hitbox.di = 0.5
+                hitbox.hit_stun = -2;
+                hitbox.hitlag_diff = 2;
+		if temp = 1 {
+		hitbox.image_yscale = 0.35
+		hitbox.hitbox_y = 3.5
+		hitbox.damage = 2
+		spark3 = instance_create(x+26*(1-facing*2),y,obj_spark)
+		spark3.sprite_index = dtilt_effect
+		spark3.image_speed = 0.35
+		spark3.image_xscale = 0.7
+		spark3.image_yscale = 0.35
+		}
+            }
+	    if timer = 13 && temp = 1 {
+                sound_play(psi_sound2);
+                create_hitbox2(2,90,3,0,8,2/size,magic1,obj_spark_shock,0.5,0.35,27,3.5,self.id,3,3); 
+                hitbox.di = 0.5
+                hitbox.hit_stun = -2;
+                hitbox.hitlag_diff = 2;
+		}
+            if timer = 15 {
+                create_hitbox(3,90,3,0,8,2/size,magic1,obj_spark_shock,0.5,0.7,19,17,self.id,3,3); 
+                hitbox.di = 0.5
+                hitbox.hit_stun = -2;
+                hitbox.hitlag_diff = 3;
+		if temp = 1 {
+		hitbox.image_yscale = 0.35
+		hitbox.hitbox_y = 7
+		hitbox.damage = 2
+		}
+            }
+	    if timer = 17 && temp = 1 {
+                create_hitbox2(2,90,3,0,8,2/size,magic1,obj_spark_shock,0.5,0.35,27,7,self.id,3,3); 
+                hitbox.di = 0.5
+                hitbox.hit_stun = -2;
+                hitbox.hitlag_diff = 2;
+		}
+            if timer = 19 {
+                create_hitbox(4,80+facing*20,5,4,6,2/size,magic2,obj_spark_shock,0.5,0.7,19,28,self.id,4,3); 
+                hitbox.hit_stun = 8;
+                hitbox.hitlag_diff = 2;
+                hitbox.shield_stun = 0.3
+                image_speed = 0.2
+		if temp = 1 {
+		hitbox.image_yscale = 0.4
+		hitbox.hitbox_y = 10
+		hitbox.damage = 3
+		}
+            }
+	    if timer = 21 && temp = 1 {
+                create_hitbox2(3,80+facing*20,5,4,6,2/size,magic2,obj_spark_shock,0.5,0.4,27,10,self.id,4,3);  
+                hitbox.hit_stun = 8;
+                hitbox.hitlag_diff = 2;
+                hitbox.shield_stun = 0.3
+		}
+	if image_index >= image_number - image_speed
+		image_speed = 0
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

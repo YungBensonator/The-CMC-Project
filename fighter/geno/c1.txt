@@ -1,0 +1,45 @@
+absorb = 0  // This attack may not be absorbed by PSI magnet
+proj_destroy = -1
+//dir = 362
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    link=attacker.id
+    sprite_index = attacker.id.ssmash_proj_sprite
+    image_speed = 0.35
+    if speed == 0  
+        hspeed=(4.3 - attacker.id.facing*8.6)*(1+smash*0.3)
+    visible =1
+    if hspeed > 0
+        directio = 0
+    else
+        directio = 1
+}
+if timer >= 2
+hspeed -= (0.195 - directio*0.39)*(1+returning*0.33+(timer>10)*.33)
+if returning {
+    if collision_point(x,y,link,1,1) && attacker = link {
+        link.staff = 0
+        instance_destroy()
+    }
+}
+moving_object = 1;
+if returning = 0 && (abs(hspeed) < 0.5 || ((collision_point(x+sign(hspeed),y,obj_wall,1,1) || collision_point(x,y,obj_slope_right2,1,1) || collision_point(x,y,obj_slope_left2,1,1)) && hit = 0)) {
+    hspeed = (-2 + directio*4)
+    returning = 1
+    timer = 2
+}
+if is_on_floor(self) && vspeed > 0
+    vspeed *= -0.85
+if hit > 0 && returning = 0 {
+    returning = 1
+    timer = 2
+    time = 19
+    hspeed = 0
+    link.staff = 0 
+}
+if (x < obj_game_control.death_l || x > obj_game_control.death_r || y < obj_game_control.death_u || y > obj_game_control.death_d) || timer>225 {
+    link.staff = 0
+    instance_destroy()
+}
+
+
+

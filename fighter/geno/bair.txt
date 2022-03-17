@@ -1,0 +1,131 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0.2;
+        sprite_index = bair_sprite;
+        image_index=0.1;
+        timer = 0;
+        time = 39;
+        timer_speed=1;
+        spark = -1;
+	temp = 0
+	attacking = 0
+	smash = 0
+}
+        if timer < time {
+            state_type = "air_attack";
+	    if timer > 0 && timer < 9 && (attacking = 1 || smash = 1)
+		temp = -1
+	    if timer = 5 {
+                spark = instance_create(x,y-38,obj_spark_effect)
+		aicon = instance_create(x,y-38,obj_spark)
+		aicon.sprite_index = aicon_sprite;
+		aicon.image_index = 0;
+		aicon.image_speed = 0.45
+		aicon.alarm[0] = 10
+		aicon.image_xscale = 0.5 * (1-facing*2) * size
+		aicon.image_yscale = 0.5 * size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		/* icon = instance_create(x+1*(1-facing*2),y-45,obj_spark)
+		icon.sprite_index = icon_sprite;
+		icon.image_index = 0;
+		icon.image_speed = 0
+		icon.alarm[0] = 10
+		icon.image_xscale = 0.35 * (1-facing*2) * size
+		icon.image_yscale = 0.5 * size
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 45*size */
+		}
+	    if timer > 5 {
+		spark.x = x * size
+		spark.y = y - 38*size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		if aicon.image_index >= aicon.image_number - aicon.image_speed
+		aicon.image_index = 0
+		}
+		if timer = 4 {
+                attacking = 0
+		smash = 0
+		}
+	    /* if timer = 6 || timer = 7 {
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 45*size
+		}
+	    if timer = 8 || timer = 9 {
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 43*size
+            }
+	    if timer = 10 || timer = 11 {
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 42*size
+		}
+	    if timer = 12 || timer = 13 {
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 43*size
+		}
+	    if timer >= 14 {
+		icon.x = x+1*(1-facing*2) * size
+		icon.y = y - 45*size
+		} */
+	    if timer > 5 && timer < 15 && temp = 0 && (attacking = 1 || smash = 1) {
+		temp = 1
+		sicon = instance_create(x,y-38,obj_spark)
+		sicon.sprite_index = sicon_sprite;
+		sicon.image_index = 0;
+		sicon.image_speed = 0.5
+		sicon.alarm[0] = 10
+		sicon.image_xscale = 0.9 * (1-facing*2) * size
+		sicon.image_yscale = 0.9 * size
+		sicon.x = x -18 * (1-facing*2) *size
+		sicon.y = y - 11 *size
+		sound_play(extrapower_sound);
+		}
+		 if instance_exists(sicon) {
+           sicon.x = x -18 * (1-facing*2) *size
+		sicon.y = y - 11 *size
+        }
+            if timer = 15 {
+                image_speed = 0.2
+                sound_play(bair);
+		if temp = 1 {
+                proj = create_projectile(8,161-facing*142,5.5,2.15,15,1/size,explodehit2,obj_spark_hit4,-0.7,0.7,-17,16,self.id,32,geno_fist2);
+                proj.sprite_index = ssmash_proj_sprite;
+                proj.image_speed = 0.2;
+                proj.hitlag_diff = round(4*size);
+                proj.hspeed = -2.75*size*(1-facing*2);
+                proj.facing = 1-facing
+		}
+		if temp = 0 {
+                create_hitbox(12,150-facing*120,6.25,6.25,18,7,fire,obj_spark_hit2,1,1,-18,14,self.id,7,2);
+		explodespark = instance_create(x -18 * (1-facing*2) *size,y - 11 *size,obj_spark_explode1)
+		explodespark.image_xscale = 0.55 * size;
+                explodespark.image_yscale = 0.55 * size;
+		}
+            }
+	    if temp = 0 && timer > 15 {
+		explodespark.x = x-18*(1-facing*2)*size
+		explodespark.y = y-11*size
+		}
+            if image_index >= image_number - image_speed
+                image_speed=0;
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=13; 
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

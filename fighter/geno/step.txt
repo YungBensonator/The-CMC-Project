@@ -1,0 +1,69 @@
+if timer_speed && ((state_type = "respawn") || attack_type = "b" || attack_type = "sideb" || attack_type = "downb") {
+    /*if state_type = "air_flinch" {
+        speed *= 1/defense
+    }*/
+    offense = 1
+    defense = 1
+    boosttimer = 0
+    boosttimer2 = 0
+	boostflag = 0
+	boostflag2 = 0
+}
+if attack_type != "upb"
+with boostspark instance_destroy()
+if boosttimer > 0 && boosttimer2 <= 0 && frac(timer/10) <= 0.3 {
+    image_blend = c_red
+    alarm[7] = 4
+	}
+if boosttimer2 > 0 && boosttimer <= 0 && frac(timer/10) <= 0.3 {
+    image_blend = c_blue
+    alarm[7] = 4
+	}
+if boosttimer = 239 {
+	if !boostflag {
+		offense *= 1.35
+		boostflag = 1
+	}
+}
+if boosttimer2 = 239 {
+	if !boostflag2 {
+		defense *= 1.35
+		boostflag2 = 1
+	}
+}
+if (enemy.state_type = "respawn"){
+	temp_spawn += 1
+}
+
+if boosttimer > 0
+boosttimer -= 1
+if boosttimer2 > 0
+boosttimer2 -= 1
+if boosttimer = 0 {
+	offense = 1
+	boostflag = 0
+}
+if boosttimer2 = 0 {
+	defense = 1
+	boostflag2 = 0
+}
+	
+if sprite_index = stand_sprite {
+	image_speed = 0.13;
+		}
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 15: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=4;  break;
+  case 18: shakey=12*size;  break;
+  case 21: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 24: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 27: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 30: sprite_index=land_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}

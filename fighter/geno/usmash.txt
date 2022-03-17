@@ -1,0 +1,142 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "usmash";
+        image_speed = 0;
+        sprite_index = usmash_sprite;
+        image_index=0.1;
+        timer = 0;
+        time = 47;
+        timer_speed=1;
+        charge_frame = -1
+	temp = 0
+	attacking = 0
+	smash = 0
+	create_hurtbox_precise(self.id,60,usmash_mask)
+}
+state_type = "attack";
+if timer = 3 {
+    image_speed = 0.25
+}
+	    if timer > 0 && timer < 4 && (attacking = 1 || smash = 1)
+		temp = -1
+if timer = 4 {
+                spark = instance_create(x,y-38,obj_spark_effect)
+		aicon = instance_create(x,y-38,obj_spark)
+		aicon.sprite_index = aicon_sprite;
+		aicon.image_index = 0;
+		aicon.image_speed = 0.45
+		aicon.alarm[0] = 10
+		aicon.image_xscale = 0.5 * (1-facing*2) * size
+		aicon.image_yscale = 0.5 * size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		}
+	    if timer > 4 {
+		spark.x = x * size
+		spark.y = y - 38*size
+		aicon.x = x * size
+		aicon.y = y - 38*size
+		if aicon.image_index >= aicon.image_number - aicon.image_speed
+		aicon.image_index = 0
+		}
+	if timer = 3 {
+	smash = 0
+	attacking = 0
+	}
+            if timer >= 4 && timer < 11 && (attacking || smash || (ai && random(10>5))) && temp = 0 {
+                temp = 1
+		sound_play(extrapower_sound)
+            }    
+if timer = 11 && temp = 1 {
+timer = 70
+time = 125
+}
+if timer = 11 && temp = 0
+image_index = 6
+if timer = 71 {
+    duster = instance_create(x-1+facing*2,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+    sound_play(usmash_sound);
+    //effect_create_below(ef_ellipse,x,y,0,c_purple)
+    create_hitbox(2,120-facing*60,2.5,0,5,2,kick2,obj_spark_hit1,0.7,0.4,11,16,self.id,3,1)
+    hitbox.charge_dmg = 0.2
+    hitbox.charge_kb = 0
+    hitbox.charge_hitlag = 0
+    hitbox.di = -1
+    create_hitbox2(1.5,150-facing*120,4,0,5,2,kick2,obj_spark_hit1,0.6,0.4,14,16,self.id,3,1)
+    hitbox2.charge_dmg = 0.2
+    hitbox2.charge_kb = 0
+    hitbox2.charge_hitlag = 0
+    hitbox2.di = -1
+}
+if timer = 75 {
+    sound_play(usmash_sound);
+    //effect_create_below(ef_ellipse,x,y,0,c_purple)
+    create_hitbox(2,120-facing*60,2.15,0,5,2,kick2,obj_spark_hit1,0.5,0.5,9,17,self.id,3,1)
+    hitbox.charge_dmg = 0.2
+    hitbox.charge_kb = 0
+    hitbox.charge_hitlag = 0
+    hitbox.di = -1
+    create_hitbox2(1.5,140-facing*100,4.1,0,5,2,kick2,obj_spark_hit1,0.5,0.45,15,24,self.id,3,1)
+    hitbox2.charge_dmg = 0.2
+    hitbox2.charge_kb = 0
+    hitbox2.charge_hitlag = 0 
+    hitbox2.di = -1
+}
+if timer = 79 {
+    duster = instance_create(x-1+facing*2,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+    sound_play(usmash_sound);
+    //effect_create_below(ef_ellipse,x,y,0,c_purple)
+    create_hitbox(2,130-facing*80,2,0,5,2,kick2,obj_spark_hit1,0.5,0.5,4,18,self.id,3,1)
+    hitbox.charge_dmg = 0.2
+    hitbox.charge_kb = 0
+    hitbox.charge_hitlag = 0
+    hitbox.di = -1
+    create_hitbox2(1.5,150-facing*120,3.65,0,5,2,kick2,obj_spark_hit1,0.7,0.55,13,27,self.id,3,1)
+    hitbox2.charge_dmg = 0.2
+    hitbox2.charge_kb = 0
+    hitbox2.charge_hitlag = 0 
+    hitbox2.di = -1
+}
+if timer = 83 {
+    sound_play(usmash_sound);
+    //effect_create_below(ef_ellipse,x,y,0,c_purple)
+    create_hitbox(2,90,1.75,0,5,2,kick2,obj_spark_hit1,0.5,0.5,3,17,self.id,3,1)
+    hitbox.charge_dmg = 0.2
+    hitbox.charge_kb = 0
+    hitbox.charge_hitlag = 0
+    hitbox.di = -1
+    create_hitbox2(1.5,110-facing*70,2.75,0,5,2,kick2,obj_spark_hit1,0.55,0.65,6,34,self.id,3,1)
+    hitbox2.charge_dmg = 0.2
+    hitbox2.charge_kb = 0
+    hitbox2.charge_hitlag = 0 
+    hitbox2.di = -1
+}
+if timer = 87 || timer = 12 {
+    duster = instance_create(x-1+facing*2,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+    sound_play(explode1)
+    create_hitbox(12,90,6.5,6.85,8,8,magic3,obj_spark_fire1,0.8,1,4,33,self.id,7,5)
+    hitbox.charge_dmg = 0.2
+    hitbox.charge_kb = 0.9
+    hitbox.charge_hitlag = 1
+    image_speed = 0.15
+	screen_shake ( 3 , 6 );
+explodespark = instance_create(x+3 * (1-facing*2) *size,y - 36 *size,obj_spark_explode1)
+explodespark.image_xscale = 0.75 * size;
+ explodespark.image_yscale = 0.75 * size;
+} 
+if image_index >= image_number-image_speed
+image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,75 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "jab";
+        image_speed = 1;
+        sprite_index = jab_sprite;
+        image_index=1;
+        timer = 0;
+        time = 109;
+        timer_speed=1;
+}
+        if timer < time {
+             state_type = "attack";
+            if timer = 3 {
+                image_index = 4.1
+                image_speed = 0.25
+                sound_play(attacksnd1);
+                create_hitbox(2,75+facing*30,1.6,0,4,5,punch1,obj_spark_hit1,0.66,0.55,16,15,self.id,4,1); 
+                create_hitbox2(2,25+facing*130,3.2,0,3,5,punch1,obj_spark_hit1,0.5,0.45,8,15,self.id,4,1);
+                hitbox2.di = 0.5
+                hitbox.di = 0.3
+                hitbox.hit_stun = 1
+                hitbox2.hit_stun = 1
+            }
+            if timer = 5
+                image_speed = 0.1
+            if timer = 10
+                image_speed = 0
+            if (timer = 9 || timer = 57) && ai = 1 && random(10)>1.5
+                attacking = 1
+            if timer >= 8 && timer < 18 && attacking  = 1 {
+                timer = 50
+                image_index = 5
+                image_speed = 0.5
+                sprite_index = jab_sprite;
+            }
+            if timer = 54 {
+                sound_play(attacksnd1);
+                create_hitbox(3,90,1.8,0,5,5,kick2,obj_spark_hit1,0.75,0.7,18,15,self.id,3,1);
+                create_hitbox2(3,60+facing*60,2.4,0,4,5,kick2,obj_spark_hit1,0.4,0.5,12,14,self.id,3,1);
+                attacking = 0
+                hitbox.di = 0.3
+                hitbox.hit_stun = -1;
+                hitbox2.hit_stun = -1;
+            }
+            if timer = 56
+                image_speed = 0.25
+            if timer = 60
+                image_speed = 0
+            if timer >= 59 && timer < 70 && attacking  = 1 {
+                timer = 80
+                image_index = 10.7
+                image_speed = 0.4
+                sprite_index = jab_sprite;
+                }
+            if timer = 86 {
+                sound_play(attacksnd3);
+                create_hitbox(3,15+facing*150,5.5,3,7,6,kick2,obj_spark_hit2,0.8,0.6,19,15,self.id,3,2);
+                attacking = 0
+                hitbox.hit_stun = 3;
+            }
+            if timer = 88
+                image_speed = 0.35
+            if timer = 95
+                image_speed = 0.2
+            if image_index >= image_number - image_speed
+                image_speed = 0
+            }  
+if (timer >= 107 || timer = 21 || timer = 70) && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,15 @@
+priority = 5
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.ssmash_proj_sprite
+    if speed == 0  hspeed=3.75 - attacker.id.facing*7.5
+    image_speed = 0
+    visible =1
+}
+if !hit
+    after_image(3,c_white,0.5)
+image_angle = direction+facing*180
+moving_object = 1;
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || (is_on_floor(self) && vspeed >= 0)) && hit = 0
+instance_destroy()

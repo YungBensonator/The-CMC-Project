@@ -1,0 +1,62 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 26;
+        timer_speed=1;
+}
+        if timer < time {
+switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+	case 20: image_index = 0; break;
+
+	
+
+      }
+            state_type = "air_attack";
+            if timer = 9 {
+                sound_play(attacksnd2);
+                create_hitbox(11,50+facing*80,4.5,6.5,15,8,kick3,obj_spark_hit3,0.65,0.8,12,26,self.id,6,2);
+                hitbox.hit_stun = 4;
+                }
+            if timer = 12 && instance_exists(hitbox) {
+                hitbox.damage=8*size
+                hitbox.dir=120-facing*60
+		hitbox.bkg=5.1*size
+                hitbox.kbg=5.9*size
+                hitbox.hitbox_x=(-4+facing*8)*size
+                hitbox.hitbox_y= 38*size
+		hitbox.image_xscale = 1
+		hitbox.image_yscale = 1.1
+           
+            }
+          
+   
+        if air = 0 {
+                state_type="land";
+                sprite_index = land_sprite;
+                attack_type="none";
+                timer=0;
+                time=10; 
+        }
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

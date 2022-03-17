@@ -1,0 +1,37 @@
+//image_angle = direction+facing*180
+priority = 1
+absorb2 = 1
+moving_object = 1
+proj_destroy = 0
+if timer = 0
+hit = 2
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    hit = 0    
+    sprite_index = attacker.id.ssmash_proj_sprite
+    if speed = 0 {
+        speed = 4.5
+        direction = 180*attacker.facing
+    }
+    image_speed = 0.2;
+    visible =1
+    create_homing_bubble(5,5.5,0,0,self.id,5);
+    }
+if timer > 5 && timer < 10
+speed += 0.2
+if frac(timer/9) = 0
+effect_create_below(ef_smoke,x,y,0,c_white)
+moving_object = 1;
+if exploded=0 && (((hit = 0 && (timer = time-2 || collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self))) || (hit > 0 && timer < time-1))) {
+    hit=2
+    exploded = 100
+    timer = time
+    instance_create(x,y,obj_spark_explode1)
+    sound_play(explode2)
+    shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 1.25;
+    shaker.xampl = 0;
+    shaker.time = 8;
+    mask_index = spr_collision_bubble
+    visible = 0
+}
+
