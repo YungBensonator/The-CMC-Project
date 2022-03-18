@@ -1,0 +1,111 @@
+if ( time != -1 )
+  {
+    state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    if !ktime
+	sprite_index = hold_sprite;
+    else
+	sprite_index = hold_spriteS;
+    image_speed = 0;
+    image_index = 1;
+    hspeed = 0;
+    target.attack_type = "none"
+    timer_speed=1;
+	target.x = x + (18 - facing*36)*size
+    pummel = -1;
+    if flaretemp > 0
+	flaretemp2 = 1
+    else
+	flaretemp2 = 0 
+  }
+if ( attacking && pummel == -1 )
+ {
+   attacking = 0;
+   pummel = 0;
+   if !ktime
+      sprite_index = pummel_sprite;
+   else
+      sprite_index = pummel_spriteS;
+   image_speed = 0.25;
+   image_index = 0;
+ }
+if ( pummel == -1 )
+ {
+if facing = 0 {
+    if moveright = 1
+    attack_type = "fthrow";
+    else if moveleft = 1
+    attack_type = "bthrow";
+    target.facing = 1
+    }
+if facing = 1 {
+    if moveleft = 1
+    attack_type = "fthrow";
+    else if moveright = 1
+    attack_type = "bthrow";
+    target.facing = 0
+    }
+if moveup = 1 
+    attack_type = "uthrow";
+if movedown = 1 {
+    attack_type = "dthrow";
+    movedown = 0; }
+ }
+else
+ { 
+pummel += 1;
+	if pummel = 5 {
+	target.x += 5 - facing*10; }
+    if ( pummel == 10 ) // replace 5 with the frame in which we pummel
+   {
+    temp_timer = target.timer;
+    temp_time = target.time;
+    sound_play2 ( kick1 );
+	target.x += 10 - facing*20;
+    create_projectile ( 2 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_hit1 , 0.8 , 0.8 , 26 , 15 , self.id , 2 , 0 );
+   }
+    if ( pummel == 11 ) // replace 6 with the frame after the one in which we pummel
+   {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+   }
+if pummel = 13 {
+	target.x -= 5 - facing*10; }
+    if ( pummel = 17 )
+   {
+    if !ktime
+	sprite_index = hold_sprite;
+    else
+	sprite_index = hold_spriteS;
+    image_speed = 0;
+    image_index = 1;
+	target.x -= 10-facing*20;
+   }
+    if ( pummel >= 30 ) // replace 15 with the frame in which pummel ends and we get back to hold
+   {
+    pummel = -1;
+   }
+ }
+if target.state_type != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }
+        
+
+if ( timer > 15 and air < max_jumps-1 and hitbox.hit > 0 )
+{
+    interrupting = 1
+    if ai
+        movejump = 1
+    if movejump = 1 
+{
+    state_type = "jump"
+    intangible = 0
+    time = 5
+}
+}

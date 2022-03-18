@@ -1,0 +1,1856 @@
+if(b_temp = 1)
+{
+	if (state_type = "run" || state_type = "stand" || state_type = "jump" )
+	{
+		attacking = 0;
+		special = 1;
+		attack_type = "b"
+		if (air = 0) 
+		{
+			state_type = "air_attack";
+			hspeed = 0;
+			if !ktime
+			sprite_index = sideb_continuous_sprite;
+			else
+			sprite_index = sideb_continuous_spriteS;
+		}
+		else 
+		{
+			state_type = "air_attack";
+			hspeed *= 0.4;
+			if !ktime
+			sprite_index = sideb_continuous_sprite;
+			else
+			sprite_index = sideb_continuous_spriteS;
+		}
+		
+		image_speed = 0;
+		image_index = 0;
+		timer = 9;
+		//time = 80;
+		time = 55;
+		timer_speed = 1;
+		temp2 = 0;
+		temp3 = 0;
+		holdin_special = 1;
+		tappin_special = 0;
+		countt = 0
+		turned = 0; //Checks if Goku has turned around when teleporting. If so, the spark would relocate with the help of this variable.
+		turnstart = facing; //Used to check which way Goku faced first when using this move. It's for the charge spark.
+	}
+	
+	if(!special) {holdin_special = 0;}
+	if(special && holdin_special = 0) {tappin_special = 1;}
+	
+	switch (timer)
+	{
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 13: image_index = 1; break;
+		case 16: image_index = 2; break;
+		case 19: image_index = 1; break;
+		case 22: image_index = 2; break;
+		case 25: image_index = 1; break;
+		case 28: image_index = 2; break;
+		case 32: image_index = 1; break;
+		case 36: image_index = 2; break;
+		case 39: image_index = 3; break;
+		case 42: image_index = 4; break;
+		case 45: image_index = 5; break;
+		case 48: image_index = 6; break;
+		case 151: image_index = 7; break;
+		case 154: image_index = 8; break;
+		case 155: image_index = 9; break;
+		case 156: image_index = 10; break;
+		case 158: image_index = 42; break;
+		case 160: image_index = 43; break;
+	}
+	
+	
+	if (timer = 15 && special ) 
+	{
+		timer = 0;
+		time = 378;
+		attacking = 0
+		special = 0
+		grabbing = 0
+		hover_timer = hover_time
+		attack_type = "b"
+		if air = 0 
+		{
+			temp4 = 0
+			state_type = "attack";
+			hspeed = 0;
+			if !ktime
+			sprite_index = b_sprite;
+			else
+			sprite_index = b_spriteS;
+		}
+		else 
+		{
+			temp4 = 1
+			state_type = "air_attack";
+			hspeed = 0;
+			if !ktime
+			sprite_index = b_air_sprite;
+			else
+			sprite_index = b_air_spriteS;
+		}
+		image_speed = 0;
+		image_index = 0;
+		
+		timer_speed = 1;
+		sound_play(downb_sound)
+		//sound_play(dragonrush_voice1)
+		air_move = 0
+		temp = 0
+		temp2 = 0
+		temp3 = 0
+		tempup = 0
+		tempdown = 0
+		temptimer = 0
+		last_shakex = shakex;
+		last_shakey = shakey;
+		charge_timer = 0;
+		image_blend = c_white;
+		alarm[7] = 1;
+		b_temp = 2;
+	}
+		
+	if (timer = 10) 
+	{
+		if !ktime
+		sprite_index = sideb_continuous_sprite
+		else
+		sprite_index = sideb_continuous_spriteS
+		image_index = 2
+	}
+	
+	if (timer = 20) 
+	{
+		timer = 41
+		temp2 = 4
+		temp3 = 1
+	}
+	
+	if (timer = 42)
+	{
+		if (kaioken = 1) 
+		{
+			if (air = 0) 
+			{
+			duster = instance_create(x,y,obj_dust_effect);
+			duster.facing = facing; 
+			}
+			sound_play(sideb_sound2);
+		}
+		else 
+		{
+			sound_play(sideb_sound);
+			if air = 0 
+			{
+				duster = instance_create(x,y,obj_dust_effect);
+				duster.facing = facing;
+				duster.image_xscale *= size*0.75
+				duster.image_yscale *= size*0.5
+			} 
+		}
+		sound_play(attack_voice2);
+		if countt < 3
+		create_projectile(1.75+kaioken*2.3,30+facing*120,3.5+kaioken*1,2+kaioken*0.75,5 + kaioken*2,9+kaioken*1,punch3,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,50,char_custom3);
+		else
+		create_projectile(1.75+kaioken*2.3,361,00,00,5 + kaioken*2,1+kaioken*1,magic1,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,50,char_custom3);
+		
+		proj.hit_stun = 1;
+		proj.priority = 1;
+		if !ktime
+		proj.temp = 1
+		else
+		proj.temp = 0
+		if(air != 0 && vspeed > -1){vspeed = -1;}
+		if(air != 0 ){hspeed -= 0.5*(1-facing*2);}
+		special = 0;
+		countt += 1
+	}
+	
+	if (timer = 59) 
+	{
+		//sound_stop(attack_voice2)
+		//sound_stop(sideb_sound)
+		//sound_stop(sideb_sound2)
+	}
+	
+	if (time = 55 && timer >= 50 && tappin_special = 1) 
+	{
+		special = 1;
+		holdin_special = 1;
+		tappin_special = 0;
+		timer = 146;
+		time = 165;
+	}
+	if (timer = 151) 
+	{
+		temp2 += 1
+		sound_play(attack_voice2);
+		create_projectile(1.75+kaioken*2.2,30+facing*120,3.5+kaioken*1,2+kaioken*0.75,5 + kaioken*2,9+kaioken*1,punch3,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,50,char_custom3);
+		proj.hit_stun = 1;
+		proj.priority = 2;
+		if !ktime
+		proj.temp = 1
+		else
+		proj.temp = 0
+		if (kaioken=1) 
+		{
+			sound_play(sideb_sound2);
+		}
+		else 
+		{
+			sound_play(sideb_sound);
+		}
+		if(air != 0 && vspeed > -1){vspeed = -1;}
+		if(air != 0 ){hspeed -= 0.5*(1-facing*2);}
+		special = 0;
+	}
+	
+	if (time = 165 && timer >= 162 && tappin_special = 1) 
+	{
+		special = 1;
+		holdin_special = 1;
+		tappin_special = 0;
+		
+		timer = 41;
+		time = 55;
+		temp2 = 4
+		temp3 = 1
+	}
+	
+	if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") 
+	{
+		attack_type = "none";
+		if air = 0
+		state_type = "stand";
+		else
+		state_type = "jump";
+		timer = 0;
+		time =-1;
+	}
+}	
+if(b_temp = 2)
+{
+	fast_fall = 0
+	fast_fall_temp = 0
+	
+	// TIP ENERGY BALL
+	if instance_exists(kameproj) && !instance_exists(ligma_spark) 
+	{
+		//ligmma is the tip (why not just name things right? ffs)
+		ligma_spark = instance_create(x, y, obj_spark)
+		ligma_spark.snap = self.id
+		ligma_spark.sprite_index = ligma_sprite
+		ligma_spark.image_speed = 0.5
+		ligma_spark.image_xscale = kameproj.image_yscale * 2.5 * (1 - 2 * facing);
+		ligma_spark.image_yscale = kameproj.image_yscale * 2.2;
+		ligma_spark.image_angle = kameproj.image_angle
+		ligma_spark.depth = -5
+		if kameproj.length = 1 
+		{
+			ligma_spark.x = x + (1 * (117 - (temp4 * 4) - (tempup * 35) - (temp4 * (tempup * 2)) - (tempdown * 36)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 77) + (temp4 * (tempup * 2)) - (tempdown * 78)) * size;
+		}
+		if kameproj.length = 2 {
+			ligma_spark.x = x + (1 * (195 - (temp4 * 4) - (tempup * 59) - (temp4 * (tempup * 2)) - (tempdown * 65)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 130) + (temp4 * (tempup * 2)) - (tempdown * 124)) * size;
+		}
+		if kameproj.length = 3 {
+			ligma_spark.x = x + (1 * (268 - (temp4 * 4) - (tempup * 80) - (temp4 * (tempup * 2)) - (tempdown * 85)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 179) + (temp4 * (tempup * 2)) - (tempdown * 179)) * size;
+		}
+		if kameproj.length = 4 {
+			ligma_spark.x = x + (1 * (350 - (temp4 * 4) - (tempup * 100) - (temp4 * (tempup * 4)) - (tempdown * 106)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 244) + (temp4 * (tempup * 2)) - (tempdown * 239)) * size;
+		}
+		if kameproj.length = 5 {
+			ligma_spark.x = x + (1 * (438 - (temp4 * 4) - (tempup * 130) - (temp4 * (tempup * 5)) - (tempdown * 134)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 300) + (temp4 * (tempup * 1)) - (tempdown * 299)) * size;
+		}
+	}
+	
+	if instance_exists(kameproj) && instance_exists(ligma_spark) 
+	{
+		ligma_spark.image_yscale = kameproj.image_yscale * 2.5;
+		ligma_spark.image_angle = kameproj.image_angle
+		if (ligma_spark.image_index >= 8.5){
+			ligma_spark.image_index = 0
+		}
+		ligma_spark.depth = -5
+		if kameproj.length = 1 {
+			ligma_spark.x = x + (1 * (117 - (temp4 * 4) - (tempup * 35) - (temp4 * (tempup * 2)) - (tempdown * 36)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 77) + (temp4 * (tempup * 2)) - (tempdown * 78)) * size;
+		}
+		if kameproj.length = 2 {
+			ligma_spark.x = x + (1 * (195 - (temp4 * 4) - (tempup * 59) - (temp4 * (tempup * 2)) - (tempdown * 65)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 130) + (temp4 * (tempup * 2)) - (tempdown * 124)) * size;
+		}
+		if kameproj.length = 3 {
+			ligma_spark.x = x + (1 * (268 - (temp4 * 4) - (tempup * 80) - (temp4 * (tempup * 2)) - (tempdown * 85)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 179) + (temp4 * (tempup * 2)) - (tempdown * 179)) * size;
+		}
+		if kameproj.length = 4 {
+			ligma_spark.x = x + (1 * (350 - (temp4 * 4) - (tempup * 100) - (temp4 * (tempup * 4)) - (tempdown * 106)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 244) + (temp4 * (tempup * 2)) - (tempdown * 239)) * size; 
+		}
+		if kameproj.length = 5 {
+			ligma_spark.x = x + (1 * (438 - (temp4 * 4) - (tempup * 130) - (temp4 * (tempup * 5)) - (tempdown * 134)) * (1 - 2 * facing)) * size;
+			ligma_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 300) + (temp4 * (tempup * 1)) - (tempdown * 299)) *size;
+		}
+	}
+	
+	if (instance_exists(ligma_spark) && !instance_exists(kameproj)) {
+		ligma_spark.image_xscale = 0 * size;
+		ligma_spark.image_yscale = 0 * size;
+		ligma_spark.image_speed = 10
+	
+	}
+	
+	
+	// BASE ENERGY BALL VFX
+	if instance_exists(kameproj) && !instance_exists(balls_spark) 
+	{
+		balls_spark = instance_create(x, y, obj_spark)
+		balls_spark.snap = self.id
+		balls_spark.sprite_index = balls_sprite
+		balls_spark.image_speed = 0.5
+		balls_spark.image_xscale = -kameproj.image_yscale * 2 * (1 - 2 * facing);
+		balls_spark.image_yscale = kameproj.image_yscale * 2;
+		balls_spark.image_angle = kameproj.image_angle
+		balls_spark.depth = -5
+		if kameproj.length = 1 {
+			balls_spark.x = x + 1 * (32 - (temp4 * 4) - (tempup * 11) - (temp4 * (tempup * 2)) - (tempdown * 25)) * (1 - 2 * facing) *size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 17) + (temp4 * (tempup * 2)) - (tempdown * 17)) * size;
+		}
+		if kameproj.length = 2 {
+			balls_spark.x = x + 1 * (38 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 25)) * (1 - 2 * facing) *size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 20) + (temp4 * (tempup * 2)) - (tempdown * 17)) * size;
+		}
+		if kameproj.length = 3 {
+			balls_spark.x = x + 1 * (44 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 19)) * (1 - 2 * facing) *size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 24) + (temp4 * (tempup * 2)) - (tempdown * 20)) * size;
+		}
+		if kameproj.length = 4 {
+			balls_spark.x = x + 1 * (47 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 4)) - (tempdown * 18)) * (1 - 2 * facing) *size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 2)) - (tempdown * 25)) * size;
+		}
+		if kameproj.length = 5 {
+			balls_spark.x = x + 1 * (50 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 4)) - (tempdown * 19)) * (1 - 2 * facing) *size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 2)) - (tempdown * 25)) *size;
+		}
+	}
+	
+	if instance_exists(kameproj) && instance_exists(balls_spark) 
+	{
+		balls_spark.image_xscale = -kameproj.image_yscale * 2 * (1 - 2 * facing);
+		balls_spark.image_yscale = kameproj.image_yscale * 2;
+		balls_spark.image_angle = kameproj.image_angle
+		if balls_spark.image_index >= 9.5
+		balls_spark.image_index = 0
+		balls_spark.depth = -5
+		if kameproj.length = 1 {
+			balls_spark.x = x + 1 * (32 - (temp4 * 4) - (tempup * 11) - (temp4 * (tempup * 2)) - (tempdown * 12)) * (1 - 2 * facing) * size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 17) + (temp4 * (tempup * 2)) - (tempdown * 17)) * size;
+		}
+		if kameproj.length = 2 {
+			balls_spark.x = x + 1 * (38 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 15)) * (1 - 2 * facing) * size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 20) + (temp4 * (tempup * 2)) - (tempdown * 17)) * size;
+		}
+		if kameproj.length = 3 {
+			balls_spark.x = x + 1 * (44 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 19)) * (1 - 2 * facing) * size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 24) + (temp4 * (tempup * 2)) - (tempdown * 20)) * size;
+		}
+		if kameproj.length = 4 {
+			balls_spark.x = x + 1 * (47 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 4)) - (tempdown * 18)) * (1 - 2 * facing) * size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 2)) - (tempdown * 25)) * size;
+		}
+		if kameproj.length = 5 {
+			balls_spark.x = x + 1 * (50 - (temp4 * 4) - (tempup * 15) - (temp4 * (tempup * 5)) - (tempdown * 19)) * (1 - 2 * facing) * size;
+			balls_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 1)) - (tempdown * 27)) * size;
+		}
+	}
+	
+	if instance_exists(balls_spark) && !instance_exists(kameproj) 
+	{
+		balls_spark.image_xscale = 0 * size;
+		balls_spark.image_yscale = 0 * size;
+		balls_spark.image_speed = 10
+	
+	}
+	
+	// RELEASE SHOCKWAVE VFX
+	if instance_exists(kameproj) && !instance_exists(youwa_spark) 
+	{
+		youwa_spark = instance_create(x, y, obj_spark)
+		youwa_spark.snap = self.id
+		youwa_spark.sprite_index = youwa_sprite
+		youwa_spark.image_speed = 0.8
+		youwa_spark.image_xscale = kameproj.length * 0.15 * (1 - 2 * facing) * size;
+		youwa_spark.image_yscale = kameproj.length * 0.3 * size;
+		youwa_spark.image_angle = kameproj.image_angle
+		youwa_spark.depth = -3
+		if kameproj.length = 1 {
+			youwa_spark.x = x + 1 * (32 - (temp4 * 4) - (tempup * 11) - (temp4 * (tempup * 2)) - (tempdown * 20)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 17) + (temp4 * (tempup * 2)) - (tempdown * 13)) * size;
+		}
+		if kameproj.length = 2 {
+			youwa_spark.x = x + 1 * (38 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 30)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 20) + (temp4 * (tempup * 2)) - (tempdown * 23)) * size;
+		}
+		if kameproj.length = 3 {
+			youwa_spark.x = x + 1 * (44 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 27)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 24) + (temp4 * (tempup * 2)) - (tempdown * 28)) * size;
+		}
+		if kameproj.length = 4 {
+			youwa_spark.x = x + 1 * (47 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 4)) - (tempdown * 27)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 2)) - (tempdown * 34)) * size;
+		}
+		if kameproj.length = 5 {
+			youwa_spark.x = x + 1 * (50 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 4)) - (tempdown * 31)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 2)) - (tempdown * 38)) * size;
+		}
+	}
+	
+	if instance_exists(kameproj) && instance_exists(youwa_spark) 
+	{
+		youwa_spark.image_angle = kameproj.image_angle
+		if (youwa_spark.image_index >= 10.4){
+			youwa_spark.image_index = 0
+		}
+		youwa_spark.depth = -3
+		if kameproj.length = 1 {
+			youwa_spark.x = x + 1 * (32 - (temp4 * 4) - (tempup * 11) - (temp4 * (tempup * 2)) - (tempdown * 20)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 17) + (temp4 * (tempup * 2)) - (tempdown * 13)) * size;
+		}
+		if kameproj.length = 2 {
+			youwa_spark.x = x + 1 * (38 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 20)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 20) + (temp4 * (tempup * 2)) - (tempdown * 13)) * size;
+		}
+		if kameproj.length = 3 {
+			youwa_spark.x = x + 1 * (44 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 2)) - (tempdown * 17)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 24) + (temp4 * (tempup * 2)) - (tempdown * 18)) * size;
+		}
+		if kameproj.length = 4 {
+			youwa_spark.x = x + 1 * (47 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 4)) - (tempdown * 17)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 2)) - (tempdown * 24)) * size;
+		}
+		if kameproj.length = 5 {
+			youwa_spark.x = x + 1 * (50 - (temp4 * 4) - (tempup * 13) - (temp4 * (tempup * 4)) - (tempdown * 21)) * (1 - 2 * facing) * size;
+			youwa_spark.y = y - 1 * (18 + (temp4 * 9) + (tempup * 28) + (temp4 * (tempup * 2)) - (tempdown * 28)) * size;
+		}
+	}
+	
+	if instance_exists(youwa_spark) && !instance_exists(kameproj) 
+	{
+		youwa_spark.image_xscale = 0 * size;
+		youwa_spark.image_yscale = 0 * size;
+		youwa_spark.image_speed = 10
+	
+	}
+	
+	if state_type = "run" || state_type = "stand" || state_type = "jump" 
+	{
+		attacking = 0
+		special = 1
+		grabbing = 0
+		hover_timer = hover_time
+		attack_type = "b"
+		if air = 0 
+		{
+			temp4 = 0
+			state_type = "attack";
+			hspeed = 0;
+			if !ktime
+			sprite_index = b_sprite;
+			else
+			sprite_index = b_spriteS;
+		}
+		else 
+		{
+			temp4 = 1
+			state_type = "air_attack";
+			hspeed = 0;
+			if !ktime
+			sprite_index = b_air_sprite;
+			else
+			sprite_index = b_air_spriteS;
+		}
+		image_speed = 0;
+		image_index = 0;
+		timer = 270;
+		time = 378;
+		timer_speed = 1;
+		sound_play(downb_sound)
+		//sound_play(dragonrush_voice1)
+		air_move = 0
+		temp = 0
+		temp2 = 0
+		temp3 = 0
+		tempup = 0
+		tempdown = 0
+		temptimer = 0
+		last_shakex = shakex;
+		last_shakey = shakey;
+		charge_timer = 0;
+		image_blend = c_white;
+		alarm[7] = 1;
+		
+		//sound_play(b_ka_voice);
+	}
+	special = 1
+	air_move = 0
+	gravity_lock = 1
+	vspeed = 0
+	if temp4 = 0 && tempup = 0 && tempdown = 0
+	switch (timer) 
+	{
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 18: image_index = 5; break;
+		case 21: image_index = 6; break;
+		case 24: image_index = 3; break;
+		case 27: image_index = 4; break;
+		case 30: image_index = 5; break;
+		case 33: image_index = 6; break;
+		case 36: image_index = 3; break;
+		case 39: image_index = 4; break;
+		case 42: image_index = 5; break;
+		case 45: image_index = 6; break;
+		case 48: image_index = 3; break;
+		case 51: image_index = 4; break;
+		case 54: image_index = 5; break;
+		case 57: image_index = 6; break;
+		case 60: image_index = 3; break;
+		case 63: image_index = 4; break;
+		case 66: image_index = 5; break;
+		case 69: image_index = 6; break;
+		case 72: image_index = 3; break;
+		case 75: image_index = 4; break;
+		case 78: image_index = 5; break;
+		case 81: image_index = 6; break;
+		case 84: image_index = 3; break;
+		case 87: image_index = 4; break;
+		case 90: image_index = 5; break;
+		case 93: image_index = 6; break;
+		case 96: image_index = 3; break;
+		case 99: image_index = 4; break;
+		case 102: image_index = 5; break;
+		case 105: image_index = 6; break;
+		case 108: image_index = 3; break;
+		case 111: image_index = 4; break;
+		case 114: image_index = 5; break;
+		case 117: image_index = 6; break;
+		case 120: image_index = 3; break;
+		case 123: image_index = 4; break;
+		case 126: image_index = 5; break;
+		case 129: image_index = 6; break;
+		case 132: image_index = 3; break;
+		case 135: image_index = 4; break;
+		case 138: image_index = 5; break;
+		case 141: image_index = 6; break;
+		case 144: image_index = 3; break;
+		case 147: image_index = 4; break;
+		case 150: image_index = 5; break;
+		case 153: image_index = 6; break;
+		case 156: image_index = 3; break;
+		case 159: image_index = 4; break;
+		case 162: image_index = 5; break;
+		case 165: image_index = 6; break;
+		case 168: image_index = 3; break;
+		case 171: image_index = 4; break;
+		case 174: image_index = 5; break;
+		case 177: image_index = 6; break;
+		case 180: image_index = 3; break;
+		case 183: image_index = 4; break;
+		case 186: image_index = 5; break;
+		case 189: image_index = 6; break;
+		case 192: image_index = 3; break;
+		case 195: image_index = 4; break;
+		case 198: image_index = 5; break;
+		case 201: image_index = 6; break;
+		case 204: image_index = 3; break;
+		case 207: image_index = 4; break;
+		case 210: image_index = 5; break;
+		case 213: image_index = 6; break;
+		case 216: image_index = 3; break;
+		case 219: image_index = 4; break;
+		case 222: image_index = 5; break;
+		case 225: image_index = 6; break;
+		case 228: image_index = 3; break;
+		case 231: image_index = 4; break;
+		case 234: image_index = 5; break;
+		case 237: image_index = 6; break;
+		case 240: image_index = 3; break;
+		case 243: image_index = 4; break;
+		case 246: image_index = 5; break;
+		case 249: image_index = 6; break;
+		case 252: image_index = 3; break;
+		case 255: image_index = 4; break;
+		case 258: image_index = 5; break;
+		case 261: image_index = 6; break;
+		case 264: image_index = 3; break;
+		case 267: image_index = 4; break;
+		case 270: image_index = 5; break;
+
+		case 299: image_index = 7; break;
+
+		case 301: image_index = 8; break;
+		case 303: image_index = 9; break;
+		case 305: image_index = 10; break;
+		case 307: image_index = 11; break;
+		case 309: image_index = 9; break;
+		case 311: image_index = 10; break;
+		case 313: image_index = 11; break;
+		case 315: image_index = 9; break;
+		case 317: image_index = 10; break;
+		case 319: image_index = 11; break;
+		case 321: image_index = 9; break;
+		case 323: image_index = 10; break;
+		case 325: image_index = 11; break;
+		case 327: image_index = 9; break;
+		case 329: image_index = 10; break;
+		case 331: image_index = 11; break;
+		case 333: image_index = 9; break;
+		case 335: image_index = 10; break;
+		case 337: image_index = 11; break;
+		case 339: image_index = 9; break;
+		case 341: image_index = 10; break;
+		case 343: image_index = 11; break;
+		case 345: image_index = 9; break;
+		case 347: image_index = 10; break;
+		case 349: image_index = 11; break;
+
+		case 351: image_index = 12; break;
+		case 353: image_index = 13; break;
+		case 355: image_index = 14; time += 30; break; //353
+		case 365+30: image_index = 15; break;
+		case 371+30: image_index = 16; break;
+	}
+	if temp4 = 1 && tempup = 0 && tempdown = 0
+	switch (timer) 
+	{
+		/*case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 301: image_index = 5; break;
+		case 303: image_index = 6; break;
+		case 351: image_index = 7; break;
+		case 353: image_index = 8; time += 30; break;
+		case 365+30: image_index = 9; break;
+		case 371+30: image_index = 2; break;*/
+
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 18: image_index = 5; break;
+		case 21: image_index = 6; break;
+		case 24: image_index = 3; break;
+		case 27: image_index = 4; break;
+		case 30: image_index = 5; break;
+		case 33: image_index = 6; break;
+		case 36: image_index = 3; break;
+		case 39: image_index = 4; break;
+		case 42: image_index = 5; break;
+		case 45: image_index = 6; break;
+		case 48: image_index = 3; break;
+		case 51: image_index = 4; break;
+		case 54: image_index = 5; break;
+		case 57: image_index = 6; break;
+		case 60: image_index = 3; break;
+		case 63: image_index = 4; break;
+		case 66: image_index = 5; break;
+		case 69: image_index = 6; break;
+		case 72: image_index = 3; break;
+		case 75: image_index = 4; break;
+		case 78: image_index = 5; break;
+		case 81: image_index = 6; break;
+		case 84: image_index = 3; break;
+		case 87: image_index = 4; break;
+		case 90: image_index = 5; break;
+		case 93: image_index = 6; break;
+		case 96: image_index = 3; break;
+		case 99: image_index = 4; break;
+		case 102: image_index = 5; break;
+		case 105: image_index = 6; break;
+		case 108: image_index = 3; break;
+		case 111: image_index = 4; break;
+		case 114: image_index = 5; break;
+		case 117: image_index = 6; break;
+		case 120: image_index = 3; break;
+		case 123: image_index = 4; break;
+		case 126: image_index = 5; break;
+		case 129: image_index = 6; break;
+		case 132: image_index = 3; break;
+		case 135: image_index = 4; break;
+		case 138: image_index = 5; break;
+		case 141: image_index = 6; break;
+		case 144: image_index = 3; break;
+		case 147: image_index = 4; break;
+		case 150: image_index = 5; break;
+		case 153: image_index = 6; break;
+		case 156: image_index = 3; break;
+		case 159: image_index = 4; break;
+		case 162: image_index = 5; break;
+		case 165: image_index = 6; break;
+		case 168: image_index = 3; break;
+		case 171: image_index = 4; break;
+		case 174: image_index = 5; break;
+		case 177: image_index = 6; break;
+		case 180: image_index = 3; break;
+		case 183: image_index = 4; break;
+		case 186: image_index = 5; break;
+		case 189: image_index = 6; break;
+		case 192: image_index = 3; break;
+		case 195: image_index = 4; break;
+		case 198: image_index = 5; break;
+		case 201: image_index = 6; break;
+		case 204: image_index = 3; break;
+		case 207: image_index = 4; break;
+		case 210: image_index = 5; break;
+		case 213: image_index = 6; break;
+		case 216: image_index = 3; break;
+		case 219: image_index = 4; break;
+		case 222: image_index = 5; break;
+		case 225: image_index = 6; break;
+		case 228: image_index = 3; break;
+		case 231: image_index = 4; break;
+		case 234: image_index = 5; break;
+		case 237: image_index = 6; break;
+		case 240: image_index = 3; break;
+		case 243: image_index = 4; break;
+		case 246: image_index = 5; break;
+		case 249: image_index = 6; break;
+		case 252: image_index = 3; break;
+		case 255: image_index = 4; break;
+		case 258: image_index = 5; break;
+		case 261: image_index = 6; break;
+		case 264: image_index = 3; break;
+		case 267: image_index = 4; break;
+		case 270: image_index = 5; break;
+
+		case 299: image_index = 7; break;
+
+		case 301: image_index = 8; break;
+		case 303: image_index = 9; break;
+		case 305: image_index = 10; break;
+		case 307: image_index = 11; break;
+		case 309: image_index = 9; break;
+		case 311: image_index = 10; break;
+		case 313: image_index = 11; break;
+		case 315: image_index = 9; break;
+		case 317: image_index = 10; break;
+		case 319: image_index = 11; break;
+		case 321: image_index = 9; break;
+		case 323: image_index = 10; break;
+		case 325: image_index = 11; break;
+		case 327: image_index = 9; break;
+		case 329: image_index = 10; break;
+		case 331: image_index = 11; break;
+		case 333: image_index = 9; break;
+		case 335: image_index = 10; break;
+		case 337: image_index = 11; break;
+		case 339: image_index = 9; break;
+		case 341: image_index = 10; break;
+		case 343: image_index = 11; break;
+		case 345: image_index = 9; break;
+		case 347: image_index = 10; break;
+		case 349: image_index = 11; break;
+
+		case 351: image_index = 12; break;
+		case 353: image_index = 13; break;
+		case 355: image_index = 14; time += 30; break; //353
+		case 365+30: image_index = 15; break;
+		case 371+30: image_index = 16; break;
+	}
+	if tempup = 1 && temp4 = 0
+	switch (timer) 
+	{
+		/*case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 301: image_index = 5; break;
+		case 303: image_index = 6; break;
+		case 351: image_index = 7; break;
+		case 365: image_index = 8; time += 30; break;
+		case 371+30: image_index = 9; break;
+		case 375+30: image_index = 10; break;*/
+
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 18: image_index = 5; break;
+		case 21: image_index = 6; break;
+		case 24: image_index = 3; break;
+		case 27: image_index = 4; break;
+		case 30: image_index = 5; break;
+		case 33: image_index = 6; break;
+		case 36: image_index = 3; break;
+		case 39: image_index = 4; break;
+		case 42: image_index = 5; break;
+		case 45: image_index = 6; break;
+		case 48: image_index = 3; break;
+		case 51: image_index = 4; break;
+		case 54: image_index = 5; break;
+		case 57: image_index = 6; break;
+		case 60: image_index = 3; break;
+		case 63: image_index = 4; break;
+		case 66: image_index = 5; break;
+		case 69: image_index = 6; break;
+		case 72: image_index = 3; break;
+		case 75: image_index = 4; break;
+		case 78: image_index = 5; break;
+		case 81: image_index = 6; break;
+		case 84: image_index = 3; break;
+		case 87: image_index = 4; break;
+		case 90: image_index = 5; break;
+		case 93: image_index = 6; break;
+		case 96: image_index = 3; break;
+		case 99: image_index = 4; break;
+		case 102: image_index = 5; break;
+		case 105: image_index = 6; break;
+		case 108: image_index = 3; break;
+		case 111: image_index = 4; break;
+		case 114: image_index = 5; break;
+		case 117: image_index = 6; break;
+		case 120: image_index = 3; break;
+		case 123: image_index = 4; break;
+		case 126: image_index = 5; break;
+		case 129: image_index = 6; break;
+		case 132: image_index = 3; break;
+		case 135: image_index = 4; break;
+		case 138: image_index = 5; break;
+		case 141: image_index = 6; break;
+		case 144: image_index = 3; break;
+		case 147: image_index = 4; break;
+		case 150: image_index = 5; break;
+		case 153: image_index = 6; break;
+		case 156: image_index = 3; break;
+		case 159: image_index = 4; break;
+		case 162: image_index = 5; break;
+		case 165: image_index = 6; break;
+		case 168: image_index = 3; break;
+		case 171: image_index = 4; break;
+		case 174: image_index = 5; break;
+		case 177: image_index = 6; break;
+		case 180: image_index = 3; break;
+		case 183: image_index = 4; break;
+		case 186: image_index = 5; break;
+		case 189: image_index = 6; break;
+		case 192: image_index = 3; break;
+		case 195: image_index = 4; break;
+		case 198: image_index = 5; break;
+		case 201: image_index = 6; break;
+		case 204: image_index = 3; break;
+		case 207: image_index = 4; break;
+		case 210: image_index = 5; break;
+		case 213: image_index = 6; break;
+		case 216: image_index = 3; break;
+		case 219: image_index = 4; break;
+		case 222: image_index = 5; break;
+		case 225: image_index = 6; break;
+		case 228: image_index = 3; break;
+		case 231: image_index = 4; break;
+		case 234: image_index = 5; break;
+		case 237: image_index = 6; break;
+		case 240: image_index = 3; break;
+		case 243: image_index = 4; break;
+		case 246: image_index = 5; break;
+		case 249: image_index = 6; break;
+		case 252: image_index = 3; break;
+		case 255: image_index = 4; break;
+		case 258: image_index = 5; break;
+		case 261: image_index = 6; break;
+		case 264: image_index = 3; break;
+		case 267: image_index = 4; break;
+		case 270: image_index = 5; break;
+
+		case 299: image_index = 7; break;
+
+		case 301: image_index = 2; break;
+		case 303: image_index = 3; break;
+		case 305: image_index = 4; break;
+		case 307: image_index = 5; break;
+		case 309: image_index = 6; break;
+		case 311: image_index = 3; break;
+		case 313: image_index = 4; break;
+		case 315: image_index = 5; break;
+		case 317: image_index = 6; break;
+		case 319: image_index = 3; break;
+		case 321: image_index = 4; break;
+		case 323: image_index = 5; break;
+		case 325: image_index = 3; break;
+		case 327: image_index = 4; break;
+		case 329: image_index = 5; break;
+		case 331: image_index = 6; break;
+		case 333: image_index = 3; break;
+		case 335: image_index = 4; break;
+		case 337: image_index = 5; break;
+		case 339: image_index = 6; break;
+		case 341: image_index = 3; break;
+		case 343: image_index = 4; break;
+		case 345: image_index = 5; break;
+		case 347: image_index = 3; break;
+		case 349: image_index = 4; break;
+
+		case 351: image_index = 7; break;
+		case 353: image_index = 8; time += 30; break;
+		case 365+30: image_index = 9; break;
+		case 371+30: image_index = 10; break;
+	}
+	if tempup = 1 && temp4 = 1
+	switch (timer) 
+	{
+		/*case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 301: image_index = 5; break;
+		case 303: image_index = 6; break;
+		case 351: image_index = 7; time += 30; break;
+		case 365+30: image_index = 8; break;
+		case 371+30: image_index = 9; break;*/
+
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 18: image_index = 5; break;
+		case 21: image_index = 6; break;
+		case 24: image_index = 3; break;
+		case 27: image_index = 4; break;
+		case 30: image_index = 5; break;
+		case 33: image_index = 6; break;
+		case 36: image_index = 3; break;
+		case 39: image_index = 4; break;
+		case 42: image_index = 5; break;
+		case 45: image_index = 6; break;
+		case 48: image_index = 3; break;
+		case 51: image_index = 4; break;
+		case 54: image_index = 5; break;
+		case 57: image_index = 6; break;
+		case 60: image_index = 3; break;
+		case 63: image_index = 4; break;
+		case 66: image_index = 5; break;
+		case 69: image_index = 6; break;
+		case 72: image_index = 3; break;
+		case 75: image_index = 4; break;
+		case 78: image_index = 5; break;
+		case 81: image_index = 6; break;
+		case 84: image_index = 3; break;
+		case 87: image_index = 4; break;
+		case 90: image_index = 5; break;
+		case 93: image_index = 6; break;
+		case 96: image_index = 3; break;
+		case 99: image_index = 4; break;
+		case 102: image_index = 5; break;
+		case 105: image_index = 6; break;
+		case 108: image_index = 3; break;
+		case 111: image_index = 4; break;
+		case 114: image_index = 5; break;
+		case 117: image_index = 6; break;
+		case 120: image_index = 3; break;
+		case 123: image_index = 4; break;
+		case 126: image_index = 5; break;
+		case 129: image_index = 6; break;
+		case 132: image_index = 3; break;
+		case 135: image_index = 4; break;
+		case 138: image_index = 5; break;
+		case 141: image_index = 6; break;
+		case 144: image_index = 3; break;
+		case 147: image_index = 4; break;
+		case 150: image_index = 5; break;
+		case 153: image_index = 6; break;
+		case 156: image_index = 3; break;
+		case 159: image_index = 4; break;
+		case 162: image_index = 5; break;
+		case 165: image_index = 6; break;
+		case 168: image_index = 3; break;
+		case 171: image_index = 4; break;
+		case 174: image_index = 5; break;
+		case 177: image_index = 6; break;
+		case 180: image_index = 3; break;
+		case 183: image_index = 4; break;
+		case 186: image_index = 5; break;
+		case 189: image_index = 6; break;
+		case 192: image_index = 3; break;
+		case 195: image_index = 4; break;
+		case 198: image_index = 5; break;
+		case 201: image_index = 6; break;
+		case 204: image_index = 3; break;
+		case 207: image_index = 4; break;
+		case 210: image_index = 5; break;
+		case 213: image_index = 6; break;
+		case 216: image_index = 3; break;
+		case 219: image_index = 4; break;
+		case 222: image_index = 5; break;
+		case 225: image_index = 6; break;
+		case 228: image_index = 3; break;
+		case 231: image_index = 4; break;
+		case 234: image_index = 5; break;
+		case 237: image_index = 6; break;
+		case 240: image_index = 3; break;
+		case 243: image_index = 4; break;
+		case 246: image_index = 5; break;
+		case 249: image_index = 6; break;
+		case 252: image_index = 3; break;
+		case 255: image_index = 4; break;
+		case 258: image_index = 5; break;
+		case 261: image_index = 6; break;
+		case 264: image_index = 3; break;
+		case 267: image_index = 4; break;
+		case 270: image_index = 5; break;
+
+		case 299: image_index = 7; break;
+
+		case 301: image_index = 2; break;
+		case 303: image_index = 3; break;
+		case 305: image_index = 4; break;
+		case 307: image_index = 5; break;
+		case 309: image_index = 6; break;
+		case 311: image_index = 3; break;
+		case 313: image_index = 4; break;
+		case 315: image_index = 5; break;
+		case 317: image_index = 6; break;
+		case 319: image_index = 3; break;
+		case 321: image_index = 4; break;
+		case 323: image_index = 5; break;
+		case 325: image_index = 3; break;
+		case 327: image_index = 4; break;
+		case 329: image_index = 5; break;
+		case 331: image_index = 6; break;
+		case 333: image_index = 3; break;
+		case 335: image_index = 4; break;
+		case 337: image_index = 5; break;
+		case 339: image_index = 6; break;
+		case 341: image_index = 3; break;
+		case 343: image_index = 4; break;
+		case 345: image_index = 5; break;
+		case 347: image_index = 3; break;
+		case 349: image_index = 4; break;
+
+		case 351: image_index = 7; break;
+		case 353: image_index = 8; time += 30; break;
+		case 365+30: image_index = 8; break;
+		case 371+30: image_index = 9; break;
+	}
+	if tempdown = 1 && temp4 = 1
+	switch (timer) 
+	{
+		/*case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 301: image_index = 5; break;
+		case 303: image_index = 6; break;
+		case 351: image_index = 7; time += 30; break;
+		case 365+30: image_index = 8; break;
+		case 371+30: image_index = 9; break;*/
+
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 18: image_index = 5; break;
+		case 21: image_index = 6; break;
+		case 24: image_index = 3; break;
+		case 27: image_index = 4; break;
+		case 30: image_index = 5; break;
+		case 33: image_index = 6; break;
+		case 36: image_index = 3; break;
+		case 39: image_index = 4; break;
+		case 42: image_index = 5; break;
+		case 45: image_index = 6; break;
+		case 48: image_index = 3; break;
+		case 51: image_index = 4; break;
+		case 54: image_index = 5; break;
+		case 57: image_index = 6; break;
+		case 60: image_index = 3; break;
+		case 63: image_index = 4; break;
+		case 66: image_index = 5; break;
+		case 69: image_index = 6; break;
+		case 72: image_index = 3; break;
+		case 75: image_index = 4; break;
+		case 78: image_index = 5; break;
+		case 81: image_index = 6; break;
+		case 84: image_index = 3; break;
+		case 87: image_index = 4; break;
+		case 90: image_index = 5; break;
+		case 93: image_index = 6; break;
+		case 96: image_index = 3; break;
+		case 99: image_index = 4; break;
+		case 102: image_index = 5; break;
+		case 105: image_index = 6; break;
+		case 108: image_index = 3; break;
+		case 111: image_index = 4; break;
+		case 114: image_index = 5; break;
+		case 117: image_index = 6; break;
+		case 120: image_index = 3; break;
+		case 123: image_index = 4; break;
+		case 126: image_index = 5; break;
+		case 129: image_index = 6; break;
+		case 132: image_index = 3; break;
+		case 135: image_index = 4; break;
+		case 138: image_index = 5; break;
+		case 141: image_index = 6; break;
+		case 144: image_index = 3; break;
+		case 147: image_index = 4; break;
+		case 150: image_index = 5; break;
+		case 153: image_index = 6; break;
+		case 156: image_index = 3; break;
+		case 159: image_index = 4; break;
+		case 162: image_index = 5; break;
+		case 165: image_index = 6; break;
+		case 168: image_index = 3; break;
+		case 171: image_index = 4; break;
+		case 174: image_index = 5; break;
+		case 177: image_index = 6; break;
+		case 180: image_index = 3; break;
+		case 183: image_index = 4; break;
+		case 186: image_index = 5; break;
+		case 189: image_index = 6; break;
+		case 192: image_index = 3; break;
+		case 195: image_index = 4; break;
+		case 198: image_index = 5; break;
+		case 201: image_index = 6; break;
+		case 204: image_index = 3; break;
+		case 207: image_index = 4; break;
+		case 210: image_index = 5; break;
+		case 213: image_index = 6; break;
+		case 216: image_index = 3; break;
+		case 219: image_index = 4; break;
+		case 222: image_index = 5; break;
+		case 225: image_index = 6; break;
+		case 228: image_index = 3; break;
+		case 231: image_index = 4; break;
+		case 234: image_index = 5; break;
+		case 237: image_index = 6; break;
+		case 240: image_index = 3; break;
+		case 243: image_index = 4; break;
+		case 246: image_index = 5; break;
+		case 249: image_index = 6; break;
+		case 252: image_index = 3; break;
+		case 255: image_index = 4; break;
+		case 258: image_index = 5; break;
+		case 261: image_index = 6; break;
+		case 264: image_index = 3; break;
+		case 267: image_index = 4; break;
+		case 270: image_index = 5; break;
+
+		case 299: image_index = 7; break;
+
+		case 301: image_index = 2; break;
+		case 303: image_index = 3; break;
+		case 305: image_index = 4; break;
+		case 307: image_index = 5; break;
+		case 309: image_index = 6; break;
+		case 311: image_index = 3; break;
+		case 313: image_index = 4; break;
+		case 315: image_index = 5; break;
+		case 317: image_index = 6; break;
+		case 319: image_index = 3; break;
+		case 321: image_index = 4; break;
+		case 323: image_index = 5; break;
+		case 325: image_index = 3; break;
+		case 327: image_index = 4; break;
+		case 329: image_index = 5; break;
+		case 331: image_index = 6; break;
+		case 333: image_index = 3; break;
+		case 335: image_index = 4; break;
+		case 337: image_index = 5; break;
+		case 339: image_index = 6; break;
+		case 341: image_index = 3; break;
+		case 343: image_index = 4; break;
+		case 345: image_index = 5; break;
+		case 347: image_index = 3; break;
+		case 349: image_index = 4; break;
+
+		case 351: image_index = 7; break;
+		case 353: image_index = 8; time += 30; break;
+		case 365+30: image_index = 8; break;
+		case 371+30: image_index = 9; break;
+	}
+	if temp3 = 1
+	switch (timer) 
+	{
+		case 403:
+			if !ktime sprite_index = upb2_sprite;
+			else sprite_index = upb2_spriteS;
+			image_index = 4;
+			break;
+		case 405: image_index = 3; break;
+		case 408: image_index = 2; break;
+		case 411: image_index = 3; break;
+		case 414: image_index = 2; break;
+		case 417: image_index = 1; break;
+		case 420: image_index = 0; break;
+		case 433: image_index = 1; break;
+		case 438: image_index = 2; break;
+		case 443: image_index = 3; break;
+		case 448: image_index = 4; break;
+	}
+	
+	if air = 0
+	temp4 = 0
+	
+	/*if (timer >= 301 && timer < 349) 
+	{
+		if (timer < 324) {
+			if (timer mod 4 < 2 && (sprite_index = b_sprite || sprite_index = b_spriteS || sprite_index = b_up_sprite || sprite_index = b_up_spriteS || sprite_index = b_air_sprite || sprite_index = b_air_spriteS))
+				image_index = 5;
+			else
+				image_index = 6;
+		} else {
+			if (timer mod 6 < 3 && (sprite_index = b_sprite || sprite_index = b_spriteS || sprite_index = b_up_sprite || sprite_index = b_up_spriteS || sprite_index = b_air_sprite || sprite_index = b_air_spriteS))
+				image_index = 5;
+			else
+				image_index = 6;
+		}
+	}*/
+	if ai_state = "recover" && ai = 1 && timer >= 6
+	special = 1
+	if timer < 30
+	hspeed = 0
+	slide = 0
+	
+	if timer = 15 
+	{
+		//Charge VFX
+		spirit_spark = instance_create(x - 4 * (1-facing*2) * size , y - 16 * size , obj_spark); //-4, -15
+		spirit_spark.x = x - 4 * (1-facing*2) * size;
+		spirit_spark.y = y - ((17 - (temp4 * 10)) * size);
+		spirit_spark.sprite_index = kamehameha_charge_sprite;
+		spirit_spark.image_index = 0;
+		spirit_spark.image_speed = 0.2;
+		spirit_spark.image_xscale = 0.35 * (1-facing*2) * size //*size;
+		spirit_spark.image_yscale = 0.35 * size;
+		//spirit_spark.snap = self.id
+		sound_play(spiritbomb_charge_sound);
+	}
+	spirit_spark.alarm[0] = 5
+	if timer > 15 && timer < 300 
+	{
+		spirit_spark.x = x - 4 * (1-facing*2) * size;
+		spirit_spark.y = y - ((17 - (temp4 * 10)) * size);
+		//shakex = (last_shakex - lengthdir_x(charge_timer * 0.01, charge_timer * 55)) * (1 - facing * 2);
+		//spirit_spark.shakex = shakex
+		charge_timer += 0.4
+		//image_blend = merge_color(c_white, c_yellow, 0.5 + lengthdir_x(0.5, charge_timer * 50));
+		alarm[7] = 2;
+		if (sin(charge_timer * pi / 6) == 1) 
+		{
+			part_particles_create(psys_front, x - 9 + random(2), y - 14 - random(3), ptype_smashspark, 1);
+		}
+		if timer = 85 
+		{
+			sound_play(b_new_voice);
+		}
+		if timer = 90 
+		{
+			temp2 = 1
+		}
+	}
+	if temp2 = 1 && ((timer > 150 && timer < 350) || timer > 450) && !instance_exists(auraspark) 
+	{
+		auraspark = instance_create(x, y, obj_spark)
+		auraspark.snap = self.id
+		//auraspark.sprite_index = dspecial_effect
+                //auraspark.image_blend = c_blue
+		if !ktime
+		auraspark.sprite_index = aura_sprite
+		else
+			auraspark.sprite_index = aura_spriteS
+		auraspark.image_xscale = size * 0.65
+		auraspark.image_yscale = size * 0.6
+		auraspark.image_speed = 0.5
+		auraspark.image_alpha = 0.75
+                //auraspark.loop = 3;
+		auraspark.depth = 2
+		auraspark.snap = self.id
+	}
+	if timer > 150 
+	{
+		auraspark.x = x
+		auraspark.y = y
+	}
+	if temp3 < -1
+	temp3 += 1
+	
+	
+	////////shoot the bloo my dude
+	if ((special = 1 && !ai) || (ai && random(1200) > 150 + enemy_dist) || timer = 270) && timer > 140 && timer < 400 && time = 378 && temp = 0 && temp3 >= -1 
+	{
+		if(moveright){facing = 0;}
+		if(moveleft){facing = 1;}
+		if(timer < 270){timer = 270;}
+		
+		
+		if timer <= 50 
+		{
+			if air = 0 {
+				duster = instance_create(x, y, obj_dust_effect);
+				duster.facing = facing;
+			}
+			if moveup {
+				tempup = 1
+				if air = 0 {
+					if !ktime
+					sprite_index = b_up_sprite;
+					else
+						sprite_index = b_up_spriteS;
+					image_index = 2
+				}
+				else {
+					if !ktime
+					sprite_index = b_air_up_sprite
+					else
+						sprite_index = b_air_up_spriteS
+					image_index = 2
+				}
+			}
+			if movedown && air > 0 {
+				tempdown = 1
+				if !ktime
+				sprite_index = b_air_down_sprite;
+				else
+					sprite_index = b_air_down_spriteS;
+				image_index = 2;
+			}
+			sound_stop(dragonrush_voice1)
+			sound_stop(downb_sound);
+			sound_stop(spiritbomb_charge_sound);
+			sound_play(b_sound);
+			sound_play(b_voice);
+			with spirit_spark instance_destroy();
+			spark = instance_create(x + (15 - facing * 30) * size, y - 19 - (temp4 * 10) * size, obj_spark_shockwave)
+			spark.image_xscale *= 0.09 * size
+			spark.image_yscale *= 0.33 * size
+			spark.image_blend = c_blue
+			kameproj = create_projectile(3.5 + kaioken * 3, 90, 1, 0.0000001, 6 + (kaioken * 2), 1 / size, crush, obj_spark_hit1, 0.15*size, 0.15*size, size*(26 - (temp4 * 11) - (tempup * 6.5) - (temp4 * (tempup * 3.5)) - (tempdown * 9)), size*(17 + (temp4 * 9) + (tempup * 18) - (temp4 * (tempup * 2)) + (tempdown * 13)), self.id, 50, goku_kamehameha);
+			kameproj.di = 0.00001;
+			kameproj.image_xscale *= 2;
+			kameproj.max_hits = 2
+			kameproj.length = 1
+			kameproj.depth = -6
+			kameproj.tempx = size * (43 - (temp4 * 4) - (tempup * 14) - (temp4 * (tempup * 2)) - (tempdown * 15))
+			kameproj.tempy = size * (18 + (temp4 * 9) + (tempup * 24) + (temp4 * (tempup * 2)) - (tempdown * 26))
+			hspeed -= size*(1 - facing * 2);
+			temp = 1
+			timer = 300
+		}
+		if timer > 50 && timer <= 90 
+		{
+			if air = 0 {
+				duster = instance_create(x, y, obj_dust_effect);
+				duster.facing = facing;
+			}
+			if moveup {
+				tempup = 1
+				if air = 0 {
+					if !ktime
+					sprite_index = b_up_sprite;
+					else
+						sprite_index = b_up_spriteS;
+					image_index = 2
+				}
+				else {
+					if !ktime
+					sprite_index = b_air_up_sprite
+					else
+						sprite_index = b_air_up_spriteS
+					image_index = 2
+				}
+			}
+			if movedown && air > 0 {
+				tempdown = 1
+				if !ktime
+				sprite_index = b_air_down_sprite;
+				else
+					sprite_index = b_air_down_spriteS;
+				image_index = 2;
+			}
+			sound_stop(downb_sound);
+			sound_stop(spiritbomb_charge_sound);
+			//sound_stop(b_ka_voice);
+			//sound_play(blast_sound);
+			sound_play(b_sound);
+			sound_play(b_new_voice2);
+			with spirit_spark instance_destroy();
+			spark = instance_create(x + (15 - facing * 30) * size, y - 19*size - (temp4 * 10) * size, obj_spark_shockwave)
+			spark.image_xscale *= 0.09;
+			spark.image_yscale *= 0.33;
+			spark.image_blend = c_blue
+			kameproj = create_projectile(3.5 + kaioken * 3, 90, 1, 0.0000001, 10 + kaioken * 2, 4 / size, crush, obj_spark_hit1, 0.25*size, 0.2*size, size*(32 - (temp4 * 12) - (tempup * 8) - (temp4 * (tempup * 3)) - (tempdown * 9)), size*(17 + (temp4 * 10.5) + (tempup * 20) - (temp4 * (tempup * 0.5)) - (tempdown * 17)), self.id, 50, goku_kamehameha);
+			kameproj.di = 0.00001;
+			kameproj.image_xscale *= 2.15;
+			kameproj.max_hits = 3
+			kameproj.length = 2
+			kameproj.depth = -6
+			kameproj.tempx = size * (60 - (temp4 * 5) - (tempup * 21) + (temp4 * (tempup * 1)) - (tempdown * 24))
+			kameproj.tempy = size * (18 + (temp4 * 9) + (tempup * 34) + (temp4 * (tempup * 3)) - (tempdown * 30))
+			hspeed -= (1.5 - facing * 3);
+			temp = 1
+			timer = 300
+		}
+		if timer >= 91 && timer <= 150 
+		{
+			if air = 0 
+			{
+				duster = instance_create(x, y, obj_dust_effect);
+				duster.facing = facing;
+			}
+			if moveup 
+			{
+				tempup = 1
+				if air = 0 
+				{
+					if !ktime
+					sprite_index = b_up_sprite;
+					else
+						sprite_index = b_up_spriteS;
+					image_index = 2
+				}
+				else 
+				{
+					if !ktime
+					sprite_index = b_air_up_sprite
+					else
+						sprite_index = b_air_up_spriteS
+					image_index = 2
+				}
+			}
+			if movedown && air > 0 
+			{
+				tempdown = 1
+				if !ktime
+				sprite_index = b_air_down_sprite;
+				else
+					sprite_index = b_air_down_spriteS;
+				image_index = 5;
+			}
+			sound_stop(downb_sound);
+			sound_stop(ha_voice);
+			sound_stop(b_me_voice);
+			sound_stop(spiritbomb_charge_sound);
+			sound_play(blast_sound);
+			sound_play(b_new_voice2);
+			with spirit_spark instance_destroy();
+			spark = instance_create(x + (15 - facing * 30) * size, y - 19*size - (temp4 * 10) * size, obj_spark_shockwave)
+			spark.image_xscale *= 0.09 //* size
+			spark.image_yscale *= 0.33 //* size
+			spark.image_blend = c_blue
+			kameproj = create_projectile(/* damage */	3.5 + kaioken * 3, 	
+										/* direction */	90, 
+										/*bkb*/			1, 
+										/*kbg*/			0.0000001, 
+										/*Shield dmg */	10 + kaioken * 2, 
+										/*hitlag */		4 / size, 
+										/*sfx */		crush, 
+										/*gfx*/			obj_spark_hit1, 
+										/*xsize*/		0.35*size,
+										/*ysize*/		0.25 * size, 
+										/*x*/			36 - (temp4 * 13) - (tempup * 9) - (temp4 * (tempup * 3.5)) - (tempdown * 10.5), 
+										/*y*/			17 + (temp4 * 9) + (tempup * 22) - (tempdown * 19.5), 
+										/*attacker*/	self.id, 
+										/*time*/		50, 
+										/*script*/		goku_kamehameha);
+			kameproj.di = 0.00001;
+			kameproj.image_xscale *= 2.2;
+			kameproj.max_hits = 4
+			kameproj.length = 3
+			kameproj.depth = -6
+			kameproj.tempx = size * (75 - (temp4 * 5) - (tempup * 24) - (temp4 * (tempup * 1)) - (tempdown * 28))
+			kameproj.tempy = size * (18 + (temp4 * 9) + (tempup * 43) + (temp4 * (tempup * 3)) - (tempdown * 41))
+			hspeed -= (2 - facing * 4);
+			temp = 1
+			timer = 300
+		}
+		if timer >= 151 && timer <= 210 
+		{
+			if air = 0 
+			{
+				duster = instance_create(x, y, obj_dust_effect);
+				duster.facing = facing;
+			}
+			if moveup 
+			{
+				tempup = 1
+				if air = 0 
+				{
+					if !ktime
+					sprite_index = b_up_sprite;
+					else
+						sprite_index = b_up_spriteS;
+					image_index = 2
+				}
+				else 
+				{
+					if !ktime
+					sprite_index = b_air_up_sprite
+					else
+						sprite_index = b_air_up_spriteS
+					image_index = 2
+				}
+			}
+			if movedown && air > 0 
+			{
+				tempdown = 1
+				if !ktime
+				sprite_index = b_air_down_sprite;
+				else
+					sprite_index = b_air_down_spriteS;
+				image_index = 2;
+			}
+			sound_stop(downb_sound);
+			sound_stop(ha_voice);
+			sound_stop(b_ha_voice);
+			sound_stop(spiritbomb_charge_sound);
+			sound_play(blast_sound);
+			sound_play(b_new_voice2);
+			with spirit_spark instance_destroy();
+			spark = instance_create(x + (15 - facing * 30) * size, y - 19 - (temp4 * 10) * size, obj_spark_shockwave)
+			spark.image_xscale *= 0.09 * size
+			spark.image_yscale *= 0.33 * size
+			spark.image_blend = c_blue
+			kameproj = create_projectile(3.5 + kaioken * 3, 90, 1, 0.0000001, 10 + kaioken * 2, 4 / size, crush, obj_spark_hit1, 0.45*size, 0.3*size, 42 - (temp4 * 14) - (tempup * 10.5) - (temp4 * (tempup * 1.5)) - (tempdown * 12), 17 + (temp4 * 9) + (tempup * 24) + (temp4 * (tempup * 2)) - (tempdown * 24), self.id, 50, goku_kamehameha);
+			kameproj.di = 0.00001;
+			kameproj.image_xscale *= 2.3;
+			kameproj.max_hits = 5
+			kameproj.length = 4
+			kameproj.depth = -6
+			kameproj.tempx = size * (87 - (temp4 * 5) - (tempup * 23) - (temp4 * (tempup * 4)) - (tempdown * 28))
+			kameproj.tempy = size * (17 + (temp4 * 9) + (tempup * 58) + (temp4 * (tempup * 1)) - (tempdown * 53))
+			hspeed -= (2.5 - facing * 5);
+			temp = 1
+			timer = 300
+		}
+		if timer >= 211 && timer <= 270 
+		{
+			if air = 0 
+			{
+				duster = instance_create(x, y, obj_dust_effect);
+				duster.facing = facing;
+			}
+			if moveup 
+			{
+				tempup = 1
+				if air = 0 
+				{
+					if !ktime
+					sprite_index = b_up_sprite;
+					else
+						sprite_index = b_up_spriteS;
+					image_index = 2
+				}
+				else 
+				{
+					if !ktime
+					sprite_index = b_air_up_sprite
+					else
+						sprite_index = b_air_up_spriteS
+					image_index = 2
+				}
+			}
+			if movedown && air > 0 
+			{
+				tempdown = 1
+				if !ktime
+				sprite_index = b_air_down_sprite;
+				else
+					sprite_index = b_air_down_spriteS;
+				image_index = 2;
+			}
+			sound_stop(downb_sound);
+			sound_stop(ha_voice);
+			sound_stop(b_mee_voice);
+			sound_stop(spiritbomb_charge_sound);
+			sound_play(blast_sound);
+			sound_play(b_new_voice2);
+			with spirit_spark instance_destroy();
+			spark = instance_create(x + (15 - facing * 30) * size, y - 19*size - (temp4 * 10) * size, obj_spark_shockwave)
+			spark.image_xscale *= 0.09 * size
+			spark.image_yscale *= 0.33 * size
+			spark.image_blend = c_blue
+			kameproj = create_projectile(3.5 + kaioken * 3, 90, 1, 0.0000001, 10 + kaioken * 2, 4 / size, crush, obj_spark_hit1, 0.55*size, 0.35*size, size*(48 - (temp4 * 15) - (tempup * 12) - (temp4 * (tempup * 3)) - (tempdown * 12)), size*(17 + (temp4 * 9) + (tempup * 26) + (temp4 * (tempup * 4.5)) - (tempdown * 26)), self.id, 50, goku_kamehameha);
+			kameproj.di = 0.00001;
+			kameproj.image_xscale *= 2.4;
+			kameproj.max_hits = 6
+			kameproj.length = 5
+			kameproj.depth = -6
+			kameproj.tempx = size * (102 - (temp4 * 5) - (tempup * 28) - (temp4 * (tempup * 4)) - (tempdown * 33))
+			kameproj.tempy = size * (17 + (temp4 * 9) + (tempup * 66) + (temp4 * (tempup * 1)) - (tempdown * 62))
+			hspeed -= (3 - facing * 6);
+			temp = 1
+			timer = 300
+		}
+		kameproj.start_yscale = kameproj.image_yscale;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	if timer = 306 || timer = 312 || timer = 318 {
+		hspeed = 0
+		if air = 0 {
+			duster = instance_create(x, y, obj_dust_effect);
+			duster.facing = facing;
+		}
+	}
+	if timer > 300 && timer < 353 {
+		kameproj.y = y - kameproj.tempy
+		kameproj.x = x + kameproj.tempx * (1 - facing * 2) + lengthdir_x(1, timer * 90)*size;
+		//kameproj.image_index = min ( kameproj.image_number - 1 , timer - 300 );
+		if (timer > 300 && timer < 340)
+			kameproj.image_yscale = kameproj.start_yscale * (1 - (timer - 300) * 0.006125);
+		else
+			kameproj.image_yscale *= 0.75;
+	}
+	if timer = 355
+	with kameproj instance_destroy()
+	if air = 0 && timer < 30
+	hspeed = 0
+	// Warp Kamehameha
+	
+	if timer > 15 && timer < 300 && temp = 0 && attacking = 1 && air < max_jumps && temp3 = 0 {
+		temp3 = 1
+		temptimer = timer
+		spirit_spark.visible = 0
+		spirit_spark.image_speed = 0
+		auraspark.image_index = auraspark.image_number;
+		//sound_stop(b_ka_voice);
+		//sound_stop(b_me_voice);
+		//sound_stop(b_ha_voice);
+		//sound_stop(b_mee_voice);
+		sound_stop(spiritbomb_charge_sound);
+		state_type = "air_attack"
+		timer = 400
+		time = 500
+	}
+	if temp3 = 1 
+	{
+		if timer > 400 
+		{
+			temp4 = 1
+			air_move = 0
+		}
+	
+		if timer = 401 
+		{
+			air = max_jumps;
+			sound_play(upb_sound)
+		}
+	
+		if timer = 402
+		intangible = 1
+		if timer = 422 
+		{
+			if moveright = 1 
+			{
+				if !ktime
+				x += 60
+				else
+					x += 120
+			}
+			if moveleft = 1 
+			{
+				if !ktime
+				x -= 60
+				else
+					x -= 120
+			}
+			if moveup = 1 
+			{
+				if !ktime
+				y -= 60
+				else
+					y -= 120
+			}
+			else if movedown && air > 0 
+			{
+				if !ktime
+				y += 60
+				else
+					y += 120
+			}
+			//if movedown = 1 
+			//x+=(75-facing*130)*(1)
+			if (!movedown && !moveright && !moveleft && !moveup) 
+			{
+				if !ktime
+				y -= 60;
+				else
+					y -= 120;
+			}
+		}
+		if timer = 440 
+		{
+			if moveleft
+			{
+			facing = 1;
+				if ( turnstart = 0 )
+				{
+				turned = 1;
+				}
+			}
+			if moveright
+			{
+			facing = 0;
+				if ( turnstart = 1 )
+				{
+				turned = 1;
+				}
+			}
+			spirit_spark.x = x - 4 * (1-facing*2) * size;
+			spirit_spark.y = y - ((17 - (temp4 * 10)) * size);
+		}
+		if timer = 433
+		intangible = 0
+	
+		if timer = 450 
+		{
+			if air = 0 
+			{
+				if !ktime
+				sprite_index = b_sprite;
+				else
+					sprite_index = b_spriteS;
+				image_index = 4;
+				temp4 = 0
+			}
+			else {
+				if !ktime
+				sprite_index = b_air_sprite;
+				else
+					sprite_index = b_air_spriteS;
+				image_index = 4;
+				temp4 = 1
+			}
+			if ( turned = 0 )
+				{
+				spirit_spark.x = x - 4 * (1-facing*2) * size;
+				}
+			if ( turned = 1 )
+				{
+				spirit_spark.x = x + 14 * (1-facing*2) * size;
+				}
+			spirit_spark.y = y - ((17 - (temp4 * 10)) * size);
+			spirit_spark.image_speed = 0.2;
+			spirit_spark.visible = 1
+			sound_play(spiritbomb_charge_sound);
+			if air = 0 
+			{
+				if !ktime
+				sprite_index = b_sprite;
+				else
+					sprite_index = b_spriteS;
+				image_index = 4;
+			}
+			else 
+			{
+				if !ktime
+				sprite_index = b_air_sprite;
+				else
+					sprite_index = b_air_spriteS;
+				image_index = 4;
+			}
+		}
+		if timer > 450 
+		{
+			if ( turned = 0 )
+				{
+				spirit_spark.x = x - 4 * (1-facing*2) * size;
+				}
+			if ( turned = 1 )
+				{
+				spirit_spark.x = x + 14 * (1-facing*2) * size;
+				}
+			spirit_spark.y = y - ((17 - (temp4 * 10)) * size);
+		}
+		if timer = 455 
+		{
+			timer = temptimer
+			time = 378
+			attacking = 0
+			temp3 = -21
+		}
+	}
+	if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch") 
+	{
+		dontrepeat = 0;
+		with spirit_spark instance_destroy();
+		attack_type = "none";
+		if air = 0
+		state_type = "stand";
+		else
+			state_type = "fall";
+		temp = 0
+		temp2 = 0
+		temp3 = 0
+		temp4 = 0
+		intangible = 0
+		timer = 0;
+		time = -1;
+	}
+	
+	if (instance_exists(spirit_spark)) 
+	{
+		if ( turned = 0 )
+			{
+			spirit_spark.x = x - 4 * (1-facing*2) * size;
+			}
+		if ( turned = 1 )
+			{
+			spirit_spark.x = x - 18 * (1-facing*2) * size;
+			}
+		
+		if (air){spirit_spark.y = y - 21*size;} 
+		else {spirit_spark.y = y - 17*size;}
+	}
+	
+	if (air){temp4 = 1}
+	else{temp4 = 0}
+	
+	if (timer > 15 and air < max_jumps - 1 and hitbox.hit > 0) 
+	{
+		interrupting = 1;
+		if (ai){movejump = 1;}
+		
+		if (movejump = 1) 
+		{
+			state_type = "jump";
+			intangible = 0;
+			time = 5;
+		}
+	}
+	
+	if(timer < 270 && ((movejump && air < max_jumps -1) || shieldup))
+	{
+		special = 0; 
+		timer = time; 
+		interrupt = 1;
+		sound_stop(b_ka_voice);
+		sound_stop(b_me_voice);
+		sound_stop(b_ha_voice);
+		sound_stop(b_mee_voice);
+		sound_stop(spiritbomb_charge_sound);
+	}
+}

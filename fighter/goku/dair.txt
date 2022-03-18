@@ -1,0 +1,152 @@
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "dair";
+  image_speed = 0;
+  image_index = 0;
+if !ktime
+  sprite_index = dair_sprite;
+else
+  sprite_index = dair_spriteS;
+  timer = 0;
+  time = 75;
+  timer_speed = 1;
+  }
+
+	switch (timer)
+	{
+	case 8: image_index = 1; break;
+	case 14: image_index = 2; break;
+	case 20: image_index = 3; break;
+	case 39: image_index = 4; break;
+	case 71: image_index = 5; break;
+	case 73: image_index = 6; break;
+	}
+	if ( timer <= 13 )
+	{
+	hspeed = 0;
+	vspeed = -0.1;
+	temp_fall_speed = 0;
+	}
+	
+            if timer = 14 {
+                sound_play(attack_sound2);
+                sound_play(powerup_sound);
+                temp_fall_speed = 2
+                play_attack_voice()
+		if !ktime{
+                create_hitbox(7,110-facing*40,4.95+kaioken,7+kaioken*0.5,15,12,magic3,obj_spark_special1,0.6,0.6,-4.5,33,self.id,60,3);
+                hitbox.hit_stun = 12
+                create_hitbox2(9,259+facing*22,5.5,2.85,16,18,goku_hit,obj_spark_special1,0.7,0.7,13,7,self.id,60,3);
+                hitbox2.hit_stun = 10
+		}
+		else{
+                create_hitbox(7,110-facing*40,4.95+kaioken,7+kaioken*0.5,15,12,crush,obj_spark_special1,0.6,0.6,-6,23,self.id,60,3);
+                hitbox.hit_stun = 10
+                create_hitbox2(9,259+facing*22,5.5,2.85,16,18,crush,obj_spark_impact,0.8,0.8,12,-1,self.id,60,3);
+                hitbox2.hit_stun = 8
+		}
+                hspeed = (3-facing*6)*size
+                vspeed=7*size
+            }
+	    if timer = 17 {
+		hitbox2.damage = 6*size;
+		hitbox2.dir = angle_correct(20);
+		}
+            if timer >= 14 && timer <= 69 && timer_speed > 0 {
+                vspeed = 7*size
+                hspeed = (3-facing*6)*size
+            }
+
+        if ( air = 0 && timer > 14 )
+		{
+		if ( timer > 14 && timer < 70 )	//landing hitbox put down if autocancel window missed
+		{
+			with(hitbox) 
+			{ 
+				instance_destroy(); 
+			}
+			create_hitbox2(7,angle_correct(60),7,1.5,4,4,punch2,obj_spark_hit1,1.5,0.7,3,9.5,self.id,5,2);
+			hitbox2.remain = true;
+		}
+
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=16; 
+	     }
+			if (timer >= 14){ 
+			if (attack_success) && (dontrepeat = 0 && temp_spawn >= 2) && target.percent > 50 && target.offstage {
+				dontrepeat = 1;
+				killspark = instance_create(enemy.x-235,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 70;
+				killspark.depth = depth + 2;
+				sound_play(killscreen_voice);
+				screen_shake(300,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 70
+				freezer2.alarm[0] = 70
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 30;
+				spark.camera_d = enemy.y - 40;
+				spark.camera_boundary_zoom = 100;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 25
+			
+				}	
+
+				}
+if (hitbox.hit > 0 || hitbox2.hit > 0) && moveup && special && air < max_jumps && ktime && !snapvanish {
+snapvanish = 1;
+timer = 0;
+time = -1;
+state_type = "jump";
+attack_type = "none";
+char_upb();
+}
+
+if ( timer >= time - 1 )
+  {
+    dontrepeat = 0;
+  if snapvanish = 2
+	snapvanish = 0
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
+if ( air >= 0 && timer >= 1 && temp != -1 && (movejump) && hitbox2.hit > 0 )
+      {
+    air_move = 1;
+    interrupt = 1;
+      }
+if ( timer >= 46 and air < max_jumps-1 and hitbox2.hit = 0 )
+{
+    interrupting = 1
+    if ai
+        movejump = 1
+    if movejump = 1 
+{
+    state_type = "jump"
+    intangible = 0
+    time = 5
+}
+}	  

@@ -1,0 +1,221 @@
+fast_fall = 0
+fast_fall_temp = 0
+hover = 0
+if (state_type = "jump") {
+	if zairtemp = 0
+	exit;
+	else
+	zairtemp -= 1
+        state_type = "air_attack";
+        attack_type = "zair";
+	if !ktime
+        sprite_index = downb_sprite;
+	else
+        sprite_index = dsmash_spriteS;
+        image_index=0;
+        timer = 0;
+        time = 65;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        temp = 0
+        hitbox = -99
+	intangible = 0
+	hspeed = 0
+	vspeed = -0.1
+	air_move = 0
+	direction = facing*180
+	tempdirection = direction
+
+} 
+  
+if timer < time {
+    switch(timer) 
+	{
+	case 5: image_index = 1; break;
+	case 30: if !ktime sprite_index = zglide_sprite; else sprite_index = zglide_spriteS; image_index = 0; break;
+	case 56: if !ktime sprite_index = downb_sprite; else sprite_index = dsmash_spriteS; image_index = 0; break;
+	}
+	
+    state_type = "air_attack";
+    if timer < 30 {
+	vspeed = -0.15
+	hspeed = 0
+	auraspark.x = x
+	auraspark.y = y
+	}
+	
+    if timer = 5 {
+	sound_play(attack_voice1);
+	sound_play(downb_sound);
+        auraspark = instance_create(x,y,obj_spark)
+        auraspark.snap = self.id
+        auraspark.sprite_index = aura_sprite
+        auraspark.image_xscale = 0.7
+        auraspark.image_yscale = 0.7
+        auraspark.image_speed = 0.5
+        auraspark.image_alpha = 0.75
+        auraspark.depth = 0
+	}
+	
+    if timer = 25
+	sound_play(powerup_sound);
+	
+    if (timer = 30) {
+	if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+	with auraspark instance_destroy();
+        direction = facing*180
+	tempdirection = direction
+        create_hitbox(6,direction+(15*(1-facing*2)),5.5,0,7,15,goku_hit,obj_spark_hit3,1.55,1,-2,13,self.id,4,2)
+        speed = 8
+	temp = 1
+	image_speed = 0.4;
+        glideaura = instance_create(x,y,obj_spark)
+	glideaura.sprite_index = zglide_aura_sprite;
+	glideaura.image_index = 0
+	glideaura.image_speed = 0.4;
+	glideaura.image_angle = direction;
+	glideaura.x = x + (9-facing*18)
+	glideaura.y = y - 14
+	glideaura.image_xscale *= 1;
+	glideaura.image_yscale *= 1.65;
+	glideaura.image_alpha = 0.75;
+        speedlines = instance_create(x,y,obj_spark)
+	speedlines.sprite_index = zglide_speedlines_sprite;
+	speedlines.image_index = 0
+	speedlines.image_speed = 1;
+	speedlines.image_angle = direction;
+	speedlines.x = x - (40-facing*80)
+	speedlines.y = y - 15
+	speedlines.image_xscale *= 0.5;
+	speedlines.image_yscale *= 0.5;
+	speedlines.image_alpha = 1;
+    }
+	
+	if timer > 30 {
+	glideaura.image_angle = direction;
+	glideaura.x = x + (9-facing*18)+((tempdirection > 185 && tempdirection < 359)*(2-facing*4))
+	glideaura.y = y-14+((tempdirection > 185 && tempdirection < 359)*(4))
+	if kaioken=1 && random(10) > 6
+	glideaura.image_blend=c_red
+	else
+	glideaura.image_blend=c_white
+	speedlines.image_angle = direction;
+	speedlines.x = x - (40-facing*80)+((tempdirection > 185 && tempdirection < 359)*(6-facing*12))+((tempdirection < 175 && tempdirection > 5)*(10-facing*20))
+	speedlines.y = y-15-((tempdirection > 185 && tempdirection < 359)*(20))+((tempdirection < 175 && tempdirection > 5)*(20))
+	if kaioken=1 && random(10) > 6
+	speedlines.image_blend=c_red
+	else
+	speedlines.image_blend=c_white
+	}
+	
+    if temp = 1 {
+    if !instance_exists(hitbox) && !attack_success
+        create_hitbox(6,direction+(15*(1-facing*2)),5.5,0,7,15,goku_hit,obj_spark_hit3,1.55,1,-2,13,self.id,1,2)
+		
+    gravity = 0
+    if moveup = 1 || (ai && (ai_state = "recover" || offstage || (enemy.y < y-5))) {
+        if direction < 90 || direction > 270    {
+            direction+=10
+            if direction >= 30 && direction < 270
+            direction = 30
+            tempdirection = direction
+        }
+        else if direction > 90 && direction < 270 {
+            direction-=10
+            if direction <= 150
+            direction = 150
+            tempdirection = direction
+        }
+    }
+    else if (movedown = 1 || (!offstage && ai && enemy.y > y+5 && ai_state != "recover")) && !collision_point(x,y+1,obj_floor,1,1) && !collision_point(x,y+1,obj_platform,1,1) {
+        if facing = 0  { 
+            direction-=5
+            if direction <= 330
+            direction = 330
+            tempdirection = direction
+        }
+        else {
+            direction+=5
+            if direction >= 210
+            direction = 210
+            tempdirection = direction
+        }
+    }
+    else {
+        //direction += 1-facing*2
+        direction = tempdirection
+    }
+    if facing {
+        image_angle = direction-180
+        }
+    else {
+        image_angle = direction
+    }
+}
+    if glideaura.image_index >= 2.9 && timer < 53
+	glideaura.image_index = 1
+	
+    if timer = 53 {
+	glideaura.image_index = 2
+	glideaura.image_speed = 1 }
+	
+    if speedlines.image_index >= 15.9 && timer < 53
+	speedlines.image_index = 1
+	
+    if timer = 53
+	speedlines.image_index = 13
+	
+    if timer = 56 {
+	with glideaura instance_destroy();
+	with speedlines instance_destroy();
+    	temp = 0
+    	image_angle = 0
+    	hspeed = 0
+    	vspeed = -1*size
+	image_speed = 0
+	}
+	
+    if air = 0 {
+	state_type = "land"
+	attack_type = "none"
+	image_speed = 0
+	image_index = 0
+	timer = 0
+	time = 20
+	}
+	
+if ( hitbox.hit > 0 && moveup && special && air < max_jumps && ktime && !snapvanish ) {
+image_angle = 0;
+snapvanish = 1;
+timer = 0;
+time = -1;
+state_type = "jump";
+attack_type = "none";
+char_upb();
+}
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    if snapvanish = 2
+	snapvanish = 0
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+}
+if ( timer >= 35 && air < max_jumps-1 && hitbox.hit = 0 && ( attacking || smash || ( special && !moveup && !ktime ) || shieldup || movejump ) )
+{
+    interrupt = 1;
+	image_angle = 0;
+	speed = air_speed * size;
+    if ( ai )
+		{
+        movejump = 1;
+		}
+}
