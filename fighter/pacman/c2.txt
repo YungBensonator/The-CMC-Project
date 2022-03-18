@@ -1,0 +1,110 @@
+// Pellet set for Up-B.
+// Based off Ness' Thunder.
+
+moving_object = 1;
+hit = 2;
+
+if ( timer == 1 )
+  {
+  var a;
+  a = instance_create ( x , y , obj_custom_gfx );
+  a.parent = self.id;
+  a.keepmain = keepmain;
+  a.draw_script = char_custom3;
+  a.alarm[0] = 240;
+  a.spr = spr;
+  }
+
+if ( temp == 0 && timer mod 6 == 0 )
+  {
+  dot_x [ dot_number ] = x;
+  dot_y [ dot_number ] = y;
+  dot_number += 1;
+  }
+
+if !instance_exists(ness)
+    instance_destroy();
+if ( ness.attack_type != "upb" )
+  instance_destroy();
+if attacker = ness && string(ness.attack_type) = "upb" {
+    moveup = ness.moveup
+    moveright = ness.moveright
+    movedown = ness.movedown
+    moveleft = ness.moveleft
+    moveupright = ness.moveup * ness.moveright
+    movedownright = ness.movedown * ness.moveright
+    movedownleft = ness.movedown * ness.moveleft
+    moveupleft = ness.moveup * ness.moveleft
+}
+if temp = 0 && !ness.ai{
+if moveup = 1 {
+    if direction < 90 || direction > 270   
+        direction+=5
+    else if direction > 90 && direction < 270
+        direction-=5
+    }
+if movedown = 1 {
+    if direction < 90 || direction > 270   
+        direction-=5
+    else if direction > 90 && direction < 270
+        direction+=5
+    }
+if moveright = 1 {
+    if direction < 180 && direction > 0   
+        direction-=5
+    else if direction > 180 && direction < 360
+        direction+=5
+    }
+if moveleft = 1 {
+    if direction < 180 && direction > 0   
+        direction+=5
+    else if direction > 180 && direction < 360
+        direction-=5
+    }
+if moveupright = 1 {
+    if direction < 45 || direction > 225
+	direction+=5
+    else if direction > 45 && direction < 225
+	direction-=5
+    }
+if movedownright = 1 {
+    if direction < 135 || direction > 315
+	direction-=5
+    else if direction > 135 && direction < 315
+	direction+=5
+    }
+if movedownleft = 1 {
+    if direction < 45 || direction > 225
+	direction-=5
+    else if direction > 45 && direction < 225
+	direction+=5
+    }
+if moveupleft = 1 {
+    if direction < 135 || direction > 315
+	direction+=5
+    else if direction > 135 && direction < 315
+	direction-=5
+    }
+}
+if temp = 0
+speed = 3
+
+if ( temp == 1 ) exit;
+
+if ( timer > 5 )
+{
+	if (under_ceiling || ((on_floor || on_platform) && vspeed > 0) || collision_point(x+sign(hspeed),y,obj_wall,1,1)) {  
+		temp = 1
+		ness.timer = 119;
+		speed = 0;
+		sound_play ( ness.upb3_voice );
+		ness.temp = 0;
+	}
+	if ( ness.special || ness.shieldup ) {
+		temp = 1
+		ness.timer = 119;
+		speed = 0;
+		sound_play ( ness.upb3_voice );
+		ness.temp = 0;
+	}
+}

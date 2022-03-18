@@ -1,0 +1,139 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump") && air < max_jumps {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb"
+        state_type = "air_attack";
+        image_speed = 0;
+        sprite_index = mid_jump_sprite;
+        image_index = 3;
+        time = 200;
+        timer_speed = 1;
+        if moveright = 1 facing = 0;
+        if moveleft = 1 facing = 1;
+}
+if timer < time {
+if ( ai )
+  {
+  if ( offstage )
+    {
+    var a;
+    a = instance_nearest ( x , y , obj_edge );
+    moveleft = 0;
+    moveright = 0;
+    if ( a . x < x )
+      moveleft = 1;
+      else
+      moveright = 1;
+    if ( y < obj_game_control.camera_boundary_u + 32 )
+      movedown = 1;
+      else
+      moveup = 1;
+    }
+  }
+	if timer > 5 {
+		air_move = 1;
+		}
+	if air = 0 {
+		if timer > 7 && timer < 200
+		{
+		sound_play(upb_sound2);	
+   		state_type="land";
+  		attack_type="none";
+  		sprite_index = land_sprite;
+		cooldown = 1;
+  		timer=0;
+  		time=3;
+		}
+	}
+	if ( moveup = 1 && vspeed < 0 ) 
+	{
+	sprite_index = mid_jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+	}
+	if ( vspeed >= 0 ) 
+	{
+	sprite_index = mid_jump_sprite;
+	image_speed = 1;
+	}
+	if ( moveup = 1 && vspeed < 0 ) 
+	{
+	duster = instance_create (x - 7 * (1-facing*2) * size,y - 1 * size,obj_smoke)
+	duster2 = instance_create (x - 1 * (1-facing*2) * size,y - 2 * size,obj_smoke)
+	}
+	if timer = 4 {
+		vspeed = -3;
+		if ( size > 1 ){
+		vspeed = -3 * size;
+		}
+		charge += 5;
+		}
+	if ( timer = 4 && cooldown = 0 )
+	{
+	sound_play(upb_sound1);
+	}
+	if timer = 2 {
+		if moveright = 1 {
+			facing = 0;
+			}
+		if moveleft = 1 {
+			facing = 1;
+			}
+		}
+	if timer >= 4 && timer < 198 && ( special = 1 || moveup = 1) {
+		vspeed -= 0.6 * size;
+		charge += 1;
+		if ai = 1 {
+			special = 1;
+			}
+		}
+	if ( size > 1 )
+	{
+	if ( vspeed < -3 * size ) 
+		{
+		vspeed = -3 * size;
+		}
+	}
+	else
+		if ( vspeed < -3 ) 
+		{
+		vspeed = -3;
+		}
+	}
+	if charge >= 80
+	{
+	timer = 200;
+	}
+	if ( timer = 190 )
+	{
+	timer = 8;
+	}
+	if timer = 200 && air = 1 {
+		sound_play(upb_sound2);
+		air = max_jumps;
+		sprite_index = mid_jump_sprite;
+		image_index = 3;
+		image_speed = 0;
+		}
+	if timer > 25
+	force_edge_grab = 1
+	
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = mid_jump_sprite;
+	image_index = 3;
+	}
+    timer = 0;
+    time =-1;
+    air = max_jumps
+    can_die = 1
+	cooldown = 0;
+    }

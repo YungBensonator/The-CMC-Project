@@ -1,0 +1,99 @@
+if ( state_type = "stand" )
+  {
+    attacking = 0;
+    state_type = "attack";
+    attack_type = "jab";
+    timer = 0;
+    time = 19;
+    sprite_index = jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 14: image_index = 5; break;
+	
+	
+	
+	case 50: image_index = 0; break;
+	case 52: image_index = 1 break;
+	case 55: image_index = 2; break;
+	case 59: image_index = 3; break;
+	case 61: image_index = 4; break;
+	case 64: image_index = 5; break;
+	case 66: image_index = 6; break;
+
+
+	
+	case 100: image_index = 0; break;
+	case 106: image_index = 2; break;
+	case 110: image_index = 3; break;
+	case 113: image_index = 4; break;
+	case 116: image_index = 5; break;
+	case 119: image_index = 5; break;
+	case 124: image_index = 5; break;
+	case 126: image_index = 6; break;
+	case 129: image_index = 7; break;
+	case 131: image_index = 8; break;
+      }
+
+    if ( timer = 6 )
+      {
+	sound_play(whif_sound1);
+	create_hitbox(3,10+facing*160,1.3,0,3,3,slash1,obj_spark_slash1,1.1,0.4,12,20,self.id,4,1);
+	hitbox.di = 0.3;
+      }
+	  
+  if attack_success = 1 and attacking = 1 and timer >= 7 and timer < 20 {
+	timer = 50
+	time = 80
+	sprite_index = jab_sprite2
+	image_index = 0
+      }
+
+    if ( timer = 55 )
+      {
+	sound_play(whif_sound2);
+	create_hitbox(2,22+facing*136,1,0,4,8,punch4,obj_spark_hit2,1.6,0.4,9,20,self.id,4,1);
+    hitbox.di = 0.6;
+    }	
+  if attack_success = 1 and attacking = 1 and timer >= 60 and timer < 80 {
+	timer = 100
+	time = 133
+	sprite_index = jab_sprite3
+	image_index = 0
+}
+    if ( timer = 109 )
+      {
+	play_attack_voice();
+    sound_play(bshoot_sound);
+	bullet = create_projectile(4,30+facing*120,5.0,4.6,10,8,magic3,obj_spark_hit3,0.5,0.5,14,1,self.id,20,-1);
+	bullet.sprite_index = bullet_sprite
+    bullet.image_xscale = image_xscale * 1.2
+    bullet.image_yscale = image_yscale * 1.2
+    bullet.hspeed = 10-facing*19
+	guneffect = create_spark(24,20,self.id);
+    guneffect.sprite_index = guneff_sprite;
+    guneffect.image_speed = 0.5;
+    guneffect.image_alpha = 0.9;
+    guneffect.image_xscale = image_xscale*1;
+    guneffect.image_yscale = image_yscale*1;
+    guneffect.depth = depth - 0.1;
+	}
+  }
+  
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

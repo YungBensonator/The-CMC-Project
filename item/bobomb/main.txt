@@ -1,0 +1,190 @@
+~~INIT:
+bobombh_spr = ispr_add_alpha ( "item/bobomb/sit.png" , 1 , 0 , 0 , 11 , 13 );
+bobombw_spr = ispr_add_alpha ( "item/bobomb/walk.png" , 11 , 0 , 0 , 15 , 22 );
+bobomb_snd = isound_add ( "item/bobomb/activate.wav" , 0 , 0 );
+~~DEINIT:
+if ( sprite_exists ( bobombh_spr ) )
+  spr_delete ( bobombh_spr );
+if ( sprite_exists ( bobomb_spr ) )
+  spr_delete ( bobomb_spr );
+~~ENTER:
+sprite_index = obj_items_control.bobombh_spr;
+sprite_air = obj_items_control.bobombh_spr;
+sprite_held = obj_items_control.bobombh_spr;
+sprite_walk = obj_items_control.bobombw_spr;
+mask_index = obj_items_control.bobombh_spr;
+bobomb_snd = obj_items_control.bobomb_snd;
+air_spr_y = -7;
+type = "toss";
+hit_timer = 0;
+hp = 1;
+collision_type = 1;
+shadow = 6.5;
+image_xscale = 0.7;
+image_yscale = image_xscale;
+start_scale = image_xscale;
+lethal = 0;
+can_pick_up = 0;
+
+pulse = 1000;
+walk_countdown = 360;
+alarm[0] = -1;
+~~LAND:
+hp = 0;
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -3 + floor ( random ( 7 ) );
+  shakey = -3 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+
+if ( lethal )
+  {
+  if ( pulse > 64 )
+    pulse = 64;
+  if ( pulse < 48 )
+    pulse += 16;
+  walk_countdown = 0;
+  can_pick_up = 0;
+  }
+
+if ( walk_countdown == 10 && thrown < 0 && held < 0 )
+  {
+  sound_play ( bobomb_snd );
+  }
+walk_countdown = max ( walk_countdown - 1 , 0 );
+pulse = max ( pulse - 1 , 0 );
+
+if ( pulse < 176 )
+  {
+  var t;
+  t = ( 8 - ( pulse mod 8 ) ) / 8;
+  image_xscale = start_scale * ( 1 + t * 0.75 );
+  image_yscale = image_xscale;
+  if ( pulse mod 16 < 8 )
+    image_blend = merge_color ( c_white , c_red , t );
+    else
+    image_blend = merge_color ( c_white , c_yellow , t );
+  }
+if ( pulse <= 0 )
+  {
+  hp = 0;
+  }
+
+if ( thrown >= 0 )
+  {
+  sprite_index = sprite_air;
+  if ( next_to_rwall || next_to_lwall || under_ceiling )
+    {
+    hp = 0;
+    }
+  }
+  else
+if ( held < 0 )
+  {
+  if ( walk_countdown <= 10 && pulse > 176 )
+    {
+    can_pick_up = 0;
+    image_index = -pulse * 0.5;
+    if ( walk_countdown == 0 )
+      {
+      if ( random ( 5 ) < 1 )
+        instance_create ( x - sign(image_xscale) * 4 , y + air_spr_y , obj_smoke );
+      sprite_index = sprite_walk;
+      image_speed = 0.5;
+      hspeed = sign ( image_xscale ) * 1.5;
+      if ( !collision_line ( x + sign(hspeed) * 3 , y - 5 , x + sign(hspeed) * 3 , y + 5 , obj_pavement , 1 , 1 ) )
+        {
+        hspeed = 0;
+        image_xscale *= -1;
+        }
+      }
+      else
+      {
+      var t;
+      t = ( 10 - walk_countdown ) / 10;
+      if ( t < 0.5 )
+        {
+        sprite_index = sprite_air;
+        image_yscale = start_scale * ( 1 - t * 0.4 );
+        }
+        else
+        {
+        sprite_index = sprite_walk;
+        image_yscale = start_scale * ( 0.8 + ( t - 0.5 ) * 0.4 );
+        }
+      }
+    }
+    else
+    {
+    if ( pulse > 176 && !lethal )
+      can_pick_up = 1;
+    hspeed = 0;
+    sprite_index = sprite_air;
+    }
+  }
+  else
+  {
+  sprite_index = sprite_air;
+  if ( pulse >= 180 ) 
+    {
+    image_xscale = start_scale;
+    image_yscale = start_scale;
+    }
+  }
+if ( sprite_index = sprite_air )
+  {
+  image_xscale = abs ( image_xscale );
+  }
+if ( hp <= 0 )
+  {
+  sound_play ( explode_big );
+  screen_shake ( 3 , 4 );
+  screen_shake ( 7 , 18 );
+  spark = instance_create ( x , y + air_spr_y , obj_spark_shockwave );
+  spark.image_xscale *= 1.5;
+  spark.image_yscale *= 1.4;
+  spark = instance_create ( x , y + air_spr_y , obj_spark_explode1 );
+  spark.image_xscale = 1.4 / 1.4;
+  spark.image_yscale = spark.image_xscale;
+  if ( thrown < 0 )
+    thrown = 99;
+  create_projectile ( 32 , 365 , 6 , 7.2 , 74 , 18 , explodehit2 , obj_spark_fire1 , 1.4 , 1.4 , 0 , -air_spr_y , thrown , 5 , -1 );
+  proj.hit_attacker = 1;
+  instance_destroy();
+  exit;
+  }
+
+if ( thrown > 0 || lethal )
+  {
+  custom_land = 1;
+  }
+  else
+  {
+  custom_land = 0;
+  }
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 && walk_countdown > 10 ) exit;
+if ( !item_candamage() ) exit;
+if ( thrown > 0 && !item_candamageatk ( thrown ) ) exit;
+hp = 0;
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 3;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+hp = 0;
+object_stun ( vermin , vermin.hitlag_frames );
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( vermin.speed < 1 ) exit;
+if ( vermin == thrown ) exit;
+//hp = 0;
+~~END OF FILE

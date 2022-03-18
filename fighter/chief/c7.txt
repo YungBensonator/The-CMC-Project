@@ -1,0 +1,111 @@
+var death, di, i, dis, dir, hh, vv;
+
+death = 0;
+
+x = xx;
+y = yy;
+
+dis = point_distance ( 0 , 0 , hs , vs );
+dir = point_direction ( 0 , 0 , hs , vs );
+
+hh = lengthdir_x ( 1 , dir );
+vv = lengthdir_y ( 1 , dir );
+
+di = drawindex;
+
+for ( i = 0 ; i <= dis ; i += 1 )
+  {
+  xx += hh;
+  yy += vv;
+  xdraw [ drawindex ] = xx;
+  ydraw [ drawindex ] = yy;
+  drawindex += 1;
+  if ( collision_point ( xx , yy - 1 , obj_ceiling , 1 , 1 ) )
+    {
+    if ( vv < 0 )
+      vv *= -1;
+      else
+      {
+      dir = point_direction ( 0 , 0 , hh , max ( 1 , vv * 2 ) );
+      hh = lengthdir_x ( 1 , dir );
+      vv = lengthdir_y ( 1 , dir );
+      }
+    }
+  if ( collision_point ( xx , yy + 1 , obj_platform , 1 , 1 ) || collision_point ( xx , yy + 1 , obj_floor , 1 , 1 ) )
+    {
+    if ( vv > 0 )
+      vv *= -1;
+      else
+      {
+      dir = point_direction ( 0 , 0 , hh , min ( -1 , vv * 2 ) );
+      hh = lengthdir_x ( 1 , dir );
+      vv = lengthdir_y ( 1 , dir );
+      }
+    }
+  if ( collision_point ( xx + 1 , yy , obj_leftwall , 1 , 1 ) )
+    {
+    /*if ( hh > 0 )
+      hh *= -1;
+      else
+      {
+      dir = point_direction ( 0 , 0 , hh * 2 , vv );
+      hh = lengthdir_x ( 1 , dir );
+      vv = lengthdir_y ( 1 , dir );
+      }*/
+    death = 1;
+    break;
+    }
+  if ( collision_point ( xx - 1 , yy , obj_rightwall , 1 , 1 ) )
+    {
+    /*if ( hh < 0 )
+      hh *= -1;
+      else
+      {
+      dir = point_direction ( 0 , 0 , hh * 2 , vv );
+      hh = lengthdir_x ( 1 , dir );
+      vv = lengthdir_y ( 1 , dir );
+      }*/
+    death = 1;
+    break;
+    }
+  }
+
+hs = hh * dis;
+vs = vv * dis;
+
+drawcompanion.alarm[0] = 2;
+for ( i = di ; i < drawindex ; i += 1 )
+  {
+  drawcompanion.xdraw [ i ] = xdraw [ i ];
+  drawcompanion.ydraw [ i ] = ydraw [ i ];
+  }
+drawcompanion.drawindex = drawindex;
+
+if ( death )
+  {
+  x = xdraw [ drawindex - 1 ];
+  y = ydraw [ drawindex - 1 ];
+  event_perform_object ( obj_smoketrail , ev_alarm , 0 );
+  instance_destroy();
+  exit;
+  }
+
+x = xdraw [ drawindex - 4 ];
+y = ydraw [ drawindex - 4 ];
+
+x += xdraw [ drawindex - dis + 4 ];
+y += ydraw [ drawindex - dis + 4 ];
+
+x *= 0.5;
+y *= 0.5;
+
+hh = xdraw [ drawindex - 4 ] - xdraw [ drawindex - dis + 4 ];
+vv = ydraw [ drawindex - 4 ] - ydraw [ drawindex - dis + 4 ];
+
+//dir = point_direction ( xdraw [ drawindex - 4 ] , ydraw [ drawindex - 4 ] , xdraw [ drawindex - dis + 4 ] , ydraw [ drawindex - dis + 4 ] );
+dis = point_distance ( xdraw [ drawindex - 4 ] , ydraw [ drawindex - 4 ] , xdraw [ drawindex - dis + 4 ] , ydraw [ drawindex - dis + 4 ] );
+
+image_xscale = dis / 32;
+image_yscale = dis / 32;
+if ( abs ( image_xscale ) < 0.3 ) image_xscale = 0.3;
+if ( abs ( image_yscale ) < 0.3 ) image_yscale = 0.3;

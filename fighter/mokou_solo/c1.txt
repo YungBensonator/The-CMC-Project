@@ -1,0 +1,573 @@
+/*
+Bullet Collection:
+	#0. Blue Amulets (Stilt)
+	#1. Bamboo Bombs (Utilt)
+	#2. Red Amulets (Fair)
+	#3. Fire Shot (Bair)
+	#4. Volcano Bomb (Usmash, Getup, Ledge, Last Word)
+	#5. Downb - Volcano Pillar (DownB)
+*/
+
+///--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//#0. Stilt - Blue Amulets
+if bullettype = 0
+{
+	priority = 1;
+	absorb = 1;
+	absorb2 = 1;
+	moving_object = 1;
+
+	if ( timer <= 1 && hit = 0 )
+	{
+		sprite_index = attacker.id.blueamulet_sprite;
+		image_xscale = 0.5 * (1-facing*2) * size;
+		image_yscale = 0.5 * size;
+		image_speed = 0;
+		visible = 1;
+		facing = attacker.facing;
+		hspeed = 0 * (1- attacker.facing*2);
+	}
+
+	if timer = ( 15 - bulletcount*2)
+	{
+		sound_play(attacker.shoot_sound); 
+	}
+	
+	if timer >= ( 15 - bulletcount*3 ) && abs(hspeed) < 9
+	{
+		hspeed += 0.4*(1-facing*2);
+	}
+
+	if hspeed != 0
+	{
+		afterimage2 = after_image(3,c_blue,0.5);
+		afterimage2.number = 0;
+	}
+	  
+	if ( hit != 1 && ( next_to_rwall || next_to_lwall || on_floor || on_platform || under_ceiling || timer >= time-1) ) || attacker.spellbreak > 0
+	{
+		timer = time-1;
+		instance_destroy();
+	}
+}
+
+///--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//#1. Utilt - Bamboo Explosion
+if bullettype = 1
+{
+	priority = 2;
+	absorb = 0;
+	absorb2 = 0;
+	no_reflect = 1;
+	parry_nodestroy = 1;
+	moving_object = 1;
+
+	if ( timer <= 1 && hit != 1 )
+	{
+		sprite_index = attacker.id.bamboo_sprite;
+		image_xscale = bulletscale * (1-facing*2) * size;
+		image_yscale = bulletscale * size;
+		image_speed = 0;
+		image_index = 0;
+		visible = 1;
+		facing = attacker.facing;
+		hspeed = ( 0.5 + bulletcount/2 ) * (1- attacker.facing*2);
+		
+		//Blur Variables
+		bambooexplodescale = bulletscale
+		bambooexplodexshift = 0
+		bambooexplodeyshift = 0
+		bambooexplodeindex = 0
+		bambooexplodetime = 15
+		bambooexplodespeed = 1
+		bambooexplodealpha = 1
+		bambooexplodeangle = 0
+		bambooexplodezoom = -1
+	}
+	
+	switch ( timer )
+	{
+		case 3:  image_index = 1; break;
+		case 7:  image_index = 2; break;
+		case 11: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 19: image_index = 5; break;
+		case 23: image_index = 6; break;
+		case 27: image_index = 7; break;
+		case 31: image_index = 8; break;
+		case 35: image_index = 9; break;
+		case 39: image_index = 10; break;
+	}
+	
+	if ( timer = 1)
+		vspeed -= 5-shotcount;
+	
+	if ( timer = 5 )
+		gravity = 0.3;
+	
+	if timer > 5 && timer < explodetime && vspeed > 0
+	{
+		vspeed -= 0.1;
+		
+		if vspeed < 0.1
+			vspeed = 0.1
+	}
+	
+	if timer < explodetime
+	{
+		image_angle -= rotatespeed*(1-facing*2);
+		rotatespeed -= 1.2;
+		
+		if rotatespeed < 10
+			rotatespeed = 10;
+	}
+	
+	if ( on_floor || on_platform) && timer < explodetime
+	{
+		hspeed = 0;
+		image_index = 10;
+		timer = explodetime;
+	}
+
+	if ( timer = explodetime )
+	{
+		hspeed = 0;
+		vspeed = 0;
+		instance_destroy();
+		bambooexplode = create_blur(x,y,self.id);
+		bambooexplode.sprite_index = attacker.bambooexplode_sprite;
+		bambooexplode.image_xscale = (bambooexplodescale*size)*(1-facing*2);
+		bambooexplode.image_yscale = (bambooexplodescale*size);
+		bambooexplode.x = x + bambooexplodexshift *size*(1-facing*2);
+		bambooexplode.y = y - bambooexplodeyshift*size;
+		bambooexplode.image_index = 0;
+		bambooexplode.image_speed = bambooexplodespeed;
+		bambooexplode.image_alpha = bambooexplodealpha;
+		bambooexplode.image_angle = bambooexplodeangle;
+		bambooexplode.alarm[0] = bambooexplodetime;
+		bambooexplode.snap = self.id;
+		bambooexplode.depth = bambooexplodezoom;
+		
+		sound_play(attacker.mokouexplosion1);
+		screen_shake(3,2);
+
+		kaboom = create_projectile(6,35+facing*110,4.5,12,12,15,-1,obj_spark_fire1,1.8,1.8,0,0,attacker.id,10,1);
+		kaboom.absorb = 0;
+		kaboom.absorb2 = 0;
+		kaboom.no_reflect = 1;
+		kaboom.parry_nodestroy = 1;
+		kaboom.priority = 5;
+		kaboom.moving_object = 0;
+		kaboom.hit_stun = 5;
+		kaboom.shield_stun = 3;
+		kaboom.di = -1;
+		kaboom.hit = 0;	
+	}
+	  
+	if ( under_ceiling && vspeed < 0 ) 
+		vspeed = 0;
+	
+	if (  next_to_lwall || next_to_rwall && hspeed != 0 ) 
+		hspeed *= -1;
+	
+	if attacker.spellbreak > 0
+	{
+		timer = time-1;
+		smoke = instance_create (x+(1-facing*2)*0*size,y-0*size,obj_smoke);
+		smoke.image_xscale = ( shotscale + 0.5 ) * (1-facing*2) * size;
+		smoke.image_yscale = ( shotscale + 0.5 ) * size;
+		instance_destroy();
+	}
+}
+
+///--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//#2. Fair - Red Amulets
+if bullettype = 2
+{
+	priority = 1;
+	absorb = 1;
+	absorb2 = 1;
+	moving_object = 1;
+	//ignore_physics = 1;
+	
+	//Direction Related Variables
+	bulletstartpos = bulletstartpos; //Initial bullet direction.
+	bulletshift = bulletshift; //Shifts the direction of the next bulletcount by this amount.
+	bulletdirshift = bulletstartpos - bulletcount*bulletshift; //Used in direction calculation.
+	bulletdir = ( ( facing=0 )*( ( 0 + bulletdirshift ) + facing*( 180 - bulletdirshift*2 ) ) ) + ( ( facing=1 )*( 180 - bulletdirshift ) );
+	
+	if ( timer <= 1 && hit != 1 )
+	{
+		sprite_index = attacker.id.redamulet_sprite;
+		image_xscale = bulletscale * (1-facing*2) * size;
+		image_yscale = bulletscale * size;
+		image_index = 0;
+		image_speed = 0;
+		image_angle = bulletdir;
+		facing = attacker.facing;
+		visible = 1;
+		direction = bulletdir;
+		amuletspawntime = 20;
+		speed = 0;
+	}
+	
+	//Placeholder until i add spark
+	if hspeed != 0
+	{
+		afterimage = after_image(3,c_red,0.5);
+		afterimage.number = 0;
+	}
+	
+	if timer = amuletspawntime
+	{
+		sound_play(attacker.shoot_sound); 
+		amulet = create_projectile(bulletdmg,25+facing*130,bulletbkb,bulletkbg,bulletshielddmg,bullethitlag,bulletsound,bulletspark,0.75,0.75,0,0,attacker.id,99);
+		amulet.facing = facing;
+		amulet.absorb = 1;
+		amulet.absorb2 = 1;
+		amulet.moving_object = 0;
+		amulet.hit = 0;
+		amulet.hit_stun = 3;
+		amulet.di = 1;
+	}
+	
+	if timer <= amuletspawntime + 2
+	{
+		amulet.shield_stun = 4;
+	}
+	else
+	{
+		amulet.shield_stun = 0;
+	}
+	
+	if timer >= amuletspawntime
+	{
+		if abs(speed) < bulletspeed
+			speed += 0.4;
+		amulet.hspeed = hspeed;
+		amulet.vspeed = vspeed;
+		
+		if attacker.attack_type = "hold" || attacker.attack_type = "dthrow" || attacker.attack_type = "fthrow" || attacker.attack_type = "bthrow" 
+			amulet.dir = 361;
+		else
+			amulet.dir = 25+facing*130
+	}
+	
+	if timer mod 2 < 1 && timer >= amuletspawntime
+	{
+		image_index += 1;
+	}
+	
+	if ( hit != 1 && timer > amuletspawntime && ( next_to_rwall || next_to_lwall || on_floor || on_platform || under_ceiling ) ) || (timer >= time - 1) || ( timer >= amuletspawntime && !instance_exists(amulet) ) || attacker.spellbreak > 0 || attacker.attack_type = "uthrow"
+	{
+		timer = time-1;
+		if instance_exists(amulet){with(amulet){instance_destroy();}}
+		instance_destroy();
+	}
+}
+
+///--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//#3. Bair - Fire Shot
+if bullettype = 3
+{
+	priority = 2;
+	absorb = 1;
+	absorb2 = 1;
+	moving_object = 1;
+	
+	//Direction Variables
+	bulletdirection = bulletdirection;
+	
+	//Blur Variables
+	bambooexplodescale = bulletscale
+	bambooexplodexshift = 0
+	bambooexplodeyshift = 0
+	bambooexplodeindex = 0
+	bambooexplodetime = 15
+	bambooexplodespeed = 1
+	bambooexplodealpha = 1
+	bambooexplodeangle = 0
+	bambooexplodezoom = -1
+	
+	if ( timer <= 1 && hit != 1 )
+	{
+		if !attacker.blueflame {sprite_index = attacker.bairshot_sprite;}
+		if attacker.blueflame {sprite_index = attacker.bairshotblue_sprite;}
+		image_xscale = bulletscale * size;
+		image_yscale = bulletscale * size;
+		image_index = 0;
+		image_speed = 0.3;
+		facing = attacker.facing;
+		image_angle = bulletdirection;
+		visible = 1;
+		direction = bulletdirection;
+		speed = bulletspeed;
+	}
+	
+	if image_index > 21
+	{
+		image_index = 0;
+	}
+	
+	if hit = 1
+	{
+		instance_destroy();
+	}
+	
+	if hit != 1
+	{
+		if attacker.spellbreak > 0
+		{
+			timer = time-1;
+			instance_destroy();
+		}
+		
+		if ( next_to_rwall || next_to_lwall || under_ceiling || on_floor || on_platform )
+		{
+			hspeed = 0;
+			vspeed = 0;
+			instance_destroy();
+			bambooexplode = create_blur(x,y,self.id);
+			bambooexplode.sprite_index = attacker.bambooexplode_sprite;
+			bambooexplode.image_xscale = (bambooexplodescale*size)*(1-facing*2);
+			bambooexplode.image_yscale = (bambooexplodescale*size);
+			bambooexplode.x = x + bambooexplodexshift *size*(1-facing*2);
+			bambooexplode.y = y - bambooexplodeyshift*size;
+			bambooexplode.image_index = 0;
+			bambooexplode.image_speed = bambooexplodespeed;
+			bambooexplode.image_alpha = bambooexplodealpha;
+			bambooexplode.image_angle = bambooexplodeangle;
+			bambooexplode.alarm[0] = bambooexplodetime;
+			bambooexplode.snap = self.id;
+			bambooexplode.depth = bambooexplodezoom;
+
+			//sound_play(attacker.mokouexplosion1);
+			screen_shake(3,2);
+		}
+	}
+}
+
+///--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//#4. Usmash/Bthrow/Edge/Final - Volcano Bomb
+if bullettype = 4
+{
+	priority = 5;
+	absorb = 0;
+	absorb2 = 0;
+	no_reflect = 1;
+	parry_nodestroy = 1;
+	
+	//Direction Variables
+	bulletflip = bulletflip;
+	
+	switch ( bulletgrab )
+	{
+		case 0: //Usmash
+			bulletstartdir = 90; //Initial bullet direction.  Use negative numbers for downward angles.
+			bulletshift = (5+smash_charge/3.6) * (1-bulletflip*2); //Shifts the direction of the next bulletcount by this amount.
+			moving_object = 1;
+			break;
+		case 1: //Bthrow
+			bulletstartdir = -50; //Initial bullet direction.  Use negative numbers for downward angles.
+			bulletshift = -5; //Shifts the direction of the next bulletcount by this amount.
+			ignore_physics = 1;
+			moving_object = 0;
+			break;
+		case 2: //Edge & Getup
+			bulletstartdir = -90; //Initial bullet direction.  Use negative numbers for downward angles.
+			bulletshift = 30 * (1-bulletflip*2); //Shifts the direction of the next bulletcount by this amount.
+			moving_object = 1;
+			break;
+		case 3: //Final Smash
+			bulletstartdir = 0 + ( specialtemp * (attacker.moveup * 90) ); //Initial bullet direction.  Use negative numbers for downward angles.
+			bulletshift = ( ( 30 + ( attacker.attack_type = "final_smash" ) * 6 ) - specialtemp * 72 ) * (1-bulletflip*2); //Shifts the direction of the next bulletcount by this amount.
+			moving_object = 1;
+			break;
+	}
+	
+	bulletdirshift = bulletstartdir + bulletcount*bulletshift; //Used in direction/angle calculation.
+	bulletangle = ( ( facing=0 )*( ( 0 + bulletdirshift ) + facing*( 180 - bulletdirshift*2 ) ) ) + ( ( facing=1 )*( 180 - bulletdirshift ) )
+
+	if ( timer <= 1 && hit != 1 )
+	{	
+		if bulletgrab < 2 {sprite_index = attacker.id.volcanobomb_sprite;}
+		if bulletgrab >= 2 && specialtemp = 0
+		{
+			if shotround mod 2 = 0 {sprite_index = attacker.id.redamulet_sprite;}
+			else {sprite_index = attacker.id.blueamulet_sprite;}
+		}
+		if specialtemp = 1
+		{
+			if !attacker.blueflame {sprite_index = attacker.id.phoenixrise_sprite;}
+			if attacker.blueflame {sprite_index = attacker.id.phoenixriseblue_sprite;}
+		}
+		image_xscale = bulletscale/(1+specialtemp*4) * (1-facing*2) * size;
+		image_yscale = bulletscale/(1+specialtemp*4) * size;
+		image_speed = 0.5-(0.5*(bulletgrab>= 2));
+		image_index = 0;
+		image_angle = bulletangle-(90*specialtemp);
+		visible = 1;
+		facing = attacker.facing;
+		direction = bulletangle;
+		speed = bulletspeed-( (bulletcount2)/3 );
+	}
+	
+	if timer = 5 && hit = 2 && bulletgrab = 3 {hit = 0;}
+	
+	if bulletgrab <= 0
+	{
+		if ( timer = 5 )
+			gravity = 0.3;
+		
+		if timer > 5 && timer < explodetime && vspeed > 0
+		{
+			vspeed -= 0.1;
+			
+			if vspeed < 0.1
+				vspeed = 0.1
+		}
+	}
+	
+	if ( ( ( on_floor || on_platform ) || ( ( next_to_rwall || next_to_lwall || under_ceiling ) && attacker.attack_type = "final_smash" ) && bulletgrab != 1 ) || hit = 1 ) && timer < explodetime
+	{
+		hspeed = 0;
+		vspeed = 0;
+		image_index = 15;
+		timer = explodetime;
+	}
+
+	if ( timer = explodetime )
+	{
+		if attacker.attack_type != "final_smash" || ( attacker.attack_type = "final_smash" && specialtemp )
+		{
+			hspeed = 0;
+			vspeed = 0;
+			instance_destroy();
+			explosion = instance_create(x+0*size*(1-facing*2),y-0* size,obj_spark_explode1);
+			explosion.image_xscale = 1*size;
+			explosion.image_yscale = 1*size;
+			sound_play(attacker.mokouexplosion1);
+			screen_shake(2,2);
+
+			kaboom = create_projectile( (3.75+smash_charge/30)-(2.5 * (bulletgrab>=2)),bulletangle,5+round(smash_charge/60),6.6+round(smash_charge/60)+specialtemp*2,5-(4 * (bulletgrab>=2))+specialtemp*12,15-(5 * (bulletgrab>=2)),-1,obj_spark_fire1,1.3,1.3,0,0,attacker.id,10,1)
+			kaboom.absorb = 0;
+			kaboom.absorb2 = 0;
+			kaboom.no_reflect = 1;
+			kaboom.priority = 4-(2 * (bulletgrab>=2));
+			kaboom.moving_object = 0;
+			kaboom.hit_stun = bullethitstun;
+			kaboom.shield_stun = bulletblockstun;
+			kaboom.di = bulletdi;
+			kaboom.hit = 0;
+	
+			
+			if bulletgrab > 0 && bulletgrab != 3
+			{
+				kaboom.dir =40+facing*100;
+			}
+			if bulletgrab = 3 && attacker.attack_type != "final_smash"
+			{
+				kaboom.dir = 25+facing*130;
+			}
+			if bulletgrab = 3 && attacker.attack_type = "final_smash"
+			{
+				kaboom.dir = bulletangle
+			}
+		}
+		else
+		{
+			smoke = instance_create (x+(1-facing*2)*0*size,y-0*size,obj_smoke);
+			smoke.image_xscale = ( shotscale + 0.5 ) * (1-facing*2) * size;
+			smoke.image_yscale = ( shotscale + 0.5 ) * size;
+			instance_destroy();
+		}
+	}
+	  
+	if ( under_ceiling && vspeed < 0 ) 
+		vspeed = 0;
+	
+	if (  next_to_lwall || next_to_rwall && hspeed != 0 ) 
+		hspeed *= -1;
+	
+	if attacker.spellbreak > 0
+	{
+		timer = time-1;
+		smoke = instance_create (x+(1-facing*2)*0*size,y-0*size,obj_smoke);
+		smoke.image_xscale = ( shotscale + 0.5 ) * (1-facing*2) * size;
+		smoke.image_yscale = ( shotscale + 0.5 ) * size;
+		instance_destroy();
+	}
+		
+				
+
+}
+
+///--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//#5. Downb - Volcano Pillar
+if bullettype = 5
+{
+	priority = 5;
+	absorb = 0;
+	absorb2 = 0;
+	moving_object = 1;
+	no_reflect = 1;
+
+	if ( timer <= 1 && hit = 0 )
+	{
+		if !attacker.blueflame {sprite_index = attacker.id.resurrectpillar_sprite;}
+		if attacker.blueflame {sprite_index = attacker.id.resurrectpillarblue_sprite;}
+		image_xscale = 0.5 * (1-facing*2) * size;
+		image_yscale = 0.5 * size;
+		image_speed = 0.75;
+		visible = 1;
+		facing = attacker.facing;
+		hspeed = 0;
+		vspeed = 0;
+		proj_hits = 0
+	}
+	
+	/*
+	if timer < time-1 && attacker.attack_type != "downb" && attacker.handtemp > 0
+	{
+		attacker.downbtemp = 1;
+	}
+	*/
+	
+	if timer > 1
+	{
+		image_yscale += 0.01;
+	}
+	
+	if timer = time-2 && proj_hits < 10
+	{
+		proj_hits+=1
+		hit = 0
+		launch = 0
+		attack_success= 0
+		target.hitby= 0
+		timer = 0
+		time = 7
+		
+		if proj_hits = 10
+		{
+			damage = round( attacker.size*(4+(target.offstage*3)) )
+			bkb= attacker.size*(6 + target.offstage)
+			kbg = attacker.size*(7 + target.offstage)
+			hitlag_frames = round(25*attacker.size)
+		}
+	}
+
+	if ( timer >= time-1 ) || attacker.state_type = "out" || attacker.state_type = "dead"
+	{
+		attacker.downbtemp = 0;
+		timer = time-1;
+		instance_destroy();
+	}
+}
+
+///--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

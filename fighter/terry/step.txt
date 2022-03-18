@@ -1,0 +1,212 @@
+///////cb face enemy///////
+if enemy.x>x && enemy_dist < 33000 && !(enemy.x<x) && air = 0 && attack_type = "none" && (state_type = "stand" || state_type = "crouch" || sprite_index = walk_sprite)
+{
+	facing = 0;
+	if (moveleft)
+	{image_speed = -image_speed}
+}
+
+if enemy.x<x && enemy_dist < 33000 && !(enemy.x>x) && air = 0 && attack_type = "none" && (sprite_index = stand_sprite || state_type = "crouch" || sprite_index = walk_sprite)
+{
+	facing = 1;
+	if (moveright)
+	{image_speed = -image_speed}
+}
+
+if(state_type != "air_attack" && state_type != "attack")
+{
+        if (instance_exists(bfire)){
+        with (bfire){
+            instance_destroy();
+        }
+        }
+}
+
+if downtimerr >0
+downtimerr -=1
+if downforwardtimerr>0
+downforwardtimerr -=1
+
+if ancientbeam >0
+ancientbeam -=1
+
+if downtimerr2 >0
+downtimerr2 -=1
+if downforwardtimerr2>0
+downforwardtimerr2 -=1
+
+if busterwolf >0
+busterwolf -=1
+
+if downbacktimerr>0
+downbacktimerr -=1
+
+if phonecall >0
+phonecall -=1
+
+if downbacktimerr2>0
+downbacktimerr2 -=1
+
+if podergeyser >0
+podergeyser -=1
+
+
+
+
+if air = 0 and facing = 0{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveright and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveright and !movedown and ancientbeam = 0
+ancientbeam = 15
+
+
+if movedown and downtimerr2 = 0 and ancientbeam >=1
+downtimerr2 = 15
+
+if downtimerr2>0 and movedown and moveright and downforwardtimerr2 = 0
+downforwardtimerr2 = 15
+
+if downforwardtimerr2 > 0 and moveright and !movedown and busterwolf = 0
+busterwolf = 15
+
+
+if downtimerr>0 and movedown and moveleft and downbacktimerr = 0{
+downbacktimerr = 15
+facing = 0}
+
+
+if downbacktimerr > 0 and moveleft and !movedown and phonecall = 0{
+phonecall = 20
+facing = 0}
+
+
+
+
+
+if movedown and moveleft and downbacktimerr2 = 0 and phonecall >= 1{
+downbacktimerr2 = 35
+facing = 0}
+
+
+if downbacktimerr2 > 0 and moveright and !movedown and podergeyser = 0{
+podergeyser = 35
+facing = 0}
+
+
+
+}
+
+if air = 0 and facing = 1{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveleft and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveleft and !movedown and ancientbeam = 0
+ancientbeam = 15
+
+
+if movedown and downtimerr2 = 0 and ancientbeam >=1
+downtimerr2 = 15
+
+if downtimerr2>0 and movedown and moveleft and downforwardtimerr2 = 0
+downforwardtimerr2 = 15
+
+if downforwardtimerr2 > 0 and moveleft and !movedown and busterwolf = 0
+busterwolf = 15
+
+
+if downtimerr>0 and movedown and moveright and downbacktimerr = 0{
+downbacktimerr = 15
+facing = 1}
+
+
+
+if downbacktimerr > 0 and moveright and !movedown and phonecall = 0{
+phonecall = 20
+facing = 1}
+
+
+if movedown and moveright and downbacktimerr2 = 0 and phonecall >= 1{
+downbacktimerr2 = 25
+facing = 1}
+
+
+if downbacktimerr2 > 0 and moveleft and !movedown and podergeyser = 0{
+podergeyser = 35
+facing = 1}
+
+}
+
+
+
+
+
+
+
+
+if state_type = "crouch" {
+	image_speed = 0;
+	switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 14: image_index = 4; break;
+	case 20: image_index = 5; break;
+      }
+	  ///////ignore this thing here ^///////
+}
+
+
+
+if percent >= 100 {
+GO = 1
+}
+
+if percent < 100 {
+GO = 0
+}
+
+
+//HUD start
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x+40, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.image_xscale *= 1.4
+	MeterHud.image_yscale *= 1.4
+}
+MeterHud.sprite_index = downb_ui; 
+MeterHud.image_speed = 0;
+
+if GO = 1 {
+MeterHud.image_index = 1;
+}
+
+if GO = 0 {
+MeterHud.image_index = 0;
+}
+
+
+//HUD end
+
+if ( sidebtemp = 1 && ( air < 1 or state_type = "air_flinch" ) )
+{
+sidebtemp = 0;
+}
+
+if ( downbtemp = 1 && ( state_type = "entry" || state_type = "respawn" || state_type = "out" || state_type = "flinch" || state_type = "air_flinch" || state_type = "stand" || state_type = "crouch" || state_type = "land" || state_type = "edge" ) )
+{
+downbtemp = 0;
+}

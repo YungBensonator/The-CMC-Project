@@ -1,0 +1,147 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" ||  state_type = "shielding" {
+    special = 1
+    timer = 0
+    attack_type = "b"
+    state_type = "air_attack"
+    image_speed = 0.35
+    sprite_index = bshot1_sprite;
+    image_index=0
+    time = 35
+    timer_speed=1
+	shottype = 0;
+	imtemp = 0;
+	tbtemp = 0;
+	lives -= 1;
+}
+if (timer < time -1){
+if(special = 0){interrupt = 1;}
+if( air = 0){hspeed *= .8}
+
+
+
+
+if(movejump && air = 0){vspeed -= jump_speed;air_move = 1;}
+
+if(movedown && air = 0){shottype = 1}
+else if((moveright || moveleft) && air = 0){shottype = 2}
+else {shottype = 0}
+
+if(shottype = 0)
+{
+	if(timer = 9 && !shieldup ){sprite_index = bshot2_sprite;}else{sprite_index = bshot1_sprite;}
+}
+if(shottype = 1)
+{
+	if(timer = 9 && !shieldup ){sprite_index = bcrouch2_sprite;}else{sprite_index = bcrouch1_sprite;}
+}
+if(shottype = 2)
+{
+	
+	if(imtemp > 7){imtemp = 0}
+	if(imtemp < 0){imtemp = 7}
+	
+	if(timer = 9 && !shieldup )
+	{
+		sprite_index = bwalk2_sprite;
+		image_index=imtemp;
+	}
+		else
+	{
+		sprite_index = bwalk1_sprite;
+		image_index=imtemp;
+	}
+}
+
+if(shottype = 2)
+{
+    if (moveright) 
+	{
+		hspeed = 2.5;
+		image_speed = 0.15;
+		if(facing = 0){imtemp += 0.25;}
+		else{imtemp -= 0.25;}
+	}
+    else if (moveleft) 
+	{
+		hspeed = -2.5;
+		image_speed = 0.15;
+		if(facing = 1){imtemp += 0.25;}
+		else{imtemp -= 0.25;}
+	}
+	else {hspeed = 0;}
+}
+
+    if timer >= 1 && timer < 3 && temp = 0 {
+        if moveright = 1 facing = 0;
+        if moveleft = 1 facing = 1;
+    }
+    if ((timer = 9 && !shieldup) || timer = 11 && !shieldup) {
+        sound_play(b_sound)
+		if(shottype = 1){
+	create_projectile(1,45,7,0.8,5,0,kick1,obj_spark_hit1,0.8,0.8,7,23,self.id,45,c1_mach_bullet)
+    flash1= instance_create(x ,y, obj_custom_gfx);
+    flash1.step_script = trans_step;
+    flash1.draw_script = trans_draw;
+    flash1.sword1 = -1;
+    flash1.sprite_index = b_fx2;
+    flash1.image_speed = 0.5;
+    flash1.image_index = 1;
+    flash1.owner = self.id;
+    flash1.keepmain = self.keepmain;
+}		
+        else {
+
+	create_projectile(1,angle_correct(45),7,0.8,5,0,kick1,obj_spark_hit1,0.8,0.8,7,30,self.id,45,c1_mach_bullet)
+    flash1= instance_create(x ,y, obj_custom_gfx);
+    flash1.step_script = trans_step;
+    flash1.draw_script = trans_draw;
+    flash1.sword1 = -1;
+    flash1.sprite_index = b_fx1;
+    flash1.image_speed = 0.5;
+    flash1.image_index = 1;
+    flash1.owner = self.id;
+    flash1.keepmain = self.keepmain;
+	}
+        proj.hspeed = 15-facing*30
+		proj.vspeed = choose ( 0 , 0.1 , 0.2 , 0.3 , 0.4 , 0.5 , -0.1 , -0.2 , -0.3 , -0.4 , -0.5  );
+		//proj.image_xscale *= 50;
+		//proj.image_yscale *= .0005;
+		proj.visibility = 0;
+    }
+    if ai {
+        if timer = 11 && random(16)>6 && ((enemy.x > x && facing) || (enemy.x < x && !facing))
+            special = 1
+        else
+            special = 0
+    }
+    if timer = 25 && special = 1 {
+        timer = 3
+    }
+    if timer = 14 {
+        if special = 0 {
+            //sound_play(b_end_sound)
+            attack_type = "none";
+            if air = 0
+            state_type = "stand";
+            else
+            state_type = "jump"
+            time =28;
+            special = 0; }
+        else {
+            timer = 3
+            special = 0
+        }
+    }
+
+	if(taunt && tbtemp = 0){sound_play(tauntb_sound); tbtemp = 1;}
+}
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air=0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+    }

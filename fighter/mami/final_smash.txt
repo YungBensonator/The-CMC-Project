@@ -1,0 +1,107 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 200;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 85;
+}
+gravity_lock = 1;
+if ( timer < time ){
+
+switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+	case 60: image_index = 9; break;
+	case 64: image_index = 10; break;
+	case 67: image_index = 10; break;
+	case 70: image_index = 10; break;
+	case 74: image_index = 10; break;
+	case 79: image_index = 10; break;
+	case 82: image_index = 10; break;
+	case 85: image_index = 10; break;
+	case 89: image_index = 10; break;
+	case 91: image_index = 10; break;
+	case 93: image_index = 10; break;
+	case 95: image_index = 11; break;
+	case 99: image_index = 12; break;
+	case 101: image_index = 13; break;
+	case 103: image_index = 14; break;	
+	
+	case 198: image_index = 15; break;
+	
+    }
+}
+	
+	if timer = 1
+       sound_play(choose(trio_finale_voice,trio_finale_voice2));
+	   
+	   if timer = 2 {
+	supershine= create_spark(15,20,self.id);
+    supershine.sprite_index = super_shine_sprite;
+    supershine.image_speed = 0.4;
+    supershine.image_alpha = 1.0;
+    supershine.image_xscale = image_xscale*1;
+    supershine.image_yscale = image_yscale*1;
+    supershine.depth = depth - 0.1;
+    supershine.snap = self.id  
+	 }
+
+	if air = 0 and timer = 4{
+		vspeed = -7
+	
+	}
+	if timer = 14
+	vspeed = 0
+	
+	
+	if timer = 100{
+    sound_play(final_smash_shoot_sound);
+    beam = create_projectile(30,43+facing*94,8.5,8.9,-1,29,magic3,obj_spark_hit3,0.8,0.5,15,8,self.id,30,-1);
+	beam.shake_type = 0;
+	beam.shake_ampl = 1.15;
+    beam.sprite_index = large_beam_sprite;
+    beam.image_speed = 0.2;
+    beam.image_xscale = image_xscale*1;
+    beam.image_yscale = image_yscale*1;
+	beam.facing = facing
+    screen_shake(7,7) 
+
+	}
+	
+	if timer = 199{
+	effect_create_above(ef_smokeup,x,y,2,c_silver)
+	
+	}
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

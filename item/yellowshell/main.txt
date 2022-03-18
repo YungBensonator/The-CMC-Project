@@ -1,0 +1,240 @@
+~~INIT:
+
+yellowshell_spr = ispr_add_alpha ( "item/yellowshell/yellowshell.png" , 11 , 0 , 0 , 12 , 10 );
+
+~~DEINIT:
+
+if ( sprite_exists ( yellowshell_spr ) )
+  spr_delete ( yellowshell_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.yellowshell_spr;
+sprite_air = obj_items_control.yellowshell_spr;
+sprite_held = obj_items_control.yellowshell_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -9;
+image_xscale = .85;
+image_yscale = .85;
+shadow = 6;
+
+sticked = 0;
+boost = 0;
+xx = x;
+yy = y;
+hit_timer = 0;
+weight = 0.2;
+
+~~LAND:
+
+~~STEP:
+
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( held > 0 )
+  {
+  boost = 1;
+  }
+if ( thrown > 0 )
+  {
+  image_speed = 0.5;
+  if ( timer mod 12 == 0 )
+    {
+    var o;
+    o = instance_create ( x , y - 8 , obj_smoke );
+    o.depth = 4;
+    }
+  if ( boost )
+    {
+    hit_timer = 3;
+    boost = 0; 
+    }
+  sprite_angle = 0;
+  rot_speed = 0;
+  collision_type = 3;
+  custom_land = 1;
+  if ( abs ( hspeed ) > 0.5 )
+    {
+    if ( hspeed > 0 ) hspeed -= 0.02;
+    if ( hspeed < 0 ) hspeed += 0.02;
+    }
+    else
+  if ( abs ( vspeed ) < 1 )
+    thrown = -99;
+  if ( abs ( speed ) < 1.7 )
+    can_pick_up = 1;
+    else
+    can_pick_up = 0.5;
+  }
+  else
+  {
+  if ( on_floor || on_platform )
+    {
+    if ( hspeed > 0 )
+      hspeed -= 0.25;
+    if ( hspeed < 0 )
+      hspeed += 0.25;
+    if ( abs ( hspeed ) < 0.25 )
+      hspeed = 0;
+    }
+  image_speed = 0;
+  collision_type = 3;
+  custom_land = 0;
+  can_pick_up = 1;
+  }
+
+if ( thrown > 0 )
+  {
+  if ( hspeed > 0 && next_to_rwall ) hspeed *= -0.95;
+  if ( hspeed < 0 && next_to_lwall ) hspeed *= -0.95;
+  if ( vspeed < 0 && under_ceiling ) vspeed = 0;
+  if ( on_floor || on_platform )
+    vspeed = 0;
+  }
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 )
+  {
+  if ( vermin.collision_type >= vermin.collision_type && vermin.thrown > 0 )
+    {
+    hit_timer = 3;
+    FMODSoundPlay ( koopa_hit );
+    thrown = vermin.thrown;
+    custom_land = 1;
+    if ( vermin.x < x )
+      hspeed = 6;
+      else
+      hspeed = -6;
+    sprite_angle = 0;
+    rot_speed = 0;
+    spark = instance_create ( x , y - 12 , obj_spark_shockwave );
+    spark.image_yscale *= 0.35;
+    spark.image_xscale *= 0.7;
+    object_stun ( self.id , 4 );
+    }
+  exit;
+  }
+if ( vermin.collision_type >= vermin.collision_type )
+  {
+  FMODSoundPlay ( koopa_hit );
+  hit_timer = 3;
+  if ( x < vermin.x )
+    hspeed = -1 * max ( 2 , abs ( hspeed ) );
+  if ( x > vermin.x )
+    hspeed = 1 * max ( 2 , abs ( hspeed ) );
+  if ( x == vermin.x )
+    hspeed = choose ( -1 , 1 ) * max ( 2 , abs ( hspeed ) );
+  if ( y < vermin.y )
+    vspeed = -4;
+  if ( y > vermin.y )
+    vspeed = -2;
+  if ( y == vermin.y )
+    vspeed = choose ( -2 , -3 , -4 );
+  //thrown = -99;
+  object_stun ( self.id , 4 );
+  }
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 || vermin.bkb + vermin.kbg > 5 )
+  {
+  hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y ) * 0.5 );
+  FMODSoundPlay ( koopa_hit );
+  hit_timer = 6;
+  if ( vermin.dir >= 360 )
+    {
+    if ( vermin.x < x )
+      direction = 45;
+      else
+      direction = 135;
+    }
+    else
+    direction = vermin.dir;
+  speed = (vermin.bkb + vermin.kbg)/1.25;
+  vspeed *= 0.5;
+  thrown = vermin.attacker.id;
+  custom_land = 1;
+  object_stun ( self.id , 6 );
+  object_stun ( vermin , 6 );
+  exit;
+  }
+if ( vermin.damage > 4 )
+  {
+  hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y ) * 0.5 );
+  object_stun ( vermin , 8 );
+  hit_timer = 9;
+  hspeed *= -0.3;
+  vspeed = -3;
+  thrown = -99;
+  object_stun ( self.id , 6 );
+  }
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( vermin.state_type == "air_flinch" || vermin.state_type == "flinch" )
+  if ( vermin.timer_speed == 0 || vermin.timer < 4 )
+    exit;
+if ( thrown <= 0 || speed < 1 )
+  {
+  if ( vermin.y < y - 10 + vermin.vspeed && vermin.air > 0 && vermin.air_move && vermin.vspeed > 0 )
+    {
+    FMODSoundPlay ( koopa_hit );
+    vermin.vspeed = -4;
+    if ( vermin.air > 1 )
+      vermin.air = 1;
+    hit_timer = 3;
+    thrown = vermin.id;
+    custom_land = 1;
+    hspeed = 6 - vermin.facing * 12;
+    //object_stun ( self.id , 12 );
+    sprite_angle = 0;
+    rot_speed = 0;
+    spark = instance_create ( x , y - 12 , obj_spark_shockwave );
+    spark.image_yscale *= 0.35;
+    spark.image_xscale *= 0.7;
+    }
+  exit;
+  }
+if ( vermin == thrown )
+  exit;
+if ( vermin.y < y - 10 + vermin.vspeed && vermin.air > 0 && vermin.air_move && vermin.vspeed > 0 )
+  {
+  FMODSoundPlay ( koopa_hit );
+  vermin.vspeed = -4;
+  if ( vermin.air > 1 )
+    vermin.air = 1;
+  hit_timer = 3;
+  thrown = -99;
+  hspeed = 0;
+  object_stun ( self.id , 12 );
+  sprite_angle = 0;
+  rot_speed = 0;
+  spark = instance_create ( x , y - 12 , obj_spark_shockwave );
+  spark.image_yscale *= 0.35;
+  spark.image_xscale *= 0.7;
+  exit;
+  }
+if ( thrown_timer < 36 )
+if ( vermin == thrown )
+  exit;
+if ( speed < 1 ) exit;
+instance_create ( x , y , obj_spark_shockwave );
+create_projectile_impaler ( 17 , 270 , 8 , 2.2 , -1 , 13 , kick3 , -1 , 1 , 1 , 0 , 12 , thrown , 7 , -1 );
+proj.hit_attacker = 0;
+instance_destroy();
+
+~~END OF FILE

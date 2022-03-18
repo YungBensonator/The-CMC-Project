@@ -1,0 +1,150 @@
+////Shit for Tutorial mode?
+
+//if instance_exists(obj_training){
+
+
+//var i;
+//for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  //{
+//	if ( db_charname[global.gs_character[i],1] == "komachi"
+//}
+
+// VARIABLES
+////
+stg_msk_x = 740;
+stg_msk_y = 480;
+scale = 0.8;
+stg_x = 64 + stg_msk_x * scale;
+stg_y = 305 + stg_msk_y * scale;
+
+// Set the camera boundaries + maximal zoom level. Minimal zoom level is determined by camera boundaries.
+
+camera_boundary_l = 90;
+camera_boundary_r = 820 * scale;
+camera_boundary_u = 320;
+camera_boundary_d = 830 * scale;
+camera_boundary_zoom = 312 * scale;
+
+// Set the death boundaries.
+
+death_l = camera_boundary_l - 160 * scale;
+death_u = camera_boundary_u - 190 * scale;
+death_r = camera_boundary_r + 160 * scale;
+death_d = camera_boundary_d + 96 * scale;
+
+// Set the players' starting position and respawn point.
+
+player_spawn_x [ 0 ] = stg_x + ( 302 - stg_msk_x ) * scale;
+player_spawn_y [ 0 ] = stg_y + ( 276 - stg_msk_y ) * scale;
+player_spawn_x [ 1 ] = stg_x + ( 455 - stg_msk_x ) * scale;
+player_spawn_y [ 1 ] = stg_y + ( 276 - stg_msk_y ) * scale;
+player_spawn_x [ 2 ] = stg_x + ( 280 - stg_msk_x ) * scale;
+player_spawn_y [ 2 ] = stg_y + ( 220 - stg_msk_y ) * scale;
+player_spawn_x [ 3 ] = stg_x + ( 475 - stg_msk_x ) * scale;
+player_spawn_y [ 3 ] = stg_y + ( 220 - stg_msk_y ) * scale;
+player_spawn_x [ 4 ] = stg_x + ( 380 - stg_msk_x ) * scale;
+player_spawn_y [ 4 ] = stg_y + ( 160 - stg_msk_y ) * scale;
+player_spawn_x [ 5 ] = stg_x + ( 380 - stg_msk_x ) * scale;
+player_spawn_y [ 5 ] = stg_y + ( 276 - stg_msk_y ) * scale;
+respawn_x = stg_x + ( 280 - stg_msk_x ) * scale;
+respawn_y = stg_y + ( 140 - stg_msk_y ) * scale;
+
+////
+// RESOURCES
+////
+
+// masks
+global.msk_stg[0] = stage_msk_add2 ( "stage/trainingprojectm/mask_floor.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[1] = stage_msk_add2 ( "stage/trainingprojectm/mask_leftwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[2] = stage_msk_add2 ( "stage/trainingprojectm/mask_rightwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[3] = stage_msk_add2 ( "stage/trainingprojectm/mask_ceil.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[6] = stage_msk_add2 ( "stage/trainingprojectm/mask_plataform.png",1,1,0,stg_msk_x,stg_msk_y );
+// stage sprites
+global.msk_stg[4] = stage_spr_add ( "stage/trainingprojectm/fg.png",1,stg_msk_x,stg_msk_y );
+global.msk_stg[5] = stage_spr_add ( "stage/trainingprojectm/rem_fore.png",1,stg_msk_x,stg_msk_y );
+// backgrounds
+background_index[0] = stage_bg_add ( "stage/trainingprojectm/bg.png" );
+
+
+////
+// OBJECTS
+////
+var o;
+// floor
+o = instance_create ( stg_x , stg_y , obj_floor );
+o.sprite_index = global.msk_stg[0];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// left wall
+o = instance_create ( stg_x , stg_y , obj_leftwall );
+o.sprite_index = global.msk_stg[1];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// right wall
+o = instance_create ( stg_x , stg_y , obj_rightwall );
+o.sprite_index = global.msk_stg[2];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ceiling wall
+o = instance_create ( stg_x , stg_y , obj_ceiling );
+o.sprite_index = global.msk_stg[3];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// platform wall
+o = instance_create ( stg_x , stg_y , obj_platform );
+o.sprite_index = global.msk_stg[6];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ledges
+instance_create ( stg_x + ( 192 - stg_msk_x ) * scale , stg_y + ( 280 - stg_msk_y ) * scale , obj_edge_left );
+instance_create ( stg_x + ( 560 - stg_msk_x ) * scale , stg_y + ( 280 - stg_msk_y ) * scale , obj_edge_right );
+
+background_x[0] = 0;
+background_y[0] = 0;
+background_htiled[0] = 0;
+background_vtiled[0] = 1;
+background_visible[0] = 1;
+background_xscale[0] = 0.9  * scale;
+background_yscale[0] = 1.205 * scale;
+background_blend[0] = 16777215;
+background_alpha[0] = 1;
+background_vspeed[0] = 1 * scale;
+
+// mg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[4];
+o.depth = 6;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_mg = o;
+
+// fg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[5];
+o.depth = -10;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_fg = o;
+
+// shadow
+o = instance_create ( stg_x , stg_y, obj_shadow_display );
+o.light_source = stg_x + ( 1352 - stg_msk_x ) * scale;
+o.light_source_y = 0;
+o = instance_create ( stg_x , stg_y, obj_shadow );
+o.sprite_index = stage_spr_add ( "stage/trainingprojectm/shadow_mask.png",1,stg_msk_x,stg_msk_y );
+o.image_xscale = scale;
+o.image_yscale = scale;
+o.image_alpha = 0.3;
+
+//made by WaluigiDeluxe (Thanks)
+stage_install_bg_object();
+//obj_main_bg = obj_stage_bg.id;
+with ( obj_stage_bg )
+  {
+  //mode = 0;
+  scale = other.scale;
+  obj_mg = other.obj_mg;
+  obj_fg = other.obj_fg;
+  stg_x = other.stg_x;
+  stg_y = other.stg_y;
+  }

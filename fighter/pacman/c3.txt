@@ -1,0 +1,32 @@
+// Up-B pellet display script.
+
+if ( !instance_exists ( parent ) )
+  {
+  instance_destroy();
+  exit;
+  }
+
+var i, alpha;
+alpha = 1;
+if ( parent.temp == 0 && parent.timer mod 8 < 4 )
+  alpha = 0.5;
+draw_set_color ( c_yellow );
+for ( i = parent.eaten ; i < parent.dot_number ; i += 1 )
+  draw_sprite_ext ( spr , 0 , parent.dot_x [ i ] , parent.dot_y [ i ] , 1 , 1 , 0 , c_white , alpha );
+if ( parent.temp == 0 )
+  {
+  expand += 1;
+  if ( expand > 4 ) expand = 4;
+  direction += 3;
+  }
+  else
+  {
+  expand -= 1;
+  direction += 3;
+  if ( expand < 0 ) expand = 0;
+  }
+if ( expand > 0 )
+  {
+  for ( i = direction ; i < direction + 360 ; i += 90 )
+  draw_sprite ( spr , 0 , parent.x + lengthdir_x ( expand , i )  , parent.y + lengthdir_y ( expand , i ) );
+  }

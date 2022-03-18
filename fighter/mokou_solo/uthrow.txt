@@ -1,0 +1,257 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( time = -1 )
+{
+	state_type = "air_attack";
+	attack_type = "uthrow";
+	sprite_index = uthrow_sprite;
+	image_speed = 1/3;
+	image_index = 4;
+	hspeed = 0;
+	timer = 0;
+	time = 110;
+	gravity_lock = 1;
+	target.depth = 1;
+	target.gravity_lock = 1;
+	target.timer_speed = 0;
+	target.alarm[0] = 1000;
+	
+	//Blur Variables
+	phoenixrisescale = 0.3
+	phoenixrisexshift = -2
+	phoenixriseyshift = 20
+	phoenixriseindex = 0
+	phoenixrisetime = 1000
+	phoenixrisespeed = 0.8
+	phoenixrisealpha = 1
+	phoenixrisezoom = -1
+	
+	//Blur Variables
+	phoenixeruptscale = 0.5
+	phoenixeruptxshift = 5
+	phoenixeruptyshift = -1
+	phoenixeruptindex = 0
+	phoenixerupttime = 49
+	phoenixeruptspeed = 0.8
+	phoenixeruptalpha = 1
+	phoenixeruptzoom = -1
+	
+	//Blur Variables
+	phoenixfeatherscale = 0.125
+	phoenixfeatherxshift = 0
+	phoenixfeatheryshift = 40
+	phoenixfeatherindex = 0
+	phoenixfeathertime = 30
+	phoenixfeatherframespeed = 0
+	phoenixfeatheralpha = 1
+	phoenixfeatherzoom = -1
+	phoenixfeatherdir = 270
+	phoenixfeathermovespeed = 4
+}
+
+if ( timer < time )
+{
+	if timer >= 3 && timer < 104
+	{
+		visible = 0;
+	}
+	else
+	{
+		visible = 1;
+	}
+	
+	if timer < 103
+	{
+		target.percent += 0.1;
+	}
+	
+	if ( timer >= 0 && timer <= 48 )
+	{
+		hspeed = 0;
+		target.hspeed = 0;
+		target.ignore_physics = 1;
+	}
+	
+	//Special FX
+	if ( timer >= 3 && timer < 40 ) || ( timer >= 42 && timer < 103 )
+	{
+		phoenixfeather = create_blur(x,y,self.id);
+		if !blueflame { phoenixfeather.sprite_index = choose(phoenixfeather_sprite, phoenixfeather2_sprite, phoenixfeather3_sprite); }
+		if blueflame { phoenixfeather.sprite_index = choose(phoenixfeatherblue_sprite, phoenixfeatherblue2_sprite, phoenixfeatherblue3_sprite); }
+		phoenixfeather.image_xscale = phoenixfeatherscale*size*(1-facing*2);
+		phoenixfeather.image_yscale = (phoenixfeatherscale*size);
+		phoenixfeather.x = x + (choose( -9, -6, -3, 0, 3, 6, 9) )*size*(1-facing*2);
+		phoenixfeather.y = y - phoenixfeatheryshift*size;
+		phoenixfeather.image_index = phoenixfeatherindex;
+		phoenixfeather.image_speed = phoenixfeatherframespeed;
+		phoenixfeather.image_alpha = phoenixfeatheralpha;
+		phoenixfeather.image_angle = random(360);
+		phoenixfeather.alarm[0] = phoenixfeathertime;
+		//phoenixfeather.snap = self.id;
+		phoenixfeather.depth = phoenixfeatherzoom;
+		if ( timer >= 3 && timer < 40 ) { phoenixfeather.direction = 270; }
+		else { phoenixfeather.direction = 90; }
+		phoenixfeather.speed = phoenixfeathermovespeed;
+		phoenixfeather.rotatedir = choose( -1, 1 );
+		phoenixfeather.rotatespeed = choose( 5, 10, 15, 20 );
+	}
+	
+	if ( timer = 3 )
+	{
+		play_attack_voice();
+		sound_play(explode1);
+		sound_play(spellcard_sound);
+		sound_play(mokoubird_sound);
+		
+		shaker2 = instance_create(0,0,obj_shakescreen2);
+		shaker2.ampl = 4.5;
+		shaker2.xampl = 0;
+		shaker2.yampl = 1.2;
+		shaker2.time = 11;
+		
+		phoenixrise = create_blur(x,y,self.id);
+		if !blueflame {phoenixrise.sprite_index = phoenixrise_sprite;}
+		if blueflame {phoenixrise.sprite_index = phoenixriseblue_sprite;}
+		phoenixrise.image_xscale = phoenixrisescale*size*(1-facing*2);
+		phoenixrise.image_yscale = (phoenixrisescale*size);
+		phoenixrise.x = x + (phoenixrisexshift )*size*(1-facing*2);
+		phoenixrise.y = y - phoenixriseyshift*size;
+		phoenixrise.image_index = phoenixriseindex;
+		phoenixrise.image_speed = phoenixrisespeed;
+		phoenixrise.image_alpha = phoenixrisealpha;
+		phoenixrise.alarm[0] = phoenixrisetime;
+		phoenixrise.snap = self.id;
+		phoenixrise.depth = phoenixrisezoom;
+		
+		phoenixerupt = create_blur(x,y,self.id);
+		if !blueflame {phoenixerupt.sprite_index = phoenixerupt_sprite;}
+		if blueflame {phoenixerupt.sprite_index = phoenixeruptblue_sprite;}
+		phoenixerupt.image_xscale = phoenixeruptscale*size*(1-facing*2);
+		phoenixerupt.image_yscale = (phoenixeruptscale*size);
+		phoenixerupt.x = x + (phoenixeruptxshift )*size*(1-facing*2);
+		phoenixerupt.y = y - phoenixeruptyshift*size;
+		phoenixerupt.image_index = phoenixeruptindex;
+		phoenixerupt.image_speed = phoenixeruptspeed;
+		phoenixerupt.image_alpha = phoenixeruptalpha;
+		phoenixerupt.alarm[0] = phoenixerupttime;
+		//phoenixerupt.snap = self.id;
+		phoenixerupt.depth = phoenixeruptzoom;
+	}
+	
+	if timer > 3
+	{
+		if phoenixrise.image_index > 2 {phoenixrise.image_index = 0;}
+		if image_index > 7 {image_index = 4;}
+		phoenixfeather.image_angle += phoenixfeather.rotatespeed * phoenixfeather.rotatedir
+	}
+	
+	if timer = 42
+	{
+		phoenixrise.image_yscale = -phoenixrise.image_yscale;
+	}
+	
+	//Momentum Speed
+	if ( timer >= 3 && timer <= 34 )
+	{
+		vspeed = -15;
+	}
+	
+	if ( timer >= 35 && timer <= 39 )
+	{
+		vspeed = -0.5;
+	}
+	
+	if ( timer = 40 )
+	{
+		vspeed = 0;
+	}
+	
+	if ( timer >= 42 && timer <= 47 )
+	{
+		temp_fall_speed = 0.5;
+	}
+	
+	if ( timer >= 48 )
+	{
+		temp_fall_speed = 15;
+	}
+	
+	//Target Position
+	if ( timer >= 0 && timer <= 39 )
+	{
+		target.x = x;
+		target.y = y - 10 * size;
+	}
+	
+	if timer = 40 || timer = 42
+	{
+		target.y = y - 8 * size;
+	}
+	
+	if timer = 41
+	{
+		target.y = y; 
+	}
+	
+	if ( timer >= 43 && timer <= 48 )
+	{
+		target.y = y - 10 * size;
+	}
+	
+	//Landing
+	if ( timer = 48 )
+	{
+		if ( on_floor || on_platform )
+			timer = 101;
+		else
+			timer = 47;
+	}
+	
+	if ( timer = 101 )
+	{
+		target.y = y;
+		target.gethit = 0;
+	}
+	
+	//Damage
+	if ( timer = 103 )
+	{
+		if instance_exists(phoenixrise) {with(phoenixrise){instance_destroy();}}
+		sound_play(mokouexplosion1);
+		create_throw_box(6,80+facing*20,3.6,3.8,4,1,-1,-1,1.4,0.7,-5,2,self.id,1);
+		hitbox.shake_ampl = 1;
+		effect_create_above(ef_smokeup,target.x,target.y,0,c_white);
+		shaker = instance_create(0,0,obj_shakescreen2);
+		shaker.ampl = 5.5;
+		shaker.xampl = 2;
+		shaker.yampl = 1.2;
+		shaker.time = 11;
+		
+		percent += selfdmg;
+		lifemeter += selfdmg * lifemetergain;
+		
+		explosion = instance_create(x+0*size*(1-facing*2),y-0* size,obj_spark_explode1);
+		explosion.image_xscale = 1.5*size;
+		explosion.image_yscale = 1.5*size;
+		//explosion.snap = self.id;
+	}
+	
+	if ( timer = 105 )
+	{
+		state_type = "jump";
+		hspeed = -2.5*(1-facing*2)*size;
+		vspeed = -4.25*size;
+		air = 1;
+	}
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+	if instance_exists(phoenixrise) {with(phoenixrise){instance_destroy();}}
+	if instance_exists(phoenixerupt) {with(phoenixerupt){instance_destroy();}}
+	state_type = "jump";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

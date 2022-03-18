@@ -1,0 +1,178 @@
+~~INIT:
+ham_spr = ispr_add_alpha ( "item/ham/ham.png" , 1 , 0 , 0 , 13 , 16 );
+hamh_spr = ispr_add_alpha ( "item/ham/hamh.png" , 1 , 0 , 0 , 4 , 12 );
+
+~~DEINIT:
+if ( sprite_exists ( ham_spr ) )
+  spr_delete ( ham_spr );
+if ( sprite_exists ( hamh_spr ) )
+  spr_delete ( hamh_spr );
+  
+~~ENTER:
+sprite_index = obj_items_control.ham_spr;
+sprite_air = obj_items_control.ham_spr;
+sprite_held = obj_items_control.hamh_spr;
+air_spr_y = -20;
+shadow = 4;
+image_xscale = 0.75;
+image_yscale = 0.75;
+hit_timer = 0;
+type = "batter";
+weight = 0.1;
+
+~~STEP:
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  collision_type = 3;
+  can_pick_up = 0.5;
+  
+  if ( on_floor && on_platform && speed < 0.1 )
+    {
+    thrown = -99;
+    }
+  }
+  else
+  {
+  collision_type = 0;
+  can_pick_up = 1;
+  }
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 18;
+last_hit_proj = create_projectile ( 0 , 90 - sign ( hspeed ) * 45 , 7 + min ( 1.7 , speed * 0.2 ) , 2.2 , 15 , 17 , kick3 , obj_spark_hit3 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin.damage > 4 )
+  {
+  object_stun ( vermin , 8 );
+  hit_timer = 9;
+  hspeed *= -0.3;
+  vspeed = -3;
+  thrown = -99;
+  object_stun ( self.id , 6 );
+  }
+
+~~PLAYER EVENT:
+if ( timer == -1 )
+  {
+  hspeed = 0;
+  sprite_index = item_swing_sprite;
+  image_index = 0;
+  switch ( attack_type )
+    {
+    case "item_batter_jab":
+      image_speed = item_swing_frame / 6;
+      time = 12;
+      break;
+    case "item_batter_stilt":
+    case "item_batter_dash":
+      image_speed = item_swing_frame / 10;
+      time = 15;
+      break;
+    case "item_batter_ssmash":
+      image_speed = item_swing_frame / 12;
+      time = 30;
+      break;
+    }
+	  state_type = "air_attack";
+  timer_speed = 1;
+  timer = 0;
+  }
+  
+switch ( attack_type )
+  {
+  case "item_batter_jab":
+    switch ( timer )
+      {
+      case 6:
+        sound_play ( swingsnd5 );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 0 , 50 + facing * 80 , 10 , 1 , 7 , 4 , punch1 , obj_spark_hit1 , 1.8 , 0.8 ,
+         0 , 0 , self.id , 4 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 8;
+        hitbox.hitbox_y = actual_height * 0.5;
+        break;
+      }
+    break;
+  case "item_batter_stilt":
+  case "item_batter_dash":
+    switch ( timer )
+      {
+      case 9:
+        sound_play ( swingsnd5 );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 0 , 40 + facing * 100 , 8 , 5 , 10 , 6 , punch2 , obj_spark_hit1 , 1.8 , 0.8 ,
+         0 , 0 , self.id , 4 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 8;
+        hitbox.hitbox_y = actual_height * 0.5;
+        break;
+      }
+    break;
+  case "item_batter_ssmash":
+    switch ( timer )
+      {
+      case 12:
+        sound_play ( swingsnd2 );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 0 , 30 + facing * 120 , random(10) , 8 , 14 , 14 , punch3 , obj_spark_hit1 , 1.9 , 0.9 ,
+         0 , 0 , self.id , 4 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 8;
+        hitbox.hitbox_y = actual_height * 0.5;
+		if ( random ( 100 ) <= 10 )
+		{
+		hitbox.damage = 100 * size;
+		hitbox.bkb = 10 * size;
+		hitbox.gfx = obj_spark_fire1;
+		hitbox.sfx = explodehit4;
+		}
+        break;
+	  case 13:
+	    if (hitbox.hit = 1 && hitbox.gfx = obj_spark_fire1)
+	    {
+		sound_play ( explode_big );
+		explode = instance_create ( held_item.x + 20 -facing*40, held_item.y - 4, obj_spark_explode1 );
+		explode.image_xscale = 0.7 *size;
+		explode.image_yscale = 0.7 *size;
+		explode.depth = -3;
+		}
+		break;
+      }
+    break;
+  }
+~~END OF FILE

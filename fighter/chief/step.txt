@@ -1,0 +1,62 @@
+shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield)
+if ( air == 0 ) {cantsideb = 0;}
+if (air == 0) { charge = 0;}
+
+ if (enemy.state_type = "out" && temp_spawn < 4){
+	temp_spawn += 1
+}
+
+
+if(dbtimer > 0 &&  !instance_exists (gren) ) {dbtimer -= 1}
+if(dbtimer < 0) {dbtimer = 0}
+
+
+
+if(shottemp = 2)
+{
+	bshot_sprite = bshot1_sprite;
+	bwalk_sprite = bwalk1_sprite;
+	bcrouch1_sprite = bcrouch1_sprite;
+}
+if(shottemp = 1)
+{
+	bshot_sprite = bshot2_sprite;
+	bwalk_sprite = bwalk2_sprite;
+	bcrouch1_sprite = bcrouch2_sprite;
+}
+if (sprite_index == shield_sprite && instance_exists(shield2)){
+	sprite_index = crouch_sprite;
+	state_type = "crouch";
+	}
+if (sprite_index == shield_sprite){
+
+if (!instance_exists(shield2)){
+    shield2 = create_projectile(0,15+facing*150,0,0,20,5,kick3,obj_spark_hit4,x+2,y,2,0,self.id,41,char_custom12);
+    shield2.alarm[0] = 1000;
+    create_hitbox_impaler ( 8 , 290 - facing * 50 , 4.5 , 8.5 , 20 , 7 , punch3 , obj_spark_hit4 , 0.87 , 0.82 , 27.55 , 11.40 , self.id , 3 , 2 );
+    hitbox.image_angle = ( 1 - facing * 2 );
+
+}
+else{
+	
+	if(shield2.image_index >= 45)
+	shield2.image_index = 20;
+
+}
+
+}
+
+else{
+if(shield2.image_index < 45)
+shield2.image_index = 45;
+
+}
+
+
+
+			
+if (instance_exists(sniper) && attack_type != "sideB") {with sniper instance_destroy();}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+    dontrepeat = 0
+	}

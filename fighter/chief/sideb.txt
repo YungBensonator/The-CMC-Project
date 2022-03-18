@@ -1,0 +1,163 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" 
+{
+        vspeed -= 0.1;
+		hspeed = 0
+        state_type = "air_attack";
+        attack_type = "sideb";
+        image_speed = 0.25;
+        sprite_index = sideb_1_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 90;
+        temp = 0;
+        timer_speed = 1;
+        special = 1;
+        air_move = 0;
+        sound_play(crfile_sound1)
+        temp = 0;
+	sniperdegree = 0;
+    }
+	
+	if(sprite_index = sideb_1_sprite && image_index = 6){image_speed = 0;}
+
+	
+	if (timer > 31 && timer < 34 && !instance_exists(sniper)) 
+	{
+        sniper = instance_create(x+14-facing*28,y-32,obj_spark)
+        sniper.sprite_index = sniper_sprite;
+        sniper.image_xscale = (0.9-facing*1.8)*size
+        sniper.image_yscale = 0.9*size
+        sniper.image_speed = 0
+		sniper.image_index = snipertemp-45;
+        sniper.snap = self.id
+        sniper.x_snap = size*(12-facing*24)
+        sniper.y_snap = 10*size
+    }
+	
+	sniper.image_index = sniperimagetemp-45;
+	sniperdegree = sniper.image_index;
+	
+	
+if(timer < 31){sprite_index = sideb_1_sprite;}
+if(timer = 31)
+{
+	if(moveright){facing = 0;}
+	if(moveleft){facing = 1;}
+	if(facing = 0){	snipertemp = 0;}
+	if(facing = 1){	snipertemp = 180;}
+	sniperimagetemp = 0;
+}
+if(timer = 32) { sprite_index = sideb_2_sprite; image_speed = 0;}	//sprite_index = sideb_loop_sprite;
+
+if(sprite_index = sideb_2_sprite && sniperimagetemp < 0){image_index = 1;}
+if(sprite_index = sideb_2_sprite && sniperimagetemp >= 0){image_index = 0;}
+
+if(timer > 32 && timer < 34 && moveup){sniperimagetemp += 1}
+if(timer > 32 && timer < 34 && movedown){sniperimagetemp -= 1}
+
+if(facing = 0)
+{
+if(timer > 32 && timer < 34 && moveup){snipertemp += 1}
+if(timer > 32 && timer < 34 && movedown){snipertemp -= 1}
+
+if(snipertemp > 44){snipertemp = 44}
+if(snipertemp < -45){snipertemp = -45}
+}
+
+if(facing = 1)
+{
+if(timer > 32 && timer < 34 && moveup){snipertemp -= 1}
+if(timer > 32 && timer < 34 && movedown){snipertemp += 1}
+
+if(snipertemp > 224){snipertemp = 224}
+if(snipertemp < 135){snipertemp = 135}
+}
+
+
+if(sniperimagetemp > 44){sniperimagetemp = 44}
+if(sniperimagetemp < -45){sniperimagetemp = -45}
+
+if(facing = 0){/*bob do somthin*/}
+
+if(timer > 32 && timer < 34 && special = 1)
+{
+	timer = 32;
+}
+
+if(timer = 34)
+{
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+	sprite_index = sideb_3_sprite;
+	sound_play(crfile_sound2)
+	create_projectile(20,70+facing*40,6.35,7.5,65,0,explodehit3,obj_spark_special2,0.8,0.8,13,40,self.id,25,c9_sniper);
+	proj.image_xscale *= 50;
+	proj.di = 0.45;
+	proj.priority = 5;
+	screen_shake(13.4,12);
+	effect_create_above(ef_smokeup,x+35*(1-facing*2),y,20,c_silver)
+	//proj.direction = snipertemp;
+	//direction = snipertemp;
+
+	if (instance_exists(sniper))
+	 {with sniper instance_destroy();}
+}
+  if(timer >= 34 && timer < 59){ 
+if ((instance_exists(sniper) && temp_spawn >= 2 && sideb.attack_success && target.state_type = "flinch" || target.state_type = "air_flinch") && dontrepeat = 0 && target.percent > 120){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+				killspark = instance_create(enemy.x-235,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 50;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(100,100);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 20
+				freezer2.alarm[0] = 120
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 90;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 65
+				time += 10
+				enemy.speed = temp_speed * 2.5
+				target.gravity = temp_grav + 1.5
+				dontrepeat = 1;
+				}
+				}
+if(air > 0){
+if( facing = 0){
+hspeed *= .8
+}
+if(facing = 1){
+hspeed *= -.8
+}
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0;
+	attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,163 @@
+~~INIT:
+
+mine_spr = ispr_add_alpha ( "item/mine/mine.png" , 2 , 0 , 0 , 9 , 7 );
+
+~~DEINIT:
+
+if ( sprite_exists ( mine_spr ) )
+  spr_delete ( mine_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.mine_spr;
+sprite_air = obj_items_control.mine_spr;
+sprite_held = obj_items_control.mine_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -6;
+image_xscale = 0.75;
+image_yscale = 0.75;
+collision_type = 1;
+shadow = 5;
+
+mask_index = spr_item_mask2;
+
+sticked = 0;
+hit_timer = 0;
+
+~~LAND:
+if ( thrown > 0 )
+  {
+  sticked = 1;
+  image_index = 1;
+  speed = 0;
+  }
+
+~~STEP:
+if ( hit_timer < 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer += 1;
+  if ( hit_timer == 0 ) instance_destroy();
+  exit;
+  }
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  if ( sticked == 0 )
+    {
+    if ( next_to_rwall )
+      {
+      sticked = 1;
+      image_index = 1;
+      speed = 0;
+      }
+    if ( next_to_lwall )
+      {
+      sticked = 1;
+      image_index = 1;
+      speed = 0;
+      }
+    if ( under_ceiling )
+      {
+      sticked = 1;
+      image_index = 1;
+      speed = 0;
+      }
+    can_pick_up = 0.5;
+    }
+  custom_land = 1;
+  }
+  else
+  {
+  can_pick_up = 1;
+  custom_land = 0;
+  }
+if ( sticked )
+  {
+  shadow = 0;
+  max_fall_speed = 0;
+  can_pick_up = 0;
+  rot_speed = 0;
+  sprite_angle = 0;
+  if ( next_to_rwall ) { air_spr_y = 0; sprite_angle = 90; }
+  if ( next_to_lwall ) { air_spr_y = 0; sprite_angle = -90; }
+  if ( under_ceiling ) { air_spr_y = 4; sprite_angle = 180; }
+  }
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( sticked )
+  {
+  sound_play ( explode_big );
+  instance_create ( x , y , obj_spark_explode1 );
+  create_projectile ( 30 , 365 , 7 , 7.2 , 74 , 7 , explodehit2 , obj_spark_fire1 , 1.4 , 1.4 , 0 , 0 , thrown , 5 , -1 );
+  proj.hit_attacker = 1;
+  instance_destroy();
+  exit;
+  }
+if ( speed < 1 ) exit;
+if ( vermin == thrown ) exit;
+hit_timer = 9;
+create_projectile ( 9 , 362 , 6.3 , 4.1 , 7 , 6 , punch2 , obj_spark_hit2 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.25;
+vspeed = -4;
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( sticked )
+  {
+  sound_play ( explode_big );
+  instance_create ( x , y , obj_spark_explode1 );
+  create_projectile ( 30 , 365 , 7 , 7.2 , 74 , 7 , explodehit2 , obj_spark_fire1 , 1.4 , 1.4 , 0 , 0 , thrown , 5 , -1 );
+  proj.hit_attacker = 1;
+  proj.priority = 4.9;
+  hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 4 ) * 0.5 );
+  object_stun ( vermin , vermin.hitlag_frames );
+  instance_destroy();
+  exit;
+  }
+if ( speed < 1 ) exit;
+if ( vermin == thrown ) exit;
+hit_timer = 9;
+create_projectile ( 9 , 362 , 6.3 , 4.1 , 7 , 6 , punch2 , obj_spark_hit2 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.25;
+vspeed = -4;
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( sticked )
+  {
+  sound_play ( explode_big );
+  spark = instance_create ( x , y , obj_spark_explode1 );
+  spark.image_xscale *= 2;
+  spark.image_yscale *= 2;
+  create_projectile ( 30 , 365 , 7 , 7.2 , 74 , 7 , explodehit2 , obj_spark_fire1 , 1.4 , 1.4 , 0 , 0 , thrown , 5 , -1 );
+  proj.hit_attacker = 1;
+  instance_destroy();
+  exit;
+  }
+if ( speed < 1 ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 9;
+last_hit_proj = create_projectile ( 9 , 362 , 6.3 , 4.1 , 7 , 6 , punch2 , obj_spark_hit2 , 1.2 , 1.2 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.25;
+vspeed = -4;
+
+~~END OF FILE

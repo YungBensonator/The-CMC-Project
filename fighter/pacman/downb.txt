@@ -1,0 +1,227 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 59;
+  timer = 0;
+  state_type = "air_attack";
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  force_edge_grab = 1;
+  create_projectile ( 0 , 270 , 0 , 0 , 1 , 1 , -1 , -1 , 1 , 1 , 0 , 0 , self.id , 150 , char_custom1 );
+  if ( air == 0 )
+    {
+    state_type = "attack";
+    temp = 0;
+    }
+    else
+    {
+    sprite_index = downb2_sprite;
+    temp = 1;
+    }
+  }
+
+if ( temp == 0 )
+  {
+  if ( timer < 60 && facing == 1 )
+    image_xscale *= -1;
+  if ( timer > 3 && timer < 17 )
+    {
+    proj.x = x;
+    proj.y = y - 10 * size;
+    if ( target > 0 )
+      {
+      sound_play ( look1_voice );
+      intangible = 0;
+      intangible_frames = 0;
+      super_armor = 1;
+      armor_frames = 20;
+      timer = 60;
+      time = 140;
+      }
+    }
+  switch ( timer )
+    {
+    case 3:
+      create_homing_bubble ( 4.5 , 3 , 0 , 10 , self.id , 14 );
+      intangible_frames = 16;
+      intangible = 1;
+      break;
+    case 12: image_index = 1; break;
+    case 14: image_index = 2; break;
+    case 16: image_index = 3; break;
+    case 18: sound_play ( look2_voice ); break;
+    case 55: image_index = 2; break;
+    case 56: image_index = 1; break;
+    case 57: image_index = 0; break;
+    case 60:
+      sprite_index = downb3_sprite;
+      image_index = 1;
+      if ( target.x < x )
+        facing = 1;
+        else
+        facing = 0;
+      break;
+    case 64: image_index = 2; break;
+    case 68: image_index = 3; break;
+    case 72: image_index = 4; break;
+    case 76: image_index = 5; break;
+    case 80:
+      sprite_index = downb5_sprite;
+      image_speed = 0.25;
+      image_index = 0;
+      break;
+    }
+  if ( timer >= 80 )
+    {
+    if ( timer mod 5 == 0 )
+      {
+      if ( timer < time - 15 )
+        {
+        create_hitbox ( 1 , 5 + facing * 170 , 5 , 0 , 25 , 7 , sf_punch1 , obj_spark_hit1 , 0.69 , 1.06 , 8.55 , 14.25 , self.id , 4 , 0 );
+        hitbox.di *= 1.2;
+        }
+        else
+      if ( timer == time - 15 )
+        {
+        create_hitbox ( 5 , 70 + facing * 20 , 7 , 4.4 , 25 , 7 , sf_punchs , obj_spark_hit4 , 0.69 , 1.06 , 8.55 , 14.25 , self.id , 4 , 0 );
+        }
+      }
+    hspeed = 4 * ( 1 - facing * 2 ) * size;
+    if ( timer > time - 10 ) hspeed *= 0.5;
+    }
+  }
+  else
+  {
+  if ( timer > 3 && timer < 17 )
+    {
+    proj.x = x;
+    proj.y = y - 10 * size;
+    if ( target > 0 )
+      {
+      sound_play ( look1_voice );
+      intangible = 0;
+      intangible_frames = 0;
+      super_armor = 1;
+      armor_frames = 20;
+      timer = 60;
+      time = 140;
+      }
+    }
+  switch ( timer )
+    {
+    case 3:
+      create_homing_bubble ( 3.8 , 3.8 , 0 , 10 , self.id , 14 );
+      intangible_frames = 16;
+      intangible = 1;
+      break;
+    case 18: sound_play ( look2_voice ); break;
+    case 60:
+      sprite_index = downb4_sprite;
+      image_index = 1;
+      if ( target.x < x )
+        facing = 1;
+        else
+        facing = 0;
+      break;
+    case 64: image_index = 2; break;
+    case 68: image_index = 3; break;
+    case 72: image_index = 4; break;
+    case 76: image_index = 5; break;
+    case 80:
+      direction = point_direction ( x , y - target.actual_height * 0.5 , target.x , target.y );
+      speed = 6 * size;
+      hs = hspeed;
+      vs = vspeed;
+      if ( target.x < x )
+        facing = 1;
+        else
+        facing = 0;
+      sprite_index = downb6_sprite;
+      image_speed = 0.25;
+      image_index = 0;
+      air_move = 0;
+      break;
+    }
+  if ( timer < 60 && air == 0 )
+    {
+    sprite_index = downb_sprite;
+    hspeed *= 0.2;
+    }
+  if ( timer >= 60 && timer < 80 )
+    {
+    speed = 0;
+    gravity_lock = 1;
+    gravity = 0;
+    }
+  if ( timer >= 80 )
+    {
+    if ( ( on_floor || on_platform ) && vs > 0 )
+      {
+      screen_shake ( 2 , 4 );
+      instance_create ( x , y , obj_down_impact );
+      vs *= -1;
+      sound_play ( thud1_sound );
+      }
+    if ( next_to_lwall && hs < 0 )
+      {
+      screen_shake ( 2 , 4 );
+      instance_create ( x - actual_width , y - actual_height * 0.5 , obj_left_impact );
+      hs *= -1;
+      sound_play ( thud1_sound );
+      }
+    if ( next_to_rwall && hs > 0 )
+      {
+      screen_shake ( 2 , 4 );
+      instance_create ( x + actual_width , y - actual_height * 0.5 , obj_right_impact );
+      hs *= -1;
+      sound_play ( thud1_sound );
+      }
+    if ( under_ceiling && vs < 0 )
+      {
+      screen_shake ( 2 , 4 );
+      instance_create ( x , y - actual_height , obj_up_impact );
+      vs *= -1;
+      sound_play ( thud1_sound );
+      }
+    hspeed = hs;
+    vspeed = vs;
+    //if ( timer >= time - 20 )
+    speed *= 0.97;
+    //image_angle = 180 * facing + direction * ( 1 - facing * 2 );
+    hs = hspeed;
+    vs = vspeed;
+    gravity_lock = 1;
+    if ( timer mod 5 == 0 )
+      {
+      if ( timer < time - 15 )
+        {
+        create_hitbox ( 1 , 60 + facing * 60 , 4.7 , 0 , 25 , 7 , sf_punch1 , obj_spark_hit1 , 1.3 , 1.1 , 12.5 , 14.5 , self.id , 4 , 0 );
+        hitbox.di *= 1.2;
+        }
+        else
+      if ( timer == time - 15 )
+        {
+        create_hitbox ( 5 , 70 + facing * 20 , 7 , 4.4 , 25 , 7 , sf_punchs , obj_spark_hit4 , 1.3 , 1.1 , 12.5 , 14.5 , self.id , 4 , 0 );
+        }
+      }
+    }
+  }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+    }

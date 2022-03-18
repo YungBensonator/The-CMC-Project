@@ -1,0 +1,115 @@
+~~INIT:
+
+dice_spr = ispr_add_alpha ( "item/dice/dice.png" , 1 , 0 , 0 , 32 , 32 );
+
+~~DEINIT:
+
+if ( sprite_exists ( dice_spr ) )
+  spr_delete ( dice_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.dice_spr;
+sprite_air = obj_items_control.dice_spr;
+sprite_held = obj_items_control.dice_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -9;
+image_xscale = .22;
+image_yscale = .22;
+shadow = 6;
+
+sticked = 0;
+boost = 0;
+xx = x;
+yy = y;
+hit_timer = 0;
+weight = 0.2;
+
+~~LAND:
+
+~~STEP:
+
+sprite_index = sprite_air;
+
+
+if ( hit_timer > 0 ) hit_timer -= 1;
+
+if ( held <= 0 ) {
+//sprite_angle = 0
+//image_angle = direction
+sprite_angle = direction
+}
+;
+
+if ( under_ceiling && vspeed < 0 )
+  {
+  rot_speed *= 0.5;
+  vspeed = 0;
+  }
+if ( ( hspeed > 0 && next_to_rwall ) || ( hspeed < 0 && next_to_lwall ) )
+  {
+  hspeed *= -0.75;
+  }
+
+if ( abs ( vspeed ) < 0.15 && abs ( hspeed ) < 0.15 && ( on_floor || on_platform ) )
+  {
+  if ( image_angle < 180 )
+    image_angle /= 4;
+    else
+    image_angle = ( 360+image_angle*3 ) / 4;
+  }
+  //image_angle = direction
+//sprite_angle = direction
+  
+  if on_floor || on_platform{
+	  hspeed = 0
+	  image_angle = 90
+	  sprite_angle = 90
+  }
+
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( vermin.speed < 0.25 ) exit;
+if ( thrown <= 0 ) exit;
+hit_timer = 9;
+FMODSoundPlay ( koopa_hit );
+last_hit_proj = create_projectile ( choose(1,2,3,4,5,6),5+facing*170,choose(1,2,3,4,5,6),3+choose(1,2,3,4,5,6),10+choose(1,2,3,4,5,6),choose(1,2,3,4,5,6),choose(kick1,kick2,kick3,punch1,punch2,punch3),obj_spark_hit1 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.11;
+vspeed = -3;
+thrown = -99;
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = vermin.hitlag_frames + 1;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+object_stun ( vermin , vermin.hitlag_frames );
+if ( vermin.dir < 360 )
+  {
+  direction = vermin.dir;
+  } 
+  else
+  {
+  direction = 90;
+  }
+speed = min ( 20 , ( 4 + ( vermin.bkb + vermin.kbg ) ) * 0.5 );
+if ( on_floor || on_platform )
+  vspeed = 0;
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( thrown > 0 && vermin == thrown ) exit;
+hit_timer = 9;
+last_hit_proj = create_projectile ( choose(1,2,3,4,5,6),5+facing*170,choose(1,2,3,4,5,6),3+choose(1,2,3,4,5,6),10+choose(1,2,3,4,5,6),choose(1,2,3,4,5,6),choose(kick1,kick2,kick3,punch1,punch2,punch3),obj_spark_hit1 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.11;
+vspeed = -3;
+thrown = -99;
+
+
+~~END OF FILE

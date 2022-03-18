@@ -1,0 +1,429 @@
+cmc_v7_check();
+
+///Mokou Initialization Script
+ai_attack_script = char_ai;
+
+//Masks
+stand_sprite = cspr_add_pal('fighter/mokou_solo/stand.gif',7,0,1,0,1,53,95);
+sprite_start = stand_sprite;
+mask_sprite = cspr_add('fighter/mokou_solo/mask.gif',1,0,1,0,1,53,95);
+//default_mask_sprite = mask_sprite;
+crouch_sprite = cspr_add_pal('fighter/mokou_solo/crouch.gif',5,0,1,0,1,58,88);
+crouch_mask_sprite = cspr_add('fighter/mokou_solo/crouchmask.gif',1,0,1,0,1,58,88);
+//default_crouch_mask_sprite = crouch_mask_sprite;
+//run_mask_sprite = cspr_add('fighter/mokou_solo/runmask.gif',1,0,1,0,1,52,72);
+//jump_mask_sprite = cspr_add('fighter/mokou_solo/jumpmask.gif',1,0,1,0,1,48,92);
+
+//Movement
+jump_sprite = cspr_add_pal('fighter/mokou_solo/jump.gif',9,0,1,0,1,48,92);
+mid_jump_sprite = jump_sprite;
+land_sprite = cspr_add_pal('fighter/mokou_solo/land.gif',5,0,1,0,1,58,88);
+walk_sprite = cspr_add_pal('fighter/mokou_solo/walk.gif',8,0,1,0,1,54,97);
+walk_step[0] = 2;
+walk_step[1] = 6;
+run_sprite = cspr_add_pal('fighter/mokou_solo/run.gif',2,0,1,0,1,52,72);
+//dash_sprite = cspr_add_pal('fighter/mokou_solo/dash.gif',3,0,1,0,1,52,72);
+//run_step[0] = 3;
+//run_step[1] = 4;
+
+//Extra
+taunt_sprite = cspr_add_pal('fighter/mokou_solo/taunt.gif',6,0,1,0,1,58,95);
+killspark_sprite = cspr_add_alpha('fighter/mokou_solo/killspark.png',16,0,1,0,1,0,0);
+
+//Defense
+shield_sprite = cspr_add_pal('fighter/mokou_solo/shield.gif',1,0,1,0,1,40,89);
+roll_sprite = cspr_add_pal('fighter/mokou_solo/roll.gif',2,0,1,0,1,27,88);
+edge_sprite = cspr_add_pal('fighter/mokou_solo/edge.gif',1,1,1,0,1,45,11);
+spot_dodge_sprite = shield_sprite;
+air_dodge_sprite = cspr_add_pal('fighter/mokou_solo/airdodge.gif',3,0,1,0,1,48,92);
+
+//Hurt
+apron_sprite = cspr_add_pal('fighter/mokou_solo/apron.gif',1,1,1,0,1,28,85);
+flinch_sprite = cspr_add_pal('fighter/mokou_solo/flinch.gif',2,0,1,0,1,31,92);
+flinch2_sprite = cspr_add_pal('fighter/mokou_solo/flinch2.gif',1,1,1,0,1,31,83);
+flinch3_sprite = cspr_add_pal('fighter/mokou_solo/flinch3.gif',1,1,1,0,1,31,88);
+tumble_sprite = flinch2_sprite;
+broken_sprite = flinch_sprite;
+down_sprite = cspr_add_pal('fighter/mokou_solo/getup.gif',10,0,1,0,1,39,86);
+ukemi_sprite = cspr_add_pal('fighter/mokou_solo/tech.gif',8,0,1,0,1,59,86);
+fall_sprite = flinch_sprite;
+
+//Ground
+jab1_sprite = cspr_add_pal('fighter/mokou_solo/jab1.gif',6,0,1,0,1,35,92);
+jab2_sprite = cspr_add_pal('fighter/mokou_solo/jab2.gif',11,0,1,0,1,43,96);
+stilt_sprite = cspr_add_pal('fighter/mokou_solo/stilt.gif',7,0,1,0,1,40,90);
+stilt2_sprite = cspr_add_pal('fighter/mokou_solo/stilt2.gif',14,0,1,0,1,69,94);
+utilt_sprite = cspr_add_pal('fighter/mokou_solo/utilt.gif',7,0,1,0,1,50,89);
+utiltflip_sprite = cspr_add_pal('fighter/mokou_solo/utiltflip.gif',2,0,1,0,1,59,75);
+utilt2_sprite = cspr_add_pal('fighter/mokou_solo/utilt2.gif',13,0,1,0,1,60,96);
+dtilt_sprite = cspr_add_pal('fighter/mokou_solo/dtilt.gif',9,0,1,0,1,66,65);
+dasha_sprite = cspr_add_pal('fighter/mokou_solo/dasha.gif',14,0,1,0,1,56,89);
+
+//Aerial
+nair1_sprite = cspr_add_pal('fighter/mokou_solo/nair1.gif',9,0,1,0,1,51,71);
+nair2_sprite = cspr_add_pal('fighter/mokou_solo/nair2.gif',14,0,1,0,1,62,83);
+fair_sprite = cspr_add_pal('fighter/mokou_solo/fair.gif',7,0,1,0,1,54,70);
+fair2_sprite = cspr_add_pal('fighter/mokou_solo/fair2.gif',9,0,1,0,1,52,89);
+bair_sprite = cspr_add_pal('fighter/mokou_solo/bair.gif',16,0,1,0,1,42,77);
+uair_sprite = cspr_add_pal('fighter/mokou_solo/uair.gif',9,0,1,0,1,50,89);
+dair_sprite = cspr_add_pal('fighter/mokou_solo/dair.gif',4,0,1,0,1,53,89);
+
+//Smash
+ssmash_sprite = cspr_add_pal('fighter/mokou_solo/ssmash.gif',11,0,1,0,1,61,92);
+usmash_sprite = cspr_add_pal('fighter/mokou_solo/usmash.gif',15,0,1,0,1,58,94);
+usmash2_sprite = cspr_add_pal('fighter/mokou_solo/usmash2.gif',8,0,1,0,1,57,94);
+//usmash2_sprite = cspr_add_pal('fighter/mokou_solo/usmash2.gif',21,0,1,0,1,70,89);
+dsmash_sprite = cspr_add_pal('fighter/mokou_solo/dsmash.gif',16,0,1,0,1,54,94);
+
+//Special
+b_start_sprite = cspr_add_pal('fighter/mokou_solo/b_start.gif',11,0,1,0,1,60,98);
+b_sprite = cspr_add_pal('fighter/mokou_solo/b.gif',15,0,1,0,1,59,95);
+sideb_sprite = cspr_add_pal('fighter/mokou_solo/sideb.gif',9,0,1,0,1,54,96);
+upb_sprite = cspr_add_pal('fighter/mokou_solo/upb.gif',12,0,1,0,1,64,94);
+downb_sprite = cspr_add_pal('fighter/mokou_solo/downb.gif',3,0,1,0,1,47,104);
+downb_land_sprite = cspr_add_pal('fighter/mokou_solo/downb_land.gif',8,0,1,0,1,48,90);
+
+//Throw
+grab_sprite = cspr_add_pal('fighter/mokou_solo/grab.gif',14,0,1,0,1,57,93);
+hold_sprite = grab_sprite;
+pummel_sprite = grab_sprite;
+bthrow_sprite = cspr_add_pal('fighter/mokou_solo/bthrow.gif',11,0,1,0,1,139,240);
+uthrow_sprite = b_sprite;
+fthrow_sprite = cspr_add_pal('fighter/mokou_solo/fthrow.gif',13,0,1,0,1,69,90);
+dthrow_sprite = cspr_add_pal('fighter/mokou_solo/dthrow.gif',9,0,1,0,1,50,94);
+
+//Bullets
+blueamulet_sprite = cspr_add_alpha('fighter/mokou_solo/blueamulet.png',1,0,0,6,5);
+redamulet_sprite = cspr_add_alpha('fighter/mokou_solo/redamulet.png',22,0,0,6,5);
+bamboo_sprite = cspr_add_alpha('fighter/mokou_solo/bamboo.png',11,0,0,13,28);
+bairshot_sprite = cspr_add_alpha('fighter/mokou_solo/bairshot.png',21,0,0,159,90);
+bairshotblue_sprite = cspr_add_alpha('fighter/mokou_solo/bairshotblue.png',21,0,0,159,90);
+volcanobomb_sprite = cspr_add_alpha('fighter/mokou_solo/volcanobomb.png',16,0,0,57,57);
+
+//Special FX
+stiltflame_sprite = cspr_add_alpha('fighter/mokou_solo/stiltflame.png',14,0,0,138,88);
+stiltflameblue_sprite = cspr_add_alpha('fighter/mokou_solo/stiltflameblue.png',14,0,0,138,88);
+
+arcflame_sprite = cspr_add_alpha('fighter/mokou_solo/arcflame.png',5,0,0,140,155);
+arcflameblue_sprite = cspr_add_alpha('fighter/mokou_solo/arcflameblue.png',5,0,0,140,155);
+
+ssmashflame_sprite = cspr_add_alpha('fighter/mokou_solo/ssmashflame.png',16,0,0,48,77);
+ssmashflameblue_sprite = cspr_add_alpha('fighter/mokou_solo/ssmashflameblue.png',16,0,0,48,77);
+
+uairflame_sprite = cspr_add_alpha('fighter/mokou_solo/uairflame.png',10,0,0,175,82);
+uairflameblue_sprite = cspr_add_alpha('fighter/mokou_solo/uairflameblue.png',10,0,0,175,82);
+
+bairexplosion_sprite = cspr_add_alpha('fighter/mokou_solo/bairexplosion_strip18.png',18,0,0,138,68);
+bairexplosionblue_sprite = cspr_add_alpha('fighter/mokou_solo/bairexplosionblue_strip18.png',18,0,0,138,68);
+
+bambooexplode_sprite = cspr_add_alpha('fighter/mokou_solo/bambooexplode.png',15,0,0,83,82);
+bambooexplodeblue_sprite = cspr_add_alpha('fighter/mokou_solo/bambooexplodeblue.png',15,0,0,83,82);
+
+dsmashpillar_sprite = cspr_add_alpha('fighter/mokou_solo/dsmashpillar_strip22.png',22,0,0,60,151);
+dsmashpillarblue_sprite = cspr_add_alpha('fighter/mokou_solo/dsmashpillarblue_strip22.png',22,0,0,60,151);
+
+usmashblast_sprite = cspr_add_alpha('fighter/mokou_solo/usmashblast.png',12,0,0,95,420);
+spellcircle_sprite = cspr_add_alpha('fighter/mokou_solo/spellcircle.png',1,0,0,125,125);
+spellcard_resurrect_sprite = cspr_add_alpha('fighter/mokou_solo/spellcard_resurrection.png',1,0,0,20,32);
+spellcard_blueflame_sprite = cspr_add_alpha('fighter/mokou_solo/spellcard_blueflame.png',1,0,0,20,32);
+
+resurrectpillar_sprite = cspr_add_alpha('fighter/mokou_solo/resurrectpillard_strip75.png',75,0,0,70,108);
+resurrectpillarblue_sprite = cspr_add_alpha('fighter/mokou_solo/resurrectpillarblued_strip75.png',75,0,0,70,108);
+
+phoenixdown_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixdown_strip50.png',50,0,0,50,50);
+phoenixdownblue_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixdownblue_strip50.png',50,0,0,50,50);
+
+talonclaw_sprite = cspr_add_alpha('fighter/mokou_solo/talonclaw.png',9,0,0,227,228);
+firebird_sprite = cspr_add_alpha('fighter/mokou_solo/firebird.png',4,0,0,212,170);
+firebirdblue_sprite = cspr_add_alpha('fighter/mokou_solo/firebirdblue.png',4,0,0,212,170);
+
+phoenixerupt_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixeruptd_strip49.png',49,0,0,89,60);
+phoenixeruptblue_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixeruptdblue_strip49.png',49,0,0,89,60);
+
+phoenixwing_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixwing_strip22.png',22,0,0,35,100);
+phoenixwingblue_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixwingblue_strip22.png',22,0,0,35,100);
+
+phoenixwing2_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixwing2.png',6,0,0,199,160);
+phoenixwingblue2_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixwingblue2.png',6,0,0,199,160);
+
+phoenixrise_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixrise_strip3.png',3,0,0,160,110);
+phoenixriseblue_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixriseblue_strip3.png',3,0,0,160,110);
+
+phoenixfeather_sprite = cspr_add('fighter/mokou_solo/phoenixfeather.gif',1,0,1,0,1,44,14);
+phoenixfeather2_sprite = cspr_add('fighter/mokou_solo/phoenixfeather2.gif',1,0,1,0,1,41,15);
+phoenixfeather3_sprite = cspr_add('fighter/mokou_solo/phoenixfeather3.gif',1,0,1,0,1,41,17);
+phoenixfeatherblue_sprite = cspr_add('fighter/mokou_solo/phoenixfeatherblue.gif',1,0,1,0,1,44,14);
+phoenixfeatherblue2_sprite = cspr_add('fighter/mokou_solo/phoenixfeatherblue2.gif',1,0,1,0,1,41,15);
+phoenixfeatherblue3_sprite = cspr_add('fighter/mokou_solo/phoenixfeatherblue3.gif',1,0,1,0,1,41,17);
+
+/*
+
+bairshot_sprite = cspr_add_alpha('fighter/mokou_solo/bairshot.png',21,0,0,320,180);
+bairshotblue_sprite = cspr_add_alpha('fighter/mokou_solo/bairshotblue.png',21,0,0,320,180);
+
+
+resurrectpillar_sprite = cspr_add_alpha('fighter/mokou_solo/resurrectpillar.png',75,0,0,358,545);
+resurrectpillarblue_sprite = cspr_add_alpha('fighter/mokou_solo/resurrectpillarblue.png',75,0,0,358,545);
+phoenixerupt_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixerupt.png',49,0,0,488,312);
+
+phoenixdown_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixdown.png',50,0,0,194,188);
+phoenixdownblue_sprite = cspr_add_alpha('fighter/mokou_solo/phoenixdownblue.png',50,0,0,194,188);
+dsmashpillar_sprite = cspr_add_alpha('fighter/mokou_solo/dsmashpillar.png',22,0,0,229,604);
+dsmashpillarblue_sprite = cspr_add_alpha('fighter/mokou_solo/dsmashpillarblue.png',22,0,0,229,604);
+bairexplosion_sprite = cspr_add_alpha('fighter/mokou_solo/bairexplosion.png',24,0,0,556,273);
+bairexplosionblue_sprite = cspr_add_alpha('fighter/mokou_solo/bairexplosionblue.png',24,0,0,556,273);
+bambooexplode_sprite = cspr_add_alpha('fighter/mokou_solo/bambooexplode.png',15,0,0,154,160);
+bambooexplodeblue_sprite = cspr_add_alpha('fighter/mokou_solo/bambooexplodeblue.png',15,0,0,154,160);
+
+*/
+
+//Meter
+meter_sprite = cspr_add('fighter/mokou_solo/meter1.gif',1,1,1,0,1,42,76);
+//card_meter_sprite = cspr_add('fighter/mokou_solo/meter2.gif',1,1,1,0,1,99,116);
+hudThing_draw_script = char_custom7;
+hudThing_step_script = char_custom8;
+
+//Final Smash
+//final_smash_sprite = cspr_add('fighter/mokou_solo/finalsmash.gif',1,0,1,0,0,38,58);
+//final_smash_effect_spr = cspr_add_alpha('fighter/mokou_solo/fs_flame.png',16,1,0,18,48);
+
+//Item
+item_forward_sprite = jab1_sprite;
+item_down_sprite = dsmash_sprite;
+item_up_sprite =  usmash2_sprite;
+item_swing_sprite = stilt2_sprite;
+item_swing_frame = 7;
+item_shoot_sprite = stilt_sprite;
+item_shoot_frame = 4;
+item_heavy_sprite = cspr_add_pal('fighter/mokou_solo/heavy.gif',8,0,1,0,1,57,94);
+hammer_swing_frame = 7;
+
+//Effect Collision
+sprite_collision_mask(usmashblast_sprite,1,0,0,0,0,0,0,0);
+sprite_collision_mask(resurrectpillar_sprite,1,0,0,0,0,0,0,0);
+sprite_collision_mask(talonclaw_sprite,1,0,0,0,0,0,0,0);
+
+//Results
+entry_sprite = taunt_sprite;
+win_sprite = b_start_sprite;
+lose_sprite = cspr_add_pal('fighter/mokou_solo/lose.gif',1,1,1,0,1,34,49);
+sprite_end = lose_sprite;
+
+//Scripts
+jab_script = char_jab;
+stilt_script = char_stilt;
+utilt_script = char_utilt;
+dtilt_script = char_dtilt;
+dash_attack_script = char_dash_attack;
+ssmash_script = char_ssmash;
+usmash_script = char_usmash;
+dsmash_script = char_dsmash;
+nair_script = char_nair;
+fair_script = char_fair;
+bair_script = char_bair;
+uair_script = char_uair;
+dair_script = char_dair;
+zair_script = char_zair;
+b_script = char_b;
+sideb_script = char_sideb;
+upb_script = char_upb;
+downb_script = char_downb;
+//smashb_script = char_smashb;
+grab_script = char_grab;
+hold_script = char_hold;
+fthrow_script = char_fthrow;
+bthrow_script = char_bthrow;
+uthrow_script = char_uthrow;
+dthrow_script = char_dthrow;
+edge_attack_script = char_edge_attack;
+edge_roll_script = char_edge_roll;
+edge_jump_script = char_edge_jump;
+down_attack_script = char_down_attack;
+final_smash_script = char_final_smash;
+win_script = char_win;
+lose_script = char_lose;
+entry_script = char_entry;
+taunt_script = char_taunt;
+step_script = char_step;
+
+//Sounds
+jump_sound = sound_add("fighter/mokou_solo/mokoudash.wav",0,1);
+sound_start = jump_sound;
+
+swing_sound1 = sound_add("fighter/mokou_solo/mokouswing1.wav",0,1);
+swing_sound2 = sound_add("fighter/mokou_solo/mokouswing2.wav",0,1);
+swing_sound3 = sound_add("fighter/mokou_solo/mokouswing3.wav",0,1);
+sound_volume(charge_sound,0.67);
+swing_sound4 = sound_add("fighter/mokou_solo/mokouswing4.wav",0,1);
+swing_sound6 = sound_add("fighter/mokou_solo/mokouswing6.wav",0,1);
+swing_sound7 = sound_add("fighter/mokou_solo/mokouswing7.wav",0,1);
+
+charge_sound = sound_add("fighter/mokou_solo/mokoucharge.wav",0,1);
+sound_volume(charge_sound,0.67);
+shoot_sound  = sound_add("fighter/mokou_solo/mokoushot2.wav",0,1);
+sound_volume(shoot_sound,0.20);
+mokouexplosion1 = sound_add("fighter/mokou_solo/mokouexplosion1.wav",0,1);
+mokouexplosion2 = sound_add("fighter/mokou_solo/mokouexplosion2.wav",0,1);
+mokouexplosion3 = sound_add("fighter/mokou_solo/mokouexplosion3.wav",0,1);
+spellcard_sound = sound_add("fighter/mokou_solo/spellcard.wav",0,1);
+blueflame_sound = sound_add("fighter/mokou_solo/blueflameon.wav",0,1);
+killscreen_voice = sound_add("fighter/mokou_solo/killscreen.wav",0,1);
+mokoubird_sound = sound_add("fighter/mokou_solo/mokoubird2.wav",0,1);
+
+//Custom Sounds
+mokouhit1 = add_hit_sfx(0,"fighter/mokou_solo/mokouhit1.wav")
+
+mokouhit2 = add_hit_sfx(1,"fighter/mokou_solo/mokouhit2.wav")
+
+mokouhit3 = add_hit_sfx(2,"fighter/mokou_solo/mokouhit3.wav")
+
+mokouhit4 = add_hit_sfx(3,"fighter/mokou_solo/mokouhit4.wav")
+
+mokouexplode1 = add_hit_sfx(4,"fighter/mokou_solo/mokouexplode1.wav")
+
+mokouexplode3 = add_hit_sfx(5,"fighter/mokou_solo/mokouexplode3.wav")
+
+mokouexplode5 = add_hit_sfx(6,"fighter/mokou_solo/mokouexplode5.wav")
+
+mokouexplode6 = add_hit_sfx(7,"fighter/mokou_solo/mokouexplode6.wav")
+
+mokouslash1 = add_hit_sfx(8,"fighter/mokou_solo/mokouslash1.wav")
+
+mokouslash2 = add_hit_sfx(9,"fighter/mokou_solo/mokouslash2.wav")
+
+mokouslash3 = add_hit_sfx(10,"fighter/mokou_solo/mokouslash3.wav")
+
+taunt_voice = sound_add("fighter/mokou_solo/taunt.wav",0,1);
+sound_mute = taunt_voice;
+fly_voice1 = sound_add("fighter/mokou_solo/fly1.wav",0,1);
+fly_voice2 = sound_add("fighter/mokou_solo/fly2.wav",0,1);
+die_voice1 = sound_add("fighter/mokou_solo/ko1.wav",0,1);
+die_voice2 = sound_add("fighter/mokou_solo/ko2.wav",0,1);
+starko_voice = sound_add("fighter/mokou_solo/starko.wav",0,1);
+
+attack_voice1 = sound_add("fighter/mokou_solo/atklite1.wav",0,1);
+attack_voice2 = sound_add("fighter/mokou_solo/atklite2.wav",0,1);
+attack_voice3 = sound_add("fighter/mokou_solo/atklite3.wav",0,1);
+attack_voice4 = sound_add("fighter/mokou_solo/atklite4.wav",0,1);
+
+mid_voice1 = sound_add("fighter/mokou_solo/atkmid1.wav",0,1);
+mid_voice2 = sound_add("fighter/mokou_solo/atkmid2.wav",0,1);
+mid_voice4 = sound_add("fighter/mokou_solo/atkmid4.wav",0,1);
+mid_voice5 = sound_add("fighter/mokou_solo/atkmid5.wav",0,1);
+mid_voice6 = sound_add("fighter/mokou_solo/atkmid6.wav",0,1);
+
+heavy_voice3 = sound_add("fighter/mokou_solo/atkheavy3.wav",0,1);
+heavy_voice4 = sound_add("fighter/mokou_solo/atkheavy4.wav",0,1);
+heavy_voice5 = sound_add("fighter/mokou_solo/atkheavy5.wav",0,1);
+heavy_voice6 = sound_add("fighter/mokou_solo/atkheavy6.wav",0,1);
+
+special_voice1 = sound_add("fighter/mokou_solo/special1.wav",0,1);
+special_voice2 = sound_add("fighter/mokou_solo/special2.wav",0,1);
+special_voice3 = sound_add("fighter/mokou_solo/special3.wav",0,1);
+special_voice4 = sound_add("fighter/mokou_solo/special4.wav",0,1);
+special_voice5 = sound_add("fighter/mokou_solo/special5.wav",0,1);
+special_voice7 = sound_add("fighter/mokou_solo/special7.wav",0,1);
+special_voice8 = sound_add("fighter/mokou_solo/special8.wav",0,1);
+special_voice9 = sound_add("fighter/mokou_solo/special9.wav",0,1);
+special_voice10 = sound_add("fighter/mokou_solo/special10.wav",0,1);
+special_voice11 = sound_add("fighter/mokou_solo/special11.wav",0,1);
+special_voice13 = sound_add("fighter/mokou_solo/special13.wav",0,1);
+ex_voice1 = sound_add("fighter/mokou_solo/ex1.wav",0,1);
+win_voice = sound_add("fighter/mokou_solo/win.wav",0,1);
+sound_end = win_voice;
+
+//Stats
+weight = 0.28;
+grav = 0.28;
+max_jumps = 3;
+walk_speed = 1.3;
+run_start_speed = 4;
+run_accel = 0.16;
+run_speed = 4.7;
+dash_speed = 4.2;
+jumptimer = 1;
+jump_speed = 6.1;
+mid_jump_speed = 6.7;
+short_hop_speed = 2.75;
+air_speed = 3.0;
+fall_speed = 4.1;
+fast_fall_multiplier = 1.2;
+air_accel = 0.28;
+airdash_speed = 8;
+fric = 0.95;
+dontrepeat = 0;
+temp_spawn = 0;
+smash_power_gain = 1.0;
+ability = "fire";
+
+ranged_attacks = 4
+ranged_attack_types[0] = "stilt"
+ranged_attack_types[1] = "utilt"
+ranged_attack_types[2] = "fair"
+ranged_attack_types[3] = "bair"
+scancel_type[0]=0
+scancel_type[1]=0
+scancel_type[2]=1
+scancel_type[3]=0
+scancel_type[4]=0
+max_attack_dist = 56
+camp_factor = 0.6
+special_land_time = 14
+
+points = 0;
+kos = 0;
+falls = 0;
+air = 0;
+state_type = "enter";
+attack_type = "none";
+timer = 0;
+time = 60;
+timer_speed = 1;
+facing = 0;
+xsize = 0.40;
+ysize = 0.40;
+image_yscale = ysize;
+moveright = 0; moveleft = 0; moveup = 0; movedown = 0; attacking =0; movejump = 0;
+hitby = 0;
+mask_index = stand_sprite;
+held_item=-1
+sideb_recover = 1
+
+//Variables
+loopstart_run = 3
+loopstart_jump = 7
+
+///Variables
+lifemeter = 0
+maxlifemeter = 200
+floattime = 100
+maxfloattime = 100
+spellcost = maxfloattime/5
+spellcosttime = 45
+lifemetergain = 0.9
+spellgain = 1.5
+spellregen = 0.04
+
+dtilttimer = 0
+grabtimer = 0
+nobullet = 0
+blueflame = 0
+blueflamepower = 0
+blueflametimer = 60 * 30
+resurrection = 0
+lastword = 0
+lastwordtemp = 0
+default_weight = weight
+
+crouchgetuptimer = 0
+crouchtemp = 0
+sidebtemp = 0
+upbtemp = 0 //Checks if you already used upb. Can't use upb if this is 1.
+upbfly = 0 //Allows you to fly with upb.
+upbflytemp = 0 //Allows you to refly when upb was used in the air at least once. Automatically puts you into fly state when using upb again in the air.
+downbtemp = 0
+spellbreak = 0
+can_zair = 1;
+
+nospellmode = 0 //Training Mode Only
+handtemp = 0 // Hand softlock fix

@@ -1,0 +1,87 @@
+if ( time != -1 )
+  {
+    if instance_exists(target)
+    {
+	state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    sprite_index = hold_sprite;
+    image_speed = 0;
+    image_index = 2;
+    hspeed = 0;
+    timer_speed=1;
+    target.attack_type = "none"
+    pummel = -1;
+	shakex = 0;
+	}
+	else
+	exit;
+  }
+if ( attacking && pummel == -1 )
+ {
+   attacking = 0;
+   pummel = 0;
+   sprite_index = pummel_sprite;
+   image_speed = 0.25;
+   image_index = 0;
+ }
+if ( timer >= 0 )
+{
+target.x = x + 16 * size * (1-facing*2);
+target.y = y;
+}
+if ( pummel == -1 )
+ {
+if facing = 0 {
+    if moveright = 1
+    attack_type = "fthrow";
+    else if moveleft = 1
+    attack_type = "bthrow";
+    }
+if facing = 1 {
+    if moveleft = 1
+    attack_type = "fthrow";
+    else if moveright = 1
+    attack_type = "bthrow";
+    }
+if moveup = 1 
+    attack_type = "uthrow";
+if movedown = 1 {
+    attack_type = "dthrow";
+    movedown = 0; }
+ }
+else
+ { 
+pummel += 1;
+    if ( pummel == 10 ) // replace 5 with the frame in which we pummel
+   {
+    temp_timer = target.timer;
+    temp_time = target.time;
+    sound_play2 ( kick1 );
+    create_projectile ( 2 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_hit1 , 0.8 , 0.8 , 10 , 5 , self.id , 2 , 0 );
+   }
+    if ( pummel == 11 ) // replace 6 with the frame after the one in which we pummel
+   {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+   }
+    if ( pummel = 17 )
+   {
+    sprite_index = hold_sprite;
+    image_speed = 0;
+    image_index = 2;
+   }
+    if ( pummel >= 30 ) // replace 15 with the frame in which pummel ends and we get back to hold
+   {
+    pummel = -1;
+   }
+ }
+if string(target.state_type) != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }
+        

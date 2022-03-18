@@ -1,0 +1,162 @@
+~~INIT:
+
+pitfall_spr = ispr_add_alpha ( "item/pitfall/pitfall.png" , 1 , 0 , 0 , 8 , 8 );
+
+~~DEINIT:
+
+if ( sprite_exists ( pitfall_spr ) )
+  spr_delete ( pitfall_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.pitfall_spr;
+sprite_air = obj_items_control.pitfall_spr;
+sprite_held = obj_items_control.pitfall_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -6;
+image_xscale = 0.75;
+image_yscale = 0.75;
+collision_type = 0;
+shadow = 5;
+
+mask_index = spr_item_mask2;
+
+sticked = 0;
+hit_timer = 0;
+
+~~LAND:
+if ( thrown > 0 && !sticked )
+  {
+  instance_create ( x , y - 5 , obj_spark_shockwave );
+  sticked = 1;
+  image_index = 1;
+  speed = 0;
+  }
+
+~~PICK:
+collision_type = 1;
+
+~~STEP:
+if ( hit_timer < 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer += 1;
+  if ( hit_timer == 0 ) instance_destroy();
+  exit;
+  }
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  if ( sticked == 0 )
+    {
+    if ( next_to_rwall )
+      {
+      instance_create ( x , y - 5 , obj_spark_shockwave );
+      sticked = 1;
+      image_index = 1;
+      speed = 0;
+      }
+    if ( next_to_lwall )
+      {
+      instance_create ( x , y - 5 , obj_spark_shockwave );
+      sticked = 1;
+      image_index = 1;
+      speed = 0;
+      }
+    if ( under_ceiling )
+      {
+      instance_create ( x , y - 5 , obj_spark_shockwave );
+      sticked = 1;
+      image_index = 1;
+      speed = 0;
+      }
+    can_pick_up = 0.5;
+    }
+  custom_land = 1;
+  }
+  else
+  {
+  can_pick_up = 1;
+  custom_land = 0;
+  }
+if ( sticked )
+  {
+  visible = 0;
+  max_fall_speed = 0;
+  can_pick_up = 0;
+  rot_speed = 0;
+  sprite_angle = 0;
+  if ( next_to_rwall ) { air_spr_y = 0; sprite_angle = 90; }
+  if ( next_to_lwall ) { air_spr_y = 0; sprite_angle = -90; }
+  if ( under_ceiling ) { air_spr_y = 6; sprite_angle = 180; }
+  }
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( sticked )
+  {
+  instance_create ( x , y , obj_spark_shockwave );
+  create_projectile_impaler ( 13 , 270 , 8 , 2.2 , -1 , 13 , kick3 , -1 , 1 , 1 , 0 , 0 , thrown , 7 , -1 );
+  proj.hit_attacker = 1;
+  instance_destroy();
+  exit;
+  }
+if ( speed < 1 ) exit;
+if ( vermin == thrown ) exit;
+instance_create ( x , y , obj_spark_shockwave );
+create_projectile_impaler ( 13 , 270 , 8 , 2.2 , -1 , 13 , kick3 , -1 , 1 , 1 , 0 , 12 , thrown , 7 , -1 );
+proj.hit_attacker = 0;
+instance_destroy();
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( vermin.attacker == thrown ) exit;
+if ( sticked )
+  {
+  instance_create ( x , y , obj_spark_shockwave );
+  create_projectile_impaler ( 13 , 270 , 8 , 2.2 , -1 , 13 , kick3 , -1 , 1 , 1 , 0 , 0 , thrown , 7 , -1 );
+  proj.hit_attacker = 1;
+  instance_destroy();
+  exit;
+  }
+if ( speed < 1 ) exit;
+instance_create ( x , y , obj_spark_shockwave );
+create_projectile_impaler ( 13 , 270 , 8 , 2.2 , -1 , 13 , kick3 , -1 , 1 , 1 , 0 , 12 , thrown , 7 , -1 );
+proj.hit_attacker = 0;
+instance_destroy();
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+if ( sticked )
+  {
+  instance_create ( x , y , obj_spark_shockwave );
+  create_projectile_impaler ( 13 , 270 , 8 , 2.2 , -1 , 13 , kick3 , -1 , 1 , 1 , 0 , 0 , thrown , 7 , -1 );
+  proj.hit_attacker = 1;
+  instance_destroy();
+  exit;
+  }
+if ( speed < 1 ) exit;
+instance_create ( x , y , obj_spark_shockwave );
+create_projectile_impaler ( 13 , 270 , 8 , 2.2 , -1 , 13 , kick3 , -1 , 1 , 1 , 0 , 12 , thrown , 7 , -1 );
+proj.hit_attacker = 0;
+instance_destroy();
+
+~~END OF FILE

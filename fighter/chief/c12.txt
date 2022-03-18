@@ -1,0 +1,78 @@
+time = 400;
+parry_nodestroy = 1;
+no_reflect = 1;
+if timer <= 1 {         // Initialize sprite and speed during frame 1
+    sprite_index = keepmain.shield_halo
+    image_speed = 0.25
+	image_xscale = 0.7 * (1-facing*2) * size;
+	image_yscale = 0.7 * size;
+    visible =1
+    image_index = 0;
+	tempfacing = attacker.id.facing;
+    hit = 2;
+    sound_play(keepmain.energy1_sound);
+
+// Whoever made josuke, thx   
+   
+   if ( !instance_exists ( shieldH ) )
+    {
+    shieldL = instance_create ( x , y , obj_leftwall );
+    shieldL.visible = 0;
+    shieldL.sprite_index = keepmain.wallmaskL_sprite
+    shieldL.image_xscale = 0.7;
+    shieldL.image_yscale = 0.7;
+	attacker.id.shieldL = shieldL;
+    }
+  shieldH.alarm[0] = 2;
+  shieldL.exception = noone;
+  with ( shieldL )
+    event_user(0);
+    if ( !instance_exists ( shieldR ) )
+    {
+    shieldR = instance_create ( x , y , obj_rightwall );
+    shieldR.visible = 0;
+    shieldR.sprite_index = keepmain.wallmaskR_sprite
+    shieldR.image_xscale = 0.7;
+    shieldR.image_yscale = 0.7;
+	attacker.id.shieldR = shieldR;
+    }
+  shieldR.alarm[0] = 2;
+  shieldR.exception = noone;
+  with ( shieldR )
+    event_user(0);
+	
+}
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+}
+
+attacker.id.shieldL = shieldL;
+attacker.id.shieldR = shieldR;
+
+if timer <= 6
+{
+vspeed -= 0.5;
+}
+
+if timer = 7
+{
+vspeed = 0;
+}
+
+if timer = time && instance_exists (shieldL)
+{
+with (shieldL){
+            instance_destroy();
+        }
+instance_destroy()
+instance_create ( x , y , obj_spark_explode1 );
+}
+
+if timer = time && instance_exists (shieldR)
+{
+with (shieldR){
+            instance_destroy();
+        }
+}

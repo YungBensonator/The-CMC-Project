@@ -1,0 +1,341 @@
+~~INIT:
+
+bulletbill_spr = ispr_add_alpha ( "item/bulletbill/BulletBill.png" , 1 , 0 , 0 , 35 , 22 );
+bulletbill_held_spr = ispr_add_alpha ( "item/bulletbill/BulletBill_held.png" , 1 , 0 , 0 , 15 , 10 );
+bulletbill_smoke_spr = ispr_add_alpha ( "item/bulletbill/smoke.png" , 14 , 0 , 0 , 32 , 32 );
+bulletbill_fire_spr = ispr_add_alpha ( "item/bulletbill/fire.png" , 10 , 0 , 0 , 120 , 36 );
+billstart_snd = isound_add ( "item/bulletbill/startup.wav" , 0 , 0 );
+billblast_snd = isound_add ( "item/bulletbill/blast.wav" , 0 , 0 );
+billfinish_snd = isound_add ( "item/bulletbill/finish.wav" , 0 , 0 );
+
+~~DEINIT:
+
+if ( sprite_exists ( bulletbill_spr ) )
+  spr_delete ( bulletbill_spr );
+if ( sprite_exists ( bulletbill_held_spr ) )
+  spr_delete ( bulletbill_held_spr );
+if ( sprite_exists ( bulletbill_smoke_spr ) )
+  spr_delete ( bulletbill_smoke_spr );
+if ( sprite_exists ( bulletbill_fire_spr ) )
+  spr_delete ( bulletbill_fire_spr );
+
+~~ENTER:
+
+sprite_index = obj_items_control.bulletbill_held_spr;
+sprite_air = obj_items_control.bulletbill_held_spr;
+sprite_held = obj_items_control.bulletbill_held_spr;
+image_speed = 0;
+image_index = 0;
+air_spr_y = -8;
+image_xscale = 0.6;
+image_yscale = 0.6;
+collision_type = 2;
+type = "batter";
+shadow = 6;
+
+temp = 0;
+bulletbilltimer = 0;
+hp = 1;
+
+batter_jab = 1;
+batter_stilt = 1;
+batter_udtiltsmash= 1;
+batter_dash = 1;
+batter_ssmash = 1;
+batter_nair = 1;
+batter_fair = 1;
+batter_uair = 1;
+batter_dair = 1;
+batter_bair = 1;
+batter_throw = 1;
+
+hit_timer = 0;
+
+~~STEP:
+if ( hit_timer > 0 )
+  hit_timer -= 1;
+if ( hp = 0 )
+{
+instance_destroy();
+exit;
+}
+
+~~PLAYER EVENT:
+
+var timing_begin, timing_end, timing_effdelta, thrust_speed;
+timing_begin = 10;
+timing_end = 40;
+timing_effdelta = 4;
+thrust_speed = 10;
+
+if ( timer == -1 )
+  {
+  /*if ( air = 0 )
+  {
+	sprite_index = stand_sprite;
+  }
+  if ( air > 0 )
+  {
+	sprite_index = jump_sprite;
+  }*/
+  image_index = 0;
+  state_type = "air_attack";
+  timer_speed = 1;
+  timer = 0;
+  time = 75;
+  image_speed = 0;
+  //visible = 0;
+  held_item.image_alpha = 0;
+  air_move = 0;
+  intangible = 1;
+  sound_play ( obj_items_control.billstart_snd );
+  
+  dust = instance_create (x , y - 10 * size , obj_spark)
+  dust.sprite_index = obj_items_control.bulletbill_smoke_spr;
+  dust.image_index = 0;
+  dust.image_xscale = 1.2;
+  dust.image_yscale = 1.2;
+  dust.image_speed = 1;
+  dust.depth = -6;
+  }
+  
+if ( timer >= 0 )
+{
+	gravity_lock = 1;
+	gravity = 0;
+	fast_fall = 0;
+	fast_fall_temp = 0;
+}
+
+
+if ( timer < timing_begin )
+{
+	speed = 0;
+}
+
+//DIRECTION
+if ( timer <= 1 )
+{
+	if ( ( moveright = 1 && !moveup && !movedown ) || ( moveright = 0 && moveleft = 0 && moveup = 0 && movedown = 0 && facing = 0 && smashright = 0 && smashup = 0 && smashdown = 0 && smashleft = 0 ) || ( smashright = 1 && !smashup && !smashdown ) )
+	{
+	direction = 0;
+	facing = 0;
+	temp = direction;
+	}
+
+	if ( ( moveright = 1 && moveup = 1 ) || ( smashright = 1 && smashup = 1 ) )
+	{
+	direction = 45;
+	facing = 0;
+	temp = direction;
+	}
+
+	if ( ( moveup = 1 && !moveright && !moveleft ) || ( smashup = 1 && !smashright && !smashleft ) )
+	{
+	direction = 90;
+	temp = direction;
+	}
+
+	if ( ( moveleft = 1 && moveup = 1 ) || ( smashleft = 1 && smashup = 1 ) )
+	{
+	direction = 135;
+	facing = 1;
+	temp = direction;
+	}
+
+	if ( ( moveleft = 1 && !moveup && !movedown ) || ( moveright = 0 && moveleft = 0 && moveup = 0 && movedown = 0 && facing = 1 && smashleft = 0 && smashup = 0 && smashdown = 0 && smashright = 0 ) || ( smashleft = 1 && !smashup && !smashdown ) )
+	{
+	direction = 180;
+	facing = 1;
+	temp = direction;
+	}
+
+	if ( ( moveleft = 1 && movedown = 1 ) || ( smashleft = 1 && smashdown = 1 ) )
+	{
+	direction = 225;
+	facing = 1;
+	temp = direction;
+	}
+
+
+	if ( ( movedown = 1 && !moveright && !moveleft ) || ( smashdown = 1 && !smashright && !smashleft ) )
+	{
+	direction = 270;
+	temp = direction;
+	}
+
+	if ( ( moveright = 1 && movedown = 1 ) || ( smashright = 1 && smashdown = 1 ) )
+	{
+	direction = 315;
+	facing = 0;
+	temp = direction;
+	}
+	
+	// haha lol
+	if ( !smashright && !smashdown && !smashleft && !smashup )
+	{
+		var a;
+		a = stick_angle(self.id);
+		if ( a > -1 )
+		{
+			direction = a;
+			if ( a < 88 || a > 272 )
+				facing = 0;
+			if ( a > 92 && a < 268 )
+				facing = 1;
+			temp = direction;
+		}
+	}
+	
+	// haha lol 2
+	if ( ai )
+	{
+		var lel, a, erro;
+		a = 180 * facing;
+		erro = 10 - ai_level;
+		lel = instance_nearest(x,y,obj_edge);
+		if ( y < lel.y + 4 )
+		{
+			if ( x < obj_items_control.camera_boundary_l + 128 )
+				a = random(erro*3);
+				else
+			if ( x > obj_items_control.camera_boundary_r - 128 )
+				a = 180-random(erro*3);
+				else
+			{
+				if ( instance_exists(e_obj) )
+				{
+					if ( e_obj.x > obj_items_control.camera_boundary_l + 64
+						&& e_obj.x < obj_items_control.camera_boundary_r - 64
+						&& e_obj.y < lel.y + 4 )
+						a = point_direction(x,y,e_obj.x,e_obj.y) - erro+random(erro*2);
+				}
+			}
+		}
+		else
+		{
+			a = point_direction(x,y,lel.x,lel.y) - erro + random(erro*2);
+		}
+		direction = a;
+		if ( a < 88 || a > 272 )
+			facing = 0;
+		if ( a > 92 && a < 268 )
+			facing = 1;
+		temp = direction;
+	}
+}
+
+//BULLET BILL SPRITE + HITBOX
+if ( timer == timing_begin )
+{
+	visible = 0;
+	bulletbill = instance_create ( x , y - 15, obj_spark );
+	bulletbill.sprite_index = obj_items_control.bulletbill_spr;
+	bulletbill.image_xscale = 0.5 * size;
+	bulletbill.image_yscale = 0.5 * (1-facing*2) * size;
+	bulletbill.image_angle = temp;
+	bulletbill.image_index = 0;
+	bulletbill.image_speed = 0;
+	bulletbill.alarm[0] = 1000;
+	sound_play ( obj_items_control.billblast_snd );
+	create_hitbox ( 25 , 30+facing*120 , 6 , 6 , 100 , 1 , punch3 , obj_spark_hit1 , 1.55 , 0.97 , 0 , 15 , self.id , 55 , 5 );
+	hitbox.image_angle = temp;
+}
+
+//FIRE TRAIL
+if ( timer >= timing_begin && timer < timing_end && !instance_exists (firetrail) )
+{
+	firetrail = instance_create (bulletbill.x, bulletbill.y, obj_spark)
+	firetrail.sprite_index = obj_items_control.bulletbill_fire_spr;
+	firetrail.image_xscale = 0.4 * size;
+	firetrail.image_yscale = 0.4 * size;
+	firetrail.image_index = 0;
+	firetrail.image_angle = temp;
+	firetrail.image_speed = 0.5;
+	firetrail.image_alpha = 0.9;
+	firetrail.snap = self.id;
+	firetrail.depth = 2;
+}
+
+
+//MOVEMENT, SPRITE FOLLOW & SMOKE TRAIL
+if ( timer >= timing_begin && timer < timing_end )
+{
+	direction = temp;
+	speed = thrust_speed;
+	bulletbill.x = x;
+	bulletbill.y = y - 15;
+	firetrail.x = bulletbill.x;
+	firetrail.y = bulletbill.y;
+	bulletbill.alarm[0] = 1000;
+	if ( timer mod timing_effdelta = 2 )
+	{
+		duster = instance_create (x , y , obj_spark)
+		duster.sprite_index = global.smoke_spark1;
+		duster.image_xscale = 0.5 * size;
+		duster.image_yscale = 0.5 * size;
+		duster.image_speed = 0;
+		duster.alarm[0] = 14;
+		duster.image_alpha = 1;
+		duster.alpha_add = -1 / 14;
+		duster.angle_add = -2+random(4);
+		duster.depth = 1;
+		duster.x = x - lengthdir_x(30,temp);
+		duster.y = y - lengthdir_y(30,temp) - 12;
+	}
+}
+
+//IMPACT
+if ( ( ( ( on_floor || on_platform ) && vspeed > 1 ) || ( next_to_rwall && hspeed > 1 ) || ( next_to_lwall && hspeed < -1 ) || ( under_ceiling && vspeed < -1 ) ) && timer > timing_begin && timer < timing_end )
+{
+	sound_stop ( obj_items_control.billblast_snd );
+	spark = instance_create(x,y,obj_spark_explode1);
+	spark.image_xscale = 1 * size;
+	spark.image_yscale = 1 * size;
+	with (hitbox) instance_destroy();
+	create_projectile ( 30 , 30+facing*120 , 6 , 6 , 100 , 1 , explodehit2 , obj_spark_fire1 , 2 , 2 , 0 , 0 , self.id , 10 , no_script );
+	sound_play ( global.explode1 )
+	with (bulletbill) instance_destroy();
+	with (firetrail) instance_destroy();
+	timer = timing_end;
+}
+
+//END
+if ( timer >= timing_end )
+{
+	if ( hspeed > 1 || hspeed < -1 )
+	{
+		hspeed = -4 * (1-facing*2);
+		vspeed = -6;
+	}
+	else
+	{
+		direction = temp;
+		speed = -6;
+	}
+	if !instance_exists ( spark )
+	{
+		sound_play ( obj_items_control.billfinish_snd );
+		dust = instance_create (x , y - 10 * size , obj_spark)
+		dust.sprite_index = obj_items_control.bulletbill_smoke_spr;
+		dust.image_index = 0;
+		dust.image_xscale = 1;
+		dust.image_yscale = 1;
+		dust.image_speed = 1;
+		dust.depth = -6;
+	}
+	//with (duster) instance_destroy();
+	with (firetrail) instance_destroy();
+	with (bulletbill) instance_destroy();
+	state_type = "air_flinch"
+	sprite_index = flinch_sprite;
+	image_index = 0;
+	intangible = 0;
+	visible = 1;
+	timer = 100;
+	time = 120;
+	held_item.hp = 0;
+}
+
+  
+~~END OF FILE

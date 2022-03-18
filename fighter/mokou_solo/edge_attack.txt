@@ -1,0 +1,249 @@
+if ( state_type = "edge" )
+{
+	hspeed = 0;
+	state_type = "air_attack";
+	attack_type = "edge_attack";
+	image_speed = 0;
+	image_index = 0;
+	sprite_index = edge_climb_sprite;
+	if percent < 100 {timer = 0;}
+	else {timer = -10;}
+	time = 50;
+	timer_speed=1;
+	attacking = 0;
+	intangible = 1;
+	
+	looped = 0;
+	loopmax = 3;
+	
+	//Blur Variables
+	phoenixdownscale = 0.88
+	phoenixdownxshift = 0
+	phoenixdownyshift = 10
+	phoenixdowntime = 50
+	phoenixdownspeed = 1
+	phoenixdownzoom = -2
+	
+	/// Projectile Initialization Variables - Streamlines creation of more complex circular projectile patterns. ( Complete Circle: bulletshift * bullettotal = 360 )
+	bullettype = 4; //Bullet type referenced in custom scripts with multiple projectile types.
+	bulletcount = 0; //Initial bullet count. This increases during loops.
+	bullettotal = 2; //Total number of bullets created. Loop max. Don't set this too high or performance will RIP!
+	bulletscale = 0.5; //Resizes bullet.
+	
+	// Notes - Copypasta all direction related variables into the bullet script or you'll face facing/direction related bugs.
+	bulletflip = 0; //Used when creating circular-like bullet patterns starting from vertical center rather than the side. (Example: Any pattern with a bulletstartdir of 90)
+	bulletstartdir = 0; //Initial bullet direction.  Use negative numbers for downward angles.
+	bulletshift = 30 * (1-bulletflip*2); //Shifts the direction of the next bulletcount by this amount.
+	bulletdirshift = bulletstartdir + bulletcount*bulletshift; //Used in direction/angle calculation.
+	
+	bulletgrab = 3; //Custom variable for editing bullet script when same bullettype is used differently in another move. Can rename.
+
+	bulletdmg = 0;
+	bulletdir = 361;
+	bulletbkb = 0;
+	bulletkbg = 0;
+	bulletshielddmg = 5;
+	bullethitlag = 0;
+	bulletsound = fire3;
+	bulletspark = obj_spark_fire1;
+	bulletxscale = 0.5;
+	bulletyscale = 0.5;
+	bulletx = 10;
+	bullety = 10;
+	bullettime = 99;
+	bulletid = self.id;
+	bulletscript = char_custom1;
+
+	bullethit = 0;
+	bullethitstun = 0;
+	bulletblockstun = 0;
+	bulletdi = 1.5;
+
+	bulletangle = ( ( facing=0 )*( ( 0 + bulletdirshift ) + facing*( 180 - bulletdirshift*2 ) ) ) + ( ( facing=1 )*( 180 - bulletdirshift ) )
+	bulletspeed = 5;
+	rotatespeed = 0;
+	bulletcharge = 0;
+	explodetime = 99;
+}
+
+switch ( timer )
+{
+	case 14: sprite_index = b_sprite; image_index = 5; break;
+	case 17: image_index = 6; break;
+	case 20: image_index = 7; break;
+	case 23: image_index = 4; break;
+	case 26: image_index = 5; break;
+	case 29: image_index = 6; break;
+	case 32: image_index = 7; break;
+	case 35: image_index = 8; break;
+	case 38: image_index = 9; break;
+	case 41: image_index = 10; break;
+}  
+
+if timer <= 0 && nobullet = 1
+{
+	timer = 0;
+	time = -1;
+	state_type = "stand";
+	char_stilt();
+}
+
+//Bullet Version
+if ( timer = 0 )
+{
+	intangible = 1;
+	floattime -= spellcost;
+	spellcosttimer = spellcosttime;
+	sound_play(charge_sound);
+}
+
+if timer = 1 || timer = 14
+{
+	visible = 0;
+	phoenixdown = create_blur(x,y,self.id);
+	if !blueflame 
+	{
+		phoenixdown.sprite_index = phoenixdown_sprite; 
+		effect_create_above(ef_ring,x + -2 * (1-facing*2) * size,y - 15 * size,0.1,c_orange);
+	}
+	if blueflame
+	{
+		phoenixdown.sprite_index = phoenixdownblue_sprite; 
+		effect_create_above(ef_ring,x + -2 * (1-facing*2) * size,y - 15 * size,0.1,c_aqua);
+	}
+	phoenixdown.image_xscale = (phoenixdownscale*size)*(1-facing*2);
+	phoenixdown.image_yscale = (phoenixdownscale*size);
+	phoenixdown.x = x + ( phoenixdownxshift + (chargeshift * looped) )*size*(1-facing*2);
+	phoenixdown.y = y - phoenixdownyshift*size;
+	phoenixdown.image_index = 0;
+	phoenixdown.image_speed = phoenixdownspeed*(1+(timer<14)*1.5);
+	phoenixdown.alarm[0] = phoenixdowntime;
+	//phoenixdown.snap = self.id;
+	phoenixdown.depth = phoenixdownzoom;
+}
+
+if timer = 2
+{
+	y = y - 50 * size;
+}
+
+if timer = 3
+{
+	x = x - 20 * (1-facing*2) * size;
+}
+
+if timer >= 2
+{
+	gravity_lock = 1;
+	hspeed = 0;
+	vspeed = 0;
+	air_move = 0;
+	fast_fall = 0;
+	fast_fall_temp = 0;
+}
+
+if ( timer == 14 )
+  intangible = 0;
+ 
+if ( timer = 17 + looped*6 ) && looped < loopmax
+{
+	visible = 1;
+	sound_play(shoot_sound);
+	///Projectile For-Loop (Arc Pattern)
+	var i;
+	for (i = 0; i < bullettotal; i += 1)
+	{
+		///Some variables need to go here for some calculations during the loop.
+		//bulletx = 30-bulletcount*7
+		//bullety = 30-bulletcount*7
+		bulletcount = i;
+		
+		create_projectile(bulletdmg,bulletdir,bulletbkb,bulletkbg,bulletshielddmg,bullethitlag,bulletsound,bulletspark,bulletxscale,bulletyscale,bulletx,bullety,bulletid,bullettime,bulletscript);
+		proj.bulletflip = 0;
+		proj.bullettype = bullettype;
+		proj.bulletcount = bulletcount;
+		proj.bulletstartdir = bulletstartdir;
+		proj.bulletshift = bulletshift;
+		proj.bulletdirshift = bulletdirshift;
+		proj.bulletscale = bulletscale;
+		proj.bulletdmg = bulletdmg;
+		proj.bulletdir = bulletdir;
+		proj.bulletbkb = bulletbkb;
+		proj.bulletkbg = bulletkbg;
+		proj.bulletshielddmg = bulletshielddmg;
+		proj.bullethitlag = bullethitlag;
+		proj.bulletsound = bulletsound;
+		proj.bulletspark = bulletspark;
+		proj.bulletxscale = bulletxscale;
+		proj.bulletyscale = bulletyscale;
+		proj.bulletx = bulletx;
+		proj.bullety = bullety;
+		proj.bullettime = bullettime;
+		proj.bulletid = bulletid;
+		proj.hit = bullethit;
+		proj.facing = facing;
+		proj.hit_stun = bullethitstun;
+		proj.shield_stun = bulletblockstun;
+		proj.di = bulletdi;
+		proj.bulletangle = bulletangle;
+		proj.bulletspeed = bulletspeed;
+		proj.rotatespeed = rotatespeed;
+		proj.bulletgrab = bulletgrab;
+		proj.bulletcharge = smash_charge;
+		proj.explodetime = explodetime;
+		proj.shotround = looped;
+		
+		if bulletcount > 0
+		{
+			create_projectile(bulletdmg,bulletdir,bulletbkb,bulletkbg,bulletshielddmg,bullethitlag,bulletsound,bulletspark,bulletxscale,bulletyscale,bulletx,bullety,bulletid,bullettime,bulletscript);
+			proj.bulletflip = 1;
+			proj.bullettype = bullettype;
+			proj.bulletcount = bulletcount;
+			proj.bulletstartdir = bulletstartdir;
+			proj.bulletshift = bulletshift;
+			proj.bulletdirshift = bulletdirshift;
+			proj.bulletscale = bulletscale;
+			proj.bulletdmg = bulletdmg;
+			proj.bulletdir = bulletdir;
+			proj.bulletbkb = bulletbkb;
+			proj.bulletkbg = bulletkbg;
+			proj.bulletshielddmg = bulletshielddmg;
+			proj.bullethitlag = bullethitlag;
+			proj.bulletsound = bulletsound;
+			proj.bulletspark = bulletspark;
+			proj.bulletxscale = bulletxscale;
+			proj.bulletyscale = bulletyscale;
+			proj.bulletx = bulletx;
+			proj.bullety = bullety;
+			proj.bullettime = bullettime;
+			proj.bulletid = bulletid;
+			proj.hit = bullethit;
+			proj.facing = facing;
+			proj.hit_stun = bullethitstun;
+			proj.shield_stun = bulletblockstun;
+			proj.di = bulletdi;
+			proj.bulletangle = bulletangle;
+			proj.bulletspeed = bulletspeed;
+			proj.rotatespeed = rotatespeed;
+			proj.bulletgrab = bulletgrab;
+			proj.bulletcharge = smash_charge;
+			proj.explodetime = explodetime;
+			proj.shotround = looped;
+		}
+		
+		bulletcount += 1;
+	}
+
+	looped += 1;
+}
+	
+
+if ( timer >= time - 1 ) 
+{
+	sprite_index = stand_sprite;
+	image_index = 0;
+	attack_type = "none";
+	state_type = "stand";
+	timer = 0;
+	time = -1;
+}

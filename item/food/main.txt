@@ -1,0 +1,24 @@
+~~INIT:
+food_spr = ispr_add_alpha ( "item/food/food.png" , 21 , 0 , 0 , 16 , 16 );
+~~DEINIT:
+if ( sprite_exists ( food_spr ) )
+  spr_delete ( food_spr );
+~~ENTER:
+sprite_index = obj_items_control.food_spr;
+sprite_air = obj_items_control.food_spr;
+sprite_held = obj_items_control.food_spr;
+image_speed = 0;
+image_index = floor ( random ( 21 ) );
+air_spr_y = -12;
+image_xscale = 0.75;
+image_yscale = 0.75;
+shadow = 10;
+~~PICK:
+sound_play ( healitem1 );
+if yuyuko_unlock = 0 and !instance_exists(obj_training){
+	yuyuko_unlock = 1
+}
+held.held_item = -1;
+heal_player ( held , choose ( 1 , 2 , 3 , 4 ) );
+instance_destroy();
+~~END OF FILE

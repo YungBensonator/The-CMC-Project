@@ -1,0 +1,69 @@
+if state_type = "run" || state_type = "stand" {
+        state_type = "air_attack";
+        attack_type = "dash_attack";
+        image_speed = 0.3;
+        sprite_index = dash_attack_sprite;
+        image_index= 0;
+        timer = 0;
+        time = 37;
+        timer_speed=1;
+		hspeed = (2 - facing*4)*size
+		vspeed-=3.9;
+}
+
+if timer < time {
+    if (timer = 2 )
+	{
+
+    flash1= instance_create(x ,y, obj_custom_gfx);
+    flash1.step_script = trans_step;
+    flash1.draw_script = trans_draw;
+    flash1.sword1 = -1;
+    flash1.sprite_index = dash_fx;
+    flash1.image_speed = 0.3;
+    flash1.image_index = 1;
+    flash1.owner = self.id;
+    flash1.keepmain = self.keepmain;
+        sound_play(b_sound)
+        create_projectile(5,368,5,0,4,0,kick1,obj_spark_hit4,0.8,0.8,12,27,self.id,44,c1_mach_bullet);
+		proj.hspeed = 3-facing*6;
+		proj.vspeed = 9;
+		proj.image_xscale *= 2;
+		proj.image_yscale *= 2;
+    }
+    if (timer = 9) 
+	{
+        sound_play(b_sound)
+        create_projectile(4,368,5,0,4,0,kick1,obj_spark_hit4,0.8,0.8,12,27,self.id,44,c1_mach_bullet);
+		proj.hspeed = 0;
+		proj.vspeed = 9;
+		proj.image_xscale *= 2;
+		proj.image_yscale *= 2;
+    }
+	if (timer = 16)
+	{
+        sound_play(b_sound)
+        create_projectile(3,368,5,0,4,0,kick1,obj_spark_hit4,0.8,0.8,12,27,self.id,44,c1_mach_bullet);
+		proj.hspeed = 0;
+		proj.vspeed = 9;
+		proj.image_xscale *= 2;
+		proj.image_yscale *= 2;
+    }
+	if (timer = 23)
+	{
+        sound_play(b_sound)
+        create_projectile(2,368,5,0,4,0,kick1,obj_spark_hit4,0.8,0.8,12,27,self.id,44,c1_mach_bullet);
+		proj.hspeed = -3-facing*-6;
+		proj.vspeed = 9;
+		proj.image_xscale *= 2;
+		proj.image_yscale *= 2;
+    }
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	facing = !facing;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

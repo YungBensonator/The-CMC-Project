@@ -1,0 +1,258 @@
+~~INIT:
+superscope_spr = ispr_add_alpha ( "item/superscope/superscope.png" , 1 , 0 , 0 , 6 , 13 );
+superscopeg_spr = ispr_add_alpha ( "item/superscope/superscopeg.png" , 1 , 0 , 0 , 5 , 26 );
+supershot_spr = ispr_add_alpha ( "item/superscope/supershot.png" , 1 , 0 , 0 , 20 , 20 );
+supershot1_snd = isound_add ( "item/superscope/shot1.wav" , 0 , 0 );
+supershot2_snd = isound_add ( "item/superscope/shot2.wav" , 0 , 0 );
+supercharge_snd = isound_add ( "item/superscope/charge.wav" , 0 , 0 );
+superempty_snd = isound_add ( "item/superscope/empty.wav" , 0 , 0 );
+superready_snd = isound_add ( "item/superscope/ready.wav" , 0 , 0 );
+
+~~DEINIT:
+if ( sprite_exists ( superscope_spr ) )
+  spr_delete ( superscope_spr );
+if ( sprite_exists ( supershot_spr ) )
+  spr_delete ( supershot_spr );
+
+
+~~ENTER:
+sprite_index = obj_items_control.superscopeg_spr;
+sprite_air = obj_items_control.superscopeg_spr;
+sprite_held = obj_items_control.superscope_spr;
+air_spr_y = -23;
+type = "batter";
+image_xscale = 0.5;
+image_yscale = 0.5;
+hit_timer = 0;
+shadow = 3;
+
+batter_jab = 1;
+batter_stilt = 1;
+batter_dash = 0;
+batter_ssmash = 1;
+batter_nair = 1;
+batter_fair = 1;
+
+ammo = 48;
+
+
+~~LAND:
+instance_create ( x , y - 4 , obj_smoke_front );
+instance_destroy();
+
+
+~~STEP:
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  collision_type = 2;
+  can_pick_up = 0.5;
+  
+  if ( on_floor && on_platform && speed < 0.1 )
+    {
+    thrown = -99;
+    }
+  }
+  else
+  {
+  collision_type = 0;
+  can_pick_up = 1;
+  }
+
+if ( ammo <= 0 )
+  custom_land = 1;
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 18;
+last_hit_proj = create_projectile ( 7 , 90 - sign ( hspeed ) * 45 , 4 + min ( 1.7 , speed * 0.2 ) , 3.2 , 15 , 17 , punch2 , obj_spark_hit1 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin.damage > 2 )
+  {
+  object_stun ( vermin , 8 );
+  hit_timer = 9;
+  hspeed *= -0.3;
+  vspeed = -3;
+  thrown = -99;
+  object_stun ( self.id , 6 );
+  }
+
+
+
+~~CUSTOM:
+moving_object = 1;
+sprite_index = obj_items_control.supershot_spr;
+mask_index = spr_item_mask2;
+image_index = 0;
+image_speed = 0;
+if ( on_floor || on_platform || under_ceiling || next_to_rwall || next_to_lwall || timer == time - 2 )
+  {
+  spark = instance_create ( x , y , obj_spark_shockwave );
+  spark . image_blend = c_white;
+  instance_destroy();
+  }
+
+
+
+~~PLAYER EVENT:
+if ( timer == -1 )
+  {
+  sprite_index = item_shoot_sprite;
+  image_index = 0;
+  state_type = "air_attack";
+  timer_speed = 1;
+  timer = 0;
+  time = 60;
+  image_speed = 0;
+  sound_play ( obj_items_control.superready_snd );
+  superscopecharge = 0;
+  temp2 = 0;
+  attacking = 1;
+  }
+
+if ( attacking = 1 && timer = 5 )
+{
+temp2 = 1;
+}
+
+if ( air == 0 )
+  {
+  hspeed *= 0.8;
+  }
+
+// RAPID SHOTS
+if ( timer == 20 || timer == 25 || timer == 30 || timer == 35 || timer == 40 || timer == 45 )
+  {
+  image_index = item_shoot_frame;
+  image_speed = ( image_number - image_index ) / 25;
+  item_posupdate();
+  if ( held_item.ammo <= 0 )
+    {
+    image_index = item_shoot_frame;
+    image_speed = ( image_number - image_index ) / 25;
+    sound_play ( obj_items_control.superempty_snd );
+    instance_create ( held_item.x + 28 * ( 1 - facing * 2 ) , held_item.y - 4 , obj_smoke );
+    exit;
+    }
+  sound_play ( obj_items_control.supershot1_snd );
+  create_projectile ( 1 , 320-facing*100 , 1 , 1 , 1 , 1 , shock2 , obj_spark_shock , 1 , 1 , 30 , 0 , self.id , 150 , char_item );
+  proj.hspeed = 5 - facing * 10;
+  proj.item_parent = held_item.object_index;
+  proj.x = held_item.x + 22 * ( 1 - facing * 2 );
+  proj.y = held_item.y - 4;
+  proj.mask_index = spr_item_mask2;
+  proj.image_xscale = 0.25;
+  proj.image_yscale = 0.25;
+  held_item.ammo -= 1;
+  spark = instance_create ( held_item.x + 25 * ( 1 - facing * 2 ) , held_item.y - 5 , obj_spark_effect2 );
+  spark.sprite_index = global.spark_sprite2;
+  spark.image_blend = c_white;
+  spark.image_speed = 0.75;
+  spark = instance_create ( held_item.x + 25 * ( 1 - facing * 2 ) , held_item.y - 5 , obj_spark_shockwave );
+  spark.image_xscale *= 0.5;
+  spark.image_blend = c_white;
+  }
+  if ( timer >= 20 && timer <= 45 && attacking = 1 )
+  {
+  temp = 1;
+  }
+  if ( timer = 49 && temp = 1 )
+  {
+  timer = 19;
+  temp = 0;
+  attacking = 0;
+  }
+
+//CHARGE SHOT
+  if ( temp2 = 1 )
+  {
+  timer = 65;
+  time = 185;
+  temp2 = 0;
+  }
+  if ( timer = 80 )
+  {
+  sound_play ( obj_items_control.supercharge_snd );
+  }
+  if ( timer >= 80 && timer <= 180 )
+  {
+  superscopecharge += 1;
+  if ( timer mod 10 < 2 )
+	{
+	gfx_ef_crown ( x , y );
+	}
+  }
+  if ( superscopecharge > 100 )
+  {
+  superscopecharge = 100;
+  }
+  if ( timer = 180 || ( timer >= 80 && timer <= 180 && attacking = 0 ) )
+  {
+  timer = 190;
+  time = 220;
+  }
+  if ( timer = 190 )
+  {
+  image_index = item_shoot_frame;
+  image_speed = ( image_number - image_index ) / 25;
+  item_posupdate();
+  if ( held_item.ammo <= 0 )
+    {
+    image_index = item_shoot_frame;
+    image_speed = ( image_number - image_index ) / 25;
+    sound_play ( obj_items_control.superempty_snd );
+    instance_create ( held_item.x + 28 * ( 1 - facing * 2 ) , held_item.y - 4 , obj_smoke );
+    exit;
+    }
+  sound_stop ( obj_items_control.supercharge_snd );
+  sound_play ( obj_items_control.supershot2_snd );
+  create_projectile ( 1 + round(superscopecharge/3.5), 35+facing*110 , 6.5 , 1.5 + round(superscopecharge/20) , 1 + round(superscopecharge/3.5), 1 + round(superscopecharge/3.5), shock2 , obj_spark_shock , 1 , 1 , 0 , 0 , self.id , 150 , char_item );
+  proj.hspeed = (1-facing*2) * (5 + round(superscopecharge/6.5));
+  proj.item_parent = held_item.object_index;
+  proj.x = held_item.x + 22 * ( 1 - facing * 2 );
+  proj.y = held_item.y - 4;
+  proj.mask_index = spr_item_mask2;
+  proj.image_xscale = 0.25 + (superscopecharge / 100);
+  proj.image_yscale = 0.25 + (superscopecharge / 100);
+  held_item.ammo -= 1 + round(charge/6.5);
+  spark = instance_create ( held_item.x + 25 * ( 1 - facing * 2 ) , held_item.y - 5 , obj_spark_effect2 );
+  spark.sprite_index = global.spark_sprite2;
+  spark.image_blend = c_white;
+  spark.image_speed = 0.75;
+  spark = instance_create ( held_item.x + 25 * ( 1 - facing * 2 ) , held_item.y - 5 , obj_spark_shockwave );
+  spark.image_xscale *= 0.5;
+  spark.image_blend = c_white;
+  }
+  
+~~END OF FILE

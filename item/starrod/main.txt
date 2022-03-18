@@ -1,0 +1,269 @@
+~~INIT:
+starrod_spr = ispr_add_alpha ( "item/starrod/starrod.png" , 1 , 0 , 0 , 8 , 17 );
+starrodh_spr = ispr_add_alpha ( "item/starrod/starrodh.png" , 1 , 0 , 0 , 2 , 8 );
+starrodp_spr = ispr_add_alpha ( "item/starrod/shoot.png" , 1 , 0 , 0 , 16 , 16 );
+
+starrod_empty_snd = isound_add ( "item/starrod/empty.wav" , 0 , 0 );
+starrod_jab_snd = isound_add ( "item/starrod/jab.wav" , 0 , 0 );
+starrod_tilt_snd = isound_add ( "item/starrod/tilt.wav" , 0 , 0 );
+starrod_smash_snd = isound_add ( "item/starrod/smash.wav" , 0 , 0 );
+
+
+~~DEINIT:
+if ( sprite_exists ( starrod_spr ) )
+  spr_delete ( starrod_spr );
+if ( sprite_exists ( starrodh_spr ) )
+  spr_delete ( starrodh_spr );
+if ( sprite_exists ( starrodp_spr ) )
+  spr_delete ( starrodp_spr );
+
+
+~~ENTER:
+sprite_index = obj_items_control.starrod_spr;
+sprite_air = obj_items_control.starrod_spr;
+sprite_held = obj_items_control.starrodh_spr;
+air_spr_y = -14;
+shadow = 4;
+image_xscale = 0.86;
+image_yscale = 0.86;
+hit_timer = 0;
+type = "batter";
+weight = 0.1;
+max_fall_speed = 3;
+shoot = 0;
+mask_index = spr_item_mask3;
+
+
+~~STEP:
+if ( hit_timer > 0 )
+  {
+  shakex = -2 + floor ( random ( 5 ) );
+  shakey = -2 + floor ( random ( 5 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex = 0;
+shakey = 0;
+if ( thrown > 0 )
+  {
+  collision_type = 3;
+  can_pick_up = 0.5;
+  
+  if ( on_floor && on_platform && speed < 0.1 )
+    {
+    thrown = -99;
+    }
+  }
+  else
+  {
+  collision_type = 0;
+  can_pick_up = 1;
+  }
+
+if ( limit == 0 )
+  {
+  limit = 15 + floor ( random ( 3 ) );
+  }
+
+if ( shoot >= limit )
+  custom_land = 1;
+
+
+~~ITEM CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( hit_timer > 0 ) exit;
+hit_timer = 9;
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~LAND:
+instance_create ( x , y - 4 , obj_smoke_front );
+instance_destroy();
+
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+hit_timer = 18;
+last_hit_proj = create_projectile ( 8 , 0+facing*180 , 7 + min ( 1.7 , speed * 0.2 ) , 3.4 , 10 , 10 , punch2 , obj_spark_hit2 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+hspeed *= -0.3;
+vspeed = -3;
+thrown = -99;
+
+
+~~HIT:
+if ( held > 0 ) exit;
+if ( hit_timer > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( vermin.damage > 3 )
+  {
+  object_stun ( vermin , 8 );
+  hit_timer = 9;
+  hspeed *= -0.3;
+  if ( y < other.y )
+    vspeed = -3;
+    else
+    vspeed = 0;
+  thrown = -99;
+  object_stun ( self.id , 6 );
+  }
+
+
+~~CUSTOM:
+image_angle -= sign ( hspeed ) * 12;
+moving_object = 1;
+if ( timer mod 3 == 0 )
+repeat ( 2 )
+  {
+  i = gfx_sweat_gen ( x , y - 10 , 1 + random ( 1 ) , 0.5 , random ( 360 ) );
+  i.gravity = 0.125;
+  i.gravity_direction = 270;
+  i.script = -1;
+  i.alpha_add = -1/50;
+  i.alarm[0] = 48;
+  }
+if ( next_to_lwall || next_to_rwall || on_floor || on_platform || under_ceiling ) instance_destroy();
+
+
+~~PLAYER EVENT:
+if ( timer == -1 )
+  {
+  hspeed = 0;
+  sprite_index = item_swing_sprite;
+  image_index = 0;
+  switch ( attack_type )
+    {
+    case "item_batter_jab":
+      image_speed = item_swing_frame / 5;
+      time = 14;
+      break;
+    case "item_batter_stilt":
+    case "item_batter_dash":
+      image_speed = item_swing_frame / 8;
+      time = 17;
+      break;
+    case "item_batter_ssmash":
+      image_speed = item_swing_frame / 14;
+      time = 32;
+      break;
+    }
+  state_type = "air_attack";
+  timer_speed = 1;
+  timer = 0;
+  }
+
+switch ( attack_type )
+  {
+  case "item_batter_jab":
+    switch ( timer )
+      {
+      case 5:
+        sound_play ( obj_items_control.starrod_jab_snd );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 6 , 60 + facing * 60 , 4.6 , 3.2 , 3 , 5 ,
+          punch1 , obj_spark_hit1 , 1.1 , 0.7 ,
+         0 , 0 , self.id , 3 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 3;
+        hitbox.hitbox_y = actual_height * 0.5;
+        
+        repeat ( 3 )
+          {
+          i = gfx_sweat_gen ( held_item.x + lengthdir_x ( 18 , held_item.sprite_angle ) ,
+            held_item.y + lengthdir_y ( 18 , held_item.sprite_angle ) , 2 + random ( 4 ) , 0.5 , random ( 360 ) );
+          i.gravity = 0.125;
+          i.gravity_direction = 270;
+          i.script = -1;
+          i.alpha_add = -1/50;
+          i.alarm[0] = 48;
+          }
+        break;
+      }
+    break;
+  case "item_batter_stilt":
+  case "item_batter_dash":
+    switch ( timer )
+      {
+      case 8:
+        sound_play ( obj_items_control.starrod_tilt_snd );
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 9 , 60 + facing * 60 , 5 , 3.6 , 4 , 6 ,
+          punch2 , obj_spark_hit2 , 1.1 , 0.7 ,
+         0 , 0 , self.id , 3 , 0 );
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 3;
+        hitbox.hitbox_y = actual_height * 0.5;
+
+        repeat ( 3 )
+          {
+          i = gfx_sweat_gen ( held_item.x + lengthdir_x ( 18 , held_item.sprite_angle ) ,
+            held_item.y + lengthdir_y ( 18 , held_item.sprite_angle ) , 2 + random ( 4 ) , 0.5 , random ( 360 ) );
+          i.gravity = 0.125;
+          i.gravity_direction = 270;
+          i.script = -1;
+          i.alpha_add = -1/50;
+          i.alarm[0] = 48;
+          }
+        break;
+      }
+    break;
+  case "item_batter_ssmash":
+    switch ( timer )
+      {
+      case 5:
+        var o;
+        o = instance_create ( held_item.x , held_item.y , obj_spark_effect );
+        o.depth -= 2;
+        break;
+      case 14:
+        image_index = item_swing_frame;
+        image_speed = ( image_number - image_index ) / ( time - timer );
+        item_posupdate();
+        create_hitbox ( 12 , 45 + facing * 90 , 7.6 , 5.2 , 5 , 10 ,
+          punch4 , obj_spark_hit4 , 1.1 , 0.7 ,
+         0 , 0 , self.id , 4 , 0 );
+        hitbox.di *= 2.4;
+        hitbox.hitbox_x = ( held_item.x - x ) + ( 1 - facing * 2 ) * 3;
+        hitbox.hitbox_y = actual_height * 0.5;
+
+        repeat ( 3 )
+          {
+          i = gfx_sweat_gen ( held_item.x + lengthdir_x ( 18 , held_item.sprite_angle ) ,
+            held_item.y + lengthdir_y ( 18 , held_item.sprite_angle ) , 2 + random ( 4 ) , 0.5 , random ( 360 ) );
+          i.gravity = 0.125;
+          i.gravity_direction = 270;
+          i.script = -1;
+          i.alpha_add = -1/50;
+          i.alarm[0] = 48;
+          }
+
+        if ( held_item.shoot < held_item.limit )
+          {
+          sound_play ( obj_items_control.starrod_smash_snd );
+          create_projectile ( 6 , 48+facing*84 , 5.25 , 4.5 , 7 , 12 , slash3 , obj_spark_slash2 , 0.5 , 0.5 , 0 , 0 , self.id , 100 , char_item );
+          proj.hspeed = 7 - facing * 14;
+          proj.item_parent = held_item.object_index;
+          proj.x = held_item.x + 15 * ( 1 - facing * 2 );
+          proj.y = held_item.y - 5;
+          proj.mask_index = spr_item_mask2;
+          proj.sprite_index = obj_items_control.starrodp_spr;
+          held_item.shoot += 1;
+          }
+          else
+          {
+          sound_play ( obj_items_control.starrod_empty_snd );
+          }
+        break;
+      }
+    break;
+  }
+~~END OF FILE

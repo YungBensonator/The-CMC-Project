@@ -1,0 +1,240 @@
+~~INIT:
+sm_monitor_spr = ispr_add_alpha ( "item/shield/monitor.png" , 2 , 0 , 0 , 16 , 32 );
+sm_shield_spr = ispr_add_alpha ( "item/shield/shield.png" , 1 , 0 , 0 , 24 , 24 );
+sm_icon_spr = ispr_add_alpha ( "item/shield/shieldicon.png" , 1 , 0 , 0 , 8 , 8 );
+
+sm_break_snd = isound_add ( "item/shield/monitor.wav" , 0 , 0 );
+sm_get_snd = isound_add ( "item/shield/get.wav" , 0 , 0 );
+sm_break2_snd = isound_add ( "item/shield/break.wav" , 0 , 0 );
+
+
+~~DEINIT:
+if ( sprite_exists ( sm_monitor_spr ) )
+  spr_delete ( sm_monitor_spr );
+if ( sprite_exists ( sm_shield_spr ) )
+  spr_delete ( sm_shield_spr );
+if ( sprite_exists ( sm_icon_spr ) )
+  spr_delete ( sm_icon_spr );
+
+
+~~ENTER:
+sprite_index = obj_items_control.sm_monitor_spr;
+sprite_air = obj_items_control.sm_monitor_spr;
+sprite_held = obj_items_control.sm_monitor_spr;
+mask_index = obj_items_control.sm_monitor_spr;
+air_spr_y = 1;
+type = "heavy";
+hit_timer = 0;
+hp = 8;
+shadow = 16;
+collision_type = 1;
+image_xscale = 1;
+image_yscale = 1;
+image_index2 = 0;
+shield_receiver = -1;
+
+
+~~LAND:
+hp = 0;
+
+
+~~CUSTOM:
+if ( activated == 0 )
+  {
+  timer = 0;
+  time = 1840;
+  alarm[0] = 1840;
+  activated = 1;
+  hit = 2;
+  }
+
+if ( timer == 60 )
+  {
+  sound_play ( obj_items_control.sm_get_snd );
+  visible = 1;
+  lock_percent = owner.percent;
+  hp = 5;
+  }
+
+if ( owner.status_cancel )
+  {
+  instance_destroy();
+  exit;
+  }
+
+if ( timer >= 60 )
+  {
+  //instance_create ( x , y , obj_spark_effect );
+  //debug_message ( string ( owner ) );
+  visible = 1;
+  if ( timer > time - 150 )
+    {
+    if ( timer mod 10 < 5 )
+      visible = 0;
+    }
+  image_angle += 6;
+  image_alpha = 0.9 + lengthdir_y ( 0.1 , ( timer * 20 ) mod 360 );
+  depth = owner.depth - 2;
+  x = owner.x;
+  y = owner.y - owner.actual_height * 0.5 + lengthdir_y ( stunned , stunned * 60 );
+  image_xscale = max ( owner.actual_width , owner.actual_height ) / 48 + 0.8;
+  if ( timer mod 2 == 0 && visible )
+    {
+    spark = instance_create ( x + sign ( xprevious - x ) , y + sign ( yprevious - y ) , obj_spark );
+    spark.sprite_index = sprite_index;
+    spark.image_xscale = image_xscale;
+    spark.image_yscale = image_yscale;
+    spark.image_alpha = image_alpha * 0.5;
+    spark.image_angle = random ( 360 );
+    spark.image_speed = 0;
+    spark.image_index = 0;
+    spark.depth = depth + 1;
+    spark.alarm[0] = 2;
+    }
+  image_yscale = image_xscale;
+  if ( stunned > 0 )
+    stunned -= 1;
+  if ( owner.alarm[1] > 0 || owner.alarm[2] > 0 )
+    {
+    if ( owner.percent > lock_percent )
+      owner.percent = lock_percent;
+    if ( stunned < owner.alarm[1] )
+      {
+      hp -= 1;
+      stunned = owner.alarm[1] + 1;
+      }
+    }
+    else
+    {
+    lock_percent = owner.percent;
+    owner.super_armor = 1;
+    owner.armor_frames = 3;
+    }
+  if ( hp <= 0 || timer >= time - 2 )
+    {
+    sound_play ( obj_items_control.sm_break2_snd );
+    var i;
+    for ( i = 0 ; i < 360 ; i += 60 )
+      {
+      spark = instance_create ( x , y , obj_spark );
+      spark.sprite_index = sprite_index;
+      spark.image_xscale = image_xscale;
+      spark.image_yscale = image_yscale;
+      spark.image_alpha = image_alpha * 0.5;
+      spark.image_angle = random ( 360 );
+      spark.image_speed = 0;
+      spark.image_index = 0;
+      spark.speed = 2;
+      spark.depth = depth;
+      spark.direction = i;
+      //spark.alpha_add = -0.1;
+      spark.alarm[0] = 8;
+      }
+    instance_destroy();
+    }
+  }
+
+
+~~STEP:
+if ( hit_timer > 0 ) 
+  {
+  shakex = -3 + floor ( random ( 7 ) );
+  shakey = -3 + floor ( random ( 7 ) );
+  hit_timer -= 1;
+  if ( hit_timer > 2 )
+    exit;
+  }
+shakex *= 0.25;
+shakey *= 0.25;
+if ( hp <= 0 )
+  {
+  var explosive;
+  explosive = 0;
+  sound_play ( obj_items_control.sm_break_snd );
+  var i, o;
+  if ( explosive == 1 )
+    {
+    sound_play ( explode_big );
+    instance_create ( x , y - 19 , obj_spark_explode1 );
+    create_projectile ( 14 , 365 , 7 , 5.7 , 74 , 20 , explodehit2 , obj_spark_fire1 , 2 , 2 , 0 , 19 , 99 , 7 , -1 );
+    proj.hit_attacker = 1;
+    }
+    else
+    {
+    o = instance_create ( x , y - 19 , obj_spark_hit4 );
+    o.image_xscale *= 3;
+    o.image_yscale *= 3;
+    o.image_angle = random ( 360 );
+    }
+  if ( shield_receiver > 0 )
+    {
+    o = instance_create ( x , y - 16 , obj_spark );
+    o.vspeed = -2.2;
+    o.gravity = 0.02;
+    o.depth = -8;
+    o.sprite_index = obj_items_control.sm_icon_spr;
+    o.gravity_direction = 270;
+    o.alarm[0] = 120;
+    o.image_speed = 0;
+    o.image_index = 0;
+    o.image_xscale = 1;
+    o.image_yscale = 1;
+    with ( projectile_box )
+      {
+      if ( item_keeper == global.itm_kind[other.item_index] )
+      if ( owner == other.shield_receiver )
+        instance_destroy();
+      }
+    create_projectile ( 0 , 360 , 1 , 1 , 0 , 1 , -1 , -1 , 1 , 1 , 0 , 16 , 99 , 300 , char_item );
+    proj.item_parent = global.itm_kind[item_index];
+    proj.hit = 2;
+    proj.visible = 0;
+    proj.sprite_index = obj_items_control.sm_shield_spr;
+    proj.activated = 0;
+    //show_message ( string ( shield_receiver ) );
+    proj.owner = shield_receiver;
+    proj.parry_nodestroy = 1;
+    }
+  repeat ( 6 )
+    {
+    instance_create ( x - 25 + random ( 50 ) , y - 44 + random ( 50 ) , obj_smoke_front );
+    }
+  instance_destroy();
+  exit;
+  }
+
+if ( thrown > 0 )
+  {
+  custom_land = 1;
+  shield_receiver = thrown;
+  }
+  else
+  {
+  custom_land = 0;
+  }
+
+image_index2 = !image_index2;
+if ( held <= 0 )
+  sprite_angle = 0;
+image_index = image_index2;
+
+
+~~PLAYER CONTACT:
+if ( held > 0 ) exit;
+if ( thrown <= 0 ) exit;
+if ( !item_candamage() ) exit;
+if ( !item_candamageatk ( thrown ) ) exit;
+create_projectile ( 10 , 364 , 6.5 , 4.8 , 12 , 12 , kick3 , obj_spark_hit3 , 1.4 , 1.4 , 0 , 19 , thrown , 6 , -1 );
+hp = 0;
+
+
+~~HIT:
+if ( hit_timer > 0 ) exit;
+hit_timer = vermin.hitlag_frames + 3;
+hp -= vermin.damage;
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 16 ) * 0.5 );
+object_stun ( vermin , vermin.hitlag_frames );
+shield_receiver = attacker;
+
+
+~~END OF FILE

@@ -1,0 +1,399 @@
+///Neutral B - Resurrection
+
+if (state_type = "jump" || state_type = "stand" || state_type = "run") 
+{
+	hspeed *= 0.7;
+	//attacking = 0;
+	special = 1;
+	attack_type = "b";
+	state_type = "air_attack";
+	sprite_index = b_start_sprite;
+	image_index = 0;
+	image_speed = 1/2;
+	timer = 0;
+	time = 72;
+	timer_speed = 1;
+	whiffed = 0;
+	looped = 0;
+	hitloop = 0;
+	dmgscale = percent/20;
+	supertemp = 0;
+	handtemp = instance_exists(obj_hand); //Bugfix to prevent softlock when using move on Hands.
+	
+	if moveright {facing = 0}
+	if moveleft {facing = 1}
+	
+	//Blur Variables
+	spellcard_resurrectscale = 0.4
+	spellcard_resurrectxshift = -2
+	spellcard_resurrectyshift = 50
+	spellcard_resurrecttime = 50
+	spellcard_resurrectspeed = 0
+	spellcard_resurrectzoom = -1
+	
+	//Blur Variables
+	spellcirclescale = 0.125
+	spellcirclexshift = -2
+	spellcircleyshift = 10
+	spellcircletime = 50
+	spellcirclespeed = 0
+	spellcirclezoom = -1
+
+	//Blur Variables
+	resurrectpillarscale = 0.5
+	resurrectpillarxshift = 0
+	resurrectpillaryshift = -2
+	resurrectpillartime = 75
+	resurrectpillarspeed = 1.5
+	resurrectpillarzoom = -99
+	
+	//Blur Variables
+	phoenixdownscale = 0.88
+	phoenixdownxshift = 0
+	phoenixdownyshift = 10
+	phoenixdowntime = 50
+	phoenixdownspeed = 1
+	phoenixdownzoom = -2
+}
+
+switch ( timer )
+{
+	case 16: sprite_index = b_sprite; image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 22: image_index = 6; break;
+	case 25: image_index = 7; break;
+	case 27: image_index = 4; break;
+	case 30: image_index = 5; break;
+	case 33: image_index = 6; break;
+	case 36: image_index = 7; break;
+	case 39: image_index = 4; break;
+	case 42: image_index = 5; break;
+	case 45: image_index = 6; break;
+	case 48: image_index = 7; break;
+	case 51: image_index = 4; break;
+	case 54: image_index = 5; break;
+	case 57: image_index = 6; break;
+	case 60: image_index = 7; break;
+	case 63: image_index = 8; break;
+	case 66: image_index = 9; break;
+	case 69: image_index = 10; break;
+	
+	case 345: sprite_index = b_start_sprite; image_index = 9; image_speed = 0; break;
+	case 348: image_index = 10; break;
+}
+
+if ( timer < time )
+{	
+	if timer <= 3 && super && !blueflame {supertemp = 1;}
+	
+	if ( ( timer >= 10 && timer < 15 ) || ( timer >= 16 && whiffed = 0 ) ) && !supertemp
+		intangible = 1
+	else
+		intangible = 0
+		
+	if timer <= 14 || ( timer >= 99 && timer < 345 )
+	{
+		if image_index > 8
+			image_index = 5
+	}
+	
+	if timer = 11 && handtemp
+	{
+		timer = 16;
+		
+		sound_play(spellcard_sound);
+		spellcircle = create_blur(x,y,self.id);
+		spellcircle.sprite_index = spellcircle_sprite;
+		spellcircle.image_xscale = (spellcirclescale*size)*(1-facing*2);
+		spellcircle.image_yscale = (spellcirclescale*size);
+		spellcircle.x = x + ( spellcirclexshift + (chargeshift * looped) )*size*(1-facing*2);
+		spellcircle.y = y - spellcircleyshift*size;
+		spellcircle.image_index = 0;
+		spellcircle.image_speed = spellcirclespeed;
+		spellcircle.alarm[0] = spellcircletime;
+		spellcircle.snap = self.id;
+		spellcircle.depth = spellcirclezoom;
+		
+		if supertemp 
+		{
+			blueflame = 1; 
+			sound_play(ex_voice1); 
+			effect_create_above(ef_ring,x + -2 * (1-facing*2) * size,y - 15 * size,0.1,c_aqua);
+		}
+	}
+	
+	if timer = 12
+	{
+		//effect_create_above(ef_ring,x + -2 * (1-facing*2) * size,y - 45 * size,0.1,c_orange);
+		target = -1;
+		sound_play(spellcard_sound);
+		if !supertemp {resurrecthit = create_homing_bubble_hit(0.72,0.72,0,15,self.id,2);}
+		if supertemp 
+		{
+			blueflame = 1; 
+			sound_play(ex_voice1); 
+			effect_create_above(ef_ring,x + -2 * (1-facing*2) * size,y - 15 * size,0.1,c_aqua);
+		}
+		
+		spellcard_resurrect = create_blur(x,y,self.id);
+		if !supertemp {spellcard_resurrect.sprite_index = spellcard_resurrect_sprite;}
+		if supertemp {spellcard_resurrect.sprite_index = spellcard_blueflame_sprite;}
+		spellcard_resurrect.image_xscale = (spellcard_resurrectscale*size)*(1-facing*2);
+		spellcard_resurrect.image_yscale = (spellcard_resurrectscale*size);
+		spellcard_resurrect.x = x + ( spellcard_resurrectxshift + (chargeshift * looped) )*size*(1-facing*2);
+		spellcard_resurrect.y = y - spellcard_resurrectyshift*size;
+		spellcard_resurrect.image_index = 0;
+		spellcard_resurrect.image_speed = spellcard_resurrectspeed;
+		spellcard_resurrect.image_alpha = 1
+		spellcard_resurrect.alarm[0] = spellcard_resurrecttime;
+		spellcard_resurrect.snap = self.id;
+		spellcard_resurrect.depth = spellcard_resurrectzoom;
+		
+		spellcircle = create_blur(x,y,self.id);
+		spellcircle.sprite_index = spellcircle_sprite;
+		spellcircle.image_xscale = (spellcirclescale*size)*(1-facing*2);
+		spellcircle.image_yscale = (spellcirclescale*size);
+		spellcircle.x = x + ( spellcirclexshift + (chargeshift * looped) )*size*(1-facing*2);
+		spellcircle.y = y - spellcircleyshift*size;
+		spellcircle.image_index = 0;
+		spellcircle.image_speed = spellcirclespeed;
+		spellcircle.alarm[0] = spellcircletime;
+		spellcircle.snap = self.id;
+		spellcircle.depth = spellcirclezoom;
+		
+		if air = 0
+		{
+			duster = instance_create(x + 0 *(1-facing*2) * size, y + 3 * size ,obj_dust_effect)
+			duster.image_alpha = 0.9;
+			duster.image_xscale = -0.2 * (1-facing*2) * size;
+			duster.image_yscale = 0.1 * size;
+			duster2 = instance_create(x + 0 *(1-facing*2) * size, y + 3 * size ,obj_dust_effect)
+			duster2.image_alpha = 0.9;
+			duster2.image_xscale = 0.2 * (1-facing*2) * size;
+			duster2.image_yscale = 0.1 * size;
+		}
+	}
+	
+	if timer >= 12
+	{
+		hspeed *= 0.3;
+		
+		spellcard_resurrect.image_alpha -= 0.05
+		//spellcard_resurrect.image_xscale += 0.1*(1-facing*2)
+		//spellcard_resurrect.image_yscale += 0.1
+		
+		spellcircle.image_alpha -= 0.05
+		spellcircle.image_xscale += 0.1*(1-facing*2)
+		spellcircle.image_yscale += 0.1
+	}
+	
+	if spellcard_resurrect.image_alpha <= 0
+	{
+		with(spellcard_resurrect){instance_destroy();}
+	}
+	
+	if spellcircle.image_alpha <= 0
+	{
+		with(spellcircle){instance_destroy();}
+	}
+	
+	if timer >= 12 && timer < 14
+	{
+		resurrecthit.x += x - xprevious;
+		resurrecthit.y += vspeed;
+	}
+	
+	if timer >= 14 && supertemp {timer = time;}
+	
+	if !supertemp
+	{
+		//Attack Failed
+		if timer = 14 && target < 1
+		{
+			image_index = 6;
+			timer = 99;
+			time = 350;
+			whiffed += 1;
+		}
+		
+		//Attack Success
+		if timer >= 12 && timer <= 13 && ( target >= 1 )
+		{
+			if ( target.intangible > 0 ) || (target.state_type = "shielding")
+			{
+				target = -1
+				image_index = 6;
+				timer = 99;
+				time = 350;
+				whiffed += 1;
+			}
+			else
+			{
+				timer = 14;
+				gravity_lock = 1;
+				hspeed = 0;
+				vspeed = 0;
+				air_move = 0;
+				fast_fall = 0;
+				fast_fall_temp = 0;
+
+				target1 = target;
+				target1.x = x + 3 * size*(1-facing*2);
+				target1.y = y + 6 * size;
+				target1.intangible = 0;
+				target1.sprite_angle = 0;
+				target1.state_type = "air_flinch"
+				target1.facing = facing;
+				target1.attack_type = "none";
+				target1.timer = 0;
+				target1.timer_speed = 0;
+				target1.alarm[0] = 2;
+			}
+		}
+		
+		if ( timer >= 14 && timer <= 16 ) && whiffed = 0
+		{
+			gravity_lock = 1;
+			hspeed = 0;
+			air_move = 0;
+			fast_fall = 0;
+			fast_fall_temp = 0;
+
+			target1.x = x + 2*size*(1-facing*2)
+			target1.y = y+ 5 * size;
+			target1.timer_speed = 0;
+			target1.intangible = 0;
+			target1.alarm[0] = 2;
+			target1.state_type = "air_flinch"
+			target1.depth = depth + 1;
+		}
+		
+		if timer >= 16 && timer <= 69 && whiffed = 0
+		{
+			hspeed = 0;
+			vspeed = 0;
+			gravity = 0;
+			gravity_lock = 1;
+			fast_fall = 0;
+			fast_fall_temp = 0;
+			image_speed = 0;
+		}
+		
+		if ( timer = 16 )
+		{
+			visible = 0;
+			resurrectpillar = create_blur(x,y,self.id);
+			if !blueflame {resurrectpillar.sprite_index = resurrectpillar_sprite;}
+			if blueflame  {resurrectpillar.sprite_index = resurrectpillarblue_sprite;}
+			resurrectpillar.image_xscale = (resurrectpillarscale*size)*(1-facing*2);
+			resurrectpillar.image_yscale = (resurrectpillarscale*size);
+			resurrectpillar.x = x + ( resurrectpillarxshift + (chargeshift * looped) )*size*(1-facing*2);
+			resurrectpillar.y = y - resurrectpillaryshift*size;
+			resurrectpillar.image_index = 0;
+			resurrectpillar.image_speed = resurrectpillarspeed;
+			resurrectpillar.alarm[0] = resurrectpillartime;
+			resurrectpillar.snap = self.id;
+			resurrectpillar.depth = resurrectpillarzoom;
+		}
+		
+		if timer > 16 && timer < 42
+		{
+			resurrectpillar.image_yscale += 0.5;
+		}
+		
+		if ( timer = 16 + hitloop * 2 ) && ( hitloop < 11 )
+		{
+			create_hitbox(1+dmgscale/5,90,3.8,0,2+dmgscale/2.5,1,fire3,obj_spark_fire1,1.4,2.8+hitloop*0.5,0,34,self.id,2,5);
+			hitbox.ignore_weight = 1;
+			hitbox.weight_kb = 1;
+			hitbox.hit_stun = 5;
+			hitbox.di = -1;
+			hitbox.armor_break = 1;
+			
+			hitloop += 1
+		}
+		
+		if timer = 42
+		{
+			if instance_exists(resurrectpillar){with(resurrectpillar){instance_destroy();}}
+			if !handtemp {x = target1.x; y = target1.y;}
+			if handtemp {y = y - 40 * size;}
+			visible = 1;
+			
+			create_hitbox(1+dmgscale,50+facing*80,8+dmgscale,1.5+dmgscale*(blueflame>0),12+dmgscale*2,10+dmgscale*2,specialhit,obj_spark_fire1,1.3,1.3,0,10,self.id,2,5);
+			hitbox.hit_stun = 15;
+			hitbox.armor_break = 1;
+			hitbox.di = -1;
+			
+			phoenixdown = create_blur(x,y,self.id);
+			if !blueflame 
+			{
+				phoenixdown.sprite_index = phoenixdown_sprite; 
+				effect_create_above(ef_ring,x + -2 * (1-facing*2) * size,y - 15 * size,0.1,c_orange);
+			}
+			if blueflame
+			{
+				phoenixdown.sprite_index = phoenixdownblue_sprite; 
+				effect_create_above(ef_ring,x + -2 * (1-facing*2) * size,y - 15 * size,0.1,c_aqua);
+			}
+			phoenixdown.image_xscale = (phoenixdownscale*size)*(1-facing*2);
+			phoenixdown.image_yscale = (phoenixdownscale*size);
+			phoenixdown.x = x + ( phoenixdownxshift + (chargeshift * looped) )*size*(1-facing*2);
+			phoenixdown.y = y - phoenixdownyshift*size;
+			phoenixdown.image_index = 0;
+			phoenixdown.image_speed = phoenixdownspeed;
+			phoenixdown.alarm[0] = phoenixdowntime;
+			phoenixdown.snap = self.id;
+			phoenixdown.depth = phoenixdownzoom;
+		}
+		
+		if timer = 43 && !blueflame && hitbox.hit > 0
+		{
+			resurrection = 1;
+		}
+	}
+}
+			if (timer >= 42 && timer < 50){
+			if (target.state_type = "air_flinch" || target.state_type = "flinch" && attack_success && dontrepeat = 0 && temp_spawn >= 4){
+				dontrepeat = 1;
+				killspark = instance_create(target.x-235,target.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.8;
+				killspark.image_yscale = size * 0.8;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.048;
+				killspark.alarm[0] = 90;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(100,100);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 90
+				freezer2.alarm[0] = 90
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = target.x - 30;
+				spark.camera_r = target.x + 30;
+				spark.camera_u = target.y - 75;
+				spark.camera_d = target.y
+				spark.camera_boundary_zoom = 100;
+				spark.alarm[0] = 90;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 90
+
+			  
+			}
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+dontrepeat = 0
+	handtemp = instance_exists(obj_hand);
+	supertemp = 0;
+	attack_type = "none";
+	if air > 0
+		state_type = "jump";
+	else
+		state_type = "stand";
+	timer = 0;
+	time =-1;
+}
