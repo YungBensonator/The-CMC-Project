@@ -1,0 +1,116 @@
+gravity_lock = 1
+gravity = 0
+vspeed = 0
+air_move = 0
+
+if (state_type = "run" || state_type = "stand" || state_type = "jump" ) and floattime >= maxfloattime * 1
+{
+	
+    special = 1;
+	attacking = 0;
+    attack_type = "dab"
+	state_type = "air_attack";
+	sprite_index = taunt_sprite;
+	image_speed = 0;
+    image_index=0;
+	
+	timer = 0;
+    time = 120;
+	
+	floattime -= maxfloattime * 1
+	
+} 
+
+if (timer < time) 
+{
+
+if timer = 1{
+	nevoa1 = create_spark(0,45,self.id);
+	nevoa1.sprite_index = nevoa_sprite;
+	nevoa1.image_speed = 0.5;
+	nevoa1.image_alpha = 1;
+	nevoa1.image_xscale = image_xscale * 0.44 ;
+	nevoa1.image_yscale = image_yscale * 0.44 ;
+	nevoa1.depth = depth - 3;
+	nevoa1.loop = 999;
+	nevoa1.xscale_add = 0.0085 * (1-facing*2);
+	nevoa1.yscale_add = 0.0085
+	nevoa1.alarm[0] = 150;	
+	nevoa1.alpha_add = -0.001
+	sound_play(ex_sound);
+	sound_play(dab_sound);
+	sound_play(dair_voice);
+}
+
+if timer >= 2 and timer <= 7{
+	
+	nevoa[timer] = create_spark(-25+random(50),35+random(20),self.id);
+	nevoa[timer].sprite_index = nevoa_sprite;
+	nevoa[timer].image_speed = 0.5;
+	nevoa[timer].image_alpha = 1;
+	nevoa[timer].image_xscale = image_xscale * 0.32 ;
+	nevoa[timer].image_yscale = image_yscale * 0.32 ;
+	nevoa[timer].depth = depth - 3;
+	nevoa[timer].loop = 999;
+	nevoa[timer].xscale_add = 0.0085 * (1-facing*2);
+	nevoa[timer].yscale_add = 0.0085
+	nevoa[timer].alarm[0] = 151 - timer;	
+	nevoa[timer].alpha_add = -0.001
+}
+
+if timer >= 30 and timer mod 3 = 0 and timer <= 115{
+	repeat(5){
+	thedir = random(360)
+	fireball = create_projectile(0.75,45+facing*90,2,4,2+random(5),5,ice1,obj_spark_ice,0,0,0,45,self.id,120,char_custom3);
+	fireball.sprite_index = dabproj_sprite;
+	fireball.image_speed = 0
+	fireball.image_index = choose(0,1,2,3,4,5)
+	fireball.image_xscale = image_xscale * 0.25;
+	fireball.image_yscale = image_yscale * 0.25;
+	fireball.image_alpha = 09
+	fireball.hit = 0
+	fireball.depth = depth - 0.1
+	fireball.facing = facing
+	fireball.direction = thedir
+	fireball.image_angle = random(360)
+	fireball.speed = 4+random(5)
+	fireball.basedir = fireball.direction
+	fireball.basespeed = fireball.speed
+	}
+}
+
+
+if timer >= 105{
+	nevoa1.image_alpha -= 0.05
+	for (i=2; i<=7; i+=1) list[i] = i+1;
+	nevoa[i].image_alpha -= 0.05
+	
+}
+
+
+if timer = 115{
+	create_hitbox(5,45+facing*90,7,4.9,4,30,magic1,obj_spark_hit3,6.5,6.5,0,45,self.id,1,5);
+	
+}
+
+
+
+
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+}
+ 

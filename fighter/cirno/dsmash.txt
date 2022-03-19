@@ -1,0 +1,85 @@
+if cantusedsmash>0 {break;}
+
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 48;
+        timer_speed=1;
+        charge_frame = 1;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+	case 36: image_index = 9; break;
+	case 40: image_index = 2; break;
+	case 44: image_index = 3; break;
+
+
+      }
+	if timer = 4{
+	if smash_charge >= 90{}
+    sound_play(dsmash_voice);
+	
+	releasetimer = max(8, ceil(smash_charge / 2))
+	time = releasetimer +4
+	
+	
+	
+	projdir = 30+facing*120
+        sound_play(iceform_sound);
+	create_projectile(max(1,6*(motivation/100)+smash_charge/15),projdir,6,5.5,12,12,ice1,obj_spark_slash2,0.0,0.0,20,releasetimer/2,self.id,150+releasetimer,char_custom2);
+	proj.shootimer = releasetimer - 4
+	proj.sprite_index = iceball_sprite
+	proj.projsize = 0.5
+	proj.hit = 2
+	
+	if facing = 0
+	hspeed = 1
+	else
+	hspeed = -1
+	}
+	
+	if timer < releasetimer{
+	proj.projsize += 0.02
+	
+	if facing = 0
+	hspeed += 0.15
+	else
+	hspeed -= 0.15
+	
+	}
+	
+	if timer = releasetimer{
+	hspeed = 0
+	}
+	
+	
+
+	
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "crouch";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	image_index = 3
+	cantusedsmash = 50-time
+  }
+        

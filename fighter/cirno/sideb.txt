@@ -1,0 +1,103 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" 
+{
+	
+    special = 1;
+	attacking = 0;
+    attack_type = "sideb"
+	state_type = "air_attack";
+    
+	sprite_index = fair_sprite;
+	image_speed = 0;
+    image_index=0;
+	
+	timer = 0; 
+	starttemp = 1;
+    time = 120;
+	special = 1
+	
+}
+
+
+
+if (timer < time) 
+{
+	
+	if timer = 5
+	timer = 10
+		time = 60;
+		
+		if (timer = 18) 
+		{
+			sound_play(iceform_sound);
+			berg = create_projectile(15,15+facing*150,4,7,7,1,ice1,obj_spark_ice,0.0001,0.0001,0,30,self.id,200,char_custom4);
+			berg.sprite_index = iceberg_sprite;
+			berg.hitstun = 17;
+		}
+		
+		if (timer < 37) and timer > 18
+		{
+			berg.x = x;
+			berg.y = y-30;
+			berg.image_xscale += 0.010;
+			berg.image_yscale += 0.010;
+			berg.hit = 2;
+		}
+		
+		if timer = 37 
+		{
+			
+			berg.hit = 1;
+			berg.hspeed = 3*(1-facing*2);
+			berg.vspeed = -3;
+			berg.gravity = 0.25
+			
+			sound_play(attack_sound2);
+			sprite_index = smashb_sprite;
+			image_index = 2;
+			duster = instance_create(x-6+facing*12,y,obj_dust_effect)
+			duster.facing = facing
+			duster.image_alpha = 0.75
+			duster.image_yscale *= 0.6*size
+			duster.image_xscale *= 0.8*size
+			spark = instance_create(x+(15-facing*26)*size,y-13.5*size,obj_spark_shockwave)
+			spark.image_xscale *= 0.1*size
+			spark.image_yscale *= 0.4*size
+			spark.image_blend = c_white
+			spark.image_alpha = 0.9
+			sound_play(fire_sound);
+			sound_play(fire_sound2);
+		}
+	
+	
+	
+	
+	if (timer = 15){ image_blend = c_white}
+		
+	if (air = 0)
+	{
+        hspeed *= 0.9;
+	}
+	
+	if (image_index >= image_number - image_speed)
+	{image_speed = 0}
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	image_speed = 0;
+	}
+	
+	
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+}
+ 

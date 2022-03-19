@@ -1,0 +1,103 @@
+if timer = 1 && hit = 2 { 
+    
+    image_speed = 0
+    visible =1
+	moving_object = 0;
+	facing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	gravity = 0
+	
+	if projsize = 0
+	projsize = 1
+	
+	if shootimer = 0
+	shootimer = 1
+	
+	startxscale = attacker.image_xscale
+	startyscale = attacker.image_yscale
+
+	image_xscale=startxscale * projsize
+	image_yscale=startyscale * projsize
+
+    image_angle=0
+	
+	if facing = 0
+	hspeed = 1
+	else
+	hspeed = -1
+	
+	hit = 2
+}
+
+if timer < shootimer and hit = 2{
+if facing = 0
+image_angle -=9
+else
+image_angle +=9
+
+if facing = 0
+	hspeed += 0.02
+	else
+	hspeed -= 0.02
+
+image_xscale=startxscale * projsize
+image_yscale=startyscale * projsize
+
+}
+
+if timer = shootimer && hit = 2 {
+hit = 0
+
+if shootimer > 14
+hspeed *= 4
+else
+hspeed *= 1.5
+
+if facing = 0
+image_angle -=9
+else
+image_angle +=9
+
+moving_object = 1;
+}
+
+if timer >shootimer{
+
+if facing = 0
+image_angle -=9
+else
+image_angle +=9
+
+if facing = 0
+	hspeed += 0.1
+	else
+	hspeed -= 0.1
+
+absorb2 = 1
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()
+
+/*
+if ( !on_floor && !on_platform )
+      vspeed += 0.25;
+      else
+      vspeed = 0;
+	  */
+    if ( vspeed > 4 )
+      vspeed = 4;
+    if ( hspeed > 0 && next_to_rwall && timer < time - 1 )
+      {
+      timer = time - 1;
+      }
+    if ( hspeed < 0 && next_to_lwall && timer < time - 1 )
+      {
+      timer = time - 1;
+      }
+
+}
+
+
+
+
+

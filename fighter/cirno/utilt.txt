@@ -1,0 +1,47 @@
+if state_type = "run" || state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0;
+        sprite_index = utilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 30;
+        timer_speed=1;
+        attacking = 0
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 11: image_index = 4; break;
+	case 13: image_index = 5; break;
+	case 17: image_index = 6; break;
+    case 25: image_index = 7; break;
+      }
+
+    if ( timer = 13 ) 
+      {
+      play_attack_voice()
+	  projdir = 75+facing*30
+	  create_projectile(4*(motivation/100),projdir,6.5,4,12,8,ice1,obj_spark_slash2,1.0,1.0,15,22,self.id,150,char_custom1);
+	  proj.shootimer = 1
+	  proj.setspeed = 1
+	  proj.chosespeed = 5
+      }
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+
+

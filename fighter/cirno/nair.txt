@@ -1,0 +1,69 @@
+if state_type = "jump"
+  {
+    state_type = "air_attack";
+
+
+    attack_type = "nair";
+    sprite_index = nair_sprite;
+    image_index = 0;
+    image_speed = 0;
+    timer = 0;
+    time = 20;
+    timer_speed=1;
+
+
+
+  }
+air = 1;
+if ( timer < time )
+  {
+    state_type = "air_attack";
+switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 10: image_index = 2; break;
+      }
+
+    if ( timer = 2 ) 
+      {
+    play_attack_voice()
+	sound_play(iceshatter_sound)
+	create_hitbox(7,18+facing*144,5,2,8,6,ice1,obj_spark_ice,0.9,0.9,16,22,self.id,12,2);
+	
+	effectjab = create_blur(x,y,self.id);
+	effectjab.sprite_index = iceshatter_sprite;
+	effectjab.x = hitbox.x - 15+facing*30;
+    effectjab.y = hitbox.y;
+    effectjab.image_speed = 1.3;
+	effectjab.image_alpha = 0.7;
+    effectjab.image_xscale = iceweaponscale*(1-facing*2) * size;
+    effectjab.image_yscale = iceweaponscale* size;
+    effectjab.depth = depth - 0.1;
+	effectjab.snap = self.id
+	
+      }
+
+	
+
+    
+
+  }
+if air = 0 {
+	
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=12;
+}
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+
+  image_index = 0;
+  timer = 0;
+  time = -1;
+}

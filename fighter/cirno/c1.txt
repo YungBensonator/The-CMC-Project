@@ -1,0 +1,87 @@
+if timer = 1 && hit = 0 
+{         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.iceshard_sprite
+    image_speed = 0
+    visible =1
+	moving_object = 0;
+	facing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	//projsize = attacker.projsize
+	if projsize = 0
+	projsize = 1
+	
+	if shatterammo = 0
+	shatterammo = 1
+	
+	
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale * projsize
+	else
+	image_xscale= (attacker.image_xscale *(-1) ) * projsize
+	image_yscale=attacker.image_yscale * projsize
+	
+	if thisisshatter = 0
+	{
+		image_angle=attacker.projdir
+		direction=attacker.projdir
+	}
+	powerup = 0
+	
+}
+
+if timer = shootimer && hit = 0 {
+if setspeed = 1{
+chosen = chosespeed
+}else {
+chosen = 6
+}
+speed= chosen // - facing   *(chosen*2)
+moving_object = 1;
+}
+
+
+if doconverge = 1{
+if timer = convergetimer{
+image_angle=convergeangle
+direction=convergeangle
+dir = convergeangle
+}
+}
+
+if doshatter = 1{
+if timer = shattertimer{
+
+for (i=0;i<shatterammo;i+=1){
+
+create_projectile(damage/4,projdir,bkb/4,kbg/4,1,2,ice1,obj_spark_slash2,1.0,1.0,0,0,attacker.id,150,char_custom1)
+proj.projsize = projsize/4
+proj.shootimer = 1
+proj.damage = damage/4
+proj.bkb = bkb/4
+proj.kbg = kbg/4
+
+proj.thisisshatter = 1
+
+proj.image_angle=shatterangle[i]
+proj.direction=shatterangle[i]
+proj.dir = shatterangle[i]}
+}
+if timer = shattertimer+1
+instance_destroy()
+
+}
+
+if hit = 1 and !attacker.perfectfreeze and !attacker.icebarrier{
+attacker.icepower +=0.33
+attacker.motivation += 0.08
+}
+
+if ignorewall = 1
+moving_object = 0
+
+if timer >shootimer and ignorewall = 0{
+absorb2 = 1
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()
+}

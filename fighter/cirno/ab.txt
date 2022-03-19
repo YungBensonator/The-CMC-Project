@@ -1,0 +1,175 @@
+
+gravity_lock = 1
+gravity = 0
+vspeed = 0
+air_move = 0
+
+if (state_type = "run" || state_type = "stand" || state_type = "jump" ) and floattime >= maxfloattime * 0.7
+{
+	
+    special = 1;
+	attacking = 0;
+    attack_type = "ab"
+	state_type = "air_attack";
+    
+	sprite_index = fair_sprite;
+	image_speed = 0;
+    image_index=0;
+        sound_play(ex_sound);
+	
+	timer = 90;
+	starttemp = 3
+    time = 120;
+	
+	nbtemp = 0;
+	activeshot = 0;
+	
+	nbtemp = 3;
+	starttemp = 0;
+	activeshot = 1;
+	
+	floattime -= maxfloattime * 0.7
+	
+}
+
+
+if (timer < time) 
+{
+		special = 1;
+		time = 280;
+		
+		if timer >133
+		vspeed = 0
+		if timer >133
+		speed=0
+		
+		if(timer = 130)
+		{
+			sprite_index = downb_sprite;
+			image_index=0;
+			doit=4
+			numbah = 70
+			doit2=4
+			numbah2 = 290
+			alternate = 0
+			alternate2 = 0
+		}
+		
+		switch ( timer )
+			{
+			case 139: image_index = 1; break;
+			case 260: image_index = 2; break;
+			}
+			if timer = 95 {
+				sound_play(b_voice);
+				}
+			
+			if timer >= 140 and timer <=269 and doit =4{
+			doit = 0
+			projdir = numbah+facing*(180-numbah*2)
+			create_projectile(1,361,0,0,3,0,ice1,obj_spark_ice,1.0,1.0,8,22,self.id,150,char_custom1);
+			proj.shootimer = 1
+			proj.doconverge = 1
+			proj.convergetimer = 22
+			proj.convergeangle = 0+facing*180
+			proj.setspeed = 1
+			proj.chosespeed = 3.9
+			proj.ignorewall = 1
+			proj.doshatter = 1
+			proj.shatterammo = 2
+			proj.shattertimer = 40
+			proj.shatterangle[0] = 330-facing*120
+			proj.shatterangle[1] = 30+facing*120
+			//proj.shatterangle[2] = 0+facing*180
+			
+			if numbah <=70 and numbah >=30 and alternate = 0
+			numbah -=4
+			else if alternate = 0{
+			alternate = 1
+			numbah +=4}
+			else if numbah >70 and alternate = 1{
+			alternate = 0
+			numbah -=4}
+			else
+			numbah +=4
+			
+			}
+			else if timer >=140
+			doit+=1
+			
+			if timer >= 140 and timer <=269 and doit2 =5{
+			doit2 = 1
+			projdir = numbah2+facing*(180-numbah2*2)
+			create_projectile(1,361,0,0,1,0,ice1,obj_spark_ice,1.0,1.0,8,22,self.id,150,char_custom1);
+			proj.shootimer = 1
+			proj.doconverge = 1
+			proj.convergetimer = 22
+			proj.convergeangle = 0+facing*180
+			proj.setspeed = 1
+			proj.chosespeed = 3.9
+			proj.ignorewall = 1
+			proj.doshatter = 1
+			proj.shatterammo = 2
+			proj.shattertimer = 40
+			proj.shatterangle[0] = 330-facing*120
+			proj.shatterangle[1] = 30+facing*120
+			//proj.shatterangle[2] = 0+facing*180
+			
+			if numbah2 <=330 and numbah2 >=290 and alternate2 = 0
+			numbah2 +=4
+			else if alternate2 = 0{
+			alternate2 = 1
+			numbah2 -=4}
+			else if numbah2 <290 and alternate2 = 1{
+			alternate2 = 0
+			numbah2 +=4}
+			else
+			numbah2 -=4
+			
+			}
+			else if timer >=140
+			doit2+=1
+			
+		
+			
+			
+		
+		icepower += 0.1
+		//motivation += 6
+			
+	
+	
+	if (timer = 15){ image_blend = c_white}
+		
+	if (air = 0)
+	{
+        hspeed *= 0.9;
+	}
+	
+	if (image_index >= image_number - image_speed)
+	{image_speed = 0}
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	image_speed = 0;
+	}
+	
+	if(time != 120)
+	{
+		card_meter = 0;
+	}
+	
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+}
+ 

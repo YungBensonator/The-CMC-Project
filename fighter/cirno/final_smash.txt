@@ -1,0 +1,352 @@
+/*
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" 
+{
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 1;
+        time = 150;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		doit=4
+		numbah = 70
+		doit2=4
+		numbah2 = 290
+		alternate = 0
+		alternate2 = 0
+		if air = 0
+		vspeed = -20
+}
+
+gravity_lock = 1;
+if ( timer < time )
+{
+if timer >3
+vspeed = 0
+if timer >3
+speed=0
+switch ( timer )
+    {
+	case 9: image_index = 1; break;
+	case 140: image_index = 2; break;
+    }
+	if timer = 1
+	     sound_play(b_voice);
+    
+	if timer >= 10 and timer <=139 and doit =4{
+	doit = 0
+	projdir = numbah+facing*(180-numbah*2)
+	create_projectile(3,361,0,0,3,0,ice1,obj_spark_slash2,1.0,1.0,8,22,self.id,150,char_custom1);
+	  proj.shootimer = 1
+	  proj.doconverge = 1
+	  proj.convergetimer = 22
+	  proj.convergeangle = 0+facing*180
+	  proj.setspeed = 1
+	  proj.chosespeed = 3.9
+	  proj.ignorewall = 1
+	  proj.doshatter = 1
+	  proj.shatterammo = 2
+	  proj.shattertimer = 40
+	  proj.shatterangle[0] = 330-facing*120
+	  proj.shatterangle[1] = 30+facing*120
+	  //proj.shatterangle[2] = 0+facing*180
+	  
+	if numbah <=70 and numbah >=30 and alternate = 0
+	numbah -=4
+	else if alternate = 0{
+	alternate = 1
+	numbah +=4}
+	else if numbah >70 and alternate = 1{
+	alternate = 0
+	numbah -=4}
+	else
+	numbah +=4
+	
+	}
+	else if timer >=10
+	doit+=1
+	
+	if timer >= 10 and timer <=139 and doit2 =5{
+	doit2 = 1
+	projdir = numbah2+facing*(180-numbah2*2)
+	create_projectile(3,361,0,0,3,0,ice1,obj_spark_slash2,1.0,1.0,8,22,self.id,150,char_custom1);
+	  proj.shootimer = 1
+	  proj.doconverge = 1
+	  proj.convergetimer = 22
+	  proj.convergeangle = 0+facing*180
+	  proj.setspeed = 1
+	  proj.chosespeed = 3.9
+	  proj.ignorewall = 1
+	  proj.doshatter = 1
+	  proj.shatterammo = 2
+	  proj.shattertimer = 40
+	  proj.shatterangle[0] = 330-facing*120
+	  proj.shatterangle[1] = 30+facing*120
+	  //proj.shatterangle[2] = 0+facing*180
+	  
+	if numbah2 <=330 and numbah2 >=290 and alternate2 = 0
+	numbah2 +=4
+	else if alternate2 = 0{
+	alternate2 = 1
+	numbah2 -=4}
+	else if numbah2 <290 and alternate2 = 1{
+	alternate2 = 0
+	numbah2 +=4}
+	else
+	numbah2 -=4
+	
+	}
+	else if timer >=10
+	doit2+=1
+	
+
+	
+	
+
+icepower += 0.1
+//motivation += 6
+
+
+
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+	
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+var saveid;
+saveid = self.id
+
+if cantusedownb>0 {break;}
+if icebarrier=1 {break;}
+if perfectfreeze=1 {break;}
+
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" 
+{
+	icepower = 100;
+	final_smashes+=1
+        smash_power = 0
+        state_type = "air_attack"
+        attack_type = "final_smash"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 60
+        time = 90
+		hspeed = 0
+        special = 1;
+		last_shakex = shakex;
+    last_shakey = shakey;
+	charge_timer = 0;
+	image_blend = c_white;
+}
+
+
+if ( timer < time )
+    {
+	
+	vspeed *= 0.1
+	
+    switch ( timer )
+    {
+	case 20: image_index = 1; break;
+	case 24: image_index = 2; break;
+	case 84: image_index = 1; break;
+	case 87: image_index = 2; break;
+    }
+	if timer = 1{
+	     sound_play(icecharge_sound);
+		 if icepower <100
+		 icepower += 0.12
+		 flashing = 1
+		 }
+	
+	if timer >= 2 and timer <= 18{
+	if icepower <100
+	icepower += 0.12
+	}
+		 
+		 
+    if ai {
+        if timer = 19 && random(8)>2
+            special = 1
+        else
+            special = 0
+    }
+	
+	if timer = 19 && special = 1 {
+        timer = 1
+	    if icepower <100
+		icepower += 0.12
+    }
+	
+	
+    if timer = 21{
+	flashing = 0
+	  
+    if icepower < 100 and icepower >=30{
+	sound_play(sideb_voice)
+	icebarrier = 1  
+    icecircle = instance_create ( x, y-20*image_yscale, obj_custom_gfx);
+	icecircle.draw_script = char_custom6;
+    icecircle.step_script = char_custom5;
+    icecircle.owner = self.id;
+    icecircle.keepmain = self.keepmain;
+	icecircle.motivation = 200
+	icecircle.icepower = 0
+	icecircle.depth = depth+5
+	icecircle.notstart = 0
+	icecircle.snap = self.id
+	icecircle.image_alpha = 0.7
+	
+	}else if icepower >=100{
+	
+	image_index = 0
+	time = 90
+	
+	
+	}
+
+
+    }
+	
+	if timer < 85 and icepower >=100{
+	image_index = 0
+	
+	if ( timer mod 16 = 4 && timer > 55 )
+	flashing = 1
+	else
+	flashing = 0
+	
+	if timer >55{
+	shakex = last_shakex - lengthdir_x ( charge_timer * 0.01 , charge_timer * 55 ) * ( 1 - facing * 2 );
+  		image_blend = merge_color ( c_white , c_green , 0.5 + lengthdir_x ( 0.5 , charge_timer * 50 ) );
+  		alarm[7] = 2;
+  		charge_timer += 1.5
+
+	
+	}
+	
+	
+	}
+	
+	if timer = 85{
+	image_blend = c_white;
+
+
+    perfectfreeze_gfx = instance_create ( 0 , 0 , obj_custom_gfx );
+    perfectfreeze_gfx.depth = -15;
+    perfectfreeze_gfx.draw_script = char_custom9;
+    perfectfreeze_gfx.keepmain = keepmain;
+    perfectfreeze_gfx.image_alpha = 0;
+    perfectfreeze_gfx.alarm[0] = 310;
+    perfectfreeze_gfx.sprite_index = finale_sprite;
+    
+  
+	
+	
+	
+	
+	
+	bigtima = 30
+	liltima = 30
+	
+	sound_play(perfectfreeze_voice)
+	perfectfreeze = 1
+
+	
+	with (projectile_box){
+	
+	
+	attacker = other.id
+    projdir = random(360)
+    projdir = random(360)
+	
+    damage *= 1*(motivation/100)
+	
+    dir = projdir
+    bkb *= motivation/100
+    kbg *= motivation/100
+    shield_damage = 3
+    hitlag_frames = 0
+    sfx = ice1
+    gfx = obj_spark_slash2
+	timer = 1
+    time = 150
+	hit = 0
+    //proj_script = char_custom1
+	hspeed *= (-1) 
+	vspeed *= (-1)
+	direction += 180
+	speed *= (-1) 
+	sprite_index = other.iceshardtwo_sprite
+	image_xscale *= (-1)
+	//image_blend = c_blue
+	if facing = 0
+	facing = 1
+	else
+	facing = 0
+	shootimer = 30}
+	
+	
+	
+	
+	}
+	
+  
+  }
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" 
+{
+	flashing = 0
+	smash_power = 0;
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

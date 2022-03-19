@@ -23,9 +23,9 @@ if state_type = "stand" || state_type ="run"{
     	flash1.owner = self.id;
     	flash1.keepmain = self.keepmain;
 	}
-			 if(timer < 20) {timer_speed = .5;image_speed = 0.35;} else { timer_speed = 1;image_speed = 0.4;}
+			 if(timer < 25) {timer_speed = .5;image_speed = 0.35;} else { timer_speed = 1;image_speed = 0.4;}
 
-            if timer = 15 
+            if timer = 20 
 			{
 				if ( smash_charge > 80 )
 				{
@@ -44,7 +44,7 @@ if state_type = "stand" || state_type ="run"{
 				sound_play(spartan_sound3)
 				create_hitbox(5,45+facing*90,9,8,10,10,shock3,obj_spark_shock,0.75,0.75,24,32,self.id,3,3);
 				hitbox.charge_dmg = 1.5
-				create_projectile(10+smash_charge/15,45+facing*90,2+smash_charge/90,7,100,10,shock3,obj_spark_shock,4,4,30,32,self.id,60,c7_laser);
+				create_projectile(10+smash_charge/15,45+facing*90,6.5+smash_charge/90,7,100,10,shock3,obj_spark_shock,4,4,30,32,self.id,60,c7_laser);
 				proj . level = 1;
 				}
 				else
@@ -62,7 +62,7 @@ if state_type = "stand" || state_type ="run"{
     flash1.owner = self.id;
     flash1.keepmain = self.keepmain;
 	            create_hitbox(5,25+facing*90,6,7,10,5,shock3,obj_spark_shock,0.75,0.75,24,32,self.id,3,3);
-				create_projectile(15+smash_charge/15,25+facing*90,2.5+smash_charge/90,7,50,5,shock3,obj_spark_shock,3,3,30,32,self.id,60,c7_laser);
+				create_projectile(15+smash_charge/15,25+facing*90,6.5+smash_charge/90,7,50,5,shock3,obj_spark_shock,3,3,30,32,self.id,60,c7_laser);
 				proj . level = 1;
 				}
 				proj . xx = proj . x;
@@ -90,7 +90,7 @@ if state_type = "stand" || state_type ="run"{
             if image_index > image_number-image_speed*2
                 image_speed = 0
             }
-			  if(timer >= 15 && timer < 75){ 
+			  if (timer >= 15){ 
 if ((instance_exists(flash1) && attack_success && target.state_type = "flinch" || target.state_type = "air_flinch") && dontrepeat = 0 && target.percent > 120 && temp_spawn > 2){
 				temp_speed = enemy.speed
 				temp_grav = enemy.gravity
@@ -119,10 +119,10 @@ if ((instance_exists(flash1) && attack_success && target.state_type = "flinch" |
 				spark.alarm[0] = 50;
 				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
 				spark2.alarm[0] = 28
-				enemy.state_type = "air_flinch"
-				enemy.timer = 0
-				enemy.time = 40
-				enemy.speed = temp_speed * 2.5
+				target.state_type = "air_flinch"
+				target.timer = 0
+				target.time = 40
+				target.hspeed = temp_speed * 1.2
 				target.gravity = temp_grav + 1.5
 				dontrepeat = 1;
 				time += 60;

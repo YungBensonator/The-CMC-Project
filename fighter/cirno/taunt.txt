@@ -1,0 +1,54 @@
+// This is the script for Mach Rider's taunt action.	
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        state_type = "attack";
+        hspeed = 0;
+        attack_type = "taunt";
+        image_speed = 0;
+		if motivation >= 300
+        sprite_index = taunt_sprite;
+		else
+		sprite_index = usmash_sprite;
+        image_index=8;
+        timer = 0;
+        time = 70;
+        timer_speed=1;
+}
+state_type = "attack";
+
+switch ( timer )
+      {
+	case 4: image_index = 5; break;
+	case 8: image_index = 6; break;
+	case 12: image_index = 7; break;
+	case 16: image_index = 8; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+	
+	case 36: image_index = 9; break;
+	case 40: image_index = 10; break;
+
+
+      }
+if timer = 2{
+if motivation >= 300
+sound_play(secretaunt_voice);
+else
+sound_play(taunt_voice);
+
+}
+
+if timer = time-2
+    interrupt = 1;    
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,71 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 30
+		hspeed = 0
+		special = 1
+}
+
+if ( timer < time )
+    {
+	
+	
+
+	if timer > 7 and timer < 15 and floattime > 0 and air > 0{
+	floattime -=0.5
+	vspeed *= 0.1
+	}
+	 
+	
+	
+    switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 20: image_index = 2; break;
+    }
+	if timer = 1 and random(10)>5
+	     sound_play(b_voice);
+    if timer = 10{
+	  
+	  if moveup and !movedown{
+	  projdir = 45+facing*90
+	  }else if movedown and !moveup{
+	  projdir = 315 + ((facing*(-1))*90 )
+	  }else{
+	  projdir = 0+facing*180
+	  
+	  }
+	  create_projectile(0.5*(motivation/102),361,0,0,3,0,ice1,obj_spark_slash2,1.0,1.0,8,22,self.id,150,char_custom1);
+	  proj.shootimer = 1
+    }
+	
+	if ai {
+        if timer = 14 && random(8)>2
+            special = 1
+        else
+            special = 0
+    }
+	
+	if timer = 15 && special = 1 {
+        timer = 7
+    }
+	
+
+	
+  
+  }
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

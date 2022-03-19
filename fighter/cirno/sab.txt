@@ -1,0 +1,76 @@
+gravity_lock = 1
+gravity = 0
+vspeed = 0
+air_move = 0
+hspeed = 0
+
+if (state_type = "run" || state_type = "stand" || state_type = "jump" ) and floattime >= maxfloattime * 0.9
+{
+    special = 1;
+	attacking = 0;
+    attack_type = "sab"
+	state_type = "air_attack";
+	sprite_index = stilt_sprite;
+	image_speed = 0;
+    image_index=0;
+	    sound_play(ex_sound);
+	
+	timer = 0;
+    time = 60;
+	
+	floattime -= maxfloattime * 0.9
+	
+} 
+
+if (timer < time) 
+{
+	
+	if timer = 15
+	image_index = 1
+
+if timer = 30{
+	image_index = 2
+	    sound_play(iceform_sound);
+	    theRedUfo = create_projectile(4,368,1,2,7,5,ice1,obj_spark_ice,0,0,10,20,self.id,99999,char_custom4);
+		theRedUfo.sprite_index = dabproj_sprite;
+		theRedUfo.shot_sprite = iceshard_sprite;
+		theRedUfo.shot_sound = shot_sound;
+		theRedUfo.image_speed = 0
+		theRedUfo.image_index = 5
+		theRedUfo.image_xscale = image_xscale;
+		theRedUfo.image_yscale = image_yscale;
+		theRedUfo.image_alpha = 0
+		theRedUfo.hit = 2
+		theRedUfo.state = "float"
+		theRedUfo.alarm[0] = 99999;
+		theRedUfo.depth = depth - 1
+		theRedUfo.facing = facing
+		theRedUfo.bigCountDown = 180
+		theRedUfo.countDown = 30
+		theRedUfo.thedir = 0+facing*180
+		theRedUfo.originalOwner = self.id
+		
+    }
+
+
+
+
+
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+}
+ 

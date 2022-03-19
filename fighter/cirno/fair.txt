@@ -1,0 +1,144 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0;
+        sprite_index = fair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 11: image_index = 5; break;
+	case 12: image_index = 6; break;
+	case 13: image_index = 7; break;
+	case 14: image_index = 8; break;
+	case 15: image_index = 9; break;
+	case 16: image_index = 10; break;
+	case 17: image_index = 11; break;
+	case 18: image_index = 12; break;
+	case 22: image_index = 13; break;
+	case 25: image_index = 14; break;
+	case 28: image_index = 15; break;
+
+
+      }
+if timer = 1
+sound_play(funny_sound);
+
+    
+	if timer = 4{
+	icesword_instance = instance_create(x,y-28,obj_spark)
+	icesword_instance.sprite_index = icesword_sprite;
+	icesword_instance.x = x;
+    icesword_instance.y = y-28;
+    icesword_instance.image_speed = 0;
+	icesword_instance.image_index = 1
+	icesword_instance.image_alpha = 0.7;
+	if facing = 0
+    icesword_instance.image_xscale = iceweaponscale*(1-facing*2) * size ;
+	else 
+	icesword_instance.image_xscale = (iceweaponscale*(1-facing*2) * size ) * (-1)
+	
+    icesword_instance.image_yscale = iceweaponscale* size;
+    icesword_instance.depth = depth - 0.1;
+	icesword_instance.image_angle = 135 - facing*90
+    icesword_instance.snap = self.id
+	
+	}
+	if timer = 9{
+	icesword_instance.image_angle = 90
+	}
+	if timer = 10{
+	icesword_instance.image_angle = 45 + facing*90
+	}
+	if timer = 11{
+	icesword_instance.image_angle = 0 + facing*180
+	}
+	if timer = 12{
+	icesword_instance.image_angle = 315 + ((facing*(-1))*90 )
+	}
+	if timer = 13{
+	icesword_instance.image_angle = 270
+	}
+	if timer = 14{
+	icesword_instance.image_angle = 225 + facing*90
+	}
+	if timer = 15{
+	icesword_instance.image_angle = 180 - facing*180
+	}
+	
+	
+	if timer = 16{
+	icesword_instance.image_angle = 135 + facing*90
+	}
+	
+	
+    if ( timer = 18 ) 
+      {
+    icesword_instance.image_angle = 315 + ((facing*(-1))*90 )
+	icesword_instance.snap = false
+	icesword_instance.y = y-17;
+	if facing = 0
+	icesword_instance.image_index = 0
+	else 
+	icesword_instance.image_index = 2
+	sound_play(swingsnd2);
+	sound_play(sideb_voice);
+	create_hitbox(max(1,7.5*(motivation/100)),35+facing*110,7,7.5,12,16,slash3,obj_spark_hit4,0.7,0.8,14,17,self.id,10,5);
+	create_hitbox2(max(1,8*(motivation/100)),275-facing*10,7,7.5,12,16,slash3,obj_spark_hit4,0.65,0.4,14,5,self.id,10,5);
+      }
+	  if timer >= 19 and timer <33{
+	  
+	  icesword_instance.y = y-17;
+	  icesword_instance.x = x
+	  }
+	  
+	  if timer = 29
+	  icesword_instance.image_index = 1
+	  
+	  if timer = 33{
+	  if instance_exists(icesword_instance){
+		with (icesword_instance){instance_destroy()}}
+	  }
+	 
+    
+	
+	
+	
+	if air = 0 {
+        if instance_exists(icesword_instance){
+		with (icesword_instance){instance_destroy()}}
+		
+		state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=11; 
+		
+		}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  if instance_exists(icesword_instance){
+		with (icesword_instance){instance_destroy()}}
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	
+  }		
+

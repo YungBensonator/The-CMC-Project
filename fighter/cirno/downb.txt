@@ -1,0 +1,97 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" 
+{
+	
+    special = 1;
+	attacking = 0;
+    attack_type = "downb"
+	state_type = "air_attack";
+    
+	sprite_index = fair_sprite;
+	image_speed = 0;
+    image_index=0;
+	
+	
+    timer = 0;
+	starttemp = 2;
+    time = 90;
+	
+	nbtemp = 0;
+	activeshot = 0;
+	special = 1
+}
+
+
+if (timer < time) 
+{
+
+if timer = 10
+timer = 20
+
+		special = 1;
+		time = 50;
+		
+		sprite_index = smashb_sprite;
+		
+		switch ( timer )
+		{
+			case 25: image_index = 1; break;
+			case 35: image_index = 2; break;
+		}
+		if timer = 35
+		{
+			if instance_exists(ice_clone)
+			{
+				with (ice_clone)
+				{
+					instance_destroy()
+				}
+			}
+			sound_play(downb_voice)
+			sound_play(iceform_sound)
+			ice_clone = create_projectile(2,45+facing*90,2,1,6,30,ice1,obj_spark_slash1,1,1,0,0,self.id,900,0);
+			ice_clone.sprite_index = sprite_index;
+			ice_clone.image_speed = 0
+			ice_clone.image_index = image_index
+			ice_clone.image_xscale = image_xscale;
+			ice_clone.image_yscale = image_yscale;
+			ice_clone.image_blend = c_blue
+			ice_clone.alarm[0] = 300;
+			ice_clone.use_palette = number;
+			
+			hspeed = (2.75-facing*5.5)*(-1)
+			vspeed = -3.75*size
+		}
+	
+	
+	
+	
+
+		
+	
+	if (image_index >= image_number - image_speed)
+	{image_speed = 0}
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 0;
+	image_speed = 0;
+	}
+	
+	if(time != 120)
+	{
+		card_meter = 0;
+	}
+	
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+}
+ 

@@ -1,0 +1,304 @@
+var saveid;
+saveid = self.id
+
+personalrate = 0
+
+if cantusedownb > 0
+cantusedownb -=1
+
+if cantusedsmash > 0
+cantusedsmash -=1
+
+if state_type = "crouch"{
+if image_index >= 3
+image_speed = 0
+}
+
+
+
+
+
+if hitbox.hit = 1 || hitbox2.hit = 1 || proj.hit = 1{
+
+if attack_type != "dair" || attack_type != "sideb" ||  attack_type != "usmash"{
+meter += 0.25
+if motivation >=200
+motivation += 0.5
+else if motivation > 50
+motivation += max(0.75,0.5 * (200/motivation))
+else 
+motivation +=2.25
+}else{
+meter += 0.05
+if motivation >=200
+motivation += 0.2
+else if motivation > 50
+motivation += max(0.25,0.2 * (200/motivation))
+else 
+motivation +=0.45
+}
+if attack_type = "b" and !perfectfreeze and !icebarrier
+icepower +=1
+}
+
+
+if state_type != "air_attack"{
+if instance_exists(icesword_instance){
+		with (icesword_instance){instance_destroy()}}
+}
+if state_type != "attack"{
+if instance_exists(icehammer_instance){
+		with (icehammer_instance){instance_destroy()}}
+}
+
+if state_type = "flinch" || state_type = "air_flinch"{
+motivation -=0.245
+}
+
+motivation += 0.0067
+
+if icepower < 100
+icepower += 0.01
+
+if icepower <0
+icepower = 0
+
+if icepower >100
+icepower = 100
+
+if motivation >999
+motivation = 999
+
+if motivation <1
+motivation = 1
+
+
+motivation = 200
+
+
+if icebarrier = 1{
+after_image(2,c_blue,0.85)
+   
+   //draw_circle_color(x,y,10,c_blue,c_blue,false)
+   if collision_circle(x,y-30,30,projectile_box,false,true){
+   enemyproj = collision_circle(x,y-30,30,projectile_box,false,true)
+   if enemyproj.attacker != self.id{
+   
+    enemyproj.attacker = self.id
+    projdir = random(360)
+    enemyproj.projdir = random(360)
+	
+    enemyproj.damage *= 1*(motivation/100)
+	
+    enemyproj.dir = projdir
+    enemyproj.bkb *= motivation/100
+    enemyproj.kbg *= motivation/100
+    enemyproj.shield_damage = 3
+    enemyproj.hitlag_frames = 0
+    enemyproj.sfx = ice1
+    enemyproj.gfx = obj_spark_slash2
+	enemyproj.timer = 1
+    enemyproj.time = 150
+	enemyproj.hit = 0
+    //enemyproj.proj_script = char_custom1
+	enemyproj.hspeed *= (-1) 
+	enemyproj.vspeed *= (-1)
+	enemyproj.direction += 180
+	enemyproj.speed *= (-1) 
+	enemyproj.sprite_index = iceshardtwo_sprite
+	enemyproj.image_xscale *= (-1)
+	//enemyproj.image_blend = c_blue
+	if enemyproj.facing = 0
+	enemyproj.facing = 1
+	else
+	enemyproj.facing = 0
+	enemyproj.shootimer = 30
+	
+   play_attack_voice()
+   
+   }
+   }
+  
+
+icepower -= 0.2
+if icepower <=0{
+icebarrier = 0
+with (icecircle){
+instance_destroy()
+}
+
+}
+
+}
+
+if perfectfreeze = 1{
+icepower -= 0.33
+liltima +=1
+if liltima >= bigtima{
+liltima = 0
+with (player){
+	if self.id != saveid{
+	
+	if state_type != "dead" and state_type != "respawn" and state_type != "out" and attack_type != "final_smash"{
+	if x > -global.x_bound
+	if x < room_width+global.x_bound
+	if y < room_height+global.y_bound
+	if y > -global.y_bound{
+	
+	        if air = 0
+                state_type = "flinch";
+            else
+                state_type = "air_flinch"; 
+                timer = 0;
+                sprite_index = flinch_sprite;
+                speed = 0;
+                time = 60;
+                timer_speed = 0.5
+				//timer_speed = 0;
+				alarm[0] = 60
+	image_blend = c_blue
+	
+	hitby = other.id;
+    give_ko = other.id;
+	hit = 1
+	percent += 0;
+    smash_power+=floor(0/2);
+    damage_taken += 0;
+	
+	if (!instance_exists(iceCube)){
+    iceCube = create_spark(x,y,self.id);
+	iceCube.sprite_index = other.icecube_sprite
+	iceCube.x = x
+	iceCube.y = y
+	iceCube.image_alpha = 0.7
+	iceCube.image_xscale = 0.5*size
+	iceCube.image_yscale = 0.5*size
+    iceCube.snap = self.id
+	iceCube.depth = depth-1
+	iceCube.image_speed = 0
+}
+	
+	if name = "cirno"
+	motivation +=0.20
+	
+	//MUITAS BRACKETS LOLOLOL
+	
+	}
+	}
+	}
+	
+	}
+	
+	}
+	
+if icepower <=0{
+perfectfreeze = 0
+with (player){
+	if self.id != saveid{
+	image_blend = c_white
+	if instance_exists(iceCube){with (iceCube){instance_destroy()}}
+	
+	//if air > 0 state_type = "jump";
+    //else state_type = "stand";
+    //time = -1;
+    //timer = 0;
+
+	
+	}
+	}
+
+
+}
+
+}
+
+
+
+
+
+///////////////////////////////////////////// flight start
+///variables
+floatspeedv = 4;
+floatspeedh = 4;
+maxfloattime = 240;
+///
+
+
+
+
+
+if (floattime > 0 && ((air > 0 && floattemp = 0) || (hover_timer > 0 && vspeed = 0)))
+{
+floattime -= 1
+}
+
+
+if ( sprite_index == jump_sprite && floattemp == 0 )
+{
+	sprite_index = hover_sprite;
+}
+///////////////////////////////////////////// my edits stop
+if floattime < 0
+floattime = 0
+if air = 0 
+{
+    cantupb = 0;
+	hover_time = 9999;
+	candash = 1 + 0;
+	if floattime < maxfloattime and attack_type != "sideb"{
+	floattime += 1;
+	} 
+	
+	if (moveup != 1) { floattemp = 1;}
+}
+
+if ((floattime <= 0 && air > 0) || state_type = "out" || state_type = "respawn" ) 
+{
+	floattemp = 2;
+	hover = 0;
+	hover_time = 0;
+	hover_timer = 0;
+}
+if(air = 0){upbtemp = 0;}
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.card_sprite[1] = card_sprite[1]
+	MeterHud.card_sprite[2] = card_sprite[2]
+	MeterHud.card_sprite[3] = card_sprite[3]
+}
+
+if floattime >= maxfloattime*0.7{
+	MeterHud.leColor[1] = c_white
+}
+else{
+	MeterHud.leColor[1] = c_dkgray
+}
+
+if floattime >= maxfloattime*0.9{
+	MeterHud.leColor[2] = c_white
+}
+else{
+	MeterHud.leColor[2] = c_dkgray
+}
+
+if floattime >= maxfloattime*1{
+	MeterHud.leColor[3] = c_white
+}
+else{
+	MeterHud.leColor[3] = c_dkgray
+}
+
+
+MeterHud.sprite_index = meter_sprite;
+if(floattime >= maxfloattime){MeterHud.image_index = 55;} else if(floattime <= 0){MeterHud.image_index = 0;} else {MeterHud.image_index = floattime*56/maxfloattime;}
+MeterHud.image_speed = 0;
+
+/////////////////Meter Stop/////////////////////////////////////
