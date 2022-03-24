@@ -1,0 +1,159 @@
+////
+// VARIABLES
+////
+stg_msk_x = 281;
+stg_msk_y = 345;
+scale = 0.9;
+camera_boundary_l = 0;
+camera_boundary_r = 1280*0.55 * scale;
+camera_boundary_u = 0;
+camera_boundary_d = 720*0.55 * scale;
+camera_boundary_zoom = 292 * scale;
+stg_x = camera_boundary_r * 0.5;
+stg_y = camera_boundary_d ;
+death_l = camera_boundary_l - 270 * scale;
+death_u = camera_boundary_u - 220 * scale;
+death_r = camera_boundary_r + 270 * scale;
+death_d = camera_boundary_d + 190 * scale;
+player_spawn_x [ 0 ] = stg_x + ( 240 - stg_msk_x ) * scale;
+player_spawn_y [ 0 ] = stg_y + ( 225 - stg_msk_y ) * scale;
+player_spawn_x [ 1 ] = stg_x + ( 322 - stg_msk_x ) * scale;
+player_spawn_y [ 1 ] = stg_y + ( 225 - stg_msk_y ) * scale;
+player_spawn_x [ 2 ] = stg_x + ( 185 - stg_msk_x ) * scale;
+player_spawn_y [ 2 ] = stg_y + ( 177 - stg_msk_y ) * scale;
+player_spawn_x [ 3 ] = stg_x + ( 377 - stg_msk_x ) * scale;
+player_spawn_y [ 3 ] = stg_y + ( 177 - stg_msk_y ) * scale;
+player_spawn_x [ 4 ] = stg_x + ( 130 - stg_msk_x ) * scale;
+player_spawn_y [ 4 ] = stg_y + ( 225 - stg_msk_y ) * scale;
+player_spawn_x [ 5 ] = stg_x + ( 431 - stg_msk_x ) * scale;
+player_spawn_y [ 5 ] = stg_y + ( 225 - stg_msk_y ) * scale;
+respawn_x = stg_x + ( 281 - stg_msk_x ) * scale;
+respawn_y = stg_y + ( 129 - stg_msk_y ) * scale;
+
+////
+// RESOURCES
+////
+// masks
+global.msk_stg[0] = stage_msk_add2 ( "stage/rockwall/mask_floor.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[1] = stage_msk_add2 ( "stage/rockwall/mask_leftwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[2] = stage_msk_add2 ( "stage/rockwall/mask_rightwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[3] = stage_msk_add2 ( "stage/rockwall/mask_platform.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[8] = stage_msk_add2 ( "stage/rockwall/mask_ceil.png",1,1,0,stg_msk_x,stg_msk_y );
+// stage sprites
+global.msk_stg[4] = stage_spr_add ( "stage/rockwall/rem.png",1,stg_msk_x,stg_msk_y );
+global.msk_stg[5] = stage_spr_add ( "stage/rockwall/rem_fore.png",1,stg_msk_x,stg_msk_y );
+global.msk_stg[6] =  spr_add_alpha ( 'stage/rockwall/himegami.png' , 3 , 0 , 0 , 17 , 98 );
+global.msk_stg[7] =  spr_add_alpha ( 'stage/rockwall/fire.png' , 29 , 0 , 0 , 38 , 185 );
+
+// backgrounds
+background_index[0] = stage_bg_add ( "stage/rockwall/rem_back.png" );
+
+////
+// OBJECTS
+////
+var o;
+// floor
+o = instance_create ( stg_x , stg_y , obj_floor );
+o.sprite_index = global.msk_stg[0];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// left wall
+o = instance_create ( stg_x , stg_y , obj_leftwall );
+o.sprite_index = global.msk_stg[1];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// right wall
+o = instance_create ( stg_x , stg_y , obj_rightwall );
+o.sprite_index = global.msk_stg[2];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ceiling
+o = instance_create ( stg_x , stg_y , obj_ceiling );
+o.sprite_index = global.msk_stg[8];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// platform
+o = instance_create ( stg_x , stg_y , obj_platform );
+o.sprite_index = global.msk_stg[3];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ledges
+instance_create ( stg_x + ( 84 - stg_msk_x ) * scale , stg_y + ( 223 - stg_msk_y ) * scale , obj_edge_left );
+instance_create ( stg_x + ( 476 - stg_msk_x ) * scale , stg_y + ( 223 - stg_msk_y ) * scale , obj_edge_right );
+// mg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[4];
+o.depth = 6;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_mg = o;
+// fg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[5];
+o.depth = -10;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_fg = o;
+
+
+/*
+if global.gs_hazard{
+
+//Himegami
+himegami = instance_create (stg_x + ( 295 - stg_msk_x ) * scale , stg_y + ( 427 - stg_msk_y ) * scale  , obj_stage_extra );
+himegami . depth = 2;
+himegami . sprite_index = global.msk_stg[6]
+himegami . image_xscale = 0.4*scale;
+himegami . image_yscale = 0.4*scale;
+himegami . //image_blend = global.def_tint;
+himegami.image_speed = 0
+himegami.timer = 0
+himegami.time = 600
+himegami.state = "stand"
+himegami.image_alpha = 1
+himegami.image_index = 0
+
+}
+
+*/
+
+
+/*
+// fog
+o = instance_create ( camera_boundary_l , camera_boundary_d - 96 , obj_stage_bgd );
+o.sprite_index = bg_add ( 'stage/rockwall/fog.png' , 0 , 0 );
+o.depth = -12;
+o.visible = 1;
+o.image_xscale = ( camera_boundary_r - camera_boundary_l ) / 64;
+o.image_yscale = 1.5;
+o.image_blend = merge_color ( c_white , make_color_rgb ( 163 , 176 , 241 ) , .8 );
+o.image_alpha = 1;
+
+*/
+
+/*
+// shadow
+o = instance_create ( stg_x , stg_y, obj_shadow_display );
+o.light_source = stg_x + ( 1352 - stg_msk_x ) * scale;
+o.light_source_y = 0;
+o = instance_create ( stg_x , stg_y, obj_shadow );
+o.sprite_index = stage_spr_add ( "stage/rockwall/shadow_mask.png",1,stg_msk_x,stg_msk_y );
+o.image_xscale = scale;
+o.image_yscale = scale;
+o.image_alpha = 0.3;
+
+*/
+
+stage_install_bg_object();
+obj_stage_bg.himegami = himegami
+
+obj_main_bg = obj_stage_bg.id;
+with ( obj_stage_bg )
+  {
+  mode = 0;
+  scale = other.scale;
+  obj_mg = other.obj_mg;
+  obj_fg = other.obj_fg;
+  stg_x = other.stg_x;
+  stg_y = other.stg_y;
+  }

@@ -1,0 +1,167 @@
+////
+// VARIABLES
+////
+stg_msk_x = 430;
+stg_msk_y = 475;
+scale = 0.75;
+star_ko_on = 0;
+camera_boundary_l = 0;
+camera_boundary_r = 1280*0.6 * scale;
+camera_boundary_u = 0;
+camera_boundary_d = 720*0.6 * scale;
+camera_boundary_zoom = 292 * scale;
+stg_x = camera_boundary_r * 0.5;
+stg_y = camera_boundary_d ;
+death_l = camera_boundary_l - 350 * scale;
+death_u = camera_boundary_u - 250 * scale;
+death_r = camera_boundary_r + 350 * scale;
+death_d = camera_boundary_d + 250 * scale;
+player_spawn_x [ 0 ] = stg_x + ( 300 - stg_msk_x ) * scale;
+player_spawn_y [ 0 ] = stg_y + ( 270 - stg_msk_y ) * scale;
+player_spawn_x [ 1 ] = stg_x + ( 559 - stg_msk_x ) * scale;
+player_spawn_y [ 1 ] = stg_y + ( 270 - stg_msk_y ) * scale;
+player_spawn_x [ 2 ] = stg_x + ( 322 - stg_msk_x ) * scale;
+player_spawn_y [ 2 ] = stg_y + ( 213 - stg_msk_y ) * scale;
+player_spawn_x [ 3 ] = stg_x + ( 537 - stg_msk_x ) * scale;
+player_spawn_y [ 3 ] = stg_y + ( 213 - stg_msk_y ) * scale;
+player_spawn_x [ 4 ] = stg_x + ( 300 - stg_msk_x ) * scale;
+player_spawn_y [ 4 ] = stg_y + ( 150 - stg_msk_y ) * scale;
+player_spawn_x [ 5 ] = stg_x + ( 559 - stg_msk_x ) * scale;
+player_spawn_y [ 5 ] = stg_y + ( 150 - stg_msk_y ) * scale;
+respawn_x = stg_x + ( 429 - stg_msk_x ) * scale;
+respawn_y = stg_y + ( 164 - stg_msk_y ) * scale;
+
+////
+// RESOURCES
+////
+// masks
+global.msk_stg[0] = stage_msk_add2 ( "stage/wariolandpm/mask_floor.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[1] = stage_msk_add2 ( "stage/wariolandpm/mask_leftwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[2] = stage_msk_add2 ( "stage/wariolandpm/mask_rightwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[3] = stage_msk_add2 ( "stage/wariolandpm/mask_platform.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[8] = stage_msk_add2 ( "stage/wariolandpm/mask_ceil.png",1,1,0,stg_msk_x,stg_msk_y );
+// stage sprites
+global.msk_stg[4] = stage_spr_add ( "stage/wariolandpm/rem.png",1,stg_msk_x,stg_msk_y );
+global.msk_stg[5] = stage_spr_add ( "stage/wariolandpm/rem_fore.png",1,stg_msk_x,stg_msk_y );
+global.msk_stg[6] =  spr_add_alpha ( 'stage/wariolandpm/himegami.png' , 3 , 0 , 0 , 17 , 98 );
+global.msk_stg[7] =  spr_add_alpha ( 'stage/wariolandpm/fire.png' , 29 , 0 , 0 , 38 , 185 );
+global.msk_stg[9] = stage_spr_add ( "stage/wariolandpm/rem_fore2.png",1,stg_msk_x,stg_msk_y );
+
+
+// backgrounds
+background_index[0] = stage_bg_add ( "stage/wariolandpm/rem_back.png" );
+
+////
+// OBJECTS
+////
+var o;
+// floor
+o = instance_create ( stg_x , stg_y , obj_floor );
+o.sprite_index = global.msk_stg[0];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// left wall
+o = instance_create ( stg_x , stg_y , obj_leftwall );
+o.sprite_index = global.msk_stg[1];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// right wall
+o = instance_create ( stg_x , stg_y , obj_rightwall );
+o.sprite_index = global.msk_stg[2];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ceiling
+o = instance_create ( stg_x , stg_y , obj_ceiling );
+o.sprite_index = global.msk_stg[8];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// platform
+o = instance_create ( stg_x , stg_y , obj_platform );
+o.sprite_index = global.msk_stg[3];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ledges
+instance_create ( stg_x + ( 268 - stg_msk_x ) * scale , stg_y + ( 279 - stg_msk_y ) * scale , obj_edge_left );
+instance_create ( stg_x + ( 591 - stg_msk_x ) * scale , stg_y + ( 279 - stg_msk_y ) * scale , obj_edge_right );
+// mg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[4];
+o.depth = 6;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_mg = o;
+// fg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[5];
+o.depth = -10;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_fg = o;
+// fg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[9];
+o.depth = -10;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_fg = o;
+// shadow
+o = instance_create ( stg_x , stg_y, obj_shadow_display );
+o.light_source = stg_x + ( 429 - stg_msk_x ) * scale;
+o.light_source_y = 0;
+o.depth = -11
+o = instance_create ( stg_x , stg_y, obj_shadow );
+o.sprite_index = stage_spr_add ( "stage/wariolandpm/shadow_mask.png",1,stg_msk_x,stg_msk_y );
+o.image_xscale = scale;
+o.image_yscale = scale;
+o.image_alpha = 0.3;
+o.depth = -11
+
+
+/*
+if global.gs_hazard{
+
+//Himegami
+himegami = instance_create (stg_x + ( 295 - stg_msk_x ) * scale , stg_y + ( 427 - stg_msk_y ) * scale  , obj_stage_extra );
+himegami . depth = 2;
+himegami . sprite_index = global.msk_stg[6]
+himegami . image_xscale = 0.4*scale;
+himegami . image_yscale = 0.4*scale;
+himegami . //image_blend = global.def_tint;
+himegami.image_speed = 0
+himegami.timer = 0
+himegami.time = 600
+himegami.state = "stand"
+himegami.image_alpha = 1
+himegami.image_index = 0
+
+}
+
+*/
+
+
+/*
+// fog
+o = instance_create ( camera_boundary_l , camera_boundary_d - 96 , obj_stage_bgd );
+o.sprite_index = bg_add ( 'stage/wariolandpm/fog.png' , 0 , 0 );
+o.depth = -12;
+o.visible = 1;
+o.image_xscale = ( camera_boundary_r - camera_boundary_l ) / 64;
+o.image_yscale = 1.5;
+o.image_blend = merge_color ( c_white , make_color_rgb ( 163 , 176 , 241 ) , .8 );
+o.image_alpha = 1;
+
+*/
+
+stage_install_bg_object();
+obj_stage_bg.himegami = himegami
+
+obj_main_bg = obj_stage_bg.id;
+with ( obj_stage_bg )
+  {
+  mode = 0;
+  scale = other.scale;
+  obj_mg = other.obj_mg;
+  obj_fg = other.obj_fg;
+  stg_x = other.stg_x;
+  stg_y = other.stg_y;
+  }
