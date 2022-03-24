@@ -1,0 +1,104 @@
+if (state_type = "stand" || state_type = "crouch" || state_type = "run" || state_type = "jump") and odactivate = 0 {
+		special = 1;
+		hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "ab";
+        image_speed = 0;
+        sprite_index = install_sprite;
+        image_index=0;
+        timer = 0;
+        time = 131;
+        timer_speed=1;
+		
+}
+
+if ( timer < time )
+{
+		switch (timer)
+		{
+		case  0: image_index =  0; break;
+		case  3: image_index =  1; break;
+		case  6: image_index =  2; break;
+		case  9: image_index =  3; break;
+		case  12: image_index =  4; break;
+		case  15: image_index =  5; break;
+		case  18: image_index =  6; break;
+		case  50: image_index =  7; break;
+		case  52: image_index =  8; break;
+		case  55: image_index =  9; break;
+		case  58: image_index =  10; break;
+		case  61: image_index =  11; break;
+		case  64: image_index =  12; break;
+		case  67: image_index =  13; break;
+		case  70: image_index =  14; break;
+		case  73: image_index =  15; break;
+		case  76: image_index =  16; break;
+		case  79: image_index =  17; break;
+		case  82: image_index =  18; break;
+		case  85: image_index =  19; break;
+		case  88: image_index =  20; break;
+		case  91: image_index =  21; break;
+		case  94: image_index =  22; break;
+		case  97: image_index =  23; break;
+		case  100: image_index = 24; break;
+		case  105: image_index =  25; break;
+		case  110: image_index =  26; break;
+		case  115: image_index =  27; break;
+		case  120: image_index =  28; break;
+		case  125: image_index =  29; break;
+		case  130: image_index =  30; break;
+		}
+		
+		if timer > 1 and air > 0 {
+			vspeed = 0
+			hspeed = 0
+			air_move = 0
+			gravity = 0
+		}
+		
+		if timer = 3 {
+		ZAWARUDOTOKIWOTOMARE  = instance_create(x,y,obj_freeze)
+ZAWARUDOTOKIWOTOMARE.dontpause = self.id
+ZAWARUDOTOKIWOTOMARE.alarm[0] = 127
+effect_create_above(ef_ring,x + 1,y - 20,1.5,c_blue)
+sound_play(distortiondrive_sound);
+sound_play(od_voice);
+		}
+		
+		if timer = 52 {
+			notgyrevortex = create_spark(0,0,self.id);
+    notgyrevortex.sprite_index = gyrevortex_sprite;
+    notgyrevortex.image_speed = 0.35;
+    notgyrevortex.image_alpha = 0.5;
+    notgyrevortex.image_xscale = 1 * (1-facing*2);
+    notgyrevortex.image_yscale = 1;
+    notgyrevortex.depth = depth - 0.1;
+    notgyrevortex.snap = self.id
+	odtimer += 480
+	sound_play(overdrive_sound);
+		}
+		
+		
+		if timer >= 52 and timer < 105 and timer mod 3 = 0 {
+			screen_shake(3,-5);
+		}
+		
+		if timer = 130 {
+			odactivate = 1
+		}
+		
+		
+
+}
+
+   
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+	if(air != 0){state_type = "jump";}
+    else{state_type = "stand";}
+    timer = 0;
+    time =-1;
+}
+        
+

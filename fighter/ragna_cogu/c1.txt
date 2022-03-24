@@ -1,0 +1,70 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+//self explanatory
+elacerto = 0
+healed = 0
+image_speed = 0.4
+
+priority = 2
+//you set the projectile's priority with this so you can determine whether or not it's gonna clash against other projectiles
+//from 1 to 4 it'll be able to either clash, be overridden or override projectiles with equal, lower or higher priority respectively.
+//with a value of 5, it'll directly completely ignore any and all other enemy projectiles.
+
+moving_object = 1
+//whether or not this projectile is gonna interact with surfaces like floors, ceilings, walls or platforms.
+//if set to 1, it'll stop its vertical speed if crashing against a floor or ceiling, and its horizontal speed if hitting a wall.
+//if set to 0, it'll go through all surfaces.
+
+speed = 5.7;
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+
+direction = angle_correct(0)
+//set an angle going from 0 to 359, where if your character faces to the right when firing the projectile:
+//0 is to the right, 90 is directly upwards, 180 is to the left, and 270 is directly downwards.
+//Values between these four correspond to diagonals (45, 135, 225, 315)
+
+}
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	if hit = 1 and healed = 0 and attacker.od = 0 {
+	attacker.percent -= 4
+	healed = 1
+	}
+	
+	if hit = 1 and healed = 0 and attacker.od = 1 {
+	attacker.percent -= 9
+	healed = 1
+	}
+	
+	if timer mod 3 = 0 and attacker.od = 1 {
+	
+	if hit = 1 and elacerto < 2 {
+		hit = 0
+		elacerto += 1
+	}
+	
+	
+	}
+	
+	if image_index >= 8 {
+		instance_destroy()
+	}
+	
+
+}
+
+if hit {
+	timer = 2; 
+	time = 1000
+	speed = 3.5
+	//replace this last variable with the actual value you gave the projectile for its duration so that it doesn't disappear if it hits an opponent
+	}
+	
+
