@@ -1,0 +1,61 @@
+if ( attack_type = "edge_climb" )
+{
+super_armor = 0;
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 15: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=8;  break;
+  case 18: shakey=12*size;  break;
+  case 21: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 24: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 27: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 30: sprite_index=land_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}
+
+if (state_type = "flinch" || state_type = "air_flinch" || state_type = "jump" || state_type != "air_attack" ) {
+	with tailstab {instance_destroy()}
+}
+if air != 2
+jump_change = 0
+
+if (facing = 0 && (moveleft) && jump_change = 0) || (facing = 1 && (moveright) && jump_change = 0) {
+mid_jump_sprite = edge_jump_sprite
+jump_change = 1
+}
+if (facing = 0 && !(moveleft) && jump_change = 0) || (facing = 1 && !(moveright) && jump_change = 0) {
+mid_jump_sprite = mid_jump_spriteF
+jump_change = 1
+}
+
+if (enemy.state_type = "out"){
+temp_spawn += 1
+ }
+if (state_type == "fall") image_speed = 0.25
+
+if ( state_type = "jump" && (sprite_index == mid_jump_sprite || sprite_index = edge_jump_sprite))
+{
+	if ( image_index >= 13 )
+	    image_index = 11;
+}
+
+
+if sprite_index = run_sprite {
+image_speed = 0.65
+}
+
+
+var earthquake;
+earthquake = 0;
+if state_type = "land" && !jumping && timer == 1
+   earthquake = 1;
+if !earthquake exit;
+else {
+   shaker = instance_create(x,y,obj_shakescreen3);
+   shaker.ampl = 3;
+   shaker.xampl = 0;
+   shaker.time = 11;
+   earthquake = 0;
+}

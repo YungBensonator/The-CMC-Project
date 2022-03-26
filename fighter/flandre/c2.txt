@@ -1,0 +1,36 @@
+moving_object = 1;
+absorb = 1;
+absorb2 = 1;
+priority = 3;
+
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = attacker.id.bproj1_sprite;
+    visible = 1;
+    image_speed = 0.4;
+    projfire = attacker.projfire
+    speed = 3 - attacker.id.facing*6
+	direction = 0 - (1-attacker.id.facing*2)
+  }
+if timer = 1 || timer = 30 || timer = 90 || timer = 150 || timer = 210 || timer = 270 {
+	create_projectile(2,361,0,0,0,0,fire3,obj_spark_fire1,0.2,0.2,17,-17,attacker.id,60,char_custom3);
+	proj.hit_stun = 0;
+}
+if timer = 60 || timer = 180 {
+	sound_play(projfire)
+	direction = 180 - (1-attacker.id.facing*2)
+	create_projectile(2,361,0,0,0,0,fire3,obj_spark_fire1,0.2,0.2,17,-17,attacker.id,60,char_custom3);
+	proj.hit_stun = 0;
+}
+if timer = 120 || timer = 240 {
+	sound_play(projfire)
+	direction = 0 - (1-attacker.id.facing*2)
+	create_projectile(2,361,0,0,0,0,fire3,obj_spark_fire1,0.2,0.2,17,-17,attacker.id,60,char_custom3);
+	proj.hit_stun = 0;
+}
+if ( timer >= 300 || is_on_floor(self.id) || ( collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 0 ) )
+  {
+   visible = 0;
+   instance_create ( x , y , obj_spark_explode2 );
+   instance_destroy();
+  }

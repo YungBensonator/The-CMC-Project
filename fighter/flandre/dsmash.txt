@@ -1,0 +1,73 @@
+if state_type = "run" || state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = utilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 50;
+        timer_speed=1;
+		canceltemp = 0;
+		charge_frame = 9
+}
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 9: image_index = 3; break;
+  case 12: image_index = 4; break;
+  case 15: image_index = 5; break;
+  case 18: image_index = 6; break;
+  case 21: image_index = 7; break;
+  case 24: image_index = 8; break;
+  case 27: image_index = 9; break;
+  case 30: image_index = 10; break;
+  case 33: image_index = 11; break;
+  case 50: image_index = 11; break;
+  }
+
+	if timer = 0 {
+		sound_play(choose(attack_voice3,attack_voice4))
+		}
+    if timer = 18 {
+		sound_play(critslash)
+        create_hitbox(15,80+facing*20,6,7,20,12,flandreslash3,obj_spark_slash3,0.9,1.3,33,21,self.id,3,2);
+		hitbox.hit_stun = 5;
+        create_hitbox2(15,100-facing*30,6,7,20,12,flandreslash3,obj_spark_slash3,0.9,1.3,-21,21,self.id,3,2);
+		hitbox2.hit_stun = 5;
+		screen_shake(5,5);
+    }
+	if ( timer = 18 && !instance_exists(dsmash)) {
+		dsmash = instance_create(x+15*(1-facing*2)*size,y-45*size,obj_spark);
+		dsmash.sprite_index = dsmasheff_sprite;
+		dsmash.image_speed = 1
+		dsmash.image_alpha = 1
+		dsmash.image_xscale = size*0.4*(1-facing*2);
+		dsmash.image_yscale = size*0.4;
+		dsmash.snap = self.id
+		dsmash.depth = depth - 0.1
+	}
+	if ( timer = 18 && !instance_exists(dsmash2)) {
+		dsmash2 = instance_create(x-40*(1-facing*2)*size,y-45*size,obj_spark);
+		dsmash2.sprite_index = dsmasheff_sprite;
+		dsmash2.image_speed = 1
+		dsmash2.image_alpha = 1
+		dsmash2.image_xscale = size*0.4*(1-facing*2);
+		dsmash2.image_yscale = size*0.4;
+		dsmash2.snap = self.id
+		dsmash2.depth = depth - 0.1
+	}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    sprite_index = stand_sprite;
+    shakex = 0;
+    shakey = 0;
+    timer = 0;
+    time =-1;
+    interrupt = 0;
+    }
+        

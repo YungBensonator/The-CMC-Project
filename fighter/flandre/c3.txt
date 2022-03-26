@@ -1,0 +1,28 @@
+absorb = 1;
+absorb2 = 1;
+moving_object = 1;
+priority = 3;
+depth = -7
+if target > -1 { 
+	storedx = target.x
+	storedy = target.y
+}
+if ( timer == 1)
+{
+    bubble = create_homing_bubble(20,20,0,10,self.id,70);
+	sprite_index = attacker.id.projectile_sprite;
+    visible = 1;
+}
+if (target != -1 && target != noone && target != -99 && target != attacker.id) && timer == 2 && target > -1 {
+		move_towards_point(storedx,storedy,5);
+	}
+if ( timer >= 60 || is_on_floor(self.id) || ( collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 0 ) )
+  {
+   visible = 0;
+   instance_create ( x , y , obj_spark_explode2 );
+   with ( bubble )
+	{
+	instance_destroy();
+	}
+   instance_destroy();
+  }

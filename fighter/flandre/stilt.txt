@@ -1,0 +1,57 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 7: image_index = 3; break;
+  case 10: image_index = 4; break;
+  case 12: image_index = 5; break;
+  case 14: image_index = 6; break;
+  case 17: image_index = 7; break;
+  case 21: image_index = 8; break;
+  case 26: image_index = 9; break;
+  case 40: image_index = 9; break;
+  }
+
+    if timer = 12 {
+        sound_play(flandre_swing_sound3);
+		play_attack_voice()
+        create_hitbox(12,25+facing*130,5,5,10,6,fire2,obj_spark_fire1,0.9,1.3,20,13,self.id,6,2);
+		hitbox.shake_ampl = 0.6
+		hspeed = 3-facing*6
+    }
+	if timer = 14 {
+		hspeed *= 0.2
+	}
+	if ( timer = 12 && !instance_exists(stilt)) {
+		stilt = instance_create(x-30*(1-facing*2)*size,y-50*size,obj_spark);
+		stilt.sprite_index = stilteff_sprite;
+		stilt.image_speed = 0.45
+		stilt.image_alpha = 1
+		stilt.image_xscale = size*0.15*(1-facing*2);
+		stilt.image_yscale = size*0.15;
+		stilt.snap = self.id
+		stilt.depth = depth - 0.1
+		stilt.image_angle = 5*(1-facing*2)
+	}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    shakex = 0;
+    shakey = 0;
+    sprite_index = stand_sprite;
+    timer = 0;
+    time =-1;
+    }
+        

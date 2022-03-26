@@ -1,0 +1,63 @@
+if (( state_type = "stand" || state_type = "run" || state_type = "jump")){
+        speed *= 0.1;
+        state_type = "air_attack";
+        attack_type = "b";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 9: image_index = 3; break;
+  case 12: image_index = 4; break;
+  case 16: image_index = 5; break;
+  case 20: image_index = 6; break;
+  case 24: image_index = 7; break;
+  case 28: image_index = 8; break;
+  case 32: image_index = 9; break;
+  case 36: image_index = 10; break;
+  case 40: image_index = 11; break;
+  case 44: image_index = 11; break;
+  }
+if timer < time {
+	if timer > 0 && timer < 41 {
+		speed = 0;
+		gravity_lock = 1;
+	}
+	if air = 0 {
+		if timer = 9 && !instance_exists(spell) {
+		sound_play(bvoice)
+			sound_play(projfire)
+			spell = create_projectile(2,20+facing*140,2,0,6,3,fire3,obj_spark_fire1,0.35,0.35,17,28,self.id,300,char_custom2);
+			spell.mask_index = no_mask
+			spell.di = 0.45;
+		}
+	}
+	if air > 0 {
+		if timer = 9 && !instance_exists(spell2) {
+		sound_play(bvoice)
+			sound_play(projfire)
+			spell2 = create_projectile(2,20+facing*140,2,0,6,3,fire3,obj_spark_fire1,0.35,0.35,17,28,self.id,240,char_custom2);
+			spell2.mask_index = no_mask
+			spell2.di = 0.45;
+		}
+	}
+  }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if ( air > 0 )
+		{
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 12;
+		}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
