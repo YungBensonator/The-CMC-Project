@@ -1,0 +1,52 @@
+can_reflect=0;
+absorb=0;
+absorb2=0;
+parry_nodestroy=1;
+priority=5;
+
+
+
+
+if timer = time+1 && hit = 1 {
+attack_success=0
+timer = 0
+time = maxtime
+alarm[0] = maxtime
+hit=2;
+}
+maxtime-=1;
+psudotimer-=1;
+
+if maxtime mod -5 = 0{
+hit=0;
+}
+
+if psudotimer=2{
+hit=0;
+gfx=obj_spark_fire1;
+sfx=explodehit2;
+exploder = instance_create(x,y, obj_spark_explode1);
+exploder.image_xscale=1.2*size;
+exploder.image_yscale=1.2*size;
+sound_play(explode_big);
+image_alpha=0;
+with(attacker){sound_stop(dsmash2_sound);}
+}
+
+
+              if psudotimer > 2{
+                x=target.x;
+                y=target.y;
+                target.alarm[0]=3;
+                target.state_type="flinch";
+                target.timer=0;
+                target.time=3;
+                target.sprite_index=target.down_sprite;
+                target.image_index=0;
+                if target.air=0{
+                target.hspeed=3*(1-facing*2)*size;}
+                else{
+                target.hspeed=0;
+                }
+                target.vspeed=0;
+                depth=target.depth-1;}

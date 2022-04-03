@@ -1,0 +1,80 @@
+if time = -1 {
+hspeed = 0;
+state_type = "air_attack";
+attack_type = "dthrow";
+image_speed = 0;
+sprite_index = chainsawthrow_sprite;
+image_index=0;
+timer = 0;
+time = 53;
+timer_speed=1;
+target.alarm[0]=14;
+sound_play(dsmash1_sound);
+}
+
+switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 4: image_index = 1; break;
+    case 8: image_index = 2; break;
+    case 12: image_index = 4; sound_stop(dsmash1_sound); sound_play(dsmash2_sound); break;
+    case 15: image_index = 5; break;
+    case 18: image_index = 4; break;
+    case 21: image_index = 5; break;
+    case 24: image_index = 4; break;
+    case 27: image_index = 5; break;
+    case 29: image_index = 4; break;
+    case 32: image_index = 5; break;
+    case 35: image_index = 4; break;
+    case 38: image_index = 5; break;
+    case 41: image_index = 2; sound_stop(dsmash2_sound); break;
+    case 44: image_index = 1; break;
+    case 47: image_index = 0; break;
+    case 50: sprite_index=stand_sprite; break;
+}
+
+        if timer < time {
+            if timer = 50{
+                chainsaweff = create_projectile(5,43+94*facing,7,2,10,2,punch1,obj_spark_hit2,0.9 , 0.9 , 0 ,27.9, self.id, 41 , char_custom3);
+                chainsaweff.image_speed=0;
+                chainsaweff.image_index=0;
+                chainsaweff.alarm[0]=41;
+                chainsaweff.depth=depth-1;
+                chainsaweff.sprite_index=chainsaw_sprite;
+                chainsaweff.size=size;
+                chainsaweff.facing=facing;
+                chainsaweff.vspeed=-7*size;
+                chainsaweff.hspeed=-3*(1-facing*2)*size;
+                chainsaweff.hit=2;
+                chainsaweff.priority=9;
+            }
+            if timer >0 && timer < 38{
+                target.x=x;
+                target.y=y;
+                target.alarm[0]=3;
+                target.state_type="air_flinch";
+                target.timer=0;
+                target.time=3;
+                target.sprite_index=target.down_sprite;
+                target.image_index=0;
+                depth=target.depth-1;
+             }
+            if timer = 12 || (timer>= 12 && timer <38 && timer mod 6 = 0) {
+                create_hitbox(2,90,1,1,4,2,slash1,obj_spark_slash1,0.53 , 0.82 , 4.50 , 0.90,self.id,6,3);
+                hitbox.hit_stun = 12;
+                hitbox.di = 0.1;
+            }
+            if timer = 38 {
+                create_hitbox(4,9+162*facing,6,4,4,9,SussyImpostySnapYourNoPussyHavvingAssIntoYourLowerBodyAndSingleSpinalBoneButPink,obj_spark_slash2,0.53 , 0.82 , 4.50 , 0.90,self.id,3,3);
+                hitbox.hit_stun = 7;
+                hitbox.di = 0.1;
+            }
+          }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,169 @@
+if  ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" ) && !instance_exists(slashyslasher)
+  {
+    state_type = "air_attack";
+    attack_type = "b";
+    timer = 0;
+    time = 81;
+    sprite_index = b_sprite;
+    hspeed=0;
+    image_speed = 0;
+    image_index = 0;
+    special=1;
+    target=0;
+    target1=0;
+    bondangle=0;
+    amsterda=0;
+  }
+  air_move=0;
+  fast_fall=0;
+  fast_fall_temp=0;
+
+    switch ( timer )
+      {
+    case 0: image_index = 0; break;
+    case 12: image_index = 1; break;
+    case 15: image_index = 2; break;
+    case 18: image_index = 3; break;
+    case 21: image_index = 4; break;
+    case 100: image_index = 0; break;
+    case 107: image_index = 1; break;
+    case 114: image_index = 2; break;
+    case 121: image_index = 3; break;
+    case 126: image_index = 4; break;
+    case 131: image_index = 5; break;
+    case 200: image_index = 3; break;
+    case 205: image_index = 4; break;
+    case 210: image_index = 5; break;
+    case 215: image_index = 6; invincible=1; sound_play(tele1_sound); break;
+    case 220: image_index = 7; break;
+    case 223: image_alpha=0; break;
+    case 229: x=target1.x-13*(1-facing*2)*size; y=slashedandgashed2.y+(actual_height/2); break;
+    case 230: image_index = 7; image_alpha=1; sound_play(tele2_sound); break;
+    case 235: image_index = 6; break;
+    case 240: image_index = 0; sprite_index=b2_sprite; invincible=0; break;
+    case 246: image_index = 1; break;
+    case 249: image_index = 2; break;
+    case 252: image_index = 3; break;
+    case 270: image_index = 1; break;
+    case 274: image_index = 0; break;
+      }
+
+
+if ( timer < time )
+  { 
+     if timer < 10 && special = 0{
+     timer = 100;
+     time=140;
+     sprite_index=b4_sprite;
+     }
+     if timer =18{
+     slashedandgashed=create_projectile(4,90,1,0,1,15,slash1,obj_spark_slash1,0.9 , 0.9 , 24.30 , 14.40, self.id, 40 , no_script);
+     slashedandgashed.vspeed=0;
+     slashedandgashed.hspeed=12*(1-facing*2)*size;
+     slashedandgashed.sprite_index=b3_sprite;
+     slashedandgashed.image_speed=0.5;
+     slashedandgashed.alarm[0]=50;
+     slashedandgashed.use_palette=number;
+     slashedandgashed.attack_success=0;
+     slashedandgashed.sdi=0;
+     slashedandgashed.di=0;
+     sound_play(swingsnd2);
+     }
+     if slashedandgashed.attack_success>0 && timer < 200 && timer >=18{
+     timer =200;
+     time = 279;
+     sprite_index=win2_sprite;
+     image_index=3;
+     target1=target;
+     bondangle=target1.x;
+     amsterda=target1.y;
+     slashedandgashed2 = instance_create( x, y, obj_spark)
+     slashedandgashed2.number=-number;
+     slashedandgashed2.sprite_index=b3_sprite;
+     slashedandgashed2.image_index=1;
+     slashedandgashed2.image_speed=0;
+     slashedandgashed2.x=slashedandgashed.x;
+     slashedandgashed2.y=slashedandgashed.y;
+     slashedandgashed2.image_xscale=0.9*(1-facing*2)*size;
+     slashedandgashed2.image_yscale=0.9*size;
+     slashedandgashed2.alarm[0]=30;
+     with(slashedandgashed){instance_destroy();}
+     }
+     if timer >= 200 && timer < 249{
+     hspeed=0;
+     vspeed=0;
+     gravity_lock=1;
+     target1.hspeed=0;
+     target1.vspeed=0;
+     target1.timer=0;
+     target1.time=3;
+     target1.gravity_lock=1;
+     target1.air_move=0;
+     target1.fast_fall=0;
+     target1.fast_fall_temp=0;
+     target1.state_type="air_flinch";
+     target1.sprite_index=target1.flinch_sprite;
+     target1.x=bondangle;
+     target1.y=amsterda;
+     }
+     if timer = 249 {
+        gravity_lock=0;
+        sound_play(swingsnd2);
+        create_hitbox(5,60+60*facing,6,3.2,19,5,kick2,obj_spark_hit2,0.83 , 1.06 , 8.10 , 8.10,self.id,8,1);
+        vspeed=-4.8*size;
+        hspeed=-1.8*(1-facing*2)*size;
+        }
+        if timer = 252{
+        hitbox.image_xscale=0.58*(1-facing*2)*size;
+        hitbox.image_yscale=0.65*size;
+        hitbox.hitbox_x=10.80*(1-facing*2)*size;
+        hitbox.hitbox_y=12.60*size;
+        }
+     if timer = 126{
+                slashyslasher=create_projectile(2,41+98*facing,3.1,0,4,1,slash1,obj_spark_slash1,0.9 , 0.9 , 24.30 , 14.40, self.id,100 , char_custom1);
+                slashyslasher.maxtime=100;
+                slashyslasher.alarm[0]=100;
+                slashyslasher.sprite_index=b5_sprite;
+                slashyslasher.image_speed=0.25;
+                slashyslasher.image_index=0;
+                slashyslasher.priority=3;
+                slashyslasher.size=size;
+                slashyslasher.facing=facing;
+                slashyslasher.hit_stun=7.5*size;
+                slashyslasher.timerstandin=0;
+                slashyslasher.depth=depth-1;
+                slashyslasher.use_palette=number;
+                if !moveup && !movedown{
+                slashyslasher.temp=0;
+                slashyslasher.hspeed=1.3*(1-facing*2);
+                slashyslasher.vspeed=0;
+                }
+                if movedown{
+                slashyslasher.temp=1;
+                slashyslasher.vspeed=0.5*size;
+                slashyslasher.hspeed=0.5*(1-facing*2)*size;
+                }
+                if moveup{
+                slashyslasher.temp=2;
+                slashyslasher.vspeed=-0.5*size;
+                slashyslasher.hspeed=0.5*(1-facing*2)*size;
+                }
+
+            }
+
+
+	}
+
+
+
+    if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    invincible=0;
+    if ( air = 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

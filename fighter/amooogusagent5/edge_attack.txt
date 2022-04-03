@@ -1,0 +1,78 @@
+if state_type = "edge" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "edge_attack";
+        image_index = 0;
+        sprite_index = jump_sprite;
+        image_index=0;
+        air_move=0;
+        frozonex=x;
+        frozoney=y;
+    if percent < 100
+        timer = 0;
+    else {
+    timer = -5 }
+        time = 150;
+        timer_speed=1;
+    intangible = 1;
+    ignore_physics=1;
+}
+        switch (timer){
+    case 1: image_index = 0; break;
+    case 100: image_index = 0; break;
+    case 105: image_index = 1; break;
+    case 110: image_index = 2; vspeed=-3*size; state_type="air_attack"; break;
+    case 115: image_index = 3; break;
+    case 120: image_index = 4; break;
+    case 125: image_index = 5; hspeed=0; vspeed=7; break;
+    case 128: image_index = 6; sound_play(land2_sound); break;
+    case 140: image_index = 7; state_type="attack"; break;
+}
+
+
+if timer < time {
+    if ( timer = -5 )
+    instance_create(x-size,y+size,obj_spark_effect);
+    if timer >= 4 && timer < 8{
+    x=frozonex-1.40*(1-facing*2)*size;
+    y=frozoney-4.80*size;
+    }
+    if timer >= 8 && timer < 12{
+    x=frozonex+4*(1-facing*2)*size;
+    y=frozoney-18.55*size; 
+    }
+    if timer = 12 {
+    x += 8-facing*16;
+    sprite_index = edgeatk_sprite;
+    image_index=0;
+    timer = 100;
+    time = 141;
+    timer_speed=1;
+}
+
+if timer >= 105 && timer < 125{
+ hspeed=3*(1-facing*2)*size;
+}
+
+      if timer = 125 {
+        create_hitbox(8,60+60*facing,10,0.1,16,2,SussyImpostySnapYourNoPussyHavvingAssIntoYourLowerBodyAndSingleSpinalBoneButWithABat2,obj_spark_hit2,1.38 , 1.67 , 21.60 , 24.30,self.id,5,3);
+        hitbox.hit_stun = 4;
+        hitbox.di = 0.2;
+        }
+}
+    if timer = 122
+        intangible = 0
+
+
+if ( timer < 100 )
+  please_shadow = -1;
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    intangible = 0
+    attack_type = "none";
+    state_type = "stand";
+    sprite_index = stand_sprite;
+    timer = 0;
+    time =-1;
+    }

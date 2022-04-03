@@ -1,0 +1,78 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" ) && !instance_exists(pinkysummon)
+  {
+
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 30;
+    sprite_index = sideb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    vspeed=0;
+
+}
+switch ( timer )
+      {
+    case 0: image_index = 0; break;
+    case 8: image_index = 1; break;
+    case 16: image_index = 2; break;
+    case 26: image_index = 1; break;
+}
+if ( timer < time )
+  {
+    if timer = 16{
+    pinkysummon=create_projectile(2,90,7,1,30,13,SussyImpostySnapYourNoPussyHavvingAssIntoYourLowerBodyAndSingleSpinalBoneButPink,obj_spark_slash1,0.9 , 0.9 , 39.60 , 6, self.id, 111, char_custom5);
+    pinkysummon.hit=2;
+    pinkysummon.can_reflect=0;
+    pinkysummon.parry_nodestroy=1;
+    pinkysummon.image_speed=0;
+    pinkysummon.image_index=0;
+    pinkysummon.size=size;
+    pinkysummon.facing=facing;
+    pinkysummon.sussusthesupersusoftheomegasus=self.id;
+    if TheSidebLooper=0{
+    pinkysummon.temp=0;
+    pinkysummon.alarm[0]=121;
+    pinkysummon.time=121;
+    pinkysummon.maxtime=121;
+    pinkysummon.hspeed=0;
+    pinkysummon.sprite_index=sideb1_sprite;
+    pinkysummon.image_speed=0;
+    TheSidebLooper=1;
+    }
+    else if TheSidebLooper=1{
+    pinkysummon.y=y-40.5*size;
+    pinkysummon.temp=1;
+    pinkysummon.image_speed=0.0625;
+    pinkysummon.alarm[0]=360;
+    pinkysummon.time=360;
+    pinkysummon.maxtime=360;
+    pinkysummon.sprite_index=sideb2_sprite;
+    pinkysummon.getyeetedlolololololomegalul=0;
+    TheSidebLooper=2;
+    }
+    else if TheSidebLooper>=2{
+    pinkysummon.temp=2;
+    pinkysummon.alarm[0]=147;
+    pinkysummon.time=147;
+    pinkysummon.maxtime=147;
+    pinkysummon.image_speed=0;
+    pinkysummon.sprite_index=sideb5_sprite;
+    TheSidebLooper=0
+    }
+    sound_play(swingsnd5);
+    }
+ 
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

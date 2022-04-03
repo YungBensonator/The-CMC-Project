@@ -1,0 +1,70 @@
+
+if state_type = "stand"{
+image_speed = 0.1;
+}
+if state_type = "run"{
+if sprite_index=run_sprite{
+image_speed = 0.32;	
+}
+if sprite_index = walk_sprite{
+image_speed = 0.1;
+}
+}
+if sprite_index=crouch_sprite && state_type="crouch"{
+    image_speed=0.05;
+    if image_index>2.95{
+    image_index=1;
+    }
+}
+
+if bulletta>11 && attack_type!="b"{
+    bulletta=13;
+}
+if bulletta<0{
+bulletta=0;
+}
+
+if reload<1 && (hitbox.hit>0 || hitbox2.hit>0 || hitbox3.hit>0 || hitbox4.hit>0 || bullet.hit =1 || knife.hit=1 || knife2.hit=1 || knife3.hit=1 || grenaddy.hit=1)  {
+ reload+=1;
+ if bulletta<12{
+ bulletta-=1;
+ }
+ else{
+ bulletta=11;
+ }
+ bulletcount.image_index=bulletta;
+ bulletcount.sprite_index=b5_sprite;
+}
+if attack_type="none" && reload>0{
+reload-=1;
+}
+if reload < 0{
+reload=0;
+}
+if reload > 1{
+reload=1;
+}
+ 
+ if sussyswappy > 540{
+ sussyswappy = 540;
+ }
+  if sussyswappy < 0{
+ sussyswappy = 0;
+ }
+ if attack_type!="b" && susman>0{
+    super_armor=0;
+    heavy_armor=0;
+    susman=0;}
+if imrichbitch>0 || butyoucancallmecheeptheripper>0 && attack_type!="downb"{
+percent=imrichbitch;
+target1.percent=butyoucancallmecheeptheripper;
+target1=0;
+imrichbitch=0;
+butyoucancallmecheeptheripper=0;
+percent+=10;
+}
+if ai = 1 and !instance_exists(vent) and air = 0 and state_type != "attack" and state_type != "air_attack" and state_type != "flinch"{
+    state_type = "stand"
+    timer = 0
+    time = -1
+    char_upb();}

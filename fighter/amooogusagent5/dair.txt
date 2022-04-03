@@ -1,0 +1,71 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 25;
+        timer_speed=1;
+        attacking = 0;
+        hspeed=0;
+        vspeed=0;
+}
+air_move=0;
+fast_fall=0;
+fast_fall_temp=0;
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 15: image_index = 1; break;
+    case 18: image_index = 2; break;
+    case 21: image_index = 3; break;
+    case 100: image_index = 3; break;
+    case 145: image_index = 0; break;
+
+}
+hspeed=0;
+if timer < time {
+   if timer >=10 && timer < 15{
+   vspeed=(-5-(timer-10))*size;
+   }
+   if timer >= 15 && timer < 21{
+   vspeed=0;
+   }
+
+   if timer >= 21 && timer < 100{
+   vspeed=20*size;
+   if timer = 24{
+   timer=21;
+   }
+   }
+
+            if timer = 18 {
+                sound_play(swingsnd3);
+
+                create_hitbox(7,318+(-96)*facing,7.5,6,28,12,SussyImpostySnapYourNoPussyHavvingAssIntoYourLowerBodyAndSingleSpinalBoneButPink2,obj_spark_slash1,0.79 , 1.26 , 16.20 , 3.60,self.id,9999,3);
+                hitbox.di=0.7;
+                hitbox.image_angle=0;
+                }
+            
+
+
+            if air = 0 && timer >=21 && timer < 100 {
+                timer =100;
+                time=150;
+                image_index=3;
+                sound_play(land1_sound);
+                screen_shake(7,7);
+                with(hitbox){instance_destroy();}
+
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
