@@ -1,0 +1,56 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 45;
+        timer_speed=1;
+        charge_frame = 5;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break; //attack frame
+	case 15: image_index = 4; break;
+	case 18: image_index = 5; break;
+	case 21: image_index = 6; break;
+	case 24: image_index = 7; break;
+	case 27: image_index = 8; break;
+	case 42: image_index = 9; break;
+      }
+	 
+	if timer = 12 {			
+			
+			ssmashshoteffect = create_blur(x+32-facing*64,y-25,self.id);
+			ssmashshoteffect.sprite_index = bshooteffect_sprite;
+			ssmashshoteffect.image_speed = 1;
+			ssmashshoteffect.image_xscale = (.18*size)-facing*(.36*size);
+			ssmashshoteffect.image_yscale = .18*size;
+			ssmashshoteffect.depth = depth-1;
+			ssmashshoteffect.alarm[0] = 300;}
+			
+	if timer = 12 {sound_play(ssmashexplosion_sound);
+	ssmasheffect = create_projectile(11,20+facing*140,6,6.5,22,11,fire3,obj_spark_fire1,.3,.3,32,25,self.id,20,char_custom8);
+	ssmasheffect.sprite_index = beffect_sprite;
+	ssmasheffect.image_speed = 0;}
+	
+	if timer >= 12 && instance_exists(ssmashshoteffect) {ssmashshoteffect.image_alpha-=.05;}
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    dontrepeat = 0;
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        

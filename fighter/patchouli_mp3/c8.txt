@@ -1,0 +1,139 @@
+priority = 5;
+absorb = 0;
+absorb2 = 0;
+proj_destroy = 0;
+no_clash = 1;
+no_reflect = 1;
+parry_nodestroy = 1;
+clankWithHitbox = 1;
+ungrazable = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.bubble_effect_sprite;
+	image_xscale = 0.3 * (1-facing*2) * size;
+	image_yscale = 0.3 * size;
+	image_index = 0;
+    image_speed = 0;
+	image_angle = 180 * (1-facing*2);
+    visible = 1;
+	depth = -7;
+	image_alpha = 0.7;
+	hit = 2;
+  }
+
+time = 120;
+
+if ( hit != 1 && target1.state_type != "out" )
+{
+target1.state_type = "flinch";
+target1.x = x;
+target1.y = y + 17 * attacker.id.size;
+}
+
+if ( ( image_xscale < 0.8  && facing = 0 ) || ( image_xscale > -0.8 && facing = 1 ) )
+{
+image_xscale += 0.2 * (1-facing*2) * size;
+}
+
+if ( image_yscale < 0.8 )
+{
+image_yscale += 0.2;
+}
+
+if ( timer >= 10 && timer <= 30 )
+{
+hspeed = 2 * (1-facing*2) * size;
+vspeed = -1 * size;
+}
+if ( timer >= 31 && timer <= 33 )
+{
+hspeed = 1.8 * (1-facing*2) * size;
+vspeed = -0.9 * size;
+}
+if ( timer >= 34 && timer <= 36 )
+{
+hspeed = 1.6 * (1-facing*2) * size;
+vspeed = -0.8 * size;
+}
+if ( timer >= 37 && timer <= 39 )
+{
+hspeed = 1.4 * (1-facing*2) * size;
+vspeed = -0.7 * size;
+}
+if ( timer >= 40 && timer <= 42 )
+{
+hspeed = 1.2 * (1-facing*2) * size;
+vspeed = -0.6 * size;
+}
+if ( timer >= 43 && timer <= 45 )
+{
+hspeed = 1 * (1-facing*2) * size;
+vspeed = -0.5 * size;
+}
+if ( timer >= 46 && timer <= 48 )
+{
+hspeed = 0.8 * (1-facing*2) * size;
+vspeed = -0.4 * size;
+}
+if ( timer >= 49 && timer <= 51 )
+{
+hspeed = 0.6 * (1-facing*2) * size;
+vspeed = -0.3 * size;
+}
+if ( timer >= 52 )
+{
+hspeed = 0.4 * (1-facing*2) * size;
+vspeed = -0.2 * size;
+}
+if ( timer = 60 )
+{
+hit = 0;
+}
+
+if ( ( ( image_xscale >= 0.8 && facing = 0 ) || ( image_xscale <= -0.8 && facing = 1 ) ) && image_yscale >= 0.8 )
+{
+	if ( timer mod 2 = 0 )
+	{
+	image_xscale = 0.8 * (1-facing*2) * size;
+	image_yscale = 0.8 * size;
+	}
+	else
+	{
+	image_xscale += 0.015 * (1-facing*2) * size;
+	image_yscale += 0.015 * size;
+	}
+}
+//--------------------------------------------------------------------------HIT------------------------------------------------------------------
+if ( hit = 1 || timer = time - 2 || target1.state_type = "out" )
+{
+splasheffect1 = instance_create( x , y , obj_spark);
+splasheffect1.sprite_index = keepmain.splash_effect_sprite;
+splasheffect1.image_xscale = 0.4 * (1 - facing * 2) * size;
+splasheffect1.image_yscale = 0.4 * size;
+splasheffect1.direction = 20 + random(20) * (1 - facing * 2);
+splasheffect1.speed = 4;
+splasheffect1.gravity = 0.2;
+splasheffect1.gravity_direction = 270;
+splasheffect1.image_alpha = 1;
+splasheffect1.image_index = 0;
+splasheffect1.image_angle = random(360);
+splasheffect1.image_speed = 0.5;
+splasheffect1.depth = -7;
+
+splasheffect2 = instance_create( x , y , obj_spark);
+splasheffect2.sprite_index = keepmain.splash_effect_sprite;
+splasheffect2.image_xscale = 0.4 * (1 - facing * 2) * size;
+splasheffect2.image_yscale = 0.4 * size;
+splasheffect2.direction = 150 - random(20) * (1 - facing * 2);
+splasheffect2.speed = 4;
+splasheffect2.gravity = 0.2;
+splasheffect2.gravity_direction = 270;
+splasheffect2.image_alpha = 1;
+splasheffect2.image_index = 0;
+splasheffect2.image_angle = random(360);
+splasheffect2.image_speed = 0.5;
+splasheffect2.depth = -7;
+
+instance_destroy();
+}

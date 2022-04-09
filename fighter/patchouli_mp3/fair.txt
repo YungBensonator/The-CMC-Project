@@ -1,0 +1,66 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "fair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fair_sprite;
+  timer = 0;
+  time = 34;
+  timer_speed = 1;
+  }
+
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 8: image_index = 4; break;
+  case 10: image_index = 5; break;
+  case 12: image_index = 6; break;
+  case 14: image_index = 7; break;
+  case 20: image_index = 8; break;
+  case 22: image_index = 9; break;
+  case 24: image_index = 10; break;
+  case 26: image_index = 11; break;
+  case 28: image_index = 12; break;
+  case 30: image_index = 13; break;
+  case 32: image_index = 14; break;
+  }
+
+if ( timer = 12 )
+{
+play_attack_voice();
+sound_play ( patchy_wind_sound3 );
+effect_create_above( ef_ring , x + 25 * (1-facing*2) * size , y - 21 * size , 0.1 , c_silver )
+nado = create_projectile( 9 , 25+facing*130 , 5.2 , 5 , 25 , 1 , patchoulislash1 , obj_spark_slash3 , 1 , 1 , 25 , 19 , self.id , 40 , char_custom5 );
+}
+
+
+if ( air = 0 )
+  {
+dontrepeat = 0;
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = 19;
+sprite_index = land_sprite;
+  }
+
+
+if ( timer >= time - 1 )
+  {
+  dontrepeat = 0;
+  attack_type = "none";
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 11;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

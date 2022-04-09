@@ -1,0 +1,167 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "sideb";
+  time = 75;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	sprite_index = sideb_sprite;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	sprite_index = sideb_air_sprite;
+	}
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+//-----------------------------------------------------------------ANIMATION GROUND-----------------------------------------------------
+if ( air = 0 )
+{
+sprite_index = sideb_sprite;
+
+if ( timer <= 2 )
+	{
+	image_index = 0;
+	}
+if ( timer >= 3 && timer <= 5 )
+	{
+	image_index = 1;
+	}
+if ( timer >= 6 && timer <= 39 )
+	{
+	image_index = 2;
+	}
+if ( timer >= 40 && timer <= 42 )
+	{
+	image_index = 3;
+	}
+if ( timer >= 43 && timer <= 45 )
+	{
+	image_index = 4;
+	}
+if ( timer >= 46 && timer <= 48 )
+	{
+	image_index = 5;
+	}
+if ( timer >= 49 && timer <= 51 )
+	{
+	image_index = 6;
+	}
+if ( timer >= 52 && timer <= 64 )
+	{
+	image_index = 7;
+	}
+if ( timer >= 65 )
+	{
+	image_index = 8;
+	}
+}
+
+//----------------------------------------------------------------ANIMATION AIR-----------------------------------------------------
+if ( air > 0 )
+{
+sprite_index = sideb_air_sprite;
+
+if ( timer <= 2 )
+	{
+	image_index = 0;
+	}
+if ( timer >= 3 && timer <= 5 )
+	{
+	image_index = 1;
+	}
+if ( timer >= 6 && timer <= 8 )
+	{
+	image_index = 2;
+	}
+if ( timer >= 9 && timer <= 42 )
+	{
+	image_index = 3;
+	}
+if ( timer >= 43 && timer <= 45 )
+	{
+	image_index = 4;
+	}
+if ( timer >= 46 && timer <= 48 )
+	{
+	image_index = 5;
+	}
+if ( timer >= 49 && timer <= 50 )
+	{
+	image_index = 6;
+	}
+if ( timer >= 51 && timer <= 64 )
+	{
+	image_index = 7;
+	}
+if ( timer >= 53 && timer <= 54 )
+	{
+	image_index = 8;
+	}
+if ( timer >= 55 && timer <= 61 )
+	{
+	image_index = 9;
+	}
+if ( timer >= 62 && timer <= 64 )
+	{
+	image_index = 10;
+	}
+if ( timer >= 65 )
+	{
+	image_index = 11;
+	}
+}
+
+if ( timer = 2 )
+{
+sound_play ( sideb_voice );
+}
+
+if ( timer = 6 )
+{
+sound_play ( sideb_sound );
+
+blade3 = create_projectile( 3 , 25+facing*130 , 2.5 , 3 , 15 , 1 , patchoulislash3 , obj_spark_slash3 , 1 , 1 , 25 , 40 , self.id , 240 , char_custom3 );
+blade3.temp = 10;
+blade2 = create_projectile( 3 , 25+facing*130 , 2.5 , 3 , 15 , 1 , patchoulislash3 , obj_spark_slash3 , 1 , 1 , 29 , 30 , self.id , 240 , char_custom3 );
+blade2.temp = 5;
+blade1 = create_projectile( 3 , 25+facing*130 , 2.5 , 3 , 15 , 1 , patchoulislash3 , obj_spark_slash3 , 1 , 1 , 32 , 20 , self.id , 240 , char_custom3 );
+blade1.temp = 0;
+blade4 = create_projectile( 3 , 25+facing*130 , 2.5 , 3 , 15 , 1 , patchoulislash3 , obj_spark_slash3 , 1 , 1 , 29 , 10 , self.id , 240 , char_custom3 );
+blade4.temp = 355;
+blade5 = create_projectile( 3 , 25+facing*130 , 2.5 , 3 , 15 , 1 , patchoulislash3 , obj_spark_slash3 , 1 , 1 , 25 , 0 , self.id , 240 , char_custom3 );
+blade5.temp = 350;
+}
+
+if ( timer = 46 )
+{
+sound_play ( sideb_sound2 );
+blade1.timer = 99;
+blade2.timer = 99;
+blade3.timer = 99;
+blade4.timer = 99;
+blade5.timer = 99;
+}
+
+if ( timer >= time - 1 )
+  {
+  dontrepeat = 0;
+  attack_type = "none";
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 9;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

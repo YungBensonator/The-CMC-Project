@@ -1,0 +1,133 @@
+absorb = 0;
+absorb2 = 0;
+clankWithHitbox = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.sideb_proj_sprite;
+	image_xscale = 0.25 * (1-facing*2) * size;
+	image_yscale = 0.04 * size;
+	image_index = 0;
+    image_speed = 0;
+    visible = 1;
+	depth = -8;
+	image_alpha = 1;
+	image_angle = temp * (1-facing*2);
+	direction = temp * (1-facing*2);
+	speed = 0;
+	hit = 2;
+	parry_nodestroy = 1;
+  }
+
+time = 240;  
+
+if ( timer <= 20 && ( image_yscale < 0.25 * size ) )
+{
+image_yscale += 0.025 * size;
+}
+
+if ( timer = 20 )
+{
+	    eff = instance_create( x , y , obj_spark);
+        eff.sprite_index = keepmain.sideb_effect_sprite;
+        eff.image_xscale = 0.25 * (1 - facing * 2) * size;
+        eff.image_yscale = 0.25 * size;
+		eff.image_alpha = 0;
+        eff.image_index = 0;
+        eff.image_speed = 0;
+		eff.image_angle = temp * (1-facing*2);
+		eff.depth = -7;
+		eff.snap = self.id;
+		eff.alarm[0] = 10;
+}
+if ( timer >= 20 && eff.image_alpha < 0.8 )
+{
+eff.image_alpha += 0.1;
+}
+if ( timer >= 20 )
+{
+eff.x = x + hspeed;
+eff.y = y + vspeed;
+eff.alarm[0] = 10;
+}
+
+
+//---------------------------------------------------------------------DESTROY IF PATCHY GOT INTERRUPTED-------------------------------------------------------
+if ( timer <= 50 && attacker.id.attack_type != "sideb" )
+{
+timer = 41;
+}
+
+if ( timer >= 41 && timer <= 50 && image_alpha > 0 )
+{
+image_alpha -= 0.1;
+}
+if ( timer >= 41 && timer <= 50 && eff.image_alpha > 0 )
+{
+eff.image_alpha -= 0.1;
+}
+if ( timer >= 41 && timer <= 80 && image_alpha <= 0 )
+{
+with ( eff )
+	{
+	instance_destroy();
+	}
+instance_destroy();
+}
+
+//------------------------------------------------------------------------------------FIRE-------------------------------------------------------
+if ( timer = 100 )
+{
+		speed = 7 * (1-facing*2);
+		hit = 0;
+		parry_nodestroy = 0;
+
+	    eff2 = instance_create( x , y , obj_spark);
+        eff2.sprite_index = keepmain.sideb_effect_sprite;
+        eff2.image_xscale = 0.25 * (1 - facing * 2) * size;
+        eff2.image_yscale = 0.25 * size;
+		eff2.image_alpha = 0.8;
+        eff2.image_index = 0;
+        eff2.image_speed = 0;
+		eff2.image_angle = 0;
+		eff2.depth = -7;
+		eff2.alarm[0] = 20;
+}
+
+if ( timer >= 100 && timer <= 120 )
+{
+eff2.image_alpha -= 0.05;
+eff2.image_xscale += 0.05 * (1-facing*2) * size;
+eff2.image_yscale += 0.05 * size;
+}
+
+if ( timer >= 100 )
+{
+speed = 8 * (1-facing*2);
+}
+
+if ( timer >= 100 && timer mod 3 = 0 )
+{
+	    eff3 = instance_create( x , y , obj_spark);
+        eff3.sprite_index = keepmain.sideb_effect_sprite;
+        eff3.image_xscale = 0.4 * (1 - facing * 2) * size;
+        eff3.image_yscale = 0.15 * size;
+		eff3.image_alpha = 0.8;
+        eff3.image_index = 0;
+        eff3.image_speed = 0.12;
+		eff3.image_angle = temp * (1-facing*2);
+		eff3.direction = temp * (1-facing*2);
+		eff3.speed = 6 * (1-facing*2);
+		eff3.depth = -7;
+		eff3.script = char_custom13;
+		eff3.owner = self.id;
+		eff3.keepmain = self.keepmain;
+}
+
+if ( timer = 239 )
+{
+with ( eff )
+	{
+	instance_destroy();
+	}
+}

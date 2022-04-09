@@ -1,0 +1,161 @@
+priority = 5;
+absorb = 0;
+absorb2 = 0;
+proj_destroy = 0;
+no_clash = 1;
+no_reflect = 1;
+parry_nodestroy = 1;
+clankWithHitbox = 1;
+ungrazable = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.rock_effect_sprite;
+	image_xscale = 0.4 * (1-facing*2) * size;
+	image_yscale = 0.4 * size;
+	image_index = 0;
+    image_speed = 0;
+	image_angle = 180 * (1-facing*2);
+    visible = 1;
+	depth = -7;
+	image_alpha = 1;
+	di = -1;
+	sdi = -1;
+	weight_kb = 1;
+	hit_stun = 10;
+	moving_object = 0;
+  }
+
+time = 120;
+x = attacker.id.x + temp2 * (1-facing*2) * attacker.id.size + attacker.id.hspeed;
+
+//--------------------------------------------------------------------------MOVEMENT------------------------------------------------------------------
+if ( timer <= 30 )
+{
+vspeed = -6;
+}
+if ( timer = 31 )
+{
+vspeed = -3;
+}
+if ( timer = 32 )
+{
+vspeed = -1;
+}
+if ( timer = 33 )
+{
+vspeed = -0.5;
+}
+if ( timer = 34 )
+{
+vspeed = 0;
+}
+
+//-----------------------------------------------------------------------ROTATE SPRITE------------------------------------------------------------------
+if ( timer >= 28 && timer <= 45 )
+{
+image_angle += 10 * (1-facing*2);
+}
+
+
+//--------------------------------------------------------------------MAKE IT HIT 2ND TIME------------------------------------------------------------------
+if ( timer = 46 )
+{
+hit = 0;
+
+if ( temp = 0 )
+	{
+	dir = 90;
+	bkb = 3 * attacker.id.size;
+	sfx = keepmain.patchoulislash1;
+	}
+
+if ( temp = 1 )
+	{
+	damage = 5 * attacker.id.size;
+	dir = 75+facing*30;
+	bkb = 7 * attacker.id.size;
+	kbg = 4 * attacker.id.size;
+	sfx = keepmain.patchoulislash3;
+	gfx = obj_spark_slash3;
+	hitlag = 10;
+	weight_kb = 0;
+	di = 1;
+	sdi = 1;
+	}
+}
+
+//-------------------------------------------------------------------------FALL DOWN------------------------------------------------------------------
+if ( timer >= 46 )
+{
+vspeed = 9;
+}
+
+if ( timer >= 60 )
+{
+moving_object = 1;
+}
+
+//--------------------------------------------------------------------------LAND------------------------------------------------------------------
+if ( ( is_on_floor(self) && moving_object = 1 ) || timer = time - 2 )
+{
+sound_play ( keepmain.dthrow_sound2 );
+
+fragment = instance_create( x , y , obj_spark);
+fragment.sprite_index = keepmain.rock_effect_sprite2;
+fragment.image_xscale = 0.4 * (1 - facing * 2) * size;
+fragment.image_yscale = 0.4 * size;
+fragment.direction = 40 + random(20) * (1 - facing * 2);
+fragment.speed = 4;
+fragment.gravity = 0.2;
+fragment.gravity_direction = 270;
+fragment.image_alpha = 1;
+fragment.image_index = 0;
+fragment.image_angle = random(360);
+fragment.image_speed = 0.5;
+fragment.depth = -7;
+
+fragment2 = instance_create( x , y , obj_spark);
+fragment2.sprite_index = keepmain.rock_effect_sprite2;
+fragment2.image_xscale = 0.4 * (1 - facing * 2) * size;
+fragment2.image_yscale = 0.4 * size;
+fragment2.direction = 40 + random(20) * (1 - facing * 2);
+fragment2.speed = 4;
+fragment2.gravity = 0.2;
+fragment2.gravity_direction = 270;
+fragment2.image_alpha = 1;
+fragment2.image_index = 0;
+fragment2.image_angle = random(360);
+fragment2.image_speed = 0.5;
+fragment2.depth = -7;
+
+fragment3 = instance_create( x , y , obj_spark);
+fragment3.sprite_index = keepmain.rock_effect_sprite2;
+fragment3.image_xscale = 0.4 * (1 - facing * 2) * size;
+fragment3.image_yscale = 0.4 * size;
+fragment3.direction = 130 - random(20) * (1 - facing * 2);
+fragment3.speed = 4;
+fragment3.gravity = 0.2;
+fragment3.gravity_direction = 270;
+fragment3.image_alpha = 1;
+fragment3.image_index = 0;
+fragment3.image_angle = random(360);
+fragment3.image_speed = 0.5;
+fragment3.depth = -7;
+
+fragment4 = instance_create( x , y , obj_spark);
+fragment4.sprite_index = keepmain.rock_effect_sprite2;
+fragment4.image_xscale = 0.4 * (1 - facing * 2) * size;
+fragment4.image_yscale = 0.4 * size;
+fragment4.direction = 130 - random(20) * (1 - facing * 2);
+fragment4.speed = 4;
+fragment4.gravity = 0.2;
+fragment4.gravity_direction = 270;
+fragment4.image_alpha = 1;
+fragment4.image_index = 0;
+fragment4.image_angle = random(360);
+fragment4.image_speed = 0.5;
+fragment4.depth = -7;
+
+instance_destroy();
+}

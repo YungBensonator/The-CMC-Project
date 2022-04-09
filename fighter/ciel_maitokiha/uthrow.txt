@@ -1,0 +1,54 @@
+if time = -1 {
+hspeed = 0;
+state_type = "air_attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = uthrow_sprite;
+image_index=0;
+timer = 0;
+time = 38;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 35
+air_move = 0;
+sound_play(uthrow_voice);
+}
+if timer < time {
+    switch ( timer )
+      {
+	  case 3: image_index = 1; break;
+	  case 6: image_index = 2; break;
+	  case 26: image_index = 3; break;
+	  case 29: image_index = 4; break;
+	  case 32: image_index = 5; break;
+	  case 35: image_index = 6; break;
+	  }
+	  if timer > 3 {after_image(5,c_red,0.5);}
+	  
+	  if timer > 26 {air_move = 1;}
+	  
+	if timer > 3 && air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=20; }
+		
+	if timer = 3 {vspeed=-7.5; sound_play(uthrowtakeoff_sound)}
+	  
+	if timer = 3 {sound_play(explode1);
+			usmasheffect = create_projectile(12,75+facing*30,7,2,-1,8,fire3,obj_spark_fire1,.39,.50,35,0,self.id,80,char_custom1);
+			usmasheffect.sprite_index = usmasheffect_sprite;
+			usmasheffect.depth = depth-1;}
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

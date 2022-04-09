@@ -1,0 +1,66 @@
+if ( state_type = "down" )
+  {
+  state_type = "attack";
+  attack_type = "down_attack";
+  image_speed = 0;
+  sprite_index = down_sprite;
+  image_index = 1;
+  timer = 1;
+  time = 42;
+  timer_speed = 1;
+  }
+switch ( timer )
+  {
+  case 6: image_index=1;  break;
+  case 9: image_index=2;  break;
+  
+  case 12: sprite_index = dsmash_sprite; image_index = 0; break;
+  case 15: image_index = 1; break;
+  case 18: image_index = 2; break;
+  case 21: image_index = 3; break;
+  case 24: image_index = 2; break;
+  case 27: image_index = 3; break;
+  case 30: image_index = 2; break;
+  case 33: image_index = 3; break;
+  case 36: image_index = 1; break;
+  case 39: image_index = 0; break;
+}
+
+if timer = 18
+{
+    dsmashproj5 = create_projectile ( 3 , 20+facing*140 , 6.5 , 2.5 , 12 , 4 , shock3 , obj_spark_shock , 0.58 , 0.58 , 2.32 , 44.08 , self.id , 25 , char_custom1 );
+    dsmashproj5.sprite_index = virusshock_sprite;
+	effect_create_above(ef_ring,x + 2.32 * (1-facing*2) * size,y - 44.08 * size,0.1,c_blue)
+	dsmashproj5.image_xscale = 0.5 *(1-facing*2) * size;
+	dsmashproj5.image_yscale = 0.5 * size;
+    dsmashproj5.speed = 8 * (1-facing*2) * size;
+	dsmashproj5.image_speed = 0.65;
+	dsmashproj5.direction = 315 * (1-facing*2);
+	dsmashproj5.charge_dmg = 0.4 * size;
+	dsmashproj5.charge_kb = 0.4 * size;
+	sound_play(shoot_sound);
+	sound_play(attack_voice6);
+	
+	dsmashproj6 = create_projectile ( 3 , 160-facing*160 , 6.5 , 2.5 , 12 , 4 , shock3 , obj_spark_shock , 0.58 , 0.58 , 2.32 , 44.08 , self.id , 25 , char_custom1 );
+    dsmashproj6.sprite_index = virusshock_sprite;
+	dsmashproj6.image_xscale = 0.5 *(1-facing*2) * size;
+	dsmashproj6.image_yscale = 0.5 * size;
+    dsmashproj6.speed = 8 * (1-facing*2) * size;
+	dsmashproj6.image_speed = 0.65;
+	dsmashproj6.direction = 225 * (1-facing*2);
+	dsmashproj6.charge_dmg = 0.4 * size;
+	dsmashproj6.charge_kb = 0.4 * size;
+}
+
+
+// Intangible ends the same frame the last hitbox ends
+if ( timer == 23 )
+  intangible = 0
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

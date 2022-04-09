@@ -1,0 +1,150 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 1;
+  attack_type = "b";
+  time = 28;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  chargetimer = 0;
+  chargelvl = 0;
+  if ai {
+		special = 0;
+		chargelvl = choose(0,1);
+		}
+  }
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 22: image_index = 5; break;
+case 25: image_index = 6; break;
+}
+
+if timer = 12 and !instance_exists(bshot)
+{
+   if !instance_exists(virusshock)
+   {
+    virusshock = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_stun,1.0,1.0,24.36,40,self.id,150,char_custom2);
+    virusshock.image_xscale = image_xscale * 0.6
+    virusshock.image_yscale = image_yscale * 0.6
+    virusshock.sprite_index = virusshock_sprite;
+	virusshock.downswitch = 1;
+	virusshock.upswitch = 0;
+    virusshock.size = size;
+    virusshock.facing = facing
+    virusshock.scale = scale
+	virusshock.stun_base = 7;
+	sound_play(shoot_sound);
+	sound_play(attack_voice1);
+	bshock = create_blur(x,y,self.id);
+    bshock.sprite_index = bshock_sprite;
+    bshock.image_index = 0;
+    bshock.image_speed = 0.75;
+	bshock.snap = self.id;
+    bshock.image_xscale = 0.4 * image_xscale;
+    bshock.image_yscale = 0.4 * image_yscale;
+    bshock.depth = depth - 1;
+    bshock.x = x + 24.36 * (1-facing*2) *size;
+    bshock.y = y - 40 *size;
+   }
+   
+   if !instance_exists(virusshock2)
+   {
+	virusshock2 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_stun,1.0,1.0,24.36,1,self.id,150,char_custom2);
+    virusshock2.image_xscale = image_xscale * 0.6
+    virusshock2.image_yscale = image_yscale * 0.6
+    virusshock2.sprite_index = virusshock_sprite;
+	virusshock2.downswitch = 0;
+	virusshock2.upswitch = 1;
+    virusshock2.size = size;
+    virusshock2.facing = facing
+    virusshock2.scale = scale
+	virusshock2.stun_base = 7;
+   }
+}
+
+if timer = 5 and special = 1 and chargelvl < 1 and chargetimer < 30 and !ai
+{
+timer = 3;
+chargetimer += 1;
+}
+
+if chargetimer = 30 and chargelvl = 0 and !ai
+{
+chargelvl = 1;
+chargetimer -= 30;
+effect_create_above(ef_ring,x* size,y - actual_height * 0.5 * size,0.1,c_blue)
+}
+
+if timer = 5 and chargelvl = 1
+{
+sprite_index = b_sprite2;
+image_index = 2;
+timer = 100;
+time = 134;
+}
+
+switch (timer)
+{
+case 103: image_index = 3; break;
+case 106: image_index = 4; sound_play(attacksnd3); break;
+case 109: image_index = 5; break;
+case 112: virushand.image_index = 1; break;
+case 129: image_index = 6; break;
+case 132: image_index = 7; break;
+}
+
+if timer = 109 and !instance_exists(bshot)
+{
+    bshot = create_projectile (1,15+facing*150,3.4,1,12,5,shock1,obj_spark_shock,1.0,1.0,38.36, 27.26,self.id,150,char_custom3);
+    bshot.image_xscale = image_xscale * 0.4
+    bshot.image_yscale = image_yscale * 0.4
+    bshot.sprite_index = bshot_sprite;
+	bshot.image_speed = 0.4;
+	bshot.hspeed = 1 * (1-facing*2) * size;
+    bshot.size = size;
+    bshot.facing = facing
+    bshot.scale = scale
+    sound_play(shoot_sound);
+	sound_play(b_voice);
+	virushand = create_blur(x,y,self.id);
+    virushand.sprite_index = bfx_sprite;
+    virushand.image_index = 0;
+    virushand.image_speed = 0;
+	virushand.snap = self.id;
+    virushand.image_xscale = 1 * image_xscale;
+    virushand.image_yscale = 1 * image_yscale;
+    virushand.depth = depth - 1;
+    virushand.x = x + 0.1 * (1-facing*2) *size;
+    virushand.y = y - 51.40 *size;
+}
+
+
+if timer = 114
+{
+with (virushand)
+{
+instance_destroy();
+}
+}
+
+if ( timer >= time - 1 )
+  {
+  dontrepeat = 0;
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

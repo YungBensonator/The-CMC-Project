@@ -1,0 +1,76 @@
+time = 120
+
+if timer  <= 1
+{
+hit = 2;
+image_alpha = 0;
+}
+
+if timer = 1 or timer = 2 or timer = 3 or timer = 4 or timer = 5 or timer = 6 or timer = 7 or timer = 8 or timer = 9 or timer = 10
+{
+image_alpha += 0.1;
+}
+
+if timer = 12
+{
+hit = 0;
+}
+
+hspeed = 1 * (1-facing*2) * size;
+
+switch (timer)
+{
+case 15: hit = 2; break;
+case 18: hit = 0; break;
+case 21: hit = 2; break;
+case 24: hit = 0; break;
+case 27: hit = 2; break;
+case 30: hit = 0; break;
+case 33: hit = 2; break;
+case 36: hit = 0; break;
+case 39: hit = 2; break;
+case 42: hit = 0; break;
+case 45: hit = 2; break;
+case 48: hit = 0; break;
+case 51: hit = 2; break;
+case 54: hit = 0; break;
+case 57: hit = 2; break;
+case 60: hit = 0; break;
+case 63: hit = 2; break;
+case 66: hit = 0; break;
+case 69: hit = 2; break;
+case 72: hit = 0; break;
+case 75: hit = 2; break;
+case 78: hit = 0; break;
+case 81: hit = 2; break;
+case 84: hit = 0; break;
+case 87: hit = 2; break;
+case 90: hit = 0; break;
+case 93: hit = 2; break;
+case 96: hit = 0; break;
+case 99: hit = 2; break;
+}
+
+if timer = 96 {
+	bkb = 6
+	kbg = 6.5
+	damage = round(attacker.size*2)
+    hitlag_frames = round(8*attacker.size)
+    shake_ampl = 0.75
+    shake_kb = 7
+    sfx = shock3
+    gfx = obj_spark_shock
+}
+
+if timer = 97 or timer = 99 or timer = 100 or timer = 102 or timer = 103 or timer = 104 or timer = 106 or timer = 107 or timer = 108 or timer = 109
+{
+image_alpha -= 0.1;
+}
+
+if timer > 90 and image_alpha = 0 
+{
+instance_destroy()
+}
+
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()

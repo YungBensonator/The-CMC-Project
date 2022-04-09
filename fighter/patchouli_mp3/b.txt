@@ -1,0 +1,183 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 60;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	sprite_index = b_sprite;
+	temp = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	sprite_index = dair_sprite;
+	temp = 1;
+	}
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+if ( air = 0 )
+{
+switch ( timer )
+  {
+  case 14: image_index = 7; break;
+  case 16: image_index = 8; break;
+  case 18: image_index = 9; break;
+  case 20: image_index = 10; break;
+  case 22: image_index = 11; break;
+  case 24: image_index = 12; break;
+  case 46: image_index = 13; break;
+  case 49: image_index = 14; break;
+  case 51: image_index = 15; break;
+  case 54: image_index = 16; break;
+  case 57: image_index = 17; break;
+  }
+}
+
+if ( air > 0 )
+{
+switch ( timer )
+  {
+  case 14: image_index = 4; break;
+  case 16: image_index = 5; break;
+  case 46: image_index = 6; break;
+  case 49: image_index = 7; break;
+  case 51: image_index = 8; break;
+  case 54: image_index = 9; break;
+  case 57: image_index = 10; break;
+  }
+}
+
+//-------------------------------------------------------------------ANIMATION PRE-FIRE GROUND---------------------------------------------------
+if ( air = 0 && timer <= 12 )
+{
+sprite_index = b_sprite;
+
+if ( timer <= 1 )
+	{
+	image_index = 0;
+	}
+if ( timer >= 2 && timer <= 3 )
+	{
+	image_index = 1;
+	}
+if ( timer >= 4 && timer <= 5 )
+	{
+	image_index = 2;
+	}
+if ( timer >= 6 && timer <= 6 )
+	{
+	image_index = 3;
+	}
+if ( timer >= 8 && timer <= 9 )
+	{
+	image_index = 4;
+	}
+if ( timer >= 10 && timer <= 19 )
+	{
+	image_index = 5;
+	}
+if ( timer = 12 )
+	{
+	image_index = 6;
+	}
+}
+
+//-------------------------------------------------------------------ANIMATION PRE-FIRE AIR-----------------------------------------------------
+if ( air > 0 && timer <= 12 )
+{
+sprite_index = dair_sprite;
+
+if ( timer <= 1 )
+	{
+	image_index = 0;
+	}
+if ( timer >= 2 && timer <= 3 )
+	{
+	image_index = 1;
+	}
+if ( timer >= 4 && timer <= 19 )
+	{
+	image_index = 2;
+	}
+if ( timer = 12 )
+	{
+	image_index = 3;
+	}
+}
+
+//----------------------------------------------------------------------------SHOOT-----------------------------------------------------
+if ( timer = 12 )
+{
+sound_play ( b_voice );
+sound_play ( b_sound );
+
+if ( air = 0 )
+	{
+	state_type = "attack";
+	hspeed = -2 * (1-facing*2) * size;
+	
+	fireball = create_projectile( 11 , 25+facing*130 , 6 , 6 , 25 , 10 , fire3 , obj_spark_fire1 , 1 , 1 , 15 , 20 , self.id , 102 , char_custom10 );
+	fireball.temp = 0;
+	
+	eff = instance_create( x + 10 * (1-facing*2) * size , y - 22 * size , obj_spark);
+	eff.sprite_index = b_burst_sprite;
+	eff.image_xscale = 0.3 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.3 * size;
+	eff.image_alpha = 1;
+	eff.image_index = 0;
+	eff.image_angle = 0;
+	eff.image_speed = 0.5;
+	eff.depth = -7;
+	}
+if ( air > 0 )
+	{
+	hspeed = -2 * (1-facing*2) * size;
+	vspeed = -2 * size;
+	
+	fireball = create_projectile( 11 , 25+facing*130 , 6 , 6 , 25 , 10 , fire3 , obj_spark_fire1 , 1 , 1 , 8 , 2 , self.id , 102 , char_custom10 );
+	fireball.temp = 1;
+	
+	eff = instance_create( x + 8 * (1-facing*2) * size , y - 2 * size , obj_spark);
+	eff.sprite_index = b_burst_sprite;
+	eff.image_xscale = 0.3 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.3 * size;
+	eff.image_alpha = 1;
+	eff.image_index = 0;
+	eff.image_angle = 300 * (1-facing*2);
+	eff.image_speed = 0.5;
+	eff.depth = -7;
+	}
+}
+
+if ( air = 0 && timer > 12 && temp = 1 )
+  {
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = max ( 35 - timer , 8 );
+sprite_index = land_sprite;
+  }
+
+if ( timer >= time - 1 )
+  {
+  dontrepeat = 0;
+  attack_type = "none";
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 11;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

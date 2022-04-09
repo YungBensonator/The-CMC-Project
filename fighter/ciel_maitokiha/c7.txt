@@ -1,0 +1,40 @@
+if timer = 1{
+	image_speed = 1
+    visible =1
+	priority = 5;
+	moving_object = 0;
+	originaltime = time
+}
+
+image_xscale += 5*(1-attacker.facing*2)
+
+if attacker.id.beamdissipate = 0 {
+
+	if attack_success = 1  {
+			attack_success=2;
+			time = originaltime
+			alarm[0] = originaltime
+			}
+			
+	if timer mod 5 = 0 and attack_success != 0
+	{
+	attack_success = 0
+	hit = 0
+	}
+
+	if timer = 150 {
+	damage = 20
+	bkb = 8
+	kbg = 9
+	hitlag_frames = 20;
+	sfx = fire3
+	}
+
+}
+			
+	if timer > 155 {
+	image_alpha-=.1;
+	attacker.finalsmashbeameffect.image_alpha -= .1;
+	attacker.finalsmashbeambase.image_alpha -= .25;
+	attacker.duster.loop = 0;
+	}

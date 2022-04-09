@@ -1,0 +1,140 @@
+if (ai = 1) and (state_type != "attack" and state_type != "air_attack" and sprite_index != entry_sprite) and !instance_exists(obj_training){
+	
+	if enemy.state_type = "out" and air = 0{
+		attack_type = "taunt"
+	}
+	
+	if distance_to_object(enemy) < 50 and (enemy.state_type = "attack" or enemy.state_type = "air_attack") and shield_hp > 30 and air = 0 and enemy.facing != facing{
+	shieldup = 1
+	//state_type = "shielding"
+	//attack_type = "none"
+    }
+	
+	if shield_hp <= 30 and state_type = "shielding"
+	state_type = "stand"
+	
+	if enemy <= -1{
+		if target <= -1
+		create_homing_bubble ( 300 ,300, 0 , 0 , self.id , 1 );
+		else
+		enemy = target
+	}
+	//char_ai();
+	
+}
+ if (enemy.state_type = "out" && temp_spawn < 4){
+	temp_spawn += 1
+}
+if ai = 1 and (!instance_exists(obj_training) or (instance_exists(obj_training) and obj_training.ai_type = 5)){
+	if state_type = "tumble"
+	{
+    if held_item = -1 {
+    if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x){
+    if enemy.y > y -2
+    attack_type = "dair"
+    else if enemy.y < y - 14
+    attack_type = choose("uair","fair")
+    else
+    attack_type = choose("uair","fair","nair")
+    }
+    else
+    attack_type = "bair"
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+	}
+}
+if (instance_exists(dsmashproj4)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (temp_spawn >= 1 && dontrepeat = 0 && !target.offstage){
+				if ((target.weight <= .22 && target.percent > 140) || (target.weight > .22 && target.weight < .3 && target.percent > 160) || (target.weight > .3 && target.percent > 180)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+                killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+                enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 25
+				enemy.speed = temp_speed
+				enemy.gravity = temp_grav + 1.5
+				}
+				}
+  }
+if ( state_type = "crouch" )
+{
+sprite_index = crouch_sprite;
+image_speed = 0;
+switch (timer) 
+{
+case 0: image_index = 0; break;
+case 3: image_index = 1; break;
+}
+}
+
+if ( sprite_index = jump_sprite and image_index >= 7 )
+{
+image_index = 7;
+}
+
+if ( sprite_index = mid_jump_sprite and image_index >= 7 )
+{
+image_index = 7;
+}
+
+if ( sprite_index = fall_sprite and image_index >= 1 )
+{
+image_index = 1;
+}
+
+if air = 0 or state_type = "flinch" or state_type = "air_flinch"
+{
+sidebtemp = 0;
+}
+
+if sprite_index = run_sprite or sprite_index = dash_sprite or sprite_index = turn_sprite or sprite_index = brake_sprite or sprite_index = roll_sprite or sprite_index = air_dodge_sprite or sprite_index = dair_sprite or sprite_index = dash_attack_sprite
+{
+if cos(timer*pi)>0.5
+after_image(5,c_purple,0.5)
+}	
+
+if(state_type != "air_attack" && state_type != "attack")
+{
+        if (instance_exists(scythe1)){
+		with (scythe1){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(scythe2)){
+		with (scythe2){
+			instance_destroy();
+		}
+		}
+}
+
+if sprite_index = edge_sprite and visible = 0
+{
+visible = 1;
+}

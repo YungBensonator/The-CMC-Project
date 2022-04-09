@@ -1,0 +1,88 @@
+absorb = 1;
+absorb2 = 1;
+moving_object = 1;
+clankWithHitbox = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.b_proj_sprite;
+	image_xscale = 0.3 * (1-facing*2) * size;
+	image_yscale = 0.3 * size;
+	image_index = 0;
+    image_speed = 0.5;
+    visible = 1;
+	depth = -8;
+	image_alpha = 0.95;
+	if ( temp = 0 )
+		{
+		direction = 0;
+		image_angle = 0;
+		}
+	if ( temp = 1 )
+		{
+		image_angle = 300 * (1-facing*2);
+		direction = 300 * (1-facing*2);
+		}
+	speed = 2.25 * (1-facing*2) * size;
+  }
+
+time = 102;
+
+if ( timer mod 7 = 0 )
+{
+spark = instance_create( x , y , obj_spark);
+spark.sprite_index = keepmain.b_trail_sprite;
+spark.image_xscale = 0.3 * (1 - facing * 2) * size;
+spark.image_yscale = 0.3 * size;
+spark.speed = -1 * (1-facing*2) * size;
+spark.image_alpha = 1;
+spark.image_index = 0;
+spark.image_angle = random(360);
+spark.image_speed = 0.3;
+spark.depth = -7;
+if ( temp = 0 )
+	{
+	spark.direction = 345 * (1 - facing * 2);
+	}
+if ( temp = 1 )
+	{
+	spark.direction = 330 * (1 - facing * 2);
+	}
+}
+if ( timer mod 5 = 0 )
+{
+duster = instance_create (x , y , obj_spark)
+duster.sprite_index = global.exp_smoke_sprite;
+duster.image_xscale = 0.4 * (1-facing*2) * size;
+duster.image_yscale = 0.4 * size;
+duster.image_speed = 1;
+duster.speed = -3 * (1-facing*2);
+duster.image_angle = random(360);
+duster.image_alpha = 0.5;
+duster.depth = -6;
+if ( temp = 0 )
+	{
+	duster.direction = ( 0 + ( choose ( random(15) , random(-15) ) ) ) * (1-facing*2);
+	}
+if ( temp = 1 )
+	{
+	duster.direction = ( 300 + ( choose ( random(15) , random(-15) ) ) ) * (1-facing*2);
+	}
+}
+
+
+if ( timer = time - 2 || hit = 1 || next_to_rwall || next_to_lwall || under_ceiling || is_on_floor(self) )
+{
+sound_play ( keepmain.b_sound2 );
+
+spark = instance_create( x , y , obj_spark);
+spark.sprite_index = keepmain.b_boom_sprite;
+spark.image_xscale = 0.4 * (1 - facing * 2) * size;
+spark.image_yscale = 0.4 * size;
+spark.image_alpha = 1;
+spark.image_index = 0;
+spark.image_speed = 0.5;
+spark.depth = -7;
+
+instance_destroy();
+}

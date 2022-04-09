@@ -1,0 +1,153 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "usmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = usmash_sprite;
+  timer = 0;
+  time = 57;
+  timer_speed = 1;
+  charge_frame = 10;
+  }
+
+switch (timer)
+{
+case 03: image_index = 1; break;
+case 06: image_index = 2; break;
+case 09: image_index = 3; break;
+case 19: image_index = 4; break;
+case 22: image_index = 5; break;
+case 25: image_index = 6; break;
+case 28: image_index = 7; break;
+case 31: image_index = 8; break;
+case 34: image_index = 9; break;
+case 54: image_index = 10; break;
+}
+
+if timer = 1 {
+	if ai {smash_charge = 90}}
+
+if timer = 9
+{
+scythe1 = instance_create(x,y,obj_spark);
+scythe1.sprite_index = scythe_sprite;
+scythe1.image_index = 0;
+scythe1.image_speed = 0;
+scythe1.image_xscale = 1*image_xscale;
+scythe1.image_yscale = 1*image_yscale;
+scythe1.snap = self.id
+scythe1.number = -number;
+scythe1.depth = depth + 1;
+scythe1.x = x - 14.14 * (1 - facing * 2) *size;
+scythe1.y = y - 36 *size ; 
+scythe1.number = -number;
+}
+
+if timer = 19
+{
+with (scythe1)
+{
+instance_destroy();
+}
+sound_play(attack_voice7);
+
+scythe2 = instance_create(x,y,obj_spark);
+scythe2.sprite_index = scythe_sprite2;
+scythe2.image_index = 0;
+scythe2.image_speed = 0;
+scythe2.image_xscale = 1*image_xscale;
+scythe2.image_yscale = 1*image_yscale;
+scythe2.snap = self.id
+scythe2.number = -number;
+scythe2.depth = depth + 1;
+scythe2.x = x + 23.20 * (1 - facing * 2) *size;
+scythe2.y = y - 60.32 *size ; 
+scythe2.number = -number;
+
+create_hitbox2 ( 1 , 90 , 4.5 , 0 , 6 , 1 , punch3 , obj_spark_hit2 , 1.17 , 1.36 , 26.68 , 27.84 , self.id , 3 , 3 );
+hitbox2.image_angle = ( 1 - facing * 2 ) * 0;
+hitbox2.charge_dmg = 0;
+hitbox2.weight_kb = 0;
+hitbox2.charge_kb = 0;
+}
+
+switch (timer)
+{
+case 22: scythe2.image_index = 1; break;
+case 25: scythe2.image_index = 2; break;
+case 28: scythe2.image_index = 3; break;
+case 31: scythe2.image_index = 0; break;
+case 34: scythe2.image_index = 1; break;
+case 37: scythe2.image_index = 2; break;
+case 40: scythe2.image_index = 3; break;
+case 43: scythe2.image_index = 0; break;
+case 46: scythe2.image_index = 1; break;
+}
+
+if timer = 19 or timer = 22 or timer = 25 or timer = 28 or timer = 31 or timer = 34 or timer = 37 or timer = 40 or timer = 43
+{
+sound_play(swingsnd2);
+create_hitbox ( 1 , 90 , 2.5 , 0 , 5 , 0.1 , slash1 , obj_spark_slash1 , 1.82 , 1.58 , 23.20 , 60.32 , self.id , 3 , 3 );
+hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+hitbox.di = 0.2;
+hitbox.hit_stun = 4;
+hitbox.weight_kb = 0;
+hitbox.charge_kb = 0;
+hitbox.charge_dmg = 0;
+}
+
+if timer = 46
+{
+sound_play(swingsnd2);
+create_hitbox ( 3 , 85 , 6.5 , 6.9 , 12 , 7 , slash3 , obj_spark_slash4 , 1.82 , 1.58 , 23.20 , 60.32 , self.id , 3 , 3 );
+hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}
+
+if timer = 47
+{
+with (scythe2)
+{
+instance_destroy();
+}
+}
+     if (timer >= 45){
+if (attack_success || target.object_index == obj_enemy) && (temp_spawn >= 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 85) || (target.weight > .22 && target.weight < .3 && target.percent > 105) || (target.weight > .3 && target.percent > 125)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+if ( timer >= time - 1 )
+  {
+  dontrepeat = 0;
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

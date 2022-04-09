@@ -1,0 +1,64 @@
+switch ( timer )
+{
+case 0: visible = 0; break;
+case 3: sound_play(teleport_sound); sprite_index = entry_sprite; image_index = 0; image_speed = 0; visible = 1; break;
+case 6: image_index = 1; break;
+case 9: image_index = 2; break;
+case 12: image_index = 3; break;
+case 15: image_index = 4; break;
+case 18: image_index = 5; break;
+case 21: image_index = 6; break;
+case 24: image_index = 7; break;
+case 27: image_index = 8; break;
+case 30: image_index = 9; break;
+case 33: image_index = 10; break;
+case 36: image_index = 11; break;
+case 39: image_index = 8; break;
+case 42: image_index = 9; break;
+case 45: image_index = 10; break;
+case 48: image_index = 11; break;
+case 51: image_index = 8; break;
+case 54: image_index = 9; break;
+case 57: image_index = 10; break;
+case 60: image_index = 11; break;
+case 63: sprite_index = entry_sprite2; image_index = 0; break;
+case 113: image_index = 1; break;
+case 118: image_index = 2; break;
+case 165: image_index = 3; break;
+}
+
+if timer = 1
+{
+    if( ( db_charname[global.gs_character[enemy.number - 1], 1] == "x" || db_charname[global.gs_character[enemy.number - 1], 1] == "x_mash" ) && db_charname[global.gs_character[enemy.number - 1], 1] != "zero" )
+    {
+        sound_play(entry_voiceX);
+    }
+    if(db_charname[global.gs_character[enemy.number - 1], 1] == "zero" && db_charname[global.gs_character[enemy.number - 1], 1] != "x" && db_charname[global.gs_character[enemy.number - 1], 1] != "x_mash" )
+    {
+        sound_play(entry_voiceZ);
+    }
+    if( ( db_charname[global.gs_character[enemy.number - 1], 1] == "x" || db_charname[global.gs_character[enemy.number - 1], 1] == "x_mash" ) && db_charname[global.gs_character[enemy.number - 1], 1] == "zero" )
+    {
+        sound_play(choose( entry_voiceX , entry_voiceZ ));
+    }
+    if( db_charname[global.gs_character[enemy.number - 1], 1] != "x" && db_charname[global.gs_character[enemy.number - 1], 1] != "x_mash" && db_charname[global.gs_character[enemy.number - 1], 1] != "zero" )
+    {
+        sound_play(entry_voice);
+    }
+}
+
+if timer = 115
+{
+create_projectile(10,85+facing*10,4.6,6,15,3,slash3,obj_spark_slash2,1,1,-2.80,36.40,self.id,25,char_custom5);
+proj.originaltime = 25;
+}
+
+if ( timer >= 168 )
+  {
+  visible = 1;
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,197 @@
+if ( state_type == "crouch" || state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dsmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dsmash_sprite;
+  timer = 0;
+  time = 63;
+  timer_speed = 1;
+  charge_frame = 5;
+  }
+
+switch ( timer )
+  {
+  case 4: image_index = 1; break;
+  case 16: image_index = 2; break;
+  case 19: image_index = 3; break;
+  case 21: image_index = 4; break;
+  case 24: image_index = 5; break;
+  case 27: image_index = 6; break;
+  case 30: image_index = 7; break;
+  case 33: image_index = 8; break;
+  case 54: image_index = 9; break;
+  case 57: image_index = 10; break;
+  case 60: image_index = 11; break;
+  }
+
+if ( timer = ( charge_frame - 1 ) )
+{
+sound_play ( smash_charge_patchouli_sound );
+}
+
+if ( timer >= 5 && timer <= 18 )
+{
+	if ( timer mod 6 = 0 )
+	{
+	eff = instance_create( x + 40 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff.sprite_index = dsmash_dust_effect_sprite;
+	eff.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.6 * size;
+	eff.image_alpha = 1;
+	eff.image_index = 0;
+	eff.image_speed = 0.8;
+	eff.depth = -8;
+	
+	eff2 = instance_create( x + 20 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff2.sprite_index = dsmash_dust_effect_sprite;
+	eff2.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff2.image_yscale = 0.6 * size;
+	eff2.image_alpha = 1;
+	eff2.image_index = 0;
+	eff2.image_speed = 0.8;
+	eff2.depth = -8;
+	
+	eff3 = instance_create( x - 40 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff3.sprite_index = dsmash_dust_effect_sprite;
+	eff3.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff3.image_yscale = 0.6 * size;
+	eff3.image_alpha = 1;
+	eff3.image_index = 0;
+	eff3.image_speed = 0.8;
+	eff3.depth = -8;
+
+	eff4 = instance_create( x - 20 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff4.sprite_index = dsmash_dust_effect_sprite;
+	eff4.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff4.image_yscale = 0.6 * size;
+	eff4.image_alpha = 1;
+	eff4.image_index = 0;
+	eff4.image_speed = 0.8;
+	eff4.depth = -8;
+	}
+}
+
+if ( timer = 19 )
+{
+	sound_play(emeraldcity_sound);
+
+	shaker = instance_create(x,y,obj_shakescreen2);
+	shaker.ampl = 5;
+	shaker.xampl = 0;
+	shaker.time = 9;
+
+	if ( smash_charge < 90 )
+	{
+	sound_play ( dsmash_voice2 );
+	
+	eff = instance_create( x + 40 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff.sprite_index = dsmash_dust_effect_sprite;
+	eff.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.6 * size;
+	eff.image_alpha = 1;
+	eff.image_index = 0;
+	eff.image_speed = 0.8;
+	eff.depth = -8;
+	
+	eff2 = instance_create( x + 20 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff2.sprite_index = dsmash_dust_effect_sprite;
+	eff2.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff2.image_yscale = 0.6 * size;
+	eff2.image_alpha = 1;
+	eff2.image_index = 0;
+	eff2.image_speed = 0.8;
+	eff2.depth = -8;
+	
+	eff3 = instance_create( x - 40 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff3.sprite_index = dsmash_dust_effect_sprite;
+	eff3.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff3.image_yscale = 0.6 * size;
+	eff3.image_alpha = 1;
+	eff3.image_index = 0;
+	eff3.image_speed = 0.8;
+	eff3.depth = -8;
+
+	eff4 = instance_create( x - 20 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff4.sprite_index = dsmash_dust_effect_sprite;
+	eff4.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff4.image_yscale = 0.6 * size;
+	eff4.image_alpha = 1;
+	eff4.image_index = 0;
+	eff4.image_speed = 0.8;
+	eff4.depth = -8;
+
+	emeraldcity = create_projectile( 10 , 90 , 7 , 5.5 , 25 , 10 , patchoulihit4 , obj_spark_hit4 , 1 , 1 , 30 , 0 , self.id , 50 , char_custom6 );
+	emeraldcity.temp = 0;
+	emeraldcity.temp2 = 0;
+	emeraldcity.charge_dmg = 0.75;
+	emeraldcity.charge_kb = 0.75;
+	emeraldcity2 = create_projectile( 10 , 90 , 7 , 5.5 , 25 , 10 , patchoulihit4 , obj_spark_hit4 , 1 , 1 , -30 , 0 , self.id , 50 , char_custom6 );
+	emeraldcity2.temp = 1;
+	emeraldcity2.temp2 = 0;
+	emeraldcity2.charge_dmg = 0.75;
+	emeraldcity2.charge_kb = 0.75;
+	}
+
+	if ( smash_charge >= 90 )
+	{
+	sound_play ( dsmash_voice );
+	
+	eff = instance_create( x + 60 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff.sprite_index = dsmash_dust_effect_sprite;
+	eff.image_xscale = 0.7 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.7 * size;
+	eff.image_alpha = 1;
+	eff.image_index = 0;
+	eff.image_speed = 0.8;
+	eff.depth = -8;
+	
+	eff2 = instance_create( x + 30 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff2.sprite_index = dsmash_dust_effect_sprite;
+	eff2.image_xscale = 0.7 * (1 - facing * 2) * size;
+	eff2.image_yscale = 0.7 * size;
+	eff2.image_alpha = 1;
+	eff2.image_index = 0;
+	eff2.image_speed = 0.8;
+	eff2.depth = -8;
+	
+	eff3 = instance_create( x - 60 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff3.sprite_index = dsmash_dust_effect_sprite;
+	eff3.image_xscale = 0.7 * (1 - facing * 2) * size;
+	eff3.image_yscale = 0.7 * size;
+	eff3.image_alpha = 1;
+	eff3.image_index = 0;
+	eff3.image_speed = 0.8;
+	eff3.depth = -8;
+
+	eff4 = instance_create( x - 30 * (1-facing*2) * size , y - 5 * size , obj_spark);
+	eff4.sprite_index = dsmash_dust_effect_sprite;
+	eff4.image_xscale = 0.7 * (1 - facing * 2) * size;
+	eff4.image_yscale = 0.7 * size;
+	eff4.image_alpha = 1;
+	eff4.image_index = 0;
+	eff4.image_speed = 0.8;
+	eff4.depth = -8;
+	
+	emeraldcity = create_projectile( 10 , 90 , 7 , 5.5 , 25 , 10 , patchoulihit4 , obj_spark_hit4 , 1 , 1 , 40 , 0 , self.id , 50 , char_custom6 );
+	emeraldcity.temp = 0;
+	emeraldcity.temp2 = 1;
+	emeraldcity.charge_dmg = 0.75;
+	emeraldcity.charge_kb = 0.75;
+	emeraldcity2 = create_projectile( 10 , 90 , 7 , 5.5 , 25 , 10 , patchoulihit4 , obj_spark_hit4 , 1 , 1 , -40 , 0 , self.id , 50 , char_custom6 );
+	emeraldcity2.temp = 1;
+	emeraldcity2.temp2 = 1;
+	emeraldcity2.charge_dmg = 0.75;
+	emeraldcity2.charge_kb = 0.75;
+	}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

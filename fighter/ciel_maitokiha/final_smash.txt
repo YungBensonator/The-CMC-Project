@@ -1,0 +1,197 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        if air = 0
+		state_type = "attack"
+		else
+		state_type = "air_attack"
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 304;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		beamdissipate = 0;
+		
+		sound_play(downbcharge_sound);
+		sound_play(downbaccompany_sound);
+		sound_play(finalsmash_voice);
+		
+        spark = instance_create ( 0 , 0 , obj_camerazoom );
+        spark.camera_l = x - 5;
+        spark.camera_r = x + 5;
+        spark.camera_u = y - 5 - actual_height;
+        spark.camera_d = y + 5;
+        spark.camera_boundary_zoom = 80;
+        spark.alarm[0] = 99;
+
+        duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 116;
+}
+
+if ( timer < time ){
+        if air = 0
+		state_type = "attack"
+		else
+		state_type = "air_attack"
+		
+		speed=0
+		gravity_lock = 1;
+		slide = 0;
+
+switch ( timer )
+    {
+	case 100: image_index = 1; break;
+	case 103: image_index = 2; break;
+	case 106: image_index = 3; break; //beam shoot frame
+	case 109: image_index = 4; break;
+	case 113: image_index = 5; break;
+	case 117: image_index = 6; break;
+	case 121: image_index = 7; break;
+	case 125: image_index = 8; break;
+	case 129: image_index = 9; break;
+	case 133: image_index = 10; break;
+	case 137: image_index = 11; break;
+	case 141: image_index = 12; break;
+	case 145: image_index = 13; break;
+	case 149: image_index = 14; break;
+	case 153: image_index = 15; break;
+	case 157: image_index = 16; break;
+	case 161: image_index = 17; break;
+	case 165: image_index = 18; break;
+	case 169: image_index = 19; break;
+	case 173: image_index = 20; break;
+	case 177: image_index = 21; break;
+	case 181: image_index = 22; break;
+	case 185: image_index = 23; break;
+	case 189: image_index = 19; break;
+	case 193: image_index = 20; break;
+	case 197: image_index = 21; break;
+	case 201: image_index = 22; break;
+	case 205: image_index = 23; break;
+	case 209: image_index = 19; break;
+	case 213: image_index = 20; break;
+	case 217: image_index = 21; break;
+	case 221: image_index = 22; break;
+	case 225: image_index = 23; break;
+	case 229: image_index = 19; break;
+	case 233: image_index = 20; break;
+	case 237: image_index = 21; break;
+	case 241: image_index = 22; break;
+	case 245: image_index = 23; break;
+	case 249: image_index = 19; break;
+	case 253: image_index = 20; break;
+	case 257: image_index = 21; beamdissipate = 1; break;
+	case 261: image_index = 22; break;
+	case 265: image_index = 23; break;
+	case 269: image_index = 19; break;
+	case 273: image_index = 20; break;
+	case 277: image_index = 21; break;
+	case 281: image_index = 22; break;
+	case 285: image_index = 23; break;
+	case 289: image_index = 24; break; //end of shootin animation
+	case 294: image_index = 25; break;
+	case 299: image_index = 26; break;
+	
+    }
+	
+	if timer = 1 {blackbgeffect = create_spark(0,0,obj_spark);
+				 blackbgeffect.sprite_index = blackbg_sprite;
+				 blackbgeffect.depth = 14;
+				 blackbgeffect.image_alpha = 0;
+				 blackbgeffect.image_xscale = 50;
+				 blackbgeffect.image_yscale = 50;
+				 
+				 }
+				 
+	if timer = 22 {
+					
+				finalsmasheffect2 = create_blur(x,y-(self.id.actual_height/2),self.id);
+				finalsmasheffect2.sprite_index = finalsmasheffect2_sprite;
+				finalsmasheffect2.image_speed = .5;
+				finalsmasheffect2.image_xscale = (.3*size)-facing*(.6*size);
+				finalsmasheffect2.image_yscale = .3*size;
+				finalsmasheffect2.depth = depth-1;
+				finalsmasheffect2.alarm[0] = 25;}
+	
+	if timer >= 2 && timer <= 22 {blackbgeffect.image_alpha+=.05;}
+	
+	if timer = 40 {sound_play(heartbeat_sound);
+				
+				finalsmasheffect = create_blur(x,y-(self.id.actual_height/2),self.id);
+				finalsmasheffect.sprite_index = finalsmasheffect_sprite;
+				finalsmasheffect.image_speed = .5;
+				finalsmasheffect.image_xscale = (.3*size)-facing*(.6*size);
+				finalsmasheffect.image_yscale = .3*size;
+				finalsmasheffect.depth = depth-1;
+				finalsmasheffect.alarm[0] = 25;}
+	
+	if timer >= 90 && timer <= 100 {blackbgeffect.image_alpha-=.1;}
+	
+	if timer = 106 {finalsmashbeam = create_projectile(1,20+facing*140,3,0,-1,4,fire2,obj_spark_fire1,1,.9,30,23,self.id,186,char_custom7);
+	finalsmashbeam.sprite_index = finalsmashbeam_sprite
+	sound_play(finalsmashbeamshoot_sound);
+	sound_play(finalsmashbeamshoot2_sound);
+	
+	
+			finalsmashbeambase = instance_create(finalsmashbeam.x,finalsmashbeam.y,obj_spark);
+			finalsmashbeambase.sprite_index = finalsmashbeambase_sprite;
+			finalsmashbeambase.image_speed = 0;
+			finalsmashbeambase.image_alpha = 0.25;
+			finalsmashbeambase.image_xscale = (.5*size)-facing*(1*size);
+			finalsmashbeambase.image_yscale = 1.25*size;
+			finalsmashbeambase.depth = finalsmashbeam.depth-1;
+			finalsmashbeambase.loop = 999;
+	
+			duster = instance_create(x,y,obj_spark);
+			duster.sprite_index = dust_effect_sprite;
+			duster.image_speed = 0.75;
+			duster.image_xscale = (.75*size)-facing*(1.5*size);
+			duster.image_yscale = .75*size;
+			duster.loop = 999;
+	
+			finalsmashbeameffect = create_blur(x,finalsmashbeam.y-2,self.id);
+			finalsmashbeameffect.sprite_index = finalsmashbeameffect_sprite;
+			finalsmashbeameffect.image_speed = .75;
+			finalsmashbeameffect.image_alpha = 0.1;
+			finalsmashbeameffect.image_xscale = (10*size)-facing*(20*size);
+			finalsmashbeameffect.image_yscale = .5*size;
+			finalsmashbeameffect.depth = depth-1;
+			finalsmashbeameffect.loop = 999;
+				}
+	
+	if timer >= 106 && timer <= 116 {finalsmashbeameffect.image_alpha += .1;
+									finalsmashbeambase.image_alpha += .25;}
+	
+	if timer >= 106 && timer < 257 && timer mod 4 = 0 {
+	screen_shake(5,5);
+	hspeed=-1+facing*2;
+	finalsmashbeam.x = x+(30*(1-facing*2));
+	finalsmashbeam.y = y-23;
+	finalsmashbeambase.x = finalsmashbeam.x
+	finalsmashbeambase.y = finalsmashbeam.y
+	duster.x = x;
+	duster.y = y;
+	finalsmashbeameffect.x = x;
+	finalsmashbeameffect.y = finalsmashbeam.y-2;
+	}
+	
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

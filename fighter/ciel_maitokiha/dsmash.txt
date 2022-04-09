@@ -1,0 +1,63 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+        charge_frame = 1;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 8: image_index = 3; break;
+	case 11: image_index = 4; break;
+	case 21: image_index = 5; break;
+	case 25: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 31: image_index = 8; break;
+      }
+	 
+	if timer = 1 {			
+			dsmasheffect = create_spark(12,21,obj_spark);
+			dsmasheffect.sprite_index = dsmasheffect_sprite;
+			dsmasheffect.image_speed = .6;
+			dsmasheffect.image_xscale = (.4*size)-facing*(.8*size);
+			dsmasheffect.image_yscale = .4*size;
+			dsmasheffect.depth = depth-1;
+			dsmasheffect.alarm[0] = 300;}
+			
+	if timer = 8 {sound_play(firecast3_sound);
+	create_hitbox(9,55+facing*70,6,7,18,9,fire3,obj_spark_fire1,.55,.8,25,12,self.id,6,3);
+	create_hitbox2(9,55+facing*70,6.2,7.4,18,9,fire3,obj_spark_fire1,1,.6,4,27,self.id,6,3);}
+
+if (timer = 20){
+     facing=!facing
+     dsmasheffect = create_spark(12,21,obj_spark);
+			dsmasheffect.sprite_index = dsmasheffect_sprite;
+			dsmasheffect.image_speed = .6;
+			dsmasheffect.image_xscale = (.4*size)-facing*(.8*size);
+			dsmasheffect.image_yscale = .4*size;
+			dsmasheffect.depth = depth-1;
+			dsmasheffect.alarm[0] = 300;
+     sound_play(firecast3_sound)
+     create_hitbox(9,55+facing*70,6,7,18,9,fire3,obj_spark_fire1,.55,.8,25,12,self.id,6,3);
+	create_hitbox2(9,55+facing*70,6.2,7.4,18,9,fire3,obj_spark_fire1,1,.6,4,27,self.id,6,3);
+  }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = 4; }
+	else {state_type = "stand";}
+    attack_type = "none";
+    timer = 12;
+    time = -1;
+  }

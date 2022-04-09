@@ -1,0 +1,140 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.sigmavirus_sprite
+	hit = 2;
+    image_speed = 0.3
+    visible =1
+	moving_object = 0;
+	priority = 4;
+	hit_stun = 1;
+	moving_object = 1;
+	chosen = goombaspeed
+	sticky = 0;
+	temp = 0;
+	tempfacing = attacker.facing
+	image_xscale=attacker.image_xscale
+	image_yscale=attacker.image_yscale
+	damagetemp = 0;
+}
+
+if ( sticky = 0 ) //How the projectile acts before sticking to someone.
+{
+
+if image_index >= 8
+{
+image_index = 6;
+}
+
+if image_index >=5
+{
+hspeed= 4 - tempfacing*(4*2)
+}
+
+if timer >40{
+absorb2 = 1}
+
+
+if ( next_to_rwall || next_to_lwall ||on_floor || on_platform )
+{
+    instance_destroy();
+	attacker.id.goombatemp -= 1;
+	}
+
+if ( timer >= 10 ) //Collision check for the sticky.
+  {
+if ( timer mod 2 == 0 and image_alpha = 1)
+  {
+create_homing_bubble(1.3,1.3,-10,5,attacker.id,2);
+proj.destroy = 0;
+proj.target = 0;
+  }
+  
+if ( proj.target > 0 && !proj.target.intangible and image_alpha = 1) //Makes it stick to the opponent when the projectile touches them.
+	{
+temp = proj.target;
+if ( ( temp.sprite_index = temp.shield_sprite ) or temp.sprite_index = temp.air_dodge_sprite or temp.sprite_index = temp.spot_dodge_sprite or temp.sprite_index = temp.roll_sprite or temp.sprite_index = temp.edge_sprite )
+{
+instance_destroy();
+}
+else
+{
+sticky = 1;
+}
+instance_create ( x , y , obj_spark_shockwave );
+if ( attacker.attack_success = 0 )
+{
+projhitbox = create_projectile ( 3, 25 + tempfacing * 130 , 4 , 3 , 6 , 3 , aura4 , obj_spark_darkness , 0.6 , 0.6 , 8 , 8 , attacker.id , 4 , no_script );
+}
+else
+target.percent += 3 * size;
+	}
+  }
+}
+
+
+if ( sticky = 1 ) //Changes its behaviour when sticking to the opponent.
+  {
+	parry_nodestroy = 1;
+	sprite_index = attacker.id.virusinfection_sprite;
+	image_index = 0;
+	image_speed = 0.5;
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+    time = 200;
+	sticky = 2;
+	damagetemp = 0;
+	depth = depth - 1;
+  }
+  
+if ( sticky = 2 ) //Keeps the projectile in place.
+  {
+  if ( timer = 0 )
+  {
+  xrandom = ( choose ( random(6) , random(-6) ) );
+  yrandom = ( choose ( random(10) , random(-10) ) );
+  }
+    if ( timer >= 0 )
+	{
+    x = temp.x;
+    y = temp.y-temp.actual_height * 0.5;
+    facing = temp.facing;
+	}
+  }
+
+if damagetemp < 15
+{
+damagetemp += 1;
+}
+
+if ( sticky = 2 && damagetemp = 15) //Code used to do chip damage overtime.
+  {
+   damagetemp = 0
+   if image_alpha = 1
+   bite = create_projectile( 1 , 361 , 0 , 0 , 0 , 1 , aura4 , obj_spark_darkness ,1,1,0,5,attacker.id,4,no_script );
+  }
+
+if ( timer > 150 && sticky = 2 ) //Makes the projectile disappear after some time has passed.
+  {
+  instance_destroy();
+  }
+  
+if timer = time - 10 or timer = time - 9 or timer = time - 8 or timer = time - 7 or timer = time - 6 or timer = time - 5 or timer = time - 4 or timer = time - 3 or timer = time - 2 or timer = time - 1
+{
+image_alpha -= 0.1;
+}
+
+if ( timer >= 199 && sticky = 2 )
+  {
+  attack_shielded = 1;
+  hit = 2;
+  sticky = 3;
+  image_blend = c_gray;
+  vspeed = 1;
+  timer = 0;
+  time = 30;
+  }
+  
+if ( sticky = 3 )
+  {
+  image_alpha -= 0.05;
+  }

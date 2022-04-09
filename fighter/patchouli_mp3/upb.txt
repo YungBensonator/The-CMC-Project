@@ -1,0 +1,262 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 50;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 1;
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+  }
+
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 8: image_index = 4; break;
+  case 10: image_index = 5; break;
+  case 12: image_index = 6; break;
+  case 16: image_index = 7; break;
+  case 20: image_index = 8; break;
+  case 24: image_index = 9; break;
+  case 28: image_index = 10; break;
+  case 32: image_index = 11; break;
+  case 36: image_index = 12; break;
+  case 40: image_index = 13; break;
+  }
+
+if ( timer > 25 )
+{
+force_edge_grab = 1;
+}
+
+if ( timer < 12 )
+{
+vspeed = 0;
+gravity_lock = 1;
+}
+
+//-------------------------------------------------------CREATE WIND------------------------------------------------------
+if ( timer = 12 )
+{
+sound_play ( upb_voice );
+sound_play ( patchy_wind_sound3 );
+
+if ( air = 0 )
+{
+vspeed = -3 * size;
+wind1 = create_wind( 2 , 1.5 , 28 , 14 , 15 , 0 , 6 );
+wind2 = create_wind( 2 , 1.5 , -30 , 14 , -15 , 0 , 6 );
+}
+if ( air > 0 )
+{
+vspeed = -8.5 * size;
+wind1 = create_wind( 2 , 1.5 , 28 , 14 , 10 , 0 , 6 );
+wind2 = create_wind( 2 , 1.5 , -30 , 14 , -10 , 0 , 6 );
+}
+
+
+mist1 = instance_create( x + 1 * (1-facing*2) * size , y - 10 * size , obj_spark);
+mist1.sprite_index = choose ( mist_sprite , mist_sprite2 );
+mist1.image_xscale = 0.4 * (1 - facing * 2) * size;
+mist1.image_yscale = 0.4 * size;
+mist1.direction = 180;
+mist1.speed = 3;
+mist1.image_alpha = 0.9;
+mist1.image_index = 0;
+mist1.image_angle = random(360);
+mist1.image_speed = 0.5;
+mist1.depth = -7;
+
+mist2 = instance_create( x + 1 * (1-facing*2) * size , y - 10 * size , obj_spark);
+mist2.sprite_index = choose ( mist_sprite , mist_sprite2 );
+mist2.image_xscale = 0.4 * (1 - facing * 2) * size;
+mist2.image_yscale = 0.4 * size;
+mist2.direction = 0;
+mist2.speed = 3;
+mist2.image_alpha = 0.9;
+mist2.image_index = 0;
+mist2.image_angle = random(360);
+mist2.image_speed = 0.5;
+mist2.depth = -7;
+
+pwind = instance_create( x + 2 * (1-facing*2) * size , y - 20 * size , obj_spark );
+pwind.sprite_index = choose ( uair_wind_sprite , uair_wind_sprite2 , uair_wind_sprite3 );
+pwind.image_xscale = 0.4 * (1-facing*2) * size;
+pwind.image_yscale = max ( 0.05 , random(1) - 0.7 ) * size;
+pwind.image_speed = 0;
+pwind.image_alpha = 1;
+pwind.image_angle = choose( random(60) , random(-60) );
+pwind.snap = self.id;
+pwind.script = char_custom12;
+pwind.owner = self.id;
+pwind.keepmain = self.keepmain
+}
+
+if ( timer = 18 )
+{
+pwind2 = instance_create( x + 2 * (1-facing*2) * size , y - 20 * size , obj_spark );
+pwind2.sprite_index = choose ( uair_wind_sprite , uair_wind_sprite2 , uair_wind_sprite3 );
+pwind2.image_xscale = 0.4 * (1-facing*2) * size;
+pwind2.image_yscale = max ( 0.05 , random(1) - 0.7 ) * size;
+pwind2.image_speed = 0;
+pwind2.image_alpha = 1;
+pwind2.image_angle = choose( random(60) , random(-60) );
+pwind2.snap = self.id;
+pwind2.script = char_custom12;
+pwind2.owner = self.id;
+pwind2.keepmain = self.keepmain
+}
+
+if ( timer = 24 )
+{
+pwind3 = instance_create( x + 2 * (1-facing*2) * size , y - 20 * size , obj_spark );
+pwind3.sprite_index = choose ( uair_wind_sprite , uair_wind_sprite2 , uair_wind_sprite3 );
+pwind3.image_xscale = 0.4 * (1-facing*2) * size;
+pwind3.image_yscale = max ( 0.05 , random(1) - 0.7 ) * size;
+pwind3.image_speed = 0;
+pwind3.image_alpha = 1;
+pwind3.image_angle = choose( random(60) , random(-60) );
+pwind3.snap = self.id;
+pwind3.script = char_custom12;
+pwind3.owner = self.id;
+pwind3.keepmain = self.keepmain
+}
+
+if ( timer = 30 )
+{
+pwind4 = instance_create( x + 2 * (1-facing*2) * size , y - 20 * size , obj_spark );
+pwind4.sprite_index = choose ( uair_wind_sprite , uair_wind_sprite2 , uair_wind_sprite3 );
+pwind4.image_xscale = 0.4 * (1-facing*2) * size;
+pwind4.image_yscale = max ( 0.05 , random(1) - 0.7 ) * size;
+pwind4.image_speed = 0;
+pwind4.image_alpha = 1;
+pwind4.image_angle = choose( random(60) , random(-60) );
+pwind4.snap = self.id;
+pwind4.script = char_custom12;
+pwind4.owner = self.id;
+pwind4.keepmain = self.keepmain
+}
+
+if ( timer = 36 )
+{
+pwind5 = instance_create( x + 2 * (1-facing*2) * size , y - 20 * size , obj_spark );
+pwind5.sprite_index = choose ( uair_wind_sprite , uair_wind_sprite2 , uair_wind_sprite3 );
+pwind5.image_xscale = 0.4 * (1-facing*2) * size;
+pwind5.image_yscale = max ( 0.05 , random(1) - 0.7 ) * size;
+pwind5.image_speed = 0;
+pwind5.image_alpha = 1;
+pwind5.image_angle = choose( random(60) , random(-60) );
+pwind5.snap = self.id;
+pwind5.script = char_custom12;
+pwind5.owner = self.id;
+pwind5.keepmain = self.keepmain
+}
+
+
+//-------------------------------------------------------WIND CONTROLLER------------------------------------------------------
+if ( instance_exists ( pwind ) )
+	{
+	pwind.image_alpha -= 0.08;
+	pwind.image_xscale += 0.02 * (1-facing*2);
+	pwind.image_yscale += 0.01;
+	
+		if ( pwind.image_alpha <= 0 )
+		{
+			with ( pwind )
+			{
+			instance_destroy();
+			}
+		}
+	}
+
+if ( instance_exists ( pwind2 ) )
+	{
+	pwind2.image_alpha -= 0.08;
+	pwind2.image_xscale += 0.02 * (1-facing*2);
+	pwind2.image_yscale += 0.01;
+	
+		if ( pwind2.image_alpha <= 0 )
+		{
+			with ( pwind2 )
+			{
+			instance_destroy();
+			}
+		}
+	}
+	
+if ( instance_exists ( pwind3 ) )
+	{
+	pwind3.image_alpha -= 0.08;
+	pwind3.image_xscale += 0.02 * (1-facing*2);
+	pwind3.image_yscale += 0.01;
+	
+		if ( pwind3.image_alpha <= 0 )
+		{
+			with ( pwind3 )
+			{
+			instance_destroy();
+			}
+		}
+	}
+	
+if ( instance_exists ( pwind4 ) )
+	{
+	pwind4.image_alpha -= 0.08;
+	pwind4.image_xscale += 0.02 * (1-facing*2);
+	pwind4.image_yscale += 0.01;
+	
+		if ( pwind4.image_alpha <= 0 )
+		{
+			with ( pwind4 )
+			{
+			instance_destroy();
+			}
+		}
+	}
+	
+if ( instance_exists ( pwind5 ) )
+	{
+	pwind5.image_alpha -= 0.08;
+	pwind5.image_xscale += 0.02 * (1-facing*2);
+	pwind5.image_yscale += 0.01;
+	
+		if ( pwind5.image_alpha <= 0 )
+		{
+			with ( pwind5 )
+			{
+			instance_destroy();
+			}
+		}
+	}
+
+//-------------------------------------------------------END------------------------------------------------------
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

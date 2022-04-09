@@ -1,0 +1,55 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.virusshock_sprite
+    image_speed = 0.5
+    visible =1
+	moving_object = 0;
+	tempfacing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale * 0.6
+	else
+	image_xscale=attacker.image_xscale * 0.6
+	image_yscale=attacker.image_yscale * 0.6	
+	downtimer = 0
+	uptimer = 0
+}
+
+hspeed= 4 - tempfacing*8
+moving_object = 1;
+
+
+if downswitch = 1 and downtimer < 30
+{
+y += 1;
+downtimer += 1;
+if uptimer > 0
+{
+uptimer -= 1;
+}
+}
+
+if downtimer = 30 and downswitch = 1
+{
+downswitch = 0;
+upswitch = 1;
+}
+
+if upswitch = 1 and uptimer < 30
+{
+y -= 1;
+uptimer += 1;
+if downtimer > 0
+{
+downtimer -= 1;
+}
+}
+
+if uptimer = 30 and upswitch = 1
+{
+upswitch = 0;
+downswitch = 1;
+}
+
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()

@@ -1,0 +1,47 @@
+if timer = 1 {  
+	image_speed = .75
+    visible =1
+	priority = 5;
+	moving_object = 0;
+	explosioncheck = 0;
+	hit = 2;
+	speed = 4;
+	originaltime = time
+	
+if (target != -1 && target != noone && target != -99 && target != attacker.id) && target > -1 
+	{move_towards_point(attacker.id.target.x,attacker.id.target.y+12,7);}
+}
+
+if ((x > attacker.id.target.x-10 && x < attacker.id.target.x+10) && (y > attacker.id.target.y-10 && y < attacker.id.target.y)) && explosioncheck = 0 {
+			sound_play(attacker.id.downbexplosion_sound);
+			hspeed = 0; vspeed = 0; 
+			timer = 2; 
+			sprite_index = attacker.id.usmasheffect_sprite;
+			image_index = 0;
+			image_speed = .65;
+			y = attacker.id.target.y+12;
+			hit = 0;
+			image_xscale = (.4*attacker.id.size)-facing*(.8*attacker.id.size);
+			image_yscale = (.5*attacker.id.size);
+
+			downbboom = instance_create(x,y,obj_spark);
+			downbboom.sprite_index = attacker.id.downbeffect_sprite;
+			downbboom.image_index = .0;
+			downbboom.image_speed = .75;
+			downbboom.image_xscale = (.6*attacker.id.size)-facing*(1.2*attacker.id.size);
+			downbboom.image_yscale = (.6*attacker.id.size);
+			explosioncheck = 1;}
+
+if explosioncheck = 1 {
+
+	if timer = time+1 && hit = 1 {
+	hit=2;
+	timer = 2
+	image_speed = .75
+    visible =1
+	time = originaltime
+	alarm[0] = originaltime
+	}
+	
+	if image_index >= 19 {instance_destroy();}
+}
