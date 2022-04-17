@@ -1,0 +1,124 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 45;
+}
+switch ( timer )
+  {
+  case 0: shakex = 4 * size * ( 1 - facing * 2 ); shakey = -4 * size; image_index = 1; break;
+  case 1: shakex=3*size*(1-facing*2); shakey=-3*size;  break;
+  case 2: shakey=-2*size;  break;
+  case 3: shakex=1*size*(1-facing*2); shakey=-1*size; image_index=0;  break;
+  case 4: shakey=-0.50*size;  break;
+  case 5: shakex=0*size*(1-facing*2); shakey=0*size; image_index=2;  break;
+  case 7: shakey=1*size; image_index=3;  break;
+  case 9: shakex=1*size*(1-facing*2); image_index=4; image_xscale *= 1.02; image_yscale *= 0.98;  break;
+  case 10: image_xscale *= 1.10; image_yscale *= 0.92;  break;
+  case 11: image_xscale *= 1.12; image_yscale *= 0.90;  break;
+  case 12: image_index=5; image_xscale *= 1.10; image_yscale *= 0.92;  break;
+  case 13: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+  case 14: image_xscale *= 1.04; image_yscale *= 0.98;  break;
+  case 15: shakex=0*size*(1-facing*2); shakey=0*size; image_index=2; image_xscale *= 1.02;  break;
+  case 16: image_xscale *= 1.01;  break;
+  case 17: image_yscale *= 0.98;  break;
+  case 18: image_yscale *= 0.96;  break;
+  case 19: image_yscale *= 0.98;  break;
+  case 21: shakey=1*size; image_index=3;  break;
+  case 23: shakex=1*size*(1-facing*2); shakey=1*size; image_index=4; image_xscale *= 1.02; image_yscale *= 0.98;  break;
+  case 24: image_xscale *= 1.10; image_yscale *= 0.92;  break;
+  case 25: image_index=5; image_xscale *= 1.06; image_yscale *= 0.94;  break;
+  case 26: image_xscale *= 1.04; image_yscale *= 0.98;  break;
+  case 27: image_xscale *= 1.02;  break;
+  case 28: shakex=0*size*(1-facing*2); shakey=0*size; image_index=2;  break;
+  case 29: image_yscale *= 0.98;  break;
+  case 30: image_yscale *= 0.96;  break;
+  case 31: image_yscale *= 0.98;  break;
+  case 33: shakex=2*size*(1-facing*2); shakey=-3*size; image_index=6;  break;
+  case 34: shakex=2.25*size*(1-facing*2); shakey=-3.75*size;  break;
+  case 35: shakex=2.50*size*(1-facing*2); shakey=-4*size;  break;
+  case 36: shakex=2.75*size*(1-facing*2); shakey=-4.25*size;  break;
+  case 37: shakex=3*size*(1-facing*2); image_index=1;  break;
+  case 38: shakex=3.25*size*(1-facing*2);  break;
+  case 39: shakex=3.50*size*(1-facing*2); shakey=-4*size;  break;
+  case 40: shakex=4*size*(1-facing*2);  break;
+  }
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 8 {
+                if random(10) > 1.5
+                    play_attack_voice()
+                sound_play(attack_sound2);
+                create_hitbox(4,90,1.75,0,7,5,punch2,obj_spark_hit2,0.8,0.5,6,-4,self.id,3,2);
+                create_hitbox2(4,90,1.75,0,7,5,punch2,obj_spark_hit2,0.8,0.5,-18,-4,self.id,3,2);
+                hitbox.hit_stun = 1;
+                hitbox2.hit_stun = 1;
+		hitbox.di = 0.5;
+		hitbox2.di = 0.5;
+                }
+				 if(timer = 24)
+				 {
+					sound_play(attack_sound2);
+					hover = 0;
+					if (uairtemp = 0){vspeed = 0;vspeed -= 5*size; uairtemp = 1;}
+					else {vspeed -= 3.4*size; }
+					create_hitbox(6,10+facing*160,5.2,5.3,8,6,punch2,obj_spark_hit4,0.8,0.5,6,-4,self.id,5,2);
+					create_hitbox2(6,170-facing*160,5.2,5.3,8,6,punch2,obj_spark_hit4,0.8,0.5,-18,-4,self.id,5,2);
+					create_hitbox3(4,270,4.9,4.6,9,5,kick3,obj_spark_hit3,0.7,.7,-7,11,self.id,4,1);
+                }
+				
+        if air = 0 {
+            state_type="land";
+            sprite_index = land_sprite;
+            attack_type="none";
+            vspeed = 0;
+            timer=0;
+            time=7; }
+        }
+        if (timer >= 24){
+if (attack_success || target.object_index == obj_enemy) && (temp_spawn >= 1 && dontrepeat = 0 && target.offstage){
+				if ((target.weight <= .22 && target.percent > 30) || (target.weight > .22 && target.weight < .3 && target.percent > 40) || (target.weight > .3 && target.percent > 50)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0 {
+        state_type = "jump";
+		sprite_index = mid_jump_sprite; }
+    else {
+        state_type = "stand"; }
+    dontrepeat = 0;
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,36 @@
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0.2;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 26; //old dtilt had 21
+        timer_speed=1;
+        attacking = 0
+}
+        if timer < time {
+             state_type = "attack";
+            if timer = 7 {
+                if random(10)>5 play_attack_voice()
+                sound_play(attack_sound1);
+                create_hitbox(6,70+facing*40,4.5,4,6,4,slash2,obj_spark_slash2,1,0.7,17,12,self.id,7,1); 
+                create_hitbox2(2,130-facing*80,3,2.4,6,4,slash1,obj_spark_slash2,0.9,0.4,-12,6,self.id,7,1);
+                hitbox2.hit_stun = 0.5;
+                hitbox2.hitshake_type = 2
+                hitbox2.di = 0.3
+            }
+        } 
+//interrupt mecanic used by old dtilt 
+if timer >= 19 && state_type != "flinch" && state_type != "air_flinch" { //old dtilt had 14
+    if attacking = 1 && movedown = 1 {
+        attack_type = "dtilt"
+        timer = 0
+        time = 26
+        image_index= 0
+    }
+    else {
+        interrupt = 1;
+    }
+}

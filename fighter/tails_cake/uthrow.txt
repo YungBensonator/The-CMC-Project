@@ -1,0 +1,125 @@
+	fast_fall = 0;
+	fast_fall_temp = 0;
+if time = -1{
+	hspeed = 0;
+	state_type = "air_attack";
+	attack_type = "uthrow";
+	image_speed = 0;
+	air_move = 0;
+	sprite_index = sideb2_sprite;
+	timer = 0;
+	time = 63;
+	gravity_lock = 1;
+	target.depth = 1;
+	target.gravity_lock = 1;
+	target.ignore_physics = 1;
+	target.alarm[0] = 100
+	target.timer_speed = 0;
+}
+switch ( timer )
+  {
+  case 30: image_index = 0; break;
+  case 31: image_index = 1; break;
+  case 33: image_index = 5; break;
+  case 34: image_index = 2; break;
+  case 36: image_index = 6; break;
+  case 38: image_index = 7; break;
+  case 40: image_index = 8; break;
+  case 41: image_index = 9; break;
+  case 42: image_index = 10; break;
+  case 45: image_index = 11; break;
+  case 48: image_index = 12; break;
+  case 51: image_index = 13; break;
+  case 53: image_index = 14; break;
+  case 55: image_index = 15; break;
+  case 100: image_index = 11; break;
+  case 104: image_index = 12; break;
+  case 109: image_index = 13; break; }
+ 
+if timer < time {
+	temp_fall_speed = 0;
+
+	if timer < 31 {
+	image_speed = 0.25;
+	target.x = x+4.75*size*(1-facing*2);
+	target.y = y+12.95*size; }
+	
+	if timer >= 0 && timer <= 30 {
+	vspeed = -1.6*size;
+	if (moveright && !facing) || (moveleft && facing) {
+			hspeed = 0.87*size*(1-facing*2);}
+	if (moveleft && !facing) || (moveright && facing) {
+			hspeed = -0.87*size*(1-facing*2);} }
+	if timer = 30 { sprite_index = uthrow_sprite; }
+	if timer = 100 { sprite_index = bthrow_sprite; }
+	
+	if timer >= 35 && timer <= 48 {
+	vspeed = 0; }
+	if timer >= 30 && timer <= 35 {
+	hspeed = -0.34*size; }
+
+	if timer >= 48 and timer < 65 {
+	vspeed = 1.73*size;	}
+
+	if timer > 43 && timer < 66 and air = 0 
+	{ timer = 99; time = 114; } 
+	
+	if timer = 100 {
+	state_type = "attack";
+	duster = instance_create(x+6-facing*12*size,y,obj_dust_effect);
+	duster.facing = 1-facing;
+	duster.image_alpha = 0.75;
+	duster2 = instance_create(x-6+facing*12*size,y,obj_dust_effect);
+	duster2.facing = facing;
+	duster2.image_alpha = 0.75;  }
+	
+	if sprite_index = uthrow_sprite {
+	image_speed = 0; }
+	
+	if timer = 30 {
+	target.x = x+5.95*size*(1-facing*2); }
+	if timer = 31 || timer = 32 {
+	target.x = x+4.75*size*(1-facing*2); }
+	if timer = 33 || timer = 34 || timer = 35 {
+	target.x = x+4.64*size*(1-facing*2); }
+	if timer = 36 || timer = 37 {
+	target.x = x+3.7*size*(1-facing*2); }
+	
+	if timer = 30 { target.y = y+8.51*size; }
+	if timer = 31 { target.y = y+4.07*size; }
+	if timer = 32 { target.y = y-0.37*size; }
+	if timer = 33 { target.y = y-4.81*size; }
+	if timer = 34 { target.y = y-9.25*size; }
+	if timer = 35 { target.y = y-13.69*size; }
+	if timer = 36 { target.y = y-18.13*size; }
+	if timer = 37 { target.y = y-22.57*size; }
+	if timer = 38 { target.y = y-27.01*size; }
+	
+	if timer >= 30 && timer <= 38 {
+	target.direction = 90;
+	target.speed = -2.3*size; }
+	
+	if timer = 42 { air_move = 1; }
+	
+	if timer = 2 or timer = 8 or timer = 14 or timer = 20 or timer = 26 {
+	sound_play(fly_sound); }
+	
+	if ( timer = 2 || timer = 9 || timer = 15 || timer = 21 || timer = 30 ) {
+	 create_projectile ( 1 , 361 , 1 , 1 , 0 , 0 , -1 , obj_spark_shock , 0.8 , 0.8 , 2 , -8 , self.id , 2 , 0 ); }
+	 
+	if timer = 38 {
+	play_attack_voice();
+	sound_play(attack_sound3);
+	create_throw_box(10,96+facing*12,3.3,4.25,1,1,kick3,obj_spark_hit4,0.57,0.71,6.65,30.40,self.id,2);
+	}
+
+    }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 1 {
+    state_type = "jump"; sprite_index = mid_jump_sprite;} else {
+    state_type = "stand";}
+    timer = 0;
+    time =-1;
+    }

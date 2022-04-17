@@ -1,0 +1,101 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+temp_no_hurtbox = 1
+ 
+ if ((state_type = "run" || state_type = "stand" || state_type = "jump") && btimer = 0){
+	btimer = 90;
+	airb = 0;
+	if(air = 0){sprite_index = b_sprite;}
+    if(air > 0){sprite_index = b2_sprite;}
+    attacking = 0 
+    attack_type = "b"
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0;
+        sprite_index = b_sprite; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.5;
+        sprite_index = b_sprite;
+        }
+        image_speed = 0;
+        image_index=0;
+        timer = 0;
+        time = 154;
+        special = 1;
+}
+if ( timer < time )
+{
+    switch ( timer )
+    {
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+        case 9: image_index = 3; break;
+        case 12: image_index = 4; break;
+        case 15: image_index = 5; break;
+        case 18: image_index = 6; break;
+        case 124: image_index = 7; break;
+        case 125: shakex=-2*size*(1-facing*2);  break;
+        case 126: shakex=0*size*(1-facing*2);  break;
+        case 127: shakex=2*size*(1-facing*2); break;
+        case 128: shakex=0*size*(1-facing*2);  break;
+        case 129: shakex=-1*size*(1-facing*2);  break;
+        case 130: shakex=0*size*(1-facing*2); break;
+        case 131: shakex=1*size*(1-facing*2);  break;
+        case 132: shakex=0*size*(1-facing*2);  break;
+        case 133: shakex=-0.50*size*(1-facing*2); break;
+        case 134: shakex=0*size*(1-facing*2);  break;
+        case 135: shakex=0.50*size*(1-facing*2); break;
+        case 136: shakex=0*size*(1-facing*2);  break;
+        case 137: shakex=-0.25*size*(1-facing*2); image_index=9; image_xscale *= 1.04; image_yscale *= 0.96; break;
+        case 138: image_xscale *= 1.06; image_yscale *= 0.94;  break;
+        case 139: image_xscale *= 1.06; image_yscale *= 0.94;  break;
+        case 140: image_xscale *= 1.06; image_yscale *= 0.94;  break;
+        case 141: image_xscale *= 1.04; image_yscale *= 0.96;  break;
+        case 142: image_xscale *= 1.02; image_yscale *= 0.98;  break;
+        case 143: image_xscale *= 1.00; image_yscale *= 1.00;  break;
+        case 144: image_index = 10; break;
+        case 147: image_index = 11; break;
+        case 150: image_index = 12; break;
+    }
+	
+	if(air = 0){sprite_index = b_sprite;}
+    if(air > 0){sprite_index = b2_sprite;}
+	
+        if ( (timer >= 22 && timer <= 83 && !special) || timer = 84 )
+            timer = 122;
+        if timer = 123 {
+			
+			
+			if(air > 0)
+			{
+				hspeed = 0;
+				vspeed = 0;
+				vspeed -= 2*size;
+				if(facing = 0){ hspeed -= 2*size}
+				if(facing = 1){hspeed += 2*size}
+				airb = 1;
+			}
+			
+            sound_play(laser_sound);
+			if(airb = 1){create_projectile(5,42+facing*96,4.2,3.25,11,13,shock3,obj_spark_shock,xsize,ysize,9.2,12.10,self.id,180,tails_projectile);}
+            else {create_projectile(5,42+facing*96,4.2,3.25,11,13,shock3,obj_spark_shock,xsize,ysize,23,11,self.id,180,tails_projectile);}
+            proj.absorb = 1;
+        }
+if image_index >= image_number - image_speed
+    image_speed = 0
+    if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+        air_move = 0
+        state_type = "attack"
+        hspeed=0 }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0 {
+    state_type = "stand"; }
+    else {
+    state_type = "jump";
+	sprite_index = mid_jump_sprite;}
+    timer = 0;
+    time =-1;
+    }
