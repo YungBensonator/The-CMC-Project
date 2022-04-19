@@ -1,0 +1,143 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 48;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  vspeed = 0;
+  air_move = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  sound_play(b_voice);
+  
+   if !instance_exists(danmaku) 
+  {
+  danmaku = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-20,10,self.id,150,char_custom3);
+  danmaku.image_xscale = image_xscale * 0.75
+  danmaku.image_yscale = image_yscale * 0.75
+  danmaku.sprite_index = danmaku_sprite;
+  danmaku.size = size;
+  danmaku.facing = facing
+  danmaku.scale = scale
+  }
+  sound_play(b_sound);
+  }
+
+if timer = 2 and !instance_exists(danmaku2)
+{
+  danmaku2 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-15,20,self.id,150,char_custom3);
+  danmaku2.image_xscale = image_xscale * 0.75
+  danmaku2.image_yscale = image_yscale * 0.75
+  danmaku2.sprite_index = danmaku_sprite;
+  danmaku2.size = size;
+  danmaku2.facing = facing
+  danmaku2.scale = scale
+}
+
+if timer = 4 and !instance_exists (danmaku3)
+{
+  
+  danmaku3 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-20,30,self.id,150,char_custom3);
+  danmaku3.image_xscale = image_xscale * 0.75
+  danmaku3.image_yscale = image_yscale * 0.75
+  danmaku3.sprite_index = danmaku_sprite;
+  danmaku3.size = size;
+  danmaku3.facing = facing
+  danmaku3.scale = scale
+}
+
+if timer = 6 and !instance_exists (danmaku4)
+{
+  danmaku4 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-15,40,self.id,150,char_custom3);
+  danmaku4.image_xscale = image_xscale * 0.75
+  danmaku4.image_yscale = image_yscale * 0.75
+  danmaku4.sprite_index = danmaku_sprite;
+  danmaku4.size = size;
+  danmaku4.facing = facing
+  danmaku4.scale = scale
+}
+
+if timer = 8 and !instance_exists(danmaku5)
+{
+  danmaku5 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-40,10,self.id,150,char_custom3);
+  danmaku5.image_xscale = image_xscale * 0.75
+  danmaku5.image_yscale = image_yscale * 0.75
+  danmaku5.sprite_index = danmaku_sprite;
+  danmaku5.size = size;
+  danmaku5.facing = facing
+  danmaku5.scale = scale
+}
+
+if timer = 10 and !instance_exists(danmaku6)
+{
+  danmaku6 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-35,20,self.id,150,char_custom3);
+  danmaku6.image_xscale = image_xscale * 0.75
+  danmaku6.image_yscale = image_yscale * 0.75
+  danmaku6.sprite_index = danmaku_sprite;
+  danmaku6.size = size;
+  danmaku6.facing = facing
+  danmaku6.scale = scale
+}
+
+if timer = 12 and !instance_exists(danmaku7)
+{
+  danmaku7 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-40,30,self.id,150,char_custom3);
+  danmaku7.image_xscale = image_xscale * 0.75
+  danmaku7.image_yscale = image_yscale * 0.75
+  danmaku7.sprite_index = danmaku_sprite;
+  danmaku7.size = size;
+  danmaku7.facing = facing
+  danmaku7.scale = scale
+}
+
+if timer = 14 and !instance_exists(danmaku8)
+{
+  danmaku8 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,-35,40,self.id,150,char_custom3);
+  danmaku8.image_xscale = image_xscale * 0.75
+  danmaku8.image_yscale = image_yscale * 0.75
+  danmaku8.sprite_index = danmaku_sprite;
+  danmaku8.size = size;
+  danmaku8.facing = facing
+  danmaku8.scale = scale
+}
+
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity_lock = 1;
+
+switch ( timer )
+    {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 26: image_index = 4; break;
+	case 28: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 31: sound_play(b_sound2); break;
+	case 32: image_index = 7; break;
+	case 42: image_index = 8; break;
+	case 44: image_index = 9; break;
+    }
+
+if timer > 31 and movejump = 1
+{
+                special = 0;
+				CAN_shield = 0;
+				CAN_jump = 2;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

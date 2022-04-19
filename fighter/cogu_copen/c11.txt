@@ -1,0 +1,59 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+//self explanatory
+sprite_index = attacker.ferrousfangs_sprite
+priority = 1
+//you set the projectile's priority with this so you can determine whether or not it's gonna clash against other projectiles
+//from 1 to 4 it'll be able to either clash, be overridden or override projectiles with equal, lower or higher priority respectively.
+//with a value of 5, it'll directly completely ignore any and all other enemy projectiles.
+
+moving_object = 1
+//whether or not this projectile is gonna interact with surfaces like floors, ceilings, walls or platforms.
+//if set to 1, it'll stop its vertical speed if crashing against a floor or ceiling, and its horizontal speed if hitting a wall.
+//if set to 0, it'll go through all surfaces.
+
+speed = 5;
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+effect_create_above(ef_ring,x,y,0.3,c_red)
+direction = angle_correct(0)
+//set an angle going from 0 to 359, where if your character faces to the right when firing the projectile:
+//0 is to the right, 90 is directly upwards, 180 is to the left, and 270 is directly downwards.
+//Values between these four correspond to diagonals (45, 135, 225, 315)
+healed = 0
+image_angle = direction+facing*180
+//this sets the projectile's orientation to match the direction it's heading towards.
+//Useful if you're not just shooting it forwards, but at a set direction.
+}
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	
+	if hit = 1 and healed = 0 {
+	attacker.percent -= 3
+	healed = 1
+	}
+	
+	if timer mod 5 = 0 {
+	smoke = effect_create_above(ef_smokeup,x,y,0,c_red)
+				smoke.image_xscale = 0.24 * (1-facing*2)
+                smoke.image_yscale = 0.24
+	}
+	
+}
+
+if hit {
+	effect_create_above(ef_ring,x,y,0.3,c_red)
+	instance_destroy()
+	//replace this last variable with the actual value you gave the projectile for its duration so that it doesn't disappear if it hits an opponent
+	}
+	
+
+if ( next_to_rwall || next_to_lwall ||on_floor || on_platform ) && hit = 0
+instance_destroy()
+//this destroys the projectile if it touches a wall, a floor or a platform without having hit any enemies. Delete it if that's not what you want.

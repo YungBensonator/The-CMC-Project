@@ -1,0 +1,41 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.danmaku_sprite
+    image_speed = 0
+    visible =1
+	moving_object = 0;
+	tempfacing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	effect_create_above(ef_ring,x * size ,y * size ,0.1,c_purple)
+	hit = 2;
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale * 0.75
+	else
+	image_xscale=attacker.image_xscale * 0.75
+	image_yscale=attacker.image_yscale * 0.75	
+}
+
+if timer = 31&& hit = 2 {
+hit = 0;
+hspeed= 4 - tempfacing*8
+moving_object = 1;
+}
+
+if timer >31{
+absorb2 = 1
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()
+if cos(timer*pi)>0.5
+afterimage = after_image(6,c_purple,0.3)
+afterimage.number = 0;
+speed += 0.25;
+
+if hit = 1
+{
+hit = 2;
+    duster2 = instance_create(x,y,obj_spark_shockwave);
+	duster2.image_blend = c_purple;
+	duster2.xscale = 0.5 * size;
+	duster2.yscale = 0.5 * size;
+}
+}

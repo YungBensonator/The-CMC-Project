@@ -1,0 +1,193 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  special = 1;
+  attack_type = "b";
+  time = 35;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+  }
+
+switch (timer)
+{
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 6: image_index = 3; break;
+case 8: image_index = 4; break;
+case 10: image_index = 5; break;
+case 12: image_index = 6; sound_play(fire_sound); break;
+case 14: image_index = 7; break;
+case 16: image_index = 8; break;
+case 18: image_index = 7; break;
+case 20: image_index = 6; break;
+case 22: image_index = 5; break;
+case 28: image_index = 10; break;
+}
+
+if timer = 16 && !instance_exists(fireball)
+{    
+    fireball = create_projectile( 3 , 20 + facing * 140 , 4.6 , 5.4 , 10 , 4 , fire3 , obj_spark_fire1 , 1 , 1 , -6.57 , 17.52 , self.id , 60 , char_custom1)
+	create_projectile( 3 , 20 + facing * 140 , 2.75 , 2.8 , 10 , 4 , fire3 , obj_spark_fire1 , 1 , 1 , -6.57 , 7.52 , self.id , 60 , char_custom1)
+	create_projectile( 3 , 20 + facing * 140 , 2.75 , 2.8 , 10 , 4 , fire3 , obj_spark_fire1 , 1 , 1 , -6.57 , 27.52 , self.id , 60 , char_custom1)
+}
+
+if ( timer <= 3 && EXmove = 1 && limitgauge >= 30 && air = 0)
+{
+temp = 1;
+}
+
+if ( timer = 4 && temp = 1)
+{
+limitgauge -= 30;
+sprite_index = usmash_sprite;
+state_type = "attack";
+image_index = 4;
+timer = 100;
+time = 206;
+vspeed = 0;
+hspeed = 0;
+air_move = 0;
+}
+
+if timer = 100
+{
+bfx = create_blur(x,y,self.id);
+bfx.sprite_index = telepillar_sprite;
+bfx.image_index = 0;
+bfx.image_speed = 0.75;
+bfx.image_xscale = 0.3*(1-facing*2)*size;
+bfx.image_yscale = 0.3*size;
+bfx.snap = self.id
+bfx.depth = depth - 1;
+bfx.x = x *size;
+bfx.y = y *size; 
+bfx.image_alpha = 0;
+sound_play(teleport_sound);
+}
+
+if timer >=100 && timer  <=105
+{
+bfx.image_alpha += 0.2;
+}
+
+if timer = 105
+{
+intangible = 1;
+visible = 0;
+}
+
+if timer > 135 && timer < 145
+{
+if moveright = 1 //&& !collision_point(x+1,y,obj_wall,1,1) 
+        {
+          hspeed = 13.5
+		  facing = 0;
+		}
+        if moveleft = 1//&& !collision_point(x-1,y,obj_wall,1,1)
+		{
+          hspeed = -13.5
+		  facing = 1;
+		}
+}
+
+if timer = 145
+{
+bfx = create_blur(x,y,self.id);
+bfx.sprite_index = telepillar_sprite;
+bfx.image_index = 0;
+bfx.image_speed = 0.75;
+bfx.image_xscale = 0.3*(1-facing*2)*size;
+bfx.image_yscale = 0.3*size;
+bfx.snap = self.id
+bfx.depth = depth - 1;
+bfx.x = x *size;
+bfx.y = y *size; 
+bfx.image_alpha = 0;
+sound_play(teleport_sound);
+speed = 0;
+}
+
+if timer >=145 && timer <= 155
+{
+bfx.image_alpha += 0.2;
+}
+
+
+if timer = 165
+{
+visible = 1;
+with (bfx)
+{
+instance_destroy();
+}
+}
+
+if timer >=167 && timer < 191 
+{
+
+if moveright = 1
+        {
+		  facing = 0;
+		}
+        if moveleft = 1
+		{
+		  facing = 1;
+		}
+
+if shieldup = 1 && air = 0 {
+        flashing = true
+        alarm[7] = 3
+        state_type = "shielding"
+        timer = 0
+        time = -1
+        attack_type = "none"
+        shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+        shield.p1 = self.id;
+        }
+}
+
+switch (timer)
+{
+case 167: sprite_index = b_sprite; image_index = 0; break;
+case 170: image_index = 1; intangible = 0; break;
+case 173: image_index = 2; break;
+case 176: image_index = 3; break;
+case 179: image_index = 4; break;
+case 182: image_index = 5; break;
+case 185: image_index = 6; break;
+case 188: image_index = 7; break;
+case 191: image_index = 8; break;
+case 194: image_index = 7; break;
+case 197: image_index = 6; break;
+case 200: image_index = 5; break;
+case 203: image_index = 10; break;
+}
+ 
+    if timer = 191 && !instance_exists(magmaball)
+	{
+	 magmaball = create_projectile( 1 , 20 + facing * 140 , 3.4 , 3.4 , 10 , 4 , fire3 , obj_spark_fire1 , 1 , 1 , -6.57 , 27.52 , self.id , 60 , char_custom2)
+	 sound_play(fire_sound);
+   magmaball.hitstun = 45
+	}
+	 
+	if timer = 200 && !instance_exists(magmaball2)
+    {	
+	 magmaball2 = create_projectile( 1 , 20 + facing * 140 , 9.4 , 6.4 , 10 , 4 , fire3 , obj_spark_fire1 , 1 , 1 , -6.57 , 7.52 , self.id , 60 , char_custom2)
+	 sound_play(fire_sound);
+	}
+	
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

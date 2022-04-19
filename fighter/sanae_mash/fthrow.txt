@@ -1,0 +1,44 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "fthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = jab_sprite2;
+  timer = 0;
+  time = 30;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  kanako = create_projectile(10,85+facing*10,4.6,6,15,3,slash3,obj_spark_slash2,1,1,-20,0,self.id,300,char_custom1);
+  kanako.y = y - 10 * size;
+  sound_play(summon_sound);
+  sound_play(fthrow_voice); 
+  }
+
+switch (timer)
+{
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 6: image_index = 3; break;
+case 8: image_index = 4; break;
+case 10: image_index = 5; sound_play(attacksnd2); break;
+case 12: image_index = 6; break;
+case 14: image_index = 7; break;
+case 24: image_index = 8; break;
+case 26: image_index = 9; break;
+}
+
+if ( timer == 17 )
+  {
+  create_throw_box ( 10 , 20 + 140 * facing , 6.2 , 4.9 , 14 , 5 , punch3 , obj_spark_hit3 , 0.7 , 0.7 , 25 , 10 , self.id , 2 );
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,203 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  special = 1;
+  attack_type = "downb";
+  if air = 0
+  {
+  state_type = "attack";
+  time = 25;
+  timer = 0;
+  sprite_index = downb_sprite;
+  }
+  else
+  {
+  timer = 100;
+  time = 130;
+  vspeed = 0;
+  state_type = "air_attack";
+  sprite_index = dair_sprite;
+  }
+  hspeed = 0;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+  temp2 = 0;
+  healtemp = 0;
+  sound_play(transform_sound);
+  }
+  
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; effect_create_above(ef_ring,x,y,0.5,c_white); masktemp = 2; break;
+case 12: image_index = 4; break;
+case 14: image_index = 5; break;
+case 16: image_index = 6; break;
+case 18: image_index = 7; break;
+case 20: image_index = 8; break;
+case 22: image_index = 9; effect_create_above(ef_ring,x,y,0.5,c_white); hspeed *= 0.5; break;
+}  
+
+if timer = 9
+{
+sound_play(wolf_voice);
+sound_play(dash_sound);
+}
+
+if timer >=9 && timer < 22
+{
+hspeed = 7.6 * (1-facing*2) * size;
+after_image(4,c_blue,0.5);
+}
+
+if timer = 9 || timer = 12 || timer = 15 || timer = 18
+{
+    create_hitbox ( 1 , 5+facing*170 , 5.2 , 0.5 , 12, 3 , kick1 , obj_spark_hit1 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 4 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}
+
+if timer = 21
+{
+    create_hitbox ( 2 , 15 + facing * 150 , 4.25 , 6.5 , 12, 3 , kick3 , obj_spark_hit4 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 6 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}
+
+
+///////AIR DOWN B
+
+if timer >= 100 && timer < 200
+{
+fast_fall = 0
+fast_fall_temp = 0;
+gravity_lock = 1;
+}
+
+switch (timer)
+{
+case 103: image_index = 1; break;
+case 106: sprite_index = downb_sprite; image_index = 8; effect_create_above(ef_ring,x,y,0.5,c_white); masktemp = 2; sound_play(wolf_voice); sound_play(dash_sound); break;
+case 127: image_index = 9; effect_create_above(ef_ring,x,y,0.5,c_white); speed *= 0.5; break;
+}  
+
+if timer >= 106 && timer < 200
+{
+after_image(4,c_blue,0.5);
+image_angle = 315 * (1-facing*2)
+direction = 315 - facing * 90
+speed = 6.4*size;
+}
+
+if timer = 106 || timer = 109 || timer = 112 
+{
+intangible = 1;
+create_hitbox ( 1 , 315 - facing * 90 , 5.2 , 0.5 , 12, 3 , kick1 , obj_spark_hit1 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 3 , 3 );
+hitbox.image_angle = ( 1 - facing * 2 ) * 315
+}
+
+if timer = 115
+{
+create_hitbox ( 1 , 315 - facing * 90 , 6.5 , 5.5 , 12, 3 , kick3 , obj_spark_hit3 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 3 , 3 );
+hitbox.image_angle = ( 1 - facing * 2 ) * 315
+}
+
+if timer > 106 && timer < 200 && air = 0 
+    {
+    intangible = 0
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=19; 
+	}
+
+/////////SOUL STEAL/////////
+if ( timer <= 3 && EXmove = 1 && limitgauge = 150 && air = 0)
+{
+temp = 1;
+}
+
+if ( timer = 4 && temp = 1)
+{
+limitgauge -= 150;
+sprite_index = spelluse_sprite;
+state_type = "attack";
+image_index = 0;
+timer = 200;
+time = 299;
+vspeed = 0;
+hspeed = 0;
+air_move = 0;
+sound_play(soulsteal_voice);
+sound_play(fs_sound);
+}
+
+switch (timer)
+{
+case 203: image_index = 1; break;
+case 206: image_index = 2; break;
+case 209: image_index = 3; break;
+case 212: image_index = 4; break;
+case 215: image_index = 5; break;
+case 218: image_index = 6; break;
+case 221: image_index = 7; break;
+case 224: image_index = 6; break;
+case 227: image_index = 7; break;
+case 230: image_index = 6; break;
+case 233: image_index = 7; break;
+case 236: image_index = 6; break;
+case 239: image_index = 7; break;
+case 242: image_index = 8; break;
+case 245: image_index = 9; break;
+case 248: sprite_index = usmash_sprite; image_index = 0; break;
+case 251: image_index = 1; break;
+case 254: image_index = 2; break;
+case 257: image_index = 3; break;
+case 260: image_index = 4; break;
+case 290: image_index = 3; break;
+case 293: image_index = 2; break;
+case 296: image_index = 1; break;
+}  
+
+if timer = 212 || timer = 222 || timer = 232 || timer = 242 || timer = 252 || timer = 262 || timer = 272
+{
+effect_create_above(ef_ring,x * size ,y - 5 * size ,0.7,c_white)
+}
+
+if !instance_exists(soul1) && timer > 212 && timer < 282
+{
+	soul1 = create_projectile(1 , 90 , 2.5 , 0 , 12 ,2 , magic2 , obj_spark_hit3 , 5 , 5 , 0 , 15 ,self.id, 3, no_script);
+    soul1.hit_stun = 4;
+    soul1.di = 0.3;
+	soul1.priority += 3;
+}
+
+if timer = 282
+{
+	soul2 = create_projectile(5 , 35 + facing * 110 , 9.3 , 3.5 , 20 , 6 , magic3 , obj_spark_hit4 , 5 , 5 , 0 , 15 ,self.id, 3, no_script);
+    soul2.hit_stun = 4;
+	soul2.priority += 3;
+}
+
+if soul1.hit = 1 || soul2.hit = 1
+{
+healtemp = 1;
+}
+
+if healtemp = 1 && percent > 0
+{
+percent -=1;
+healtemp = 0;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

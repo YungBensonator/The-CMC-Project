@@ -1,0 +1,135 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0;
+        sprite_index = aircommand_sprite;
+        image_index=0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+		facing = 1-facing
+}
+if timer < time {
+			
+	switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 7: image_index = 4; break;
+	case 11: image_index = 5; break;
+	case 14: image_index = 6; break;
+      }
+	  
+	  if timer = 1 {
+		  sword = create_blur(x + 36 * (1-facing*2),y-70,self.id);
+    sword.sprite_index = frostblade_sprite;
+    sword.anim_speed = 1;
+    sword.image_alpha = 0;
+    sword.image_xscale = -0.4 * (1-facing*2);
+    sword.image_yscale = 0.4;
+    sword.depth = depth - 0.1;
+    sword.snap = self.id
+	sound_play(summon_sound);
+	  }
+	  
+	  if timer = 10 {
+		  sword2 = create_blur(x + 56 * (1-facing*2),y-70,self.id);
+    sword2.sprite_index = frostblade_sprite;
+    sword2.anim_speed = 1;
+    sword2.image_alpha = 0;
+    sword2.image_xscale = -0.4 * (1-facing*2);
+    sword2.image_yscale = 0.4;
+    sword2.depth = depth - 0.1;
+    sword2.snap = self.id
+	sound_play(summon_sound);
+	  }
+	  
+	  if timer >= 1 and timer < 11 and sword.image_alpha < 1 {
+		  sword.image_alpha += 0.1
+	  }
+	  
+	  if timer >= 5 and timer < 20 and sword2.image_alpha < 1 {
+		  sword2.image_alpha += 0.1
+	  }
+	  
+	  if timer = 11 {
+		create_hitbox ( 2 , 370 , 3 , 0.001 , 24 , 11 , slash3 , obj_spark_slash4 , 2 , 1.6 , 16.40 , 20 , self.id , 2 , 4 );
+		sound_play(swingsnd3);
+		hitbox.hit_stun = 10
+		
+		if tagtimer > 0 {
+			create_projectile(4, angle_correct(35), 6, 4.5, 20, 12, slash3, obj_spark_slash4, 0.3, 0.3, 30, 24, self.id, 1000, char_custom12);
+		}
+	}
+	
+	if timer = 20 {
+		create_hitbox ( 5 , angle_correct(25) , 6.3 , 4.8 , 24 , 11 , slash3 , obj_spark_slash4 , 2 , 1.6 , 16.40 , 20 , self.id , 2 , 4 );
+		sound_play(swingsnd3);
+		
+		if tagtimer > 0 {
+			create_projectile(9, angle_correct(35), 6, 4.05, 20, 12, slash3, obj_spark_slash4, 0.3, 0.3, 30, 15, self.id, 1000, char_custom12);
+		}
+	}
+	
+	if timer >= 11 {
+		sword.image_alpha -= 0.1
+	}
+	
+	if timer >= 20 {
+		sword.image_alpha -= 0.1
+	}
+	
+	if (timer >= 20){
+if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 105) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 145)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	    
+	
+	  
+        if air = 0 {
+			facing = 1-facing
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14; }
+    }  
+	
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+	facing = 1-facing
+	dontrepeat = 0;
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+	
+    timer = 0;
+    time =-1;
+    }
+        

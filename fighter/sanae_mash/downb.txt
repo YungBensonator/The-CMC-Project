@@ -1,0 +1,45 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 26;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+switch (timer)
+{
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 6: image_index = 3; break;
+case 16: image_index = 4; sound_play(attacksnd3); break;
+case 18: image_index = 5; break;
+case 20: image_index = 6; break;
+case 22: image_index = 7; break;
+case 24: image_index = 8; break;
+}
+
+if timer = 18 && !instance_exists(obomb)
+{
+obomb = create_projectile( 10 , 25+facing*130 , 6.5, 5.5 , 4 , 3 , fire3 , obj_spark_fire1 , 0.15 , 0.15 , -8.51 , 31.45 , self.id , 100 , char_custom6 );
+obomb.sprite_index = bomb_sprite;
+sound_play(downb_sound);
+sound_play(downb_voice); 
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

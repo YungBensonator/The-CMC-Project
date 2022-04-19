@@ -1,0 +1,85 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "air_attack";
+  attack_type = "uthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = uair_sprite;
+  timer = 0;
+  time = 42;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+switch (timer)
+{
+case 4: image_index = 1; sound_play(swingsnd2); sound_play(attack_voice5); break;
+case 7: image_index = 2; slashfx.image_index = 1; break;
+case 10: image_index = 3; slashfx.image_index = 2; break;
+case 13: image_index = 4; break;
+case 16: image_index = 0; break;
+case 19: image_index = 1; sound_play(swingsnd2); break;
+case 22: image_index = 2; slashfx.image_index = 1; break;
+case 25: image_index = 3; slashfx.image_index = 2; break;
+case 35: image_index = 4; break;
+}
+
+if timer = 4
+{
+    slashfx = create_blur(x,y,self.id);
+    slashfx.sprite_index = slash_fx3;
+    slashfx.image_index = 0;
+    slashfx.image_speed = 0;
+    slashfx.image_xscale = 0.35*(1-facing*2)*size;
+    slashfx.image_yscale = 0.35*size;
+    slashfx.snap = self.id
+    slashfx.depth = depth - 1;
+    slashfx.x = x + 13.79*(1 - facing * 2)*size;
+    slashfx.y = y - 26.71 *size;
+    create_hitbox ( 5 , 361 , 4.5 , 5.5 , 23 , 5 , slash2 , obj_spark_slash3 , 1.30 , 0.76 , 22.63 , 23.36 , self.id , 6 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	vspeed = -4.5 * size;
+	hspeed = 1.5 * (1-facing*2) * size;
+}
+
+if ( timer < 19 )
+	{
+	target.x = x + 10 * size * (1-facing*2);
+	target.y = y;
+	}
+
+
+if timer = 12 || timer = 27
+{
+with (slashfx)
+ {
+  instance_destroy();
+ }
+}
+
+if ( timer == 19 )
+  {
+    slashfx = create_blur(x,y,self.id);
+    slashfx.sprite_index = slash_fx3;
+    slashfx.image_index = 0;
+    slashfx.image_speed = 0;
+    slashfx.image_xscale = 0.35*(1-facing*2)*size;
+    slashfx.image_yscale = 0.35*size;
+    slashfx.snap = self.id
+    slashfx.depth = depth - 1;
+    slashfx.x = x + 13.79*(1 - facing * 2)*size;
+    slashfx.y = y - 26.71 *size;
+	vspeed = -4.5 * size;
+	hspeed = 1.5 * (1-facing*2) * size;
+    create_throw_box ( 8 , 65 + facing * 50 , 6.9 , 3 , 14 , 8 , slash3 , obj_spark_slash3 , 1.30 , 0.76 , 22.63 , 23.36 , self.id , 2 );
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

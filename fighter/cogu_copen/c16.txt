@@ -1,0 +1,62 @@
+if timer = 1
+{
+visible = 1;
+priority = 5
+moving_object = 1
+image_angle = direction+facing*180
+sprite_index = attacker.fireball_sprite
+kaboom = 0
+vspeed = 0
+image_speed = 0.5
+vanish = 0
+}
+
+if timer > 1 
+{
+	if timer mod 6 = 0 {
+	hit = 0
+}
+	
+	
+	
+	if image_index >= 4 {
+		image_index = 1
+	}
+		
+	
+}
+
+if hit = 1 and timer mod 5 = 0 {
+	hit = 0
+	vanish += 1
+}
+
+if hit = 1 {
+	hspeed = 4 * (1-facing*2)
+	time = 1000
+}
+
+if vanish >= 5 and kaboom = 0 {
+	boom = instance_create(x,y,obj_spark_explode2);
+        screen_shake(5,5);
+        timer = time
+		sound_play(explode_big);
+		image_alpha = 0
+		stolenkatacode = create_projectile(4,angle_correct(36),6,4,5,2,explodehit3,obj_spark_explode2,2,2,x,y,attacker.id,5,-1);
+        stolenkatacode.hit = 0;
+        stolenkatacode.x = victim.x;
+        stolenkatacode.y = victim.y;
+		kaboom = 1
+		instance_destroy()
+}
+
+
+	
+	
+	
+	
+	
+	
+
+if ( next_to_rwall || next_to_lwall ||on_floor || on_platform ) && hit = 0
+instance_destroy()

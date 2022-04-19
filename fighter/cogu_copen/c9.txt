@@ -1,0 +1,48 @@
+priority = 2
+if timer = 1 and hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.photondetonator_sprite
+    image_speed = 0.5
+    visible = 1
+	moving_object = 0;
+create_homing_bubble(300,300,0,0,self.id,900);
+speed = 3
+hspeed= speed - attacker.id.facing*(speed*2)
+image_alpha = 1
+kaboom = 0
+}
+
+if timer > 1 && hit = 0
+{
+	// homing properties
+	move_towards_point(target.x,target.y - 10,2);
+	
+	image_angle += 1 * (1-facing*2)
+}
+
+
+if hit = 1 {
+time = 10
+    image_alpha = 0
+    if kaboom = 0 {
+		boom = instance_create(x,y,obj_spark_explode1);
+	boom.x = x 
+	boom.y = y
+	sound_play(explode_big);
+	boom.image_xscale = 3
+	boom.image_yscale = 3
+	kaboom = 1
+	}
+	
+	if kaboom = 1 {
+		image_xscale = 4 * (1-facing*2)
+		image_yscale = 4
+	}
+}
+
+if image_alpha = 0 {
+instance_destroy()
+}
+/*
+if hspeed < 0 {
+image_xscale *= -1
+}

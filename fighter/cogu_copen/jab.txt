@@ -1,0 +1,94 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "jab"
+    timer = 0;
+    time = 35;
+    sprite_index = b_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	attacking = 1
+	bimbo = 0
+  }
+
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 3: image_index = 1; break;
+	case 6: image_index = 0; break;
+	case 9: image_index = 1; break;
+	case 12: image_index = 0; break;
+	case 15: image_index = 1; break;
+	case 18: image_index = 0; break;
+	case 21: image_index = 1; break;
+	case 24: image_index = 0; break;
+	case 27: image_index = 1; break;
+	case 29: image_index = 2; break;
+	case 31: image_index = 3; break;
+      }
+	  
+	  if timer = 1 {
+		  sawblade = create_spark(15,26,self.id);
+    sawblade.sprite_index = sawblade_sprite;
+    sawblade.image_speed = 0.5;
+    sawblade.image_alpha = 0;
+    sawblade.image_xscale = 0.01 * (1-facing*2);
+    sawblade.image_yscale = 0.01;
+    sawblade.depth = depth + 2;
+    sawblade.snap = self.id
+	sawblade.loop = 9999
+	  }
+	  
+	  if attack_success = 1 {
+		  bimbo = 1
+	  }
+	  
+	  if sawblade.image_alpha < 0.8 and timer < 30 {
+	  sawblade.image_alpha += 0.2
+	  sawblade.image_xscale += 0.1 * (1-facing*2);
+    sawblade.image_yscale += 0.1;
+	  }
+	  
+	  if timer >= 6 and timer < 30 and timer mod 6 = 0 {
+		  create_hitbox ( 1.5 , 370 , 3.5 , 0.0001 , 11 , 4 , slash2 , obj_spark_slash2 , 1.24 , 0.96 , 12 , 21.12 , self.id , 3 , 2 );
+		  duster = instance_create(x-(3-facing*6)*size,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_xscale = 0.25
+                duster.image_yscale = 0.25
+	  }
+	  
+	  if timer = 30 {
+		 create_hitbox ( 1.5 , angle_correct(40) , 5.9 , 4.6 , 11 , 7 , slash3 , obj_spark_slash2 , 1.24 , 0.96 , 12 , 21.12 , self.id , 3 , 2 );
+		  duster = instance_create(x-(3-facing*6)*size,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_xscale = 0.25
+                duster.image_yscale = 0.25 
+	  }
+	  
+	  if timer = 30 and bimbo = 0 and attacking = 1 {
+		  timer = 7
+	  }
+	  
+	  if timer >= 30 {
+		  sawblade.image_alpha -= 0.2
+		   sawblade.image_xscale -= 0.1 * (1-facing*2);
+    sawblade.image_yscale -= 0.1;
+	  }
+	  
+	  
+	  
+	
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

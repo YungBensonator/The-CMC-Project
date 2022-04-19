@@ -1,0 +1,90 @@
+absorb = 1;
+absorb2 = 1;
+proj_destroy = 0;
+if ( timer <= 1 && temp <= 0)
+  {
+    sprite_index = keepmain.magma_sprite;
+	image_xscale = 0.75 * (1-facing*2) * size;
+	image_yscale = 0.75 * size;
+    temp = 1
+    proj_hits = 0
+	image_speed = 0.75;
+    soma = attacker
+    xspeed = 2.75
+    facing = soma.facing
+    hspeed = xspeed*(1-attacker.facing*2)
+    facing = attacker.facing
+    visible = 1;
+	temp2 = 
+	sound_play(keepmain.sideb_sound);
+	    spark = instance_create(x*size,y*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.8*size
+        spark.image_yscale *= 0.8*size
+        spark.image_blend = c_red
+        spark.image_alpha = 0.8
+}
+  if !instance_exists(magmashock)
+  {
+    magmashock = instance_create(x,y,obj_spark);
+    magmashock.sprite_index = keepmain.magmashock_sprite;
+    magmashock.image_speed = 0.45;
+    magmashock.image_xscale = 0.7*(1-facing*2)*size;
+    magmashock.image_yscale = 0.7*size;
+    magmashock.depth = depth - 1;
+  }
+
+if image_index >= 18
+{
+image_index = 9;
+}
+
+magmashock.x = x + (1 - facing * 2) * size;
+magmashock.y = y * size;
+
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+
+hspeed = xspeed*(1-facing*2)
+
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.9)
+if timer = time+1 && proj_hits <= 1 {
+    proj_hits+=1
+    timer = 0
+    time = 20
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+    if proj_hits = 2 {
+        damage = round(attacker.size*3)
+        bkb= attacker.size*6.45
+        kbg = attacker.size*6.45
+        dir = 25+facing*130
+        hitlag_frames = round(14*attacker.size)
+        shake_ampl = 0.75
+        shake_kb = 7
+        sfx = fire3
+        gfx = obj_spark_fire1
+    }
+}
+if timer = 75 && proj_hits<1
+proj_hits=1
+moving_object = 1;
+
+if timer = time+1 && instance_exists (orb) 
+{
+		with (magmashock){
+			instance_destroy();
+		}
+}
+
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self.id)   {
+    instance_destroy();
+	with (magmashock){
+			instance_destroy();
+			}
+	}

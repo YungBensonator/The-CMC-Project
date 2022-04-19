@@ -1,0 +1,399 @@
+///////////////////////////////////Crouch thing for crouching and getting up from crouch visually
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(6,timer) //replace the 12 by the number the last case you add below has
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+		//put as many cases as frames your crouch animation has
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+    image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+    image_index = 2;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 9 ){
+    image_index = 3;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 12 ){
+    image_index = 4;
+} //copypaste this conditional for every frame your crouch animation has, changing the number of the crouchgetuptimer from 12 to whichever corresponds to that frame's switch case number, and the image_index number to the frame number itself.
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch thing for crouching and getting up from crouch visually
+							
+if ( state_type = "jump" && sprite_index == jump_sprite )
+{
+  if ( timer = 0 )
+    image_index = 0; //start out the jump from the jump sprite's very first frame instead of any later ones
+  if ( vspeed < 0 && image_index >= 4 )
+    image_index = 4; //stay in that first frame as long as you're going up (you can change the image index in the condition to a later one to loop back)
+  if ( vspeed >= 0 && image_index < 5 )
+    image_index = 5; //the moment you start falling, continue the animation
+  if ( image_index >= 7 )
+    image_index = 6; //remove the comment thing if you want to loop the jump animation back to a previous frame when falling*/
+}
+
+if cos(timer*pi)>0.5
+after_image(4,make_color_rgb(204,0,68),0.5)
+
+if sprite_index = stand_sprite {
+	image_speed = 0.2
+}
+
+if (!instance_exists(BullitsHud)){
+    hud_x = obj_game_control.hud_x[44];
+    hud_y = window_h-77+lengthdir_y(obj_game_control.hudp_shake[i]*0.1,obj_game_control.hudp_shake[i]*10);    
+    BullitsHud = instance_create ( hud_x+40, hud_y, obj_custom_gfx);
+    BullitsHud.step_script = hudThing_step_script;
+    BullitsHud.draw_script = hudThing_draw_script;
+    BullitsHud.owner = self.id;
+    BullitsHud.keepmain = self.keepmain;
+	BullitsHud.image_xscale = 2.4
+	BullitsHud.image_yscale = 2.4
+	BullitsHud.sprite_index = bullits_ui;
+    BullitsHud.image_speed = 0;
+	BullitsHud.image_alpha = 1;
+}
+
+if bullitsused = 0 {
+	BullitsHud.image_index = 0
+}
+
+if bullitsused = 1 {
+	BullitsHud.image_index = 1
+}
+
+if bullitsused = 2 {
+	BullitsHud.image_index = 2
+}
+
+if bullitsused = 3 {
+	BullitsHud.image_index = 3
+}
+
+if state_type = "out" {
+	bullitsused = 0
+}
+
+if bullitsused > 3
+bullitsused = 3
+
+if bullitsused < 0
+bullitsused = 0
+
+if attack_type = "none" {
+	with (sawblade) {instance_destroy()}
+	with (jetboot) {instance_destroy()}
+	with (drilleffect) {instance_destroy()}
+}
+
+if sprite_index = hold_sprite {
+	image_index = 5
+}
+
+if tagtimer > 0
+tagtimer -= 1
+
+if tagtimer < 0
+tagtimer = 0
+
+if tagtimer = 1
+tagged = -1
+
+if tagtimer > 0 and !instance_exists(lockonsights) {
+	lockonsights = create_projectile(2, angle_correct(90), 3, 0, 10, 14, slash2, obj_spark_slash2, 1.5, 1.5, 0, 0, self.id, 600, char_custom13);
+	lockonsights.alarm[0] = 600
+	sound_play(lock_sound);
+}
+
+if tagtimer = 0 {
+	with (lockonsights) {instance_destroy()}
+}
+
+if ( lola == 0  || ( lola > 0 && !instance_exists ( lola ) ) )
+  {
+  lola = instance_create ( x , y - 6 , obj_spark );
+  lola.depth = depth + 1;
+  lola.image_xscale = xsize;
+  lola.image_yscale = ysize;
+  lola.sprite_index = lolapod_sprite;
+  lola.image_speed = 0;
+  lola.image_index = 0;
+  lola.keepmain = keepmain;
+  lola.script = char_custom1;
+  lola.crash = self.id;
+  }
+  
+  if idol = 0 {
+  
+  if attack_type = "none" or attack_type = "stilt" {
+	  lola.sprite_index = lolapod_sprite
+  }
+  
+  if attack_type = "dash_attack" {
+	  lola.sprite_index = lolaanchor_sprite
+  }
+  
+  if attack_type = "dtilt" {
+	  lola.sprite_index = lolashroud_sprite
+  }
+  
+  if attack_type = "ssmash" {
+	  lola.sprite_index = lolaphoton_sprite
+  }
+  
+  if attack_type = "usmash" {
+	  lola.sprite_index = lolasonic_sprite
+  }
+  
+  if attack_type = "dsmash" {
+	  lola.sprite_index = lolahydro_sprite
+  }
+  
+  if attack_type = "utilt" or attack_type = "uair" {
+	  lola.sprite_index = lolatwintail_sprite
+  }
+  
+  if attack_type = "fair" {
+	  lola.sprite_index = lolafangs_sprite
+  }
+  
+  if attack_type = "bair" {
+	  lola.sprite_index = lolahailstorm_sprite
+  }
+  
+  }
+  
+  if obj_score_control.stocks[number-1]= 1 {
+	  idol = 1
+  }
+  
+  if idol = 1 {
+	  lola.sprite_index = lolaidol_sprite
+  }
+
+lola_timer += 1;
+if ( lola_timer >= 20 )
+  {
+  lola_xo = -6 + random ( 12 );
+  lola_yo = -6 + random ( 12 );
+  lola_timer = 0;
+  }
+
+if ( !final_smashing )
+with ( lola )
+  {
+  visible = 1;
+  x = ( x * 23 + other.x - 40 * ( 1 - other.facing * 2 ) + other.lola_xo ) / 24;
+  y = ( y * 23 + other.y - 40 + other.lola_yo ) / 24;
+  image_xscale = 0.64 * ( 1 - other.facing * 2 );
+  image_yscale = 0.64;
+  depth = other.depth + 1;
+  
+  image_angle = point_direction ( 0 , 0 , 24 , ( y - yprevious ) * ( 1 - facing * 2 ) );
+  }
+
+
+
+
+if (instance_exists(soniccyclone)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 120) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 140)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+                killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				image_speed = 0.5;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+                enemy.state_type = "flinch"
+				enemy.timer = 0
+				enemy.time = 25
+				enemy.speed = temp_speed
+				enemy.gravity = temp_grav + 1.2
+				}
+				}
+  }	
+
+if (enemy.state_type = "out"){
+temp_spawn += 1
+ }
+
+if (instance_exists(photondetonator)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 120) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 140)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+        target.gravity_lock = 1
+        killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				image_speed = 0.5;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 25
+				freezer2.alarm[0] = 30
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+        enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 60
+				enemy.speed = temp_speed * 2
+				}
+				}
+  }	
+
+if (instance_exists(hairneedle1) || instance_exists(hairneedle4)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 100) || (target.weight > .22 && target.weight < .3 && target.percent > 120) || (target.weight > .3 && target.percent > 130)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+        target.gravity_lock = 1
+        killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 50;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 25
+				freezer2.alarm[0] = 30
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+        enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 60
+			
+				}
+				}
+  }	
+
+if (instance_exists(hitthing)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 120) || (target.weight > .22 && target.weight < .3 && target.percent > 135) || (target.weight > .3 && target.percent > 145)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+        target.gravity_lock = 1
+        killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 50;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 25
+				freezer2.alarm[0] = 30
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+        enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 60
+			
+				}
+				}
+  }	
+
+/*
+if ( state_type = "jump" && sprite_index == mid_jump_sprite ) {if ( timer = 0 ) {image_index = 0;}
+							image_speed = .25; 
+							if image_index >= 9 {image_index = 7}} //uncomment all of this if you want to loop your double jump animation*/

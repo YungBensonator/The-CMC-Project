@@ -1,0 +1,107 @@
+fast_fall_temp = 0;
+fast_fall = 0;
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.25;
+  state_type = "air_attack";
+  attack_type = "dair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dair_sprite;
+  timer = 0;
+  time = 40;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+switch (timer) 
+{
+case 10: image_index = 1; break;
+case 12: image_index = 2; break;
+case 14: image_index = 3; break;
+case 32: image_index = 4; break;
+case 36: image_index = 5; break;
+case 38: image_index = 6; break;
+}  
+
+if timer = 12
+{
+    play_attack_voice();
+    sound_play(attacksnd3);
+    create_hitbox ( 13 , 285 * ( 1 - 2 * facing ) , 3.0 , 6.75 , 24 , 8 , kick3 , obj_spark_hit3 , 0.52 , 0.51 , 11.68 , 8.76 , self.id , 20 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+    create_hitbox2 ( 13 , 285 * ( 1 - 2 * facing ) , 3.0 , 6.75 , 24 , 8 , kick3 , obj_spark_hit3 , 0.63 , 0.51 , 0 , 17.52 , self.id , 20 , 3 );
+    hitbox2.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox.hit_stun = 1; 
+	hitbox2.hit_stun = 1; 
+}
+
+if timer >= 12 && timer <= 32 
+{
+hspeed = 6 -(facing * 12) *size
+vspeed = 9 
+}	
+
+
+if timer >= 12 && timer < 32 && attack_success || attack2_success 
+            {
+            sprite_index = mid_jump_sprite
+			interrupt = 1;
+			vspeed = -5
+			hspeed = 0
+			attack_type = "none";
+            if air > 0
+				state_type = "jump";
+            else
+				state_type = "stand";
+            timer = 0;
+            time =-1;
+			}
+			
+			if attack_success || attack2_success && air <= 0 
+			{
+				vspeed = 0
+			}
+			
+            if timer = 17 
+			{
+                hitbox.damage = 11*size;
+                hitbox.bkb = 7*size;
+                hitbox.kbg = 1.3*size;
+                hitbox.dir = 60+facing*60;
+                hitbox.shield_damage = round(9*size);
+                hitbox.hitlag_frames = round(5*size);
+                hitbox.sfx = kick2;
+                hitbox.gfx = obj_spark_hit1;
+                hitbox.hit_stun = 0.1;
+				
+				hitbox2.damage = 11*size;
+                hitbox2.bkb = 7*size;
+                hitbox2.kbg = 1.3*size;
+                hitbox2.dir = 60+facing*60;
+                hitbox2.shield_damage = round(9*size);
+                hitbox2.hitlag_frames = round(5*size);
+                hitbox2.sfx = kick2;
+                hitbox2.gfx = obj_spark_hit1;
+                hitbox2.hit_stun = 0.1;
+            }
+
+if air = 0 
+			    {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14; 
+				}
+				
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

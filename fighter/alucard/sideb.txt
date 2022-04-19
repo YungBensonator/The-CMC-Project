@@ -1,0 +1,117 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity_lock = 1;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  if sidebtemp = 1 {exit;}
+  if air = 0
+  {
+  vspeed = -3 * size;
+  }
+  else
+  {
+  vspeed = 0;
+  }
+  air_move = 0;
+  hspeed = 0;
+  attack_type = "sideb";
+  time = 58;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = sideb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  sound_play(transform_sound);
+  }
+ 
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; vspeed = 0; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+case 18: image_index = 6; break;
+}
+
+if timer = 21
+{
+  sprite_index = sideb_fly_sprite;
+  image_index = 0;
+  image_speed = 0.25;
+}
+
+if timer = 9
+{
+  hspeed = 5.5 * (1-facing*2) * size;
+  sound_play(bat_voice);
+  sound_play(dash_sound);
+  masktemp = 1;
+  create_hitbox ( 11 , 25 + facing * 130 , 3 , 2.6 , 24 , 7 , punch3 , obj_spark_hit4 , 1.10 , 1.14 , 0.73 , 26.28 , self.id , 45 , 3 );
+  hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}
+
+if timer >= 9
+{
+after_image(4,c_blue,0.5)
+
+if moveup 
+{
+vspeed = -2.5 * size
+}
+else if movedown
+{
+vspeed = 2.5 * size
+}
+else
+{
+vspeed = 0;
+}
+
+}
+
+if timer>=9 && timer < 54 {
+if attacking || smash {
+        temp = 0
+	if air != 0 {
+        vspeed -= size*1.5
+		hspeed *= 0.5
+    	air_move = 1;
+	}
+	effect_create_above(ef_ring,x,y,0.5,c_white)
+	interrupt = 1
+	sidebtemp = 1;
+	masktemp = 0;
+	}
+	
+if special && !moveleft || special && !moveright {
+        temp = 0
+	if air != 0 {
+        vspeed -= size*1.5
+		hspeed *= 0.5
+    	air_move = 1;
+	}
+	effect_create_above(ef_ring,x,y,0.5,c_white)
+	interrupt = 1
+	sidebtemp = 1;
+	masktemp = 0;
+	}
+}
+
+if ( timer >= time - 1 )
+  {
+  masktemp = 0;
+  attack_type = "none";
+  hspeed *= 0.5;
+  effect_create_above(ef_ring,x,y,0.5,c_white)
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  sidebtemp = 1;
+  }

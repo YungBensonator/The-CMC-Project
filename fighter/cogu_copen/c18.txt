@@ -1,0 +1,71 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+
+//self explanatory
+ image_xscale = 0.64*(1-facing*2)
+priority = 5
+//you set the projectile's priority with this so you can determine whether or not it's gonna clash against other projectiles
+//from 1 to 4 it'll be able to either clash, be overridden or override projectiles with equal, lower or higher priority respectively.
+//with a value of 5, it'll directly completely ignore any and all other enemy projectiles.
+sprite_index = attacker.jethover_sprite
+moving_object = 0
+//whether or not this projectile is gonna interact with surfaces like floors, ceilings, walls or platforms.
+//if set to 1, it'll stop its vertical speed if crashing against a floor or ceiling, and its horizontal speed if hitting a wall.
+//if set to 0, it'll go through all surfaces.
+image_alpha = 0
+image_blend = c_fuchsia
+speed = 0;
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+hit = 2
+//set an angle going from 0 to 359, where if your character faces to the right when firing the projectile:
+//0 is to the right, 90 is directly upwards, 180 is to the left, and 270 is directly downwards.
+//Values between these four correspond to diagonals (45, 135, 225, 315)
+
+
+//this sets the projectile's orientation to match the direction it's heading towards.
+//Useful if you're not just shooting it forwards, but at a set direction.
+}
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	if timer < 20 and image_alpha < 1
+	image_alpha += 0.1
+	
+	if timer = 35 {
+	sprite_index = attacker.hovershot_sprite
+	image_index = 0
+	}
+	
+	if timer >= 35 and timer < 90 and timer mod 8 = 0 {
+		lasershot = create_projectile(1, 361, 0, 0, 1, 1, magic1, obj_spark_shock, 0.1*(1-facing*2), 0.1, 15, 27, attacker.id, 1000, char_custom19);
+		lasershot.target = attacker.target
+				sound_play(attacker.schut_sound);
+				lasershot.facing = facing
+	}
+	
+	if timer > 90 {
+		image_alpha -= 0.1
+	}
+	
+	if timer > 90 and image_alpha = 0
+	instance_destroy()
+	
+	
+	
+	
+	
+}
+
+if hit {
+	time = 1000
+	//replace this last variable with the actual value you gave the projectile for its duration so that it doesn't disappear if it hits an opponent
+	}
+	
+
+//this destroys the projectile if it touches a wall, a floor or a platform without having hit any enemies. Delete it if that's not what you want.

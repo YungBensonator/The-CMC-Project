@@ -1,0 +1,35 @@
+if timer <= 1 {         // Initialize sprite and speed during frame 1
+    hspeed = 2.5*(1-attacker.facing*2)*size;
+    vspeed = -7*size;
+    sprite_index = keepmain.bomb_sprite;
+	image_xscale = 0.15 * (1-facing*2) * size;
+	image_yscale = 0.15 * size;
+    visible =1 
+    }
+	
+moving_object = 1;
+
+image_angle += 10*(1-facing*2);
+	
+vspeed += 0.4;
+
+if hit = 1
+{
+hit = 2;
+instance_create(x,y,obj_spark_explode1)
+}
+
+
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1))
+{
+instance_create(x,y,obj_spark_explode1)
+instance_destroy();
+sound_play(explode_big);
+}
+
+if is_on_floor(self)
+{
+instance_create(x,y,obj_spark_explode1)
+instance_destroy();
+sound_play(explode_big);
+}

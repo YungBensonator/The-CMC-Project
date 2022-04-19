@@ -1,0 +1,50 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = command_sprite;
+        image_index=0;
+        timer = 0;
+        time = 50;
+        timer_speed=1;
+        charge_frame = 3;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 3: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 14: image_index = 5; break;
+	case 17: image_index = 6; break;
+      }
+	  
+	  if timer = 16 {
+		  photondetonator = create_projectile(12, angle_correct(25), 2.5, 7.8, 40, 24, explodehit3, obj_spark_fire1, 0.1, 0.1, 15, 30, self.id, 1000, char_custom6);
+		  photondetonator.charge_kb = 1
+		  photondetonator.charge_dmg = 1
+		  sound_play(ssmash_sound);
+		  if tagtimer > 0
+		  photondetonator.proj_script = char_custom9
+	  }
+	  
+	
+    
+  }
+
+ if attack_success && tagged{
+		  tagged = 0
+	  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    dontrepeat = 0;
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        

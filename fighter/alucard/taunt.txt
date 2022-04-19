@@ -1,0 +1,114 @@
+if ( state_type == "stand" || state_type == "crouch" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "taunt";
+  image_speed = 0;
+  sprite_index = taunt_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 48;
+  timer_speed = 1;
+  }
+  
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+case 45: image_index = 6; break;
+}  
+  
+if timer = 1  && instance_exists(obj_training){
+		limitgauge = 150;
+}  
+
+
+if timer = 39 && special = 1
+{
+timer = 100;
+time = 211;
+bfx = create_blur(x,y,self.id);
+bfx.sprite_index = telepillar_sprite;
+bfx.image_index = 0;
+bfx.image_speed = 0.75;
+bfx.image_xscale = 0.3*(1-facing*2)*size;
+bfx.image_yscale = 0.3*size;
+bfx.snap = self.id
+bfx.depth = depth - 1;
+bfx.x = x + 65 * (1-facing*2) *size;
+bfx.y = y *size; 
+bfx.image_alpha = 0;
+sound_play(teleport_sound);
+}
+
+if timer >=100 && timer  <=105
+{
+bfx.image_alpha += 0.2;
+}
+
+if timer = 105 
+{
+poker = instance_create(x,y,obj_spark);
+poker.sprite_index = poker_sprite;
+poker.image_index = 0;
+poker.image_speed = 0;
+poker.image_xscale = 0.3*size;
+poker.image_yscale = 0.3*size;
+poker.snap = self.id
+poker.depth = 1;
+poker.x = x + 65 * (1-facing*2) *size;
+poker.y = y *size;
+}
+
+if timer = 145
+{
+with (bfx)
+{
+instance_destroy();
+}
+}
+
+if timer = 160
+{
+bfx = create_blur(x,y,self.id);
+bfx.sprite_index = telepillar_sprite;
+bfx.image_index = 0;
+bfx.image_speed = 0.75;
+bfx.image_xscale = 0.3*(1-facing*2)*size;
+bfx.image_yscale = 0.3*size;
+bfx.snap = self.id
+bfx.depth = depth - 1;
+bfx.x = x + 65 * (1-facing*2) *size;
+bfx.y = y *size; 
+bfx.image_alpha = 0;
+sound_play(teleport_sound);
+}
+
+if timer >=160 && timer  <=165
+{
+bfx.image_alpha += 0.2;
+}
+
+if timer = 165
+{
+with (poker)
+{
+instance_destroy();
+}
+}
+
+if timer = 205
+{
+with (bfx)
+{
+instance_destroy();
+}
+}
+
+switch (timer)
+{
+case 208: image_index = 6; break;
+} 

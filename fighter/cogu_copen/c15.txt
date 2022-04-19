@@ -1,0 +1,46 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    hit = 0    
+    speed = 7
+    direction = 180*facing
+    image_angle = direction+facing*180
+    image_xscale = 0.1 * (1-facing*2)
+    sprite_index = attacker.bshot_sprite
+    moving_object = 1;
+    visible =1
+    create_homing_bubble(50,50,5,5.5,self.id,5);
+    }
+    
+image_angle = direction+facing*180
+    
+gfx = obj_spark_shockwave;
+
+    
+if timer > 1 && timer < time-10 && (target = -1 || target = attacker) && frac(timer/6)=0
+    {
+    create_homing_bubble(50,50,5,5.5,self.id,7);
+}
+
+if timer > 1 && speed < 7 {speed+=0.6;}
+    
+if target != -1 && target!= attacker {
+
+direction = point_direction(x,y,target.x,target.y - ( target.actual_height / 2 ) );
+    
+        
+    }
+    
+if (hit = 0 && (timer = time-2)) //collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self))) 
+{
+    hit=2
+        lightballgfx = instance_create(x,y,obj_spark_shockwave);
+        lightballgfx.image_blend = c_red;
+    sound_play(explode_small)
+        timer = time
+        image_alpha=0;
+}
+
+if hit = 1{
+        hit = 2;
+        timer = time
+        image_alpha=0;
+        }

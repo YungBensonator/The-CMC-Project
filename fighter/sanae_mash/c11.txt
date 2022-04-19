@@ -1,0 +1,202 @@
+if type = 0
+{
+time = 1000
+
+  if timer <= 1
+ {
+  sprite_index = keepmain.fslineH_sprite;
+  image_xscale = 2 * size;
+  image_yscale = 0.1 * size;
+  hit = 2;
+  redtimer = 255
+  greentimer = 0
+  bluetimer = 0
+  redswitch = 1;
+  greenswitch = 0;
+  blueswitch = 0;
+ }
+ 
+ if ( timer = 2 || timer = 4 || timer = 6 || timer = 8)
+{
+image_yscale += 0.1;
+}   
+ 
+}
+
+if type = 1
+{
+time = 1000
+
+  if timer <= 1
+ {
+  sprite_index = keepmain.fslineV_sprite;
+  image_xscale = 0.1 * size;
+  image_yscale = 2 * size;
+  hit = 2;
+  redtimer = 255
+  greentimer = 0
+  bluetimer = 0
+  redswitch = 1;
+  greenswitch = 0;
+  blueswitch = 0;
+ }
+ 
+if ( timer = 2 || timer = 4 || timer = 6 || timer = 8)
+{
+image_xscale += 0.1;
+}   
+ 
+}
+
+if type = 2
+{
+priority = 5
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = keepmain.fsbeamH_sprite;
+	image_xscale = 2 * size;
+    image_yscale = 0.5 * size;
+    image_speed = 0.7
+    visible = 1
+	moving_object = 0;
+	tempfacing = attacker.facing
+	vanish = 0
+}
+
+if timer >31{
+absorb2 = 0
+absorb = 0;
+}
+
+if timer >= 1{
+resetvalue = 5
+originaltime = 9999
+}
+if hit = 1{
+time = 9999
+hit = 2
+resetrigger = resetvalue
+vanish +=1
+}
+if resetrigger > 0
+resetrigger -= 1
+
+if resetrigger = 1
+hit = 0
+
+if vanish >= 10 {
+	instance_destroy()	
+}
+
+if vanish >= 9 {
+	bkb = 6.3
+	kbg = 6.3
+}
+}
+
+if type = 3
+{
+priority = 5
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = keepmain.fsbeamV_sprite;
+	image_xscale = 0.5 * size;
+    image_yscale = 2 * size;
+    image_speed = 0.7
+    visible = 1
+	moving_object = 0;
+	tempfacing = attacker.facing
+	vanish = 0
+}
+
+if timer >31{
+absorb2 = 0
+absorb = 0;
+}
+
+if timer >= 1{
+resetvalue = 5
+originaltime = 9999
+}
+if hit = 1{
+time = 9999
+hit = 2
+resetrigger = resetvalue
+vanish +=1
+}
+if resetrigger > 0
+resetrigger -= 1
+
+if resetrigger = 1
+hit = 0
+
+if vanish >= 10 {
+	instance_destroy()	
+}
+
+if vanish >= 9 {
+	bkb = 6.3
+	kbg = 6.3
+}
+}
+
+image_blend = make_color_rgb(redtimer,greentimer,bluetimer)
+
+
+if redtimer = 255 and greenswitch = 0 and bluetimer = 0
+{
+greenswitch = 1;
+}
+
+if greenswitch = 1 and greentimer < 255
+{
+greentimer += 5;
+}
+
+if greentimer = 255 and redswitch = 1
+{
+redswitch = 0;
+}
+
+if redswitch = 0 and redtimer > 0
+{
+redtimer -=5;
+}
+
+if redtimer = 0 && blueswitch = 0
+{
+blueswitch = 1;
+}
+
+if blueswitch = 1 and bluetimer < 255
+{
+bluetimer += 5;
+}
+
+if bluetimer = 255 and greenswitch = 1
+{
+greenswitch = 0;
+}
+
+if greenswitch = 0 and greentimer > 0
+{
+greentimer -=5;
+}
+
+if greentimer = 0 && redswitch = 0
+{
+redswitch = 1;
+}
+
+if redswitch = 1 and redtimer < 255
+{
+redtimer += 5;
+}
+
+if redtimer = 255 and blueswitch = 1
+{
+blueswitch = 0;
+}
+
+if blueswitch = 0 and bluetimer > 0
+{
+bluetimer -=5;
+}

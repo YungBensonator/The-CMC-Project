@@ -1,0 +1,64 @@
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 80;
+        timer_speed=1;
+}
+state_type = "attack";
+
+switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 6: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 12: image_index = 1; break;
+	case 15: image_index = 2; break;
+	case 18: image_index = 1; break;
+	case 21: image_index = 2; break;
+	case 24: image_index = 1; break;
+	case 27: image_index = 2; break;
+	case 30: image_index = 1; break;
+
+      }
+	  
+	  if timer = 45 {
+		  		bullitsused -= 1
+
+		  bullets = instance_create (x,y - 20 * size,obj_spark)
+bullets.sprite_index = bullets_sprite;
+bullets.image_xscale = -0.85 * (1-facing*2) * size;
+bullets.image_yscale = 0.85 * size;
+bullets.image_alpha = 1;
+bullets.depth = 2;
+bullets.alarm[0] = 24
+sound_play(cockback_sound);
+
+
+bullets2 = instance_create (x,y - 20 * size,obj_spark)
+bullets2.sprite_index = bullets_sprite;
+bullets2.image_xscale = 0.85 * (1-facing*2) * size;
+bullets2.image_yscale = 0.85 * size;
+bullets2.image_alpha = 1;
+bullets2.depth = 2;
+bullets2.alarm[0] = 24
+	  }
+	  
+	  if timer = 40 {
+	  sound_play(cockforward_sound);
+	  }
+	  
+
+		  
+	  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

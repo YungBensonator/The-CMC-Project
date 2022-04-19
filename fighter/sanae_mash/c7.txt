@@ -1,0 +1,88 @@
+if strike = 0
+{
+time = 202
+if timer <= 1 
+{
+image_xscale = 0.2*(1-facing*2)*size;
+image_yscale = 0.2*size;
+sprite_index = attacker.id.windproj_sprite
+image_index = 0;
+image_speed = 0.75;
+visible =1
+hit = 2;
+tempfacing = attacker.id.facing
+if attacker.id.state_type = "attack"
+{
+hspeed = 6 - tempfacing * 12 * attacker.id.size;
+}
+sound_play(attacker.id.wind_sound);
+effect_create_above(ef_ring,x * size ,y * size ,0.1,c_white)
+}
+
+if timer = 5
+{
+hspeed = 0;
+}
+
+if ( timer = 192 || timer = 194 || timer = 196 || timer = 198 || timer = 200)
+{
+image_alpha -= 0.2;
+} 
+}
+
+if strike = 1
+{
+absorb = 1;
+absorb2 = 1;
+proj_destroy = 0;
+if ( timer <= 1 && temp <= 0)
+  {
+    sprite_index = keepmain.windproj_sprite;
+	image_xscale = 0.27 * (1-facing*2) * size;
+	image_yscale = 0.27 * size;
+    temp = 1
+    proj_hits = 0
+	image_speed = 0.75;
+    soma = attacker
+    visible = 1;
+	sound_play(attacker.id.wind_sound);
+}
+
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+
+speed += 0.15;
+
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.9)
+if timer = time+1 && proj_hits <= 1 {
+    proj_hits+=1
+    timer = 0
+    time = 20
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+    if proj_hits = 2 {
+        damage = round(attacker.size*3)
+        bkb= attacker.size*4.15
+        kbg = attacker.size*6.0
+        hitlag_frames = round(14*attacker.size)
+        shake_ampl = 0.75
+        shake_kb = 7
+        sfx = slash3
+        gfx = obj_spark_slash3
+    }
+}
+if timer = 75 && proj_hits<1
+proj_hits=1
+moving_object = 1;
+
+
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self.id)   {
+    instance_destroy();
+	}
+}

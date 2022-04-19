@@ -1,0 +1,160 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "dair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dair_sprite;
+  timer = 0;
+  time = 45;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+switch ( timer )
+    {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; sound_play(attacksnd1); break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 21: image_index = 4; break;
+	case 24: image_index = 2; break;
+	case 27: image_index = 3; break;
+	case 30: image_index = 4; break;
+	case 33: image_index = 2; break;
+	case 36: image_index = 3; break;
+	case 39: image_index = 4; break;
+	}
+
+if timer = 6
+{
+    target = -1;
+    create_hitbox ( 2 , 90 , 1.5 , 0.5 , 12 , 3 , kick2 , obj_spark_hit3 , 0.47 , 0.50 , -0.37 , 7.40 , self.id , 30 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}
+
+if ( timer >= 6 && timer <= 36 && hitbox.hit = 1 && attack_shielded = 0 && target.custom_boss != 1 && distance_to_object(target)<size*20 )
+{
+sound_play(dair_voice);
+sprite_index = dair_sprite2;
+timer = 100;
+time = 134;
+gravity_lock = 1;
+hspeed = 0;
+vspeed = 0;
+air_move = 0;
+fast_fall = 0;
+fast_fall_temp = 0;
+
+target1 = target;
+target1.x = x + 2*size*(1-facing*2)
+target1.y = y + 5 * size;
+target1.intangible = 0;
+target1.sprite_angle = 0;
+target1.state_type = "air_flinch"
+target1.facing = !facing;
+target1.attack_type = "none";
+target1.timer = 0;
+target1.timer_speed = 0;
+target1.alarm[0] = 2;
+}
+
+if ( timer >= 100 && timer <= 113 )
+{
+gravity_lock = 1;
+hspeed = 0;
+vspeed = 0;
+air_move = 0;
+fast_fall = 0;
+fast_fall_temp = 0;
+
+target1.x = x + 2*size*(1-facing*2)
+target1.y = y+ 5 * size;
+target1.timer_speed = 0;
+target1.intangible = 0;
+target1.alarm[0] = 2;
+target1.state_type = "air_flinch"
+target1.depth = depth + 1;
+}
+
+
+switch ( timer )
+    {
+	case 103: image_index = 1; break;
+	case 113: image_index = 2; break;
+	case 116: image_index = 3; break;
+	case 119: image_index = 4; break;
+	case 122: image_index = 5; break;
+	case 125: image_index = 6; break;
+	case 128: image_index = 7; break;
+	case 131: image_index = 8; break;
+	}  
+
+if ( timer = 113 )
+{
+hspeed = + 1 * (1-facing*2) * size;
+vspeed = -5 * size;
+create_hitbox( 8 , 285 - facing * 30 , 4.5 , 3.5 , 12 , 3 , kick3 , obj_spark_hit4 , 0.47 , 0.50 , -0.37 , 7.40 , self.id , 3 , 3);
+}
+
+if ( air = 0 && ( timer <= 100 || timer >= 114 ) )
+{
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = 10;
+sprite_index = land_sprite;
+image_index = 0;
+}
+
+if (timer >= 113){
+if (attack_success || target.object_index == obj_enemy) && (temp_spawn >= 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 140)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    {
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 11;
+	}
+    else
+    state_type = "stand";
+    dontrepeat = 0;
+  timer = 0;
+  time = -1;
+  }
