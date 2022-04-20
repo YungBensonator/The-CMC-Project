@@ -1,0 +1,243 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch")  {
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 80
+		special = 1
+		last_shakex = shakex;
+        last_shakey = shakey;
+		skidtemp = 0 // (for repeating)
+		charge_value = 0;
+	
+		
+		
+    }
+
+if ( timer < time )
+  {
+		if air = 0 {hspeed *=.9;}
+state_type = "air_attack"
+	switch (timer)
+	{
+		case 2: image_index = 1; break;
+		case 5: image_index = 2; break;
+		case 9: image_index = 3; break;
+		case 13: image_index = 4; break;
+		case 17: image_index = 5; break;
+		case 22: sprite_index = stand_sprite; image_index = 0; break;
+		case 28: sprite_index = run_sprite; image_index = 0; break;
+		case 33: sprite_index = run_sprite; image_index = 1; break;
+		case 37: sprite_index = run_sprite; image_index = 2; break;
+		case 41: sprite_index = run_sprite; image_index = 3; break;
+		case 45: sprite_index = run_sprite; image_index = 4; break;
+		case 49: sprite_index = run_sprite; image_index = 5; break;
+		case 53: sprite_index = run_sprite; image_index = 6; break;
+		case 57: sprite_index = dash_attack_sprite; image_index = 2; break;
+	    case 62: image_index = 3; break;
+	    case 65: image_index = 4; break;
+	    case 68: image_index = 5; break;
+	    case 70: image_index = 6; break;
+	    case 72: image_index = 7; break;
+	    case 75: image_index = 8; break;
+	    case 78: image_index = 9; break;
+	    case 83: image_index = 10; break;
+	}
+	  
+
+		if air = 0 
+			{
+			airtemp = 0;
+			}
+		if air > 0 
+			{
+			airtemp = 1;
+			}
+		
+		if airtemp = 1 && timer < 100 {
+		time = 87
+		}
+			
+	if timer = 9
+		{
+		sound_play(downb_sound);
+		spark = instance_create(x+16*(1-facing*2)*size,y-11*size,obj_spark_effect);
+		spark.snap = self.id;
+		spark2 = instance_create(x*size,y-7*size,obj_spark_shockwave);
+		spark2.image_xscale *= 0.7*size;
+		spark2.image_yscale *= 0.7*size;
+		spark2.image_blend = make_color_rgb(165,42,42);
+		spark2.image_alpha = 1;
+		spark2.snap = self.id;
+		}
+		
+		if timer < 27 {
+			if airtemp = 1 
+			{
+				if vspeed >= 0.8 
+					{
+					vspeed = 0.8;
+					}
+				hspeed = 0.1*(1-facing*2)
+				
+			}
+			}
+	
+	if timer >= 22 && timer < 28 && special = 1  
+		{
+		
+		charge_value += 1;
+		shakex = last_shakex - lengthdir_x ( charge_value * 0.1 , charge_value * 55 ) * ( 1 - facing * 2 );
+		
+	
+	
+
+		
+		if timer = 27
+			{
+			timer = 22;
+			sound_play(downbfull_sound);
+			sound_volume(downbfull_sound,0.5);
+			part_particles_create ( psys_back , x - 20 + random ( 40) , y - 7 - random ( 9 ) , ptype_smashspark , 1 )
+			}
+		
+		if special = 0 || charge_value = 50 
+			{
+			timer = 28;
+			shakex = 0
+			}
+		
+		
+		}
+	
+	
+	
+	
+
+	
+	if timer = 28 
+		{
+		duster = instance_create(x+12*(1-facing*2),y,obj_dust_effect_bold);
+		duster.image_xscale *= 0.8+(charge_value*0.01)*size;
+		duster.image_yscale *= 0.8+(charge_value*0.01)*size;
+		duster.facing = facing;
+		sound_play(die_voice2);
+		hspeed =  3.6*(1-facing*2);
+		create_hitbox(round(11+(charge_value/10)),36+facing*108,6.25+(charge_value/100),6.15+(charge_value/100),round(10+(charge_value/10)),round(5+(charge_value/10)),kick2,obj_spark_hit1,.7,.7,0,10,self.id,29,4);
+		}
+	
+	if timer >= 29 && timer < 62 
+		{
+			if timer mod 7 = 0 
+				{
+				spark2 = instance_create(x*size,y-7*size,obj_spark_shockwave);
+				spark2.image_xscale *= 0.2*size;
+				spark2.image_yscale *= 0.7*size;
+				spark2.image_alpha = charge_value/50;
+				spark2.depth = depth+1
+				}
+			after_image(3,make_color_rgb(251,254,34),1)
+			after_image(3,make_color_rgb(251,254,34),1)
+			hspeed = ((charge_value/33) +3.1)*(1-facing*2);
+			
+						if airtemp = 1 
+			{
+			
+			if timer >= 29 && timer < 34 {
+			vspeed = -1.5
+			}
+			if timer >= 34 && timer < 39 {
+			vspeed = -1
+			}
+			if timer >= 39 && timer < 44 {
+			vspeed = -0.5
+			}
+			if timer >= 44 && timer < 49 {
+			vspeed = 0
+			}
+			if timer >= 49 && timer < 54 {
+			vspeed = 1
+			}
+			if timer >= 54 && timer < 59 {
+			vspeed = 2
+			}
+			if timer >= 59 && timer < 62 {
+			vspeed = 3
+			}
+			}
+		}
+		
+	
+	if timer >= 62 && timer < 70 {
+	if airtemp = 1 {
+	hspeed = 1.5*(1-facing*2)
+	}}
+	
+		if timer >= 70 && timer < 80 {
+	if airtemp = 1 {
+	hspeed = 0.5*(1-facing*2)
+	}}
+	
+
+
+	if hitbox.hit = 1  && timer < 100 {
+	timer = 100
+	time = 140+(charge_value/2.5)
+	sprite_index = flinch_sprite; 
+	image_index = 0; 
+	}
+	
+	if timer = 100 {
+	hspeed = 0 
+	vspeed = 0
+	}
+	
+	if timer = 101{
+	vspeed = -4-(charge_value/35)
+	hspeed = (-2-(charge_value/35))*(1-facing*2)
+	}
+	
+	if timer >100 && timer < time {
+	image_angle += 30*(1-facing*2)
+	if air= 0 && timer > 101 && vspeed >= 0 {
+	spark2 = instance_create(x*size,y-7*size,obj_down_impact);
+	state_type = "down"
+	image_angle = 0
+	timer = 159
+	}
+	}
+	
+		
+		
+		
+	
+	
+  }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0 {
+	if timer < 100 
+		{
+        state_type = "jump";
+		}
+	else if timer > 100 {
+		state_type = "tumble";
+		}
+	}
+	else if air = 0 {
+		if timer < 100 
+		{
+        state_type = "stand";
+		}
+	else if timer > 100 {
+		state_type = "down";
+		}
+	}
+    timer = 0;
+    time =-1;
+}

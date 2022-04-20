@@ -1,0 +1,49 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" )
+  {
+    state_type = "attack";
+    attack_type = "dtilt";
+    timer = 0;
+    time = 28;
+    sprite_index = dtilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 26: image_index = 0; break;
+      }
+
+    if ( timer = 8 )
+      {
+	play_attack_voice();
+	sound_play(sephirothswing1);
+	create_hitbox(7,80+facing*20,5.55,4.2,10,5,slash2,obj_spark_slash2,1.31 , 1.48 , 39 , 10.80,self.id,4,3);
+	create_hitbox2(10,80+facing*20,5.55,4.2,10,8,slash3,obj_spark_slash2, 0.59 , 1.25 , 69 , 12,self.id,4,3);
+	instance_create(x+69*(1-facing*2),y-27*size,obj_spark_effect);
+	hitbox.hit_stun = 8;
+	hitbox.di = 0.5;
+	stabeff = create_blur(x+57*(1-facing*2),y-27*size,self.id)
+	stabeff.sprite_index = stab_eff
+	stabeff.image_xscale = size*0.12*(1-facing*2)
+	stabeff.image_yscale = size*0.12
+	stabeff.anim_speed = 1
+	stabeff.image_alpha = 1
+	stabeff.depth = depth - 0.1
+	stabeff.snap = self.id
+	stabeff.image_angle = 10*(1-facing*2);
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

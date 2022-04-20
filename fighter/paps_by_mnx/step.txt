@@ -43,7 +43,8 @@ if (enemy.state_type = "respawn"){
 }
 
 if (instance_exists(spinningbone)){
-		if (enemy.state_type = "air_flinch" || enemy.state_type = "flinch") && (dontrepeat =0 && temp_spawn >= 2) && target.percent > 115 {
+		if (enemy.state_type = "air_flinch" || enemy.state_type = "flinch") && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1) {
+			if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 135)){
 				dontrepeat = 1;
 				temp_speed = enemy.speed
 				temp_grav = enemy.gravity
@@ -79,10 +80,10 @@ if (instance_exists(spinningbone)){
 				enemy.speed = temp_speed
 				enemy.gravity = temp_grav + 1
 				}	
-				
+		}
 				}
 		if (instance_exists(boneplatform)){
-		if (enemy.state_type = "air_flinch" || enemy.state_type = "flinch") && (dontrepeat =0 && temp_spawn >= 2) && target.percent > 40 && target.offstage {
+		if (enemy.state_type = "air_flinch" || enemy.state_type = "flinch") && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1) && target.percent > 40 && target.offstage {
 				dontrepeat = 1;
 				temp_speed = enemy.speed
 				temp_grav = enemy.gravity

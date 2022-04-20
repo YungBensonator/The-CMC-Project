@@ -1,0 +1,168 @@
+if zairtemp = 1 {exit;}
+gravity = 0;
+gravity_lock = 1;
+vspeed = 0;
+
+if ( state_type == "jump" )
+  {
+  air_move = 0;
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "zair";
+  image_speed = 0.6;
+  image_index = 0;
+  if moveright = 0 and moveleft = 0
+  {
+  sprite_index = air_dodge_sprite;
+  hspeed = 5 * (1-facing*2) * size;
+  duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+	duster.image_xscale = 0.25*size;
+	duster.image_yscale = 0.25*size;
+  }
+  if moveright = 1 and facing = 0
+  {
+  sprite_index = air_dodge_sprite;
+  hspeed = 5 * (1-facing*2) * size;
+  duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+	duster.image_xscale = 0.25*size;
+	duster.image_yscale = 0.25*size;
+  }
+  if moveright = 1 and facing = 1
+  {
+  sprite_index = roll_sprite;
+  hspeed = -5 * (1-facing*2) * size;
+  duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing-1;
+	duster.image_xscale = 0.25*size;
+	duster.image_yscale = 0.25*size;
+  }
+  if moveleft = 1 and facing = 0
+  {
+  sprite_index = roll_sprite;
+  hspeed = -5 * (1-facing*2) * size;
+  duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = 1+facing;
+	duster.image_xscale = 0.25*size;
+	duster.image_yscale = 0.25*size;
+  }
+  if moveleft = 1 and facing = 1
+  {
+  sprite_index = air_dodge_sprite;
+  hspeed = 5 * (1-facing*2) * size;
+  duster = instance_create(x,y,obj_dust_effect);
+  duster.facing = facing;
+  duster.image_xscale = 0.25*size;
+  duster.image_yscale = 0.25*size;
+  }
+  timer = 0;
+  time = 15;
+  timer_speed = 1;
+  lcancel = 1;
+  sound_play(airdash_sound);
+  }
+
+if cos(timer*pi)>0.5
+after_image(7,c_blue,0.5)
+
+if timer >= 10
+{
+		  
+		  if attacking = 1 {
+			  image_angle = 0;
+			  speed *= 0.75;
+			  if ( ( ( moveright && facing = 0 ) or ( moveleft && facing = 1 ) ) ) {
+		 state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_fair();
+			  }
+			  
+			 if ( ( ( moveright && facing = 1 ) or ( moveleft && facing = 0 ) ) ) {
+		 state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_bair();
+			  } 
+			  
+			  if movedown = 1 {
+				  state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_dair();
+			  }
+			  
+			  if moveup = 1 {
+				  state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_uair();
+			  }
+			  
+			if moveup = 0 and movedown = 0 and moveleft = 0 and moveright = 0 {
+				  state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_nair();
+			  }
+			  
+  zairtemp = 1;
+		  }
+		  
+		  if special = 1 {
+		  image_angle = 0;
+		  speed *= 0.75;
+			  if ( ( ( moveright && facing = 0 ) or ( moveleft && facing = 1 ) ) ) {
+		 state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_sideb();
+			  }
+			  
+			  
+			  if movedown = 1 {
+				  state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_downb();
+			  }
+			  
+			  if moveup = 1 {
+				  state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_upb();
+			  }
+			  
+			  if moveup = 0 and movedown = 0 and moveleft = 0 and moveright = 0 {
+				  state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_b();
+			  }
+			  
+  zairtemp = 1;
+		  }
+}
+
+if ( timer >= time - 1 )
+  {
+  zairtemp = 1;
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

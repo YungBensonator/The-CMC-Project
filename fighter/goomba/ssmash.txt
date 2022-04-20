@@ -1,0 +1,44 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+        charge_frame = 6;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 28: image_index = 6; break;
+	case 36: image_index = 7; break;
+      }
+    
+	if timer = 12 { sound_play(swingsnd3);
+					var burst;
+					burst = instance_create ( place_x ( 69 ) + x , place_y ( 17 ) + y , obj_jab_burst );
+					burst.snap = self.id;
+					burst.image_xscale = xsize * 0.45;
+					burst.image_yscale = ysize * 0.45;
+					create_hitbox(8*neutralbcharge,10+facing*160,6,7.25*neutralbcharge,16,8,slash3,obj_spark_slash2,1.25,.65,24,9,self.id,3,4);}
+			
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        

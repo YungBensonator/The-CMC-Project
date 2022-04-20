@@ -1,0 +1,324 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+	if air > 0 {
+    state_type = "air_attack";
+	}
+	if air = 0 {
+    state_type = "attack";
+	}
+    attack_type = "upb";
+    timer = 0;
+    time = 56;
+    sprite_index = b_sprite3;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    air_move = 0;
+	
+	uptemp = 0
+	uprighttemp = 0
+	uplefttemp = 0
+	downtemp = 0
+	downrighttemp = 0
+	downlefttemp = 0
+	snaptemp = 0
+  }
+if timer = 0 {
+	if owatemp = 0 {
+		sound_play(choose(no_voice,upb_voice1));
+	}	
+	if owatemp = 1 {
+		sound_play(choose(no_voice,upb_voice2));
+	}
+}
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 25: image_index = 1; break;
+	case 28: image_index = 3; break;
+	case 31: image_index = 4; break;
+	case 35: image_index = 5; break;
+      }
+	if timer < 25 {
+	speed = 0;
+	gravity = 0;
+	gravity_lock = 0;
+	}
+	if timer = 25 {
+		force_edge_grab = 1;
+	}
+	if timer = 10 && air > 0 {
+		if moveleft && facing = 0 {
+			facing = !facing
+		}
+		if moveright && facing = 1 {
+			facing = !facing
+		}
+		if (!movedown && moveup && !moveleft && !moveright ) {
+		state_type = "air_attack";
+		uptemp = 1
+		}
+		if (moveup && moveright && !moveleft && !movedown ) {
+		state_type = "air_attack";
+		uprighttemp = 1
+		}
+		if (moveup && !moveright && moveleft && !movedown ) {
+		state_type = "air_attack";
+		uplefttemp = 1
+		}
+		if (movedown && !moveup && !moveleft && !moveright ) {
+		state_type = "air_attack";
+		downtemp = 1
+		}
+		if (!moveup && moveright && !moveleft && movedown ) {
+		state_type = "air_attack";
+		downrighttemp = 1
+		}
+		if (!moveup && !moveright && moveleft && movedown ) {
+		state_type = "air_attack";
+		downlefttemp = 1
+		}
+	}
+	if owatemp = 0 {
+	if timer = 25 {
+	sound_play(upbsnd2)
+	create_hitbox(12,90,5.1,5.35,15,5,slash3,obj_spark_slash3,1.33 , 1.59 , 24.48 , 20.40,self.id,10,3);
+	}
+	if timer = 26 {
+	slasheff = instance_create(x+10*(1-facing*2),y-25*size,obj_spark)
+	slasheff.sprite_index = slash_eff2
+	slasheff.image_xscale = size*0.3*(1-facing*2)
+	slasheff.image_yscale = size*0.4
+	slasheff.image_speed = 0
+	slasheff.image_alpha = 1
+	slasheff.depth = depth - 0.1
+	slasheff.snap = self.id;
+	slasheff.alarm[0] = 10;
+	}
+	if timer >= 26 {
+		slasheff.image_yscale -= 0.05*size;
+	}
+	if timer = 35 {
+		slasheff.image_alpha = 0;
+	}
+	}
+	if owatemp = 1 {
+	if timer = 25 || timer = 27 || timer = 29 || timer = 31 || timer = 32 || timer = 33 || timer = 34 {
+	create_hitbox(2,30+facing*120,5,0,15,5,slash2,obj_spark_slash3,1.33 , 1.59 , 24.48 , 20.40,self.id,2,3);
+    hitbox.weight_kb = 1
+	hitbox.di = 0;
+	}
+	if timer = 25 {
+	sound_play(octaslashsnd1);
+	octaslasheff1 = create_blur(x,y,self.id)
+	octaslasheff1.sprite_index = octaslash_eff1
+	octaslasheff1.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff1.image_yscale = size*0.14
+	octaslasheff1.anim_speed = 0
+	octaslasheff1.image_alpha = 1
+	octaslasheff1.depth = depth - 0.1
+	octaslasheff1.snap = self.id;
+	octaslasheff1.alarm[0] = 4
+	}
+	if timer = 27 {
+	sound_play(octaslashsnd2);
+	octaslasheff2 = create_blur(x,y,self.id)
+	octaslasheff2.sprite_index = octaslash_eff2
+	octaslasheff2.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff2.image_yscale = size*0.14
+	octaslasheff2.anim_speed = 0
+	octaslasheff2.image_alpha = 1
+	octaslasheff2.depth = depth - 0.1
+	octaslasheff2.snap = self.id;
+	octaslasheff2.alarm[0] = 4
+	}
+	if timer = 29 {
+	sound_play(octaslashsnd3);
+	octaslasheff3 = create_blur(x,y,self.id)
+	octaslasheff3.sprite_index = octaslash_eff3
+	octaslasheff3.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff3.image_yscale = size*0.14
+	octaslasheff3.anim_speed = 0
+	octaslasheff3.image_alpha = 1
+	octaslasheff3.depth = depth - 0.1
+	octaslasheff3.snap = self.id;
+	octaslasheff3.alarm[0] = 4
+	}
+	if timer = 31 {
+	sound_play(octaslashsnd4);
+	octaslasheff4 = create_blur(x,y,self.id)
+	octaslasheff4.sprite_index = octaslash_eff1
+	octaslasheff4.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff4.image_yscale = size*0.14
+	octaslasheff4.anim_speed = 0
+	octaslasheff4.image_alpha = 1
+	octaslasheff4.depth = depth - 0.1
+	octaslasheff4.snap = self.id;
+	octaslasheff4.alarm[0] = 4
+	}
+	if timer = 32 {
+	sound_play(octaslashsnd5);
+	octaslasheff5 = create_blur(x,y,self.id)
+	octaslasheff5.sprite_index = octaslash_eff2
+	octaslasheff5.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff5.image_yscale = size*0.14
+	octaslasheff5.anim_speed = 0
+	octaslasheff5.image_alpha = 1
+	octaslasheff5.depth = depth - 0.1
+	octaslasheff5.snap = self.id;
+	octaslasheff5.alarm[0] = 4
+	}
+	if timer = 33 {
+	sound_play(octaslashsnd6);
+	octaslasheff6 = create_blur(x,y,self.id)
+	octaslasheff6.sprite_index = octaslash_eff3
+	octaslasheff6.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff6.image_yscale = size*0.14
+	octaslasheff6.anim_speed = 0
+	octaslasheff6.image_alpha = 1
+	octaslasheff6.depth = depth - 0.1
+	octaslasheff6.snap = self.id;
+	octaslasheff6.alarm[0] = 4
+	}
+	if timer = 34 {
+	sound_play(octaslashsnd7);
+	octaslasheff7 = create_blur(x,y,self.id)
+	octaslasheff7.sprite_index = octaslash_eff2
+	octaslasheff7.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff7.image_yscale = size*0.14
+	octaslasheff7.anim_speed = 0
+	octaslasheff7.image_alpha = 1
+	octaslasheff7.depth = depth - 0.1
+	octaslasheff7.snap = self.id;
+	octaslasheff7.alarm[0] = 4
+	}
+	if timer = 35 {
+	sound_play(octaslashsnd8);
+	create_hitbox(12,30+facing*120,5.1,5.35,15,20,slash3,obj_spark_slash3,1.33 , 1.59 , 24.48 , 20.40,self.id,2,3);
+	octaslasheff8 = create_blur(x,y,self.id)
+	octaslasheff8.sprite_index = octaslash_eff1
+	octaslasheff8.image_xscale = size*0.14*(1-facing*2)
+	octaslasheff8.image_yscale = size*0.14
+	octaslasheff8.anim_speed = 0
+	octaslasheff8.image_alpha = 1
+	octaslasheff8.depth = depth - 0.1
+	octaslasheff8.snap = self.id;
+	octaslasheff8.alarm[0] = 4
+	}
+	if attack_success = 1 && timer < 35 {
+		snaptemp = 1
+	}
+	if (snaptemp = 1 && timer > 24 && timer < 35) 
+	{
+	target.x = x+40*(1-facing*2)*size;
+	target.y = y;
+	}
+	}
+	if timer > 35 {
+		speed *= 0.7;
+	}
+	if timer >= 25 && timer <= 35 {
+	if owatemp = 0 {
+	speed = 13*(1-facing*2);
+	}
+	if owatemp = 1 {
+	speed = 15*(1-facing*2);
+	}
+	if uprighttemp = 0 || uptemp = 0 || uplefttemp = 0 || downrighttemp = 0 || downtemp = 0 || downlefttemp = 0 {
+	direction = 0*(1-facing*2);
+	}
+	if uptemp = 1 {
+	direction = 90*(1-facing*2);
+	image_angle = 90*(1-facing*2);
+	slasheff.image_angle = 90*(1-facing*2);
+	octaslasheff1.image_angle = 90*(1-facing*2);
+	octaslasheff2.image_angle = 90*(1-facing*2);
+	octaslasheff3.image_angle = 90*(1-facing*2);
+	octaslasheff4.image_angle = 90*(1-facing*2);
+	octaslasheff5.image_angle = 90*(1-facing*2);
+	octaslasheff6.image_angle = 90*(1-facing*2);
+	octaslasheff7.image_angle = 90*(1-facing*2);
+	octaslasheff8.image_angle = 90*(1-facing*2);
+	}
+	if uprighttemp = 1 || uplefttemp = 1 {
+	direction = 45*(1-facing*2);
+	image_angle = 45*(1-facing*2);
+	slasheff.image_angle = 45*(1-facing*2);
+	octaslasheff1.image_angle = 45*(1-facing*2);
+	octaslasheff2.image_angle = 45*(1-facing*2);
+	octaslasheff3.image_angle = 45*(1-facing*2);
+	octaslasheff4.image_angle = 45*(1-facing*2);
+	octaslasheff5.image_angle = 45*(1-facing*2);
+	octaslasheff6.image_angle = 45*(1-facing*2);
+	octaslasheff7.image_angle = 45*(1-facing*2);
+	octaslasheff8.image_angle = 45*(1-facing*2);
+	}
+	if downtemp = 1 {
+	direction = 270*(1-facing*2);
+	image_angle = 270*(1-facing*2);
+	slasheff.image_angle = 270*(1-facing*2);
+	octaslasheff1.image_angle = 270*(1-facing*2);
+	octaslasheff2.image_angle = 270*(1-facing*2);
+	octaslasheff3.image_angle = 270*(1-facing*2);
+	octaslasheff4.image_angle = 270*(1-facing*2);
+	octaslasheff5.image_angle = 270*(1-facing*2);
+	octaslasheff6.image_angle = 270*(1-facing*2);
+	octaslasheff7.image_angle = 270*(1-facing*2);
+	octaslasheff8.image_angle = 270*(1-facing*2);
+	}
+	if downrighttemp = 1 || downlefttemp = 1 {
+	direction = 315*(1-facing*2);
+	image_angle = 315*(1-facing*2);
+	slasheff.image_angle = 315*(1-facing*2);
+	octaslasheff1.image_angle = 315*(1-facing*2);
+	octaslasheff2.image_angle = 315*(1-facing*2);
+	octaslasheff3.image_angle = 315*(1-facing*2);
+	octaslasheff4.image_angle = 315*(1-facing*2);
+	octaslasheff5.image_angle = 315*(1-facing*2);
+	octaslasheff6.image_angle = 315*(1-facing*2);
+	octaslasheff7.image_angle = 315*(1-facing*2);
+	octaslasheff8.image_angle = 315*(1-facing*2);
+	}
+	}
+	if downrighttemp = 1 || downlefttemp = 1 && air = 0 {
+	direction = 0*(1-facing*2);
+	image_angle = 0;
+	slasheff.image_angle = 0;
+	state_type = "attack"
+	octaslasheff1.image_angle = 0*(1-facing*2);
+	octaslasheff2.image_angle = 0*(1-facing*2);
+	octaslasheff3.image_angle = 0*(1-facing*2);
+	octaslasheff4.image_angle = 0*(1-facing*2);
+	octaslasheff5.image_angle = 0*(1-facing*2);
+	octaslasheff6.image_angle = 0*(1-facing*2);
+	octaslasheff7.image_angle = 0*(1-facing*2);
+	octaslasheff8.image_angle = 0*(1-facing*2);
+	}
+	if downtemp = 1 && air = 0 {
+	image_angle = 0;
+	if (instance_exists(slasheff)) {with (slasheff){instance_destroy();}}
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 26;
+	sprite_index = land_sprite;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+	state_type = "stand";
+	if air > 0
+	{
+    state_type = "fall";
+	image_speed = 0;
+	}
+    timer = 0;
+    time = -1;
+  }

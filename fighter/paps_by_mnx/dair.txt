@@ -34,7 +34,7 @@ if ( timer < time )
 	hitbox.execute_on_hit = "attacker.has_hit = 1"
       }
     
-	if has_hit = 1 and timer <= 22{
+	if (attack_success and timer <= 22){
 		target.speed = speed - 1;
 		target.direction = point_direction(target.x,target.y,x,y)
 	}
@@ -63,7 +63,8 @@ if ( timer < time )
 	}
 
 if (timer >= 18 && timer < 50){
-if (attack_success) && (dontrepeat = 0 && temp_spawn >= 2) && target.percent > 50 && target.offstage {
+if (attack_success) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1) && target.offstage {
+			if ((target.weight <= .22 && target.percent > 55) || (target.weight > .22 && target.weight < .3 && target.percent > 65) || (target.weight > .3 && target.percent > 66)){
 				dontrepeat = 1;
 				temp_vspeed = target.vspeed
 				temp_grav = target.gravity
@@ -98,7 +99,7 @@ if (attack_success) && (dontrepeat = 0 && temp_spawn >= 2) && target.percent > 5
 				target.timer = 0
 				target.time = 65 
 				}	
-				
+}
 				}
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
   {

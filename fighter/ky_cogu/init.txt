@@ -1,0 +1,476 @@
+
+
+// System Animations
+
+   //from which sprite the game should begin reading downwards in this file. IMPORTANT.
+	
+    stand_sprite = cspr_add_pal('fighter/ky_cogu/stand_strip9.png',9,0,1,0,1,121,250);
+	sprite_start = stand_sprite
+    mask_sprite = cspr_add('fighter/ky_cogu/mask.png',1,0,1,0,1,121,250);
+
+	
+	walk_sprite = cspr_add_pal('fighter/ky_cogu/walk_strip6.png',6,1,1,0,1,103,237);
+    run_sprite = cspr_add_pal('fighter/ky_cogu/run_strip8.png',8,1,1,0,1,120,218);
+	
+    jump_sprite = cspr_add_pal('fighter/ky_cogu/jump_strip11.png',11,1,1,0,1,108,359);
+    mid_jump_sprite = jump_sprite;
+	
+	crouch_sprite = cspr_add_pal('fighter/ky_cogu/crouch_strip11.png',11,1,1,0,1,85,202);
+    crouch_mask_sprite = cspr_add('fighter/ky_cogu/crouchmask.png',1,0,1,0,1,85,202);
+	
+	shield_sprite = cspr_add_pal('fighter/ky_cogu/shield.png',1,1,1,0,1,82,246);
+    roll_sprite = cspr_add_pal('fighter/ky_cogu/airdodgeback_strip3.png',3,1,1,0,1,140,242);
+	air_dodge_sprite = cspr_add_pal('fighter/ky_cogu/airdodge_strip5.png',5,1,1,0,1,159,219); 
+	spot_dodge_sprite = roll_sprite;
+	
+    flinch_sprite = cspr_add_pal('fighter/ky_cogu/flinch.png',1,1,1,0,1,190,338);
+    flinch2_sprite = cspr_add_pal('fighter/ky_cogu/flinch2.png',1,1,1,0,1,275,252);
+    flinch3_sprite = cspr_add_pal('fighter/ky_cogu/flinch3.png',1,1,1,0,1,116,235);
+	
+	launched_sprite = cspr_add_pal('fighter/ky_cogu/launched_strip4.png',4,1,1,0,1,104,233);
+	//this sprite is for when you're actually launched by a strong attack, should be 8 frames long preferably, imagine the sonic battle sprite where you're spinning backwards in the air. Align it in the same way you align flinch sprites, and make sure the sprite doesn't have extra canvas space so that the game actually spins it properly to avoid wack results
+	
+	broken_sprite = cspr_add_pal('fighter/ky_cogu/broken_strip4.png',4,1,1,0,1,80,218);
+    fall_sprite = cspr_add_pal('fighter/ky_cogu/fall_strip2.png',2,1,1,0,1,279,430);
+	land_sprite = cspr_add_pal('fighter/ky_cogu/land.png',1,1,1,0,1,98,202);
+	
+	sleep_sprite = broken_sprite // sprite for when jigglypuff sings to you
+	
+	taunt_sprite = cspr_add_pal('fighter/ky_cogu/taunt_strip25.png',25,1,1,0,1,196,320);
+	taunt2_sprite = cspr_add_pal('fighter/ky_cogu/taunt2_strip22.png',22,1,1,0,1,110,251);
+    win_sprite = cspr_add_pal('fighter/ky_cogu/win_strip29.png',29,1,1,0,1,94,389);
+    lose_sprite = broken_sprite;
+	
+	henrytaunt_sprite = taunt_sprite; //for if the opponent uses the henry distraction dance assist on you
+	
+	edge_sprite = cspr_add_pal('fighter/ky_cogu/edge.png',1,1,1,0,1,276,71);
+    edge_climb_sprite = edge_sprite;
+	
+	down_sprite = cspr_add_pal('fighter/ky_cogu/getup_strip7.png',7,1,1,0,1,170,193);
+    ukemi_sprite = air_dodge_sprite;
+	
+    swim_sprite = fall_sprite;
+    ladder_sprite = fall_sprite;
+    vehicle_sprite = fall_sprite //ACTUALLY USE THESE THREE AND REPLACE THEM BY FITTING SPRITES FOR THE GAME'S NEXT VERSION
+
+// Attack Animations
+
+    dipperslash_sprite = cspr_add('fighter/ky_cogu/dipperslash.png',5,1,1,0,1,111,80);
+    ssmashslash_sprite = cspr_add('fighter/ky_cogu/ssmashslash_strip7.png',7,1,1,0,1,279,149);
+    lightning_sprite = cspr_add('fighter/ky_cogu/lightning.png',4,1,1,0,1,82,511);
+	fairslash_sprite = cspr_add('fighter/ky_cogu/fairslash_strip5.png',5,1,1,0,1,238,124);
+	baireffect_sprite = cspr_add('fighter/ky_cogu/baireffect_strip9.png',9,1,1,0,1,192,102);
+	stunedge_sprite = cspr_add('fighter/ky_cogu/stunedge_strip7.png',7,1,1,0,1,159,94);
+	stunedgecharge_sprite = cspr_add('fighter/ky_cogu/stunedgecharge_strip4.png',4,1,1,0,1,399,116);
+	bchargeeffect_sprite = cspr_add('fighter/ky_cogu/bchargeeffect_strip8.png',8,1,1,0,1,126,127);
+	downbproj_sprite = cspr_add('fighter/ky_cogu/downbspark_strip25.png',25,1,1,0,1,84,102);
+	sacrededge_sprite = cspr_add('fighter/ky_cogu/sacrededge_strip4.png',4,1,1,0,1,281,114);
+	upbeffect_sprite = cspr_add('fighter/ky_cogu/upbeffect_strip5.png',5,1,1,0,1,295,55);
+	flashfield_sprite = cspr_add('fighter/ky_cogu/flashfield_strip4.png',4,1,1,0,1,119,120);
+sprite_set_precise(flashfield_sprite,1);
+astralsphere_sprite = cspr_add('fighter/ky_cogu/astralsphere_strip4.png',4,1,1,0,1,63,63);
+sprite_set_precise(astralsphere_sprite,1);
+black_screen_sprite = cspr_add ('fighter/ky_cogu/blackbg.gif',1,0,1,0,1,0,0 );
+risingforceeffect_sprite = cspr_add('fighter/ky_cogu/risingforceeffect_strip14.png',14,1,1,0,1,251,131);
+sacrededgeeffect_sprite = cspr_add('fighter/ky_cogu/sacrededgeeffect_strip22.png',22,1,1,0,1,126,125);
+killspark_sprite = cspr_add('fighter/kugami/killspark.png',16,0,1,0,1,0,0);
+
+    jab_sprite = cspr_add_pal('fighter/ky_cogu/jab_strip5.png',5,1,1,0,1,98,254);
+    jab2_sprite = cspr_add_pal('fighter/ky_cogu/jab2_strip8.png',8,1,1,0,1,129,279);
+    jab3_sprite = cspr_add_pal('fighter/ky_cogu/jab3_strip11.png',11,1,1,0,1,176,270);
+	
+    stilt_sprite = cspr_add_pal('fighter/ky_cogu/stilt_strip12.png',12,1,1,0,1,135,379);
+    utilt_sprite = cspr_add_pal('fighter/ky_cogu/utilt_strip9.png',9,1,1,0,1,102,379);
+	dtilt_sprite = cspr_add_pal('fighter/ky_cogu/dtilt_strip12.png',12,1,1,0,1,307,165);
+
+    ssmash_sprite = cspr_add_pal('fighter/ky_cogu/ssmash_strip10.png',10,1,1,0,1,175,311);
+    usmash_sprite = cspr_add_pal('fighter/ky_cogu/usmash_strip6.png',6,1,1,0,1,221,347);
+    dsmash_sprite = cspr_add_pal('fighter/ky_cogu/dsmash_strip10.png',10,0,1,0,1,159,294);
+	
+    nair_sprite = cspr_add_pal('fighter/ky_cogu/nair_strip10.png',10,1,1,0,1,176,160);
+    fair_sprite = cspr_add_pal('fighter/ky_cogu/fair_strip8.png',8,1,1,0,1,184,315);
+    bair_sprite = cspr_add_pal('fighter/ky_cogu/bair_strip9.png',9,0,1,0,1,311,371);
+    uair_sprite = cspr_add_pal('fighter/ky_cogu/uair_strip13.png',13,1,1,0,1,185,367);
+    dair_sprite = cspr_add_pal('fighter/ky_cogu/dair_strip9.png',9,1,1,0,1,123,338);	
+	
+	dash_attack_sprite = cspr_add_pal('fighter/ky_cogu/dashattack_strip10.png',10,0,1,0,1,229,258);
+    down_attack_sprite = dsmash_sprite;
+    edge_attack_sprite = stilt_sprite
+	
+    b_sprite = cspr_add_pal('fighter/ky_cogu/b_strip12.png',12,1,1,0,1,290,341);
+    airb_sprite = cspr_add_pal('fighter/ky_cogu/airb_strip6.png',6,1,1,0,1,238,346);
+    upb_sprite = cspr_add_pal('fighter/ky_cogu/upb_strip15.png',15,0,1,0,1,279,430);
+    upb2_sprite = cspr_add_pal('fighter/ky_cogu/upb2_strip14.png',14,0,1,0,1,280,390);
+	sideb_sprite = cspr_add_pal('fighter/ky_cogu/sideb_strip9.png',9,0,1,0,1,190,330);
+    downb_sprite = cspr_add_pal('fighter/ky_cogu/downb_strip13.png',13,0,1,0,1,136,345);
+    airdownb_sprite = cspr_add_pal('fighter/ky_cogu/airdownb_strip10.png',10,0,1,0,1,110,392);
+	final_smash_sprite = cspr_add_pal('fighter/ky_cogu/finalsmash_strip23.png',23,0,1,0,1,160,353);
+	final_smash_sprite2 = cspr_add_pal('fighter/ky_cogu/finalsmash2_strip16.png',16,0,1,0,1,81,478);
+	risingforce_sprite = cspr_add_pal('fighter/ky_cogu/risingforce_strip24.png',24,0,1,0,1,101,258);
+	burst_sprite = cspr_add_pal('fighter/ky_cogu/burst_strip14.png',14,0,1,0,1,114,349);
+	
+	ab_sprite = cspr_add_pal('fighter/ky_cogu/ab_strip24.png',24,1,1,0,1,241,264);
+	
+// Grabs and Throws
+    
+    grab_sprite = jab_sprite;
+    hold_sprite = cspr_add_pal('fighter/ky_cogu/jab_strip5.png',5,1,1,0,1,98,254);
+    pummel_sprite = jab2_sprite;
+    fthrow_sprite = cspr_add_pal('fighter/ky_cogu/fthrow_strip15.png',15,1,1,0,1,281,446);
+    bthrow_sprite = bair_sprite;
+    uthrow_sprite = usmash_sprite;
+    dthrow_sprite = b_sprite;
+	
+// Item-Related
+	
+	item_down_sprite = crouch_sprite;
+	item_forward_sprite = jab_sprite;
+    item_up_sprite = jab_sprite;
+    item_heavy_sprite = shield_sprite;
+    item_swing_sprite = jab_sprite; //sprite for homerun bat, lightsaber, and similar swingable items. Should clearly swing from above and forwards.
+    item_swing_frame = 1; //frame at which the character is at the zenith of swinging their hand/appendage forwards
+    hammer_swing_frame = 0; //frame at which the character starts swinging their hand, should ideally be pointing upwards
+    item_shoot_sprite = jab_sprite; //sprite for ray gun and similar shootable weapons. Should be the character in a position similar to holding a gun.
+    item_shoot_frame = 2; //frame at which the character should shoot the gun in question.
+	
+    sprite_end = fthrow_sprite //which DECLARED (cspr_add) sprite is the last one the game should load. IMPORTANT.
+
+// Scripts
+	
+    entry_script = char_entry;
+    taunt_script = char_taunt;
+    win_script = char_win;
+    lose_script = char_lose;
+    edge_jump_script = char_edge_jump;
+    edge_roll_script = char_edge_roll;
+    step_script = char_step;
+	
+    jab_script = char_jab;
+	
+    stilt_script = char_stilt;
+    utilt_script = char_utilt;
+    dtilt_script = char_dtilt;
+	
+    ssmash_script=char_ssmash;
+    usmash_script=char_usmash;
+    dsmash_script=char_dsmash;
+	
+    nair_script = char_nair;
+    fair_script = char_fair;
+    bair_script = char_bair;
+    uair_script = char_uair;
+    dair_script = char_dair;
+    zair_script = char_zair;
+	
+    dash_attack_script = char_dash_attack;
+    edge_attack_script = char_edge_attack;
+    down_attack_script = char_down_attack;
+	
+    b_script = char_b;
+    upb_script = char_upb;
+    sideb_script = char_sideb;
+    smashb_script=sideb_script;
+    downb_script = char_downb;
+    final_smash_script = char_final_smash;
+	
+	ab_script = char_ab;
+	
+    grab_script = char_grab;
+    hold_script = char_hold;
+    fthrow_script = char_fthrow;
+    bthrow_script = char_bthrow;
+    uthrow_script = char_uthrow;
+    dthrow_script = char_dthrow;
+    ai_attack_script = char_ai;
+	
+// Sounds
+	
+    jump_sound = sound_add("fighter/ky_cogu/jump.wav",0,1);
+	swingsound1 = sound_add("fighter/ky_cogu/swing1.wav",0,1);
+swingsound2 = sound_add("fighter/ky_cogu/swing2.wav",0,1);
+swingsound3 = sound_add("fighter/ky_cogu/swing3.wav",0,1);
+swingsound4 = sound_add("fighter/ky_cogu/swing4.wav",0,1);
+swingsound5 = sound_add("fighter/ky_cogu/swing5.wav",0,1);
+swingsound6 = sound_add("fighter/ky_cogu/swing6.wav",0,1);
+	solhit1 = add_hit_sfx(0,"fighter/ky_cogu/solhit1.wav")
+    solhit2 = add_hit_sfx(1,"fighter/ky_cogu/solhit2.wav")
+    solhit3 = add_hit_sfx(2,"fighter/ky_cogu/solhit3.wav")
+    solslash1 = add_hit_sfx(3,"fighter/ky_cogu/solslash1.wav")
+    solslash2 = add_hit_sfx(4,"fighter/ky_cogu/solslash2.wav")
+	lightning_sound = sound_add("fighter/ky_cogu/crackle.wav",0,1);
+	lightning_sound2 = sound_add("fighter/ky_cogu/lightningsound.wav",0,1);
+	airdash_sound = sound_add("fighter/ky_cogu/airdash.wav",0,1);
+	vaporthrust_sound = sound_add("fighter/ky_cogu/upbsfx.wav",0,1);
+	greedsever_sound = sound_add("fighter/ky_cogu/sidebsfx.wav",0,1);
+	ridethelightning_sound = sound_add("fighter/ky_cogu/finalsmashsfx.wav",0,1);
+	risingforce_sound = sound_add("fighter/ky_cogu/risingforcesfx.wav",0,1);
+	risingforce_sound2 = sound_add("fighter/ky_cogu/risingforcesfx2.wav",0,1);
+	sacrededge_sound = sound_add("fighter/ky_cogu/sacrededgesfx.wav",0,1);
+    sound_start = jump_sound //from which sound the game should begin loading sounds in. IMPORTANT.
+    mid_jump_sound = jump_sound;
+    killscreen_voice = sound_add("fighter/kugami/killscreen.wav",0,1);
+
+
+// Voices
+    b_voice = sound_add("fighter/ky_cogu/b.ogg",0,1);
+    downb_voice = sound_add("fighter/ky_cogu/downb.ogg",0,1);
+    b_voice2 = sound_add("fighter/ky_cogu/b2.ogg",0,1);
+    bcharged_voice = sound_add("fighter/ky_cogu/bcharged.ogg",0,1);
+    dashattack_voice = sound_add("fighter/ky_cogu/dashattack.ogg",0,1);
+    upb_voice = sound_add("fighter/ky_cogu/upb.ogg",0,1);
+    upb_voice2 = sound_add("fighter/ky_cogu/upb2.ogg",0,1);
+    sideb_voice = sound_add("fighter/ky_cogu/sideb.ogg",0,1);
+    finalsmash_voice = sound_add("fighter/ky_cogu/rtl1.ogg",0,1);
+    finalsmash_voice2 = sound_add("fighter/ky_cogu/rtl2.ogg",0,1);
+    finalsmash2_voice = sound_add("fighter/ky_cogu/fsspeech.ogg",0,1);
+    finalsmash2_voice2 = sound_add("fighter/ky_cogu/fs2.ogg",0,1);
+    ab_voice = sound_add("fighter/ky_cogu/sacrededge.ogg",0,1);
+    dragoninstall_voice = sound_add("fighter/ky_cogu/dragoninstall.wav",0,1);
+    taunt_voice = sound_add("fighter/ky_cogu/taunt.ogg",0,1);
+    taunt2_voice = sound_add("fighter/ky_cogu/taunt2.ogg",0,1);
+    respect_voice = sound_add("fighter/ky_cogu/respect.ogg",0,1);
+    respect2_voice = sound_add("fighter/ky_cogu/respect2.ogg",0,1);
+	win_voice = sound_add("fighter/ky_cogu/win.ogg",0,1);
+	usmash_voice = sound_add("fighter/ky_cogu/usmash.ogg",0,1);
+	die_voice1 = sound_add("fighter/ky_cogu/die1.ogg",0,1);
+    die_voice2 = sound_add("fighter/ky_cogu/die2.ogg",0,1);
+	starko_voice = sound_add("fighter/ky_cogu/starko.ogg",0,1);
+	hit_voice1 = sound_add("fighter/ky_cogu/hurt1.ogg",0,1); // voice for when you get hit by a normal attack
+	hit_voice2 = sound_add("fighter/ky_cogu/hurt2.ogg",0,1);
+    fly_voice1 = sound_add("fighter/ky_cogu/fly1.wav",0,1);
+    fly_voice2 = sound_add("fighter/ky_cogu/fly2.wav",0,1);	// another voice for when you get hit by a normal attack
+	mid_jump_voice = sound_add("fighter/ky_cogu/jump.ogg",0,1);
+	attack_voice1 = sound_add("fighter/ky_cogu/attack (1).ogg",0,1);
+    attack_voice2 = sound_add("fighter/ky_cogu/attack (2).ogg",0,1);
+    attack_voice3 = sound_add("fighter/ky_cogu/attack (3).ogg",0,1);
+    attack_voice4 = sound_add("fighter/ky_cogu/attack (4).ogg",0,1);
+    attack_voice5 = sound_add("fighter/ky_cogu/attack (5).ogg",0,1);
+    attack_voice6 = sound_add("fighter/ky_cogu/attack (6).ogg",0,1);
+   /*
+
+	//Delete the * and / symbols preceding and ending this section when you're ready to start adding voice files to your character.
+	
+	jump_voice = sound_add("fighter/ky_cogu/attack.wav",0,1); // voice for first jump
+	mid_jump_voice = sound_add("fighter/ky_cogu/attack.wav",0,1); // voice for double jump
+    sound_mute = mid_jump_voice
+	//sound_mute takes the sound you specify and mutes all sounds from that sound onwards for when you grab a Metal Cap.
+	//Effect lasts until Metal Cap runs out.
+	
+    usmash_voice = sound_add("fighter/ky_cogu/smash.wav",0,1);
+
+	
+    attack_voice1 = sound_add("fighter/ky_cogu/attack.wav",0,1);
+    attack_voice2 = sound_add("fighter/ky_cogu/attack2.wav",0,1);
+    attack_voice3 = sound_add("fighter/ky_cogu/attack3.wav",0,1);
+    attack_voice4 = sound_add("fighter/ky_cogu/attack4.wav",0,1);
+	 
+	hit_voice1 = sound_add("fighter/ky_cogu/hit.wav",0,1); // voice for when you get hit by a normal attack
+	hit_voice2 = hit_voice1 // another voice for when you get hit by a normal attack
+	broken_voice = sound_add("fighter/ky_cogu/hit.wav",0,1); // voice for when your shield breaks and you get up and are stunned
+	
+    starko_voice = sound_add("fighter/ky_cogu/hit.wav",0,1);
+    fly_voice1 = sound_add("fighter/ky_cogu/hit.wav",0,1);
+    fly_voice2 = sound_add("fighter/ky_cogu/hit2.wav",0,1);
+    die_voice1 = sound_add("fighter/ky_cogu/die.wav",0,1);
+    die_voice2 = sound_add("fighter/ky_cogu/die2.wav",0,1);;
+	entry_voice = sound_add("fighter/ky_cogu/intro.wav",0,1);
+	
+	*/
+	
+    sound_end = jump_sound //at which DECLARED (sound_add) sound the game should stop loading sounds in. IMPORTANT.
+	
+// Stats
+	
+    // REFERENCE:
+// Jigglypuff - 0.17
+// Mr. Game & Watch - 0.19
+// Tails - 0.21
+//~~ Mario - 0.25
+// Samus - 0.3
+// Snake - 0.32
+// DK - 0.33
+// Weegee - 0.37
+// Bowser - 0.4
+weight = 0.24;
+
+// REFERENCE:
+// Jigglypuff - 0.2
+// Samus - 0.21
+// Luigi - 0.23
+//~~ Mario - 0.25
+// Ganondorf - 0.29
+// Falco - 0.355
+// Fox - 0.45
+grav = 0.25;
+
+// REFERENCE:
+// Luigi - 0.75
+//~~ Mario, MR. G&W - 0.88
+// Ganondorf - 1.2
+// C. Falcon, Mach Rider - 1.5
+// MetaKnight - 2
+// Weegee - 2.5
+// Jiggs - 3
+// Link - 4
+// Peach - 6
+// Porky - 7
+fric = 0.80;
+
+// MAX JUMPS - 3 for 2 jumps + upb
+max_jumps = 3;
+dontrepeat = 0;
+temp_spawn = 0;
+
+// REFERENCE:
+// Phoenix Wright - 1.5
+// Peach - 2
+// Falco - 2.1
+//~~ Mario - 2.5
+// Captain Falcon - 3
+// Fox - 3.4
+// Sonic - 3.9
+run_start_speed = 3.2;
+
+// REFERENCE:
+// Porky - 0.06
+// Megaman - 0.075
+//~~ Mario, Sonic - 0.08
+// Metaknight - 0.09
+// Geno - 0.095
+// Falco - 0.1
+// Phoenix Wright - 0.25
+// Ganondorf - 0.3
+// Rayman - 0.4
+run_accel = 0.17;
+
+// REFERENCE:
+// Ganondorf - 2.5
+// Mewtwo - 2.65
+// Porky - 2.75
+// DK - 2.9
+// Megaman - 3
+//~~ Mario - 3.1
+// Snivy - 3.6
+// Pichu - 4
+// Pikachu - 4.2
+// Fox - 4.5
+// Captain Falcon - 4.7
+// Sonic - 5
+run_speed = 4.1;
+// Initial dash speed is 155% of run speed in default formula. You can use a different value.
+dash_speed = 6.35;
+// Walk speed is 60% of run speed in default formula. You can use a different value.
+walk_speed = 1.7;
+
+// Determines frame lag on jump
+jumptimer = 0
+
+// Effect of these values are heavily dependent on grav, so no reference.
+jump_speed = 5.4;
+mid_jump_speed = 5.4;
+short_hop_speed = 2.2;
+
+// REFERENCE:
+// Sonic - 1.85
+// Shadow - 2.1
+//~~ Mario - 2.3
+// Ristar - 2.4
+// Jigglypuff - 3
+// Wario - 3.1
+air_speed = 2.5;
+
+// REFERENCE:
+// Jigglypuff - 2.2
+// Mewtwo - 2.6
+// Lucario - 2.9
+//~~ Mario - 3.1
+// Chun-Li - 3.2
+// Waluigi - 3.3
+// Mach Rider - 3.4
+// Fox - 4.7
+// Falco - 5
+fall_speed = 3.1;
+// Fast fall multiplier. How many times faster fast fall is than normal fall. 150% in default formula.
+fast_fall_multiplier = 1.5;
+
+// REFERENCE:
+// Porky - 0.175
+// Knuckles - 0.18
+//~~ Mario - 0.2
+// Chun-Li - 0.21
+// Snivy - 0.24
+// Toad - 0.25
+// Jigglypuff, Wario - 0.6
+air_accel = 0.23;
+
+// Play around with these to see what your characters' scaling should be.
+xsize = 0.19;
+ysize = 0.19;
+	
+	//PLEASE DON'T HAVE THE XSIZE HAVE A DIFFERENT VALUE THAN THE YSIZE. XSIZE = YSIZE.
+	//If for example, xsize = 0.1 and ysize = 0.1, this is a good setting.
+	//If, instead, xsize = 1 but ysize = 0.5, this is horrible. This one will stretch the character horizontally and it will look hideous. You can play around with this to see what I mean. Always make sure xsize and ysize share the same value.
+	
+    ability = "spark"
+	// Ability Kirby gets upon absorbing this character you're making.
+	// Available:
+	// "fire"
+	// "beam"
+	// "fighter"
+	// "wheel"
+	// "laser"
+	// "sword"
+	// "bomb"
+	// "spark"
+	// "parasol"
+	// "falcon"
+	// "ice"
+	// "hammer"
+	// "cutter"
+	// "leaf"
+	// "whip"
+	// "esp"
+	// "sleep"
+	// "animal"
+	// "famicom"
+	// "magic"
+
+    smash_power_gain = 1
+	//Rate at which your smash bar fills up, default is 1.
+	
+    smash_charge_sound = 0
+	//Sound that plays when you charge a smash attack
+	//0 is the default chargesnd1 (find it in the sfx folder), 1 is chargesnd2, anything else won't play anything.
+	
+//Don't touch the ones below
+
+    state_type = "enter";
+    attack_type = "none";
+    image_yscale = ysize;
+    jumptimer = 1 //Determines frame lag on jump.
+    moveright = 0; moveleft = 0; moveup = 0; movedown = 0;
+	attacking =0; movejump = 0;
+    mask_index = stand_sprite;
+    points = 0;
+    kos = 0;
+    falls = 0;
+    air = 0;
+    time = 90;
+    timer = 0;
+    timer_speed = 1;
+    facing = 0;
+    hitby = 0;
+	can_zair = 1
+    special_land_time = 13
+    ranged_attacks = 4
+    ranged_attack_types[0] = "upb"
+    ranged_attack_types[1] = "upb"
+    ranged_attack_types[2] = "downb"
+    ranged_attack_types[3] = "downb"
+    scancel_type[0]=0
+    scancel_type[1]=0
+    scancel_type[2]=1
+    scancel_type[3]=1
+    scancel_type[4]=0
+    max_attack_dist = 55
+    held_item=-1

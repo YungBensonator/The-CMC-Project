@@ -1,0 +1,218 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 88;
+  timer = 0;
+  state_type = "air_attack";
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  upbalpha = 0;
+  }
+
+if ( timer < 20 )
+{
+hspeed = 0;
+vspeed = 0;
+}
+
+if ( timer < 80 )
+{
+gravity_lock = 1;
+}
+
+if ( ( timer > 25 && timer < 80 ) || timer > 85 )
+{
+force_edge_grab = 1;
+}
+if ( timer >= 80 && timer <= 85 )
+{
+force_edge_grab = 0;
+}
+
+	switch ( timer )
+	{
+	case 2: image_index = 0; break;
+	case 4: image_index = 1; break;
+	
+	case 20: sprite_index = upb_empty_sprite; image_index = 0; break;
+	
+	case 80: sprite_index = jump_sprite; image_index = 0; break;
+	case 82: image_index = 1; break;
+	case 84: image_index = 1; break;
+	case 86: image_index = 1; break;
+	}
+	
+if ( timer >= 10 && timer <= 20 )
+{
+upbalpha = 1;
+image_alpha -= 0.1;
+image_blend = c_lime
+}
+
+if ( timer = 20 )
+{
+sound_play(upb_sound);
+}
+
+if ( timer >= 20 && timer <= 80 )
+{
+image_alpha = 1;
+intangible = 1;
+	if ( timer mod 5 < 1 )
+	{
+	mist = instance_create( x + choose( random(6) , random (-6) ) * size , y - 13 + choose( random(6) , random (-6) ) * size , obj_spark );
+	mist.sprite_index = choose( mist_sprite , mist_sprite2 )
+	mist.image_index = 0;
+	mist.image_speed = 0.6;
+	mist.image_xscale = 0.5 * (1-facing*2) * size;
+	mist.image_yscale = 0.5 * size;
+	mist.image_angle = random(360);
+	mist.image_alpha = 0.8;
+	mist.depth = -7;
+	mist.image_blend = c_lime
+	}
+	
+	if ( !moveright && !moveleft && !moveup && !movedown )
+	{
+	hspeed = 0;
+	vspeed = 0;
+	}
+	if ( moveright = 1 && !moveup && !movedown )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = 3 * size;
+		vspeed = 0;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = 1 * size;
+		vspeed = 0;
+		}
+	}
+	if ( moveright = 1 && moveup = 1 )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = 3 * size;
+		vspeed = -3 * size;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = 1 * size;
+		vspeed = -1 * size;
+		}
+	}
+	if ( moveright = 1 && movedown = 1 )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = 3 * size;
+		vspeed = 3 * size;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = 1 * size;
+		vspeed = 1 * size;
+		}
+	}
+	if ( moveleft = 1 && !moveup && !movedown )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = -3 * size;
+		vspeed = 0;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = -1 * size;
+		vspeed = 0;
+		}
+	}
+	if ( moveleft = 1 && moveup = 1 )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = -3 * size;
+		vspeed = -3 * size;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = -1 * size;
+		vspeed = -1 * size;
+		}
+	}
+	if ( moveleft = 1 && movedown = 1 )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = -3 * size;
+		vspeed = 3 * size;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = -1 * size;
+		vspeed = 1 * size;
+		}
+	}
+	if ( moveup = 1 && !moveleft && !moveright )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = 0;
+		vspeed = -3 * size;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = 0;
+		vspeed = -1 * size;
+		}
+	}
+	if ( movedown = 1 && !moveleft && !moveright )
+	{
+	if ( giant_suika = 0 )
+		{
+		hspeed = 0;
+		vspeed = 3 * size;
+		}
+	if ( giant_suika > 0 )
+		{
+		hspeed = 0;
+		vspeed = 1 * size;
+		}
+	}
+}
+
+if ( timer = 80 )
+{
+sound_play(upb_sound2);
+vspeed = -6;
+image_alpha = 0;
+intangible = 0;
+}
+
+if ( timer >= 80 && timer <= 85 )
+{
+image_alpha += 0.2;
+}
+
+if ( timer >= time - 1 )
+  {
+  upbalpha = 0;
+  intangible = 0;
+  image_alpha = 1;
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

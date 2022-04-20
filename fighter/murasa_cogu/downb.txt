@@ -1,0 +1,111 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+        time = 40
+		hspeed = 0
+}
+if ( timer < time )
+    {
+	
+    switch ( timer )
+    {
+	case 0: image_index = 0; break;
+	case 10: image_index = 1; break;
+	case 14: image_index = 2; break;
+	case 20: image_index = 3; break;
+	
+	case 100: image_index = 1; break;
+	case 115: image_index = 2; break;
+	case 123: image_index = 3; break;
+	case 180: image_index = 4; break;
+	case 183: image_index = 5; break;
+	case 186: image_index = 6; break;
+    }
+	
+	if timer = 14 {
+		create_hitbox ( 2 , 90 , 0 , 0 , -1 , 1 , punch1 , obj_spark_hit1 , 0.26 , 0.30 , 12.09 , 12.09 , self.id , 2 , 4 );
+		sound_play(swingsnd2);
+		hitbox.di = 0
+		hitbox.hit_stun = 150
+	}
+	
+	if attack_success = 1 and timer < 100 and target.custom_boss != 1 {
+		timer = 100
+		time = 200
+		sprite_index = sideb_sprite
+		image_index = 0
+		target.alarm[0] = 200
+	}
+	
+	if timer = 101 { 
+	vspeed = -30
+	hspeed = 1.2 * (1-facing*2)
+	}
+
+	
+	if timer >= 101 and timer < 179 {
+				target.x = x + 4 * (1-facing*2)
+		target.y = y
+				vspeed += 3.5
+		}
+	
+	
+	if timer = 175 {
+		timer = 140
+	}
+	
+	if air = 0 and timer > 102 and timer < 179 {
+		timer = 179
+	}
+	
+	if timer = 180 {
+		  create_hitbox ( 25 , 45+facing*90 , 7.9 , 6.9 , 100 , 20 , water3 , obj_spark_hit3 , 1.18 , 1.61 , 10 , 7 , self.id , 3 , 4 );
+		  screen_shake(5,-7);
+		  hspeed = 0
+		  sound_play(fountain_sound);
+		  
+		   geyser = create_spark(-8,81,self.id);
+    geyser.sprite_index = watergeyser_sprite;
+    geyser.image_speed = 0.7;
+    geyser.image_alpha = 0.8;
+    geyser.image_xscale = image_xscale*0.7;
+    geyser.image_yscale = image_yscale*0.7;
+    geyser.depth = depth - 0.1;
+    geyser.snap = self.id
+	
+	 shockwave = create_spark(-18,10,self.id);
+    shockwave.sprite_index = shockwave_sprite;
+    shockwave.image_speed = 0.9;
+    shockwave.image_alpha = 0.7;
+    shockwave.image_xscale = image_xscale*1;
+    shockwave.image_yscale = image_yscale*1;
+    shockwave.depth = depth - 0.1;
+    shockwave.snap = self.id
+	  }
+	  
+	  if timer = 183 {
+		  vspeed = -3.4
+		  hspeed = -2 * (1-facing*2)
+	  }
+	
+	
+	
+	
+		
+
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantusedownb = 30
+}
+        

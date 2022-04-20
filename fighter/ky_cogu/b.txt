@@ -1,0 +1,113 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" and stunedged = 0 {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 45
+		hspeed = 0
+		special = 1
+}
+
+if ( timer < time )
+    {
+    switch (timer) { 
+	case 0: image_index = 0; break; 
+	case 1: image_index = 1; break; 
+	case 2: image_index = 2; break; 
+	case 3: image_index = 3; break; 
+	case 4: image_index = 4; break; 
+	case 8: image_index = 5; break; 
+	case 12: image_index = 6; break; 
+	case 16: image_index = 7; break; 
+	case 19: image_index = 8; break; 
+	case 29: image_index = 9; break; 
+	case 32: image_index = 10; break; 
+	case 35: image_index = 11; break; 
+	
+
+	case 50: image_index = 0; break; 
+	case 54: image_index = 1; break; 
+	case 60: image_index = 2; break; 
+	case 63: image_index = 3; break; 
+	case 67: image_index = 4; break; 
+	case 74: image_index = 5; break; 
+	
+
+
+
+
+}
+
+if timer = 1 and air > 0 {
+	timer = 50
+	time = 90
+	sprite_index = airb_sprite
+	image_index = 0
+}
+
+
+   if timer = 3 and !dragoninstall {
+	   stunedge = create_projectile(6, angle_correct(45), 4.7, 3.4, 1, 5, shock2, obj_spark_shock, 0.19, 0.19, 15, 30, self.id, 1000, char_custom1);
+	   stunedge.direction = angle_correct(0)
+	   stunedge.facingvar = facing
+	   sound_play(choose(b_voice,b_voice2));
+	   sound_play(lightning_sound);
+   }
+   
+    if timer = 3 and dragoninstall = 1 {
+	   stunedge = create_projectile(2, angle_correct(45), 1, 0, 1, 5, shock2, obj_spark_shock, 0.19, 0.19, 15, 30, self.id, 1000, char_custom2);
+	   stunedge.direction = angle_correct(0)
+	   stunedge.di = 0
+	   sound_play(choose(b_voice,b_voice2));
+	   sound_play(lightning_sound);
+   }
+   
+   if timer >= 50 and timer < 63 {
+	   vspeed = 0
+	   hspeed = 0
+	   air_move = 0
+	   gravity_lock = 1
+   }
+   
+   if timer = 63 and !dragoninstall {
+	   stunedge = create_projectile(6, angle_correct(45), 4.7, 3.4, 1, 5, shock2, obj_spark_shock, 0.19, 0.19, 15, 30, self.id, 1000, char_custom1);
+	    stunedge.direction = angle_correct(320)
+		stunedge.facingvar = facing
+		hspeed = -1.5 * (1-facing*2)
+		vspeed = -4
+		sound_play(choose(b_voice,b_voice2));
+		sound_play(lightning_sound);
+		stunedged = 1
+   }
+   
+   if timer = 63 and dragoninstall = 1 {
+	   stunedge = create_projectile(2, angle_correct(45), 1, 0, 1, 5, shock2, obj_spark_shock, 0.19, 0.19, 15, 30, self.id, 1000, char_custom2);
+	    stunedge.direction = angle_correct(320)
+		stunedge.di = 0
+		hspeed = -1.5 * (1-facing*2)
+		vspeed = -4
+		sound_play(choose(b_voice,b_voice2));
+		sound_play(lightning_sound);
+		stunedged = 1
+   }
+   
+	  
+	
+  }
+  
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

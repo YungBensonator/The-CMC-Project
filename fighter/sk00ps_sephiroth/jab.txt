@@ -1,0 +1,159 @@
+if ( state_type = "stand" )
+  {
+    attacking = 0;
+    state_type = "attack";
+    attack_type = "jab";
+    timer = 0;
+    time = 22;
+    sprite_index = jab_sprite;
+    image_index = 0;
+    image_speed = 0;
+    hspeed = 0;
+	hittemp = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 6: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 12: image_index = 0; break;
+	
+	case 100: sprite_index = jab_sprite2; image_index = 0; break;
+	case 103: image_index = 1; break;
+	case 117: image_index = 0; break;
+	
+	case 205: image_index = 1; break;
+	case 208: sprite_index = jab_sprite3; image_index = 2; break;
+	case 222: sprite_index = utilt_sprite; image_index = 1; break;
+	case 224: image_index = 0; break;
+	
+	case 340: sprite_index = utilt_sprite; image_index = 1; break;
+	case 344: image_index = 0;
+      }
+	if timer > 200 && hitbox.hit = 1 {
+		hittemp = 1;
+	}
+    if ( timer = 6 )
+      {
+	sound_play(sephirothswing1);
+	create_hitbox(2,10+facing*160,3.05,0,3,2,slash2,obj_spark_slash2,1.55 , 0.61 , 56.44 , 20.60,self.id,4,3);
+	hitbox.hit_stun = 7;
+	hitbox.di = 0;
+	hitbox.di = 0;
+	stabeff = create_blur(x+57*(1-facing*2),y-30*size,self.id)
+	stabeff.sprite_index = stab_eff
+	stabeff.image_xscale = size*0.12*(1-facing*2)
+	stabeff.image_yscale = size*0.12
+	stabeff.anim_speed = 1
+	stabeff.image_alpha = 1
+	stabeff.depth = depth - 0.1
+	stabeff.snap = self.id
+      }
+				
+if ((timer >= 10 && timer <= 19) || (timer >= 107 && timer <= 119)) && ai && attack_success
+{attacking = 1; attack_success = 0;}
+
+    if ( timer >= 10 && timer <= 19 && attacking )
+      {
+	timer = 99;
+	time = 122;
+    sprite_index = jab_sprite2;
+    image_index = 0;
+	hittemp = 0
+      }
+	/*
+	switch (timer){
+      case 100: eff = create_sword_trail(self.id, 9, 30, spread_texture); eff.index = 1; break;
+	  case 101: eff.index = 2; break;
+	  case 103: eff.index = 3; break;
+	  case 106: eff.end_decay = 0.33; break;
+      case 107: eff.end_decay = 0.66; break;
+      case 108: eff.end_decay = 1; break;
+      case 109: eff.end_decay = 1.33; break;
+      case 110: eff.end_decay = 1.66; break;
+      case 111: eff.end_decay = 2; break;
+      case 112: eff.end_decay = 2.33; break;
+      case 113: eff.end_decay = 2.66; break;
+      case 114: eff.end_decay = 3; break;
+      case 115: eff.end_decay = 3.33; break;
+      case 116: eff.end_decay = 3.66; break;
+      case 117:
+        with (eff){
+          instance_destroy();
+        }
+        break;
+    }
+	*/
+    if ( timer = 103 )
+      {
+	sound_play(sephirothswing2);
+	play_attack_voice();
+	create_hitbox(6,85+facing*10,5,0,3,6,slash3,obj_spark_slash2,1.36 , 1.64 , 39.44 , 19.04,self.id,4,1);
+	hitbox.hit_stun = 4;
+	hitbox.di = 0;
+	jab2eff = instance_create(x+20*(1-facing*2),y+5,obj_spark)
+	jab2eff.sprite_index = jab2_eff
+	jab2eff.image_xscale = size*0.7*(1-facing*2)
+	jab2eff.image_yscale = size*0.7
+	jab2eff.image_speed = 0
+	jab2eff.image_alpha = 1
+	jab2eff.depth = 1
+	jab2eff.snap = self.id
+      }
+	if timer >= 106 {
+		jab2eff.image_alpha -= 0.15;
+	}
+    if ( timer >= 107 && timer <= 119 && attacking)
+      {
+	timer = 200;
+	time = 230;
+    sprite_index = utilt_sprite;
+    image_index = 0;
+	if (instance_exists(jab2eff)) {with (jab2eff){instance_destroy();}}
+      }
+    if ( timer = 208 )
+      {
+	attacking = 0
+	sound_play(sephirothswing3);
+	sound_play(choose(smash_voice1,smash_voice2))
+	create_hitbox(4,90,2.5,0,7,6,slash3,obj_spark_slash2,2.06 , 2.00 , 53.72 , 22.16,self.id,4,3);
+	stabeff = create_blur(x+57*(1-facing*2),y-55*size,self.id)
+	stabeff.sprite_index = stab_eff
+	stabeff.image_xscale = size*0.12*(1-facing*2)
+	stabeff.image_yscale = size*0.12
+	stabeff.anim_speed = 1
+	stabeff.image_alpha = 1
+	stabeff.depth = depth - 0.1
+	stabeff.snap = self.id
+	stabeff.image_angle = 25*(1-facing*2);
+      }
+	if timer = 210 && hittemp = 1 {
+	timer = 300;
+	time = 380;
+	}
+	if timer >= 300 && timer < 340 && target.state_type != "shielding" {
+		target.x = x+40*(1-facing*2)*size;
+		target.y = y-25*size;
+		target.state_type = "flinch"
+		target.sprite_index = target.flinch_sprite;
+		target.depth = depth - 0.1;
+	}
+	if timer = 301 {
+		sound_play(jab_voice);
+	}
+	if timer = 340 && target.state_type != "shielding"{
+	create_projectile(4,175-facing*170,5.5,5,7,3,slash3,obj_spark_slash2,1,1,-15,12,self.id,4,no_script);
+	proj.x = target.x
+	proj.y = target.y-10;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

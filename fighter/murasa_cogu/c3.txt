@@ -1,0 +1,29 @@
+if timer = 1 and hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.ghostanchor2_sprite
+    image_speed = 0.5
+    visible = 1
+	moving_object = 1;
+speed = 0.1 * (1-facing*2)
+image_alpha = 0.8
+	
+}
+
+if timer >= 1 {
+	speed += 0.2 * (1-facing*2)
+}
+
+
+
+if is_on_floor(self) and hit = 0 {
+	hit = 1
+	screen_shake(5, -7);
+	sound_play(attacker.id.shakeheavy_sound);
+}
+
+if hit = 1 {
+image_alpha -= 0.1
+}
+
+if image_alpha = 0 {
+instance_destroy()
+}

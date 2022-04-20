@@ -1,0 +1,107 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 72;
+        timer_speed=1;
+        charge_frame = 9;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch (timer) { 
+	case 0: image_index = 0; break; 
+	case 2: image_index = 1; break; 
+	case 4: image_index = 2; break; 
+	case 6: image_index = 3; break; 
+	case 8: image_index = 4; break; 
+	case 11: image_index = 5; break; 
+	case 13: image_index = 6; break; 
+	case 50: image_index = 7; break; 
+	case 57: image_index = 8; break; 
+	case 63: image_index = 9; break; 
+}
+	  
+	if timer = 25 {
+		create_hitbox ( 11 , angle_correct(40) , 6.25 , 7.12 , 14 , 12 , magic3 , obj_spark_shock , 0.75 , 3.8 , 25.22 , 50.26 , self.id , 7 , 2 );
+		create_hitbox2 ( 11 , angle_correct(140) , 6.25 , 7.12 , 14 , 12 , magic3 , obj_spark_shock , 0.75 , 3.8 , -35.22 , 50.26 , self.id , 7 , 2 );
+		lightning = create_blur(x+25*(1-facing*2),y,self.id);
+    lightning.sprite_index = lightning_sprite;
+	lightning.image_index = 0;
+    lightning.anim_speed = 0.4;
+    lightning.image_alpha = 0.9;
+    lightning.image_xscale = 0.2 * (1-facing*2);
+    lightning.image_yscale = 0.2;
+    lightning.depth = depth - 0.1;
+    lightning.snap = self.id
+    lightning.loop = 9999
+	sound_play(lightning_sound);
+	sound_play2(explodehit4);
+	sound_play2(explodehit4);
+	
+	boom1 = instance_create(x+25*(1-facing*2),y,obj_spark_explode1);
+	boom2 = instance_create(x-35*(1-facing*2),y,obj_spark_explode1);
+	
+	lightning2 = create_blur(x-35*(1-facing*2),y,self.id);
+    lightning2.sprite_index = lightning_sprite;
+	lightning2.image_index = 0;
+    lightning2.anim_speed = 0.4;
+    lightning2.image_alpha = 0.9;
+    lightning2.image_xscale = 0.2 * (1-facing*2);
+    lightning2.image_yscale = 0.2;
+    lightning2.depth = depth - 0.1;
+    lightning2.snap = self.id
+	lightning2.loop = 9999
+	screen_shake(5,-7);
+	}
+	
+	if timer >= 37 {
+		lightning.image_alpha -= 0.05
+		lightning2.image_alpha -= 0.05
+	}
+
+  }
+if (timer >= 25){
+if (attack_success || target.object_index == obj_enemy) && (temp_spawn >= 0 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 105) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 145)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	    
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    dontrepeat = 0;
+    if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = frame_where_youre_fully_crouched; }
+	else {state_type = "stand";}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

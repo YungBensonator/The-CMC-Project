@@ -1,0 +1,59 @@
+if state_type = "edge" {
+
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "edge_attack";
+        image_speed = 0;
+        sprite_index = edge_attack_sprite;
+		timer = 0;
+        time = 37;
+        timer_speed=1;
+
+}
+
+if ( image_index < 4 )
+  please_shadow = -1;
+
+if timer < time {
+    attacking = 0;
+    state_type = "attack";
+	
+    switch (timer)
+	{
+	 case 3: image_index=1; break;
+	 case 6: image_index=2; break;
+	 case 10: image_index=3; break;
+	 case 13: image_index=4; break;
+	 case 15: image_index=5; break;
+	 case 17: image_index=6; break;
+	 case 19: image_index=7; break;
+	 case 21: image_index=8; break;
+	 case 25: image_index=9; break;
+	 case 29: image_index=10; break;
+	 case 33: image_index=11; break;
+	}
+	
+	if timer = 3 {intangible=1;}
+	
+	if timer = 13 {hspeed=3.5-facing*7;}
+	
+	if timer = 17 {create_hitbox(6.75,15+facing*150,5,7.5,13,6,kick2,obj_spark_hit2,.65,.65,4,5,self.id,6,3);
+					sound_play(thud_sound1);
+					duster = instance_create(x+6*(1-facing*2),y,obj_dust_effect);
+		
+			duster.image_xscale *= 0.3*size;
+			duster.image_yscale *= 0.3*size;
+			duster2 = instance_create(x+6*(1-facing*2),y,obj_dust_effect);
+	
+			duster2.image_xscale *= -0.3*size;
+			duster2.image_yscale *= 0.3*size;}
+}
+  
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+	intangible=0;
+	sprite_index = stand_sprite;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

@@ -1,0 +1,103 @@
+if ( time != -1 )
+  {
+    if instance_exists(target)
+    {
+	state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    sprite_index = grab_sprite;
+    image_speed = 0;
+    image_index = 5; 
+    hspeed = 0;
+    target.attack_type = "none";
+	pummel = -1;
+	}
+	else
+	exit;
+  }
+if ( timer >= 0 )
+{
+target.y = y;
+}
+if ( timer >= 0 && pummel == -1 )
+{
+target.x = x + 14 * size * (1-facing*2);
+}
+if ( attacking && pummel == -1 )
+  {
+    attacking = 0;
+    pummel = 0;
+    sprite_index = jab_sprite2;
+    image_speed = 0.4;
+    image_index = 0;
+  }
+if ( pummel == -1 )
+{
+if ( ( !facing && moveright ) || ( facing && moveleft ) )
+    attack_type = "fthrow";
+if ( ( !facing && moveleft ) || ( facing && moveright ) )
+    attack_type = "bthrow";
+if ( moveup )
+    attack_type = "uthrow";
+if ( movedown )
+  {
+    movedown = 0;
+    attack_type = "dthrow";
+  }
+}
+else
+{
+pummel += 1;
+if ( pummel >= 0 && pummel <= 5 )
+{
+target.x = x + 14 * size * (1-facing*2);
+}
+if ( pummel == 6 || pummel == 7 )
+{
+target.x = x + 13 * size * (1-facing*2);
+}
+if ( pummel = 8 || pummel = 9 )
+{
+target.x = x + 12 * size * (1-facing*2);
+}
+if ( pummel >= 10 && pummel <= 30 )
+{
+target.x = x + 14 * size * (1-facing*2);
+}
+if ( pummel == 10 )
+  {
+    target.x += 3 * ( 1 - facing * 2 );
+    temp_timer = target.timer;
+    temp_time = target.time;
+    sound_play2 ( slash2 );
+    create_projectile ( 2 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_hit1 , 0.8 , 0.9 , 10 , 10 , self.id , 2 , 0 );
+  }
+if ( pummel == 12 )
+  {
+    target.x -= 1 * ( 1 - facing * 2 );
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+    image_speed = 0.5;
+  }
+if ( pummel = 18 )
+  {
+    sprite_index = grab_sprite;
+    image_speed = 0;
+    image_index = 5;
+  }
+if ( pummel >= 30 )
+  {
+    pummel = -1;
+  }
+}
+
+if ( string(target.state_type) != "grabbed" )
+  {
+    state_type = "flinch";
+    timer = 0;
+    time = 15;
+  }

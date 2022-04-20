@@ -1,0 +1,80 @@
+absorb = -1
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.meteorflame_sprite
+    image_speed = 0.75;
+    visible=1;
+    temp = 1
+    proj_hits = 1
+    saber = attacker
+	dragtemp = 0
+    }
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+if hit = 1 {
+dragtemp = 1
+visible=1
+}
+if dragtemp = 1 {
+	target.x = x;
+	target.y = y;
+vspeed = 0.5;
+}
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.85)
+if timer = time+1 && proj_hits <= 7 {
+    proj_hits+=1
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+    shake_ampl = 0.3
+    if proj_hits = 8 {
+        bkb= attacker.size*5.5
+        kbg = attacker.size*5.2
+        dir = 20+facing*140
+        hitlag_frames = 5
+        hitlag_diff = 2
+        shake_type = 1
+        shake_ampl = 0
+        shaker = instance_create(0,0,obj_bloomery)
+        shaker.b = 0
+        shaker.size = 0.75
+        shaker.size_diff = 0.05
+        hit_stun = 3
+		di = 0;
+        //sfx = kick3
+        instance_create(0,0,obj_flashscreen)
+    explodddd = instance_create(x,y,obj_spark_explode1)
+    explodddd.image_xscale = 3
+    explodddd.image_yscale = 3
+   sound_play(explode_big)
+   screen_shake(10,10);
+   visible = 0;
+   sound_stop(attacker.downbsnd3)
+	create_projectile(10,90,6,6.95,8,6,-1,-1,4,4,0,20,attacker.id,3,no_script); 
+   instance_destroy();
+    }
+    timer = 0
+    time = 19
+}
+if timer = 179 && proj_hits<12 {
+proj_hits=8
+}
+if ( is_on_floor(self.id) || ( collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 0 ) )
+  {
+	create_projectile(10,90,6,6.95,8,6,-1,-1,4,4,0,20,attacker.id,3,no_script); 
+   visible = 0;
+   instance_create(0,0,obj_flashscreen)
+    explodddd = instance_create(x,y,obj_spark_explode1)
+    explodddd.image_xscale = 3
+    explodddd.image_yscale = 3
+   screen_shake(10,10);
+   sound_play(explode_big)
+   instance_destroy();
+   sound_stop(attacker.downbsnd3)
+  }
+
+
+

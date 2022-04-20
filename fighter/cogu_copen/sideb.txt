@@ -7,7 +7,7 @@ if state_type = "jump" || state_type = "stand" || state_type = "run" || state_ty
         sprite_index = sidebstart_sprite
         image_index=0
         timer = 0
-        time = 20
+        time = 25
 		special = 1
 		target = 0
 		target1 = 0
@@ -45,7 +45,6 @@ state_type = "air_attack"
 	force_edge_grab = 1
 	
 	if timer = 3 {
-		bullitsused += 1
 		sound_play(bullitdash_sound);
 	}
 	
@@ -106,7 +105,17 @@ state_type = "air_attack"
 		image_index = 0
 		tagged = target1
 		tagtimer = choose(300,400,450,0)
-		hitthing = create_projectile(3, 90, 0, 0, 1, 20, punch2, obj_spark_hit2, 0.3, 0.3, 15, 30, self.id, 1000, no_script);
+		if hit > 4{
+		hitthing = create_projectile(3, angle_correct(45), 5.4, 4.2, 1, 20, punch2, obj_spark_hit2, 0.3, 0.3, 15, 30, self.id, 1000, no_script);
+			  hitthing.visible = 0
+              hitthing.image_alpha = 0
+			  hitthing.x = target1.x
+			  hitthing.y = target1.y-(target1.actual_height / 2 );
+			  hitthing.di = 0
+			  with (jetboot) {instance_destroy()}
+			  bullitsused -= 1
+		}
+		hitthing = create_projectile(3, 90, 2.4, 1.2, 1, 20, punch2, obj_spark_hit2, 0.3, 0.3, 15, 30, self.id, 1000, no_script);
 			  hitthing.visible = 0
               hitthing.image_alpha = 0
 			  hitthing.x = target1.x
@@ -304,6 +313,7 @@ if timer >= 1000 and timer < 1020 {
 		hspeed *= 0.2
 		with (bubble) {instance_destroy()}
 		with (jetboot) {instance_destroy()}
+		bullitsused -= 1
 	}
 	
 	

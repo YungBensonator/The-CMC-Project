@@ -1,0 +1,144 @@
+no_hurtbox = 1;
+if ( sprite_index = stand_sprite )
+image_speed = 0.15;
+
+if ( sprite_index = crouch_sprite )
+{
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: image_index = 0;  break;
+  case 4: image_index = 1; wingeff.y = y-8*size; break;
+  }
+  if timer = 0 {
+  wingeff.y = y-12*size;
+  }
+  if timer = 4 {
+  wingeff.y = y-8*size;
+  }
+}
+has_abs = 1
+if air = 0 {
+	wingeff.image_index = 0;
+}
+if air > 0 {
+	wingeff.image_index = 1;
+}
+if owatemp = 1 && owatemp2 = 0 {
+	wingeff.image_alpha = 1;
+	owatemp2 = 1; 
+}
+wingeff.image_xscale = size*0.68*(1-facing*2)
+wingeff.image_yscale = size*0.68
+wingeff.image_angle = image_angle
+if sprite_index = stand_sprite {
+wingeff.x = x
+wingeff.y = y-25*size;
+}
+if sprite_index = stand_sprite {
+wingeff.x = x
+wingeff.y = y-25*size;
+}
+if sprite_index = jump_sprite || sprite_index = mid_jump_sprite || run_sprite {
+wingeff.x = x
+wingeff.y = y-25*size;
+}
+if sprite_index = walk_sprite {
+wingeff.x = x+10*(1-facing*2)*size;
+wingeff.y = y-25*size;
+}
+if state_type = "out" {
+	owatemp = 0
+	tempmus_stop ( owasound );
+	if (instance_exists(wingeff)) {with (wingeff){instance_destroy();}}
+}
+
+if (enemy.state_type = "out"){
+temp_spawn += 1
+ }
+if attack_type != "downb" {
+	if (instance_exists(materia)) {with (materia){instance_destroy();}}
+}
+
+if (instance_exists(meteor)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 110) || (target.weight > .22 && target.weight < .3 && target.percent > 120) || (target.weight > .3 && target.percent > 130)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+        target.gravity_lock = 1
+        killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				image_speed = 0.5;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 25
+				freezer2.alarm[0] = 30
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+        enemy.state_type = "air_flinch"
+				enemy.timer = 0
+				enemy.time = 60
+				enemy.speed = temp_speed * 2
+				}
+				}
+  }	
+
+
+if owatemp = 0 {
+weight = 0.19;
+grav = 0.26;
+max_jumps=3;
+walk_speed = 2;
+run_speed = 4.2;
+run_start_speed = 3.4;
+run_accel = .1
+jumptimer = 1
+jump_speed = 7;
+mid_jump_speed = 7.5;
+short_hop_speed = 3.75;
+air_speed = 2.3;
+fall_speed = 3.2;
+air_accel = 0.22;
+fast_fall_multipler = 1.5;
+airdash_speed = 5.75;
+fric = 2;
+offense = 1;
+}
+if owatemp = 1 {
+weight = 0.26;
+grav = 0.26;
+max_jumps=4;
+walk_speed = 2.7;
+run_speed = 5;
+run_start_speed = 3.4;
+run_accel = .1
+jumptimer = 1
+jump_speed = 7;
+mid_jump_speed = 7.5;
+short_hop_speed = 3.75;
+air_speed = 3;
+fall_speed = 3.2;
+air_accel = 0.22;
+fast_fall_multipler = 1.5;
+airdash_speed = 5.75;
+fric = 2;
+offense = 1.3
+}

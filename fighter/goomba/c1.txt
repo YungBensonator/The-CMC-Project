@@ -1,0 +1,297 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.micro_goomba_sprite
+	hit = 2;
+    image_speed = 0.15
+    visible =1
+	moving_object = 0;
+	priority = 4;
+	hit_stun = 1;
+	time = 500;
+	alarm[0] = 500;
+	vspeed = -1.5;
+	moving_object = 1;
+	chosen = goombaspeed
+	hspeed= chosen - attacker.id.facing*(chosen*2)
+	sticky = 0;
+	temp = 0;
+	facing = attacker.facing
+	image_xscale=attacker.image_xscale
+	image_yscale=attacker.image_yscale
+	damagetemp = 0;
+
+	grounded = 0
+	groundtimer = -1
+	safetemp = 0
+}
+
+if y > obj_game_control.death_d {
+instance_create ( x+random_range(-7,7) , y +random_range(-7,7) , obj_spark_shockwave );
+			repeat ( 5 )
+				{
+					spark = instance_create ( x+random_range(-7,7) , y +random_range(-7,7) , obj_spark_effect );
+					spark.speed = random ( 4 );
+					spark.direction = random ( 360 );
+				}
+attacker.goombanumber -= 1
+sound_play(attacker.flat_sound1)
+timer = time
+alarm[0] = timer
+instance_destroy();
+
+}
+
+if ( sticky = 0 ) //How the projectile acts before sticking to someone.
+{
+
+	vspeed += 0.075;
+	vspeed = min(4.0,vspeed);
+
+if timer >40{
+absorb2 = 1}
+
+if grounded = 0 {
+
+
+if ( !next_to_rwall && !next_to_lwall && !on_floor && !on_platform ) 
+	{
+	hspeed -= 0.3*(1-facing*2)
+	
+	if facing = 0 
+		{
+			hspeed = max(1,hspeed);
+		}
+		
+	else
+		{
+			hspeed = min(-1,hspeed*-1);
+		}
+		
+	}
+	
+	
+
+if ( next_to_rwall || next_to_lwall  ) // Behaviour when next to a wall
+	{ 
+		hspeed *= -1
+		if facing = 0 
+			{
+				facing = 1;
+			}
+		else 
+			{
+			facing = 0;
+			}
+		
+	}
+
+if ( on_floor || on_platform ) 
+	{
+		grounded = 1;
+	}
+}
+// -------------------- Grounded behaviours start here
+
+if (((!on_floor && !on_platform) || (sticky > 0)) && safetemp != 1) //safetemp exists so mini goombas can leave the ground when you want them to without bugging; just make sure to include safetemp = 1 in the associated groundtimer.
+	{
+	grounded = 0
+	groundtimer = -1
+	}
+
+if grounded = 1 
+	{
+	
+	groundtimer += 1
+
+	
+	
+	if groundtimer = 0  // when the mini goomba touches the ground:
+		{
+			safetemp = 1;
+			
+			hspeed *= 0.5 ;
+			
+			duster = instance_create(x,y,obj_dust_effect);
+			duster.image_xscale *= 0.1*size;
+			duster.image_yscale *= 0.1*size;
+			
+			duster2 = instance_create(x,y,obj_dust_effect);
+			duster2.image_xscale *= -0.1*size;
+			duster2.image_yscale *= 0.1*size;
+			
+		}
+	
+	if groundtimer = 1 // i had some code here to make it bounce, didnt work :yeet: thats why it goes to 35
+		{
+			groundtimer = 35;
+		}
+	
+	
+	if groundtimer = 35
+		{
+			safetemp = 0;
+			
+			hspeed *= 0 ;
+			
+			duster = instance_create(x,y,obj_dust_effect);
+			duster.image_xscale *= 0.05*size;
+			duster.image_yscale *= 0.05*size;
+			
+			duster2 = instance_create(x,y,obj_dust_effect);
+			duster2.image_xscale *= -0.05*size;
+			duster2.image_yscale *= 0.05*size;	
+		
+		}
+	if groundtimer >= 35 && groundtimer < 50 
+		{
+			hspeed = 0;
+		
+		}
+	
+	
+	if groundtimer >= 50 && groundtimer < 450 // Movement
+		{
+			hspeed = chosen - facing*(chosen*2);
+			vspeed = 0
+			
+		
+		if ( next_to_rwall || next_to_lwall  ) // Behaviour when next to a wall
+	{ 
+		hspeed *= -1
+		if facing = 0 
+			{
+				facing = 1;
+			}
+		else 
+			{
+			facing = 0;
+			}
+		
+	}
+			
+		}
+		
+
+	
+	  if groundtimer > 440 
+		{
+			hspeed = 0;
+			image_alpha = 0;
+			
+			
+			instance_create ( x , y - 15 , obj_spark_shockwave );
+			repeat ( 5 )
+				{
+					spark = instance_create ( x , y - 15 , obj_spark_effect );
+					spark.speed = random ( 4 );
+					spark.direction = random ( 360 );
+				}
+			timer = time-1;
+			
+			
+		}
+			
+
+	  
+	 }
+		
+
+
+
+if ( timer >= 2 ) //Collision check for the sticky.
+  {
+if ( timer mod 2 == 0 )
+  {
+create_homing_bubble(0.33,0.33,0,0,attacker.id,2);
+proj.destroy = 0;
+proj.target = 0;
+  }
+  
+if ( proj.target > 0 && !proj.target.intangible ) //Makes it stick to the opponent when the projectile touches them.
+	{
+temp = proj.target;
+sticky = 1;
+instance_create ( x , y , obj_spark_shockwave );
+if ( attacker.attack_success = 0 )
+{
+projhitbox = create_projectile ( 3, 45+facing*90 , 1 , 1 , 6 , 3 , kick2 , obj_spark_special1 , 1 , 1 , 8 , 8 , attacker.id , 4 , no_script );
+}
+else
+target.percent += 3 * size;
+	}
+  }
+}
+
+
+if ( sticky = 1 ) //Changes its behaviour when sticking to the opponent.
+  {
+	parry_nodestroy = 1;
+	sprite_index = attacker.id.micro_goomba_sprite;
+	image_index = 0;
+	image_speed = 0.15;
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+    time = 250;
+	sticky = 2;
+	damagetemp = 0;
+	depth = temp.depth - 1;
+  }
+  
+if ( sticky = 2 ) //Keeps the projectile in place.
+  {
+  if ( timer = 0 )
+  {
+  xrandom = ( choose ( random(6) , random(-6) ) );
+  yrandom = ( choose ( random(10) , random(-10) ) );
+  }
+    if ( timer >= 0 )
+	{
+    x = temp.x+xrandom*(1-facing*2)*temp.size;
+    y = temp.y-temp.actual_height * 0.5 - yrandom;
+    facing = temp.facing;
+	}
+	
+	if temp.moveright || temp.moveleft || temp.moveup || temp.movedown 
+		{
+			timer += 0.5;
+		}
+	
+  }
+
+if damagetemp < 30
+{
+damagetemp += 1;
+}
+
+if ( sticky = 2 && damagetemp = 30 && temp.intangible != 1 && temp.state_type != "out") //Code used to do chip damage overtime.
+  {
+   damagetemp = 0;
+   sound_play2(kick2);
+   goombspark = instance_create(temp.x+random_range(-7,7),temp.y-random_range(0,temp.actual_height),obj_spark_hit1);
+   x = goombspark.x
+   y = goombspark.y
+   temp.percent += 1;
+  }
+
+if ( timer > 150 && sticky = 2 )
+  {
+  timer = time-1;
+  }
+  
+
+
+  
+if timer = time - 1 {
+instance_create ( x+random_range(-7,7) , y +random_range(-7,7) , obj_spark_shockwave );
+			repeat ( 5 )
+				{
+					spark = instance_create ( x+random_range(-7,7) , y +random_range(-7,7) , obj_spark_effect );
+					spark.speed = random ( 4 );
+					spark.direction = random ( 360 );
+				}
+attacker.goombanumber -= 1
+sound_play(attacker.flat_sound1)
+instance_destroy();
+}  
+
+	

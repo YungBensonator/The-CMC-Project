@@ -1,0 +1,53 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "dthrow";
+    timer = 0;
+    time = 90;
+    sprite_index = dair_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	target.shakex = 0;
+	target.shakey = 0;
+	target.image_index = 0;
+	target.image_speed = 0;
+	target.timer_speed = 0.01;
+	target.alarm[0] = 100;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 13: sprite_index = dthrow_sprite; image_index = 1; break;
+	case 16: image_index = 2; break;
+	
+	case 76: sprite_index = utilt_sprite; image_index = 1; break;
+	case 80: image_index = 0; break;
+      }
+	if timer >= 13 && timer <= 76 {
+	target.sprite_index = target.down_sprite;
+	target.image_speed = 0;
+	target.image_index = 0;
+	target.state_type = "flinch"
+	}
+	if timer = 13 {
+	create_projectile(2,361,1,0,15,2,slash3,obj_spark_slash3,0.1 , 0.1 , 24.48 , 20.40,self.id,2,no_script);
+	proj.x = target.x
+	proj.y = target.y-5
+	}
+	if timer = 76 {
+	create_projectile(2,60+facing*60,7,4,15,2,slash3,obj_spark_slash3,0.1 , 0.1 , 24.48 , 20.40,self.id,2,no_script);
+	proj.x = target.x
+	proj.y = target.y-5
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

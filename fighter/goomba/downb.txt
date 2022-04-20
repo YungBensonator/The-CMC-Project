@@ -1,0 +1,269 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+		sprite_index = fthrow_sprite
+        image_index=0
+        timer = 0
+        time = 90
+		falltemp = 0
+		spintemp = 0
+		target1 = 0
+		attack_shielded = 0
+		
+		if air = 0 {hspeed = 0}
+		}
+
+if ( timer < time )
+    {
+	
+		switch ( timer )
+		{
+			case 3: image_index = 1; break;
+			case 5: image_index = 2; break;
+			case 6: image_angle = 340*(1-facing*2); break;
+			case 7: image_angle = 335*(1-facing*2); break;
+			case 8: image_angle = 332*(1-facing*2); break;
+			case 9: image_angle = 331*(1-facing*2); break;
+			case 10: image_angle  = 331*(1-facing*2); break;
+			case 11: image_angle = 331*(1-facing*2); break;
+			case 12: image_angle = 332*(1-facing*2); break;
+			case 13: image_angle = 335*(1-facing*2); break;
+			case 14: image_angle = 340*(1-facing*2); break;
+			case 15: image_angle = 360*(1-facing*2); break;
+			
+			
+			
+			
+		
+		}
+		
+		if timer = 5 
+			{
+				instance_create(x,y-15*size,obj_spark_effect);
+			}
+		
+		if timer > 15 
+			{
+				if vspeed > 4.5
+					{
+						vspeed = 4.5;
+					}
+			}
+			
+		if timer = 15 
+			{
+				sound_play(air_dodge_sound);
+				spark = instance_create(x*size,y-7*size,obj_spark_shockwave);
+				spark.image_xscale *= 0.5*size;
+				spark.image_yscale *= 0.1*size;
+				spark2 = instance_create(x*size,y-7*size,obj_spark_shockwave);
+				spark2.image_xscale *= 0.7*size;
+				spark2.image_yscale *= 0.2*size;
+				duster = instance_create(x+12*(1-facing*2),y,obj_dust_effect_bold);
+				duster.image_xscale *= 0.8*size;
+				duster.image_yscale *= 0.8*size;
+				duster.facing = facing;
+				
+				shakey =-12
+				
+				sprite_index = dair_sprite
+				//mask_index = sprite_index
+				image_index = 4
+				
+				air_move = 0
+				
+				create_hitbox(5,39+facing*102,5.4,1,7,4,kick3,obj_spark_hit1,0.8,0.8,0,0,self.id,44,2)
+				hitbox.hit_stun = 45
+				hitbox.di = 0
+				hitbox.sdi = 0
+				vspeed = -3
+				hspeed = 3.2*(1-facing*2)
+				
+			}
+		
+		if timer < 60 && attack_success && !attack_shielded 
+			{
+				sprite_index = nair_sprite
+				timer = 100
+				time = 150
+				image_index = 2
+				image_angle = 0
+				vspeed = -6.5
+				target1 = target
+				target1.state_type = "air_flinch";
+				special = 0
+
+				
+			}
+		if timer < 60  && attack_shielded 
+			{
+			timer = 60
+			vspeed = -4.2
+
+				
+			}
+		
+		if timer >= 15 && timer < 60
+			{
+			image_angle = timer*3*(1-facing*2)
+				image_yscale *= -1
+				image_xscale *= -1
+				
+				
+			}
+			
+		if timer >= 60 {
+		air_move = 1
+		}
+		
+		if timer = 60 
+			{
+				spintemp = 1 // just to end this move quicker LUL
+				sprite_index = nair_sprite;
+				image_index = 3;
+				image_speed = 0.25
+				shakey = 6
+				shakex = -3*(1-facing*2)
+			}
+		
+		if timer >=60 && timer <= 84 {
+		
+		if image_index > 8
+			{
+				image_index = 8
+			}
+			if spintemp = 1 {
+		time = 83}
+		}
+		
+
+		
+		        if air = 0 && timer >=60 && timer < 90 {
+				shakey = 0
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14;}
+		
+		
+			if air= 0 && timer > 15 && timer < 60 && vspeed >= 0 {
+	spark2 = instance_create(x*size,y*size,obj_down_impact);
+	state_type = "down"
+	image_angle = 0
+	timer = 89
+	falltemp = 1
+	}
+		
+	
+
+
+
+
+	if timer >= 100 && timer < 147 
+		{
+		if timer = 100 {
+		attack_success = 0
+		gravity_lock = 1
+		}
+		
+		if sauce_hitbox > 0 {
+		sauce_hitbox = 0
+		}
+		sauce_hitbox -= 1
+		
+			x  = target1.x;
+			vspeed += 0.4
+			
+			
+			
+			if timer = 120 {
+			sprite_index = dair_sprite
+			image_index = 4
+			image_speed = 0
+			create_hitbox(7,56+facing*68,5.8,5.3,10,4,kick2,obj_spark_hit3,0.7,0.7,0,0,self.id,25,4)
+			}
+			if timer >= 120 {
+			if air = 0  {
+				shakey = 0
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=11;}
+				}
+			
+			if timer >= 130 && y > target1.y {
+			timer = 60
+			time = 90
+			}
+			if special = 1 {
+			
+			sauce_hitbox += 5			}
+			
+			if sauce_hitbox >  0 {
+			
+			hitbox.damage = 9
+			hitbox.bkb = 6.8
+			hitbox.kbg = 6.3
+			hitbox.hitlag_frames = 16
+			}
+			else {
+			hitbox.damage = 7
+			hitbox.bkb = 5.8
+			hitbox.kbg = 5.3
+			hitbox.hitlag_frames = 4
+			}
+			
+			 
+			
+			if attack_success {
+			vspeed = -6.2
+			timer = 60
+			time = 90
+				spintemp = 1 // just to end this move quicker LUL
+				sprite_index = nair_sprite;
+				image_index = 3;
+				image_speed = 0.25
+				shakey = 6
+				shakex = -3*(1-facing*2)
+			}
+			
+		
+	
+		
+			
+
+			
+		}
+		
+	
+	}
+	
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0 {
+	if timer = 89 && falltemp = 1 {
+		sprite_index = down_sprite
+		image_index = 0
+		shakey = 0
+		image_angle = 360
+        state_type = "down";
+		}
+	else {
+    
+        state_type = "stand";
+		}
+		}
+	if air > 0 {
+	state_type = "jump"
+	}
+    timer = 0;
+    time =-1;
+}
+        

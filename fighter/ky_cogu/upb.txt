@@ -1,0 +1,154 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 50;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+	 followup = 0
+}
+
+if timer < time {
+	state_type = "air_attack"
+    switch (timer) { 
+	case 0: image_index = 0; break; 
+	case 2: image_index = 1; break; 
+	case 4: image_index = 2; break; 
+	case 6: image_index = 3; break; 
+	case 8: image_index = 4; break; 
+	case 11: image_index = 5; break; 
+	case 22: image_index = 6; break; 
+	case 25: image_index = 7; break; 
+	case 29: image_index = 8; break; 
+	case 32: image_index = 9; break; 
+	case 35: image_index = 10; break; 
+	case 38: image_index = 11; break; 
+	case 41: image_index = 12; break; 
+	case 44: image_index = 13; break; 
+	case 47: image_index = 14; break; 
+	
+
+	case 100: image_index = 0; break; 
+	case 104: image_index = 1; break; 
+	case 108: image_index = 2; break; 
+	case 112: image_index = 3; break; 
+	case 115: image_index = 4; break; 
+	case 119: image_index = 5; break; 
+	case 122: image_index = 6; break; 
+	case 125: image_index = 7; break; 
+	case 129: image_index = 8; break; 
+	case 133: image_index = 9; break; 
+	case 137: image_index = 10; break; 
+	case 140: image_index = 11; break; 
+	case 143: image_index = 12; break; 
+	case 146: image_index = 13; break; 
+
+}
+
+force_edge_grab = 1
+
+if timer >= 6 and timer < 11 {
+	vspeed = -7.4
+	hspeed = 1 * (1-facing*2)
+	air_move = 0
+}
+
+if timer = 6 {
+	create_hitbox ( 14 , angle_correct(80) , 3.5 , 7.5 , 50 , 15 , solslash2 , obj_spark_shock , 1.25 , 1.9 , 16.36 , 26.22 , self.id , 5 , 4 );
+	lightninggfx = create_blur(x + 8 * (1-facing*2) ,y - 77,self.id);
+    lightninggfx.sprite_index = upbeffect_sprite;
+	lightninggfx.image_index = 0;
+    lightninggfx.anim_speed = 0.6;
+    lightninggfx.image_alpha = 0.9;
+    lightninggfx.image_xscale = 0.2 * (1-facing*2);
+    lightninggfx.image_yscale = 0.2;
+    lightninggfx.depth = depth - 0.1;
+    lightninggfx.snap = self.id
+	sound_play(vaporthrust_sound);
+	sound_play(choose(upb_voice, upb_voice2));
+}
+
+if timer = 8 {
+	hitbox.hitbox_x = 0 * (1-facing*2)
+	hitbox.hitbox_y = 55
+	hitbox.image_xscale = 1.44 * (1-facing*2)
+	hitbox.image_yscale = 1.7
+}
+
+if timer >= 11 and timer < 22 and special = 1 {
+	followup = 1
+}
+
+if timer = 22 and followup = 1 {
+	timer = 100
+	time = 150
+	sprite_index = upb2_sprite
+	image_index = 0
+}
+
+if timer = 115 {
+	create_hitbox ( 8 , angle_correct(28) , 6 , 5 , 31 , 7 , magic3 , obj_spark_shock , 1.29 , 1 , 21.47 , 29.82 , self.id , 2 ,3 );
+	hspeed = -1.3 * (1-facing*2)
+	vspeed = -3
+	sound_play(lightning_sound2);
+	lightninggfx = create_spark(22,34,self.id);
+    lightninggfx.sprite_index = baireffect_sprite;
+	lightninggfx.image_index = 0;
+    lightninggfx.image_speed = 1;
+    lightninggfx.image_alpha = 0.9;
+    lightninggfx.image_xscale = 0.15 * (1-facing*2);
+    lightninggfx.image_yscale = 0.15;
+    lightninggfx.depth = depth - 0.1;
+    lightninggfx.snap = self.id
+}
+	  
+if (timer >= 9){
+if (attack_success || target.object_index == obj_enemy) && (temp_spawn >= 0 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 140)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	    	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        dontrepeat = 0
+		attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }
