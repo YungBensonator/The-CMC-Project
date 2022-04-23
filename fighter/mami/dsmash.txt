@@ -6,7 +6,7 @@ if state_type = "stand" || state_type = "run" || state_type = "crouch" {
         sprite_index = dsmash_sprite;
         image_index=0;
         timer = 0;
-        time = 37;
+        time = 46;
         timer_speed=1;
         charge_frame = 4;
 }
@@ -23,18 +23,17 @@ if ( timer < time )
 	case 21: image_index = 6; break;
 	case 23: image_index = 7; break;
 	case 25: image_index = 8; break;	
-	case 29: image_index = 8; break;
-	case 31: image_index = 9; break;
-	case 33: image_index = 10; break;
-	case 37: image_index = 11; break;
+	case 28: image_index = 9; break;
+	case 38: image_index = 10; break;
+	case 42: image_index = 11; break;
 	}
 
  if ( timer = 16 ) 
       {	      
     sound_play(dsmash_voice);
 	sound_play(bshoot_sound);
-	create_hitbox(9,20+facing*140,5,6,18,9,magic3,obj_spark_hit4,2,1,65,28,self.id,4,2);
-    create_hitbox2(9,158-facing*136,5,6,18,9,magic3,obj_spark_hit4,2,1,-65,28,self.id,4,2);
+	create_hitbox(9,20+facing*140,5,6.2,18,9,magic3,obj_spark_hit4,2,1,65,28,self.id,4,2);
+    create_hitbox2(9,158-facing*136,5,6.2,18,9,magic3,obj_spark_hit4,2,1,-65,28,self.id,4,2);
     effectdsmash = create_spark(30,20,self.id);
     effectdsmash.sprite_index = guneff_sprite;
     effectdsmash.image_speed = 0.4;
@@ -54,9 +53,9 @@ if ( timer < time )
   }
   
  }
-if (timer >= 16 && timer < 24){
-		if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
-				if ((target.weight <= .22 && target.percent > 90) || (target.weight > .22 && target.weight < .3 && target.percent > 110) || (target.weight > .3 && target.percent > 120)){
+    if (timer >= 16){
+if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 140)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;
 				killspark.image_xscale = size * 0.75;
@@ -83,12 +82,20 @@ if (timer >= 16 && timer < 24){
 				dontrepeat = 1;
 				}
 				}
-				}
-      
+        
+  }	   
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
   {
-	dontrepeat = 0;
+  dontrepeat = 0
+	if movedown
+	{
     state_type = "crouch";
+	sprite_index = crouch_sprite
+	image_index = 3
+    timer = 16;
+	}
+	else
+	{state_type = "stand"}
     attack_type = "none";
     timer = 0;
     time = -1;
