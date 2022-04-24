@@ -1,0 +1,87 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "uthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = uthrow_sprite;
+  timer = 0;
+  time = 41;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+
+switch(timer)
+{
+case 03: image_index = 1; break;
+case 06: image_index = 2; break;
+case 09: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+case 18: image_index = 6; break;
+case 21: image_index = 7; break;
+case 31: image_index = 8; break;
+case 34: image_index = 9; break;
+}
+
+if timer = 15
+{
+  create_throw_box ( 13 , 85 + facing * 10 , 7.25 , 1.25 , 29 , 7 , punch3 , obj_spark_hit4 , 0.48 , 1.23 , 14.40 , 20.25 , self.id , 2 );
+  sound_play(usmash_voice);
+  sound_play(attacksnd3);
+}
+
+if ( ( timer >= 3 and timer < 12 ) )
+	hspeed = size * (1-facing*2);
+    else
+	hspeed = 0;
+
+//Blur shit starts here
+    switch ( timer )
+      {
+	case 9:  
+    blur2 = create_itmpnt_blur(/*Attacker*/self.id, /*Texture*/blur_texture, /*Start frame*/2, /*Apex Frame*/6, /*End frame*/6, /*CCW*/1, /*girth*/10, 15);
+    blur2.index = 1;
+    blur2.image_index = 1;
+    blur2.depth -= 0.1;
+	blur2.h_squish = -8;
+	blur2.v_squish = -8;
+	blur2.push_x = -10*size*(1-facing*2);
+	blur2.push_y = -3*size;
+    break;
+    case 12:
+    blur2.index = 2;
+	blur2.push_x = 5*size*(1-facing*2);
+    break;
+	case 15: 
+	blur2.index = 3;
+	blur2.push_x = -10*size*(1-facing*2);
+    break;
+	case 16:
+	blur2.image_index = 2;
+	break;
+    case 17: 
+    blur2.image_index = 3.33;
+    break;
+    case 18:
+    blur2.image_index = 3.5;
+    break;
+	case 19: 
+    blur2.image_index = 4; 
+    break;
+    case 20:  
+    blur2.image_index = 4; 
+    break;
+    case 21: with (blur2) instance_destroy(); break;
+      }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

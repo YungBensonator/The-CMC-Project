@@ -1,0 +1,96 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (up_b_used = 1) exit;
+if state_type = "run" || state_type = "stand" || state_type = "jump" && air < max_jumps {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb"
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0;
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing; }
+    else {
+        state_type = "air_attack";
+    }
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=1;
+    time = 50;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+        if timer < time {
+
+            if timer = 4 {
+                sound_play(upb_sound);
+                vspeed = -8.2*size;
+                after_image(5,c_yellow,0.85)
+                instance_create(x+10*(1-facing*2)*size,y-18*size,obj_spark_effect)
+		}
+		if timer = 4 {
+		image_index = 1
+		}
+		if timer = 6 {
+		image_index = 2
+		}
+		if timer = 9 {
+		image_index = 3
+		}
+		if timer = 12 {
+		image_index = 4
+		}
+		if timer = 18 {
+		image_index = 5
+		}
+		if timer = 24 {
+		image_index = 6
+		}
+		if timer = 30 {
+		image_index = 7
+		}
+		if timer = 7 {
+                intangible = 1;
+		}
+            if timer = 8 || timer = 10 || timer = 12 || timer = 14 {
+
+                vspeed -= 0.6*grav*size*GRAV_MUL;
+                after_image(5,c_yellow,0.85)
+                }
+            if timer = 16 {
+                 after_image(5,c_yellow,0.85)
+		 }
+            if timer = 19 || timer = 20 || timer = 21 || timer = 22 || timer = 23 || timer = 24 || timer = 25 || timer = 26 || timer = 27 || timer = 28 || timer = 29 || timer = 30 || timer = 31 || timer = 32 || timer = 33 || timer = 34 || timer = 35 {
+                vspeed = -1.85*size
+            }
+ if timer = 36 || timer = 37 {
+                vspeed = -1.25*size
+            }
+            if timer >= 36 {
+		intangible = 0
+			}
+            if timer >= 38 {
+		//up_b_used = 1;
+		force_edge_grab = 1
+			}
+	if ( timer > 25 && ( attacking || smash )) {
+		intangible = 0
+		up_b_used = 1
+		interrupt = 1
+	}
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "jump";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+	intangability = 0
+	up_b_used = 1;
+    }

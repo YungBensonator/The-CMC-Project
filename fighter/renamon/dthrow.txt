@@ -1,0 +1,68 @@
+if time = -1 {
+hspeed = 0;
+temp = 0
+slide = 0;
+if air = 0 {
+hspeed = 0
+}
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0;
+sprite_index = fthrow_throw_sprite;
+image_index=0;
+timer = 0;
+time = 40;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 70
+slide=0
+}
+if timer < time {
+  switch ( timer )
+    {
+    case 4: image_index = 1; break;
+    case 7: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 15: image_index = 4; break;
+    case 17: image_index = 5; break;
+    case 19: image_index = 6; break;
+    case 22: image_index = 7; break;
+    case 32: image_index = 8; break;
+    case 37: image_index = 9; break;
+    }
+	if timer >= 1 && timer <= 18 {
+    if(facing = 0){target.x = x+20;}
+	if(facing = 1){target.x = x-20;}
+	target.y = y
+	}
+	if target.percent >= 85 && air = 0 {
+	temp = 1
+	}
+	if (target.percent >= (100+target.weight*100)) && air > 0 {
+	temp = 1
+	}
+	if (target.percent <= (100+target.weight*100)) && air > 0 {
+	temp = 0
+	}
+        if timer = 19 
+		{
+		if(air > 0)
+		{
+			vspeed = -5;
+			hspeed = 0;
+	if (target.percent <= (100+target.weight*100)) {
+	temp = 0
+	}
+		}	
+			
+        create_throw_box(7,90+(temp*180),6-(temp*1.7),4.15+(1.5*temp),1,1,kick2,obj_down_impact,0.5,0.5,11,10,self.id,2);
+        create_hitbox (7,90+(temp*180),6-(temp*1.7),4.45+(1.2*temp),1,1,kick2,obj_down_impact,0.5,0.5,11,10,self.id,2);
+        hitbox.hit_stun = 10;}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

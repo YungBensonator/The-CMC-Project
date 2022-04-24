@@ -1,0 +1,122 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 19;
+        timer_speed=1;
+		chip = 0
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 4: image_index = 1; break;
+	case 7: image_index = 2; break;
+	case 12: image_index = 3; break;
+	
+	case 50: image_index = 0; break;
+	case 54: image_index = 1; break;
+	case 57: image_index = 2; break;
+	case 60: image_index = 3; break;
+	case 65: image_index = 4; break;
+	case 72: image_index = 5; break;
+	case 76: image_index = 6; break;
+	case 78: image_index = 7; break;
+      }
+	  
+	  if timer = 1 {
+	  chip = 0
+	  attack_shielded = 0
+	  }
+	  
+	  if timer = 4 {
+		  create_hitbox ( 2 , 90 , 1.2 , 0 , 8 , 3 , unibhit1 , obj_spark_hit2 , 0.67 , 0.36 , 17.25 , 4.25 , self.id , 3 , 2 );
+		  sound_play(attack_sound2);
+		  hitbox.di = 0
+	  }
+	  
+	  if timer >= 7 and timer < 19 and attack_success = 1 and attacking = 1 {
+		  timer = 50
+		  time = 85
+		  sprite_index = dtilt2_sprite
+		  image_index = 0
+	  }
+	  
+	  if timer = 60 {
+		  create_hitbox ( 3 , 90 , 0 , 0 , 11 , 6 , unibslash2 , obj_spark_slash3 , 1.03 , 0.69 , 17 , 10.25 , self.id , 5 , 3 );
+		  swordslash = create_spark(-14,-14,self.id);
+    swordslash.sprite_index = newswordslash_sprite;
+    swordslash.image_speed = 0.5;
+    swordslash.image_alpha = 1;
+    swordslash.image_xscale = image_xscale*1.04;
+    swordslash.image_yscale = image_yscale*1.4;
+    swordslash.depth = depth - 0.1;
+    swordslash.snap = self.id
+	swordslash.image_angle = 94 * (1-facing*2)
+	sound_play(insulator1_voice);
+	play_attack_voice()
+	hitbox.di = 0
+	hitbox.hit_stun = 15
+	  }
+	  
+	  if attack_shielded = 1 and chip = 0 and timer >= 60 and timer < 85 {
+	target.percent += 3
+	chip = 1
+	}
+	  
+	  if timer > 60 {
+		  swordslash.image_alpha -= 0.1
+	  }
+	  
+	  if timer > 65 and attack_success = 1 {
+
+	  
+	  if attacking = 1 {
+			  
+			  if ( ( ( moveright && facing = 0 ) or ( moveleft && facing = 1 ) ) ) {
+		 state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_stilt();
+			  }
+			  
+			  if moveup = 1 {
+				  state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_usmash();
+			  }
+			  
+			  if movedown = 1 {
+				  state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_dsmash();
+			  }
+
+	  }
+	  
+	  }
+
+
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "crouch";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        
+

@@ -1,0 +1,116 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 30;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  if air = 0
+  {
+  sprite_index = b_sprite;
+  }
+  
+  if air > 0
+  {
+  sprite_index = b_air_sprite;
+  }
+  
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 0;
+  }
+
+if timer < 9
+{
+gravity = 0;
+gravity_lock = 1;
+fast_fall = 0;
+fast_fall_temp = 0;
+vspeed = 0;
+}
+
+switch(timer)
+{
+case 03: image_index = 1; break;
+case 06: image_index = 2; break;
+case 09: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+case 18: image_index = 6; break;
+case 21: image_index = 7; break;
+case 24: image_index = 8; break;
+case 27: image_index = 9; break;
+}
+
+if timer = 9
+{
+
+if sprite_index = b_sprite
+{
+if !instance_exists(bproj)
+{
+    bproj = create_projectile ( 8 , 25+facing*130 , 3.5 , 4.4 , 12 , 4 , shock3 , obj_spark_shock , 0.23 , 0.20 , 14.85 , 34.20 , self.id , 65 , char_custom1 );
+    bproj.sprite_index = lightningsphere_sprite;
+	bproj.image_xscale = 0.15 *(1-facing*2) * size;
+	bproj.image_yscale = 0.15 * size;
+	bproj.speed = 4 * (1-facing*2) * size;
+	bproj.image_speed = 0.6;
+	
+	lightninghit = instance_create( x,y,obj_spark );
+    lightninghit.sprite_index = lightninghit_eff;
+    lightninghit.image_xscale = 0.3 * size;
+    lightninghit.image_yscale = 0.3 * size;
+    lightninghit.image_speed = 0.7;
+    lightninghit.x = x + 14.85 * (1-facing*2) * size;
+    lightninghit.y = y - 34.20;
+	
+	sound_play(shocksound);
+	sound_play(choose(b_voice,b_voice2,b_voice3));
+}
+}
+
+if sprite_index = b_air_sprite
+{
+if !instance_exists(bproj)
+{
+    bproj = create_projectile ( 8 , 25+facing*130 , 3.5 , 4.4 , 12 , 4 , shock3 , obj_spark_shock , 0.23 , 0.20 , 17.10 , 26.10 , self.id , 65 , char_custom1 );
+    bproj.sprite_index = lightningsphere_sprite;
+	bproj.image_xscale = 0.15 *(1-facing*2) * size;
+	bproj.image_yscale = 0.15 * size;
+	bproj.speed = 4 * (1-facing*2) * size;
+	bproj.direction = 315 * (1-facing*2);
+	bproj.image_speed = 0.6;
+	
+	lightninghit = instance_create( x,y,obj_spark );
+    lightninghit.sprite_index = lightninghit_eff;
+    lightninghit.image_xscale = 0.3 * size;
+    lightninghit.image_yscale = 0.3 * size;
+    lightninghit.image_speed = 0.7;
+    lightninghit.x = x + 14.85 * (1-facing*2) * size;
+    lightninghit.y = y - 26.10 * size;
+	
+	sound_play(shocksound);
+	sound_play(choose(b_voice,b_voice2,b_voice3));
+	
+}
+
+vspeed = -2 * size;
+hspeed = -1 * (1-facing*2) * size;
+
+}
+
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,80 @@
+if air > 0 {
+exit;
+}
+
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "attack"
+        attack_type = "downb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        timer = 0
+        time = 31
+		image_index = 0
+		hspeed = 0
+
+
+}
+if ( timer < time )
+    {
+	state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 0; break;
+	case 6: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 15: image_index = 4; break;
+	case 18: image_index = 5; break;
+	case 20: image_index = 6; break;
+	case 22: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 26: image_index = 9; break;
+
+      }
+	  
+	  if timer = 15 {
+create_hitbox ( 9 , 70+facing*40 , 5.31 , 2 , 15 , 7 , unibslash3 , obj_spark_darkness , 0.7 , 2.22 , 65.69 , 27.84 , self.id , 3 , 2 );
+create_hitbox2 ( 3 , 10+facing*160 , 4 , 1.92 , 6 , 4 , unibslash1 , obj_spark_slash1 , 0.96 , 0.32 , 39.41 , 3.51 , self.id , 4 , 1 );
+hitbox.image_angle = 165-facing*150
+   pillar = create_spark(63,0,self.id);
+    pillar.sprite_index = downbeffect_sprite;
+    pillar.image_speed = 0.7;
+    pillar.image_alpha = 1;
+    pillar.image_xscale = image_xscale*2;
+    pillar.image_yscale = image_yscale*2;
+    pillar.depth = depth - 0.1;
+    pillar.snap = self.id
+	sound_play(downb_voice);
+	hitbox.hit_stun = 30
+	}
+
+
+if timer >= 18 and attack_success = 1 {
+interrupt = 1;
+}
+	
+	
+if facing = 0 {
+pillar.image_angle=342;
+}
+
+if facing = 1 {
+pillar.image_angle=18;
+}
+
+
+	
+
+
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantusedownb = 30
+}
+        

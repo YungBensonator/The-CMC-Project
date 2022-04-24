@@ -1,0 +1,136 @@
+if (state_type = "stand" || state_type = "crouch" || state_type = "run" || state_type = "jump") {
+	if meter < 100 {
+		exit;
+	}
+		special = 1;
+		hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "ab";
+        image_speed = 0;
+        sprite_index = b_sprite;
+        image_index=0;
+        timer = 0;
+        time = 67;
+		air_move = 0;
+        timer_speed=1;
+}
+
+		switch (timer)
+		{
+		case 03: image_index = 1; break;
+        case 06: image_index = 2; break;
+		case 36: sound_play(ab_voice); break;
+        case 46: image_index = 3; break;
+        case 49: image_index = 4; break;
+        case 52: image_index = 5; break;
+        case 55: image_index = 6; break;
+        case 58: image_index = 7; break;
+        case 61: image_index = 8; break;
+        case 64: image_index = 9; break;
+		
+	    case 103: image_index = 1; break;
+        case 106: image_index = 2; break;
+		case 136: sound_play(ab_voice); break;
+        case 146: image_index = 3; break;
+        case 149: image_index = 4; break;
+        case 152: image_index = 5; break;
+        case 155: image_index = 6; break;
+        case 158: image_index = 7; break;
+        case 161: image_index = 8; break;
+        case 164: image_index = 9; break;
+		}
+		
+		if timer = 2 
+		{
+			meter -= 100
+			ZAWARUDOTOKIWOTOMARE  = instance_create(x,y,obj_freeze)
+			ZAWARUDOTOKIWOTOMARE.dontpause = self.id
+			ZAWARUDOTOKIWOTOMARE.alarm[0] = 37
+			sound_play(supersound);
+			effect_create_above(ef_ring,x + 1 * (1-facing*2),y - 15,1.5,c_blue)
+		}
+		
+		
+		if timer = 36 or timer = 39 or timer = 42 or timer = 45
+		{
+			bproj = create_projectile ( 9 , 15+facing*150 , 5 , 6.2 , 12 , 10 , shock3 , obj_spark_shock , 0.23 , 0.20 , 14.85 , 34.20 , self.id , 65 , char_custom1 );
+			bproj.sprite_index = lightningsphere_sprite;
+			bproj.image_xscale = 0.2 *(1-facing*2) * size;
+			bproj.image_yscale = 0.2 * size;
+			bproj.speed = 4 * (1-facing*2) * size;
+			bproj.image_speed = 0.6;
+			bproj.priority +=4;
+	
+			lightninghit = instance_create( x,y,obj_spark );
+			lightninghit.sprite_index = lightninghit_eff;
+			lightninghit.image_xscale = 0.3 * size;
+			lightninghit.image_yscale = 0.3 * size;
+ 			lightninghit.image_speed = 0.7;
+			lightninghit.x = x + 14.85 * (1-facing*2) * size;
+			lightninghit.y = y - 34.20;
+			
+			
+	        sound_play(shocksound);
+		}
+		
+		if timer = 1 and air > 0 {
+			timer = 100
+			time = 167
+			sprite_index = b_air_sprite
+			image_index = 0
+			effect_create_above(ef_ring,x + 1 * (1-facing*2),y - 15,1.5,c_blue)
+		}
+		
+		if timer = 101 {
+			ZAWARUDOTOKIWOTOMARE  = instance_create(x,y,obj_freeze)
+			ZAWARUDOTOKIWOTOMARE.dontpause = self.id
+			ZAWARUDOTOKIWOTOMARE.alarm[0] = 27
+			sound_play(super_sound);
+			meter -= 100
+		}
+
+		if timer = 136 or timer = 141 or timer = 146
+		{
+			bproj = create_projectile ( 9 , 15+facing*150 , 5 , 6.2 , 12 , 10 , shock3 , obj_spark_shock , 0.23 , 0.20 , 17.10 , 26.10 , self.id , 65 , char_custom1 );
+			bproj.sprite_index = lightningsphere_sprite;
+			bproj.image_xscale = 0.2 *(1-facing*2) * size;
+			bproj.image_yscale = 0.2 * size;
+			bproj.speed = 4 * (1-facing*2) * size;
+			bproj.direction = 315 * (1-facing*2);
+			bproj.image_speed = 0.6;
+			bproj.priority +=4;
+	
+			lightninghit = instance_create( x,y,obj_spark );
+			lightninghit.sprite_index = lightninghit_eff;
+			lightninghit.image_xscale = 0.3 * size;
+			lightninghit.image_yscale = 0.3 * size;
+			lightninghit.image_speed = 0.7;
+			lightninghit.x = x + 14.85 * (1-facing*2) * size;
+			lightninghit.y = y - 26.10 * size;
+			
+			sound_play(shocksound);
+		}
+        
+		if timer < 149
+		{
+			gravity = 0;
+			gravity_lock = 1;
+			fast_fall = 0;
+			fast_fall_temp = 0;
+			vspeed = 0;
+		}
+		
+		if timer = 149
+		{
+			vspeed = -2 * size;
+			hspeed = -1 * (1-facing*2) * size;
+		}
+   
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+	if(air != 0){state_type = "jump";}
+    else{state_type = "stand";}
+    timer = 0;
+    time =-1;
+}

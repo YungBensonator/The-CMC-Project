@@ -1,0 +1,61 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "fair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fair_sprite;
+  timer = 0;
+  time = 21;
+  timer_speed = 1;
+  lcancel = 1;
+  canceltemp = 0;
+  attack_success = 0;
+  }
+
+switch(timer)
+{
+case 03: image_index = 1; break;
+case 06: image_index = 2; break;
+case 09: image_index = 3; break;
+case 19: image_index = 4; break;
+}
+
+if timer = 6
+{
+    create_hitbox ( 8 , 15 + facing * 150 , 3.5 , 4.6 , 10 , 4 , kick3 , obj_spark_hit3 , 1.02 , 0.66 , 12.60 , 13.05 , self.id , 5 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	sound_play(attacksnd3);
+	sound_play(choose(attack_voice6,attack_voice7,attack_voice8,attack_voice9,attack_voice10));
+}
+
+if ( attack_success = 1 )
+{
+canceltemp = 1;
+}
+
+if ( canceltemp = 1 && ( ( movejump && !attacking && ( ( !smashright && facing = 0 ) || ( !smashleft && facing = 1 ) ) && (air < max_jumps-1) ) || ( special && !grab ) || ( smash && ( ( !smashright && facing = 0 ) || ( !smashleft && facing = 1 ) ) && !movejump && !attacking ) || ( (attacking || grab) && ( ( !moveright && !smashright && facing = 0 ) || ( !moveleft && !smashleft && facing = 1 ) ) ) ) )
+{
+interrupt = 1;
+}
+
+if air = 0 
+    {
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=9; 
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

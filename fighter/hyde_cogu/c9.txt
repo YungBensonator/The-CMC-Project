@@ -1,0 +1,37 @@
+if (collision_rectangle( x -19.60 , y - 3 , x + 23.80  , y + 0 , obj_floor , 1 , 1 )) || (collision_rectangle ( x -19.60 , y - 3 , x + 23.80  , y + 0 , obj_platform , 1 , 1 )){
+    grounded=1;
+}
+else
+{grounded=0;}
+
+if grounded = 0{
+vspeed=6;
+hspeed=0;
+}
+
+if grounded = 1 {
+vspeed=0;
+hspeed=3*(1-facing*2);
+if timer mod 5 = 0{
+create_projectile(1,15+150*facing,7,1,20,2,unibslash2,obj_spark_darkness,0.35 , 0.35 , 0 , 0, attacker.id, 10, no_script);
+proj.image_alpha=1;
+proj.hspeed=0;
+proj.vspeed=0;
+proj.hit=0;
+proj.image_speed=0.7;
+proj.image_index=0;
+proj.sprite_index=attacker.downbeffect_sprite;
+proj.image_angle = 342 * (1-facing*2)
+proj.image_yscale = 0.7
+		proj.image_xscale = 0.7 * (1-facing*2)
+		vanish = 0
+}
+}
+
+if proj.hit = 1 {
+	vanish += 1
+}
+
+if vanish = 19 {
+    {instance_destroy()}
+}

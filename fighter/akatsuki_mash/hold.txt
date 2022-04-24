@@ -1,0 +1,89 @@
+if ( time != -1 )
+{
+    if instance_exists(target)
+    {
+	hspeed = 0;
+    state_type = "attack";
+    attack_type = "hold";
+    image_speed = 0;
+    sprite_index = hold_sprite;
+    image_index=2;
+    target.attack_type = "none"
+    timer = 0;
+    time = -1;
+    timer_speed=1;
+    pummel = -1;
+	}
+	else
+	exit;
+}
+if ( attacking && pummel == -1 )
+  {
+    attacking = 0;
+    pummel = 0;
+    sprite_index = pummel_sprite;
+    image_speed = 0.25;
+    image_index = 0;
+  }
+if ( pummel == -1 )
+{
+if facing = 0 {
+    if moveright = 1
+    attack_type = "fthrow";
+    else if moveleft = 1
+    attack_type = "bthrow";
+    }
+if facing = 1 {
+    if moveleft = 1
+    attack_type = "fthrow";
+    else if moveright = 1
+    attack_type = "bthrow";
+    }
+if moveup = 1 
+    attack_type = "uthrow";
+if movedown = 1 {
+    attack_type = "dthrow";
+    movedown = 0; }
+}
+else
+{
+pummel += 1;
+if ( pummel == 10 )
+  {
+    temp_timer = target.timer;
+    temp_time = target.time;
+	sound_play2 ( shock2 )
+    create_projectile ( 2 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_shock , 0.8 , 0.8 , 10 , 15 , self.id , 2 , 0 );
+	
+	lightninghit = instance_create( x,y,obj_spark );
+    lightninghit.sprite_index = lightninghit_eff;
+    lightninghit.image_xscale = 0.4 * size;
+    lightninghit.image_yscale = 0.4 * size;
+    lightninghit.image_speed = 0.7;
+    lightninghit.x = x + 20.70 * (1-facing*2) * size;
+    lightninghit.y = y - 18.45;
+	
+  }
+if ( pummel == 11 )
+  {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+  }
+if ( pummel = 17 )
+  {
+    sprite_index = hold_sprite;
+    image_speed = 0;
+    image_index = 1;
+  }
+if ( pummel >= 30 )
+  {
+    pummel = -1;
+  }
+}
+if string(target.state_type) != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }

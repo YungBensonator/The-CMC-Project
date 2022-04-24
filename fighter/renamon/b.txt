@@ -1,0 +1,411 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "b";
+        image_speed = 0;
+        temp = air > 0
+        sprite_index =b_sprite;
+        image_index=0;
+        timer = 0;
+        time = 62;
+        timer_speed=1;
+	//sound_play(b_voice);
+        special = 0;
+        if temp = 1 {
+            sprite_index = b_air_sprite;
+            state_type = "air_attack";
+		time = 62;
+		image_speed = 0;
+        }
+}
+        if temp = 0 {
+	hspeed = 0
+  switch ( timer )
+    {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 11: image_index = 4; break;
+    case 15: image_index = 5; break;
+    case 17: image_index = 6; break;
+    case 20: image_index = 7; break;
+    case 28: image_index = 8; break;
+    case 40: image_index = 9; break;
+    }
+	if timer = 4
+	{
+			sound_play(sideb_sound)
+			diam1 = instance_create(x+(6-facing*12),y-32,obj_spark)
+			diam1.sprite_index = diamond_sprite;
+			diam1.image_xscale = (0.7)*size
+			diam1.image_yscale = 0.4*size
+			diam1.image_speed = 0;
+			diam1.image_angle = 90
+			diam1.snap = self.id
+			diam1.x_snap = size*(12-facing*24)
+			diam1.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 6
+	{
+			diam2 = instance_create(x+(14-facing*28),y-25,obj_spark)
+			diam2.sprite_index = diamond_sprite;
+			diam2.image_xscale = (0.7)*size
+			diam2.image_yscale = 0.4*size
+			diam2.image_speed = 0;
+			diam2.image_angle = 90
+			diam2.snap = self.id
+			diam2.x_snap = size*(12-facing*24)
+			diam2.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 8
+	{
+			diam3 = instance_create(x+(22-facing*42),y-22,obj_spark)
+			diam3.sprite_index = diamond_sprite;
+			diam3.image_xscale = (0.7)*size
+			diam3.image_yscale = 0.4*size
+			diam3.image_speed = 0;
+			diam3.image_angle = 90
+			diam3.snap = self.id
+			diam3.x_snap = size*(12-facing*24)
+			diam3.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 10
+	{
+			diam4 = instance_create(x+(14-facing*28),y-11,obj_spark)
+			diam4.sprite_index = diamond_sprite;
+			diam4.image_xscale = (0.7)*size
+			diam4.image_yscale = 0.4*size
+			diam4.image_speed = 0;
+			diam4.image_angle = 90
+			diam4.snap = self.id
+			diam4.x_snap = size*(12-facing*24)
+			diam4.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 12
+	{
+			diam5 = instance_create(x+(6-facing*12),y-4,obj_spark)
+			diam5.sprite_index = diamond_sprite;
+			diam5.image_xscale = (0.7)*size
+			diam5.image_yscale = 0.4*size
+			diam5.image_speed = 0;
+			diam5.image_angle = 90
+			diam5.snap = self.id
+			diam5.x_snap = size*(12-facing*24)
+			diam5.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer > 4 {
+	if diam1.image_alpha != 1
+		{
+		diam1.image_alpha+=0.1
+		}
+	if diam2.image_alpha != 1
+		{
+		diam2.image_alpha+=0.1
+		}
+	if diam3.image_alpha != 1
+		{
+		diam3.image_alpha+=0.1
+		}
+	if diam4.image_alpha != 1
+		{
+		diam4.image_alpha+=0.1
+		}
+	if diam5.image_alpha != 1
+		{
+		diam5.image_alpha+=0.1
+		}
+	if diam1.image_angle != 0+facing*180
+		{
+		diam1.image_angle-=10-20*facing
+		}
+	if diam2.image_angle != 0+facing*180
+		{
+		diam2.image_angle-=10-20*facing
+		}
+	if diam3.image_angle != 0+facing*180
+		{
+		diam3.image_angle-=10-20*facing
+		}
+	if diam4.image_angle != 0+facing*180
+		{
+		diam4.image_angle-=10-20*facing
+		}
+	if diam5.image_angle != 0+facing*180
+		{
+		diam5.image_angle-=10-20*facing
+		}
+	}
+        if timer = 16 
+		{
+	with (diam1) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,6,32,self.id,45,mach_bullet);	
+	proj.hspeed = 5.5 - (facing * 11)
+        }
+        if timer = 19 
+		{
+	with (diam2) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,14,25,self.id,40,mach_bullet);
+	proj.hspeed = 5.5 - (facing * 11)
+        }
+        if timer = 22 
+		{
+	with (diam3) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,22,18,self.id,35,mach_bullet);
+	proj.hspeed = 5.5 - (facing * 11)	
+        }
+        if timer = 25 
+		{
+	with (diam4) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,14,11,self.id,40,mach_bullet);
+	proj.hspeed = 5.5 - (facing * 11)	
+        }
+        if timer = 28 
+		{
+	with (diam5) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(3,40+facing*100,5,3.1,5,5,slash2,obj_spark_hit4,0.7,0.4,6,4,self.id,45,mach_bullet);
+	proj.hspeeds = 5.5 - (facing * 11)	
+        }
+	if timer > 29 {
+	b_used = 1
+	}
+            air_move = 0
+            hspeed=0
+        }  
+        else {
+  switch ( timer )
+    {
+    case 4: image_index = 1; break;
+    case 9: image_index = 2; break;
+    case 13: image_index = 3; break;
+    case 16: image_index = 4; break;
+    case 19: image_index = 5; break;
+    case 22: image_index = 6; break;
+    case 25: image_index = 7; break;
+    case 28: image_index = 8; break;
+    }
+
+	if timer >= 1 && timer <= 42 && vspeed > 1.1 {
+		vspeed = 1.1
+	}
+		if timer >= 5 && timer < 64 {
+			moveright = 0
+			moveleft = 0
+	}	if timer = 4
+	{
+			sound_play(sideb_sound)
+			diam1 = instance_create(x+(6-facing*12),y-32,obj_spark)
+			diam1.sprite_index = diamond_sprite;
+			diam1.image_xscale = (0.7-facing*1.4)*size
+			diam1.image_yscale = 0.4*size
+			diam1.image_speed = 0;
+			diam1.image_angle = 90
+			diam1.snap = self.id
+			diam1.x_snap = size*(12-facing*24)
+			diam1.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 6
+	{
+			diam2 = instance_create(x+(14-facing*28),y-25,obj_spark)
+			diam2.sprite_index = diamond_sprite;
+			diam2.image_xscale = (0.7)*size
+			diam2.image_yscale = 0.4*size
+			diam2.image_speed = 0;
+			diam2.image_angle = 90
+			diam2.snap = self.id
+			diam2.x_snap = size*(12-facing*24)
+			diam2.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 8
+	{
+			diam3 = instance_create(x+(22-facing*42),y-22,obj_spark)
+			diam3.sprite_index = diamond_sprite;
+			diam3.image_xscale = (0.7)*size
+			diam3.image_yscale = 0.4*size
+			diam3.image_speed = 0;
+			diam3.image_angle = 90
+			diam3.snap = self.id
+			diam3.x_snap = size*(12-facing*24)
+			diam3.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 10
+	{
+			diam4 = instance_create(x+(14-facing*28),y-11,obj_spark)
+			diam4.sprite_index = diamond_sprite;
+			diam4.image_xscale = (0.7)*size
+			diam4.image_yscale = 0.4*size
+			diam4.image_speed = 0;
+			diam4.image_angle = 90
+			diam4.snap = self.id
+			diam4.x_snap = size*(12-facing*24)
+			diam4.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer = 12
+	{
+			diam5 = instance_create(x+(6-facing*12),y-4,obj_spark)
+			diam5.sprite_index = diamond_sprite;
+			diam5.image_xscale = (0.7)*size
+			diam5.image_yscale = 0.4*size
+			diam5.image_speed = 0;
+			diam5.image_angle = 90
+			diam5.snap = self.id
+			diam5.x_snap = size*(12-facing*24)
+			diam5.image_alpha = 0.1
+			//diam1.y_snap = 32*size
+	}
+	if timer > 4 {
+	if diam1.image_alpha != 1
+		{
+		diam1.image_alpha+=0.1
+		}
+	if diam2.image_alpha != 1
+		{
+		diam2.image_alpha+=0.1
+		}
+	if diam3.image_alpha != 1
+		{
+		diam3.image_alpha+=0.1
+		}
+	if diam4.image_alpha != 1
+		{
+		diam4.image_alpha+=0.1
+		}
+	if diam5.image_alpha != 1
+		{
+		diam5.image_alpha+=0.1
+		}
+	if diam1.image_angle != -15+facing*210
+		{
+		diam1.image_angle-=15-30*facing
+		}
+	if diam2.image_angle != -15+facing*210
+		{
+		diam2.image_angle-=15-30*facing
+		}
+	if diam3.image_angle != -15+facing*210
+		{
+		diam3.image_angle-=15-30*facing
+		}
+	if diam4.image_angle != -15+facing*210
+		{
+		diam4.image_angle-=15-30*facing
+		}
+	if diam5.image_angle != -15+facing*210
+		{
+		diam5.image_angle-=15-30*facing
+		}
+	}
+        if timer = 16 
+		{
+	with (diam1) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,6,32,self.id,45,mach_bullet);	
+	proj.hspeed = 5.5 - (facing * 11)
+	proj.vspeed = 2.1
+        }
+        if timer = 19 
+		{
+	with (diam2) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,14,25,self.id,40,mach_bullet);
+	proj.hspeed = 5.5 - (facing * 11)
+	proj.vspeed = 2.1
+        }
+        if timer = 22 
+		{
+	with (diam3) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,22,18,self.id,35,mach_bullet);
+	proj.hspeed = 5.5 - (facing * 11)
+	proj.vspeed = 2.1	
+        }
+        if timer = 25 
+		{
+	with (diam4) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(2,25+facing*130,3,0.1,5,5,slash2,obj_spark_hit4,0.7,0.4,14,11,self.id,40,mach_bullet);
+	proj.hspeed = 5.5 - (facing * 11)
+	proj.vspeed = 2.1	
+        }
+        if timer = 28 
+		{
+	with (diam5) instance_destroy();
+            sound_play(b_sound);
+            spark = instance_create(x+(19-facing*38)*size,y-19*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.08*size
+            spark.image_yscale *= 0.3*size
+            spark.image_blend = c_white
+            create_projectile(3,40+facing*100,5,3.1,5,5,slash2,obj_spark_hit4,0.7,0.4,6,4,self.id,45,mach_bullet);
+	proj.hspeeds = 5.5 - (facing * 11)
+	proj.hspeed = 5.5 - (facing * 11)
+	proj.vspeed = 2.1	
+        }
+        }  
+    if air = 0 && temp > 0 {
+	if timer < 28 {
+	sound_stop(b_voice);
+	}
+        state_type="land";
+        attack_type="none";
+        time=10;
+        sprite_index = land_sprite;
+        timer=0;
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        
