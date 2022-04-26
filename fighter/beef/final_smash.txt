@@ -1,0 +1,156 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index = 0;
+        timer = 0
+        time = 601
+        timer_speed = 1;
+        intangible = 1;
+        final_smashes+=1;
+        smash_power = 0;
+		air_move = 0;
+gravity = 0
+}
+if ( timer < time )
+{
+switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+
+
+case 70: sprite_index = crouch_sprite; image_index = 0; break;
+case 75: sprite_index = jump_sprite; image_index = 0; break;
+
+
+	}
+	if timer >= 1 && timer <= 52 {
+	gravity = 0
+	gravity_lock = 1
+	vspeed = 0
+	hspeed = 0
+    }
+	
+}
+	
+
+if timer = 8 {
+create_hitbox(0,90,0,0,-1,0,punch3,obj_spark_hit4,2.0,1.5,22,26,self.id,3,1);
+}
+
+
+if timer = 30 && hitbox.hit = 0 {
+state_type = "stand"
+intangiable = 0
+}
+
+if hitbox.hit = 1 {
+timer = 50
+}
+
+if timer >= 30 && timer <= 650 {
+gravity = 0
+vspeed = 0
+hspeed = 0
+gravity_lock = 1
+ignore_physics = 1
+}
+
+
+
+if timer = 50 {
+spark = instance_create ( 0 , 0 , obj_camerazoom );
+spark.camera_l = x - 32;
+spark.camera_r = x + 32;
+spark.camera_u = y - 16 - actual_height
+spark.camera_d = y + 16;
+spark.camera_boundary_zoom = 40;
+spark.alarm[0] = 600;
+  freezer  = instance_create(x,y,obj_freeze)
+  freezer.dontpause = self.id
+  freezer.alarm[0] = 500
+    target.time = 500;
+    target.timer = 0
+    target.sprite_index=target.flinch_sprite
+    target.state_type = "flinch"
+    target.speed = 0;
+    target.gravity_lock = 2;
+	target.ignore_physics = 1;
+    target.y = target.y;
+    target.x = target.x; 
+}
+
+if timer >= 72 && timer <= 80 {
+y -= 10*size
+}
+
+if timer >= 81 && timer <= 600 {
+y -= 0
+}
+
+if timer = 83 {
+instance_create(x,y,obj_flashscreen)
+}
+
+if timer = 84 {
+fs_scene = create_spark(0,-155,self.id);
+fs_scene.sprite_index = final_smash_scene_sprite;
+fs_scene.image_speed = 0.4;
+fs_scene.image_alpha = 9.7;
+fs_scene.image_xscale = 1*(0.6-facing*1.2) * size;
+fs_scene.image_yscale = 0.6 * size;
+fs_scene.depth = depth - 12.0;
+fs_scene.snap = self.id
+}
+
+
+if timer = 500 {
+sound_play(attack_voice1)
+sound_play(attack_voice2)
+sound_play(attack_voice3)
+sound_play(attack_voice4)
+sound_play(attack_voice5)
+
+}
+
+if timer = 501 {
+sound_play(mega_nut_sound)
+}
+
+
+if timer = 600 {
+instance_create(x,y,obj_flashscreen)
+with (fs_scene)
+instance_destroy()
+with (freezer)
+instance_destroy()
+
+target.dead = 1
+instance_create(x,y,obj_flashscreen)
+target.image_blend = -1;
+self.y = target.y
+state_type = "stand"
+target.percent = 999
+death_timer = 40
+intangiable = 0
+}
+
+
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+intangiable = 0
+    }

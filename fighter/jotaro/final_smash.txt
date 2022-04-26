@@ -1,0 +1,134 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.5;
+        sprite_index = ssmash_sprite;
+        image_index = 0;
+        timer = 1;
+        time = 50;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+	gravity_lock = 1
+	stardeltemp = 0
+    zawarudo = 0
+    bangalore=1;
+    target=0;
+    with (freezer){instance_destroy()}
+        if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_launch2)
+         }
+    }
+
+
+
+if sprite_index = ssmash_sprite && image_index = 5 {
+image_speed = 0;
+}
+if timer = 10 {
+    create_hitbox(8,27+facing*126,0,0,9,6,punch4,obj_spark_hit4,2.0,1.15,10,16,self.id,9,9);
+    hitbox.di = 0
+}
+if timer >= 8 && timer <= 50 && hitbox.hit = 1 {
+time = 414
+timer = 100
+}
+if timer = 100 {
+sprite_index = dthrow_sprite;
+image_index = 0;
+image_speed = 0.5;
+			    sound_play(stand_rush);
+}
+if timer = 102 || timer =  112 || timer = 132 || timer = 142 || timer = 152 || timer = 162 || timer = 172 || timer = 182 || timer = 192 {
+                star_platinum = create_projectile(1,361,0,0,0,-1,punch3,obj_spark_hit3,0.8,0.9,-12,30,self.id,9,steelydankiller);
+				star_platinum.hit = 2;
+				star_platinum.sprite_index = steelydankiller_sprite;
+                duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; 
+                duster = instance_create(x+12*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = 1-facing;	
+                star_platinum.use_palette=number;
+}
+if timer = 200 {
+image_speed = 0.15;
+image_index = 0;
+sprite_index = usmash_sprite;
+create_projectile(18,90,5.5,7.5,15,20,punch4,obj_spark_hit4,1.8,1.9,12,30,self.id,9,3); 
+			    sound_play(stando_attack2);
+}
+if timer = 236 {
+sprite_index = dthrow_sprite;
+image_index = 0;
+image_speed = 0.5;
+			    sound_play(stand_rush);
+}
+if timer = 242 || timer =  252 || timer = 262 {
+                star_platinum = create_projectile(1,361,0,0,0,-1,punch3,obj_spark_hit3,0.8,0.9,-12,30,self.id,9,steelydankiller);
+				star_platinum.hit = 2;
+				star_platinum.sprite_index = steelydankiller_sprite;
+                duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; 
+                duster = instance_create(x+12*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = 1-facing;
+                star_platinum.use_palette=number;	
+}
+if timer = 270 {
+image_speed = 0.15;
+image_index = 0;
+sprite_index = usmash_sprite;
+create_projectile(18,90,5.5,7.5,15,20,punch4,obj_spark_hit4,1.8,1.9,12,30,self.id,9,3); 
+hitbox.hit_stun = 160
+			    sound_play(stando_attack2);
+}
+if timer = 306 {
+sprite_index = dthrow_sprite;
+image_index = 0;
+image_speed = 0.5;
+			    sound_play(stand_rush);
+}
+if timer = 312 || timer =  322 || timer = 332 || timer = 342 || timer = 352 || timer = 362 || timer = 372 || timer = 382 || timer = 392 {
+                star_platinum = create_projectile(0,361,0,0,0,-1,punch3,obj_spark_hit3,0.8,0.9,-12,30,self.id,9,steelydankiller);
+				star_platinum.sprite_index = steelydankiller_sprite;
+                duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; 
+                duster = instance_create(x+12*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = 1-facing;
+                star_platinum.use_palette=number;	
+}
+if timer < 412{
+    target.y=y;
+    target.x=x+30*(1-facing*2)*size;
+}
+if timer = 412 {
+create_projectile(18,40+facing*100,7.5,7.5,15,20,punch4,obj_spark_hit4,1.8,1.9,12,30,self.id,9,3); 
+}
+ 
+if timer >= 411 || timer >= 48 {
+intangible = 0
+}
+
+if timer <= time {
+gravity_lock = 1
+hspeed = 0
+vspeed = 0
+}
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    special = 0
+    angle = 0
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    //effect_create_above(ef_smokeup,x,y,0,c_silver)
+    smash_power = 0
+}

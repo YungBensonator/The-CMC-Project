@@ -1,0 +1,68 @@
+fast_fall = 0
+fast_fall_temp = 0
+if cantuseupb>0 {break;}
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    attacking = 0;
+    special = 0;
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0.25;
+    sprite_index = upb_sprite;
+    image_index=0.1;
+    hspeed = 0
+    time = 45;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+        if timer < time {
+		state_type = "air_attack"
+	if timer > 25
+	force_edge_grab = 1
+
+            if timer = 8{
+                intangible = 1
+                create_hitbox(1.5,30+facing*120,8.85,0,2,1,punch1,obj_spark_hit1,0.7,0.7,0,51,self.id,38,1);
+                }
+            if timer = 16
+                intangible = 0
+
+            if timer >= 5 && timer <= 45
+                vspeed = -3.75*size
+
+	    if timer = 42{
+		create_projectile (1.5,30+facing*120,8.85,0,2,1,punch1,obj_spark_hit1,1.0,1.0,0,47,self.id,150,char_custom9);
+    proj.sprite_index = white_balloon_sprite;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.shootimer = 1}
+
+	    if timer = 43{
+		create_projectile (1.5,30+facing*120,8.85,0,2,1,punch1,obj_spark_hit1,1.0,1.0,0,47,self.id,150,char_custom8);
+    proj.sprite_index = red_balloon_sprite;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale}
+        }
+
+if timer <= 40 && movedown = 1 {
+timer = 41
+    }
+
+
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "jump";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+	cantuseupb = 1
+    }

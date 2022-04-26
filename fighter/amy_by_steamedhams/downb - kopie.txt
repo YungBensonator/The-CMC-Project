@@ -1,0 +1,115 @@
+if cantusedownb>0 {break;}
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+		if percent <50
+        sprite_index = downb_sprite
+		else
+		sprite_index = downb_possessed_sprite
+        image_index=0
+        timer = 0
+		if percent <50
+        time = 40
+		else
+		time = 60
+		hspeed = 0
+}
+if ( timer < time )
+    {
+	
+	if percent <50{   ///////////////////////////////RIKA SPRAY
+	
+    switch ( timer )
+    {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 20: image_index = 3; break;
+	case 25: image_index = 1; break;
+	case 30: image_index = 1; break;
+	case 35: image_index = 0; break;
+    }
+	if timer = 1
+	     sound_play(downb_voice);
+    if timer = 10{
+	create_projectile (3,60+facing*60,5.4,2,12,8,slash2,obj_spark_slash2,0,0,15,5,self.id,30,char_custom2);
+    proj.sprite_index = spray_sprite;
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale}
+    } else if percent < 100{  ///////////////////////////////HANYUU MODE
+	
+	switch ( timer )
+    {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 20: image_index = 4; break;
+	case 25: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 35: image_index = 7; break;
+	case 40: image_index = 8; break;
+	case 45: image_index = 9; break;
+	case 50: image_index = 9; break;
+	case 55: image_index = 10; break;
+    }
+	if timer = 15
+	     sound_play(rika_hanyuu_voice);
+    if timer = 30{
+	sound_play(hanyuu_voice);
+	toappear = 1
+	create_projectile (0,361,0,0,0,0,slash2,obj_spark_slash2,size*scale,size*scale,20,0,self.id,75,char_custom3);
+    proj.sprite_index = hanyuu_sprite;
+	proj.hit = 2
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale}
+	if timer = 31{
+	create_projectile (15,60+facing*60,6.4,6,12,8,explode2,obj_spark_slash2,0,0,25,30,self.id,60,char_custom4);}
+	}else {  ///////////////////////////////BERNKASTEL MODE
+	switch ( timer )
+    {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 20: image_index = 4; break;
+	case 25: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 35: image_index = 7; break;
+	case 40: image_index = 8; break;
+	case 45: image_index = 9; break;
+	case 50: image_index = 9; break;
+	case 55: image_index = 10; break;
+    }
+	//if timer = 15
+	//     sound_play(rika_hanyuu_voice);
+    if timer = 30{
+	sound_play(bernkastel_voice);
+	toappear = 1
+	create_projectile (0,361,0,0,0,0,slash2,obj_spark_slash2,size*scale,size*scale,20,0,self.id,75,char_custom3);
+    proj.sprite_index = bernkastel_sprite;
+	proj.hit = 2
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale}
+	if timer = 31{
+	create_projectile (30,60+facing*60,8.4,8,30,16,explode3,obj_spark_slash2,0,0,25,30,self.id,60,char_custom4);}
+	}
+
+
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantusedownb = 30
+}
+        

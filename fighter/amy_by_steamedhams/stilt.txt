@@ -1,0 +1,35 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0.30;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 33;
+        timer_speed=1;
+}
+
+        if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+            if timer = 13
+                sound_play(hammerswing2);
+            if timer = 17 {
+                duster = instance_create(x,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.4*size
+                duster.image_yscale *= 0.3*size
+                if random(10) > 2
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+                create_hitbox(11,22+facing*136,4.9,5.7,14,7,kick2,obj_spark_hit2,0.6,0.75,35,11,self.id,5,2);
+                create_hitbox2(7,22+facing*136,4.3,5.2,14,7,kick1,obj_spark_hit2,0.2,0.2,25,9,self.id,5,2);
+                }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

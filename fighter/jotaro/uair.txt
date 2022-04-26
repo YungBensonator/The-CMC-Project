@@ -1,0 +1,88 @@
+if state_type = "jump" {
+	stardeltemp = 1;
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0.25;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 36;
+        timer_speed=1;
+}
+
+if(zawarudo = 0)
+{
+    if timer < time {
+        state_type = "air_attack";
+        if timer = 4
+            image_speed = 0.4
+        if timer = 7 {
+            sound_play(attack_sound3);
+            sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
+            create_hitbox(15,30+facing*120,5.5,7.25,15,10,punch4,obj_spark_hit4,1.5,0.9,42,56,self.id,8,2);
+            hitbox.hit_stun = 8;
+			hitbox.di = 0.75
+            hitbox.image_angle=angle_correct(42);
+        }
+        if air = 0 {
+            state_type="land";
+            sprite_index = land_sprite;
+            attack_type="none";
+            timer=0;
+            time=18; 
+        }
+	if image_index >= image_number - image_speed
+	image_speed = 0
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+} 
+
+
+if(zawarudo = 1)   
+{
+    if timer < time {
+        state_type = "air_attack";
+        if timer = 4
+            image_speed = 0.4
+        if timer = 7 {
+            sound_play(attack_sound3);
+            sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
+            create_projectile(15,30+facing*120,5.5,7.25,15,10,punch4,obj_spark_hit4,1.5,0.9,42,56,self.id,15,2);
+            proj.hit_stun = 8;
+			proj.di = 0.75
+            hitbox.image_angle=angle_correct(42);
+        }
+        if air = 0 {
+            dontrepeat = 0
+            state_type="land";
+            sprite_index = land_sprite;
+            attack_type="none";
+            timer=0;
+            time=18; 
+        }
+	if image_index >= image_number - image_speed
+	image_speed = 0
+}  
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0;
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+}    

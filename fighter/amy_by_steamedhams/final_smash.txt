@@ -1,0 +1,103 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.3;
+        sprite_index = dsmash_sprite; 
+        image_index=0;
+        timer = 1;
+        time = 206;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+
+
+if timer = 10 or timer = 15 or timer = 20 or timer = 25 or timer = 30 or timer = 35 or timer = 40
+sound_play(hammerswing4)
+
+	
+	if timer = 10{
+	sound_play(yeah_voice)
+	sound_play(final_smash_sound_tornado)
+	sound_play(final_smash_sound_rumble)
+	sprite_index = final_smash_sprite
+	image_speed = 0.3
+	create_projectile (3,90,3,0,-1,4,slash2,obj_spark_fire1,2,2,0,4,self.id,2000,char_custom6);
+	proj.sprite_index = giga_typhoon_sprite;
+	proj.image_speed = 0.25
+	proj.hitstun = 6
+	proj.di = 0;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.depth = depth+2
+                duster = instance_create(x-7*size,y,obj_dust_effect)
+                duster.facing = 0
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 1.5*size
+                duster.image_yscale *= 1*size
+                duster2 = instance_create(x+7*size,y,obj_dust_effect)
+                duster2.facing = 1
+                duster2.image_alpha = 0.75
+                duster2.image_xscale *= 1.5*size
+                duster2.image_yscale *= 1*size
+	
+	
+	}
+
+	if timer >= 10 and timer < 186{
+	if moveleft
+	hspeed = -0.7
+	else if moveright
+	hspeed = 0.7
+	else if !moveleft and !moveright
+	hspeed = 0
+	proj.x = x
+	if !instance_exists(screenshake)
+	screenshake = instance_create(x,y,obj_shakescreen2);
+	if duster.image_index = 4{
+                duster = instance_create(x-7*size,y,obj_dust_effect)
+                duster.facing = 0
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 1.5*size
+                duster.image_yscale *= 1*size
+                duster2 = instance_create(x+7*size,y,obj_dust_effect)
+                duster2.facing = 1
+                duster2.image_alpha = 0.75
+                duster2.image_xscale *= 1.5*size
+                duster2.image_yscale *= 1*size}}
+
+	if timer = 182
+	sound_play(hammer3)
+
+	if timer = 186{
+	sprite_index = final_smash_end_sprite
+	image_speed = 0.20
+	}
+
+	if sprite_index = final_smash_end_sprite and image_index >= 1
+	image_speed = 0
+
+
+
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

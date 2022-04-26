@@ -1,0 +1,54 @@
+if cantdownb>0 {break;}
+if (state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch") && nodownb = 0 {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+        time = 10
+		hspeed = 0
+		temp = 0
+		nodownb = 1
+}
+if ( timer < time )
+    {
+	
+    switch ( timer )
+    {
+	case 8: image_index = 1; break;
+    }
+}
+
+
+if timer = 1 {
+instance_create(x,y-21,obj_spark_shockwave)
+instance_create(x,y,obj_shakescreen3)
+sound_play(choose(attack_voice1,attack_voice2));
+nodownb = 1
+}
+
+
+
+if timer = 8 {
+gf = create_projectile(20,73+facing*34,6,6,17,5,strong_punch,obj_spark_shockwave,0.47,0.47,20,500,self.id,1000,gf_script)
+gf.gravity = 0.3
+gf.image_speed = 0
+gf.sprite_index = gf_drop_sprite
+gf.use_palette=number
+}
+
+
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantdownb = 180
+}
+        

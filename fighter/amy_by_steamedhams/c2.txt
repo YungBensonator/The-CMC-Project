@@ -1,0 +1,49 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+hitsuccess = 0
+    sprite_index = attacker.id.present_sprite
+    image_speed = 0.25
+    visible =1
+	moving_object = 0;
+	facing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	priority = 5
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale
+	else
+	image_xscale=attacker.image_xscale
+	image_yscale=attacker.image_yscale
+	
+}if timer = 1&& hit = 0 {
+chosen = 4.5
+hspeed= chosen - attacker.id.facing*(chosen*2)
+moving_object = 1;
+
+}
+
+if timer > 0 and timer < 6
+vspeed = -0.6
+
+if timer > 3
+gravity = 0.4
+
+if hit = 1
+ hitsuccess = hitsuccess + 1
+if hitsuccess = 1 or timer = 219{
+	spark = instance_create(x,y - 5 *size,obj_spark_explode1)
+	spark.image_xscale = 0.45 * size;
+    spark.image_yscale = 0.45 * size;
+sound_play(explode1)
+
+create_hitbox(3,60+facing*60,5.4,3,12,8,explodehit3,obj_spark_fire1,0.2,0.2,0,5,self.id,220,2);
+}
+
+if hitsuccess = 2 or timer = 219
+instance_destroy()
+
+if timer >1{
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0{
+hspeed = 0
+vspeed = 3
+}
+}

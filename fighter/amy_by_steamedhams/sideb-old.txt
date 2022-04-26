@@ -1,0 +1,73 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        if ( cantsideb ) exit;
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0.25
+        sprite_index = sideb_sprite
+        image_index=0
+        timer = 0
+        time = 25
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack"
+
+if timer = 1
+	sound_play(sideb_voice);
+
+if ( timer == 4 || timer == 8 || timer == 12 || timer == 16 || timer == 20 ) 
+      {
+	sound_play(slash3);
+	sprite_index = sideb_sprite
+	create_hitbox(1,25+facing*130,4,0,2,2,kick2,obj_spark_hit2,1.4,1.1,4,11,self.id,5,1);
+	hitbox.weight_kb = 1;
+	gravity = 0
+
+      }
+    if ( timer = 22 )
+      {
+	sound_play(slash4);
+	create_hitbox(3,40+facing*100,6.5,2.5,5,8,kick3,obj_spark_hit3,1.4,1.1,4,11,self.id,3,2);
+	hitbox.hit_stun = 6;
+      }
+
+
+	  
+	if timer = 1 || timer = 3 || timer = 5
+        hspeed = 3.75-facing*7.5 
+	if timer = 7 || timer = 9 || timer = 11 || timer = 13
+        hspeed = 3.75-facing*7.5
+    if timer = 15 || timer = 17{
+        hspeed = 2.9 - facing*5.8
+    }
+    if timer = 19 || timer = 21 {
+        hspeed = 2.5 - facing*5
+    }
+    if timer = 23 {
+        hspeed = 0
+    }
+    if timer <23 and special = 1 {
+        vspeed = -1
+    }
+    if timer <23 and special = 0 {
+        vspeed = 0
+    }
+	  
+	  
+	  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    effect_create_above(ef_smokeup,x,y,0,c_silver)
+}

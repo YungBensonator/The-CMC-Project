@@ -1,0 +1,66 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0.3;
+sprite_index = dthrow_sprite;
+image_index=0;
+timer = 0;
+time = 60;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 70
+}
+if timer < time {
+	if ( timer = 0 || timer = 1 )
+	{
+	target.x = x + 20 * size * (1-facing*2);
+	target.y = y;
+	}
+    if ( timer = 2 || timer = 3 )
+		{
+        target.x = x +20 - facing*40;
+        target.y = y;
+        }
+     if ( timer >= 4 && timer <= 34 )
+		{
+        target.x = x +20 - facing*40;
+        target.y = y;
+        }
+
+      if timer < 33 and image_index >= 4
+	image_index = 1
+    
+		if timer = 6 or timer = 18 or timer = 31{
+                sound_play(hammerswing3);
+                //create_hitbox2( 15 , 265+facing*10 , 5.5 , 4.5 , 20 , 12 , punch3 , obj_spark_hit4 , 0.3 , 0.3 , 9 , 4 , self.id , 1 
+	}
+if timer = 8 or timer = 20 or timer = 33 {
+        create_hitbox(3,33+facing*114,1.2,0,14,1,kick2,obj_spark_hit2,0.7,0.8,14,9,self.id,7,2);
+        hitbox.hit_stun = 4; }
+            
+        if timer = 33 {
+        create_throw_box(2,368,1,0,1,1,1,punch2,obj_down_impact,0.4,0.5,0,3,self.id,1);
+        hitbox.hit_stun = 4; }
+        if timer = 35 {
+	create_hitbox_impaler(4,270,2.6,1.3,15,7,punch3,obj_spark_hit4,0.7,0.8,14,9,self.id,3,2);
+	 }
+
+	if timer > 35
+	image_speed = 0
+
+        if timer > 37 and timer < 46 {
+	image_index = 4
+	 }
+
+        if timer > 46 {
+	image_index = 5
+	 }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

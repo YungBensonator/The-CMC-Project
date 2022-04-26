@@ -1,0 +1,76 @@
+if state_type = "stand" || state_type ="run"{
+	stardeltemp = 1;
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0.3;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 45;
+        timer_speed=1;
+        if(zawarudo = 0){charge_frame = 2;}
+}
+
+if(zawarudo = 0)
+{
+        if timer < time {
+             state_type = "attack";
+            if timer = 11 {
+                sound_play(attack_sound3);
+                sound_play(choose(smashattk_voice1,stando_attack1,smashattk_voice2));	
+                create_hitbox(16,40+facing*100,5.5,7.85,25,10,standopunch,obj_spark_hit4,1.2,0.65,32,25,self.id,10,2); 
+                hitbox.shake_ampl = 0.9
+            }
+            if timer = 16 || timer = 17 || timer = 18 || timer = 19 {
+                hitbox.damage = 12*size
+                hitbox.bkb = 5*size
+                hitbox.kbg = 5.5*size
+                hitbox.sfx = kick2
+                set_hitlag(hitbox,8)
+                }
+            if image_index > image_number-image_speed*2
+                image_speed = 0
+            }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+} 
+
+
+if(zawarudo = 1)  
+{
+        if timer < time {
+             state_type = "attack";
+            if timer = 11 {
+                sound_play(attack_sound3);
+                sound_play(choose(smashattk_voice1,stando_attack1,smashattk_voice2));	
+                create_projectile(16,40+facing*100,5.5,7.85,25,10,standopunch,obj_spark_hit4,1.2,0.65,32,25,self.id,15,2); 
+                proj.shake_ampl = 0.9
+            }
+            if timer = 16 || timer = 17 || timer = 18 || timer = 19 {
+                proj.damage = 12*size
+                proj.bkb = 5*size
+                proj.kbg = 5.5*size
+                proj.sfx = kick2
+                set_hitlag(proj,8)
+                }
+            if image_index > image_number-image_speed*2
+                image_speed = 0
+            }  
+
+
+
+         
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+}   

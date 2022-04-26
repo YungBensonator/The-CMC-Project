@@ -11,7 +11,7 @@ if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
     time = 121;
     sound_play(spin_sound);
     sprite_index = b_sprite
-    image_speed = 0;
+    image_speed = 0.25;
     image_index = 0;
     vspeed -= 0.1;
     air_move = 0;
@@ -20,57 +20,26 @@ if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
     shadtemp=0// sonicbib
     temp = 0 //homing in = 1, otherwise 0
 	hitboxtemp = 0;
+	has_hit = 0;
   }
 
-if ( timer < time )
-  {
-    if (temp = 1 && attack_shielded){
-    temp = 0; 
+    if ( temp = 1 && attack_shielded ){
+    temp = 2; 
     timer = 200;
     time = 227;
-    speed = 6.5*size;
+    speed = 6.5 * size;
     direction = 80+facing*20;
 	if ( instance_exists(hitbox) )
         hitbox.hit = 2;
 }
     switch ( timer )
       {
-	case 4:
-	case 64:
-	case 200: image_index = 0; break;
-	case 8:
-	case 68:
-	case 204: image_index = 2; break;
-	case 12:
-	case 72:
-	case 208: image_index = 3; break;
-	case 16:
-	case 76:
-	case 212: image_index = 4; break;
-	case 20:
-	case 80:
-	case 216: image_index = 5; break;
-	case 24:
-	case 84:
-	case 220: image_index = 6; break;
-	case 28:
-	case 88:
-	case 224: image_index = 6; break;
-	case 32:
-	case 92: image_index = 8; break;
-	case 36:
-	case 96: image_index = 9; break;
-	case 40:
-	case 100: image_index = 0; break;
-	case 44:
-	case 104: image_index = 0; break;
-	case 48:
-	case 108: image_index = 0; break;
-	case 52:
-	case 112: image_index = 0; break;
-	case 56:
-	case 116: image_index = 0; break;
-	case 60: image_index = 0; break;
+	case 300: image_index = 0; break;
+	case 304: image_index = 2; break;
+	case 308: image_index = 3; break;
+	case 312: image_index = 4; break;
+	case 316: image_index = 5; break;
+	case 320: image_index = 6; break;
       }
 
     fast_fall = 0;
@@ -81,43 +50,48 @@ if ( timer < time )
 	hspeed = 0;
 	vspeed = -0.75*size;
       }
+
+if ( temp = 1 && hitboxtemp = 0 )	  
+{
+create_hitbox(12,362,6.45,2.65,20,7,punch3,obj_spark_hit1, 1 , 1 , 3 , 16 ,self.id,130,0);
+hitbox.execute_on_hit = "attacker.has_hit = 1;"
+hitboxtemp = 1;
+}
+
 if timer = 1
 {
 target=0
 }
 if timer = 8
 {
-knuckbub=create_homing_bubble(4.5,3.5,0,5,self.id,44);
+knuckbub=create_homing_bubble(4.5,3.5,2,12,self.id,44);
 //4.8,4.8
 }
 if timer >=8 && timer <= 54
 {
-knuckbub.x=x + 0 * (1-facing*2)*size
-knuckbub.y=y - 8*size
+knuckbub.x = x + 2 * (1-facing*2)*size
+knuckbub.y = y - 12 *size
 }
-    if ( temp = 0 && timer <= 56 && ( timer = 55 || ( special && timer >= 16 ) ) )
+    if ( temp = 0 && ( timer = 55 || ( special && timer >= 16 && timer <= 56 ) ) )
       {
 	timer = 57;
 	temp = 1;
+	speed = 8;
+	image_speed = 0.5;
 	if irandom(5) > 4
-		sound_play(attack_voice1,zair_voice2);
+	sound_play(attack_voice1,zair_voice2);
 	sound_play(dash_sound);
-with knuckbub
-{
-instance_destroy()
-}
-	//create_homing_bubble(4.875,4.7625,0,8,self.id,2);
-	if (target1) {
-		
-		hitboxtemp = 1;
-      }
+	with knuckbub
+	{
+	instance_destroy()
+	}
 	}
 		
     if ( temp = 1 )
       {
 if !instance_exists(sonicbub) && target>0 && shadtemp=0
 {
-   sonicbub=create_projectile ( 0.1 , 361 , 1 , 1 , 0.1 , 0.1 , -1 , obj_spark_hit1 , 0.5 , 0.5 , target.x,target.y-10 , self.id , 99 , 0 );
+   sonicbub=create_projectile ( 0.1 , 361 , 1 , 1 , 0.1 , 0.1 , -1 , obj_spark_hit1 , 0.5 , 0.5 , target.x, ( target.y - target.actual_height*0.5 ) , self.id , 99 , 0 );
    sonicbub.hit=2
    //sonicbub.sprite_index=b_sprite
    tailtemp=1
@@ -127,31 +101,26 @@ if instance_exists(sonicbub) && tailtemp=1
 {
 tailtemp=0
 sonicbub.x=target.x
-sonicbub.y=target.y
+sonicbub.y = ( target.y - target.actual_height*0.5 )
 }
 if instance_exists(hitbox)
 {
 if collision_point ( x , y - 4 , sonicbub , 0 , 1 )
 {
 
-hitbox.hit=2
+	hitbox.hit=2
     sprite_index = b_sprite;
-		temp = 0;
+		temp = 3;
 	        timer = 200;
 	        time = 240;
 		state_type = "air_attack";
-		target=0
-		speed=5
-	/*hitbox.damage = 6*size;
-	hitbox.bkb = 3.7*size;
-	hitbox.kbg = 2*size;
-	hitbox.hitlag_frames = 4*size;
-	hitbox.sfx = punch2;
-	hitbox.gfx = obj_spark_hit1;*/
-with sonicbub
-{
-instance_destroy()
-}
+		target = 0;
+		speed = 8;
+
+	with sonicbub
+	{
+	instance_destroy()
+	}
 
 }
 }
@@ -160,10 +129,6 @@ instance_destroy()
 
 	if ( target1 > 0 )
 	  {
-		if hitboxtemp = 0 {
-			create_hitbox(12,25+facing*130,6.45,2.65,20,7,punch3,obj_spark_hit1,1,1.1,1,12,self.id,30,0);
-			hitboxtemp = 1;
-		}
 		if ( timer == 65) {
 			hitbox.damage = 10*size;
 			hitbox.bkb = 5.3*size;
@@ -182,10 +147,10 @@ instance_destroy()
       }
 		
 	    if ( timer <= 76 )
-		move_towards_point(sonicbub.x,sonicbub.y*target1.size,6.5);
+		move_towards_point(sonicbub.x,sonicbub.y*target1.size,8);
 	    else
 	    if ( timer <= 89 )
-		move_towards_point(sonicbub.x,sonicbub.y*target1.size,4.75);
+		move_towards_point(sonicbub.x,sonicbub.y*target1.size,8);
 	  }
 	else
 	if ( timer <= 114 )
@@ -199,22 +164,24 @@ instance_destroy()
     if ( timer = 119 )
 {
 	speed = 0;
- cantb = 1;
+	cantb = 1;
 }
 
-    if ( air = 0  && timer > 10)
+    if ( air = 0 && timer > 10)
       {
-	if ( temp = 1  )
+	if ( temp > 0  )
 	  {
-		  sprite_index = air_dodge_sprite;
-	    temp = 0;
-	    timer = 200;
-	    time = 230;
-	    speed = 6*size;
-		tailtemp=0
+		sprite_index = air_dodge_sprite;
+	    temp = 3;
+	    timer = 300;
+	    time = 330;
+	    speed = 6 * size;
+		tailtemp = 0;
+		image_speed = 0;
 	    direction = 80+facing*20;
 	    instance_create(x,y+3,obj_down_impact);
 	    instance_create(0,0,obj_shakescreen);
+		sound_play(stomp_land_sound)
 	    if ( instance_exists(hitbox) )
 		hitbox.hit = 2;
                 cantb = 1;
@@ -225,16 +192,18 @@ instance_destroy()
 	  }
 	else
 	  {
-	    cantb = 1;    speed = 6*size;
+	    cantb = 1;
+		speed = 6 * size;
 		tailtemp=0
 	    direction = 80+facing*20;
 	    instance_create(x,y+3,obj_down_impact);
 	    instance_create(0,0,obj_shakescreen);
+		sound_play(stomp_land_sound)
 	    if ( instance_exists(hitbox) )
 		hitbox.hit = 2;
 	    state_type = "land";
 	    attack_type = "none";
-target=0
+		target=0
 	    timer = 0;
 	    time = 35;
 		tailtemp=0
@@ -247,42 +216,42 @@ instance_destroy()
       }
 
 	  
-    if ( temp = 1 && hitbox.hit = 1 )
+    if ( temp = 1 && has_hit = 1 )
       {
-		 sprite_index = air_dodge_sprite;
-	temp = 0;
-	timer = 200;
-	time = 227;
-	
+	sprite_index = air_dodge_sprite;
+	temp = 3;
+	timer = 300;
+	time = 327;
+	image_speed = 0;
 	speed = 7.5*size;
 	direction = 80+facing*20;
+	cantb = 1;
+	
 	if ( instance_exists(hitbox) )
-	    hitbox.hit = 2;
-            cantb = 1;
-with sonicbub
-{
-instance_destroy()
-}
+	hitbox.hit = 2;
+	
+		with sonicbub
+		{
+		instance_destroy()
+		}
       }
+
 	if ( temp = 2 && hitbox.hit = 2)
 	  {
 	    sprite_index = b_sprite;
-	    temp = 0;
+	    temp = 3;
 	    timer = 200;
 	    time = 225;
-	    //speed = 3*size;
 		tailtemp=0
-	    //direction = direction;
-target=0
-	with sonicbub
-{
-instance_destroy()
-}
+		target=0
+			with ( sonicbub )
+			{
+			instance_destroy()
+			}
 	    if ( instance_exists(hitbox) )
 		hitbox.hit = 2;
                 cantb = 1;
 	  }
-  }
 
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
   {

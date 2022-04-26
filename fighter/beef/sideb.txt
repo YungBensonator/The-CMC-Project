@@ -1,0 +1,47 @@
+if cantsideb>0 {break;}
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch") && nosideb = 0 {
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = sideb_sprite
+        image_index=0
+        timer = 0
+        time = 20
+		nosideb = 1
+		extraexc = 8
+hspeed = 0
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack"
+	switch (timer)
+	{
+		case 14: image_index = 1; break;
+		case 18: image_index = 2; break;
+	}
+
+  }
+
+
+if timer = 10 {
+arrowleft = create_projectile(6,180-facing*180,5,5,10,10,aura3,obj_spark_darkness,0.9,0.9,0,8,self.id,128,none)
+arrowleft.sprite_index = note2_sprite;
+arrowleft.hspeed = 5-facing*10
+arrowleft.facing = facing
+sound_play(attack_voice2)
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantsideb = 30
+}
