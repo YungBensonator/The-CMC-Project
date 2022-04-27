@@ -1,0 +1,206 @@
+// Initialize boundaries.
+
+camera_boundary_l = -5;
+camera_boundary_u = 0;
+camera_boundary_r = 800;
+camera_boundary_d = 450;
+camera_boundary_zoom = 380;
+death_l = -112;
+death_u = -112;
+death_r = camera_boundary_r + 112;
+death_d = camera_boundary_d + 112;
+
+// Scaling variables.
+
+var top_x, top_y, scale, i;
+scale = 0.50;
+top_x = ( camera_boundary_r - camera_boundary_l ) * 0.5 - 512 * scale;
+top_y = camera_boundary_d - 512 * scale;
+
+player_spawn_x [ 0 ] = 311 * scale + top_x;
+player_spawn_y [ 0 ] = 100 * scale + top_y;
+player_spawn_x [ 1 ] = 694 * scale + top_x;
+player_spawn_y [ 1 ] = 100 * scale + top_y;
+player_spawn_x [ 2 ] = 200 * scale + top_x;
+player_spawn_y [ 2 ] = 248 * scale + top_y;
+player_spawn_x [ 3 ] = 300 * scale + top_x;
+player_spawn_y [ 3 ] = 248 * scale + top_y;
+player_spawn_x [ 4 ] = 700 * scale + top_x;
+player_spawn_y [ 4 ] = 248 * scale + top_y;
+player_spawn_x [ 5 ] = 800 * scale + top_x;
+player_spawn_y [ 5 ] = 248 * scale + top_y;
+respawn_x = 428 * scale + top_x;
+respawn_y = 84 * scale + top_y;
+
+// Load and set the stage collisions.
+
+//global.msk_stg[0] = spr_add_alpha (folder_loc + 'puddle.png' , 4 , 1 , 0 , 181 , 32 );
+//global.msk_stg[1] = spr_add_alpha ( 'stage/smashstadium/puddle1.png' , 4 , 1 , 0 , 181 , 32 );
+//global.msk_stg[5] = spr_add_alpha ( 'stage/smashstadium/puddle2.png' , 4 , 1 , 0 , 181 , 32 );
+//global.msk_stg[6] = spr_add_alpha ('stage/smashstadium/limo.png', 1, 1 , 0, 232, 51);
+global.msk_stg[7] = spr_add_alpha ('stage/smashstadium/trace.png' , 1 , 1 , 0 , 512 , 4 );
+global.msk_stg[8] = spr_add_alpha ('stage/smashstadium/light_mask.png' , 1 , 1 , 0 , 386, 68);
+
+msk_floor = stage_msk_add ( "stage/smashstadium/m_floor.png" , 1 , 1 , 0 , 0 , 0 );
+msk_platform = stage_msk_add ( "stage/smashstadium/m_platform2.png" , 1 , 1 , 0 , 0 , 0 );
+msk_r = stage_msk_add ( "stage/smashstadiumm_r.png" , 1 , 1 , 0 , 0 , 0 );
+msk_l = stage_msk_add ( "stage/smashstadium/m_l.png" , 1 , 1 , 0 , 0 , 0 );
+msk_ceiling = stage_msk_add ( "stage/smashstadium/m_ceiling.png" , 1 , 1 , 0 , 0 , 0 );
+msk_shadow = stage_msk_add ( "stage/smashstadium/shadowmask.png" , 1 , 1 , 0 , 0 , 0 );
+
+i = instance_create ( top_x , top_y , obj_floor );
+i . sprite_index = msk_floor;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i = instance_create ( top_x , top_y , obj_platform );
+i . sprite_index = msk_platform;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i = instance_create ( top_x , top_y , obj_rightwall );
+i . sprite_index = msk_r;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i = instance_create ( top_x , top_y , obj_leftwall );
+i . sprite_index = msk_l;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i = instance_create ( top_x , top_y , obj_ceiling );
+i . sprite_index = msk_ceiling;
+i . image_xscale = scale;
+i . image_yscale = scale;
+
+/* Shadow stuff */
+i = instance_create ( top_x , top_y , obj_shadow_display );
+i . light_source = 300;
+i . light_source_y = 0;
+i . depth = -6.1;
+i = instance_create ( top_x , top_y  , obj_shadow );
+i . sprite_index = msk_shadow;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i . image_alpha = 0.5;
+
+// Set the ledges.
+
+instance_create ( top_x + 140 * scale , top_y + 253 * scale , obj_edge_left );
+instance_create ( top_x + 873 * scale , top_y + 253 * scale , obj_edge_right );
+
+// Load and set up the background layers.
+
+background_index[0] = bg_add ("stage/smashstadium/bg.png");
+background_index[1] = bg_add ("stage/smashstadium/fog.png" );
+background_index[2] = bg_add ("'stage/smashstadium/stars.png" );
+//background_index[3] = bg_add ( "stage/smashstadium/bg2.png" );
+background_index[4] = bg_add ("stage/smashstadium/fog2.png" );;
+
+kk = instance_create ( top_x , top_y , obj_stage_extra );
+kk.sprite_index = global.msk_stg[4];
+kk.depth = 9;
+kk.image_xscale = scale;
+kk.image_yscale = scale;
+/*
+kk = instance_create ( top_x , top_y , obj_stage_extra );
+kk.sprite_index = global.msk_stg[0];
+kk.depth = 9;
+kk.image_xscale = scale;
+kk.image_yscale = scale;
+kk.image_speed = 0.25;
+*/
+//
+kk = instance_create ( top_x , top_y , obj_stage_extra );
+kk.sprite_index = global.msk_stg[2];
+kk.depth = -1;
+kk.image_xscale = scale;
+kk.image_yscale = scale;
+//
+/*
+kk = instance_create ( top_x , top_y , obj_stage_extra );
+kk.sprite_index = global.msk_stg[1];
+kk.depth = -1;
+kk.image_xscale = scale;
+kk.image_yscale = scale;
+kk.image_speed = 0.25;
+//kk.image_alpha = 0;
+*/
+
+// Create terrain objects.
+
+i = instance_create ( top_x , top_y , obj_stage_bgd );
+i . sprite_index = bg_add ( "stage/smashstadium/mg2.png" );
+i . depth = 9;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i . image_blend = global.def_tint;
+i = instance_create ( top_x , top_y , obj_stage_bgd );
+i . sprite_index = bg_add ( "stage/smashstadium/fg2.png" );
+i . depth = -6;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i . image_blend = global.def_tint;
+
+stage_install_bg_object();
+with ( obj_stage_bg )
+  {
+  bg_fade = 0;
+  
+  top_x = other.top_x;
+  top_y = other.top_y;
+  scale = other.scale;
+  
+  dfog_x1 = 0;
+  dfog_x2 = 0;
+  
+  sparkle_timer = 90; // 5
+  sparkle_combo = 0; // 0
+  sparkle_new = 0; // 0
+/*
+  for ( i = 0 ; i < 20 ; i += 1 ) // i < 24
+    {
+    sparkle_i[i] = 0;
+    sparkle_dir[i] = 0;
+    sparkle_x[i] = 0;
+    sparkle_y[i] = 0;
+    sparkle_b[i] = c_white;
+    }*/
+	sparkle_i [0] = 0;
+	sparkle_dir [0] = 315; // CCW?
+	sparkle_x [0] = 250;
+	sparkle_y [0] = 450;
+	sparkle_b [0] = c_fuchsia; 
+	sparkle_i [1] = 0;
+	sparkle_dir [1] = 225;
+	sparkle_x [1] = 390;
+	sparkle_y [1] = 450;
+	sparkle_b [1] = c_fuchsia;
+	
+	for (cont = 2; cont < 12; cont += 2) {
+		sparkle_i [cont] = 0;
+		sparkle_dir [cont] = 335 + (cont - 2) * 4; // 315
+		sparkle_x [cont] = 200;
+		sparkle_y [cont] = 550;
+		sparkle_b [cont] = c_fuchsia; 
+		sparkle_i [cont + 1] = 0;
+		sparkle_dir [cont + 1] = 205 - (cont - 2) * 4; // 225
+		sparkle_x [cont + 1] = 440;
+		sparkle_y [cont + 1] = 550;
+		sparkle_b [cont + 1] = c_fuchsia;
+	}
+	
+  
+  fog_d = 0;
+  fog_x1 = 0;
+  fog_x2 = 0;
+  }
+/*
+orb = instance_create ( top_x , top_y + 228 * scale , obj_stage_bg );
+orb.mode = 2;
+orb.scale = scale;
+orb.sprite_index = global.msk_stg[6];
+
+var limo_x = 0.0;
+kk = instance_create ( top_x , top_y + 228 * scale, obj_stage_extra );
+kk.sprite_index = global.msk_stg[6];
+kk.depth = 9;
+kk.image_xscale = scale;
+kk.image_yscale = scale;
+*/

@@ -1,0 +1,91 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "crouch" || state_type = "stand" || state_type = "run" || state_type = "jump" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 3;
+        sprite_index = flinch3_sprite;
+        image_index=0;
+        timer = 0;
+        time = 36;
+        timer_speed=1;
+        target = -1;
+        temp = 0;
+	special = 1
+}
+if timer < time {
+image_alpha = random(1)
+if timer = 4 {
+    image_speed = 0.5;
+    if temp = 0 || !sound_isplaying(downb_sound)
+        sound_play(downb_sound)
+	if temp = 0
+	intangible = 1
+        create_hitbox2(5,50+facing*80,5,5,20,12,shock3,obj_spark_shock,0.55,0.65,9,8,self.id,13,1)
+        create_hitbox(5,130-facing*80,5,5,20,12,shock3,obj_spark_shock,0.55,0.65,-9,8,self.id,13,1) 
+        create_hitbox3(5,50+facing*80,5,5,20,12,shock3,obj_spark_shock,0.45,0.7,1,12,self.id,13,1)
+		hitbox.hit_stun = 8
+		hitbox2.hit_stun = 8
+		hitbox3.hit_stun = 8
+		if instance_exists(portal) {
+			with hitbox instance_destroy();
+			with hitbox2 instance_destroy();
+			with hitbox3 instance_destroy();
+			time = 24;
+			with (portal) {
+			explode = create_projectile(12,50+facing*80,5,5,20,20,explodehit4,obj_spark_explode1,1,1,9,8,attacker.id,10); 
+			explode.x = x
+			explode.y = y
+			explode.hit = 0
+			sound_play(explosion);
+			spark2 = instance_create(x,y,obj_spark_explode2);
+			    spark2.xscale = size*0.6;
+			    spark2.yscale = size*0.6;
+			    spark2.x = x
+			    spark2.y = y
+				instance_destroy();
+			}
+		}
+		
+	}
+    if timer = 8
+	intangible = 0
+    if timer = 18 {
+        if special=1 && temp < 5 {
+            temp += 1
+            image_speed = 0.5
+            image_index = 5.5
+            timer = 1 }
+        else {
+            timer = 20
+            image_speed = 0.5
+        }           
+    }
+if air = 0 {
+    air_move = 0
+    if abs(hspeed) < 0.25*size
+        hspeed = 0
+    else if hspeed < 0
+        hspeed += size*0.2
+    else
+        hspeed -= size*0.2
+}
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+	image_alpha = 1
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+}
+        

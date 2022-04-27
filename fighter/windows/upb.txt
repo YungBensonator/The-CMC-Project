@@ -1,0 +1,161 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" && air < max_jumps { 
+	attacking = 0;
+    special = 1;
+    timer = 0;
+    attack_type = "upb"
+    state_type = "air_attack";
+    hspeed *= 0.9;
+    image_speed = 0;
+    sprite_index = stand_sprite;
+    image_index=0;
+    time = 38;
+    timer_speed=1;
+	temp = 0
+	image_alpha = 1
+	force_edge_grab = 1
+	visible = 1
+	if air = 0 {
+		temp = 1
+		state_type = "air_attack";
+		duster = instance_create(x,y,obj_dust_effect);
+		duster.facing = facing; 
+		duster = instance_create(x,y,obj_dust_effect);
+		duster.facing = 1-facing; 
+		}
+}
+if (timer < time) 
+{
+    switch ( timer )
+    {
+        case 1: image_angle = 0*(1-facing*2); image_yscale = 0.5;  break;
+        case 2: image_angle = 0*(1-facing*2); image_yscale = 0.25; break;
+        case 3: image_angle = -30*(1-facing*2); break;
+        case 4: image_angle = -40*(1-facing*2); break;
+        case 5: image_angle = -50*(1-facing*2); break;
+        case 6: image_angle = -60*(1-facing*2); break;
+        case 7: image_angle = -70*(1-facing*2); break;
+        case 8: image_angle = -80*(1-facing*2); break;
+        case 9: image_angle = -90*(1-facing*2); break;
+        case 10: image_angle = -100*(1-facing*2); break;
+        case 11: image_angle = -110*(1-facing*2); break;
+        case 12: image_angle = -120*(1-facing*2); break;
+        case 13: image_angle = -130*(1-facing*2); break;
+        case 14: image_angle = -140*(1-facing*2); break;
+        case 15: image_angle = -150*(1-facing*2); break;
+        case 16: image_angle = -160*(1-facing*2); break;
+        case 17: image_angle = -170*(1-facing*2); break;
+        case 18: image_angle = -180*(1-facing*2); break;
+        case 19: image_angle = -190*(1-facing*2); break;
+		case 20: image_angle = -200*(1-facing*2); break;
+		case 21: image_angle = -210*(1-facing*2); break;
+		case 22: image_angle = -220*(1-facing*2); break;
+		case 23: image_angle = -230*(1-facing*2); break;
+		case 24: image_angle = -240*(1-facing*2); break;
+		case 25: image_angle = -250*(1-facing*2); break;
+		case 26: image_angle = -260*(1-facing*2); break;
+		case 27: image_angle = -270*(1-facing*2); break;
+		case 28: image_angle = -280*(1-facing*2); break;
+		case 29: image_angle = -290*(1-facing*2); break;
+		case 30: image_angle = -300*(1-facing*2); break;
+		case 31: image_angle = -310*(1-facing*2); break;
+		case 32: image_angle = -320*(1-facing*2); break;
+		case 33: image_angle = -330*(1-facing*2); break;
+		case 34: image_angle = -340*(1-facing*2); break;
+		case 35: image_angle = -350*(1-facing*2); break;
+		case 36: image_angle = -360*(1-facing*2); break;
+    }
+if timer > 9 && !instance_exists(portal) {
+	}
+
+
+if timer = 3  {
+	vspeed = -6
+	sound_play(attack_sound1)
+	if !instance_exists(portal) {
+		portal = create_projectile(3,23+facing*134,2,2.2,15,3,sf_kick2,obj_spark_hit3,0.25,0.25,0,6,self.id,6,char_custom3);
+		shootimer = 1
+		}
+	else if instance_exists(portal) && portal.attacker = self.id {
+		timer = 100
+		time = 146
+		temp2 = 0
+		image_angle = 360*(1+facing*2)
+		gravity_lock = 1
+		sprite_index = upb_sprite;
+		}
+	}
+if timer >= 3 && timer < 10 {
+	vspeed = -4
+	}
+if timer >=10 && timer < 20 {
+	vspeed = -2
+	}
+if timer >= 3 {
+  if ( moveright && hspeed < 2.5 ) hspeed += 0.5;
+  if ( moveleft && hspeed > -2.5 ) hspeed -= 0.5;
+	}
+// -------- If a portal is out
+
+if timer > 101 && timer < 121 {
+gravity_lock = 2
+hspeed = 0
+vspeed = 0
+}
+
+if timer > 107 && timer <= 119 {
+image_alpha -= 0.1
+}
+
+if timer = 122 {
+spark = instance_create(x+2,y,obj_spark_shockwave)
+sound_play(attack_sound2)
+}
+
+if timer >= 121 && timer < 140  {
+self.x = portal.x
+self.y = portal.y
+portal.visible = 0
+image_alpha = 1
+ignore_physics = 1
+vspeed = -5
+if portal.facing = 1 {
+facing = 1
+}
+if portal.facing = 0 {
+facing = 0
+}
+}
+
+if timer > 121 {
+temp2 = 1
+}
+
+if timer = 141 {
+portal.timer = portal.time
+}
+
+
+
+		if air = 0 && temp = 0{
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=9; }
+			
+}
+
+if timer >= 145 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0 {
+		if temp2 = 1 {
+        state_type = "fall";
+		}
+		}
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+}

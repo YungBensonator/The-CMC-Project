@@ -1,0 +1,76 @@
+absorb = 1  
+absorb2 = 1
+moving_object = 1
+proj_name = letter
+if timer <= 1 && hit = 0   {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.bproj_sprite
+	image_index = irandom_range(0,25);
+    hspeed = 5 - attacker.id.facing*10
+	image_xscale = 0.5
+	image_yscale = 0.5
+    image_speed = 0;
+    visible=1
+	temp2 = 0 // how many times the projectile has bounced along the floor.
+	temp4 = 0 // so i can do the 2nd part of the move
+	fire_sound = attacker.fire_sound3
+    priority = 2
+    }
+
+if ( hit == 0 )
+  {
+    if vspeed < 8 && timer > 12
+    vspeed += 0.2
+
+
+  
+
+  if ( on_floor || on_platform )
+    {
+    if ( vspeed > 0 )
+      {
+      x = xprevious;
+      y = yprevious;
+      vspeed = -1.75;
+	  hspeed *= 0.5 
+	  temp2 += 1
+	  if temp2 >= 3 {
+	  hspeed = 0
+	  vspeed = 0
+	  hit = 2
+	  }
+      sound_stop(fire_sound)
+      sound_play(fire_sound)
+      }
+    }
+
+
+
+  if ( under_ceiling && vspeed < 0 ) vspeed = 0;
+  if ( next_to_rwall && hspeed > 0 ) hspeed *= -1;
+  if ( next_to_lwall && hspeed < 0 ) hspeed *= -1;
+  }
+
+if (hit = 1) 
+{
+temp4 = 1
+timer = 100
+hit = 2
+}
+if ( timer >= 100 && temp4 = 1 )
+{
+vspeed = -4+((timer-99)/4.5) 
+hspeed = -1*(1-facing*2)  
+depth = -3
+moving_object = 0
+image_angle = ( 1 - facing * 2 ) * (timer * 45/3)
+}
+
+if (hit = 2)
+{
+if timer = (time - 2) && temp4 = 0 {
+  if ( timer > 90 )
+  {
+    image_alpha -= 0.5
+	}
+}
+}

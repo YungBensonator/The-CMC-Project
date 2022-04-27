@@ -1,0 +1,52 @@
+if ( state_type = "stand" || state_type = "crouch"|| state_type = "run" || state_type = "shielding" || state_type = "jump"  ) {
+    state_type = "attack"
+    attack_type = "sideb"
+    image_speed = 0.38
+    sprite_index = sideb_sprite
+    image_index=0
+    timer = 0
+    time = 22
+    timer_speed=1
+	
+}
+    if timer < time {
+    state_type = "attack";
+	slide = 0
+    if air > 0
+    state_type = "air_attack";
+}
+	if timer = 19 {
+    sound_play(attack_sound1);
+    mouse = create_projectile(12,0,4.5,1.2,0,1,-1,-1,1.0,1.0,10,7,self.id,3,cursor);
+	shootimer = 1
+	mouse.sprite_index = clicc_sprite
+	mouse.image_xscale = 0.4
+	mouse.image_yscale = 0.4
+    }
+	if instance_exists(mouse) {
+	temp_fall_speed = -2.75;
+	if air > 0 {
+if moveleft{
+hspeed-=0.5;}
+if moveright{
+hspeed+=0.5;}
+if hspeed >= 1{
+hspeed = 1;}
+if hspeed <= -1{
+hspeed = -1;}
+}
+	timer = 19
+	}
+	if timer = 20 {
+	sound_play(attack_sound2);
+	image_speed = - 0.6
+	}
+    if image_index >= image_number - image_speed
+    image_speed = 0
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

@@ -1,0 +1,131 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+if ( mode == 0 )
+  {
+  mode = 1;
+  exit;
+  }
+if ( mode == 1 )
+  {
+  /*bg_fade += 0.001;
+  if ( bg_fade >= 1 ) {
+    bg_fade -= 2;
+	//global.msk_stg[2] = make_color_hsv ( random (7) * 30 , 224 , 70 );
+  }*/
+/*
+  var i;
+  star_x1 += 1;
+  star_x2 += 0.5; //-
+  if ( star_x1 >= 0 ) star_x1 -= 512;
+  if ( star_x2 > 256 ) star_x2 -= 256; //<-256, +
+  */
+  dfog_x1 += 0.7;
+  dfog_x2 -= 0.3; 
+  if ( dfog_x1 >= 0 ) dfog_x1 -= 512;
+  if ( dfog_x2 < -512 ) dfog_x2 += 512;
+  
+  fog_d += 1;
+  if ( fog_d >= 360 ) fog_d = 0;
+  fog_x1 += 0.2;
+  fog_x2 -= 0.15;
+  if ( fog_x1 >= 0 ) fog_x1 -= 128;
+  if ( fog_x2 < -128 ) fog_x2 += 128;
+	
+/*limo_x += 0.1;
+	if (limo_x = camera_boundary_r)
+		limo_x = 0;/*
+    /*
+  sparkle_timer -= 1;
+  if ( sparkle_timer <= 0 )
+    {
+    if ( sparkle_combo < 5 && random ( 2 ) < 1 )
+      {
+      sparkle_combo += 1;
+      sparkle_timer = 4 + random ( 5 );
+      }
+      else
+      {
+      sparkle_combo = 0;
+      sparkle_timer = 15 + random ( 15 );
+      }
+    i = sparkle_new;
+    sparkle_i[i] = 1;
+    /*if ( random ( 2 ) < 1 )
+      sparkle_dir[i] = 1 + (random (4) * 45); // random (178);
+      else
+      sparkle_dir[i] = 181 + (random (4) * 45); // random (178);//
+	sparkle_dir [i] = random (3) * 90 + random (45);
+    sparkle_x[i] = random ( 640 ) - lengthdir_x ( 720 , sparkle_dir[i] );
+    sparkle_y[i] = random ( 360 ) - lengthdir_y ( 720 , sparkle_dir[i] );
+    sparkle_b[i] = make_color_hsv ( random (7) * 30 , 224 , 80 ); // H = r(256), V = 48
+    sparkle_new += 1;
+    if ( sparkle_new == 20 ) sparkle_new = 0; // 24
+    }
+  
+  for ( i = 0 ; i < 20 ; i += 1 ) // 24
+    {
+    if ( sparkle_i[i] == 0 ) continue;
+    sparkle_x[i] += lengthdir_x ( 7 , sparkle_dir[i] );
+    sparkle_y[i] += lengthdir_y ( 7 , sparkle_dir[i] );
+    if ( sparkle_dir[i] > 180 )
+    if ( sparkle_y[i] > 860 )
+      sparkle_i[i] = 0;
+    if ( sparkle_dir[i] < 180 )
+    if ( sparkle_y[i] < -500 )
+      sparkle_i[i] = 0;
+    }*/
+	sparkle_timer -= 1;
+		// Using y as true or false (450, 451), the light will go up
+		if (sparkle_y [0] == 450 && sparkle_dir [0] > 270) {
+			sparkle_dir [0] -= 0.05;
+			sparkle_dir [1] += 0.05;
+		} else {
+			sparkle_dir [0] += 0.05;
+			sparkle_dir [1] -= 0.05;
+		}
+		if (sparkle_dir [0] <= 270) {
+			sparkle_y [0] = 451;
+		}
+		if (sparkle_y [0] == 451 && sparkle_dir [0] >= 315) {
+			sparkle_y [0] = 450;
+		}
+
+		for (cont = 2; cont < 12; cont += 2) {
+			if (sparkle_y [cont] == 550 && sparkle_dir [cont] >= 205) {
+				sparkle_dir [cont] -= 0.2;
+				sparkle_dir [cont + 1] += 0.2;
+			} else {
+				sparkle_dir [cont] += 0.2;
+				sparkle_dir [cont + 1] -= 0.2;
+
+				if (sparkle_y [cont] == 551 && sparkle_dir [cont] >= 335) {
+					sparkle_y [cont] = 550;
+				}
+			}
+			if (sparkle_dir [cont] < 205) {
+				sparkle_y [cont] = 551;
+			}
+		}
+		
+	if ( sparkle_timer <= 0 ) {
+		for (cont = 0; cont < 12; cont += 2) {
+			// Last 2 omitted cuz are temps and not shown
+			if (random (2) == 1)
+				sparkle_b [cont] = make_color_hsv (1, 50, 220);
+			else
+				sparkle_b [cont] = make_color_hsv ( random (7) * 30 , 224 , 120 );
+			sparkle_b [cont + 1] = sparkle_b [cont];
+		}
+		sparkle_timer = 90 + random (50);
+	}
+
+  exit;
+  }
+if ( mode == 2 )
+  {
+  direction += 2;
+  if ( direction >= 360 ) {direction -= 360;
+	
+}
+  exit;
+  }

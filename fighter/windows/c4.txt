@@ -1,0 +1,63 @@
+absorb = 0 
+absorb2 = 0
+
+moving_object = 0
+proj_name = letter
+time = 99999
+if attacker.id.timer = 799 {
+timer = time
+}
+depth = -100
+alarm[0] = 99999
+if timer <= 1 && hit = 0   {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.downb_sprite
+	image_index = 5;
+	image_xscale = 0.38*(1-facing*2)
+	image_yscale = 0.39
+    image_speed = 0;
+    visible=1
+    priority = 5
+    }
+
+if ( hit == 0 )
+  {
+  }
+
+if (hit = 1 || hit = 2) 
+{
+for (n = 0; n < enemy_target_n; n += 1) {
+with ( enemy_target[n] ) 
+{
+    show_message("with player")
+    show_message("if other")
+with ( other ) 
+{
+other.x = attacker.id.x + random_range(-7,7)
+				other.y = attacker.id.y 
+				
+				other.image_alpha = 0
+				other.depth = 300
+				other.speed = 0
+				other.gravity_lock = 1
+				other.image_speed = 0
+				other.sprite_index = flinch_sprite
+				other.state_type = "flinch"
+				
+				
+ if attacker.id.timer = 798 {
+other. depth = attacker.id.depth
+other.image_alpha = 1
+}
+
+}
+}
+}
+proj_destroy = 0
+
+
+if attacker.id.timer = time{
+timer = time
+other.image_alpha = 1
+}
+}
+
