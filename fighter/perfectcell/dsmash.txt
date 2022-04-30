@@ -1,0 +1,78 @@
+if ( state_type == "crouch" || state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dsmash";
+  image_speed = 0;
+  image_index = 2;
+  sprite_index = bthrow_sprite;
+  timer = 0;
+  time = 60;
+  timer_speed = 1;
+  charge_frame = 15;
+  }
+
+switch ( timer )
+{
+case 16: image_index = 1; break;
+case 18: image_index = 0; break;
+}
+
+if ( timer = 18 )
+{
+sound_play(attack_voice1);
+sound_play(cell_swing_sound2);
+
+if ( superperfectcell = 0 )
+	{
+	proj = create_projectile( 4 , 20+facing*140 , 5.5 , 0 , 10 , 1 , fire3 , obj_spark_fire1 , 1 , 1 , 30 , 0 , self.id , 30 , char_custom5 );
+	proj.timer = 0;
+	proj.di = -1;
+	proj.sdi = -1;
+	proj.weight_kb = 1;
+	proj2 = create_projectile( 4 , 20+facing*140 , 5.5 , 0 , 10 , 1 , fire3 , obj_spark_fire1 , 1 , 1 , 70 , 0 , self.id , 30 , char_custom5 );
+	proj2.timer = -10;
+	proj2.weight_kb = 1;
+	proj2.di = -1;
+	proj2.sdi = -1;
+	proj3 = create_projectile( 4 , 20+facing*140 , 5 , 3.5 , 10 , 15 , fire3 , obj_spark_fire1 , 1 , 1 , 110 , 0 , self.id , 30 , char_custom5 );
+	proj3.timer = -20;
+	proj3.charge_dmg = 0.75;
+	proj3.charge_kb = 0.75;
+	}
+if ( superperfectcell = 1 )
+	{
+	proj = create_projectile( 4 , 20+facing*140 , 5.5 , 0 , 10 , 1 , fire3 , obj_spark_fire1 , 1 , 1 , 30 , 0 , self.id , 30 , char_custom5 );
+	proj.timer = 0;
+	proj.di = -1;
+	proj.sdi = -1;
+	proj.weight_kb = 1;
+	proj2 = create_projectile( 4 , 20+facing*140 , 5.5 , 0 , 10 , 1 , fire3 , obj_spark_fire1 , 1 , 1 , 70 , 0 , self.id , 30 , char_custom5 );
+	proj2.timer = -10;
+	proj2.weight_kb = 1;
+	proj2.di = -1;
+	proj2.sdi = -1;
+	proj3 = create_projectile( 4 , 20+facing*140 , 5.5 , 0 , 10 , 1 , fire3 , obj_spark_fire1 , 1 , 1 , 110 , 0 , self.id , 30 , char_custom5 );
+	proj3.timer = -20;
+	proj3.weight_kb = 1;
+	proj3.di = -1;
+	proj3.sdi = -1;
+	proj4 = create_projectile( 4 , 20+facing*140 , 5.5 , 0 , 10 , 1 , fire3 , obj_spark_fire1 , 1 , 1 , 150 , 0 , self.id , 30 , char_custom5 );
+	proj4.timer = -30;
+	proj4.weight_kb = 1;
+	proj4.di = -1;
+	proj4.sdi = -1;
+	proj5 = create_projectile( 4 , 20+facing*140 , 5 , 3.5 , 10 , 15 , fire3 , obj_spark_fire1 , 1 , 1 , 190 , 0 , self.id , 30 , char_custom5 );
+	proj5.timer = -40;
+	proj5.charge_dmg = 0.75;
+	proj5.charge_kb = 0.75;
+	}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

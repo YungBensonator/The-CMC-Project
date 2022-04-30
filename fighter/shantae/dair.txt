@@ -1,0 +1,340 @@
+if monkey = 0 && elephant = 0 && harpy = 0 {
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "dair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dair_sprite;
+  timer = 0;
+  time = 48;
+  temp = air;
+  timer_speed = 1;
+  }
+switch ( timer )
+  {
+  case 5: image_angle = 5 * ( 1 - facing * 2 ); break;
+  case 6: image_angle=10*(1-facing*2); break;
+  case 7: image_angle=15*(1-facing*2); break;
+  case 8: image_angle=20*(1-facing*2); break;
+  case 9: image_angle=25*(1-facing*2); break;
+  case 10: image_index=1;  break;
+  case 12: image_index=2;  break;
+  case 14: image_index=3;  break;
+  case 16: image_index=4;  break;
+  case 18: image_index=5;  break;
+  case 20: image_index=6;  break;
+  case 22: image_index=7;  break;
+  case 24: image_index=0;  break;
+  case 26: image_index=1;  break;
+  case 28: image_index=2;  break;
+  case 30: image_index=3;  break;
+  case 32: image_index=4;  break;
+  case 34: image_index=5;  break;
+  case 36: image_index=6;  break;
+  case 38: image_index=7;  break;
+  case 40: image_index=0; image_angle=20*(1-facing*2); image_xscale *= 1.05; image_yscale *= 1.05; break;
+  case 41: image_angle=15*(1-facing*2); break;
+  case 42: image_xscale *= 0.95; image_yscale *= 0.95; image_angle=10*(1-facing*2); break;
+  case 43: image_angle = 5 * ( 1 - facing * 2 ); break;
+  case 44: image_xscale *= 1.05; image_yscale *= 1.05; image_angle = 0; break;
+  
+  case 102: image_index = 1 break;
+  case 104: image_index = 2 break;
+  case 106: image_index = 3 break;
+  case 108: image_index = 4 break;
+  case 110: image_index = 5 break;
+  }
+  
+  if ( timer > 12 && timer < 38 )
+  {
+  hspeed = size * (2-facing*4);
+  vspeed = 5;
+  }
+  if ( timer = 10 )
+  {
+  sound_play (attacksnd1)
+  create_hitbox(2,290-facing*40,3.6,0,5,4,kick1,obj_spark_slash3,0.8,0.95,8,6,self.id,2,1);
+  }
+  if ( timer = 14 || timer = 18 || timer = 22 || timer = 26 || timer = 30 || timer = 34 )
+  {
+  sound_play (attacksnd1)
+  create_hitbox(1,320-facing*100,3.8,0,5,4,kick1,obj_spark_slash3,0.8,0.95,8,6,self.id,2,1);
+  }
+  if ( timer = 38 )
+  {
+  sound_play (attacksnd1)
+  create_hitbox(4,20+facing*140,1.5,8,8,4,kick3,obj_spark_hit4,0.8,0.95,8,6,self.id,2,2);
+  hitbox.hit_stun = 8;
+  }
+  if ( timer >= 99 && timer < 111 ) {
+  hspeed = 0;
+  vspeed = 0;
+  }
+  if ( timer > 111 )
+  {
+  vspeed = 1;
+  }
+  if ( ( on_floor || on_platform  ) && ( timer >= 10 && timer < 38 ) )
+	{
+	with hitbox instance_destroy();
+	create_hitbox2(4,20+facing*140,1.5,0,8,4,kick3,obj_spark_hit4,0.8,0.95,8,6,self.id,2,2);
+	hitbox2.hit_stun = 8;
+	hitbox2.remain = 1;
+	air = temp;
+	gfx_land_effect ( x , y , actual_width );
+	sprite_index = land_sprite;
+	image_index = 0;
+	image_angle = 0;
+	timer = 100;
+	time = 112;
+	hspeed = 0;
+	vspeed = 0;
+	}
+    if ( air = 0 && ( ( timer >= 0 && timer <= 5 ) || ( timer >= 38 && timer <= 48 ) ) )
+    {
+	state_type = "land";
+	attack_type = "none";
+	sprite_index = land_sprite;
+	image_index = 0;
+	image_angle = 0;
+	timer = 0;
+	time = 12;
+	hspeed = 0;
+	vspeed = 0;
+    }
+	if ( timer >= 111 && air = 0 )
+	{
+	state_type = "stand"
+	attack_type = "none"
+	timer = 0;
+	time = 2;
+	temp_fall_speed = 0;
+	}
+
+if ( timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+	state_type = "jump";
+	sprite_index = mid_jump_sprite;
+	image_angle = 0;
+	image_index = 15;
+    timer = 0;
+    time =-1;
+  }
+}
+
+if ( harpy = 1 || elephant == 1 || monkey == 1) {
+if ( state_type == "jump" )
+{
+vspeed -= 0.1;
+state_type = "air_attack";
+attack_type = "dair";
+image_speed = 0;
+image_index = 0;
+if (elephant == 1) sprite_index = elephant_transform_sprite;
+if (monkey == 1) sprite_index = monkey_transform_sprite;
+if (elephant == 1 || monkey == 1) timer = -8;
+else {
+	timer = 0;
+	sprite_index = harpy_dair_sprite;
+}
+time = 37;
+timer_speed = 1;
+
+}
+switch ( timer )
+{
+case 3: image_index = 1; break;
+case 6: shakey = 1; image_index = 2; break;
+case 8: shakey = 2; break;
+case 10: shakey = 4; break;
+case 11: image_index = 3; break;
+case 12: shakey = 6; break;
+case 13: shakey = 8; image_index = 4; image_xscale *= 1.1; image_yscale *= 1.1; break;
+case 16: image_index = 5; break;
+case 19: image_index = 6; image_xscale *= 1.1; image_yscale *= 1.1; break;
+case 23: image_index = 7; break;
+case 26: shakey = 6; image_index = 1; break;
+case 30: shakey = 4; image_index = 0; break;
+case 32: shakey = 2; break;
+case 34: shakey = 1; break;
+case 36: shakey = 0; break;
+}
+
+if (timer = -7) {
+harpy = 1
+elephant = 0;
+monkey = 0;
+sound_play(transform_sound);
+transformspark = instance_create(x,y-13 * size,obj_spark);
+transformspark.sprite_index = b_transform_effect_sprite;
+transformspark.image_index = 0
+transformspark.image_speed = 0.8
+transformspark.depth = trans_depth;
+transformspark.snap = self.id
+transformspark.image_xscale = 0.37 * size
+transformspark.image_yscale = 0.37 * size
+transform = 1;
+}
+
+if timer = 0 {
+	image_index = 0;
+	sprite_index = harpy_dair_sprite;
+}
+
+if ( timer = 13 )
+{
+sound_play(attacksnd2);
+create_hitbox(5,290-facing*40,1.6,0,5,4,slash1,obj_spark_slash3,0.65,0.625,0,-5,self.id,5,2);
+}
+
+if ( timer = 19 )
+{
+sound_play(attacksnd2);
+create_hitbox(5,280-facing*20,4.75,2.75,18,9,slash3,obj_spark_slash3,0.65,0.625,0,-5,self.id,5,2);
+hitbox.hit_stun = 2
+}
+
+if ( air = 0 )
+{
+state_type = "land";
+attack_type = "none";
+shakey = 0
+timer = 0;
+time = 15;
+sprite_index = land_sprite;
+image_index = 0;
+}
+
+if ( timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+	shakey = 0
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 7;
+    timer = 13;
+    time =-1;
+  }
+}
+
+/*if ( elephant = 1 )
+{
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "jump" )
+{
+hspeed = 0;
+vspeed = 0;
+temp = 0;
+state_type = "air_attack";
+attack_type = "dair";
+sprite_index = elephant_nair_sprite;
+image_index = 0;
+image_speed = 0;
+timer = 0;
+time = 100;
+timer_speed=1;
+}
+
+switch ( timer )
+{
+case 129: image_index = 0; image_xscale *= 1.10; image_yscale *= 0.90; break;
+case 130: image_xscale *= 1.10; image_yscale *= 0.90; break;
+case 131: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 132: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 133: image_index=1; image_xscale *= 1.10; image_yscale *= 0.90;  break;
+case 134: image_xscale *= 1.10; image_yscale *= 0.90;  break;
+case 135: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 136: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 137: image_index=2;  break;
+case 139: image_yscale *= 1.06;  break;
+case 140: image_yscale *= 1.06;  break;
+case 141: sprite_index = elephant_stand_sprite; image_index = 0; image_yscale *= 1.10;  break;
+case 142: image_yscale *= 1.10;  break;
+case 143: image_yscale *= 1.06;  break;
+case 144: image_yscale *= 1.06;  break;
+}
+		if ( timer <= 5 )
+		{
+		if ( timer mod 1 = 0 )
+		  {
+		  after_image(2,c_blue,0.55);
+		  }
+		}
+	    if ( timer = 3 )
+		{
+		super_armor = 1;
+		armor_frames = 10;
+		}
+        if ( timer = 3 )
+		{
+		vspeed = 8;
+        temp_fall_speed = 4;
+        create_hitbox(16,75+facing*30,6,5.5,90,6,punch3,obj_spark_hit4,1.2,1.2,6,4,self.id,100,2);
+		create_hitbox2(16,105-facing*30,6,5.5,90,6,punch3,obj_spark_hit4,1.2,1.2,-14,4,self.id,100,2);
+        hitbox.shake_ampl = 0
+        }
+		if ( timer >= 5 && temp = 0 )
+		{
+		if ( on_floor || on_platform )
+		{
+		sprite_index = elephant_airattack_land_sprite;
+		timer = 129;
+		time = 150;
+		temp = 1;
+		}
+		}
+        if ( timer = 129 )
+		{
+        if instance_exists(hitbox)
+		with hitbox instance_destroy()
+		with hitbox2 instance_destroy()
+		super_armor = 0;
+        hspeed = 0;
+        vspeed = 0;
+        temp_fall_speed = 0;
+		duster = instance_create(x + 15 *(1-facing*2) * size, y,obj_dust_effect)
+		duster.facing = 1-facing;
+		duster.image_alpha = 0.75;
+		duster.image_xscale *= 0.8 * size;
+		duster.image_yscale *= 0.6 * size;
+		duster2 = instance_create(x - 12 *(1-facing*2) * size, y,obj_dust_effect)
+		duster2.image_alpha = 0.75;
+		duster2.image_xscale *= 0.8 * size;
+		duster2.image_yscale *= 0.6 * size;
+		shaker = instance_create(x,y,obj_shakescreen2);
+		shaker.ampl = 6;
+		shaker.xampl = 0;
+		shaker.time = 12;
+		sound_play (stomping_sound);
+        }
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    temp_fall_speed = 0
+    attack_type = "none";
+	state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    timer = 0;
+    time =-1;
+    }
+}
+
+if ( monkey = 1 )
+{
+state_type = "jump";
+attack_type = "none";
+timer = 0;
+time = -1;
+char_nair();
+}*/

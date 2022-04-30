@@ -1,0 +1,98 @@
+if ( timer = 0 )
+{
+image_alpha = 0;
+sprite_index = upb_sprite;
+image_index = 2;
+image_speed = 0;
+
+eff = instance_create( x + 2 * (1-facing*2) * size , y - 22 * size , obj_spark );
+eff.sprite_index = upb_effect_sprite;
+eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+eff.image_yscale = 0.2 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 0.7;
+eff.depth = -7;
+
+sound_play ( upb_sound );
+}
+
+if ( global.gs_gamemode = "Arcade" && global.gs_form[number-1] != 1 )
+{
+  var i;
+  for ( i = 0; i < MAX_FIGHTERS; i += 1 )
+  {
+	if ( timer = 5 && db_charname[global.gs_character[i],1] == "ronald" )
+	{
+	superperfectcell_timer = 600;
+	superperfectcell_permanent = 1;
+	superperfectcell = 1;
+	}
+  }
+}
+
+if ( timer = 5 )
+{
+image_alpha = 1;
+}
+
+switch ( timer )
+{
+case 60: image_index = 1; break;
+case 63: image_index = 0; break;
+
+case 66: sprite_index = entry_sprite; image_index = 4; break;
+case 69: image_index = 5; break;
+case 75: image_index = 6; break;
+}
+
+if ( timer = 75 )
+{
+  sound_play ( sideb_sound );
+  sound_play ( entry_voice );
+  
+if ( superperfectcell = 0 )
+  {
+  eff = instance_create( x - 2 * (1-facing*2) * size , y , obj_spark);
+  eff.sprite_index = entry_effect_sprite;
+  eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+  eff.image_yscale = 0.3 * size;
+  eff.image_alpha = 0.8;
+  eff.image_index = 0;
+  eff.image_speed = 0.35;
+  eff.depth = depth - 0.1;
+  eff.snap = self.id;
+  }
+if ( superperfectcell = 1 )
+  {
+  superperfectcellaura = instance_create( x - 2 * (1-facing*2) * size , y , obj_spark);
+  superperfectcellaura.sprite_index = entry_effect_sprite;
+  superperfectcellaura.y = y;
+  superperfectcellaura.image_xscale = 0.5 * (1 - facing * 2) * size;
+  superperfectcellaura.image_yscale = 0.3 * size;
+  superperfectcellaura.image_alpha = 0.8;
+  superperfectcellaura.image_index = 0;
+  superperfectcellaura.image_speed = 0.35;
+  superperfectcellaura.depth = depth - 6;
+  superperfectcellaura.script = char_custom6;
+  superperfectcellaura.keepmain = keepmain;
+  superperfectcellaura.perfectcell = self.id;
+  superperfectcellaura.loop = 100;
+  superperfectcellaura.temp = 0;
+  superperfectcellaura.snap = self.id;
+  }
+  
+  shaker = instance_create(x,y,obj_shakescreen2);
+  shaker.ampl = 5;
+  shaker.xampl = 0;
+  shaker.time = 9;
+}
+
+if ( timer >= 110 )
+  {
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+  }

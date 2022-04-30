@@ -1,0 +1,68 @@
+priority = 5;
+absorb = 0;
+absorb2 = 0;
+moving_object = 0;
+
+no_clash = 1;
+no_reflect = 1;
+proj_destroy = 0;
+parry_nodestroy = 1;
+clankWithHitbox = 1;
+grazehp = 100;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.downb_effect_sprite3;
+	image_xscale = 0.3 * (1-facing*2) * size;
+	image_yscale = 0.3 * size;
+	image_index = 0;
+    image_speed = 0;
+    visible = 1;
+	depth = -8;
+	image_alpha = 0.95;
+	eff = instance_create( x , y , obj_spark);
+	eff.sprite_index = keepmain.downb_effect_sprite4;
+	eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.5 * size;
+	eff.image_alpha = 0.95;
+	eff.image_index = 0;
+	eff.image_speed = 0.5;
+	eff.loop = 100;
+	eff.depth = depth - 1;
+	eff.alarm[0] = 5;
+  }
+
+time = 61;
+
+x = attacker.id.x + 0 * (1-facing*2) * attacker.id.size + attacker.id.hspeed;
+y = attacker.id.y - 20 * attacker.id.size + attacker.id.vspeed;
+eff.x = x;
+eff.y = y;
+eff.alarm[0] = 5;
+
+if ( timer <= time - 2 )
+{
+image_xscale += 0.01 * (1-facing*2) * size;
+image_yscale += 0.01 * size;
+eff.image_xscale += 0.01 * (1 - facing * 2) * size;
+eff.image_yscale += 0.01 * size;
+}
+
+if ( timer >= time - 10 )
+{
+hit = 2;
+image_alpha -= 0.1
+eff.image_alpha -= 0.1
+}
+
+
+if ( timer = time - 1 || attacker.id.attack_type != "downb" )
+{
+hit = 2;
+
+with ( eff )
+	{
+	instance_destroy();
+	}
+instance_destroy();
+}

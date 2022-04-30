@@ -1,0 +1,69 @@
+if ( timer == 0 )
+{
+sprite_index = elephant_nair_sprite;
+image_speed = 0;
+image_index = 0;
+shakey = -410;
+vspeed = -0.5;
+}
+switch ( timer )
+{
+case 41: sprite_index = elephant_airattack_land_sprite; image_index = 0; image_xscale *= 1.10; image_yscale *= 0.90; break;
+case 42: image_xscale *= 1.10; image_yscale *= 0.90; break;
+case 43: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 44: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 45: image_index=1; image_xscale *= 1.10; image_yscale *= 0.90;  break;
+case 46: image_xscale *= 1.10; image_yscale *= 0.90;  break;
+case 47: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 48: image_xscale *= 1.06; image_yscale *= 0.96;  break;
+case 49: image_index=2;  break;
+
+case 51: image_yscale *= 1.06;  break;
+case 52: image_yscale *= 1.06;  break;
+case 53: sprite_index = elephant_dsmash_sprite; image_index = 0; image_yscale *= 1.10;  break;
+case 54: image_yscale *= 1.10;  break;
+case 55: image_yscale *= 1.06;  break;
+case 56: image_yscale *= 1.06;  break;
+}
+if ( timer <= 40 )
+{
+shakey += 10;
+please_shadow = -1;
+}
+if ( timer = 41 )
+{
+vspeed = 0;
+shakey = 0;
+duster = instance_create(x + 15 *(1-facing*2) * size, y,obj_dust_effect)
+duster.facing = 1-facing;
+duster.image_alpha = 0.75;
+duster.image_xscale *= 0.8 * size;
+duster.image_yscale *= 0.6 * size;
+duster2 = instance_create(x - 12 *(1-facing*2) * size, y,obj_dust_effect)
+duster2.image_alpha = 0.75;
+duster2.image_xscale *= 0.8 * size;
+duster2.image_yscale *= 0.6 * size;
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 6;
+shaker.xampl = 0;
+shaker.time = 12;
+sound_play (stomping_sound);
+}
+
+if ( timer >= 75 )
+  {
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+  sound_play ( choose ( entry_voice , entry_voice2 , entry_voice3 ) );
+  transformspark = instance_create(x - 1 + facing * 2 * size,y-13 * size,obj_spark);
+  transformspark.sprite_index = b_transform_effect_sprite;
+  transformspark.image_index = 0
+  transformspark.image_speed = 1.5
+  transformspark.depth = -6;
+  transformspark.snap = self.id
+  transformspark.image_xscale = 0.3 * size
+  transformspark.image_yscale = 0.3 * size
+  }

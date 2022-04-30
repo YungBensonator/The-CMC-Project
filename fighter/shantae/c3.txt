@@ -1,0 +1,40 @@
+//Cannonball
+moving_object = 1;
+proj_destroy = -1;
+absorb = 0;
+absorb2 = 1;
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.cannonball_sprite;
+    vspeed = 5;
+	hspeed = 0;
+    image_speed = 0;
+	image_index = 0;
+	image_xscale = attacker.size * (1-facing*2);
+	image_yscale = attacker.size;
+    visible = 1;
+	temp = 0;
+    }
+if ( timer = 2 )
+{
+dir = 20+facing*140;
+}
+if ( temp = 0 && ( hit = 1 || on_floor || on_platform  ) )
+{
+temp = 1;
+timer = 120;
+}
+if ( timer = 120 )
+{
+spark = instance_create(x ,y,obj_spark)
+spark.sprite_index = attacker.id.cannonball_boom_sprite;
+spark.image_xscale = attacker.size * (1-facing*2);
+spark.image_yscale = attacker.size;
+spark.image_speed = 0.5;
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 3;
+shaker.xampl = 0;
+shaker.time = 6;
+sound_play (attacker.id.cannonboom_sound);
+visible = 0;
+vspeed = 0;
+}

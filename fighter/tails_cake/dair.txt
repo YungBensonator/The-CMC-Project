@@ -66,9 +66,9 @@ switch ( timer )
 					hover = 0;
 					if (uairtemp = 0){vspeed = 0;vspeed -= 5*size; uairtemp = 1;}
 					else {vspeed -= 3.4*size; }
-					create_hitbox(6,10+facing*160,5.2,5.3,8,6,punch2,obj_spark_hit4,0.8,0.5,6,-4,self.id,5,2);
-					create_hitbox2(6,170-facing*160,5.2,5.3,8,6,punch2,obj_spark_hit4,0.8,0.5,-18,-4,self.id,5,2);
-					create_hitbox3(4,270,4.9,4.6,9,5,kick3,obj_spark_hit3,0.7,.7,-7,11,self.id,4,1);
+					hb1 = create_hitbox(6,10+facing*160,5.2,5.3,8,6,punch2,obj_spark_hit4,0.8,0.5,6,-4,self.id,5,2);
+					 hb2 = create_hitbox2(6,170-facing*160,5.2,5.3,8,6,punch2,obj_spark_hit4,0.8,0.5,-18,-4,self.id,5,2);
+					hb3 = create_hitbox3(4,270,4.9,4.6,9,5,kick3,obj_spark_hit3,0.7,.7,-7,11,self.id,4,1);
                 }
 				
         if air = 0 {
@@ -80,7 +80,7 @@ switch ( timer )
             time=7; }
         }
         if (timer >= 25){
-if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0 && target.offstage){
+if ((hb1.attack_success || hb2.attack_success || hb3.attack_success) || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0 && target.offstage){
 				if ((target.weight <= .22 && target.percent > 110) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 140)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;

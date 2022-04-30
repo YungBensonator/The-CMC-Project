@@ -1,0 +1,45 @@
+absorb = 1;
+absorb2 = 1;
+moving_object = 1;
+
+proj_destroy = 0;
+clankWithHitbox = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.ssmash_proj_sprite;
+	image_xscale = 0.25 * (1-facing*2) * size;
+	image_yscale = 0.25 * size;
+	image_index = 0;
+    image_speed = 0.5;
+    visible = 1;
+	depth = -8;
+	image_alpha = 0.95;
+	if ( temp = 0 )
+		{
+		direction = 0;
+		image_angle = 0;
+		}
+	if ( temp = 1 )
+		{
+		image_angle = 45 * (1-facing*2);
+		direction = 45 * (1-facing*2);
+		}
+	speed = 8 * (1-facing*2) * size;
+  }
+  
+if ( timer = time - 2 || hit = 1 || next_to_rwall || next_to_lwall || under_ceiling || is_on_floor(self) )
+{
+sound_play ( keepmain.ki_explosion_sound );
+
+eff = instance_create( x , y , obj_spark);
+eff.sprite_index = keepmain.ssmash_effect_sprite2;
+eff.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff.image_yscale = 0.4 * size;
+eff.image_alpha = 1;
+eff.image_index = 0;
+eff.image_speed = 0.5;
+eff.depth = -7;
+
+instance_destroy();
+}

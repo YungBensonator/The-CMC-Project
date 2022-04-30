@@ -1,0 +1,93 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 180;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+  }
+
+switch ( timer )
+{
+case 77: image_index=2;  break;
+case 80: image_index=3;  break;
+case 152: image_index=4;  break;
+case 156: image_index=5;  break;
+}
+
+if ( superperfectcell = 1 && timer = 45 )
+	{
+	timer = 81;
+	}
+
+if ( timer = 15 )
+{
+sound_play ( downb_sound );
+
+eff = instance_create( x , y - 25 * size , obj_spark);
+eff.sprite_index = downb_effect_sprite;
+eff.image_xscale = 0.7 * (1 - facing * 2) * size;
+eff.image_yscale = 0.7 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 0.38;
+eff.depth = -7;
+eff.snap = self.id;
+eff.script = char_custom10;
+eff.owner = self.id;
+eff.keepmain = self.keepmain;
+}
+
+if ( timer = 85 )
+{
+sound_stop ( downb_sound );
+sound_play ( downb_sound2 );
+sound_play ( downb_voice );
+
+explosivewave = create_projectile( 12 , 10+facing*160 , 3 , 5.5 , 100 , 30 , shock3 , obj_spark_shock , 1 , 1 , 0 , 20 , self.id , 71 , char_custom3 );
+explosivewave.hitstun = 50
+}
+
+if ( timer = 145 )
+{
+eff2 = instance_create( x , y - 15 * size , obj_spark);
+eff2.sprite_index = downb_effect_sprite2;
+eff2.image_xscale = 0.1 * (1 - facing * 2) * size;
+eff2.image_yscale = 0.1 * size;
+eff2.image_alpha = 0.8;
+eff2.image_index = 0;
+eff2.image_speed = 0.5;
+eff2.loop = 1;
+eff2.depth = -7;
+eff2.snap = self.id;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

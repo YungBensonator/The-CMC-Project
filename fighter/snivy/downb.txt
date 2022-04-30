@@ -7,7 +7,7 @@ if state_type = "jump" || state_type = "stand" || state_type = "run" || state_ty
         sprite_index = jump_sprite
         image_index=0
         timer = 0
-        time = 42
+        time = 60
 hspeed*=0.7
 	delt=0
     }
@@ -33,22 +33,25 @@ state_type = "air_attack"
 		case 96: image_index = 6; break;
 	}
 
-	if air = 0 && timer = 4 && downbbrecover = 0
+	if  timer = 4 && downbbrecover = 0
 	{
-		vspeed = -4;
+		vspeed = -3.5;
 		hspeed = 4 - facing*8
+		create_hitbox( 8 , angle_correct(28) , 6.2 , 0 , 14 , 12 , kick2 , obj_spark_hit2 , .95 , 0.95 , 2 , 19 , self.id , 20 , 1 );
+		hitbox.weight_kb = 0
+		
+
+		hitbox.hitstun = 45
+		hitbox.di = 0
 	}
 
-if air!=0 && timer=4
-{
-    special = 0;
-    timer = 60;
-    time = 100;
-}
+
 
 if timer = 4 && sidebrecover = 1{
-	vspeed = -3;
+	vspeed = -3.25;
 	hspeed = 3 - facing*6
+	
+	
 	}
 
 	if timer = 20 {
@@ -76,28 +79,37 @@ if timer = 4 && sidebrecover = 1{
 
 	if timer = 70
 	{
-	vspeed = 15
-	hspeed = 1 - facing*2
+
+	hspeed = (1 - facing*2) + 1
 	sound_play(sideb_sound2);
 	sound_play(choose(attack_voice1,attack_voice3))
-	create_hitbox(17,366,7,6,30,20,slash3,obj_spark_slash1,0.8,1.1,19,16,self.id,10,3);
-	create_hitbox2(17,366,7,6,30,20,slash3,obj_spark_slash1,0.8,0.8,8,12,self.id,10,3);
-if facing=1{
-hitbox.dir=367
-hitbox2.dir=367}
-if facing=0{
-hitbox.dir=366
-hitbox2.dir=366}
+	create_hitbox(11,angle_correct(3),3.5,6.25,30,20,slash3,obj_spark_slash1,0.8,1.1,19,16,self.id,10,3);
+	create_hitbox2(11,angle_correct(3),3.5,6.25,30,20,slash3,obj_spark_slash1,0.8,0.8,8,12,self.id,10,3);
+
 
 	}
 if timer >= 70 && timer <= 80 && (hitbox.hit=1 || hitbox2.hit=1) && delt=0
 {
-     instance_create ( x , y , obj_down_impact );
-percent+=5
+     if facing == 0{
+		 facing = 1
+		 vspeed *= -2.5
+		 time += 30
+	}
+		
+	 
+	 else{
+		 facing = 0
+		 vspeed *= -2.5
+		 time += 30
+	
+	 }
+	 
+	 
+	 instance_create ( x , y , obj_down_impact );
 for (i = 0; i < 9; i += 1){
 chooseny32 = choose(-2.5,-2,-1.5,-1,0,1,1.5,2,2.5,)
 chooseny52 = choose(-3,-2,-1,0,1,2,3,)
-		proj[i] = create_projectile(2,45+90*facing,2,0,2,4,-1 ,-1, 1, 1, 0, 15 , self.id   , 50  , char_custom3);
+		proj[i] = create_projectile(2,angle_correct(3),3.5,6.25,2,4,-1 ,-1, 1, 1, 0, 15 , self.id   , 50  , char_custom3);
 		proj[i].sprite_index = woodhammer_sprite;
 		proj[i].depth = depth - 0.1;
 		proj[i].image_index=i

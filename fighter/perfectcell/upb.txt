@@ -1,0 +1,160 @@
+if ( cantupb = 1 )
+{
+exit;
+}
+
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 40;
+  timer = 0;
+  state_type = "air_attack";
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  hover = 0
+  air_move = 0;
+  temp = 90;
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+  }
+
+switch ( timer )
+{
+case 4: image_index = 1; break;
+case 8: image_index = 2; break;
+case 37: image_index = 4; break;
+}
+
+if ( timer > 25 )
+{
+force_edge_grab = 1;
+}
+
+//------------------------------------------------------------------------------------AI---------------------------------------------------------------------------
+if ( ai && ( obj_training.ai_type != 6 ) && ( offstage || ai_state = "recover" ) )
+  {
+	if ( y > nearest_edge.y )
+	moveup = 1;
+	if ( x < nearest_edge.x )
+	  {
+	moveright = 1;
+	moveleft = 0;
+	  }
+	if ( x > nearest_edge.x )
+	  {
+	moveleft = 1;
+	moveright = 0;
+	  }
+  }
+
+//---------------------------------------------------------------------------------TRANSMIT-------------------------------------------------------------------------
+if ( timer = 14 )
+{
+sound_play ( upb_sound );
+intangible = 1;
+image_alpha = 0;
+
+eff = instance_create( x + 2 * (1-facing*2) * size , y - 22 * size , obj_spark );
+eff.sprite_index = upb_effect_sprite;
+eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+eff.image_yscale = 0.2 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 0.7;
+eff.depth = -7;
+}
+
+if ( timer <= 16 )
+{
+vspeed = 0;
+hspeed = 0;
+gravity_lock = 1;
+
+	if ( moveright && !moveup && !movedown )
+	  {
+	    temp = 0;
+	  }
+	if ( moveleft && !moveup && !movedown )
+	  {
+	    temp = 180;
+	  }
+	if ( !moveright && !moveleft && !movedown )
+	  {
+	    temp = 90;
+	  }
+	if ( movedown && !moveright && !moveleft )
+	  {
+	    temp = 270;
+	  }
+	if ( moveup && moveright )
+	  {
+	    temp = 45;
+	  }
+	if ( moveup && moveleft )
+	  {
+	    temp = 135;
+	  }
+	if ( movedown && moveright )
+	  {
+	    temp = 315;
+	  }
+	if ( movedown && moveleft )
+	  {
+	    temp = 225;
+	  }
+}
+
+if ( timer = 16 )
+{
+direction = temp;
+speed = 100 * size;
+}
+
+if ( timer = 17 )
+{
+speed = 0;
+
+eff = instance_create( x + 2 * (1-facing*2) * size , y - 22 * size , obj_spark );
+eff.sprite_index = upb_effect_sprite;
+eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+eff.image_yscale = 0.2 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 0.7;
+eff.depth = -7;
+}
+
+if ( timer = 23 )
+{
+air_move = 1;
+intangible = 0;
+image_alpha = 1;
+}
+
+if ( vspeed > 0.1 && timer > 17 )
+{
+vspeed = 0.1
+} 
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	cantupb = 1;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

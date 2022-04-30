@@ -1,0 +1,52 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "uair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = uair_sprite;
+  timer = 0;
+  time = 22;
+  timer_speed = 1;
+  }
+
+switch ( timer )
+{
+case 6: image_index = 1; break;
+case 7: image_index = 2; break;
+case 19: image_index = 4; break;
+case 22: image_index = 5; break;
+}
+
+if ( timer = 7 )
+{
+if ( irandom(1) = 0 )
+	{
+	play_attack_voice();
+	}
+sound_play(cell_swing_sound);
+create_hitbox( 7 , 75+facing*30  , 4.8 , 3.2 , 18 , 8 , goku_hit , obj_spark_hit3 , 0.62 , 1.02 , 5.60 , 35 , self.id , 5 , 2 );
+hitbox.image_angle = ( 1 - facing * 2 ) * 350.33;
+hitbox.hit_stun = 25
+}
+
+if ( air = 0 )
+{
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = 15;
+sprite_index = land_sprite;
+image_index = 0;
+}
+
+if ( timer >= time -1 )
+  {
+    attack_type = "none";
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+    timer = 0;
+    time =-1;
+  }

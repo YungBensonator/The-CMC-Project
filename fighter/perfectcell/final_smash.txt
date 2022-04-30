@@ -1,0 +1,187 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = final_smash_sprite;
+  timer = 0;
+  time = 450;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  freeze = instance_create ( 0 , 0 , obj_freeze );
+  freeze.dontpause = eff;
+  freeze.dontpause = eff2;
+  freeze.dontpause = self.id;
+  freeze.alarm[0] = 200;
+  
+  camerazoom = instance_create ( 0 , 0 , obj_camerazoom );
+  camerazoom.camera_l = x - 16;
+  camerazoom.camera_r = x + 16;
+  camerazoom.camera_u = y - 12 - actual_height;
+  camerazoom.camera_d = y + 12;
+  camerazoom.camera_boundary_zoom = 100;
+  camerazoom.alarm[0] = 200;
+  }
+
+switch ( timer )
+{
+case 5: image_index = 1; break;
+case 10: image_index = 2; break;
+case 15: image_index = 3; break;
+
+case 200: image_index = 5; break;
+
+case 352: image_index = 6; break;
+case 445: image_index = 8; break;
+}
+
+gravity_lock = 2;
+hspeed = 0;
+vspeed = 0;
+
+if ( timer = 15 )
+{
+sound_play ( final_smash_voice );
+sound_play ( final_smash_sound );
+
+eff = instance_create( x , y , obj_spark);
+eff.sprite_index = final_smash_effect_sprite;
+eff.image_xscale = 0.2 * (1 - facing * 2) * size;
+eff.image_yscale = 0.3 * size;
+eff.image_alpha = 1;
+eff.image_index = 0;
+eff.image_speed = 0.5;
+eff.loop = 100;
+eff.depth = depth + 0.1;
+eff.snap = self.id;
+eff.alarm[0] = 10;
+
+eff2 = instance_create( x - 4 * (1-facing*2) * size , y - 12 * size , obj_spark);
+eff2.sprite_index = final_smash_effect_sprite2;
+eff2.image_xscale = 0.35 * (1 - facing * 2) * size;
+eff2.image_yscale = 0.35 * size;
+eff2.image_alpha = 0.9;
+eff2.image_index = 0;
+eff2.image_speed = 0.5;
+eff2.loop = 100;
+eff2.depth = depth - 0.1;
+eff2.snap = self.id;
+eff2.alarm[0] = 10;
+
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 5;
+shaker.xampl = 0;
+shaker.time = 9;
+}
+
+if ( timer = 75 )
+{
+sound_play ( sideb_sound );
+
+eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+eff.image_yscale = 0.6 * size;
+
+eff.image_speed = 0.6;
+eff2.image_speed = 0.7;
+
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 7;
+shaker.xampl = 0;
+shaker.time = 9;
+
+camerazoom.camera_l = x - 32;
+camerazoom.camera_r = x + 32;
+camerazoom.camera_u = y - 44 - actual_height;
+camerazoom.camera_d = y + 4;
+camerazoom.camera_boundary_zoom = 75;
+}
+
+if ( timer = 135 )
+{
+sound_play ( sideb_sound );
+
+eff.image_xscale = 0.8 * (1 - facing * 2) * size;
+eff.image_yscale = 0.9 * size;
+
+eff.image_speed = 0.7;
+eff2.image_speed = 1;
+
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 10;
+shaker.xampl = 0;
+shaker.time = 9;
+
+camerazoom.camera_l = x - 64;
+camerazoom.camera_r = x + 64;
+camerazoom.camera_u = y - 98 - actual_height;
+camerazoom.camera_d = y + 8;
+camerazoom.camera_boundary_zoom = 25;
+}
+
+if ( timer >= 15 && timer < 200 )
+{
+eff.alarm[0] = 10;
+eff2.alarm[0] = 10;
+}
+
+if ( timer = 200 )
+{
+with ( eff )
+	{
+	instance_destroy();
+	}
+with ( eff2 )
+	{
+	instance_destroy();
+	}
+
+sound_play ( final_smash_sound3 );
+
+superperfectcell = 1;
+superperfectcell_init = 1;
+superperfectcell_timer = 600;
+
+kamehameha = create_projectile ( 1 , 90 , 2.1 , 0 , -1 , 1 , -1 , -1 , 1 , 1 , 35 , 20 , self.id , 150 , char_custom4 );
+kamehameha.di = -1;
+}
+
+if ( timer >= 200 && timer <= 350 )
+{
+	if ( timer mod 10 = 0 )
+	{
+	shaker = instance_create(x,y,obj_shakescreen2);
+	shaker.ampl = 3;
+	shaker.xampl = 0;
+	shaker.time = 9;
+	}
+	if ( timer mod 6 <= 3 )
+	{
+	image_index = 4;
+	}
+	else
+	{
+	image_index = 5;
+	}
+}
+
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

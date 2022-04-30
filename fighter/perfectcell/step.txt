@@ -1,0 +1,245 @@
+//--------------------------------------------------------------------------------STAND-----------------------------------------------------------
+if ( sprite_index = stand_sprite )
+{
+image_speed = 0.08;
+}
+
+//--------------------------------------------------------------------------------CROUCH-----------------------------------------------------------
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(3,timer)
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 2: image_index = 1; break;
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 1 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 3 ){
+    image_index = 1;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+
+if (enemy.state_type = "out"){
+temp_spawn += 1
+ }
+
+// obj_score_control.stocks[target.number-1] == 1
+
+if (instance_exists(proj2)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 130) || (target.weight > .22 && target.weight < .3 && target.percent > 140) || (target.weight > .3 && target.percent > 150)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+                killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				image_speed = 0.5;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 50
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+                enemy.state_type = "flinch"
+				enemy.timer = 0
+				enemy.time = 65
+                enemy.kbg = 25
+				enemy.speed = temp_speed * 4
+				}
+				}
+  }	
+
+
+//--------------------------------------------------------------------------------WALK-----------------------------------------------------------
+if ( sprite_index = walk_sprite )
+{
+if ( timer < 2 )
+	{
+	image_index = 0;
+	image_speed = 0;
+	}
+if ( timer >= 2 )
+	{
+	image_speed = 0.2;
+
+		if ( image_index >= 5 )
+		{
+		image_index = 1;
+		}
+	}
+
+}
+
+
+//--------------------------------------------------------------------------------RUN-----------------------------------------------------------
+if ( sprite_index = run_sprite )
+{
+	if ( timer mod 5 = 0 )
+	{
+	duster = instance_create( x , y , obj_dust_effect);
+	duster.image_alpha = 0.75;
+	duster.image_speed = 0.5;
+	duster.image_xscale = 0.15 * (1-facing*2) * size;
+	duster.image_yscale = 0.15 * size;
+	}
+}
+
+//--------------------------------------------------------------------------------JUMP-----------------------------------------------------------
+if ( sprite_index = jump_sprite && lastanimframe = 1 )
+{
+image_index = 4;
+lastanimframe = 0;
+}
+
+if ( state_type != "jump" && lastanimframe = 1 )
+{
+lastanimframe = 0;
+}
+
+if ( sprite_index = hover_sprite )
+{
+lastanimframe = 1;
+}
+
+if ( state_type == "land" && !jumping && timer == 1 && metal_transformation = 0 )
+  {
+  sound_play ( land_sound );
+  }
+
+//--------------------------------------------------------------------------------MISC-----------------------------------------------------------
+if ( sprite_index = air_dodge_sprite )
+{
+if ( image_index >= image_number - 1 )
+	{
+	image_index = 2;
+	image_speed = 0;
+	}
+}
+
+if ( cantupb = 1 && ( air = 0 || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" || state_type = "out" ) )
+{
+cantupb = 0;
+}
+if ( cantsideb = 1 && ( air = 0 || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" || state_type = "out" ) )
+{
+cantsideb = 0;
+}
+
+
+//--------------------------------------------------------------------------SUPER PERFECT CELL----------------------------------------------------
+if ( global.gs_form[number-1] = 1 && superperfectcell_init = 0 )
+{
+superperfectcell_timer = 600;
+superperfectcell_permanent = 1;
+superperfectcell = 1;
+superperfectcell_init = 1;
+}
+
+
+if ( superperfectcell_permanent != 1 && superperfectcell = 1 && superperfectcell_timer = 0 )
+{
+superperfectcell = 0;
+}
+
+if ( superperfectcell_timer > 0 && attack_type != "final_smash" )
+{
+superperfectcell_timer -= 1;
+}
+
+if ( superperfectcell = 1 )
+{
+if ( superperfectcell_timer = 599 || superperfectcell_permanent = 1 )
+{
+offense = 1.5;
+defense = 1.5;
+}
+
+if ( state_type != "entry" && state_type != "out" )
+{
+  if ( !instance_exists( superperfectcellaura ) )
+  {
+  superperfectcellaura = instance_create( x - 2 * (1-facing*2) * size , y , obj_spark);
+  superperfectcellaura.sprite_index = entry_effect_sprite;
+  superperfectcellaura.y = y;
+  superperfectcellaura.image_xscale = 0.5 * (1 - facing * 2) * size;
+  superperfectcellaura.image_yscale = 0.3 * size;
+  superperfectcellaura.image_alpha = 0.8;
+  superperfectcellaura.image_index = 0;
+  superperfectcellaura.image_speed = 0.35;
+  superperfectcellaura.depth = depth - 6;
+  superperfectcellaura.script = char_custom6;
+  superperfectcellaura.keepmain = keepmain;
+  superperfectcellaura.perfectcell = self.id;
+  superperfectcellaura.loop = 100;
+  superperfectcellaura.temp = 0;
+  superperfectcellaura.snap = self.id;
+  }
+  if ( timer mod 60 = 1 )
+  {
+  superperfectcellelectricaura = instance_create( x - 2 * (1-facing*2) * size , y , obj_spark);
+  superperfectcellelectricaura.sprite_index = choose ( electric_aura_sprite , electric_aura_sprite2 , electric_aura_sprite3 );
+  superperfectcellelectricaura.y = y - 15 * size;
+  superperfectcellelectricaura.image_xscale = 0.4 * (1 - facing * 2) * size;
+  superperfectcellelectricaura.image_yscale = 0.4 * size;
+  superperfectcellelectricaura.image_alpha = 0.9;
+  superperfectcellelectricaura.image_index = 0;
+  superperfectcellelectricaura.image_speed = 0.5;
+  superperfectcellelectricaura.image_angle = 0 + random(60) * (1-facing*2);
+  superperfectcellelectricaura.depth = -6.1;
+  superperfectcellelectricaura.script = char_custom6;
+  superperfectcellelectricaura.keepmain = keepmain;
+  superperfectcellelectricaura.perfectcell = self.id;
+  superperfectcellelectricaura.temp = 1;
+  superperfectcellelectricaura.snap = self.id;
+  }
+}
+
+}
+
+if ( superperfectcell = 0 && superperfectcell_init = 1 )
+{
+offense = 1;
+defense = 1;
+superperfectcell_init = 0;
+}

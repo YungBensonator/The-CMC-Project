@@ -1,0 +1,39 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "bthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bthrow_sprite;
+  timer = 0;
+  time = 45;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 45;
+  }
+
+switch ( timer )
+{
+case 3: image_index=1;  break;
+case 6: image_index=2;  break;
+}
+
+if ( timer <= 6 )
+{
+target.x = x + 20 * size * (1-facing*2);
+target.y = y;
+}
+
+if ( timer == 6 )
+  {
+  create_throw_box ( 10 , 145-facing*110 , 8 , 2.5 , 15 , 2 , strong_punch , obj_spark_hit3 , 0.90 , 1.26 , 10.50 , 18.90 , self.id , 2 );
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

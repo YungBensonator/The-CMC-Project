@@ -1,0 +1,197 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attack_type = "b";
+  time = 100;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  if ( air > 0 && movedown = 1 )
+	{
+	sprite_index = b_air_sprite;
+	temp = 1;
+	}
+	else
+	{
+	sprite_index = b_sprite;
+	temp = 0;
+	}
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  air_move = 1;
+  }
+
+//-------------------------------------------------------------------AIM CONTROL--------------------------------------------------
+if ( movedown = 1 && moveup != 1 && air > 0 && timer < 40 )
+	{
+	temp = 1;
+	}
+
+if ( air = 0 && temp = 1 && ( timer < 40 || timer > 70 ) ) || ( moveup = 1 && movedown != 1 && timer < 40 )
+	{
+	temp = 0;
+	}
+
+if ( superperfectcell = 1 && timer = 20 )
+	{
+	timer = 39;
+	}
+
+//---------------------------------------------------------------------GROUND-----------------------------------------------------
+if ( temp = 0 )
+{
+sprite_index = b_sprite;
+
+if ( timer >= 80 )
+	{
+	image_index = 6;
+	}
+
+if ( instance_exists ( eff ) )
+	{
+	eff.x = x - 3 * (1-facing*2) * size
+	eff.y = y - 34 * size
+	eff.alarm[0] = 5;
+	}
+
+}
+
+//------------------------------------------------------------------AIR + AIM DOWNWARDS-------------------------------------------
+if ( temp = 1 )
+{
+sprite_index = b_air_sprite;
+
+if ( timer >= 80 )
+	{
+	image_index = 4;
+	}
+
+if ( instance_exists ( eff ) )
+	{
+	eff.x = x + 3 * (1-facing*2) * size
+	eff.y = y - 41 * size
+	eff.alarm[0] = 5;
+	}
+
+}
+
+//------------------------------------------------------------------CHARGE EFFECT-------------------------------------------
+if ( timer = 1 )
+{
+  sound_play ( b_sound2 );
+  
+  if ( temp = 0 )
+	{
+	eff = instance_create( x - 3 * (1-facing*2) * size , y - 34 * size , obj_spark);
+	}
+  if ( temp = 1 )
+	{
+	eff = instance_create( x + 3 * (1-facing*2) * size , y - 41 * size , obj_spark);
+	}
+  eff.sprite_index = b_effect_sprite2;
+  eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+  eff.image_yscale = 0.5 * size;
+  eff.image_alpha = 0.8;
+  eff.image_index = 0;
+  eff.image_speed = 0.7;
+  eff.depth = depth - 1.1;
+  eff.alarm[0] = 5;
+  eff.script = char_custom10;
+  eff.owner = self.id;
+  eff.keepmain = self.keepmain;
+}
+
+
+//--------------------------------------------------------------------FIRE-------------------------------------------
+if ( timer = 45 )
+{
+if ( superperfectcell = 1 )
+{
+if ( instance_exists ( eff ) )
+	{
+	with ( eff )
+		{
+		instance_destroy();
+		}
+	}
+}
+
+image_index = 4;
+
+sound_stop ( b_sound2 );
+sound_play ( b_sound );
+
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 5;
+shaker.xampl = 0;
+shaker.time = 9;
+
+if ( air = 0 )
+{
+duster = instance_create( x - 12 * (1-facing*2) * size , y , obj_dust_effect);
+duster.image_alpha = 0.85;
+duster.image_xscale = 0.30 * (1-facing*2) * size;
+duster.image_yscale = 0.30 * size;
+}
+
+  if ( temp = 0 )
+	{
+	eff2 = instance_create( x + 24 * (1-facing*2) * size , y - 23 * size , obj_spark);
+	eff2.sprite_index = b_effect_sprite;
+	eff2.image_xscale = 0.4 * (1 - facing * 2) * size;
+	eff2.image_yscale = 0.4 * size;
+	eff2.image_alpha = 0.8;
+	eff2.image_index = 0;
+	eff2.image_speed = 1;
+	eff2.depth = -7;
+	eff2.snap = self.id;
+	eff2.script = char_custom10;
+	eff2.owner = self.id;
+	eff2.keepmain = self.keepmain;
+	
+	proj = create_projectile( 15 , 10+facing*160 , 1.5 , 2 , 100 , 30 , crush , obj_spark_hit3 , 1 , 1 , 24 , 23 , self.id , 30 , char_custom2 );
+	proj.temp = 0;
+	proj.hit_stun = 15;
+	proj.image_angle = 0;
+	}
+  if ( temp = 1 )
+	{
+	eff2 = instance_create( x + 23 * (1-facing*2) * size , y - 9 * size , obj_spark);
+	eff2.sprite_index = b_effect_sprite;
+	eff2.image_xscale = 0.4 * (1 - facing * 2) * size;
+	eff2.image_yscale = 0.4 * size;
+	eff2.image_alpha = 0.8;
+	eff2.image_index = 0;
+	eff2.image_speed = 1;
+	eff2.image_angle = 325 * (1-facing*2);
+	eff2.depth = -7;
+	eff2.snap = self.id;
+	
+	proj = create_projectile( 15 , 10+facing*160 , 5.5 , 4.4 , 100 , 30 , crush , obj_spark_hit3 , 1 , 1 , 23 , 9 , self.id , 30 , char_custom2 );
+	proj.temp = 1;
+	proj.hit_stun = 20;
+	proj.image_angle = 325 * (1-facing*2);
+	}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

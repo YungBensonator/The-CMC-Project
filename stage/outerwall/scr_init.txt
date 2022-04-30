@@ -1,0 +1,151 @@
+////
+// VARIABLES
+////
+stg_msk_x = 477;
+stg_msk_y = 825;
+scale = 0.45;
+camera_boundary_l = 0;
+camera_boundary_r = 1280*1.5 * scale;
+camera_boundary_u = 0;
+camera_boundary_d = 720*1.5 * scale;
+camera_boundary_zoom = 292 * scale;
+stg_x = camera_boundary_r * 0.5;
+stg_y = camera_boundary_d ;
+death_l = camera_boundary_l - 100 * scale;
+death_u = camera_boundary_u - 270 * scale;
+death_r = camera_boundary_r + 120 * scale;
+death_d = camera_boundary_d + 190 * scale;
+player_spawn_x [ 0 ] = stg_x + ( 86 - stg_msk_x ) * scale;
+player_spawn_y [ 0 ] = stg_y + ( 310 - stg_msk_y ) * scale;
+player_spawn_x [ 1 ] = stg_x + ( 865 - stg_msk_x ) * scale;
+player_spawn_y [ 1 ] = stg_y + ( 310 - stg_msk_y ) * scale;
+player_spawn_x [ 2 ] = stg_x + ( 86 - stg_msk_x ) * scale;
+player_spawn_y [ 2 ] = stg_y + ( 156 - stg_msk_y ) * scale;
+player_spawn_x [ 3 ] = stg_x + ( 865 - stg_msk_x ) * scale;
+player_spawn_y [ 3 ] = stg_y + ( 156 - stg_msk_y ) * scale;
+player_spawn_x [ 4 ] = stg_x + ( 86 - stg_msk_x ) * scale;
+player_spawn_y [ 4 ] = stg_y + ( 2 - stg_msk_y ) * scale;
+player_spawn_x [ 5 ] = stg_x + ( 865 - stg_msk_x ) * scale;
+player_spawn_y [ 5 ] = stg_y + ( 2 - stg_msk_y ) * scale;
+respawn_x = stg_x + ( 477 - stg_msk_x ) * scale;
+respawn_y = stg_y + ( 86 - stg_msk_y ) * scale;
+
+////
+// RESOURCES
+////
+// masks
+global.msk_stg[0] = stage_msk_add2 ( "stage/outerwall/mask_floor.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[1] = stage_msk_add2 ( "stage/outerwall/mask_leftwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[2] = stage_msk_add2 ( "stage/outerwall/mask_rightwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[3] = stage_msk_add2 ( "stage/outerwall/mask_platform.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[8] = stage_msk_add2 ( "stage/outerwall/mask_ceil.png",1,1,0,stg_msk_x,stg_msk_y );
+// stage sprites
+global.msk_stg[4] = stage_spr_add ( "stage/outerwall/rem.png",1,stg_msk_x,stg_msk_y );
+global.msk_stg[5] = stage_spr_add ( "stage/outerwall/clouds4.png",1,stg_msk_x,stg_msk_y );
+
+// backgrounds
+background_index[0] = stage_bg_add ("stage/outerwall/bg.png");
+background_index[1] = stage_bg_add ("stage/outerwall/clouds1.png");
+background_index[2] = stage_bg_add ("stage/outerwall/clouds2.png");
+background_index[3] = stage_bg_add ("stage/outerwall/clouds3.png");
+
+////
+// OBJECTS
+////
+var o;
+// floor
+o = instance_create ( stg_x , stg_y , obj_floor );
+o.sprite_index = global.msk_stg[0];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// left wall
+o = instance_create ( stg_x , stg_y , obj_leftwall );
+o.sprite_index = global.msk_stg[1];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// right wall
+o = instance_create ( stg_x , stg_y , obj_rightwall );
+o.sprite_index = global.msk_stg[2];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ceiling
+o = instance_create ( stg_x , stg_y , obj_ceiling );
+o.sprite_index = global.msk_stg[8];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// platform
+o = instance_create ( stg_x , stg_y , obj_platform );
+o.sprite_index = global.msk_stg[3];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// ledges
+instance_create ( stg_x + ( 40 - stg_msk_x ) * scale , stg_y + ( 313 - stg_msk_y ) * scale , obj_edge_left );
+instance_create ( stg_x + ( 914 - stg_msk_x ) * scale , stg_y + ( 313 - stg_msk_y ) * scale , obj_edge_right );
+// mg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[4];
+o.depth = 6;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_mg = o;
+// fg
+o = instance_create (325,975,obj_stage_extra);
+o.sprite_index = global.msk_stg[5];
+o.depth = -10;
+o.image_xscale = background_xscale*0.7;
+o.image_yscale = background_yscale*0.7;
+obj_fg = o;
+
+background_x[0] = 0;
+background_y[0] = 0;
+background_htiled[0] = 0;
+background_vtiled[0] = 0;
+background_visible[0] = 1;
+background_xscale[0] = background_xscale*0.7;
+background_yscale[0] = background_yscale*0.7;
+background_alpha[0] = 1;
+background_hspeed[0] = 0;
+
+background_x[1] = 0;
+background_y[1] = 123;
+background_htiled[1] = 1;
+background_vtiled[1] = 0;
+background_visible[1] = 1;
+background_xscale[1] = background_xscale*0.7;
+background_yscale[1] = background_yscale*0.7;
+background_alpha[1] = 1;
+background_hspeed[1] = -0.25;
+
+background_x[2] = 0;
+background_y[2] = 130;
+background_htiled[2] = 1;
+background_vtiled[2] = 0;
+background_visible[2] = 1;
+background_xscale[2] = background_xscale*0.7;
+background_yscale[2] = background_yscale*0.7;
+background_alpha[2] = 1;
+background_hspeed[2] = -1.5;
+
+background_x[3] = 0;
+background_y[3] = 150;
+background_htiled[3] = 1;
+background_vtiled[3] = 0;
+background_visible[3] = 1;
+background_xscale[3] = background_xscale*0.7;
+background_yscale[3] = background_yscale*0.7;
+background_alpha[3] = 1;
+background_hspeed[3] = -3.25;
+
+
+
+stage_install_bg_object();
+obj_main_bg = obj_stage_bg.id;
+with ( obj_stage_bg )
+  {
+  mode = 0;
+  scale = other.scale;
+  obj_mg = other.obj_mg;
+  obj_fg = other.obj_fg;
+  stg_x = other.stg_x;
+  stg_y = other.stg_y;
+  }

@@ -1,0 +1,355 @@
+if ( cantsideb = 1 )
+{
+exit;
+}
+
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  hspeed = 0;
+  vspeed = 0;
+  attacking = 0;
+  special = 0;
+  attack_type = "sideb";
+  time = 50;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = dash_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  hover = 0;
+  air_move = 0;
+  attack_success = 0;
+  temp = 0;
+  temp2 = 0;
+  temp3 = 0;
+  targetLock = -1;
+  has_hit = 0;
+  
+  eff = instance_create( x + 2 * (1-facing*2) * size , y - 15 * size , obj_spark);
+  eff.sprite_index = sideb_effect_sprite;
+  eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+  eff.image_yscale = 0.5 * size;
+  eff.image_alpha = 0.8;
+  eff.image_index = 0;
+  eff.image_speed = 0.35;
+  eff.depth = depth - 0.1;
+  eff.snap = self.id;
+  eff.script = char_custom10;
+  eff.owner = self.id;
+  eff.keepmain = self.keepmain;
+  }
+
+gravity_lock = 1;
+
+switch ( timer )
+{
+case 5: image_index = 1; break;
+case 15: image_index = 2; break;
+case 30: image_index = 1; break;
+case 35: image_index = 0; break;
+
+case 106: image_index = 1; break;
+case 107: image_index = 2; break;
+case 108: image_index = 3; break;
+
+case 140: image_index = 1; break;
+case 142: image_index = 3; break;
+case 167: image_index = 4; break;
+
+case 205: image_index = 2; break;
+case 210: image_index = 1; break;
+case 215: image_index = 0; break;
+case 308: image_index = 1; break;
+case 312: image_index = 2; break;
+case 316: image_index = 3; break;
+}
+
+//-----------------------------------------------------------------------------------------------PART 1---------------------------------------------------------------------------
+if ( timer <= 17 )
+{
+hspeed = 0;
+vspeed -= 0.05;
+}
+
+if ( timer = 15 )
+{
+sound_play ( sideb_sound );
+}
+
+if ( timer = 18 )
+{
+eff2 = instance_create( x + 5 * (1-facing*2) * size , y - 15 * size , obj_spark);
+eff2.sprite_index = ssmash_proj_sprite;
+eff2.image_xscale = 0.6 * (1 - facing * 2) * size;
+eff2.image_yscale = 0.6 * size;
+eff2.image_alpha = 0.8;
+eff2.loop = 5;
+eff2.image_index = 0;
+eff2.image_speed = 1;
+eff2.depth = depth + 0.1;
+eff2.snap = self.id;
+eff2.alarm[0] = 10;
+eff2.script = char_custom10;
+eff2.owner = self.id;
+eff2.keepmain = self.keepmain;
+
+create_hitbox ( 2 , 90 , 3.5 , 0 , 9 , 10 , goku_hit , obj_spark_hit3 , 1.81 , 1.06 , -2.80 , 14.70 , self.id , 14 , 2 );
+hitbox.armor_break = 1;
+hitbox.di = -1;
+hitbox.hit_stun = 15;
+hitbox.execute_on_hit = "attacker.has_hit = 1; attacker.targetLock = attacked.id;"
+}
+
+if ( timer >= 18 && timer <= 33 )
+{
+eff2.alarm[0] = 10;
+vspeed = 0;
+}
+
+if ( timer >= 18 && timer <= 33 )
+{
+hspeed = 7 * (1-facing*2) * size;
+}
+if ( timer = 34 )
+{
+if instance_exists ( eff2 )
+	{
+	with ( eff2 )
+		{
+		instance_destroy();
+		}
+	}
+
+hspeed = 6 * (1-facing*2) * size;
+}
+if ( timer = 35 )
+{
+hspeed = 5 * (1-facing*2) * size;
+}
+if ( timer = 36 )
+{
+hspeed = 4 * (1-facing*2) * size;
+}
+if ( timer = 37 )
+{
+hspeed = 3 * (1-facing*2) * size;
+}
+if ( timer = 38 )
+{
+hspeed = 2 * (1-facing*2) * size;
+}
+if ( timer = 39 )
+{
+hspeed = 1 * (1-facing*2) * size;
+}
+
+if ( has_hit = 1 && temp = 0 && targetLock.custom_boss != 1 )
+{
+if instance_exists ( eff2 )
+	{
+	with ( eff2 )
+		{
+		instance_destroy();
+		}
+	}
+
+temp = 1;
+sprite_index = utilt_sprite;
+image_index = 0;
+
+timer = 100;
+time = 170;
+
+targetLock.x = x + 10 * (1-facing*2) * size;
+targetLock.y = y;
+targetLock.state_type = "flinch"
+targetLock.facing = !facing;
+targetLock.attack_type = "none";
+targetLock.timer = 0;
+targetLock.timer_speed = 0;
+targetLock.alarm[0] = 2;
+}
+
+//-----------------------------------------------------------------------------------------------PART 2---------------------------------------------------------------------------
+
+if ( timer >= 100 && timer <= 106 )
+{
+targetLock.x = x + 10 * (1-facing*2) * size;
+targetLock.y = y;
+targetLock.state_type = "flinch"
+targetLock.facing = !facing;
+targetLock.attack_type = "none";
+targetLock.timer = 0;
+targetLock.timer_speed = 0;
+targetLock.alarm[0] = 2;
+}
+
+if ( timer >= 109 && targetLock.state_type = "out" && temp2 = 0 )
+{
+temp2 = 1;
+}
+
+if ( timer = 108 )
+{
+sound_play(cell_swing_sound);
+
+if ( targetLock.object_index = obj_enemy )
+	{
+	create_hitbox( 5 , 60+facing*60 , 7 , 0 , 20 , 15 , smash_up , obj_spark_hit3 , 0.78 , 1.5 , 5.60 , 25 , self.id , 4 , 5 );
+	}
+	else
+	{
+	create_hitbox( 5 , 60+facing*60 , 9 , 0 , 20 , 15 , smash_up , obj_spark_hit3 , 0.78 , 1.5 , 5.60 , 25 , self.id , 4 , 5 );
+	}
+hitbox.armor_break = 1;
+hitbox.di = -1;
+hitbox.weight_kb = 1;
+hitbox.hit_stun = 60;
+}
+
+//-----------------------------------------------------------------------------------------------PART 3---------------------------------------------------------------------------
+
+if ( timer = 130 && temp2 = 1 )
+	{
+	sprite_index = entry_sprite;
+	image_index = 3;
+	timer = 200;
+	time = 320;
+	}
+
+if ( ( targetLock.vspeed >= 0 || ( targetLock.object_index = obj_enemy && point_distance( x , y , targetLock.x , targetLock.y ) > 5 ) ) && timer > 108 && timer < 130 && targetLock.state_type != "out" )
+{
+timer = 130;
+}
+
+if ( timer = 130 )
+{
+sound_play ( upb_sound );
+intangible = 1;
+image_alpha = 0;
+
+eff = instance_create( x + 2 * (1-facing*2) * size , y - 22 * size , obj_spark );
+eff.sprite_index = upb_effect_sprite;
+eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+eff.image_yscale = 0.2 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 0.7;
+eff.depth = -7;
+}
+
+if ( ( timer >= 100 && timer < 132 ) || ( timer >= 134 ) )
+{
+hspeed = 0;
+vspeed = 0;
+}
+
+if ( timer >= 132 && timer < 142 )
+{
+targetLock.speed = 0;
+}
+
+if ( timer = 132 )
+{
+	if ( temp2 = 0 && targetLock.state_type != "out" )
+	{
+	if ( targetLock.object_index = obj_enemy )
+		{
+		x = targetLock.x;
+		y = targetLock.y;
+		}
+		else
+		{
+		ignore_physics = 1;
+		x = targetLock.x + 10 * (1-facing*2) * size;
+		y = targetLock.y - 10 * size;
+		}
+	facing = 1 - facing;
+	}
+}
+
+if ( timer = 133 )
+{
+eff = instance_create( x + 2 * (1-facing*2) * size , y - 22 * size , obj_spark );
+eff.sprite_index = upb_effect_sprite;
+eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+eff.image_yscale = 0.2 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 0.7;
+eff.depth = -7;
+}
+
+if ( timer = 138 )
+{
+sprite_index = nair_sprite;
+image_index = 0;
+
+intangible = 0;
+image_alpha = 1;
+}
+
+if ( timer = 142 )
+{
+sound_play(cell_swing_sound5);
+create_hitbox( 13 , 281-facing*22 , 7 , 6 , 12 , 30 , strong_punch , obj_spark_impact , 1 , 0.5 , 10.50 , 6.30 , self.id , 10 , 2 );
+}
+
+if ( timer = 220 )
+{
+sound_play ( choose ( taunt_voice2 , taunt_voice3 ) );
+}
+
+if (timer == 142 ){
+if (attack_success || target.object_index == obj_enemy) && ( obj_score_control.stocks[target.number-1] == 1 && target.offstage && place_meeting ( target.x , target.y , attack_box )){
+				if ((target.weight <= .22 && target.percent > 30) || (target.weight > .22 && target.weight < .3 && target.percent > 40) || (target.weight > .3 && target.percent > 50)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	    
+
+if ( timer >= time - 1 )
+  {
+  dontrepeat = 0;
+  attack_type = "none";
+  if ( air > 0 )
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	cantsideb = 1;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

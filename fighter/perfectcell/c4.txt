@@ -1,0 +1,91 @@
+priority = 5;
+absorb = 0;
+absorb2 = 0;
+moving_object = 0;
+
+no_clash = 1;
+no_reflect = 1;
+proj_destroy = 0;
+parry_nodestroy = 1;
+clankWithHitbox = 1;
+ungrazable = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.final_smash_proj_sprite;
+	image_xscale = 4 * (1-facing*2) * attacker.id.size;
+	image_yscale = 4 * size;
+	image_index = 0;
+    image_speed = 0.4;
+    visible = 1;
+	depth = -9;
+	temp = 0;
+	temp2 = 0;
+	image_alpha = 0.9;
+	weight_kb = 1;
+	temp = 0;
+	temp2 = 0;
+	hittotal = 0;
+  }
+
+time = 150;
+x = attacker.id.x + 20 * (1-facing*2) * attacker.id.size + attacker.id.hspeed;
+y = attacker.id.y - 20 * attacker.id.size + attacker.id.vspeed;
+
+if ( timer <= time - 20 )
+{
+	if ( timer mod 3 = 0 )
+	{
+	hit = 0;
+	temp = 0;
+	}
+}
+
+if ( hittotal < 25 && hit = 1 && temp = 0 )
+{
+hittotal += 1;
+temp = 1;
+}
+
+if ( hittotal >= 25 && temp2 = 0 && ( timer <= time - 30 ) )
+{
+temp2 = 1;
+sound_play ( keepmain.final_smash_sound2 );
+
+solarkamehameha = instance_create ( 0 , 0 , obj_custom_gfx );
+solarkamehameha.draw_script = char_custom9;
+solarkamehameha.step_script = char_custom8;
+solarkamehameha.depth = -15;
+solarkamehameha.image_index = 0;
+solarkamehameha.image_alpha = 0.1;
+solarkamehameha.image_speed = 0.18;
+solarkamehameha.x = view_wport*0.5;
+solarkamehameha.y = view_hport*0.5;
+solarkamehameha.owner = attacker.id;
+solarkamehameha.keepmain = attacker.id;
+solarkamehameha.sprite_index = attacker.id.final_smash_effect_sprite3;
+solarkamehameha.image_xscale = 5;
+solarkamehameha.image_yscale = 5;
+}
+
+if ( timer = time - 15 )
+{
+weight_kb = 0;
+damage = 10 * attacker.id.size;
+dir = 30+facing*120;
+bkb = 9 * attacker.id.size;
+kbg = 9 * attacker.id.size;
+gfx = obj_spark_hit3;
+sfx = strong_punch;
+hit = 0;
+}
+
+if ( image_index >= 13 )
+{
+image_index -= 5;
+}
+
+if ( timer >= time - 10 )
+{
+image_alpha -= 0.1;
+}
