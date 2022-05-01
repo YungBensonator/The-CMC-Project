@@ -1,0 +1,203 @@
+if(time == -1)
+{
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "bthrow";
+	image_speed = 0.25;
+	sprite_index = bthrow_sprite;
+	image_index = 0;
+	timer = 0;
+	time = 46;
+	timer_speed = 1;
+	target1 = target;
+	target1.timer_speed = 0;
+	target1.alarm[0] = 50;
+	target1.state_type = "air_flinch";
+}
+if(timer < 16)	//frames 1-16
+{
+	target1.x = x + lengthdir_x(14 * size - 28 * size * facing, (timer / 16) * 180);
+	target1.y = y;
+	target1.depth = depth + 1;
+}
+if(timer == 16)	//frame 17
+{
+	image_speed = 0.5;
+}
+if(timer >= 16 && timer <= 32)	//frames 17-33
+{
+	target1.x = x - lengthdir_x(14 * size - 28 * size * facing, ((timer - 16) / 16) * 360);
+	target1.y = y;
+	if(timer < 24)	//frames 17-24
+	{
+		target1.depth = depth - 1;
+	}
+	else	//frames 25-33
+	{
+		target1.depth = depth + 1;
+	}
+}
+if(timer == 32)	//frame 33
+{
+	image_index = 12;
+	image_speed = 0;
+}
+if(timer == 40)	//frame 41
+{
+	image_index = 14;
+}
+if(timer == 42)	//frame 43
+{
+	image_index = 15;
+}
+if(timer < time)
+{
+	state_type = "attack";
+	super_armor = true;
+	image_blend = c_white;
+	if(timer == 1)	//frame 2
+	{
+		if(db_charname[global.gs_character[target.number - 1], 1] == "bowser")
+		{
+			/* choose() probability table by HFF
+             * 
+             * Parameter    | # appearances | probability (%)
+             * bthrow_bowser| 1             | 50.0
+             * bthrow_voice | 1             | 50.0
+             */
+			sound_play(choose(bthrow_bowser , bthrow_voice));
+		}
+		else 
+		{
+			/* choose() probability table by HFF
+             * 
+             * Parameter    | # appearances | probability (%)
+             * bthrow_voice2| 1             | 50.0
+             * bthrow_voice | 1             | 50.0
+             */
+			sound_play(choose(bthrow_voice, bthrow_voice2));
+		}
+	}
+	//if timer = 8 || timer = 16 || timer = 24 || timer = 32 || timer = 40
+	//    target1.x = x -2 + facing*4;										Why are these lines commented out?	-HFF	2019/12/02
+	if(timer == 14)	//frame 15
+	{
+		target1.alarm[0] = 25;
+		sound_play(bthrow_sound);
+		target1.intangible_frames = 10;
+		target1.intangible = true;
+		if(timer != 43)
+		{
+			create_hitbox(
+			/* Damage            */ 8 + (target1.weight > .29),
+			/* Direction         */ 150-facing*120,
+			/* Base KB           */ 6.5,
+			/* KB Growth         */ 4,
+			/* Shield Damage     */ 12,
+			/* Hitlag            */ 7,
+			/* SFX               */ kick2,
+			/* VFX               */ obj_spark_hit4,
+			/* Width             */ 0.8,
+			/* Height            */ 0.6,
+			/* X                 */ -19,
+			/* Y                 */ 16,
+			/* Owner             */ self.id,
+			/* Active Frames     */ 3,
+			/* Priority          */ 5
+			);
+		}
+
+	}
+	if(timer == 22)	//frame 23
+	{
+		target1.alarm[0] = 25;
+		sound_play(bthrow_sound);
+		target1.intangible_frames = 10;
+		target1.intangible = true;
+		create_hitbox(
+        /* Damage            */ 8 + (target1.weight > .29),
+        /* Direction         */ 30 + facing * 120,
+        /* Base KB           */ 6.5,
+        /* KB Growth         */ 4,
+        /* Shield Damage     */ 12,
+        /* Hitlag            */ 7,
+        /* SFX               */ kick2,
+        /* VFX               */ obj_spark_hit4,
+        /* Width             */ 0.8,
+        /* Height            */ 0.6,
+        /* X                 */ 19,
+        /* Y                 */ 16,
+        /* Owner             */ self.id,
+        /* Active Frames     */ 3,
+        /* Priority          */ 5
+        );
+
+	}
+	
+	if(timer == 32)	//frame 33
+	{
+		target1.intangible_frames = -1;
+		target1.intangible = false;
+		target1.gethit = false;
+		target = target1;
+		script_execute(create_throw_box, 
+		/* Damage            */ 10,
+        /* Direction         */ 145 - facing * 110,
+        /* Base KB           */ 6.7,
+        /* KB Growth         */ 6.3,
+        /* Shield Damage     */ 1,
+        /* Hitlag            */ 1,
+        /* SFX               */ -1,
+        /* VFX               */ obj_spark_effect2,
+        /* Width             */ 0.9,
+        /* Height            */ 0.7,
+        /* X                 */ -10,
+        /* Y                 */ 10,
+        /* Owner             */ self.id,
+        /* Active Frames     */ 1
+        );
+	}
+}
+
+            if (timer >= 32){
+if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 110) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 135)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+if(timer >= 45 && state_type != "flinch" && state_type != "air_flinch")
+{
+    dontrepeat = 0;
+	attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+    super_armor = false;
+    facing = !facing;
+}
+//S/O to HFF

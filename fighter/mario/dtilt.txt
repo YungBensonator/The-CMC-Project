@@ -1,0 +1,90 @@
+if(state_type == "crouch" || state_type == "stand" || state_type == "run")
+{
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "dtilt";
+	image_speed = 0;
+	image_index = 0;
+	sprite_index = stand_sprite;
+	image_index = 0;
+	timer = 0;
+	time = 24;
+	timer_speed = 1;
+}
+
+switch(timer)
+{
+	case 3: sprite_index = dtilt_sprite; break;					//frame 4
+	case 5: shakex = 1 - facing * 2; image_index = 1; break;	//frame 6
+	case 6: shakex = 0.5 - facing; break;						//frame 7
+	case 7: shakex = 0; break;									//frame 8
+	case 10: image_index = 2; break;							//frame 11
+	case 13: image_index = 3; break;							//frame 14
+	case 16: image_index = 4; break;							//frame 17
+	case 19: image_index = 5; break;							//frame 20
+}
+
+if(timer < time)
+{
+	state_type = "attack";
+	if(timer == 5)	//frame 6
+	{
+		duster = instance_create(x + 24 * size * (1 - facing * 2), y, obj_dust_effect);
+		duster.facing = facing;
+		duster.image_xscale *= 0.3;
+		duster.image_yscale *= 0.3;
+		sound_play(attacksnd2);
+		if(random(2) < 1)
+		{
+			/* choose() probability table by HFF
+             * 
+             * Parameter    | # appearances | probability (%)
+             * attack_voice2| 1             | 33.3
+             * attack_voice1| 1             | 33.3
+             * attack_voice3| 1             | 33.3
+             */
+			sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+		}
+		
+		create_hitbox(
+        /* Damage            */ 6,
+        /* Direction         */ 70 + facing * 40,
+        /* Base KB           */ 5.65,
+        /* KB Growth         */ 1.4,
+        /* Shield Damage     */ 9,
+        /* Hitlag            */ 5,
+        /* SFX               */ kick1,
+        /* VFX               */ obj_spark_hit1,
+        /* Width             */ 0.75,
+        /* Height            */ 0.3,
+        /* X                 */ 20,
+        /* Y                 */ 4,
+        /* Owner             */ self.id,
+        /* Active Frames     */ 5,
+        /* Priority          */ 1
+        );
+		hitbox.di = 0.6;
+		hitbox.hit_stun = 11;
+		hitbox.fx_y = -5;
+	}
+	if(timer == 20)	//frame 21
+	{
+		interrupt = true;
+	}
+}
+		
+if(timer >= 23 && state_type != "flinch" && state_type != "air_flinch")
+{
+	attack_type = "none";
+	if(movedown)
+	{
+		state_type = "crouch";
+	}
+	else
+	{
+		state_type = "stand";
+	}
+	timer = 0;
+	time = -1;
+}
+//S/O to HFF

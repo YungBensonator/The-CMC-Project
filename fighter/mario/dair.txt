@@ -1,0 +1,150 @@
+if(state_type = "jump")
+{
+	vspeed -= 0.1;
+	state_type = "air_attack";
+	attack_type = "dair";
+	image_speed = 0;
+	sprite_index = dair_sprite;
+	image_index = 0;
+	timer = 0;
+	time = 48;
+	timer_speed = 1;
+}
+
+switch(timer)
+{
+	case 6: image_xscale *= 0.95; image_yscale *= 0.95; break;	//frame 7
+	case 7: image_xscale *= 0.9; image_yscale *= 0.9; break;	//frame 8
+	case 8: image_index = 1; image_speed = 0.5; break;			//frame 9
+	case 20: image_index = 1; image_speed = 0.5; break;			//frame 21
+	case 32: image_index = 0; image_speed = 0; break;			//frame 33
+	case 33: image_xscale *= 1.1; image_yscale *= 1.1; break;	//frame 34
+	case 34: image_xscale *= 1.05; image_yscale *= 1.05; break;	//frame 35
+}
+  
+if(timer < time)
+{
+	state_type = "air_attack";
+	
+	if(timer == 8 || timer == 16 || timer == 24)	//frames 9, 17, and 25
+	{
+		sound_play(spin_sound);
+		create_hitbox(
+        /* Damage            */ 2,
+        /* Direction         */ 270,
+        /* Base KB           */ 1,
+        /* KB Growth         */ 0,
+        /* Shield Damage     */ 2,
+        /* Hitlag            */ 3,
+        /* SFX               */ kick1,
+        /* VFX               */ obj_spark_hit1,
+        /* Width             */ 0.5,
+        /* Height            */ 0.5,
+        /* X                 */ 1,
+        /* Y                 */ 2,
+        /* Owner             */ self.id,
+        /* Active Frames     */ 2,
+        /* Priority          */ 1
+        );
+		hitbox.di = 0.1;
+	}
+	
+	if(timer == 12 || timer == 20 || timer == 28)	//frames 13, 21, and 29
+	{
+		sound_play(spin_sound);
+		create_hitbox(
+        /* Damage            */ 2,
+        /* Direction         */ 270,
+        /* Base KB           */ 1.75+vspeed/3,
+        /* KB Growth         */ 0,
+        /* Shield Damage     */ 2,
+        /* Hitlag            */ 3,
+        /* SFX               */ kick1,
+        /* VFX               */ obj_spark_hit1,
+        /* Width             */ 0.5,
+        /* Height            */ 0.5,
+        /* X                 */ 1,
+        /* Y                 */ 2,
+        /* Owner             */ self.id,
+        /* Active Frames     */ 2,
+        /* Priority          */ 1
+        );
+		hitbox.di = 0.1;
+	}
+	
+	if(timer == 32)	//frame 33
+	{
+		sound_play(spin_sound);
+		create_hitbox(
+		/* Damage            */ 2,
+		/* Direction         */ 362,
+		/* Base KB           */ 4.5,
+		/* KB Growth         */ 5.75,
+		/* Shield Damage     */ 4,
+		/* Hitlag            */ 5,
+		/* SFX               */ kick2,
+		/* VFX               */ obj_spark_hit1,
+		/* Width             */ 0.6,
+		/* Height            */ 0.55,
+		/* X                 */ 2,
+		/* Y                 */ 2,
+		/* Owner             */ self.id,
+		/* Active Frames     */ 4,
+		/* Priority          */ 1
+		);
+	}
+	
+	if(!air)
+	{
+		if(timer < 32 && timer > 8)	//landing hitbox put down if autocancel window missed
+		{
+			with(hitbox) 
+			{ 
+				instance_destroy(); 
+			}
+			create_hitbox2(
+            /* Damage            */ 3,
+            /* Direction         */ 30 + facing * 120,
+            /* Base KB           */ 6,
+            /* KB Growth         */ 2.5,
+            /* Shield Damage     */ 4,
+            /* Hitlag            */ 4,
+            /* SFX               */ punch2,
+            /* VFX               */ obj_spark_hit1,
+            /* Width             */ 0.5,
+            /* Height            */ 0.5,
+            /* X                 */ 4,
+            /* Y                 */ 8,
+            /* Owner             */ self.id,
+            /* Active Frames     */ 4,
+            /* Priority          */ 2
+            );
+			hitbox2.remain = true;
+		}
+		state_type = "land";
+		sprite_index = land_sprite;
+		attack_type = "none";
+		hspeed = 0;
+		timer = 0;
+		time = 10; 
+	}
+}
+
+if(timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch") 
+{
+	attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	if(air)
+	{
+		state_type = "jump";
+	}
+	else
+	{
+		state_type = "stand";
+	}
+	timer = 0;
+	time = -1;
+}
+//S/O to HFF

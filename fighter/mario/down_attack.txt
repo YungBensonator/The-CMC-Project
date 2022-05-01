@@ -1,0 +1,89 @@
+if(state_type == "down")
+{
+    state_type = "attack";
+    attack_type = "down_attack";
+    timer = 1;
+    time = 40;
+    sprite_index = dsmash_sprite;
+    image_speed = 0;
+    image_index = 2;
+}
+
+if(timer < time)
+{
+	switch(timer)
+	{
+		case 5: image_index = 3; break;		//frame 6
+		case 8: image_index = 4; break;		//frame 9
+		case 10: image_index = 5; break;	//frame 11
+		case 13: image_index = 6; break;	//frame 14
+		case 16: image_index = 7; break;	//frame 17
+		case 18: image_index = 8; break;	//frame 19
+		case 21: image_index = 9; break;	//frame 22
+		case 24: image_index = 10; break;	//frame 25
+		case 27: image_index = 11; break;	//frame 28
+		case 31: image_index = 12; break;	//frame 32
+		case 35: image_index = 13; break;	//frame 36
+	}
+	
+	if(timer == 1)	//frame 2
+	{
+		intangible = true;
+	}
+	
+	if(timer == 10)	//frame 11
+	{
+		sound_play(attacksnd2);
+		create_hitbox(
+        /* Damage            */ 10,
+        /* Direction         */ 40 + facing * 100,
+        /* Base KB           */ 5.1,
+        /* KB Growth         */ 4.6,
+        /* Shield Damage     */ 8,
+        /* Hitlag            */ 5,
+        /* SFX               */ kick2,
+        /* VFX               */ obj_spark_hit2,
+        /* Width             */ 0.7,
+        /* Height            */ 0.6,
+        /* X                 */ 20,
+        /* Y                 */ 9,
+        /* Owner             */ self.id,
+        /* Active Frames     */ 5,
+        /* Priority          */ 3
+        );
+	}
+	if(timer == 18)	//frame 19
+	{
+		sound_play(attacksnd2);
+		create_hitbox(
+        /* Damage            */ 13,
+        /* Direction         */ 130 - facing * 80,
+        /* Base KB           */ 5.6,
+        /* KB Growth         */ 4.7,
+        /* Shield Damage     */ 8,
+        /* Hitlag            */ 6,
+        /* SFX               */ kick2,
+        /* VFX               */ obj_spark_hit2,
+        /* Width             */ 0.7,
+        /* Height            */ 0.6,
+        /* X                 */ -6,
+        /* Y                 */ 9,
+        /* Owner             */ self.id,
+        /* Active Frames     */ 5,
+        /* Priority          */ 3
+        );
+	}
+	
+	if(timer == 21)	//frame 22
+	{
+		intangible = false;
+	}
+}
+
+if(timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch")
+{
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+	time = -1;
+}

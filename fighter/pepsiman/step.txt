@@ -1,0 +1,102 @@
+///////////////////////////////////Crouch thing for crouching and getting up from crouch visually
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(12,timer) //replace the 12 by the number the last case you add below has
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+		//put as many cases as frames your crouch animation has
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+    image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 6 ){
+    image_index = 2;
+}
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch thing for crouching and getting up from crouch visually
+							
+if ( state_type = "jump" && sprite_index == jump_sprite )
+{
+  if ( timer = 0 )
+    image_index = 0; //start out the jump from the jump sprite's very first frame instead of any later ones
+  if ( vspeed < 0 && image_index >= 0 )
+    image_index = 0; //stay in that first frame as long as you're going up (you can change the image index in the condition to a later one to loop back)
+  if ( vspeed >= 0 && image_index < 1 )
+    image_index = 1; //the moment you start falling, continue the animation
+  /*if ( image_index >= 4 )
+    image_index = 2; //remove the comment thing if you want to loop the jump animation back to a previous frame when falling*/
+}
+
+/*
+if ( state_type = "jump" && sprite_index == mid_jump_sprite ) {if ( timer = 0 ) {image_index = 0;}
+							image_speed = .25; 
+							if image_index >= 9 {image_index = 7}} //uncomment all of this if you want to loop your double jump animation*/
+
+
+        if (instance_exists(urtrashlol)){
+if (target.state_type = "air_flinch" || target.state_type = "flinch") && (dontrepeat = 0){
+	if ((target.weight <= .22 && target.percent > 50) || (target.weight > .22 && target.weight < .3 && target.percent > 60) || (target.weight > .3 && target.percent > 70)){
+				temp_speed = enemy.speed
+				temp_grav = enemy.gravity
+                killspark = instance_create(enemy.x-180,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				image_speed = 0.5;
+				killspark.alarm[0] = 70;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+                enemy.state_type = "flinch"
+				enemy.timer = 0
+				enemy.time = 35
+				enemy.vspeed = 6.5 
+				}
+  }	
+}

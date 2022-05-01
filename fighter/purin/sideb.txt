@@ -1,0 +1,137 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "sideb"
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0; }
+    else {
+        state_type = "air_attack"; }
+    sprite_index = sideb_sprite;
+    time = 46;
+    temp = 0;
+    air_move=0
+    if moveright = 1 facing = 0
+    if moveleft = 1 facing = 1
+    if ai && ai_state = "recover" {
+        if x > room_width/2
+            facing = 1
+        else 
+            facing = 0 
+	rise = 1
+    }
+}
+	if timer < time {
+	switch ( timer ) {
+	case 0: image_index = 0; break;
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 5: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 14: image_index = 6; break;
+	case 18: image_index = 7; break;
+	case 22: image_index = 8; break;
+	case 26: image_index = 9; break;
+	case 30: image_index = 11; break;
+	case 43: image_index = 14; break;
+	}
+
+		if air = 0 {
+			if timer > 14 && timer < 30 {
+				hspeed = (air_speed*0.8)*(1-facing*2)
+				}
+			}
+		if air > 0 {
+			air_move = 0;
+				if timer < 14
+				vspeed = 0
+				if timer < 30
+				gravity_lock = 1
+				if timer >= 4 && timer <= 13 && moveup = 1 && movedown = 0 {
+					rise = 1;
+					}
+				if timer >= 4 && timer <= 13 && movedown = 1 && moveup = 0 {
+					rise = -1;
+					}
+				if timer >= 4 && timer <= 13 && movedown = 0 && moveup = 0 {
+					rise = 0;
+					}
+			}
+		if timer > 14 && timer < 30 && air = 1 {
+			if rise = 1 && air = 1 {
+				moveup = 1;
+				vspeed = -1.1;
+				hspeed = (air_speed*0.8)*(1-facing*2)
+				}
+			if rise = -1 && air = 1 {
+				movedown = 1;
+				vspeed = 1.1;
+				hspeed = (air_speed*0.8)*(1-facing*2)
+				}
+			if rise = 0 {
+				hspeed = (air_speed*0.8)*(1-facing*2)
+				vspeed = 0;
+				}
+			}
+		if timer = 22 {
+			hspeed *=0.5;
+			vspeed *=0.5;
+			}
+		if timer = 31 {
+			hspeed = 0;
+			vspeed = 0;
+			}
+		if timer = 42 {
+			air_move = 1;
+			}
+		if timer = 14 {
+			duster = instance_create(x,y,obj_dust_effect);
+                	duster.facing = facing;
+                	hspeed = 3.4 - facing*6.8
+                	sound_play(sideb_voice)
+                	sound_play(attack_sound4)
+                	create_hitbox(12,125-facing*70,5.1,1.4,95,9,paperhit,obj_spark_hit3,0.75,0.55,9,9,self.id,16,3)
+                	hitbox.flag = 10            // extra damage to sleeping enemy
+                	hitbox.armor_break = 1
+                	hitbox.shield_stun = 2
+                	image_speed = 0.25
+			hitbox.hit_stun = 22;
+			}
+		if timer = 21 {
+                	hitbox.damage = 10*size
+                	hitbox.bkb = 4.5*size
+                	hitbox.kbg = 1*size
+                	hitbox.shield_damage = round(38*size)
+                	hitbox.shield_stun = 1.5
+           		}
+		if timer = 27 {
+                	hitbox.damage = 9*size
+                	hitbox.bkb = 4.15*size
+                	hitbox.kbg = 0.8*size
+                	hitbox.shield_damage = round(32*size)
+           		}
+		if timer = 44 {
+			movedown = 0;
+			moveup = 0;
+			}
+		}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    hspeed = 1*size*(1-facing*2);
+    attack_type = "none"
+    if air > 0 {
+        state_type = "jump";
+		sprite_index = mid_jump_sprite;
+		image_index = 3; }
+    else {
+		x += 1*size*(1-facing*2);
+        state_type = "stand";
+		image_index = 0; }
+    timer = 0;
+    time =-1;
+    intangible = 0
+    intangible_frames = 0
+}   

@@ -1,0 +1,167 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding"  {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index = 0;
+        timer = 1;
+        time = 160;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        sound_play(final_smash_voice_1)
+        sound_play(final_smash_sound_1)
+        //room_speed = 40*game_speed
+        //background_blend=c_ltgray
+        smash_power = 0
+        air_move=0
+        //camera.following_state = number
+        //instance_create(0,0,obj_bloomer)
+        //effect_create_below(ef_ellipse,x,y,1,c_red)
+  spark = instance_create ( 0 , 0 , obj_camerazoom );
+  spark.camera_l = x - 8;
+  spark.camera_r = x + 8;
+  spark.camera_u = y - 4 - actual_height;
+  spark.camera_d = y + 4;
+  spark.camera_boundary_zoom = 120;
+  spark.alarm[0] = 40;
+
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 55;
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+    switch ( timer )
+	{
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 10: image_index = 5; break;
+	case 12: image_index = 6; break;
+	case 14: image_index = 7; break;
+	case 16: image_index = 8; break;
+	case 18: image_index = 9; break;
+	case 20: image_index = 10; break;
+	case 22: image_index = 11; break;
+	case 24: image_index = 12; break;
+	case 26: image_index = 13; break;
+	case 28: image_index = 14; break;
+	case 30: image_index = 15; break;
+	case 33: image_index = 16; break;
+	case 36: image_index = 17; break;
+	case 39: image_index = 18; break;
+	case 52: image_index = 19; break;
+	case 55: image_index = 20; image_xscale *= 1.2; image_yscale *= 1.2; break;
+	case 56: shakex = 2 - facing*4; break;
+	case 57: shakex = 0; break;
+	case 58: shakex = -2 + facing*4; break;
+	case 59: shakex = 0; break;
+	case 60: shakex = 2 - facing*4; break;
+	case 61: shakex = 0; break;
+	case 62: shakex = -2 + facing*4; break;
+	case 63: shakex = 0; break;
+	case 64: shakex = 2 - facing*4; break;
+	case 65: shakex = 0; break;
+	case 66: shakex = -2 + facing*4; break;
+	case 67: shakex = 0; break;
+	case 68: shakex = 2 - facing*4; break;
+	case 69: shakex = 0; break;
+	case 70: shakex = -2 + facing*4; break;
+	case 71: shakex = 0; break;
+	case 72: shakex = 2 - facing*4; break;
+	case 73: shakex = 0; break;
+	case 74: shakex = -2 + facing*4; break;
+	case 75: shakex = 0; break;
+	case 76: shakex = 2 - facing*4; break;
+	case 77: shakex = 0; break;
+	case 78: shakex = -2 + facing*4; break;
+	case 79: shakex = 0; break;
+	case 80: shakex = 1 - facing*2; break;
+	case 81: shakex = 0; break;
+	case 82: shakex = -1 + facing*2; break;
+	case 83: shakex = 0; break;
+	case 84: shakex = 1 - facing*2; break;
+	case 85: shakex = 0; break;
+	case 86: shakex = -1 + facing*2; break;
+	case 87: shakex = 0; break;
+	case 88: shakex = 1 - facing*2; break;
+	case 89: shakex = 0; break;
+	case 90: shakex = -1 + facing*2; break;
+	case 91: shakex = 0; break;
+	case 88: shakex = 1 - facing*2; break;
+	case 89: shakex = 0; break;
+	case 90: shakex = -1 + facing*2; break;
+	case 91: shakex = 0; break;
+	case 92: shakex = 1 - facing*2; break;
+	case 93: shakex = 0; break;
+	case 94: shakex = -1 + facing*2; break;
+	case 95: shakex = 0; break;
+	case 96: shakex = 1 - facing*2; break;
+	case 97: shakex = 0; break;
+	case 98: shakex = -1 + facing*2; break;
+	case 99: shakex = 0; break;
+	case 100: shakex = 1 - facing*2; break;
+	case 101: shakex = 0; break;
+	case 102: shakex = -1 + facing*2; break;
+	case 103: shakex = 0; break;
+	case 104: shakex = 0.5 - facing; break;
+	case 105: shakex = 0; break;
+	case 106: shakex = -0.5 + facing; break;
+	case 107: shakex = 0; break;
+	case 137: image_index = 21; break;
+	case 140: image_index = 22; break;
+	case 143: image_index = 23; break;
+	case 146: image_index = 24; break;
+	case 149: image_index = 25; break;
+	case 152: image_index = 26; break;
+	case 155: image_index = 27; break;
+	}
+     if timer = 24 {
+     if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = self.id
+        FMODSoundPlay(crowd_launch2)
+     }
+     }
+    if timer = 55 {
+        sound_play(final_smash_voice_2);
+        sound_play(final_smash_sound_2);
+        create_projectile(4,15+facing*150,11,0,-1,4,fire2,obj_spark_fire1,0.5,0.6,25,12,self.id,212,finale_script);
+		proj.image_xscale = 1.5 * (1-facing*2) * size;
+		proj.image_yscale = 1.5 * size;
+        proj.di = 0.65
+        proj.facing = facing;
+        proj.priority = 5;
+        proj.shake_ampl=0;
+		proj.temp = 0;
+		proj.depth = -7;
+        screen_shake ( 4 , -20 );
+		spark = instance_create(x + 25 * (1-facing*2) * size, y - 12 * size,obj_spark)
+		spark.sprite_index = finale_shockwave_sprite;
+		spark.image_xscale = 1 * (1-facing*2) * size;
+		spark.image_yscale = 1 * size;
+		spark.image_speed = 1;
+		spark.image_alpha = 0.9;
+		spark.depth = -8;
+    }
+}
+if timer >= 159 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	}
+	smash_power = 0
+	intangible = 0;
+    timer = 0;
+    time =-1;
+}

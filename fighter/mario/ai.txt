@@ -1,0 +1,361 @@
+if(ai_timer >= time - 2)
+{
+	ai_state = "idle";
+}
+if(!air)
+{
+	if(collision_rectangle(x - 13, y - 13, x + 10, y, item, 0, 0) && !hold_item && !instance_nearest(x, y - 5, item).holder && instance_nearest(x, y - 5, item).grab)
+	{
+		attack_type = "none";
+		state_type = "land";
+		sprite_index = land_sprite;
+		timer = 0;
+		time = 3;
+		hold_item = true;
+		held_item = instance_nearest(x, y - 5, item);
+		held_item.holder = id;
+		held_item.state_type = "held";
+		sound_play(itemgetsnd);
+		attacking = false;
+		exit;
+	}
+	else 
+	{
+		if(enemy.percent > 100)
+		{
+			if(distance_to_object(enemy) < 19)
+			{
+				//timer=0
+				if(!enemy.air)
+				{
+					if(held_item == -1)
+					{
+						if(smash_power >= global.gs_fs_charge)
+						{
+							attack_type = "final_smash";
+						}
+						else
+						{
+							/* choose() probability table by HFF
+							 * 
+							 * Parameter| # of appearances	| probability (x / y)	| probability (%)
+							 * "utilt"	| 1					| 01 / 14				| 07.14%
+							 * "jab"	| 1					| 01 / 14				| 07.14%
+							 * "stilt"	| 1					| 01 / 14				| 07.14%
+							 * "upb"	| 1					| 01 / 14				| 07.14%
+							 * "grab"	| 3					| 03 / 14				| 21.43%
+							 * "dsmash"	| 3					| 03 / 14				| 21.43%
+							 * "usmash"	| 2					| 01 / 07				| 14.29%
+							 * "downb"	| 1					| 01 / 14				| 07.14%
+							 * "ssmash"	| 1					| 01 / 14				| 07.14%
+							 */
+							attack_type = choose("utilt", "jab", "stilt", "upb", "grab", "grab", "grab", "dsmash", "usmash", "dsmash", "downb", "dsmash", "usmash", "ssmash");
+						}
+					}
+					else
+					{
+						attack_type = "itemfthrow";
+					}
+				}
+				else 
+				{
+					if(held_item == -1)
+					{
+						if(smash_power >= global.gs_fs_charge)
+						{
+							attack_type = "final_smash";
+						}
+						else
+						{
+							/* choose() probability table by HFF
+							 *
+							 * Parameter| # of appearances	| probability (x / y)	| probability (%)
+							 * "utilt"	| 2					| 02 / 11				| 18.18%
+							 * "upb"	| 1					| 01 / 11				| 09.09%
+							 * "stilt"	| 1					| 01 / 11				| 09.09%
+							 * "usmash"	| 3					| 03 / 11				| 27.27%
+							 * "ssmash"	| 2					| 02 / 11				| 18.18%
+							 * "downb"	| 1					| 01 / 11				| 09.09%
+							 * "dsmash"	| 1					| 01 / 11				| 09.09%
+							 */
+							attack_type = choose("utilt", "utilt", "upb", "stilt", "usmash", "usmash", /*Fixed a gameplay-affecting typo here. One of the params was ",usmash" instead of "usmash". -HFF	2019/12/01*/ "usmash", "ssmash", "downb", "dsmash", "ssmash");
+						}
+					}
+					else
+					{
+						/* choose() probability table by HFF
+						 *
+						 * Parameter	| # of appearances	| probability (x / y)	| probability (%)
+						 * "itemfthrow"	| 1					| 1 / 2					| 50.00%
+						 * "itemuthrow"	| 1					| 1 / 2					| 50.00%
+						 */
+						attack_type = choose("itemfthrow", "itemuthrow");
+					}
+				}
+				exit;
+			}
+			if(distance_to_object(enemy) >= 19 && !enemy.air)
+			{
+				//timer=0	|	Commented out? Why?	-HFF	2019/12/01
+				if(held_item == -1)
+				{
+					if(smash_power >= global.gs_fs_charge && abs(enemy.y - self.y) < 42)
+					{
+						if ((facing && enemy.x > x) || (!facing && enemy.x < x))
+						{
+							facing = !facing;
+						}
+						attack_type = "final_smash"; 
+					}
+					else
+					{
+						/* choose() probability table by HFF
+						 *
+						 * Parameter| # of appearances	| probability (x / y)	| probability (%)
+						 * "jab"	| 1					| 01 / 12				| 08.33%
+						 * "stilt"	| 3					| 01 / 04				| 25.00%
+						 * "dtilt"	| 2					| 01 / 06				| 16.67%
+						 * "sideb"	| 1					| 01 / 12				| 08.33%
+						 * "b"		| 2					| 01 / 06				| 16.67%
+						 * "ssmash"	| 2					| 01 / 06				| 16.67%
+						 * "usmash"	| 1					| 01 / 12				| 08.33%
+						 */
+						attack_type = choose("jab", "stilt", "stilt", "dtilt", "sideb", "b", "b", "stilt", "ssmash", "usmash", "dtilt", "ssmash");
+					}
+				}
+				else
+				{
+					attack_type = "itemfthrow";
+				}
+				exit;
+			}
+		}
+		else 
+		{
+			if(distance_to_object(enemy) < 19)
+			{
+				//timer=0	|	Commented out? Why?	-HFF	2019/12/01
+				if(!enemy.air)
+				{
+					if(held_item == -1)
+					{
+						/* choose() probability table by HFF
+						 *
+						 * Parameter| # of appearances	| probability (x / y)	| probability (%)
+						 * "jab"	| 3					| 01 / 05				| 20.00%
+						 * "utilt"	| 3					| 01 / 05				| 20.00%
+						 * "dtilt"	| 1					| 01 / 15				| 06.67%
+						 * "upb"	| 1					| 01 / 15				| 06.67%
+						 * "grab"	| 2					| 02 / 15				| 13.33%
+						 * "dsmash" | 3					| 01 / 05				| 20.00%
+						 * "usmash" | 1					| 01 / 15				| 06.67%
+						 * "downb"	| 1					| 01 / 15				| 06.67%
+						 */
+						attack_type = choose("jab", "jab", "jab", "utilt", "utilt", "utilt", "dtilt", "upb", "grab", "grab", "dsmash", "usmash", "dsmash", "downb", "dsmash");
+					}
+					else
+					{
+						attack_type = "itemfthrow";
+					}
+				}
+				else 
+				{
+					if(held_item == -1)
+					{
+						/* choose() probability table by HFF
+						 * 
+						 * Parameter		| # appearances	| probability (%)
+						 * utilt			| 3				| 25.0
+						 * downb			| 1				| 8.33
+						 * upb				| 2				| 16.6
+						 * usmash			| 3				| 25.0
+						 * jab				| 1				| 8.33
+						 * ssmash			| 2				| 16.6
+						 */
+						attack_type = choose("jab", "utilt", "utilt", "utilt", "upb", "usmash", "usmash", "usmash", "ssmash", "downb", "upb", "ssmash");
+					}
+					else
+					{
+						/* choose() probability table by HFF
+						 * 
+						 * Parameter		| # appearances	| probability (%)
+						 * itemfthrow		| 1				| 50.0
+						 * itemuthrow		| 1				| 50.0
+						 */
+						attack_type = choose("itemfthrow", "itemuthrow");
+					}
+				}
+				exit;
+			}
+			if(distance_to_object(enemy) >= 19 && !enemy.air)
+			{
+				//timer=0	|	Commented out? Why?	-HFF	2019/12/01
+				if(held_item == -1)
+				{
+					if(smash_power >= global.gs_fs_charge && abs(enemy.y - self.y) < 42)
+					{
+						if((facing && enemy.x > x) || (!facing && enemy.x < x))
+						{
+							facing = !facing;
+						}
+						attack_type = "final_smash";
+					}
+					else
+					{
+						/* choose() probability table by HFF
+						 * 
+						 * Parameter		| # appearances	| probability (%)
+						 * b				| 3				| 25.0
+						 * dtilt			| 2				| 16.6
+						 * usmash			| 1				| 8.33
+						 * jab				| 1				| 8.33
+						 * stilt			| 2				| 16.6
+						 * ssmash			| 2				| 16.6
+						 * sideb			| 1				| 8.33
+						 */
+						attack_type = choose("jab", "stilt", "stilt", "dtilt", "sideb", "b", "b", "b", "ssmash", "usmash", "dtilt", "ssmash");
+					}
+				}
+				else
+				{
+					attack_type = "itemfthrow";
+				}
+				exit;
+			}
+		}
+	}
+}
+else if(offstage && enemy.y > y - 8)
+{
+    /* choose() probability table by HFF
+	 * 
+	 * Parameter	| # appearances	| probability (%)
+	 * downb		| 1				| 20.0
+	 * fair			| 3				| 60.0
+	 * nair			| 1				| 20.0
+	 */
+	attack_type = choose("fair","nair","fair","downb","fair");
+}
+else 
+{
+	if(distance_to_object(enemy) < 25)
+	{
+		//timer=0	|	Commented out? Why?	-HFF	2019/12/01
+		if(held_item == -1)
+		{
+			if (!facing && enemy.x > x) || (facing && enemy.x <= x)
+			{
+				if(enemy.y > y - 2)
+				{
+					/* choose() probability table by HFF
+					 * 
+					 * Parameter	| # appearances	| probability (%)
+					 * dair			| 4				| 36.3
+					 * fair			| 1				| 9.09
+					 * nair			| 6				| 54.5
+					 */
+					attack_type = choose("dair", "dair", "dair", "nair", "fair", "nair", "nair", "nair", "nair", "nair", "dair");
+				}
+				else if(enemy.y < y - 14)
+				{
+					/* choose() probability table by HFF
+					 * 
+					 * Parameter| # appearances	| probability (%)
+					 * uair		| 7				| 70.0
+					 * downb	| 1				| 10.0
+					 * fair		| 1				| 10.0
+					 * nair		| 1				| 10.0
+					 */
+					attack_type = choose("uair", "fair", "nair", "uair", "uair", "uair", "uair", "uair", "uair", "downb");
+				}
+				else
+				{
+					/* choose() probability table by HFF
+					 * 
+					 * Parameter| # appearances	| probability (%)
+					 * uair		| 6				| 54.5
+					 * dair		| 1				| 9.09
+					 * fair		| 1				| 9.09
+					 * nair		| 3				| 27.2
+					 */
+					attack_type = choose("uair", "fair", "nair", "nair", "nair", "uair", "uair", "uair", "uair", "dair", "uair");
+				}
+			}
+			else
+			{
+				/* choose() probability table by HFF
+				 * 
+				 * Parameter| # appearances	| probability (%)
+				 * uair		| 2				| 18.1
+				 * bair		| 7				| 63.6
+				 * nair		| 2				| 18.1
+				 */
+				attack_type = choose("uair", "uair", "nair", "nair", "bair", "bair", "bair", "bair", "bair", "bair", "bair");
+			}
+		}
+		else
+		{
+			attack_type = "itemfthrow";
+		}
+		exit;
+	}
+	if(distance_to_object(enemy) >= 25)
+	{
+		//timer=0	|	Commented out? Why?	-HFF	2019/12/01
+		if(held_item == -1)
+		{
+			if((!facing && enemy.x > x) || (facing && enemy.x <= x))
+			{
+				if(smash_power >= global.gs_fs_charge && abs(enemy.y - self.y) < 46)
+				{
+					attack_type = "final_smash";
+				}
+				else 
+				{
+					if(enemy.y < y - 10)
+					{
+						/* choose() probability table by HFF
+						 * 
+						 * Parameter| # appearances	| probability (%)
+						 * uair		| 7				| 70.0
+						 * bair		| 1				| 10.0
+						 * fair		| 2				| 20.0
+						 */
+						attack_type = choose("uair", "uair", "uair", "uair", "fair", "uair", "uair", "uair", "fair", "bair");
+					}
+					else
+					{
+						/* choose() probability table by HFF
+						 * 
+						 * Parameter| # appearances	| probability (%)
+						 * b		| 1				| 8.33
+						 * uair		| 1				| 8.33
+						 * dair		| 2				| 16.6
+						 * fair		| 3				| 25.0
+						 * sideb	| 1				| 8.33
+						 * nair		| 4				| 33.3
+						 */
+						attack_type = choose("uair", "fair", "nair", "fair", "dair", "fair", "nair", "sideb", "nair", "dair", "nair", "b");
+					}
+				}
+			}
+			else
+			{
+				/* choose() probability table by HFF
+				 * 
+				 * Parameter| # appearances	| probability (%)
+				 * uair		| 1				| 10.0
+				 * bair		| 6				| 60.0
+				 * nair		| 3				| 30.0
+				 */
+				attack_type = choose("nair", "uair", "nair", "bair", "bair", "bair", "bair", "bair", "nair", "bair");
+			}
+		}
+		else
+		{
+			attack_type = "itemfthrow";
+		}
+		exit;
+	}
+}
+//Shoutouts to HFF

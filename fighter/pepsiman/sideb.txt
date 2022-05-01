@@ -1,0 +1,361 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+	  target = -1;
+	  floattime = 0;
+    hover_timer = hover_time;
+    attack_type = "sideb";
+    timer = 0;
+    time = 60;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    if ( air = 0 )
+      {
+	state_type = "attack";
+	sprite_index = sideb_sprite;
+	temp = 0;
+      }
+    else
+      {
+	state_type = "air_attack";
+	sprite_index = sideb2_sprite;
+	vspeed = -0.01;
+	air_move = 0;
+	gravity_lock = 1;
+	temp = 1;
+      }
+  }
+
+if ( timer < time )
+  {
+	if temp=0 && !instance_exists(hurtbox)
+	  create_hurtbox_precise(self.id,999,sideb_mask)
+	if temp=1 && !instance_exists(hurtbox)
+	  create_hurtbox_precise(self.id,999,sideb2_mask)
+    if ( temp = 0 )
+    switch ( timer )
+      {
+	case 4: sound_play(sspec_sound1); image_index = 1; break;
+	case 8: sprite_index = sideb2_sprite; image_index = 3; break;
+	case 16:  sound_play(sspec_sound2); image_index = 4; sprite_index = sideb_sprite; break;
+	case 20: image_index = 5; break;
+	case 100: image_index = 6; break;
+	case 100: image_index = 5; break;
+	case 103: image_index = 6; break;
+	case 127: image_index = 7; break;
+	case 131: image_index = 8; break;
+      }
+    if ( temp = 1 )
+    switch ( timer )
+      {
+	case 4: sound_play(sspec_sound1); image_index = 1; break;
+	case 8: sprite_index = sideb2_sprite; image_index = 3; break;
+	case 16:  sound_play(sspec_sound2); image_index = 4; sprite_index = sideb_sprite; break;
+	case 20: image_index = 5; break;
+	case 100: image_index = 6; break;
+	case 127: image_index = 7; break;
+	case 131: image_index = 8; break;
+      }
+
+    if ( temp = 0 )
+      {
+        if ( timer < 16 )
+          {
+            shakex = size * ( 1 - facing * 2 ) * lengthdir_y ( 14 , timer * 10 );
+            shakey = lengthdir_y ( 3 , timer * 20 );
+          }
+	if ( timer = 16 )
+	  {
+            shakex = 0;
+            shakey = 0;
+	    sound_play_pitch(swingsnd5 , .3);
+	    proj = create_homing_bubble(0.63 , 0.38 , 19.50 , 21 ,self.id,12);
+	    if (target > 0 && (target.intangible || target.state_type = "down" || target.attack_type = "final_smash"))
+		{
+		target = 0;
+		}
+		//proj.visible = 1;
+	    duster = instance_create(x,y,obj_dust_effect);
+	    duster.facing = facing;
+	    hspeed = size * (9-facing*18);
+            instance_create ( x , y , obj_down_impact );
+	  }
+	if ( timer >= 16 && timer <= 46 )
+	  {
+	    hspeed *= 0.97;
+	    if ( timer mod 3 = 0 )
+		after_image(2,c_blue,2);
+	    if ( instance_exists(proj) )
+	      {
+		proj.x = x + size * (19.50-facing*39) + hspeed;
+		proj.y = y - 21*size + vspeed;
+	      }
+		if (target > 0 && (target.intangible || string(target.state_type) = "down" || string(target.attack_type) = "final_smash"))
+		{
+		target = 0;
+	    }
+	    if ( target > 0 && distance_to_object(target)<size*8 )
+	      {
+		sprite_index = sideb_sprite; 
+		image_index = 5;
+		timer = 100;
+		time = 150;
+		sound_play(catchsnd);
+		hspeed = 0;
+		slide = 0;
+		instance_create(x,y-9*size,obj_grab_spark);
+		target.state_type = "air_flinch";
+		target.attack_type = "none";
+		target.timer = 0;
+		target.time = 50;
+		target.timer_speed = 0;
+		target.sprite_index = target.flinch_sprite;
+		target.alarm[0] = 2;
+		target.facing = 1-facing;
+		target.x = x + size * (22.5-facing*45 );
+		target.y = y - 3*size;
+	      }
+	    if ( air > 0 )
+	      {
+		state_type = "jump";
+		attack_type = "none";
+		timer = 0;
+		time = -1;
+		exit;
+	      }
+	  }
+	if ( timer = 45 )
+	    hspeed = 0;
+
+        if ( timer >= 100 && timer < 130 )
+          {
+		shakex = 0;
+        shakey = 0;
+	    target.x = x + size * (22.5-facing*45 );
+	    target.y = y - 3*size;
+	    if ( timer >= 103 )
+	      target.y -= 3*size;
+	    if ( timer >= 106 )
+	      {
+		target.x = x + size * (18.5-facing*37);
+		target.y -= 3*size;
+	      }
+	    if ( timer >= 109 )
+	      target.y -= 2*size;
+	    if ( timer >= 112 )
+	      target.y -= 1*size;
+          }
+	if ( timer <= 129 )
+	{
+	target.alarm[0] = 2;
+	}
+	if ( timer = 130 )
+	  {
+	    sound_play(sspec_sound3);
+	screen_shake(8,10);
+	    create_throw_box(15,angle_correct(70),7,7,19,1,water3,obj_spark_shock,1.12 , 2, 18.75 , 51.00,self.id,4,5);
+	    hitbox.hit_stun = 10;
+	  }
+	if ( timer >= 146 )
+	    interrupt = 1;
+      }
+
+    if ( temp = 1 )
+      {
+	fast_fall = 0;
+	fast_fall_temp = 0;
+	if timer < 129
+	vspeed = -0.01
+        if ( on_floor || on_platform )
+          y -= 1;
+        gravity_lock = 2;
+
+        if ( timer < 16 )
+          {
+            shakex = size * ( 1 - facing * 2 ) * lengthdir_y ( 8 , timer * 9 );
+            shakey = lengthdir_y ( 4 , timer * 18 );
+          }
+	if ( timer = 16 )
+	  {
+            shakex = 0;
+            shakey = 0;
+	    sound_play_pitch(swingsnd5 , .3);
+	    create_homing_bubble(0.83 , 0.38 , 14 , 25 , self.id , 20);
+		if (target > 0 && (target.intangible || target.state_type = "down" || target.attack_type = "final_smash"))
+		{
+		target = 0;
+		}
+	    instance_create(x-size*(5-facing*10),y-20*size,obj_spark_effect);
+	    hspeed = size * (9-facing*18);
+	  }
+	if timer > 30 && timer < 100
+		force_edge_grab = 1
+	else
+		force_edge_grab = 0
+	if ( timer >= 16 && timer <= 46 )
+	  {
+	    hspeed *= 0.95;
+	    if ( timer mod 3 = 0 )
+		after_image(2,c_blue,2);
+	    if ( instance_exists(proj) )
+	      {
+		proj.x = x + size * (14-facing*28) + hspeed;
+		proj.y = y - 25*size + vspeed;
+	      }
+		if (target > 0 && (target.intangible || string(target.state_type) = "down" || string(target.attack_type) = "final_smash"))
+		{
+		target = 0;
+	    }
+	    if ( target > 0 && distance_to_object(target)<size*20 )
+	      {
+		timer = 100;
+		time = 156;
+		dontrepeat = 0;
+		sound_play(catchsnd);
+		hspeed = 0;
+		slide = 0;
+		instance_create(x,y-9*size,obj_grab_spark);
+		target.state_type = "air_flinch";
+		target.attack_type = "none";
+		target.timer = 0;
+		target.time = 50;
+		target.timer_speed = 0;
+		target.sprite_index = target.flinch_sprite;
+		target.alarm[0] = 2;
+		target.facing = 1-facing;
+		target.x = x + size * (40*(1-2*facing));
+		target.y = y - 4*size;
+	      }
+	  }
+	if ( timer = 45 )
+	    hspeed = 0;
+
+	if ( timer = 103 )
+	  {
+	    shakex = 0;
+        shakey = 0;
+	    target.x = x + size * (21.75*(1-2*facing));
+	    target.y -= 7*size;
+	  }
+	if ( timer = 106 )
+	  {
+	    target.x -= 3*size*(1-2*facing);
+	    target.y -= 1*size;
+	  }
+	if ( timer = 109 )
+	  {
+	    target.x += 2*size*(1-2*facing);
+	    target.y += 8*size;
+	    target.depth = depth + 1;
+	  }
+	if ( timer = 112 )
+	  {
+	    target.x -= 4*size*(1-2*facing);
+	    target.y -= 6*size;
+	  }
+	if ( timer = 115 )
+	  {
+	    target.x -= 4*size*(1-2*facing);
+	    target.y -= 1*size;
+	  }
+	if ( timer = 118 )
+	  {
+	    target.x -= 2*size*(1-2*facing);
+	    target.y -= 1*size;
+	  }
+	if ( timer = 121 )
+	  {
+	    target.x += 6*size*(1-2*facing);
+	    target.y += 6*size;
+	  }
+	if ( timer = 124 )
+	  {
+	    target.x += 3*size*(1-2*facing);
+	    target.y += 6*size;
+	  }
+	if ( timer = 127 )
+	  {
+	    target.x += 2*size*(1-2*facing);
+	    target.y = y;
+	  }
+	if ( timer <= 128 )
+	{
+	target.alarm[0] = 2;
+	}
+	if ( timer = 129 )
+	  {
+	    hspeed = 0;
+	    vspeed = 8.5*size;
+	    temp_fall_speed = 10;
+	    if ( moveright )
+		hspeed = 1*size;
+	    if ( moveleft )
+		hspeed = -1*size;
+	    target.alarm[0] += 1;
+	    target.x = x + size * (33*(1-2*facing));
+	    target.y = y + 16 *size;
+
+	    if ( on_floor || on_platform || target.on_floor || target.on_platform )
+	      {
+	 sound_play(sspec_sound3);
+	screen_shake(8,10);
+         create_throw_box(15,80+facing*20,7,7,19,1,water3,obj_spark_shock,1.40 , 1.05 , 18.00 , 6.00,self.id,4,5);
+         hitbox.hit_stun = 10;
+         vspeed = 0;
+         screen_shake(6,5);
+         timer = 130;
+	      }
+	    else
+		timer = 128;
+	  }
+      }
+  }
+
+
+if (attack_success || target.object_index == obj_enemy) && ( place_meeting ( target.x , target.y , attack_box )){
+				if ((target.weight <= .22 && target.percent > 120) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 140)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+         
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    dontrepeat = 0;
+	if ( air = 0 )
+	state_type = "stand";
+    else
+	state_type = "fall";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+  
+  if ( timer > time )
+  {
+	  floattime = 0;
+  }

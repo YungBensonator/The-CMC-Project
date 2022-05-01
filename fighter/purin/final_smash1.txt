@@ -1,0 +1,142 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding"  {
+    size = csize
+    if air = 0
+        state_type = "attack";
+    else
+        state_type = "air_attack";
+    attack_type = "final_smash";
+    image_speed = 0.2;
+    sprite_index = final_smash_sprite1;
+    image_index=0;
+    timer = 1;
+    time = 650;
+    timer_speed=1;
+    intangible = 1;
+    final_smashes+=1
+    background_blend=c_ltgray
+    smash_power = 0
+    freezer  = instance_create(x,y,obj_freeze)
+    freezer.dontpause = self.id
+    freezer.alarm[0] = 20
+    instance_create(x,y-20,obj_spark_effect2);
+    air_move=0
+    effect_create_above(ef_ring,x,y-15*size,0,c_white)
+    temp = 24
+}
+speed=0
+gravity=0
+intangible = 1
+if timer = 3 {
+    effect_create_above(ef_ring,x,y-15*size,0,c_white)
+}
+if timer = 19 {
+    xsize = 0.19
+    ysize = 0.19
+}
+if timer = 20 {
+    xsize = 0.19
+    ysize = 0.19
+    sprite_index = final_smash_sprite2
+    image_speed = 0
+    image_index = 0
+    sound_play(final_smash_sound1)
+    player.jiggs = self.id
+    instance_create(x,y,obj_down_impact)
+}
+if timer = 208 {
+    sound_loop(final_smash_sound3)
+}
+if timer < 500 && timer > 20 {
+    with player {
+        if self.id != jiggs {
+            if (abs(x - jiggs.x) < 0.45*(jiggs.size*jiggs.xsize*sprite_get_width(jiggs.sprite_index))) && (abs(y - jiggs.y) < 0.45*(jiggs.size*jiggs.ysize*sprite_get_height(jiggs.sprite_index))) {
+                if jiggs.x < x {
+                    if hspeed < 1
+                        hspeed = 1
+                    //x = jiggs.x + 0.45*(jiggs.size*jiggs.xsize*sprite_get_width(jiggs.sprite_index))*(1-(abs(y - jiggs.y - 0.5*sprite_get_height(jiggs.sprite_index)*jiggs.ysize)/(0.5*sprite_get_height(jiggs.sprite_index)*jiggs.ysize)))
+                }
+                else {
+                    if hspeed > -1
+                        hspeed = -1
+                    //x = jiggs.x - 0.45*(jiggs.size*jiggs.xsize*sprite_get_width(jiggs.sprite_index))*(1-(abs(y - jiggs.y - 0.5*sprite_get_height(jiggs.sprite_index)*jiggs.ysize)/(0.5*sprite_get_height(jiggs.sprite_index)*jiggs.ysize)))
+                }
+                if vspeed >= 0 && abs(jiggs.x - x) < 0.36*(jiggs.size*jiggs.xsize*sprite_get_width(jiggs.sprite_index)) && y < jiggs.y-10*jiggs.ysize
+                    vspeed -= (abs(vspeed) + grav*1.5 + 0.25)
+            }
+        }
+    }
+}
+if timer > 20 && timer < 275 {
+    if xsize < 2.1 {
+        xsize += 0.013
+        ysize += 0.013
+    }
+    if timer = temp {
+        flashing = true
+        alarm[7] = 4
+        temp += 12
+        duster = instance_create(x+(6-facing*12)*xsize*2,y,obj_dust_effect)
+        duster.facing = 1-facing
+        duster.image_alpha = 0.75
+        duster.image_xscale *= 0.6*xsize*3
+        duster.image_yscale *= 0.4*xsize*3
+        duster = instance_create(x-(6+facing*12)*xsize*2,y,obj_dust_effect)
+        duster.facing = facing
+        duster.image_alpha = 0.75
+        duster.image_xscale *= 0.6*xsize*3
+        duster.image_yscale *= 0.4*xsize*3
+    }
+}
+if timer = 280  {
+    sound_play(final_smash_voice)
+    sound_stop(final_smash_sound3)
+}
+if timer = 300
+    image_speed = 0.2
+if timer = 330  {
+    sound_play(final_smash_sound2);
+    create_hitbox(30,362,9.25,5,-1,8,kick3,obj_spark_hit3,11.5,8.2,0,90,self.id,5,6);
+    hitbox.shake_type = 1
+    hitbox.shake_ampl = 0.6
+    create_wind(10.2,9.5,22,92,8,0,11)
+    create_wind(10.2,9.5,-22,92,-8,0,11)
+    duster = instance_create(x+(6-facing*12)*xsize*2,y,obj_dust_effect)
+    duster.facing = 1-facing
+    duster.image_alpha = 0.75
+    duster.image_xscale *= 0.6*xsize*3
+    duster.image_yscale *= 0.4*xsize*3
+    duster = instance_create(x-(6+facing*12)*xsize*2,y,obj_dust_effect)
+    duster.facing = facing
+    duster.image_alpha = 0.75
+    duster.image_xscale *= 0.6*xsize*3
+    duster.image_yscale *= 0.4*xsize*3
+}
+if timer > 364 && sprite_index != stand_sprite {
+    if xsize > 0.19 {
+        xsize -= 0.033
+        ysize -= 0.033
+    }
+    else {
+        sprite_index = stand_sprite
+        image_speed = 0.25
+        timer = time-1
+        xsize = .91
+        ysize = .91
+    }
+}
+if image_index >= image_number - image_speed 
+    image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    xsize = .91
+    ysize = .91
+}

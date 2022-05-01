@@ -1,0 +1,72 @@
+absorb = -1;
+absorb2 = -1;
+
+if(timer == 7)
+{
+	bkb = 4 * size;
+	kbg = 1 * size;
+}
+
+if(timer <= 1 && !hit && !temp)          // Initialize sprite and speed during frame 1
+{
+	sprite_index = attacker.id.finale_startup_sprite;
+    visible = true;
+	hspeed = 0;
+}
+
+if(timer <= 1 && !hit && temp) 
+{
+	sprite_index = attacker.id.finale_loop_sprite;
+    visible = true;
+	hspeed = 3.3 - facing * 6.6;
+}
+
+if(hit && timer == time && !temp) 
+{
+    time += 16;
+    attack_success = 2;
+    timer = 0;
+	hspeed = 0;
+}
+
+if(hit && timer == time && temp) 
+{
+	time += 16;
+    attack_success = 2;
+    timer = 0;
+    hspeed = 3.4 - facing * 6.8;
+}
+
+if(timer == 7 && attack_success == 2)
+{
+	launch = false;
+	hit = false;
+	attacker.id.attack_hits -= 1;
+	attack_success = false;
+}
+
+if(sprite_index == attacker.id.finale_startup_sprite && timer >= 0)
+{
+	image_index += 0.95;
+}
+
+if(sprite_index == attacker.id.finale_startup_sprite && image_index > 44)
+{
+	sprite_index = attacker.id.finale_loop_sprite;
+	image_speed = 0.8;
+	temp = true;
+	hspeed = 3.3 - facing * 6.6;
+}
+
+if(attack_success == 2 && timer >= time + 1)
+{
+	//script_execute(create_projectile,4,25+facing*130,2,2,-1,1,fire2,obj_spark_fire1,image_xscale,image_yscale,0,0,attacker.id,212,finale_script); 
+	//proj.facing=facing;
+	hit = false;
+	launch = false;
+	attack_success = false;
+	target.hitby = false;
+	timer = 0;
+	time = 200;
+}
+//S/O to HFF

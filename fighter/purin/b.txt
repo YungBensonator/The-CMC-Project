@@ -1,0 +1,201 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        vspeed -= 0.1
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0.15
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 80
+        temp=0
+        timer_speed=1
+        attack_success=0
+        sound_play(b_sound2)
+        target=-1
+        special=1
+        attacking=0
+        charge=0
+        hspeed = 0
+        air_move = 0
+        hover = 0
+        rolling_sound = b_sound2
+        sound_play(b_voice)
+    }
+if ai = 1 {
+    if ai_timer = 5 
+        special = 1
+    if charge < 1.7
+        special = 1
+    else if ai && random(10 > 9.5)
+        special = 0
+}
+//if temp > 0
+//image_speed = charge*0.1
+if timer>=10 && temp = 0 {
+    if special = 1 {
+        if charge<5
+            charge+=0.5  
+        else {
+            special=1 - ai
+        }
+        if charge > 2
+            rolling_sound = b_sound3
+        if charge > 4.6
+            rolling_sound = b_sound4
+        timer=1
+        sound_stop(rolling_sound)
+        sound_play(rolling_sound)
+        duster=instance_create(x,y,obj_dust_effect)
+        duster.facing=facing
+        image_speed = charge*0.2
+    }
+}
+if timer >= 12 && (special = 0) && temp = 0 {
+    timer=13
+    time=130
+    temp=2+charge*1.5
+    hspeed = temp-facing*temp*2
+}
+
+if timer < 13 {
+	air_move = 0 }
+
+if timer >= 13 && temp > 0.1  {
+        if ai = 1 {
+            if !enemy.offstage {
+                if enemy.x < x && temp >= 2.5 {
+                    moveleft = 1
+                    moveright=0
+                }
+                if enemy.x > x && temp >= 2.5 {
+                    moveright = 1
+                    moveleft = 0
+                }
+            }
+            else {
+                if temp >= 2.5 {
+                    if room_width/2 < x {
+                        moveleft = 1
+                        moveright=0
+                    }
+                    else {
+                        moveright = 1
+                        moveleft = 0
+                    }
+                }
+            } 
+        }
+        if cos(timer*pi) >= 0.8 && temp >= 2.5
+            after_image(4,make_color_rgb(255,89,196),0.5)
+        if temp>0 {
+            if abs(hspeed) < temp && temp > 0
+                hspeed += 0.085*(temp-facing*temp*2)*size
+            if air > 0 && abs(hspeed) > size*temp*0.65 && !is_on_floor(id)
+                hspeed += size*(moveright-moveleft)*0.33
+            if hspeed > size*temp
+                hspeed = size*temp
+            if hspeed < -size*temp
+                hspeed = -size*temp
+            //if !(collision_point(x,y,obj_platform,0,1) && !collision_point(x,y,obj_floor,0,1)) {
+                //gravity=grav
+                //temp=-1
+                //hspeed*=0.65
+                //}
+            if abs(sin(timer*pi/8)) >= 0.9 {
+                sound_stop(b_sound2)
+                sound_play(b_sound2)
+            }
+            if attack_success=0 && speed >= 0.8*temp && temp != -1 && !instance_exists(hitbox) && charge > 1.7 {
+                attacks-=1
+                create_hitbox(12+charge*2,362,5.2+charge/3,4.2+charge/1.2,round(11+charge*1.65),7+round(charge),kick3,obj_spark_hit2,0.8,0.8,1,12,self.id,25,3);
+                hitbox.hit_stun = 3;
+                if charge > 3
+                    hitbox.armor_break = 1 }
+            }
+            if ( instance_exists(hitbox) && hitbox.hit != 0 && temp > 0 ) or collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+		if instance_exists(hitbox) { with (hitbox){
+                        instance_destroy(); } }
+                temp = -2
+                hspeed *= -0.075
+                vspeed = - 6
+                y -= 2
+                time = -1
+                timer = 100
+                image_speed = 0.65
+                sprite_index = b_sprite;
+                state_type = "air_attack"
+            }                
+    }
+if timer >= 13 {
+if temp >= 2.5 && moveleft = 1 && facing = 0 && speed > temp/2 {
+    moveright=0
+    facing=1
+    attack_success=0
+    hspeed*=0.5
+ }
+if temp >= 2.5 && moveright = 1 && facing = 1 && speed > temp/2 {
+    moveleft=0
+    facing=0
+    attack_success=0
+    hspeed*=0.5
+ }
+if timer >= 10 && timer <= 95 && temp >= 2.5 && moveup = 1 && air < 1 && wooyeah = 0 {
+    attack_success=0
+    vspeed = -3.2*size;
+    wooyeah = 15;
+ }
+if wooyeah > 0 {
+air_move = 0 }
+
+if vspeed > 1 && temp != 0
+    vspeed = 1
+air_move = 0;
+if temp >= 2.5 && moveleft = 1 && facing = 0 && speed > temp/2 && air > 0 {
+	moveright = 0;
+	hspeed *=0.5;
+	}
+if temp >= 2.5 && moveright = 1 && facing = 1 && speed > temp/2 && air > 0 {
+	moveleft = 0;
+	hspeed *=0.5;
+	} }
+interrupt = 0;
+if timer = 95 && air = 0 {
+    temp = -1
+    sprite_index = dash_attack_sprite
+    image_speed = 0.25
+    image_index = 3
+    hspeed*= 0.8
+    sound_stop(b_sound2)
+    sound_play(run_stop_sound);
+    if instance_exists(hitbox)
+    with (hitbox) instance_destroy();
+}
+if timer < 125 && temp = -1
+hspeed = 1.5 - facing*3
+if temp = -2 && timer = 130 {
+state_type = "jump"
+attack_type = "none"
+hspeed *= 0.5
+}
+
+if air = 0 && temp = -2 && timer > 101 {
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=13; }
+
+if timer = time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0 {
+        state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 4; }
+    else {
+        state_type = "stand";
+		image_index = 0; }
+    timer = 0;
+    time =-1;
+    }

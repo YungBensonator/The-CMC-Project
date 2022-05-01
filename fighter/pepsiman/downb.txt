@@ -1,0 +1,39 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+        time = 40
+		hspeed = 0
+}
+
+if ( timer < time )
+    {
+    switch ( timer )
+    {
+	case 30: image_index = 1;
+    }
+
+	if timer = 5
+	{
+	sound_play(downb_sound);
+		percent -= 5;
+	}
+  }
+  
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

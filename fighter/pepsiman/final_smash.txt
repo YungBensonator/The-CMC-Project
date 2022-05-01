@@ -1,0 +1,78 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 1;
+        time = 105;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+  spark = instance_create ( 0 , 0 , obj_camerazoom );
+  spark.camera_l = x - 8;
+  spark.camera_r = x + 8;
+  spark.camera_u = y - 4 - actual_height;
+  spark.camera_d = y + 4;
+  spark.camera_boundary_zoom = 120;
+  spark.alarm[0] = 75;
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 100;
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 10: image_index = 2; sound_play(taunt_sound); break;
+	case 101: image_index = 1; break;
+	case 103: image_index = 0; break;
+      }
+
+	if timer = 100
+	{
+	sound_play(final_smash_sound);
+	sound_play(explode3);
+	create_hitbox(1,angle_correct(90),77,4,5,50,fire3,obj_spark_fire1,100,100,1,20,self.id,10,3);
+	spark = instance_create(x + 0 * (1-facing*2) *size,y - 20 *size,obj_spark_explode1)
+	spark.image_xscale = 100 * size;
+        spark.image_yscale = 100 * size;
+	}
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130))/size, -place_y(104)/size, self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan_of_the_spark_here
+	}
+	*/
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

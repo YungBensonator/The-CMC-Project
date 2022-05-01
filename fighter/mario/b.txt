@@ -1,0 +1,111 @@
+if(state_type = "run" || state_type = "stand" || state_type = "jump")
+{
+    attacking = false;
+    attack_type = "b";
+    special = false;
+    if(!air)
+	{
+        state_type = "attack";
+        hspeed = 0;
+		sprite_index = b_sprite; 
+	}
+    else 
+	{
+        state_type = "air_attack";
+        hspeed *= 0.8;
+		sprite_index = b_sprite2;
+	}
+	image_speed = 0;
+	image_index = 0;
+	timer = 0;
+	time = 45;
+	timer_speed = 1;
+}
+if(!air)
+{
+	sprite_index = b_sprite;
+}
+else
+{
+	sprite_index = b_sprite2;
+}
+switch(timer)
+{
+	case 3: shakex = -1 + facing * 2; break;					//frame 4
+	case 4: image_index = 1; break;								//frame 5
+	case 11: shakex = 0; break;									//frame 12
+	case 12: image_index = 2; break;							//frame 13
+	case 14: shakex = 1 - facing * 2; break;					//frame 15
+	case 15: shakex = 2 - facing * 4; image_index = 3; break;	//frame 16
+	case 16: shakex = 1 - facing * 2; break;					//frame 17
+	case 18: shakex = 0; image_index = 4; break;				//frame 19
+}
+if(timer < time)
+{
+	if(timer == 13)	//frame 14
+	{ 
+		image_blend = merge_color(c_white, c_red, .4); 
+		alarm[7] = 3; 
+	}
+	if(timer == 15)	//frame 16
+	{
+		duster = instance_create(x - 6 + facing * 12, y, obj_dust_effect);
+		duster.facing = facing;
+		duster.image_alpha = 0.75;
+		duster.image_yscale *= 0.6 * size;
+		duster.image_xscale *= 0.8 * size;
+		spark = instance_create(x + (15 - facing * 26) * size, y - 13.5 * size, obj_spark_shockwave);
+		spark.image_xscale *= 0.1 * size;
+		spark.image_yscale *= 0.4 * size;
+		spark.image_blend = c_orange;
+		spark.image_alpha = 0.9;
+		create_projectile(
+		/* Damage		 */ 5,
+		/* Direction	 */ 15 + facing * 150,
+		/* Base KB		 */ 3,
+		/* KB Growth	 */ 1,
+		/* Shield Damage */ 7,
+		/* Hitlag		 */ 4,
+		/* SFX			 */ fireball_hit,
+		/* VFX			 */ obj_spark_fire1,
+		/* Width		 */ 0.33,
+		/* Height		 */ 0.33,
+		/* X			 */ 13,
+		/* Y			 */ 13,
+		/* Owner		 */ self.id,
+		/* Active Frames */ 120,
+		/* Projectile ID */ char_custom2
+		);
+		proj.hit_stun = 3;
+		sound_play(fire_sound);
+	}
+	if(timer == 17)	//frame	18
+	{
+		image_blend = c_white;
+	}	
+	if(!air)
+	{
+		air_move = false;
+		state_type = "attack";
+	}
+	if(image_index >= image_number - image_speed)
+	{
+		image_speed = 0;
+	}
+}
+if(timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch")
+{
+    attack_type = "none";
+    state_type = "stand";
+    if(air)
+	{
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 2;
+		image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time = -1;
+}
+//S/O to HFF

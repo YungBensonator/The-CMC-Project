@@ -1,0 +1,212 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        vspeed -= 0.1
+        state_type = "air_attack"
+        attack_type = "final_smash"
+        image_speed = 0.25
+        sprite_index = sideb_start_sprite
+        image_index=0
+        timer = 0
+        time = 685
+        temp=0
+        timer_speed=1
+        attack_success=0
+        target=-1
+        special=1
+        attacking=0
+        charge=0
+        hspeed = 0
+        air_move = 0
+        sound_play(sideb_start_sound)
+        temp = 0
+        sound_play(super)
+        //effect_create_above(ef_ring,x,y,0,c_white)
+        instance_create(x,y-15*size,obj_spark_effect2)
+        angle = 0
+		shakex = 0;
+		shakey = 0;
+        final_smashes += 1
+        size = csize
+        if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_launch2)
+         }
+    }
+	
+switch ( timer )
+  {
+  case 682: image_index = 1; break;
+  case 684: image_index = 0; break;
+  }
+	
+if ai = 1 {
+    if timer < 680 && enemy_dist < 175 {
+        special = 1
+        if enemy.y < y - 11*size 
+            moveup = 1
+        else
+            moveup = 0
+        if enemy.y < y-1 && enemy.air = 0 || collision_point(x + 8*(1-facing*2),y,obj_wall,1,0)
+            movejump = 1
+        else
+            movejump = 0
+    }
+    else
+        special = 0 
+}
+if air != 0 {
+    gravity_lock = 1;
+    if vspeed < 3*size
+    vspeed += 0.3*size      // gravity
+}
+if timer>=6 && temp = 0 {
+        if charge<5.5
+        charge+=0.1
+        special=1 - ai
+        timer=1
+        time = 701
+        sound_stop(sideb_zoom_sound2)
+        sound_play(sideb_zoom_sound2)
+        duster=instance_create(x,y,obj_dust_effect)
+        duster.facing=facing
+        image_index = 0
+        temp = 0.5
+        image_speed = 0.3
+        sprite_index = final_smash_start_sprite
+    }
+if timer >= 12 && temp = 0.5 {
+    timer=11
+    time=701
+    temp=6.5
+    hspeed = (temp-facing*temp*2)*0.75
+    sprite_index = final_smash_sprite
+}
+if timer >= 10 && temp > 0.1  {
+        if ai = 1 {
+            if !enemy.offstage && !offstage {
+                if enemy.x < x && enemy_dist > 33 {
+                    moveleft = 1
+                    moveright=0
+                }
+                if enemy.x>x && enemy_dist > 33 {
+                    moveright = 1
+                    moveleft = 0
+                }
+            }
+            else {
+                if room_width/2 < x {
+                    moveleft = 1
+                    moveright=0
+                }
+                else {
+                    moveright = 1
+                    moveleft = 0
+                }
+            } 
+        }
+        if temp>0 {
+            if abs(hspeed) < temp && temp > 0 && !collision_point(x + 8*(1-facing*2),y,obj_wall,1,0)
+            hspeed += 0.05*(temp-facing*temp*2)
+            //if !(collision_point(x,y,obj_platform,0,1) && !collision_point(x,y,obj_floor,0,1)) {
+                //gravity=grav
+                //temp=-1
+                //hspeed*=0.65
+                //}
+            if attack_success=0 && speed >= 0.8*temp && temp != -1 && !instance_exists(hitbox) {
+                attacks-=1
+                create_hitbox(10+abs(hspeed)/2,35+facing*110,6+abs(hspeed)/4,3.6+abs(hspeed)/2,-1,8,kick3,obj_spark_hit4,1.35,1.1,10,14,self.id,22,6);}
+            }           
+    }
+if moveleft = 1 && facing = 0 && speed > temp/2 {
+    moveright=0
+    facing=1
+    attack_success=0
+    sound_play(sideb_zoom_sound)
+    hspeed*=0.5
+ }
+if moveright = 1 && facing = 1 && speed > temp/2 {
+    moveleft=0
+    facing=0
+    attack_success=0
+    sound_play(sideb_zoom_sound)
+    hspeed*=0.5
+ }
+if movejump && air < 2 && vspeed > -4.67 && timer < 680 {
+    vspeed = -7.9*size
+    hspeed *= 0.8
+    air += 1
+    sound_play(sideb_zoom_sound2)
+    movejump = 0
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing; 
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = 1-facing; 
+}
+if ( temp > 0 && moveup && angle < 45 )
+	{
+    angle += 2;
+	}
+if ( temp > 0 && moveup && shakey > -8.1 )
+	{
+    shakey -= 0.2 * size;
+	}
+
+if ( angle > 0 && !moveup )
+	{
+    angle -= 1
+	}
+if ( shakey < 0 && !moveup )
+	{
+	shakey += 0.1 * size;
+	}
+
+if special = 1 && shoot_time = 0 {
+    image_speed = 0.35
+    sound_play(b_sound)
+    create_projectile(1.5,361,0,0,7,3,kick2,obj_spark_hit3,0.8,0.8,12,23,self.id,30,mach_bullet)   
+    proj.speed = 9
+    proj.priority = 4
+    proj.direction = angle + ( (180-angle*2)*facing )
+	proj.y = y - 23 + (shakey*2.1) * size;
+    shoot_time = 8 
+}
+if ( shoot_time > 0 )
+    shoot_time -= 1
+
+if timer = 680 {
+    temp = -1
+    sprite_index = sideb_start_sprite
+    image_speed = 0;
+    image_index = 2;
+	special = 0;
+    hspeed*= 0.8
+    sound_play(stop_sound)
+    angle = 0
+	shakey = 0;
+}
+
+if facing = 0
+    image_angle = angle
+else
+    image_angle = -angle
+if cos(timer*pi) >= 0.8 && temp != -1
+    after_image(4,c_ltgray,0.6)
+smash_power = 0
+if timer > 680 && temp = -1
+hspeed = 0.5 - facing*1
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+	intangible = 0;
+    attack_type = "none";
+    special = 0
+    angle = 0
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    //effect_create_above(ef_smokeup,x,y,0,c_silver)
+    smash_power = 0
+}

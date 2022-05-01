@@ -1,0 +1,28 @@
+if timer = 1 || timer = 23 || timer = 47 {
+    if timer = 23 {
+        image_yscale = 1.82 * purin.size;
+        image_xscale = image_yscale;
+    }
+    if timer = 47 {
+        image_yscale = 2.11 * purin.size;
+        image_xscale = image_yscale;
+    }
+    player.purin = purin;
+    with player {
+        if id != purin && collision_circle(x,y-25*size,other.image_yscale,other.id,false,false) && intangible = 0 && state_type != "shielding" && attack_type != "final_smash" && air = 0 {
+	    if state_type != "sleep" {
+		sound_play ( purin.upb_sound );
+		state_type = "sleep";
+                attack_type = "none"
+		timer = 0;
+		time = 96 + round(percent/15);
+		speed = 0;
+	    }
+
+        }
+    } 
+}
+sprite_index = spr_collision_bubble;
+visible = 1;
+x = purin.x;
+y = purin.y - 15 * purin.size;
