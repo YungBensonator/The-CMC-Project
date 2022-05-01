@@ -1,0 +1,127 @@
+if state_type = "run" || state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        sprite_index = utilt_sprite;
+        image_index = 0;
+		image_speed = 0;
+        timer = 0;
+        time = 30;
+        timer_speed = 1;
+}
+xoff = 0;
+yoff = 0;
+effscale = 0.2;
+
+if timer < time {
+		// Animate VFX
+	switch (timer){
+		case 4:
+			blur = create_itmpnt_blur(/*Attacker*/self.id, /*Texture*/blur_texture, /*Start frame*/2, /*Apex Frame*/4, /*End frame*/7, /*CCW*/1, /*girth*/12, 15); 
+			blur.index = 0;
+			blur.image_index = 0;
+			blur.h_squish = 4;
+			blur.v_squish = -4;
+			blur.depth = depth - 0.1;
+			blur.push_x = -15 * size * (1-facing*2);
+			blur.start_index = 1; 
+			break;
+
+		case 9: blur.index = 3; blur.image_index = 2; break;
+		case 10: blur.index = 3.5; blur.image_index = 3; break;
+		case 11: blur.index = 4; blur.start_index = 1;break;
+		case 12: case 13: blur.index += (1/3); break;
+		case 14: blur.index = 5;  break;
+		case 15: blur.image_index = 4; break;
+		case 16: blur.index = 5.5; break;
+		case 17: blur.index = 6;  break;
+		case 18: blur.image_index = 5; break;
+		case 19:
+			with (blur){
+				instance_destroy();
+			}
+			break;
+
+	}
+	
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+        case 5: image_index = 2; break;
+        case 7: image_index = 3;
+                break;
+        case 9: image_index = 4;
+                break; //hitbox start
+
+        case 11: image_angle = 65-facing*130;
+                break;
+        case 14: image_index = 5; image_angle = 0; shakex = 0; shakey = 0;
+               break;
+        case 17: image_index = 6;
+                break;
+        case 20: image_index = 7; break;
+        case 24: image_index = 8; break;
+        case 27: image_index = 9; break;	
+      }
+            if timer = 9 
+			    {
+                sound_play(utilt_sound);
+                if random(20)>8
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+
+ create_hitbox2(10,110+-40*facing,5.5,5.6,10,5,kick2,obj_spark_hit4,1.1,0.5,25,15,self.id,12,1);
+                hitbox2.hit_stun = 14;
+		hitbox2.image_angle = 200+140*facing; 
+
+                                create_hitbox(7,110+-40*facing,5.5,5.6,10,5,kick2,obj_spark_hit4,1.1,0.5,24,30,self.id,12,1);
+                hitbox.hit_stun = 14;
+		hitbox.image_angle = 340+-140*facing; 
+
+               
+                }
+			if timer = 11
+				{
+                hitbox.hitbox_x = (2-facing*4)*size;
+                hitbox.hitbox_y = 47*size; 
+                hitbox.image_xscale = 0.7*size;
+                hitbox.image_yscale = 1*size;  
+		hitbox.image_angle=0+180*facing
+
+   		hitbox2.hitbox_x = (14-facing*28)*size;
+                hitbox2.hitbox_y = 55*size; 
+                hitbox2.image_xscale = 0.6*size;
+                hitbox2.image_yscale = 0.6*size;  
+		hitbox2.image_angle=0+180*facing
+                }
+			if timer = 14
+				{
+                hitbox.hitbox_x = (-12-facing*-24)*size;
+                hitbox.hitbox_y = 29*size; 
+                hitbox.image_xscale = 0.7*size;
+                hitbox.image_yscale = 1.1*size;  
+hitbox.dir=78+24*facing
+
+		hitbox2.hitbox_x = (-9-facing*-18)*size;
+                hitbox2.hitbox_y = 45*size; 
+       hitbox2.dir=78+24*facing
+
+                }
+                        if timer = 17
+				{
+                hitbox.hitbox_x = (-16-facing*-32)*size;
+                hitbox.hitbox_y = 8*size; 
+                hitbox.image_xscale = 0.8*size;
+                hitbox.image_yscale = 0.5*size;  
+
+		hitbox2.hitbox_x = (-24-facing*-48)*size;
+                hitbox2.hitbox_y = 12*size; 
+       
+                }
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

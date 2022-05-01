@@ -1,0 +1,270 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        air_move=0
+        grab_edge = 0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.25
+        sprite_index = taunt_sprite
+        image_index=0
+        timer = 0
+        time = 60
+        temp = 0
+        timer_speed=1
+        intangible = 1
+        final_smashes+=1
+        speed = 0
+        background_blend=c_gray
+        smash_power = 0
+        effect_create_below(ef_ellipse,x,y,1,c_yellow)
+        image_blend = c_white
+        target1 = -99
+        //instance_create(0,0,obj_flashscreen)
+}
+if timer < time {
+    if timer = 5 {
+        sound_play(final_smash_voice1)
+        spark = instance_create(x,y + size*32, obj_spark)
+        spark.sprite_index = blue_falcon_start_sprite
+        spark.image_speed = 0.2
+        spark.image_xscale *= (1-facing*2)*size*1.2
+        spark.image_yscale *= size*1.2
+        spark.depth = -8
+        sound_play(final_smash_sound1)
+    }
+    if timer >= 6 && timer <= 12 {
+        spark.x += (1 - timer*0.04)*size*7.2*(1-facing*2)
+        spark.y -= (1 + timer*0.02)*size*3
+    }
+    if timer >= 13 && timer <= 27 {
+        if instance_exists(spark)
+            spark.y -= size*3.5
+    }
+    if timer = 15 {
+        create_hitbox(10,80+facing*20,6.5,0,-1,5,slash3,obj_spark_hit3,2.5,1.2,40,13,self.id,3,6)
+        hitbox.armor_break = 1;
+        hitbox.hitonce = 1;
+        hitbox.shake_kb = size*2
+    }
+    if timer > 15 && timer <= 19 && attack_success && instance_exists(target) {
+        target.state_type = "air_flinch"
+        target.attack_type = "none"
+        target.timer = 0
+        target.time = 280
+        target.timer_speed = 0
+        target.alarm[0] = 280
+        time = 256
+        timer = 100
+        image_speed = 0.25
+        image_index = 18
+        instance_create(target.x,target.y-9,obj_grab_spark)
+        temp = 1
+        target1 = target
+        camera.following_state = number
+        target1.facing = 1-facing
+        y-=7
+    }
+    if timer >= 19 && timer <= 50 {
+        if instance_exists(spark) {
+	spark.x -= 0.4*size*(1-facing*2)
+            spark.y -= size*0.4
+            spark.image_yscale *= 0.95
+            spark.image_xscale *= 0.95
+	}
+    }
+	if timer >= 30 && timer <= 50 {
+	if instance_exists(spark)
+	spark.image_alpha *= 0.85
+	}
+    if timer < 60
+    speed = 0
+    gravity_lock = 1;
+	vspeed = 0;
+     if timer >= 109 && timer <= 224 && instance_exists(target1) {
+        target1.x = x
+        target1.y = y+6*size
+        target1.alarm[0] = 200
+        target1.state_type = "air_flinch"
+        if timer < 190 || timer > 250
+            background_blend = c_dkgray
+        target = target1
+     }
+     if timer = 110 {
+        sprite_index = final_smash_start_sprite
+        image_index = 0
+        image_speed = 0.25
+        depth = -3
+        target1.depth = -3
+        spark = instance_create ( 0 , 0 , obj_freeze );
+        spark.alarm[0] = 115;
+        spark.dontpause = self.id;
+        falcon_helper = instance_create ( x , y , obj_custom_gfx );
+        falcon_helper.keepmain = keepmain;
+        falcon_helper.draw_script = char_custom1;
+        falcon_helper.parent = self.id;
+        falcon_helper.depth = -15;
+        /*falcon_helper = instance_create(0,0,obj_falcon_draw_helper)
+        falcon_helper.falcon = id
+        falcon_helper.sprite_index = finalbg_sprite
+        falcon_helper.image_speed = 0.5
+        falcon_helper.depth = depth + 2
+        camera.following_state = target1.number*/
+     }
+     /*if timer >= 111 && timer <= 135 {
+        shakey -= 15
+     }
+     if timer = 120
+        sound_play(final_smash_voice2)*/
+     if timer = 136 {
+        /*spark = instance_create(x - 220 + facing*440, y+24*size, obj_spark)
+        spark.sprite_index = blue_falcon_sprite
+        spark.image_speed = 0
+        spark.alarm[0] = 75
+        spark.hspeed = 7 - facing*14
+        spark.depth = depth -3
+        spark.image_xscale *= 1-facing*2
+        shakey = 999
+        shakex = 999*/
+        sound_play(final_smash_sound2)
+     }
+     if timer = 156 {
+        //shakex =  spark.x - x - 10*(1-facing*2)
+        //shakey = 0
+        sound_play(upb_sound2)
+        //sprite_index = final_smash_punch_sprite
+        //image_index = 0
+        //image_speed = 0.3
+     }
+     /*if timer > 156 && timer < 166 {
+        shakey -= 4
+     }
+     if timer >= 166 && timer < 172 {
+        shakex += (1-facing*2)*1.75
+        shakey -= 1.75
+     }
+     if timer >= 172 && timer < 175 {
+        shakex += (1-facing*2)*1.75
+        shakey -= 0
+     }
+     if timer >= 175 && timer < 185 {
+        shakex += (1-facing*2)*1.5
+        shakey += 1 + (timer-175)*0.05
+     }
+     if timer > 185 && timer < 225 {
+        if shakex > -15*(1-facing*2)
+            shakex -= 0.75
+        else if shakex < -15*(1-facing*2)
+            shakex += 0.75
+        if abs(shakex + 15*(1-facing*2)) < 0.75
+            shakex = -15*(1-facing*2)
+        if shakey > 0
+            shakey -= 0.75
+        else if shakey < 0
+            shakey += 1.25
+        if abs(shakey) < 0.75
+            shakey = 0
+     }*/
+     if timer = 168 {
+        sound_play(upb_sound1)
+        sound_play(final_smash_voice2)
+     }
+     /*if timer = 190
+        image_speed = 0
+     if timer = 210
+        image_speed = 0.3
+     if timer = 205 || timer = 219 {
+        spark = instance_create(x-(10-facing*20)*size + shakex,y-17*size + shakey,obj_spark_shockwave)
+        spark.image_xscale *= 0.6*size
+        spark.image_yscale *= 0.6*size
+        spark.image_blend = c_red
+        spark.image_alpha = 0.8
+        spark.depth = depth -1
+        spark = instance_create(x-(10-facing*20)*size + shakex,y-17*size + shakey,obj_spark_shockwave)
+        spark.image_xscale *= 0.6*size
+        spark.image_yscale *= 0.6*size
+        spark.image_blend = c_orange
+        spark.image_alpha = 0.6
+        spark.depth = depth -1
+    }
+    if timer = 210 {
+        instance_create(x+shakex,y-27*size+shakey,obj_spark_effect)
+        //shakey = 0
+        //shakex = (1-facing*2)*(-15)
+    }*/
+     if timer = 225 {
+        //sound_play(b_voice2)
+	sprite_index = b_sprite
+        image_index = 16
+        image_speed = 0.33
+        shaker= instance_create(x,y,obj_shakescreen3)
+        shaker.ampl = 7
+        shaker.xampl = 0
+        shaker.time = 26
+        shaker = instance_create(x,y,obj_epicflash);
+        shaker.front[number-1] = 1
+        shaker.front[target1.number-1] = 1
+        spark = instance_create(target.x,target.y-15*size,obj_spark_shockwave);
+        spark.image_xscale *= 1.8*size
+        spark.image_yscale *= 1.8*size
+        spark.image_alpha = 0.75
+        spark.depth = depth -1
+        spark = instance_create(target.x,target.y-15*size,obj_spark_shockwave);
+        spark.image_xscale *= 2.1*size
+        spark.image_yscale *= 2.1*size
+        spark.image_blend = c_red
+        spark.image_alpha = 0.75
+        spark.depth = depth -1
+        target1.alarm[0] = -1
+        target1.timer_speed = 1
+        //falcon_helper.punch_hit = 1
+        //falcon_helper.alarm[0] = 45
+        target = target1
+        create_hitbox(30,30+facing*120,8.5,12.8,-1,round((32/size)/hitlag_constant),sf_punchs,obj_spark_hit2,1.8,1.8,0,13,self.id,1);
+        hitbox.shake_ampl = 0
+		spark = instance_create(x+size*(1-facing*2),y-22*size,obj_spark);
+		spark.sprite_index = b_falconpunch_bird_sprite;
+		spark.image_xscale = 0.35 * (1-facing*2) * size;
+		spark.image_yscale = 0.35 * size;
+		spark.image_speed = 0.8;
+		spark.depth = depth + 1;
+		spark.snap = self.id;
+		spark = instance_create(x+size*(2-facing*4),y-16*size,obj_spark);
+		spark.sprite_index = b_falconpunch_fire_sprite;
+		spark.image_xscale = 0.35 * (1-facing*2) * size;
+		spark.image_yscale = 0.35 * size;
+		spark.image_speed = 0.8;
+		spark.depth = depth - 1;
+		spark.snap = self.id;
+        if instance_exists(target1) {
+            target1.gethit = 0
+        }
+    }
+     if image_index >= image_number - image_speed
+        image_speed = 0
+     if timer >= time - 20 {
+        //camera.following_state = 0
+        shakex = 0
+        shakey = 0
+     }
+}
+intangible = 1
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    intangible = 0;
+	attack_type = "none";
+	state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 7;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+    grab_edge=1
+    can_die=1
+    camera.following_state = 0
+}

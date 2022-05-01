@@ -1,0 +1,38 @@
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.shadow_ball_sprite
+    hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.3;
+    visible =1
+    }
+vspeed = cos(timer*pi/8)*2
+if timer = 110 && damage > 2 {
+damage -= 2
+bkb-=0.5
+}
+
+image_angle+=-15*(-1-facing*-2);
+
+if timer mod 3 = 0
+{
+shad=irandom_range(0, 360);
+proj=create_projectile ( 1 , 361 , 0.05 , 1.6 , 2 , 1 , ice1 , obj_spark_ice3 ,  0.085 , 0.085 , 7 , -1 , self.id , 3 , no_script);
+proj.sprite_index=keepmain.nair_eff4_sprite;
+proj.depth=5
+proj.image_xscale *= size*0.6
+proj.image_yscale *= size*0.6
+proj.image_angle=shad*(-1-facing*-2);
+}
+
+moving_object = 1;
+if hit!=0
+visible = 0
+
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 0 {
+    sound_play(explode1)
+    shaker = instance_create(x,y+4,obj_spark_explode2)
+    shaker.image_xscale *= size*0.8
+    shaker.image_yscale *= size*0.8
+    instance_destroy()
+}

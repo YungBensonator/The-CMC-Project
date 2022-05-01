@@ -1,0 +1,95 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "ssmash";
+    timer = 0;
+    time = 59;
+    sprite_index = ssmash_sprite;
+    image_speed = 0;
+    image_index = 0;
+    charge_frame = 10;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 10: image_index = 3; break;
+	case 13: image_index = 4; break;
+	case 16: image_index = 5; break;
+	case 20: image_index = 6; break;
+	case 24: image_index = 7; break;
+	case 30: image_index = 8; break;
+	case 36: image_index = 9; break;
+	case 42: image_index = 10; break;
+      }
+
+    if ( timer = 18 )
+      {
+	sound_play(ssmash_voice);
+	sound_play(attack_sound4);
+	create_hitbox(20,40+facing*100,4.8,8.5,15,8,fire3,obj_spark_fire1,0.9,0.75,16,16,self.id,3,2);
+	hitbox.di = -1;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	spark = instance_create(x+size*(34-facing*68),y-25*size,obj_spark_explode2);
+	spark.image_xscale *= size;
+	spark.image_yscale *= size;
+      }
+    if ( timer <= 10 )
+  hspeed = size * (-1.2+facing*2.4);
+    if ( timer >= 14 && timer <= 17 )
+	hspeed = size * (4.5-facing*9);
+    if ( timer >= 18 && timer <= 20 )
+	hspeed = size * (3.5-facing*7);
+    if ( timer >= 21 && timer <= 22 )
+	hspeed = size * (1-facing*2);
+    if ( timer = 23 )
+	hspeed = 0;
+    if ( timer = 48 )
+	sprite_index = stand_sprite;
+  }
+
+  if (timer >= 18){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && target.air > 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 80) || (target.weight > .22 && target.weight < .3 && target.percent > 95) || (target.weight > .3 && target.percent > 110)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    dontrepeat = 0;
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

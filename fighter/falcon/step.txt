@@ -1,0 +1,39 @@
+if ( sprite_index = roll_sprite && state_type = "dodge" )
+{
+image_speed = 0;
+if ( timer >= 23 && timer <=30 )
+{
+sprite_index = crouch_sprite; image_index = 0;
+}
+switch ( timer )
+  {
+  case 0: image_index = 0; break;
+  case 2: shakex=-5*size*(1-facing*2); shakey=2*size; sprite_angle=45*(1-facing*2);  break;
+  case 4: shakex=-6*size*(1-facing*2); shakey=6*size; sprite_angle=90*(1-facing*2);  break;
+  case 6: shakex=-4*size*(1-facing*2); shakey=8*size; sprite_angle=135*(1-facing*2);  break;
+  case 8: shakex=-1*size*(1-facing*2); shakey=6*size; sprite_angle=180*(1-facing*2);  break;
+  case 11: shakex=4*size*(1-facing*2); shakey=4*size; sprite_angle=225*(1-facing*2);  break;
+  case 14: shakex=4*size*(1-facing*2); shakey=3*size; sprite_angle=270*(1-facing*2);  break;
+  case 17: shakex=4*size*(1-facing*2); shakey=2*size; sprite_angle=315*(1-facing*2);  break;
+  case 20: shakex=0; shakey=0; sprite_angle=0;  break;
+  }
+}
+
+if state_type = "land" || state_type = "respawn" || state_type = "edge" || state_type = "stand" || state_type = "flinch" || state_type = "air_flinch"
+    jumptemp = 0
+
+if jumping = 1 && jumptemp <= 0
+jumptemp = 5
+
+if jumptemp > 0 && jumptemp < 6 {
+grav = 0.25
+jumptemp -= 1
+}
+
+if sprite_index = mid_jump_sprite
+image_speed = 0.4
+
+if jumptemp <= 0
+grav = 0.335
+
+

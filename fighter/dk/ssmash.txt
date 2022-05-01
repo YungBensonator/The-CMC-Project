@@ -1,0 +1,61 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 49;
+        timer_speed=1;
+        charge_frame = 13
+}
+        if timer < time {
+            state_type = "attack";
+			switch ( timer ) {
+			case 1: image_index = 0; break;
+			case 6: image_index = 1; break;
+			case 12: image_index = 2; break;
+			case 15: image_index = 3; break;
+			case 17: image_index = 4; break;
+			case 25: image_index = 5; break;
+			case 29: image_index = 6; break;
+			case 33: image_index = 7; break;
+			case 37: image_index = 9; break;		
+            case 41: image_index = 10; break;				
+			}
+            if timer = 14 {
+                instance_create(x+10-facing*20,y-20,obj_spark_effect)
+                sound_play(ssmash_voice)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing;  }
+            if timer = 17 {
+                sound_play(ssmash_sound);
+                screen_shake(0.9,10)
+                create_hitbox(20,27+facing*126,6.8,7.1,30,17,punch3,obj_spark_hit1,1.4,0.75,30,13,self.id,4,3);
+				var burst;
+    //78, 36
+	burst = instance_create(place_x(63)+x,place_y(30)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+                hitbox.shake_ampl = 0.3
+                hitbox.shield_stun = 1.4
+                spark = instance_create(x+(35-facing*70)*size,y-13*size,obj_spark_shockwave)
+                spark.image_xscale *= 0.6*size
+                spark.image_yscale *= 0.6*size
+                spark.image_blend = c_ltgray
+                spark.image_alpha = 0.75
+                create_wind(1.45,0.75,34,13,5.1,0,9)
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

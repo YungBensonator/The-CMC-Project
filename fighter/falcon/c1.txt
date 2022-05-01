@@ -1,0 +1,171 @@
+// final smash bg drawer
+obj_game_control.no_pause = 2;
+obj_game_control.please_no_tags = 2;
+if ( parent.attack_type != "final_smash" )
+  {
+  instance_destroy();
+  exit;
+  }
+timer = parent.timer;
+timer2 = timer;
+number = parent.number;
+facing = parent.facing;
+if ( timer >= 225 )
+  {
+  instance_destroy();
+  exit;
+  }
+
+var a, b, c, d, xx, yy;
+d3d_set_projection_ortho ( 0 , 0 , 1280 , 720 , 0 );
+
+if ( timer2 >= 110 && timer2 <= 160 )
+  {
+  timer = 110 + round ( ( timer - 110 ) / ( 50 / 115 ) );
+  a = 6 - floor ( ( timer2 mod 14 ) / 2 );
+  yy = -222;
+  if ( timer > 120 )
+    {
+    yy += power ( 2 , ( timer - 120 ) * 0.2 ) * 0.125;
+    }
+  if ( yy >= 0 ) yy = 0;
+  if ( facing == 0 )
+    draw_sprite_ext ( parent.finalbg_sprite , a , 0 , yy , 1.759 , 1.759 , 0 , c_white , 1 );
+    else
+    draw_sprite_ext ( parent.finalbg_sprite , a , 1280 , yy , -1.759 , 1.759 , 0 , c_white , 1 );
+  if ( timer < 225 )
+    {
+    yy = 436;
+    if ( timer mod 4 < 2 )
+      yy += 2;
+    if ( timer < 140 )
+      xx = -64 + ( timer - 110 ) * 19;
+      else
+      xx = 506 + ( timer - 140 ) * 3;
+    y += ( timer - 110 ) * 0.125;
+    if ( timer > 120 )
+      {
+      yy += power ( 2 , ( timer - 120 ) * 0.2 );
+      }
+    if ( facing == 0 )
+      {
+      if ( timer mod 4 < 2 )
+        draw_sprite_ext ( parent.blue_falcon_sprite , 0 , xx - 32 , yy , 4 , 4 , 0 , c_black , 0.5 );
+      draw_sprite_ext ( parent.blue_falcon_sprite , 0 , xx , yy , 4 , 4 , 0 , c_white , 1 );
+      }
+      else
+      {
+      if ( timer mod 4 < 2 )
+        draw_sprite_ext ( parent.blue_falcon_sprite , 0 , 1280 - xx + 32 , yy , -4 , 4 , 0 , c_black , 0.5 );
+      draw_sprite_ext ( parent.blue_falcon_sprite , 0 , 1280 - xx , yy , -4 , 4 , 0 , c_white , 1 );
+      }
+    if ( timer > 170 )
+      {
+      xx = 640;
+      yy = 900 - ( timer - 170 ) * 24;
+      a = ( timer - 170 ) * 0.025;
+      b = floor ( ( timer - 170 ) / 8 );
+      palette_own_set();
+      if ( facing == 1 )
+        draw_sprite_ext ( parent.final_smash_start_sprite , b , 1280 - xx , yy , -5-a , 5+a , 0 , c_white , 1 );
+        else
+        draw_sprite_ext ( parent.final_smash_start_sprite , b , xx , yy , 5+a , 5+a , 0 , c_white , 1 );
+      palette_reset();
+      }
+    }
+  if ( timer < 121 )
+    {
+    a = 1 - ( timer - 110 ) * 0.1;
+    draw_set_color ( c_black );
+    draw_set_alpha ( a );
+    draw_rectangle ( 0 , 0 , 1280 , 720 , 0 );
+    draw_set_alpha ( 1 );
+    draw_rectangle ( 0 , 0 , 1280 , 64 + a * 296 , 0 );
+    draw_rectangle ( 0 , 656 - a * 296 , 1280 , 720 , 0 );
+    }
+    else
+    {
+    draw_set_color ( c_black );
+    draw_rectangle ( 0 , 0 , 1280 , 64 , 0 );
+    draw_rectangle ( 0 , 656 , 1280 , 720 , 0 );
+    }
+  }
+if ( timer2 > 160 && timer2 < 225 )
+  {
+  a = 6 - floor ( ( timer2 mod 14 ) / 2 );
+  timer -= 160;
+  if ( facing == 0 )
+    draw_sprite_ext ( parent.finalbg_sprite , a , 0 , -220 , 2 , 2 , -10 , c_lime , 1 );
+    else
+    draw_sprite_ext ( parent.finalbg_sprite , a , 1280 , -220 , -2 , 2 , 10 , c_lime , 1 );
+  b = timer / 65;
+  draw_set_blend_mode ( bm_add );
+  if ( facing == 0 )
+    draw_sprite_ext ( parent.finalbg_sprite , a , 0 , -220 , 2 , 2 , -10 , c_blue , b );
+    else
+    draw_sprite_ext ( parent.finalbg_sprite , a , 1280 , -220 , -2 , 2 , 10 , c_blue , b );
+  draw_set_blend_mode ( bm_normal );
+  
+  if ( timer mod 10 < 5 )
+    {
+    draw_set_color ( c_white );
+    draw_set_alpha ( max ( 0 , min ( 1 , timer * 0.01 ) ) );
+    draw_rectangle ( 0 , 64 , 1280 , 656 , 0 );
+    draw_set_alpha ( 1 );
+    }
+    
+  a = 9;
+  if ( timer > 25 ) a = 10;
+  if ( timer >= 38 ) a = 11;
+  if ( timer >= 43 ) a = 12;
+  if ( timer >= 48 ) a = 13;
+  
+  timer -= 1;
+  
+  xx = 128 + power ( 2 , 1 + b * 9.5 ) * 1.8;
+  yy = 368;
+  if ( timer < 20 )
+    {
+    yy = 820 + lengthdir_y ( 452 , timer * 90 / 20 );
+    }
+  c = 0;
+  if ( timer > 30 )
+    {
+    yy += power ( 2 , 1 + ( timer - 30 ) * 0.3 ) * 3;
+    c = power ( 2 , ( timer - 30 ) * 0.2 ) - 1;
+    c *= 0.6;
+    }
+    
+  if ( facing == 1 )
+    draw_sprite_ext ( parent.final_smash_punch_sprite , a , 1280-xx , yy , -4 - c , 4 + c , 0 , c_black , 0.7 );
+    else
+    draw_sprite_ext ( parent.final_smash_punch_sprite , a , xx , yy , 4 + c , 4 + c , 0 , c_black , 0.7 );
+  
+  timer += 1;
+  
+  xx = 128 + power ( 2 , 1 + b * 9.5 ) * 1.8;
+  yy = 368;
+  if ( timer < 20 )
+    {
+    yy = 820 + lengthdir_y ( 452 , timer * 90 / 20 );
+    }
+  c = 0;
+  if ( timer > 30 )
+    {
+    yy += power ( 2 , 1 + ( timer - 30 ) * 0.3 ) * 3;
+    c = power ( 2 , ( timer - 30 ) * 0.2 ) - 1;
+    c *= 0.6;
+    }
+  palette_own_set();
+  if ( facing == 1 )
+    draw_sprite_ext ( parent.final_smash_punch_sprite , a , 1280-xx , yy , -4 - c , 4 + c , 0 , c_white , 1 );
+    else
+    draw_sprite_ext ( parent.final_smash_punch_sprite , a , xx , yy , 4 + c , 4 + c , 0 , c_white , 1 );
+  palette_reset();
+  
+  draw_set_color ( c_black );
+  draw_rectangle ( 0 , 0 , 1280 , 64 , 0 );
+  draw_rectangle ( 0 , 656 , 1280 , 720 , 0 );
+  }
+  
+d3d_set_projection_ortho ( view_xview[0] , view_yview[0] , view_wview[0] , view_hview[0] , view_angle[0] );

@@ -1,0 +1,88 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "bthrow";
+    timer = 0;
+    time = 48;
+    sprite_index = bthrow_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.timer_speed = 0;
+	target.depth = depth - 1;
+    target.alarm[0] = 50;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 8: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 14: image_index = 6; break;
+	case 15: image_index = 7; break;
+	case 17: image_index = 8; break;
+	case 18: image_index = 9; break;
+	case 19: image_index = 10; break;
+	case 21: image_index = 11; break;
+	case 24: image_index = 12; break;
+	case 26: image_index = 13; break;
+	case 29: image_index = 14; break;
+	case 31: image_index = 15; break;
+      }
+	if ( timer >= 0 && timer <= 7 )
+	{
+	target.x = x + 16 * size * (1-facing*2);
+	target.y = y;
+	}
+    if ( timer = 8 || timer = 9 )
+      {
+	target.x = x + 10 * (1-facing*2) * size;
+	target.y = y;
+      }
+    if ( timer = 10 || timer = 11 )
+      {
+	target.x = x + 5 * (1-facing*2) * size;
+	target.y = y;
+      }
+	
+    if ( timer = 12 )
+      {
+	target.x = x - 15 * (1-facing*2) * size;
+	target.y = y - 8*size;
+	play_attack_voice();
+	sound_play(attack_sound2);
+	create_throw_box(6,135-facing*90,6.2,4.2,8,7,kick2,obj_spark_hit4,0.81 , 0.81 , -11.20 , 22.40,self.id,1);
+	hitbox.hit_stun = 7;
+      }
+    if ( timer = 19 || timer = 24 || timer = 29 )
+      {
+	sound_play(b_sound);
+	create_projectile(1,361,0,0,8,1,punch2,obj_spark_hit1,0.9,0.8,-29,36,self.id,40,char_custom1);
+	proj.direction = ( 145 - facing*110 ) + ( random(22) - 11 );
+	proj.speed = 9;
+	laserblast = instance_create( x,y,obj_spark );
+	laserblast.sprite_index = laser_blast_sprite;
+	laserblast.image_xscale = 0.3 * (1-facing*2) * size;
+	laserblast.image_yscale = 0.3 * size;
+	laserblast.image_angle = 145 * (1-facing*2);
+	laserblast.image_speed = 0.9;
+	laserblast.x = x - 16 * (1-facing*2) * size;
+	laserblast.y = y - 27 * size;
+	laserblast.snap = self.id;
+      }
+    if ( timer >= 30 )
+	interrupt = 1;
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    facing = 1-facing;
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

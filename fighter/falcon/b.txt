@@ -1,0 +1,473 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    special = 1;
+    state_type = "air_attack";
+    attack_type = "b";
+    timer = 0;
+    time = 99;
+    sound_play(b_voice1);
+    sprite_index = b_sprite;
+    image_speed = 0;
+    image_index = 0;
+	if air = 0
+	hspeed = 0
+    temp = 0; //used for reverse
+    temp2 = 1; //used for charge
+    temp_timer = 100; //used to keep effects while reversing
+    temp5 = 0; //using to get around case image stuff w/o messing up annimation or charge timer
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 1: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+	case 22: image_index = 7; break;
+	case 25: image_index = 8; break;
+	case 28: image_index = 9; break;
+	case 32: image_index = 10; break;
+	case 36: image_index = 11; break;
+	case 40: image_index = 12; break;
+	case 45: image_index = 13; break;
+	case 48: image_index = 14; break;
+	case 50: image_index = 15; break;
+	case 52: image_index = 16; break;
+	case 62: image_index = 17; break;
+	case 67: image_index = 18; break;
+	case 71: image_index = 19; break;
+	case 76: image_index = 20; break;
+	case 78: image_index = 21; break;
+	case 82: image_index = 22; break;
+	case 88: image_index = 23; break;
+	case 90: image_index = 24; break;
+	case 92: image_index = 25; break;
+	case 94: image_index = 26; break;
+	case 99: image_index = 27; break;
+
+	
+	case 103: image_index = 5; break; //Start of Turn
+	case 105: image_index = 4; break;
+	case 108: image_index = 3; break;
+	case 110: image_index = 2; break;
+	case 113: image_index = 1; break;
+	case 115: image_index = 0; break;
+      }
+
+if (air = 0)
+{
+ hspeed *= 0.89;
+}
+	  
+if air > 0
+vspeed -= 0.02
+    if ( ai )
+	special = 0;
+    if ( timer = 3 )
+	sound_play(b_sound1);
+    if ( timer >= 3 && timer <= 25 && ( ( !facing && moveleft ) || ( facing && moveright ) ) )
+      {
+	facing = 1-facing;
+	sprite_index = b_reverse_sprite;
+	image_index = 6;
+	time = 200;
+	timer = 100;
+	temp = 1;
+      }
+if temp5 = 1 && ((timer < 8 ) || (timer >=12 && timer < 16) || ( timer >= 20 && timer < 26))  && sprite_index = b_sprite {
+	image_index = 11
+}
+if temp5 = 1 && (( timer >= 8 && timer < 12 ) || (timer >=16 && timer < 20 )) && sprite_index = b_sprite {
+	image_index = 12
+}
+    if ( timer = 118 && temp = 1 )
+      {
+	sprite_index = b_sprite;
+	image_index = 5;
+	timer = 13;
+	time = 99;
+	temp = 0
+      }
+
+	if ( timer = 8 )
+	{
+	spark = instance_create(x-size*(16-facing*32),y-14*size,obj_spark);
+	spark.sprite_index = b_falconpunch_charge_sprite;
+	spark.image_xscale = 0.35 * size;
+	spark.image_yscale = 0.35 * size;
+	spark.image_speed = 0.8;
+	spark.depth = depth - 1;
+	spark.snap = self.id;
+	}
+
+    if ( temp2 >= 4 )
+      {
+	if ( timer = 25 || timer = 125 )
+	  {
+	    duster = instance_create(x-size*(6-facing*12),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1.1*size;
+	    duster.image_yscale *= 1.1*size;
+	  }
+      }
+    if ( temp2 >= 8 )
+      {
+	if ( timer = 15 || timer = 25 || timer = 115 || timer = 125 || timer = 135 || timer = 145 )
+	  {
+	    sound_play(b_sound1);
+	    spark = instance_create(x,y,obj_spark_shockwave);
+	    spark.image_xscale *= 0.7*size;
+	    spark.image_yscale *= 0.1*size;
+	    spark.image_blend = c_red;
+	    spark = instance_create(x-size*(10-facing*20),y-22*size,obj_spark_effect2);
+	    spark.depth = depth - 1;
+	    spark.image_alpha = 0.7;
+	    spark.image_blend = c_orange;
+	    screen_shake(0.25,10);
+	  }
+      }
+    if ( temp2 >= 12 )
+      {
+	if ( timer = 15 || timer = 25 || timer = 115 || timer = 125 || timer = 135 || timer = 145 )
+	  {
+	    spark = instance_create(x,y-10*size,obj_spark);
+	    spark.sprite_index = guardspark;
+	    spark.image_speed = 0.25;
+	    spark.image_index = 12;
+	    spark.image_xscale *= size * (0.75-facing*1.5);
+	    spark.image_yscale *= 0.75*size;
+	    spark.image_angle = 90 - facing*180;
+	    spark.image_blend = choose(c_blue,c_navy,c_purple);
+	    spark.image_alpha = 0.5;
+	    spark.vspeed = -0.9*size;
+	  }
+      }
+    if ( temp2 >= 16 )
+      {
+	if ( ( timer >= 10 && timer <= 25 && timer mod 5 = 0 ) || ( timer >= 115 && timer <= 145 && timer mod 5 = 0 ) )
+	  {
+	    sound_play(explode1);
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1.6*size + (0.6 * (temp2>=24));
+	    duster.image_yscale *= 1.6*size + (0.6 * (temp2>=24));
+	    duster.image_blend = c_orange;
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1.2*size + (0.6 * (temp2>=24));
+	    duster.image_yscale *= 1.2*size + (0.6 * (temp2>=24));
+	    duster.image_blend = c_red;
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 0.8*size + (0.6 * (temp2>=24));
+	    duster.image_yscale *= 0.8*size + (0.6 * (temp2>=24));
+	    duster.image_blend = c_orange;
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 0.4*size + (0.6 * (temp2>=24));
+	    duster.image_yscale *= 0.4*size + (0.6 * (temp2>=24));
+	    duster.image_blend = c_red;
+	    screen_shake(1,5);
+	  }
+      }
+    if ( temp2 >= 24 || ( temp2 >= 20 && timer mod 10 = 5 ) || ( temp2 >= 16 && timer = 25 ) )
+      {
+	if ( ( timer >= 10 && timer <= 25 && timer mod 5 = 0 ) || ( timer >= 115 && timer <= 145 && timer mod 5 = 0 ) )
+	  {
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 3.2*size;
+	    duster.image_yscale *= 1.2*size;
+	    duster.image_blend = c_orange;
+	    duster.depth = depth - 10;
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 2.4*size;
+	    duster.image_yscale *= 0.9*size;
+	    duster.image_blend = c_red;
+	    duster.depth = depth - 10;
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1.6*size;
+	    duster.image_yscale *= 0.6*size;
+	    duster.image_blend = c_orange;
+	    duster.depth = depth - 10;
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 0.8*size;
+	    duster.image_yscale *= 0.3*size;
+	    duster.image_blend = c_red;
+	    duster.depth = depth - 10;
+	  }
+      }
+    if ( temp2 >= 32 )
+      {
+	if ( ( timer >= 10 && timer <= 25 && timer mod 5 = 0 ) || ( timer >= 115 && timer <= 145 && timer mod 5 = 0 ) )
+	  {
+	    spark = instance_create(x,y,obj_down_impact);
+	    spark.image_blend = c_red;
+	    spark.image_xscale *= 3*size;
+	    spark.image_alpha = 0.25;
+	    spark = instance_create(x,y,obj_down_impact);
+	    spark.image_blend = c_red;
+	    spark.image_xscale *= 2.7*size;
+	    spark.image_alpha = 0.25;
+	    spark = instance_create(x,y,obj_down_impact);
+	    spark.image_blend = c_red;
+	    spark.image_xscale *= 2.4*size;
+	    spark.image_alpha = 0.25;
+	    screen_shake(3,5);
+	  }
+      }
+    if ( timer = 25 )
+      {
+	spark = instance_create(x-size*(10-facing*20),y-17*size,obj_spark_shockwave);
+	spark = instance_create(x-size*(10-facing*20),y-17*size,obj_spark_shockwave);
+	spark.image_xscale *= 0.6*size;
+	spark.image_yscale *= 0.6*size;
+	spark.image_blend = c_orange;
+	spark.image_alpha = 0.6;
+	if ( special )
+	  {
+	    sound_play(b_sound1);
+	    timer = 4;
+	    temp2 += 1;
+	temp5 = 1
+	  }
+      }
+    if temp2 > 1 && timer = 26
+	timer_speed = 2
+    if ( temp2 >= 8 && timer >= 26 && timer <= 41 && timer mod 5 = 1 )
+      {
+	spark = instance_create(x-size*(8-facing*16),y-16*size,obj_spark_effect2);
+	spark.depth = depth - 1;
+	spark.image_alpha = 0.7;
+	spark.image_blend = c_orange;
+      }
+    if ( timer = 34 )
+      {
+	instance_create(x+size*(-16-facing*-32),y-14*size,obj_spark_effect);
+	spark = instance_create(x,y,obj_spark_shockwave);
+	spark.image_xscale *= 0.7*size;
+	spark.image_yscale *= 0.1*size;
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.9;
+      }
+    if ( timer = 50 )
+      {
+	sound_play(b_sound2);
+	hspeed = size * (2-facing*4);
+      }
+	if timer >= 50 && timer <= 56 && air > 0 {
+		vspeed = -2*size;
+		air_move = 0;
+		hspeed *= 0.6*size;
+		}
+	
+    if ( timer = 52 )
+      {
+	spark = instance_create(x+size*(1-facing*2),y-18*size,obj_spark);
+	spark.sprite_index = b_falconpunch_bird_sprite;
+	spark.image_xscale = 0.35 * (1-facing*2) * size;
+	spark.image_yscale = 0.35 * size;
+	spark.image_speed = 0.45;
+	spark.depth = depth + 1;
+	spark.snap = self.id;
+	spark = instance_create(x+size*(2-facing*4),y-12*size,obj_spark);
+	spark.sprite_index = b_falconpunch_fire_sprite;
+	spark.image_xscale = 0.35 * (1-facing*2) * size;
+	spark.image_yscale = 0.35 * size;
+	spark.image_speed = 0.6;
+	spark.depth = depth - 1;
+	spark.snap = self.id;
+	spark.draw_set_blend_mode = ( bm_add );
+	if ( temp2 >= 16 && temp2 < 24 )
+	  {
+	    spark = instance_create(x,y,obj_custom_gfx);
+	    spark.sprite_index = spr_dust2;
+	    spark.image_xscale = size * (1-facing*2);
+	    spark.image_yscale = 1*size;
+	    spark.image_alpha = 0.8;
+	    spark.image_speed = 0.5;
+	    spark.image_blend = c_red;
+	    spark.depth = 0;
+	  }
+	if ( temp2 >= 24 )
+	  {
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 2.2*size;
+	    duster.image_yscale *= 2.2*size;
+	    duster.image_blend = c_orange;
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1.8*size;
+	    duster.image_yscale *= 1.8*size;
+	    duster.image_blend = c_red;
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1.4*size;
+	    duster.image_yscale *= 1.4*size;
+	    duster.image_blend = c_orange;
+	    duster = instance_create(x-size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1*size;
+	    duster.image_yscale *= 1*size;
+	    duster.image_blend = c_red;
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 3.2*size;
+	    duster.image_yscale *= 1.2*size;
+	    duster.image_blend = c_orange;
+	    duster.depth = depth - 10;
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 2.4*size;
+	    duster.image_yscale *= 0.9*size;
+	    duster.image_blend = c_red;
+	    duster.depth = depth - 10;
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 1.6*size;
+	    duster.image_yscale *= 0.6*size;
+	    duster.image_blend = c_orange;
+	    duster.depth = depth - 10;
+	    duster = instance_create(x+size*(15-facing*30),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.9;
+	    duster.image_xscale *= 0.8*size;
+	    duster.image_yscale *= 0.3*size;
+	    duster.image_blend = c_red;
+	    duster.depth = depth - 10;
+	    spark = instance_create(x,y,obj_spark);
+	    spark.sprite_index = spr_dust2;
+	    spark.image_xscale = size * (1.5-facing*3);
+	    spark.image_yscale = 1.5*size;
+	    spark.image_alpha = 0.8;
+	    spark.image_speed = 0.3;
+	    spark.image_blend = c_red;
+	    spark.depth = 0;
+	  }
+	sound_play(b_voice2);
+	sound_play(b_sound3);
+	if temp2 > 32
+	temp2 = 32
+	if ( temp = 0 )
+	    create_hitbox(23+temp2/1.2,25+facing*130,6.3+temp2/10,7.25+temp2/10,45+temp2*7,12+temp2*1.1,kick3,obj_spark_fire1,0.7,0.75,22,20,self.id,10,4);
+	else
+	    create_hitbox(24+temp2/1.2,25+facing*130,6.8+temp2/10,8.5+temp2/10,50+temp2*8,14+temp2*1.1,kick3,obj_spark_fire1,0.7,0.75,22,20,self.id,10,4);
+	create_hitbox2(22+temp2/1.2,25+facing*130,6+temp2/10,6.75+temp2/10,40+temp2*6,10+temp2*1.1,kick2,obj_spark_fire1,0.7,0.75,22,20,self.id,10,4);
+	hspeed = size * (3-facing*6);
+	duster = instance_create(x-size*(6-facing*12),y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_alpha = 0.9;
+	duster.image_xscale *= 1.2*size;
+	duster.image_yscale *= 1.2*size;
+	screen_shake(2.3,10);
+	timer_speed = 1
+      }
+    if ( timer >= 52 && timer <= 53 && attack_success )
+      {
+	if ( temp2 >= 8 )
+	  {
+	    spark = instance_create(x+size*(26-facing*52),y-24*size,obj_spark_explode2);
+	    spark.image_xscale *= 1.7*size;
+	    spark.image_yscale *= 1.7*size;
+	   }
+	  if ( temp2 = 32 )
+	  {
+	    sound_play(fullb_sound);
+	    sound_play(fullb_voice);
+	  }	
+	if ( temp2 >= 16 )
+	  {
+	    sound_play(explode2);
+	    sound_play(magic3);
+	    repeat ( temp2 - 8 )
+	      {
+		spark = instance_create(x+size*(26-facing*52),y-28*size,obj_spark_explode2);
+		spark.image_xscale *= 0.7*size;
+		spark.image_yscale *= 0.7*size;
+		spark.image_blend = choose(c_red,c_white);
+		spark.speed = 8 + random(6);
+		spark.direction = random(360);
+	      }
+	    spark = instance_create(x+size*(32-facing*64),y-28*size,obj_spark_explode2);
+	    spark.image_xscale *= 3*size;
+	    spark.image_yscale *= 3*size;
+	    spark.speed = 5*size;
+	    spark.direction = facing*180;
+	    spark.image_speed = 0.3;
+	  }
+      }
+    if ( air = 0 && ( timer <= 47 || timer = 55 || timer >= 100 ) )
+	hspeed = 0;
+  }
+
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 40) || (target.weight > .22 && target.weight < .3 && target.percent > 55) || (target.weight > .3 && target.percent > 60)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    
+	dontrepeat = 0
+	timer_speed = 1
+	attack_type = "none";
+	state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 7;
+	image_speed = 0;
+	}
+    timer = 0;
+    time = -1;
+  }

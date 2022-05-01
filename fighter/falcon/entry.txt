@@ -1,0 +1,79 @@
+if ( timer < 30 )
+  {
+    visible = 0;
+  }
+if ( timer == 1 )
+  {
+    sound_play ( final_smash_sound1 );
+    spark = instance_create ( x - 640 * ( 1 - facing * 2 ) , y - 98 , obj_spark );
+    spark.sprite_index = blue_falcon_sprite;
+    spark.image_xscale = ( 1 - facing * 2 ) * 0.74;
+    spark.image_yscale = 0.74;
+    spark.image_speed = 0;
+    spark.alarm[0] = 120;
+    spark.image_index = 0;
+    spark.image_alpha = 0.2;
+    spark.hspeed = 21 * ( 1 - facing * 2 );
+    spark.vspeed = 3;
+    spark.depth = -7;
+    spark.image_angle = point_direction ( 0 , 0 , abs ( spark.hspeed ) , sign ( spark.hspeed ) * spark.vspeed );
+  }
+if ( timer > 1 && timer < 6 )
+  {
+    spark.image_alpha = ( timer - 1 ) * 0.2;
+  }
+if ( timer == 30 )
+  {
+    if ( random ( 10 ) < 1 )
+      {
+        sound_play ( explode_big );
+        screen_shake ( 6 , 9 );
+        spark.hspeed *= 0.4;
+        spark.vspeed = -6;
+        spark.angle_add = sign ( spark.hspeed ) * -14;
+        spark.gravity_direction = 270;
+        spark.gravity = 0.5;
+        var a;
+        a = instance_create ( x , y - 7 , obj_spark_explode1 );
+        a.image_xscale *= 1.5;
+        a.image_yscale *= 1.5;
+      }
+    else
+      {
+        spark.hspeed *= 0.2;
+        spark.vspeed *= 0.2;
+      }
+    visible = 1;
+    sprite_index = entry_sprite;
+    image_index = 0;
+    image_speed = 0.75;
+  }
+if ( timer == 36 )
+  {
+    if ( spark.gravity == 0 )
+      {
+        spark.speed = 0;
+      }
+  }
+if ( timer == 40 )
+  {
+    sound_play(yes_voice);
+  }
+if ( timer == 60 )
+  {
+    if ( spark.speed == 0 )
+      {
+        sound_play ( final_smash_sound2 );
+        spark.hspeed = 21 * ( 1 - facing * 2 );
+        spark.vspeed = 3;
+      }
+  }
+if ( timer >= 75 )
+  {
+    visible = 1;
+    state_type = "stand";
+    sprite_index = stand_sprite;
+    vspeed = 0;
+    timer = 0;
+    time = -1;
+  }

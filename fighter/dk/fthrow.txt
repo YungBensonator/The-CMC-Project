@@ -1,0 +1,251 @@
+if time =-1 {
+    special = 0;
+    attacking = 0;
+    timer = 0;
+    attack_type = "fthrow";
+    state_type = "air_attack";
+    image_speed = 0.3;
+    sprite_index = fthrow_sprite;
+    image_index=0;
+    time = 200;
+    timer_speed=1;     
+    target.timer_speed = 0
+    target.alarm[0]=25
+    temp = 0;
+    if air = 0 {
+        hspeed = 0
+        air_move = 0
+    }
+}
+if timer >= 2 && timer <= 4 {
+    target.x = x + size*(8-facing*16)
+    target.y = y - size*4
+}
+if timer >= 5 && timer <= 7 {
+    target.x = x + size*(7-facing*14)
+    target.y = y - size*6
+}
+if timer >= 8 && timer <= 11 {
+    target.x = x + size*(6-facing*12)
+    target.y = y - size*10
+}
+if timer >= 12 && timer <= 13 {
+    target.x = x + size*(6-facing*12)
+    target.y = y - size*14
+}
+if timer = 14 {
+    target.x = x + size*(5-facing*10)
+    target.y = y - size*18
+    play_attack_voice();
+    screen_shake(0.75,10)
+    instance_create(x,y,obj_down_impact)
+}
+if timer = 22 {
+    target.x = x + size*(5-facing*10)
+    target.y = y - size*22
+    image_speed = 0
+}
+    if timer = 23
+        temp = 1
+if temp = 1  {
+        if (timer > 45 + ceil(target.percent/2)) || distance_to_object(target) > 40*size || timer > 163 {
+            attack_type = "none";
+            state_type = "air_flinch";
+            timer = 0;
+            time =15; 
+            speed = 3*size
+            direction = 120-facing*60
+            target.state_type = "air_flinch"
+            target.alarm[0] = -1
+            target.timer_speed = 1
+            target.speed = 3*target.size
+            target.direction = 50+facing*70
+            target.timer = 0
+            target.time = 22
+        }
+        if timer >= 13 {
+            target.x = x + size*(5-facing*10)
+            target.y = y - size*21
+            target.timer_speed = 0
+            target.alarm[0]=19
+        }
+        if (ai && random(100)>65) || attacking=1 && (movedown || moveright || moveleft || moveup) || special=1 && (movedown || moveright || moveleft || moveup) {
+            timer = 250
+	    if moveright || moveleft {
+		time = 284
+		temp = 2
+	    }
+	    if moveup {
+		time = 281
+		temp = 3
+	    }
+	    if movedown {
+		time = 285
+		temp = 4
+	    }
+        }
+        if air = 0 {
+            sprite_index = fthrow_walk_sprite
+            image_speed = 0.35*(moveright||moveleft)
+            if image_speed = 0
+                image_index = 0
+        }
+        else {
+            image_speed = 0
+        }
+        if moveright = 1 && moveleft = 0 {
+            image_xscale = xsize
+            facing=0
+            if air = 0 
+                hspeed = size*(2.6 - (target.weight-0.05)*1);
+            else if hspeed < 2.2
+                hspeed += 0.25
+            image_speed = 0.35 } else
+        if moveright = 0 && moveleft = 1 {
+            image_xscale = -xsize
+            facing = 1
+            if air = 0 
+                hspeed = -size*(2.6 - (target.weight-0.05)*1);
+            else if hspeed > -2.2
+                hspeed += -0.25
+            image_speed = 0.35 } else
+        hspeed = sign ( hspeed ) * max ( 0 , abs ( hspeed ) - ( 0.05 + 0.15 * ( air == 0 ) ) )
+        if vspeed > -0.1 && (collision_rectangle(x-10,y-1,x+10,y+1,obj_floor,1,1) || collision_rectangle(x-10,y-1,x+10,y+1,obj_platform,1,1)) && movedown=0 {
+            vspeed = 0
+            gravity = 0
+            if movejump = 1 {
+                sound_play(jump_sound)
+                vspeed = -(6.15-target.size*(target.weight-0.05)*3)*size
+                air = 1
+                }
+             }  
+        else {
+            if vspeed < fall_speed
+                gravity = grav*GRAV_MUL
+            else
+                vspeed = fall_speed }  
+        }
+//Forward
+if temp = 2 {
+hspeed = sign ( hspeed ) * max ( 0 , abs ( hspeed ) - ( 0.05 + 0.15 * ( air == 0 ) ) )
+    if timer = 250 {
+        image_speed = 0.25;
+        image_index = 0;
+        sprite_index = fthrow_throw_sprite;
+        if air = 0 hspeed = 0
+    }
+    if timer = 254 {
+        target.x = x
+        target.y = y - size*24
+    }
+    if timer = 258 {
+        target.x = x + size*(-4+facing*8)
+        target.y = y - size*24
+        play_attack_voice();
+    }
+    if timer = 262 {
+        target.x = x + size*(-6+facing*12)
+        target.y = y - size*23
+    }
+    if timer = 266 {
+        target.x = x + size*(9-facing*18)
+        target.y = y - size*18
+    }
+    if timer = 267 {
+        target.x = x + size*(9-facing*18)
+        target.y = y - size*18
+        create_throw_box(10,38+facing*104,5.8,2.3,1,1,-1,obj_spark_effect,0.9,0.9,17,25,id,1);
+        hitbox.hit_stun = 13
+        hitbox.shake_ampl = 1.1
+        hitbox.shake_kb = 4*size
+        sound_play(swing_sound1);
+    }
+    if timer = 285 {
+        interrupt = 1 }
+    if image_index >= image_number-image_speed
+        image_speed = 0
+}
+//Up
+if temp = 3 {
+hspeed = sign ( hspeed ) * max ( 0 , abs ( hspeed ) - ( 0.05 + 0.15 * ( air == 0 ) ) )
+    if timer = 250 {
+	image_speed = 0.25;
+	image_index = 0;
+	sprite_index = uthrow_sprite;
+	if air = 0 hspeed = 0
+    }
+    if timer = 254 {
+        target.x = x + size*(4 - facing*8)
+        target.y = y - 8*size
+        target.alarm[0] = 20
+    }
+    if timer > 254 && timer <= 262 {
+        target.x -= (1-facing*2)*size*0.4
+        target.y -= size*1.75
+        target.speed = 0
+        target.alarm[0] = 20
+    }
+    if timer = 263 {
+	target.x = x + size*(4 - facing*8)
+        target.y = y - size*28
+        sound_play(swing_sound1);
+        play_attack_voice();
+        create_throw_box(9,100-facing*20,6,2.75,1,1,-1,obj_spark_effect,0.9,0.9,9,40,self.id,1); 
+        hitbox.hit_stun = 15;
+        hitbox.shake_kb = size;
+    }
+    if timer = 268
+        image_speed = 0
+    if timer = 272
+        image_speed = 0.25
+    if image_index >= image_number - image_speed
+        image_speed = 0
+    if timer = 279
+        interrupt = 1
+}
+//Down
+if temp = 4 {
+hspeed = sign ( hspeed ) * max ( 0 , abs ( hspeed ) - ( 0.05 + 0.15 * ( air == 0 ) ) )
+    if timer = 250 {
+	image_speed = 0.25;
+	image_index = 0;
+	sprite_index = dthrow_sprite;
+	if air = 0 hspeed = 0
+    }
+    if timer <= 259 {
+        target.x = x
+        target.y = y -16*size 
+    }
+    if ( timer >= 260 && timer <= 262 ) {
+        target.x = x + (5 - facing*10)*size
+        target.y = y -13*size 
+    }
+    if ( timer >= 263 && timer <= 265 ) {
+        target.x = x + (7 - facing*14)*size
+        target.y = y -6*size 
+    }
+    if ( timer >= 266 && timer <= 268 ) {
+        target.x = x + (9 - facing*18)*size
+        target.y = y -4*size 
+    }
+    if timer = 269 {
+        sound_play(choose(attack_voice1,attack_voice2));
+        sound_play(swing_sound2);
+        create_throw_box(9,368,4,0,1,1,-1,obj_spark_effect,0.8,0.8,4,15,self.id,1);
+        hitbox.hit_stun = 10; 
+        hitbox.shake_kb = size;
+        hitbox.shake_ampl = 1.2;
+    }
+    if timer = 282
+        interrupt = 1
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    temp = 0;
+}

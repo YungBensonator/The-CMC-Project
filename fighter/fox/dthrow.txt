@@ -1,0 +1,109 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "dthrow";
+    timer = 0;
+    time = 40;
+    sprite_index = dthrow_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	target.depth = depth - 1;
+    target.timer_speed = 0.01;
+	target.shakex = 0;
+	target.shakey = 0;
+	target.image_index = 0;
+	target.image_speed = 0;
+    target.alarm[0] = 60;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 5: image_index = 3; break;
+	case 6: image_index = 4; break;
+	case 7: image_index = 5; break;
+	case 8: image_index = 6; break;
+	case 10: image_index = 7; break;
+	case 12: image_index = 8; break;
+	case 14: image_index = 9; break;
+	case 18: image_index = 10; break;
+	case 20: image_index = 11; break;
+	case 24: image_index = 12; break;
+	case 26: image_index = 13; break;
+	case 29: image_index = 14; break;
+	case 32: image_index = 15; break;
+	case 35: image_index = 16; break;
+	case 38: image_index = 17; break;
+      }
+	if ( timer >= 0 && timer <= 28 )
+    {
+	target.sprite_index = target.down_sprite;
+	}
+    if ( timer = 0 || timer = 1 )
+      {
+	target.x = x + 6 * (1-facing*2) * size;
+	target.y = y - 10*size;
+      }
+    if ( timer = 2 || timer = 3 )
+      {
+	target.x = x;
+	target.y = y - 25*size;
+      }
+    if ( timer = 4 )
+      {
+	target.x = x;
+	target.y = y - 23*size;
+      }
+	if ( timer = 5 )
+      {
+	target.x = x;
+	target.y = y - 27*size;
+      }
+	if ( timer = 6 )
+      {
+	target.x = x;
+	target.y = y - 14*size;
+      }
+	if ( timer >= 7 && timer <= 9 )
+      {
+	target.x = x;
+	target.y += 4*size;
+      }
+	if ( timer >= 10 && timer <= 29 )
+      {
+	target.x = x;
+	target.y = y;
+      }
+	  
+    if ( timer = 12 || timer = 18 || timer = 24 )
+      {
+	sound_play(b_sound);
+	create_projectile(1,361,0,0,8,1,punch2,obj_spark_hit2,0.8,0.8,-0.5,10,self.id,30,char_custom1);
+	proj.direction = 270;
+	proj.speed = 9;
+	laserblast = instance_create( x,y,obj_spark );
+	laserblast.sprite_index = laser_blast_sprite;
+	laserblast.image_xscale = 0.3 * (1-facing*2) * size;
+	laserblast.image_yscale = 0.3 * size;
+	laserblast.image_angle = 270 * (1-facing*2);
+	laserblast.image_speed = 0.9;
+	laserblast.x = x - 0.5 * (1-facing*2) * size;
+	laserblast.y = y - 20 * size;
+	laserblast.snap = self.id;
+      }
+    if ( timer = 29 ) {
+	create_throw_box(6,368,2,0,1,1,kick3,obj_spark_hit2,0.81 , 0.63 , 0.70 , 4.20,self.id,1);
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

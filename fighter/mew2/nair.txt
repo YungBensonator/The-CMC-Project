@@ -1,0 +1,176 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "nair";
+        image_speed = 0;
+        sprite_index = nair_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 45;
+        timer_speed = 1;
+}
+if timer < time {
+    switch ( timer )
+    {
+    case 4: image_index = 1; break;
+    case 8: image_index = 2; break;
+    case 12: image_index = 3; break;
+    case 16: image_index = 4; break;
+    case 20: image_index = 5; break;
+    case 24: image_index = 6; break;
+    case 28: image_index = 7; break;
+    case 31: image_index = 8; break;
+    case 33: image_index = 9; break;
+    }
+            if timer = 4 {
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3))
+                sound_play(nair_sound);
+                create_hitbox2(2,140-facing*100,3,0,3,3,shock1,obj_spark_shock,0.75,1.2,5,18,self.id,3,2);
+                create_hitbox(2,60+facing*60,2.5,0,3,3,shock1,obj_spark_shock,0.7,1.2,-3,18,self.id,3,2);
+                hitbox2.di = 0.5;
+                hitbox.di = 0.5;
+                }
+            if timer = 8 {
+                create_hitbox(1,40+facing*100,2.5,0,3,3,shock1,obj_spark_shock,0.7,1.2,-3,18,self.id,3,2);
+                create_hitbox2(1,140-facing*100,3,0,3,3,shock1,obj_spark_hit1,0.75,1.2,5,18,self.id,3,2);
+                hitbox2.di = 0.5;
+                hitbox.di = 0.5;
+                }
+            if timer = 12 {
+                create_hitbox2(2,160-facing*140,3,0,3,3,shock1,obj_spark_hit1,1,1.2,7,18,self.id,3,2);
+                create_hitbox(2,30+facing*120,2.5,0,3,3,shock1,obj_spark_shock,1.2,-5,18,self.id,3,2);
+                hitbox2.di = 0.5;
+                hitbox.di = 0.5;
+                }
+            if timer = 16 {
+                create_hitbox(2,40+facing*100,2.5,0,3,3,shock1,obj_spark_shock,0.75,1.2,-9,18,self.id,3,2);
+                create_hitbox2(2,140-facing*100,3,0,3,3,shock1,obj_spark_shock,0.95,1.2,7,18,self.id,3,2);
+                hitbox2.di = 0.5;
+                hitbox.di = 0.5;
+                }
+            if timer = 20 {
+                create_hitbox2(1,160-facing*140,3,0,3,3,shock1,obj_spark_hit1,0.95,1.2,7,18,self.id,3,2);
+                create_hitbox(1,30+facing*120,2.5,0,3,3,shock1,obj_spark_shock,0.75,1.2,-9,18,self.id,3,2);
+                hitbox2.di = 0.5;
+                hitbox.di = 0.5;
+                }
+            if timer = 24 {
+                create_hitbox(1,40+facing*100,2.5,0,3,3,shock1,obj_spark_shock,0.7,1.2,-9,18,self.id,3,2);
+                create_hitbox2(1,140-facing*100,3,0,3,3,shock1,obj_spark_hit1,0.7,1.2,7,18,self.id,3,2);
+                hitbox2.di = 0.5;
+                hitbox.di = 0.5;
+                }
+            if timer = 28 {
+				sound_stop(nair_sound);
+				sound_play(nair_sound2);
+                create_hitbox2(5,25+facing*130,6.5,4.5,5,7,shock3,obj_spark_shock,0.7,1.2,7,18,self.id,3,2);
+                create_hitbox(5,155-facing*130,6,4.5,4,7,shock3,obj_spark_shock,0.7,1.2,-9,18,self.id,3,2);
+                }
+            if air = 0 {
+                state_type="land";
+                if timer < 30 && timer > 4 {
+					sound_stop(nair_sound);
+                    create_hitbox2(5,17+facing*146,6.5,2.5,5,1,shock3,obj_spark_shock,1,1.2,7,18,self.id,3,2);
+                    create_hitbox(5,160-facing*140,6.75,2.5,4,1,shock3,obj_spark_shock,0.8,1.2,-9,18,self.id,3,2);
+                    hitbox2.remain = 1
+                    hitbox.remain = 1
+                }
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=12-2*(timer>=30); }
+
+                if timer >=4 && timer < 31{
+        if !instance_exists(nairblurwhiteshock1) && timer > 5{
+        nairblurwhiteshock1 = create_blur( x, y, self.id)
+        nairblurwhiteshock1.sprite_index = nair_eff1_sprite;
+        nairblurwhiteshock1.image_xscale = 0.102*( 1 - facing * 2)*size;
+        nairblurwhiteshock1.image_yscale = 0.102*size;
+        nairblurwhiteshock1.image_speed=1;
+        nairblurwhiteshock1.image_index=0;
+        nairblurwhiteshock1.x=x-0.78*(1-facing*2)*size;
+        nairblurwhiteshock1.y=y-24.18*size;
+        nairblurwhiteshock1.snap=self.id;
+        nairblurwhiteshock1.depth=depth-3;
+        nairblurwhiteshock1.image_alpha=1;
+        nairblurwhiteshock1.image_angle = random(360);}
+
+        if !instance_exists(nairblurblackshock){
+        nairblurblackshock = create_blur( x, y, self.id)
+        nairblurblackshock.sprite_index = nair_eff2_sprite;
+        nairblurblackshock.image_xscale = 0.153*( 1 - facing * 2)*size;
+        nairblurblackshock.image_yscale = 0.153*size;
+        nairblurblackshock.image_speed=1;
+        nairblurblackshock.image_index=0;
+        nairblurblackshock.x=x-5*(1-facing*2)*size;
+        nairblurblackshock.y=y-24.18*size;
+        nairblurblackshock.snap=self.id;
+        nairblurblackshock.depth=depth-2;
+        nairblurblackshock.image_alpha=1;
+        nairblurblackshock.image_angle = random(360);}
+
+        if !instance_exists(nairblurcircle){
+        nairblurcircle = create_blur( x, y, self.id)
+        nairblurcircle.sprite_index = nair_eff3_sprite;
+        nairblurcircle.image_xscale = 0.1785*( 1 - facing * 2)*size;
+        nairblurcircle.image_yscale = 0.1785*size;
+        nairblurcircle.image_speed=0;
+        nairblurcircle.image_index=0;
+        nairblurcircle.x=x-0.78*(1-facing*2)*size;
+        nairblurcircle.y=y-24.18*size;
+        nairblurcircle.snap=self.id;
+        nairblurcircle.depth=depth-1;
+        nairblurcircle.image_alpha=1;
+        nairblurcircle.glow=18;
+        nairblurcircle.alarm[0]=27;}
+                
+        if !instance_exists(nairblurpurpleshock){
+        nairblurpurpleshock = create_blur( x, y, self.id)
+        nairblurpurpleshock.sprite_index = nair_eff4_sprite;
+        nairblurpurpleshock.image_xscale = 0.085*( 1 - facing * 2)*size;
+        nairblurpurpleshock.image_yscale = 0.085*size;
+        nairblurpurpleshock.image_speed=0.5;
+        nairblurpurpleshock.image_index=0;
+        nairblurpurpleshock.x=x-0.78*(1-facing*2)*size;
+        nairblurpurpleshock.y=y-24.18*size;
+        nairblurpurpleshock.snap=self.id;
+        nairblurpurpleshock.depth=depth+1;
+        nairblurpurpleshock.image_alpha=1;
+        nairblurpurpleshock.image_angle = choose(0,90,180,270,45,135,225,315);}
+
+
+        if !instance_exists(nairblurwhiteshock2){
+        nairblurwhiteshock2 = create_blur( x, y, self.id)
+        nairblurwhiteshock2.sprite_index = nair_eff5_sprite;
+        nairblurwhiteshock2.image_xscale = 0.102*( 1 - facing * 2)*size;
+        nairblurwhiteshock2.image_yscale = 0.102*size;
+        nairblurwhiteshock2.image_speed=0.2;
+        nairblurwhiteshock2.image_index=0;
+        nairblurwhiteshock2.x=x-0.78*(1-facing*2)*size;
+        nairblurwhiteshock2.y=y-24.18*size;
+        nairblurwhiteshock2.snap=self.id;
+        nairblurwhiteshock2.depth=depth+2;
+        nairblurwhiteshock2.image_alpha=1;
+        nairblurwhiteshock2.loop=8;
+        //nairblurwhiteshock2.image_angle = irandom(360);
+        }
+        nairblurwhiteshock2.image_angle = irandom(360);
+                }
+
+                if timer =31{
+                with (nairblurwhiteshock1){instance_destroy();}
+                with (nairblurblackshock){instance_destroy();}
+                with (nairblurcircle){instance_destroy();}
+                with (nairblurpurpleshock){instance_destroy();}
+                with (nairblurwhiteshock2){instance_destroy();}
+                }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

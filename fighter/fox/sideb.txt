@@ -1,0 +1,195 @@
+if state_type = "run" || state_type = "stand" || state_type  = "jump" {
+        attack_type = "sideb";
+        temp = 0
+        image_speed = 0;
+		if ( air = 0 )
+		{
+        sprite_index = sideb_sprite;
+		}
+		if ( air > 0 )
+		{
+        sprite_index = sideb_air_sprite;
+		}
+        image_index=0;
+        timer = 0;
+        time = 48;
+        timer_speed=1;
+        sound_play(sideb_sound)
+        vspeed = 0;
+        if air = 0 {
+        hspeed = 0;
+        state_type = "air_attack";
+	}
+        else {
+        hspeed*=0.2;
+        state_type = "air_attack";
+	}
+        if ai && death_under
+        {
+        if x > nearest_edge.x
+            facing = 1
+        else 
+        facing = 0 }
+        air_move = 0;
+}
+if timer < 30 {
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity = 0;
+vspeed = 0;
+gravity_lock = 1;
+}
+
+	if ( timer = 0 )
+	{
+	flare = instance_create(x,y,obj_spark);
+	flare.sprite_index = sideb_flare_sprite;
+	flare.image_xscale = 0.4 * (1-facing*2) * size;
+	flare.image_yscale = 0.4 * size;
+	flare.image_speed = 0;
+	flare.x = x + 13 * (1-facing*2) * size;
+	flare.y = y - 10 * size;
+	flare.snap = self.id;
+	flare.alarm[0] = 20;
+	}
+	if ( timer >= 0 && air = 0 )
+	{
+	sprite_index = sideb_sprite;
+	}
+	if ( timer >= 0 && air > 0 )
+	{
+	sprite_index = sideb_air_sprite;
+	}
+	
+	if ( timer >= 0 && timer < 2 && air = 0 )
+	image_index = 0;
+	if ( timer >= 2 && timer < 4 && air = 0 )
+	image_index = 1;
+	if ( timer >= 4 && timer < 17 && air = 0 )
+	image_index = 2;
+	if ( timer = 17 && air = 0 )
+	image_index = 3;
+	if ( timer = 18 && air = 0 )
+	image_index = 4;
+	if ( timer = 19 && air = 0 )
+	image_index = 5;
+	if ( timer >= 20 && timer < 25 && air = 0 )
+	image_index = 6;
+	if ( timer >= 25 && timer < 27 && air = 0 )
+	image_index = 7;
+	if ( timer >= 27 && timer <= 48 && air = 0 )
+	image_index = 8;
+	
+	if ( timer = 0 && air > 0 )
+	image_index = 0;
+	if ( timer = 1 && air > 0 )
+	image_index = 1;
+	if ( timer = 2 && air > 0 )
+	image_index = 2;
+	if ( timer = 3 && air > 0 )
+	image_index = 3;
+	if ( timer >= 4 && timer < 18 && air > 0 )
+	image_index = 4;
+	if ( timer = 18 && air > 0 )
+	image_index = 5;
+	if ( timer = 19 && air > 0 )
+	image_index = 6;
+	if ( timer >= 20 && timer <= 48 && air > 0 )
+	image_index = 7;
+            if timer < 12
+                special = 0
+            if special = 1 && timer >= 12 && timer <= 19
+                temp = 1
+            if timer = 20 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing;
+                hspeed = (30-facing*60)*(1-temp*0.25);
+                if temp = 0 {
+					afterimage = instance_create(x,y,obj_spark);
+					afterimage.sprite_index = sideb_afterimage_sprite;
+					afterimage.image_xscale = 0.7 * (1-facing*2) * size;
+					afterimage.image_yscale = 0.7 * size;
+					afterimage.image_speed = 0.3;
+					afterimage.image_alpha = 0.8;
+					afterimage.depth = 1;
+                    sound_play(sideb_sound2);
+                    sound_play(sideb_voice);
+                    create_hitbox(4,55+facing*70,5.6,3,8,2,slash2,obj_spark_slash2,1.41 , 0.77 , 4.90 , 8.40,self.id,5,1);
+                    hitbox.hit_stun = 6; 
+                    hitbox.shield_stun = 0.3;
+                }
+            }
+			if ( timer >= 0 && timer <= 20 )
+			{
+			flare.image_xscale -= 0.02 * (1-facing*2);
+			flare.image_yscale -= 0.02;
+			flare.image_angle += 10 * (1-facing*2);
+			}
+			if ( timer >= 21 && timer <= 24 && temp = 0 )
+			{
+			illusionblur = instance_create(x - 5 * ( 1-facing*2 ) * size ,y - 10 * size,obj_spark);
+			illusionblur.sprite_index = sideb_blur_sprite;
+			illusionblur.image_xscale = 0.8 * (1-facing*2) * size;
+			illusionblur.image_yscale = 0.3 * size;
+			illusionblur.image_speed = 0;
+			illusionblur.image_alpha = 0.4;
+			illusionblur.depth = 1;
+			illusionblur.alarm[0] = 5;
+			}
+            if ( timer = 22 && temp = 0 )
+			{
+			afterimage2 = instance_create(x,y,obj_spark);
+			afterimage2.sprite_index = sideb_afterimage_sprite;
+			afterimage2.image_xscale = 0.7 * (1-facing*2) * size;
+			afterimage2.image_yscale = 0.7 * size;
+			afterimage2.image_speed = 0.3;
+			afterimage2.image_alpha = 0.8;
+			afterimage2.depth = 1;
+			}
+			if ( timer = 24 && temp = 0 )
+			{
+			afterimage3 = instance_create(x,y,obj_spark);
+			afterimage3.sprite_index = sideb_afterimage_sprite;
+			afterimage3.image_xscale = 0.7 * (1-facing*2) * size;
+			afterimage3.image_yscale = 0.7 * size;
+			afterimage3.image_speed = 0.3;
+			afterimage3.image_alpha = 0.8;
+			afterimage3.depth = 1;
+			}
+            if timer > 20 && timer < 25
+				{
+                hspeed=(28-facing*56)*(1-temp*0.925)
+                vspeed = 0;
+				}
+            if timer = 25 || (timer > 24 && timer < 30 && speed > 3) { 
+                hspeed = (3-facing*6)
+                vspeed = 0;
+            }
+             if timer = 27 && air = 0 
+                hspeed = 1-facing*2;
+             if timer = 29 && air = 0 && !temp
+                hspeed = 0;
+             if temp && air > 0 && timer >= 24 && timer <= 28 {
+                hspeed = 2-facing*4
+                vspeed = 0;
+             } 
+if timer > 25
+force_edge_grab = 1
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+	if ( air = 0 )
+	{
+	state_type = "stand";
+	vspeed = 0;
+	}
+	if ( air > 0 )
+	{
+	air = max_jumps;
+    state_type = "fall";
+    sprite_index = fall_sprite;
+	}
+    timer = 0;
+    time =-1;
+    temp = 0
+	hspeed = 0;
+}

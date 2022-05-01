@@ -1,0 +1,91 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.15;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 113;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        sound_play(b_charge_sound)
+        smash_power = 0
+        air_move=0
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+    if timer = 3 {
+        spark = instance_create(x,y-28,obj_spark)
+        spark.sprite_index = global.spark_sprite
+        spark.image_speed = 0.1
+        spark.image_xscale = 0.3
+        spark.image_yscale = 0.3
+        sound_play(b_voice)
+        sound_play(super)
+        }
+    if timer = 5 {
+        spark = instance_create(x,y-15,obj_spark)
+        spark.sprite_index = lightning_sprite
+        spark.image_speed = 0.5
+        spark.image_xscale = 0.75
+        spark.image_yscale = 0.75
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 39
+        }
+    if timer = 21 {
+        spark = instance_create(x,y-15,obj_spark)
+        spark.sprite_index = lightning_sprite
+        spark.image_speed = 0.5
+        spark.image_xscale = 0.75
+        spark.image_yscale = 0.75
+        spark.image_angle = 90
+        }
+    //if timer = 30 {
+        //effect_create_above(ef_ellipse,x,y+2,1,c_white) }
+    if image_index >= image_number - image_speed
+        image_speed = 0;
+    if timer = 46 {
+        sound_stop(b_charge_sound)
+        sound_play(final_smash_sound); 
+        spark = instance_create(x,y-15,obj_spark)
+        spark.sprite_index = shock_wave_sprite
+        spark.image_speed = 0.4
+        spark.image_xscale = 1.1
+        spark.image_yscale = 1
+        instance_create(x,y,obj_shakescreen)
+		}
+    if timer = 47 || timer = 53 || timer = 59 || timer = 65 || timer = 72 {   
+        create_hitbox2(9,120-facing*60,1,0,-1,6,magic2,obj_spark_shock,2.4,3.8,-11,17,self.id,5,6); 
+        hitbox2.shake_kb = 0
+        hitbox2.shake_ampl = 3.5
+        hitbox2.di = 0
+        create_hitbox(9,60+facing*60,1,0,-1,6,magic2,obj_spark_shock,2.4,3.8,11,17,self.id,5,6); 
+        hitbox.di = 0
+        hitbox.shake_kb = 0
+        hitbox.shake_ampl = 3.5
+        effect_create_below(ef_ellipse,x,y,1,c_white)        
+        }
+    if timer = 78 {
+        //effect_create_above(ef_flare,x,y-12,2,c_white)
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        create_hitbox(16,45+facing*90,9.6,8.8,-1,15,magic4,obj_spark_shock,4.4,3.9,0,17,self.id,6,6); 
+        hitbox.shake_type = 4
+        shaker.b = 0
+        shaker.size = 0.9
+        shaker.size_diff = 0.06
+    }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    sprite_index = stand_sprite;
+    state_type = "stand";
+    timer = 0;
+    time =135;
+    }

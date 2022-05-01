@@ -1,0 +1,69 @@
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    //sprite_index = attacker.id.shadow_ball_sprite
+    hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.3;
+    visible =1
+fart=create_homing_bubble(77.8,77.8,2,2,self.id,999);
+    }
+fart.x=x+1
+fart.y=y+1
+fart.visible=1
+moving_object = 1;
+
+
+if timer mod 3 = 0
+{
+    spark77 = instance_create(x,y-4,obj_spark_effect )
+    spark77.image_xscale *= 1.15
+    spark77.image_yscale *= 1.15
+    spark77.snap = self.id;
+    spark77.depth=-2
+
+}
+//Magic
+if ( place_meeting ( x , y , other.id ) )
+{
+if target.facing=1-facing && target.air=0 && target.state_type != "shielding"
+{
+  with target {
+            if state_type != "shielding" && air=0{
+                shield_hp = 150;
+                state_type = "broken";   
+                timer = 0;               // Enter broken shield stunned state
+                time = 110;
+                attack_type = "none"
+                sprite_index = broken_sprite;
+                speed = 0 }
+}
+}
+}
+///air
+if ( place_meeting ( x , y , other.id ) )
+{
+if target.facing=1-facing && target.air=1 && target.state_type != "shielding"
+{
+  		state_type = "tumble";
+		attack_type = "none";   
+                target=-1
+                speed = 0
+		  create_projectile(5,361,0,0,0.1,0.1,-1,-1,0.3,0.3,target.x,target.y,self.id,2,no_script);
+           	  proj.hit_stun = 15
+        	
+}
+}
+////Launch
+if ( place_meeting ( x , y , other.id ) )
+{
+        if target.state_type = "broken" || target.state_type = "air_flinch" || target.state_type = "flinch"
+	    create_projectile(5,30+facing*120,7.5,3.6,10,2,-1,obj_spark_effect2,0.8,0.8,target.x,target.y,self.id,3,no_script);
+      }      
+
+
+
+
+
+
+
+

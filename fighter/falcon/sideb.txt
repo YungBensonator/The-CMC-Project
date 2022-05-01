@@ -1,0 +1,169 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+        hspeed = 0;
+	slide = 0;
+        state_type = "air_attack";
+	if ( air == 0 ) state_type = "attack";
+        attack_type = "sideb";
+        image_speed = 0.35;
+        sprite_index = sideb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 65;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        air_move=0
+        temp = 0
+        temp2 = air
+	temp3 = 0
+        hover = 0
+        tempdirection = 0-facing*180
+        sound_play(sideb_sound1)
+}
+if timer < time {
+if timer > 30
+force_edge_grab = 1
+    state_type = "air_attack";
+	if ( air == 0 ) state_type = "attack";
+    if temp
+        gravity = 0
+    if timer < 77
+        vspeed = 0
+    if timer = 5 {
+        image_speed = 0.25
+        spark = instance_create(x-(10-facing*20)*size,y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.6*size
+        spark.image_yscale *= 0.6*size
+        spark.image_blend = c_red
+        spark.image_alpha = 0.8
+        spark = instance_create(x-(12-facing*24)*size,y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.6*size
+        spark.image_yscale *= 0.6*size
+        spark.image_blend = c_orange
+        spark.image_alpha = 0.6
+    }
+    if timer = 15 {
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing;
+        sound_play(sideb_sound2);
+        image_speed = 0.3
+        temp = 1
+        target = -99
+        proj = create_homing_bubble_hit(0.9,0.7,14,19 - air*7,self.id,19);
+    }
+    if timer = 40
+	hspeed = 2 - 4*facing
+    if timer >= 15 && timer <= 34 {
+        temp = 1
+    }
+    else
+        temp = 0
+}
+
+// Dashing
+if temp = 1 {
+    if vspeed > 0
+            vspeed = 0
+    if cos(timer*pi)>0.5
+        after_image(6,c_white,0.75)
+    hspeed = 5*size*(1-facing*2)
+    proj.x += x - xprevious
+    proj.y += vspeed
+    air_move = 0
+    if target > 0 {
+        if air = 0 {
+            hspeed = 2.5*size*(1-facing*2)
+            sprite_index = sideb_upper_sprite
+            image_index = 0.7
+            image_speed = 0.35
+            timer = 70
+            time = 102
+	    temp3 = 1
+        }
+        else {
+            hspeed =  2*size*(1-facing*2)
+            sprite_index = sideb_spike_sprite
+            image_index = 0.7
+            image_speed = 0.35
+            timer = 70
+            time = 102
+	    temp3 = 1
+        }
+    }
+}  
+
+if timer = 32 {
+    temp = 0
+    image_angle = 0
+    hspeed = (2-facing*4)*size
+}
+if timer = 74 {
+    if sprite_index = sideb_upper_sprite {
+        spark = instance_create(x + size*(1-facing*2)*14, y - size*18, obj_spark)
+        spark.sprite_index = sideb_effect_sprite
+        spark.image_xscale = size*0.75
+        spark.image_yscale = size*0.75
+        spark.image_speed = 0.5
+    }
+    else {
+        spark = instance_create(x + size*(1-facing*2)*14, y - size*10, obj_spark)
+        spark.sprite_index = sideb_effect_sprite
+        spark.image_xscale = size*0.75
+        spark.image_yscale = -size*0.75
+        spark.image_speed = 0.5
+    }
+}
+if (timer = (74 - (temp=0)*1)) { 
+    if sprite_index = sideb_upper_sprite {
+        sound_play(attack_sound3)
+        create_hitbox(10,90,4.3,5.92,18,7,fire3,obj_spark_fire1,1.4,1.3,7,12,self.id,8,3)
+        hitbox.hit_stun = 8
+        hitbox.shield_stun = -2.25
+        hspeed = 0
+	time = 90
+    }
+    else {
+        sound_play(attack_sound3)
+        create_hitbox(12,270,6.7,3.15,17,7,fire3,obj_spark_fire1,0.75,0.9,13,16,self.id,8,3)
+        hitbox.hit_stun = 2
+        vspeed = -4*size
+        air_move = 1
+	air = 1
+    }
+}
+if timer = 88
+    interrupt = 1
+if image_index >= image_number-image_speed
+    image_speed = 0 
+if vspeed > 0.12 && (collision_point(x,y,obj_platform,0,1) || collision_point(x,y,obj_floor,0,1)) && timer >= 39 - temp*4 {
+            state_type="land"
+            attacking = 0
+            temp = 0
+            image_angle = 0
+            attack_type="none"
+            sound_play(sideb_sound3)
+            instance_create(x,y,obj_down_impact)
+            sprite_index = land_sprite
+            image_index = 0
+            image_speed = 0
+            timer=0
+            time= 13
+}
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") || (air > 0 && temp2 < 0) {
+	attack_type = "none";
+	state_type = "stand";
+    if air > 0
+	{
+	if temp3 = 1
+    	state_type = "jump";
+	else
+	state_type = "fall"
+	sprite_index = jump_sprite;
+	image_index = 7;
+	image_speed = 0;
+	}
+    timer = 0;
+    time = 19;
+}

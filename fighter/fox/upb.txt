@@ -1,0 +1,417 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "upb";
+    timer = 0;
+    time = 81;
+    sound_play(upb_sound);
+    sprite_index = upb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    vspeed = 0;
+    air_move = 0;
+    temp = 0; //used for direction
+    temp_facing = 0; //used for direction
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+	case 21: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 27: image_index = 9; break;
+	case 30: image_index = 8; break;
+	case 33: image_index = 9; break;
+	case 36: image_index = 10; break;
+	case 39: image_index = 11; break;
+
+	case 42: image_index = 0; break;
+	case 44: image_index = 1; break;
+	case 46: image_index = 2; break;
+	case 48: image_index = 3; break;
+	case 50: image_index = 4; break;
+	case 52: image_index = 5; break;
+	case 54: image_index = 6; break;
+	case 55: image_index = 7; break;
+	case 57: image_index = 8; break;
+	case 59: image_index = 9; break;
+	case 61: image_index = 10; break;
+	case 63: image_index = 11; break;
+	case 65: image_index = 12; break;
+	case 67: image_index = 13; break;
+	case 69: image_index = 14; break;
+	case 71: image_index = 15; break;
+	case 73: image_index = 16; break;
+	case 75: image_index = 17; break;
+      }
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    gravity = 0;
+    gravity_lock = 1;
+    
+	if ( timer >= 0 && timer < 42 && !instance_exists ( firefox_charge ) )
+	{
+	firefox_charge = instance_create( x,y,obj_spark );
+	firefox_charge.sprite_index = firefox_charge_sprite;
+	firefox_charge.image_xscale = 0.7 * (1-facing*2) * size;
+	firefox_charge.image_yscale = 0.7 * size;
+	firefox_charge.image_speed = 0.7;
+	firefox_charge.image_alpha = 0.9;
+	firefox_charge.x = x + 3 * (1-facing*2) * size;
+	firefox_charge.y = y + 4 * size;
+	firefox_charge.snap = self.id;
+	}
+	
+    if ( timer = 8 || timer = 16 || timer = 24 || timer = 29 || timer = 34 )
+      {
+	create_hitbox(1.2,55+facing*70,2.5,0,8,2,fire2,obj_spark_fire1,0.63 , 0.98 , -2 , 13.30,self.id,4,5);
+	create_hitbox2(1.2,125-facing*70,2.5,0,8,2,fire2,obj_spark_fire1,0.63 , 0.98 , 3 , 13.30,self.id,4,5);
+        if timer >= 29
+            screen_shake(1.1,5)
+      }
+    if timer > 25
+	force_edge_grab = 1
+    if ( timer = 42 )
+      {
+	with ( firefox_charge ) instance_destroy();
+	if ( ai && ( offstage || ai_state = "recover" ) )
+	  {
+	    if ( y > nearest_edge.y )
+		moveup = 1;
+	    if ( x < nearest_edge.x )
+	      {
+		moveright = 1;
+		moveleft = 0;
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		moveleft = 1;
+		moveright = 0;
+	      }
+	  }
+	sound_play(upb_voice);
+	sound_play(upb_sound2);
+	sprite_index = upb_sprite2;
+	speed = 4.2*size;
+	if ( moveright && !moveup && !movedown )
+	  {
+	    direction = 0;
+	    facing = 0;
+	    temp = direction;
+	  }
+	if ( moveleft && !moveup && !movedown )
+	  {
+	    direction = 180;
+	    facing = 1;
+	    temp = direction;
+	  }
+	if ( !moveright && !moveleft && !movedown )
+	  {
+	    direction = 90;
+	    image_angle = 90 - facing*180;
+	    temp = direction;
+	  }
+	if ( movedown && !moveright && !moveleft )
+	  {
+	    direction = 270;
+	    image_angle = 270 - facing*180;
+	    temp = direction;
+	  }
+	if ( moveup && moveright )
+	  {
+	    direction = 45;
+	    image_angle = 45;
+	    facing = 0;
+	    temp = direction;
+	  }
+	if ( moveup && moveleft )
+	  {
+	    direction = 135;
+	    image_angle = 315;
+	    facing = 1;
+	    temp = direction;
+	  }
+	if ( movedown && moveright )
+	  {
+	    direction = 315;
+	    image_angle = 315;
+	    facing = 0;
+	    temp = direction;
+	  }
+	if ( movedown && moveleft )
+	  {
+	    direction = 225;
+	    image_angle = 45;
+	    facing = 1;
+	    temp = direction;
+	  }
+	if ( analog_control )
+	  {
+	    var dis, dir;
+	    dis = point_distance ( 0 , 0 , holdx , holdy );
+	    dir = point_direction ( 0 , 0 , holdx , holdy );
+	    if ( dis > 0.5 )
+	      {
+                var dd;
+                dd = round ( dir / 45 ) * 45;
+                if ( abs ( dir - dd ) < 14 )
+                  dir = dd;
+		direction = dir;
+		image_angle = dir;
+		temp = direction;
+		if ( dir < 85 || dir > 275 )
+		  facing = 0;
+		if ( dir > 95 && dir < 265 )
+		  facing = 1;
+	      }
+	  }
+	create_hitbox(11,55+facing*70,7.4,2.85,8,6,fire3,obj_spark_fire1,1.18 , 0.71 , 1.40 , 10.50,self.id,30,5);
+	hitbox.image_angle = temp;
+	temp_facing = facing;
+      }
+	if timer >= 42 && timer < 73 && !instance_exists ( firefox_launch )
+	{
+	firefox_launch = instance_create( x,y,obj_spark );
+	firefox_launch.sprite_index = firefox_launch_sprite;
+	firefox_launch.image_xscale = 0.35 * size;
+	firefox_launch.image_yscale = 0.35 * size;
+	firefox_launch.image_speed = 0.7;
+	firefox_launch.image_alpha = 0.9;
+	firefox_launch.image_angle = temp;
+	if ( temp = 0 )
+	{
+	firefox_launch.x = x + 5 * size;
+	firefox_launch.y = y - 10 * size;
+	}
+	if ( temp > 0 && temp < 90 )
+	{
+	firefox_launch.x = x + 6 * size;
+	firefox_launch.y = y - 15 * size;
+	}
+	if ( temp = 90 )
+	{
+	firefox_launch.x = x + 3 * size;
+	firefox_launch.y = y - 19 * size;
+	}
+	if ( temp > 90 && temp < 180 )
+	{
+	firefox_launch.x = x - 2 * size;
+	firefox_launch.y = y - 18 * size;
+	}
+	if ( temp = 180 )
+	{
+	firefox_launch.x = x - 5 * size;
+	firefox_launch.y = y - 14 * size;
+	}
+	if ( temp > 180 && temp < 270 )
+	{
+	firefox_launch.x = x - 6 * size;
+	firefox_launch.y = y - 10 * size;
+	}
+	if ( temp = 270 )
+	{
+	firefox_launch.x = x - 3 * size;
+	firefox_launch.y = y - 7 * size;
+	}
+	if ( temp > 270 )
+	{
+	firefox_launch.x = x + 3 * size;
+	firefox_launch.y = y - 6.5 * size;
+	}
+	firefox_launch.snap = self.id;
+	}
+	
+	if timer >= 42 && timer < 73
+	{
+	if ( timer mod 5 < 2 )
+	{
+	firefox_smoke = instance_create( x,y,obj_spark );
+	firefox_smoke.sprite_index = firefox_smoke_sprite;
+	firefox_smoke.image_xscale = 0.3 * size;
+	firefox_smoke.image_yscale = 0.3 * size;
+	firefox_smoke.image_speed = 0.8;
+	firefox_smoke.image_alpha = 0.7;
+	firefox_smoke.direction = temp + choose( random(30) , random(-30) );
+	firefox_smoke.depth = 1;
+	firefox_smoke.speed = -5;
+	if ( temp = 0 )
+	{
+	firefox_smoke.x = x - 15 * size;
+	firefox_smoke.y = y - 8 * size;
+	}
+	if ( temp > 0 && temp < 90 )
+	{
+	firefox_smoke.x = x - 10 * size;
+	firefox_smoke.y = y - 3 * size;
+	}
+	if ( temp = 90 )
+	{
+	firefox_smoke.x = x;
+	firefox_smoke.y = y - 4 * size;
+	}
+	if ( temp > 90 && temp < 180 )
+	{
+	firefox_smoke.x = x - 5 * size;
+	firefox_smoke.y = y - 12 * size;
+	}
+	if ( temp = 180 )
+	{
+	firefox_smoke.x = x - 5 * size;
+	firefox_smoke.y = y - 8 * size;
+	}
+	if ( temp > 180 && temp < 270 )
+	{
+	firefox_smoke.x = x;
+	firefox_smoke.y = y - 12 * size;
+	}
+	if ( temp = 270 )
+	{
+	firefox_smoke.x = x;
+	firefox_smoke.y = y - 8 * size;
+	}
+	if ( temp > 270 )
+	{
+	firefox_smoke.x = x - 14 * size;
+	firefox_smoke.y = y - 28 * size;
+	}
+	}
+	
+	if ( timer mod 5 < 2 )
+	{
+	firefox_debree = instance_create( x,y,obj_spark );
+	firefox_debree.sprite_index = firefox_debree_sprite;
+	firefox_debree.image_xscale = 0.24 * (1-facing*2) * size;
+	firefox_debree.image_yscale = 0.24 * size;
+	firefox_debree.image_speed = 0.8;
+	firefox_debree.image_alpha = 0.8;
+	firefox_debree.direction = temp + choose( random(30) , random(-30) );
+	firefox_debree.depth = 2;
+	firefox_debree.speed = -5;
+	if ( temp = 0 )
+	{
+	firefox_debree.x = x - 15 * size;
+	firefox_debree.y = y - 8 * size;
+	}
+	if ( temp > 0 && temp < 90 )
+	{
+	firefox_debree.x = x - 10 * size;
+	firefox_debree.y = y - 3 * size;
+	}
+	if ( temp = 90 )
+	{
+	firefox_debree.x = x;
+	firefox_debree.y = y - 4 * size;
+	}
+	if ( temp > 90 && temp < 180 )
+	{
+	firefox_debree.x = x - 5 * size;
+	firefox_debree.y = y - 12 * size;
+	}
+	if ( temp = 180 )
+	{
+	firefox_debree.x = x - 5 * size;
+	firefox_debree.y = y - 8 * size;
+	}
+	if ( temp > 180 && temp < 270 )
+	{
+	firefox_debree.x = x;
+	firefox_debree.y = y - 12 * size;
+	}
+	if ( temp = 270 )
+	{
+	firefox_debree.x = x;
+	firefox_debree.y = y - 8 * size;
+	}
+	if ( temp > 270 )
+	{
+	firefox_debree.x = x - 14 * size;
+	firefox_debree.y = y - 28 * size;
+	}
+	}
+	
+	}
+	
+    if ( timer >= 43 && timer <= 75 )
+      {
+	if timer < 50
+	speed *= 1.07
+	if timer < 60
+	speed *= 1.05
+	if timer < 68
+	speed *= 0.98
+	if timer < 76
+	speed *= 0.965
+	if timer = 43 {
+	if ( facing = temp_facing )
+	{
+	direction = temp;
+	hitbox.image_angle = temp;
+	firefox_launch.image_angle = temp;
+	firefox_launch.image_angle = temp;
+	}
+	else
+	  {
+	    if ( temp < 180 )
+		direction = 180 - temp;
+	    else
+		direction = 360 - temp;
+	  }
+	image_angle = direction - 180*facing;
+	}
+	if ( timer = 73 )
+	{
+	with ( firefox_launch ) instance_destroy();
+	}
+	if collision_point(x+sign(hspeed),y-sign(vspeed),obj_wall,1,1)
+	    hspeed = 0;
+      }
+	if ( timer = 77 && air = 0 )
+	{
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 12;
+	sprite_index = land_sprite;
+	}
+	
+    if ( vspeed > 2 && ( on_floor || on_platform ) )
+      {
+	if instance_exists ( firefox_launch )
+	{
+	with ( firefox_launch ) instance_destroy();
+	}
+	if ( hitbox > 0 )
+	with ( hitbox )
+	    instance_destroy();
+	image_angle = 0;
+	state_type = "air_flinch";
+	attack_type = "none";
+	timer = 0;
+	time = 12;
+	sprite_index = flinch_sprite;
+	image_speed = 0;
+	image_index = 1;
+	vspeed = -3*size;
+	instance_create(x,y+1,obj_down_impact);
+	shaker = instance_create(x,y,obj_shakescreen2);
+	shaker.ampl = 2;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "fall";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    speed *= 0.6;
+  }

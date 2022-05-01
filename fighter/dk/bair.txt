@@ -1,0 +1,70 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0;
+        sprite_index = bair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 31;
+        timer_speed=1;
+}
+if timer < time && state_type = "air_attack" {
+            attacking = 0;
+            state_type = "air_attack";
+			switch ( timer ) {
+			case 1: image_index = 1; break;
+			case 3: image_index = 2; break;
+			case 5: image_index = 3; break;
+			case 7: image_index = 4; break;
+			case 9: image_index = 5; break;
+			case 14: image_index = 6; break;
+			case 17: image_index = 7; break;
+			case 20: image_index = 8; break;
+			case 23: image_index = 9; break;
+			case 26: image_index = 10; break;
+			case 29: image_index = 11; break;
+			}
+            if timer = 7 {
+                sound_play(swing_sound2);
+                play_attack_voice()
+                create_hitbox(11,144-facing*108,5,6.4,16,9,kick3,obj_spark_hit2,1.15,0.75,-26,13,self.id,10,2);
+				var burst;
+    //78, 36
+	burst = instance_create(place_x(5)+x,place_y(20)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		hitbox.hit_stun = 12
+            }
+			if timer = 9
+            {
+            hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * -28
+            hitbox.hitbox_y = size * 24
+            }
+            if timer = 11 {
+                image_speed = 0
+                hitbox.damage = 7*size;
+                hitbox.kbg = 2.4*size;
+                hitbox.shield_damage = round(10*size);
+                hitbox.hitlag_frames = round(7*size);
+                hitbox.sfx = kick2;
+            }
+        if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=9; 
+        }
+}  
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        
