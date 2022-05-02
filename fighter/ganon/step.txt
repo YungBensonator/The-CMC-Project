@@ -1,0 +1,190 @@
+if sprite_index = stand_sprite || sprite_index = walk_sprite || sprite_index = jump_sprite || sprite_index = fall_sprite
+	image_speed = 0.185;
+
+
+if (sprite_index = fall_sprite || sprite_index = jump_sprite) && image_index >= 4.7
+	image_index = 0;
+
+if (sprite_index = jump_sprite) && vspeed > 0
+	sprite_index = fall_sprite;
+
+//if instance_exists(ganondummy){
+      	ganondummy.image_xscale = .75*size*(1-2*facing);
+      	ganondummy.image_yscale = .75*size;
+	ganondummy.x = x;
+	ganondummy.y = y;
+      	ganondummy.bind = self.id;
+
+if ganondummy.image_index >= 7.7
+	ganondummy.image_index = 0;
+
+if state_type = "air_attack" || state_type = "special" || floattemp != 0{
+with(ganondummy)
+instance_destroy();
+}
+
+//}
+
+///////////////////////////////////////////// my edits start
+
+floatspeedv = 4;
+floatspeedh = 4;
+
+//if state_type = "land" && floattemp = 0 
+	//visible = 1;
+
+if (( (moveup && special) && attack_type != "downb" && state_type != "attack" && floattime > 0 && floattemp != 0) && state_type != "tumble" && state_type != "air_flinch" && state_type != "edge" && state_type != "grabbed" && state_type != "dodge" && state_type != "air_dodge" && state_type != "ukemi" && state_type != "locked" && state_type != "broken" && sprite_index != fall_sprite && sprite_index != flinch_sprite )
+{
+	//sound_play(uspec_sound);
+	//sound_play(taunt_voice2);
+	vspeed = -1;
+	floattemp = 0;
+} 
+
+if (state_type = "flinch" || state_type = "air_flinch" || state_type = "tumble" || state_type = "edge" || state_type = "grabbed" || state_type = "out" || state_type = "respawn" || state_type = "entry" || state_type = "land")// || (air = 0 && floattemp = 0))
+{
+		floattemp = 1;
+}
+
+
+if floattemp = 0 
+{ 
+
+	//if !instance_exists(ganondummy) && state_type != "air_attack" && state_type != "special"{
+      	//ganondummy = instance_create(x,y,obj_spark);
+      	ganondummy.sprite_index = walk_sprite;
+      	ganondummy.image_speed = 0.185;
+      	ganondummy.image_xscale = .75*size*(1-2*facing);
+      	ganondummy.image_yscale = .75*size;
+      	ganondummy.bind = self.id;
+	ganondummy.number = number;
+	ganondummy.use_palette = number;
+	ganondummy.depth = depth;
+	//}
+
+	if floattime = 70
+		sound_play(float_sound);
+
+	//if (state_type = "air_attack" || state_type = "special")
+		//visible = 1;
+	//else
+		//visible = 0;
+
+	if (taunt)
+	{
+	attack_type = "taunt";
+	}
+	if (shieldup = 1)
+	{
+		//visible = 1;
+		floattemp = 1;
+	}
+
+	gravity = 0;
+    gravity_lock = 1;
+	if moveup
+	{
+	vspeed -= 0.2
+	}
+	if movedown
+	{
+	vspeed += 0.2
+	}
+	if moveleft
+	{
+	hspeed -= 0.16
+	}
+	if moveright
+	{
+	hspeed += 0.16
+	}
+	if (!moveright || !moveleft)
+	{
+		if hspeed > 0
+		{
+		hspeed -= 0.1;
+		}
+		if hspeed < 0
+		{
+		hspeed += 0.1;
+		}
+	}
+		if (!moveup || !movedown )
+	{
+		if vspeed < 0
+		{
+		vspeed += 0.1; 
+		}
+		if vspeed > 0
+		{
+		vspeed -= 0.1; 
+		}
+	}
+	if hspeed > floatspeedh
+	{
+		hspeed = floatspeedh
+	}
+	if vspeed > floatspeedv
+	{
+		vspeed = floatspeedv
+	}
+		if hspeed < -floatspeedh
+	{
+		hspeed = -floatspeedh
+	}
+	if vspeed < -floatspeedv
+	{
+		vspeed = -floatspeedv
+	}
+}
+
+if air > 0 && floattemp = 0
+{
+floattime -= 1
+}
+
+
+if ( sprite_index == jump_sprite && floattemp == 0 )
+{
+	sprite_index = hover_sprite;
+}
+///////////////////////////////////////////// my edits stop
+
+if air = 0 
+{
+	candash = 1 + kaioken;
+	floattime = 70; 
+	if (moveup != 1) { floattemp = 1;}
+}
+
+if floattime <= 0 && air > 0 
+{
+	floattemp = 2;
+}
+
+
+if ( sprite_index == mid_jump_sprite )
+  {
+  image_index = 1;
+  image_speed = 0;
+  if ( timer < 20 )
+    sprite_angle = ( 360 - 18 * timer ) * ( 1 - facing * 2 );
+    else
+    sprite_index = fall_sprite;
+  if ( attack_type != "none" )
+    sprite_angle = 0;
+  }
+if ( sprite_index = run_sprite )
+    image_speed = 0.4;//image_speed = 0.2;
+if (hover_timer = 4) {
+sound_play(float_sound)
+}
+if ( ( hover_timer >= hover_time - 1 ) || (state_type != "jump" && state_type != "fall" ) || state_type = "air_attack")
+{
+sound_stop(float_sound);
+}
+
+/*if ( attack_type == "final_smash" )
+  palu = 0;
+  else
+  palu = 1;*/

@@ -1,0 +1,91 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "usmash";
+    timer = 0;
+    time = 64;
+    sprite_index = usmash_sprite;
+    image_speed = 0;
+    image_index = 0;
+    charge_frame = 10;
+    hspeed = 0;
+	create_hurtbox_precise(self.id,66,usmash_mask)
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: sound_play(sword_sound1); image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 16: image_index = 5; break;
+	case 17: image_index = 6; break;
+	case 18: image_index = 7; break;
+	case 19: image_index = 8; break;
+	case 22: image_index = 9; break;
+	case 25: image_index = 10; break;
+	case 28: image_index = 11; break;
+	case 32: image_index = 12; break;
+	case 37: image_index = 13; break;
+	case 43: image_index = 4; break;
+	case 46: image_index = 3; break;
+	case 49: image_index = 2; break;
+	case 52: image_index = 15; break;
+	case 57: image_index = 1; break;
+	case 60: image_index = 0; break;
+      }
+
+    if ( timer = 16 )
+      {
+	play_attack_voice();
+	create_hitbox(8,270,7.3,0,12,6,shock2,obj_spark_shock,0.66 , 1.19 , 2.25 , 150,self.id,7,2);
+	sound_play(thunder_sound);
+	sound_play(ball_hit_sound);
+      }
+    if ( timer = 17 )
+      {
+	hitbox.hitbox_y = 124.50*size;
+      }
+    if ( timer = 18 )
+      {
+	hitbox.hitbox_y = 99.75*size;
+      }
+    if ( timer = 19 )
+      {
+	create_hitbox(18,angle_correct(90),6.2,7.2,30,12,shock3,obj_spark_shock,1.17,1.04,3,69,self.id,18,3);
+	create_hitbox2(10,angle_correct(115),6,6.2,20,8,shock1,obj_spark_shock,1,1.70,-8,25.50,self.id,18,1);
+	create_hitbox3(10,angle_correct(65),6,6.2,20,8,shock1,obj_spark_shock,1,1.70,8,25.50,self.id,18,1);
+	screen_shake(6,12);
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = 1-facing;
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	image_xscale = image_xscale+0.20*(1-2*facing);
+      }
+    if ( timer  = 24 )
+    {
+    hitbox.damage = 7*size;
+	hitbox.kbg = 5*size;
+	hitbox2.damage = 4*size;
+	hitbox2.bkb = 4*size;
+	hitbox3.damage = 4*size;
+	hitbox3.bkb = 4*size;
+    }
+	if ( timer = 32 )
+	{
+	hitbox.damage = 6 * size;
+	hitbox.sfx = shock1;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+	sprite_index = stand_sprite;
+	image_index = 0;
+    timer = 0;
+    time = -1;
+  }
