@@ -1,0 +1,251 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+    state_type = "attack";
+    attack_type = "stilt";
+    timer = 0;
+    time = 24;
+    sprite_index = monkey_stilt_sprite;
+    image_speed = 0;
+    image_index = 1;
+    hspeed = 0;
+	transformspark = instance_create(x - 1 + facing * 2 * size,y-8 * size,obj_spark);
+	transformspark.sprite_index = b_transform_effect_sprite;
+	transformspark.image_index = 0
+	transformspark.image_speed = 1.5
+	transformspark.depth = -6;
+	transformspark.snap = self.id
+	transformspark.image_xscale = 0.2 * size
+	transformspark.image_yscale = 0.2 * size
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 1: image_index = 2; break;
+	case 2: image_index = 3; break;
+	case 4: image_index = 4; break;
+	case 6: image_index = 5; image_xscale *= 1.1; image_yscale *= 1.1; break;
+	case 10: image_index = 10; break;
+	case 12: image_index = 11; break;
+	case 14: image_index = 12; break;
+	case 16: image_index = 13; break;
+	case 18: image_index = 0; break;
+      }
+	if ( timer >= 0 && timer <= 10 )
+	{
+	hspeed = (0.8-facing*1.6) * size;
+	}
+	if ( timer = 6 )
+    {
+	sound_play(attacksnd2);
+	create_hitbox(3,145-facing*110,3.2,0,8,6,kick2,obj_spark_hit1,0.7,0.3,11,5,self.id,5,1);
+	hitbox.weight_kb = 1
+	hitbox.hit_stun = 8
+    }
+	if timer > 16 && timer < 24 && attacking {
+	if moveup {
+	timer = 100
+        time = 128;
+    	sprite_index = monkey_utilt_sprite;
+    	image_speed = 0;
+    	image_index = 0;
+    	hspeed = 0;
+		}
+	else if movedown {
+	timer = 200
+        time = 234;
+    	sprite_index = monkey_dtilt_sprite;
+    	image_speed = 0;
+    	image_index = 0;
+    	hspeed = 0;
+		}
+	else if facing && moveleft {
+	timer = 400
+		time = 450;
+		sprite_index = monkey_dash_attack_sprite;
+    	image_speed = 0;
+    	image_index = 0;
+    	hspeed = 0;
+	}
+	else if !facing && moveright {
+	timer = 400
+		time = 450;
+		sprite_index = monkey_dash_attack_sprite;
+    	image_speed = 0;
+    	image_index = 0;
+    	hspeed = 0;
+		}
+	else {
+	timer = 300
+        time = 321;
+    	sprite_index = monkey_jab_sprite;
+    	image_speed = 0;
+    	image_index = 1;
+    	hspeed = 0;
+	}
+	}
+
+if ( timer > 99 )
+  {
+    switch ( timer )
+      {
+	case 104: image_index = 1; break;
+	case 106: image_index = 2; shakey = 2; break;
+	case 107: shakey = 0; break;
+	case 108: image_index = 3; break;
+	case 111: image_index = 4; break;
+	case 112: shakey = 2; break;
+	case 113: image_index = 5; shakey = 0; break;
+	case 114: shakey = 2; break;
+	case 115: image_index = 6; shakey = 0; break;
+	case 116: shakey = 2; break;
+	case 117: image_index = 7; shakey = 0; break;
+	case 120: image_index = 8; break;
+	case 122: image_index = 9; break;
+	case 124: image_index = 0; break;
+      }
+
+    if ( timer = 108 )
+      {
+	sound_play(attacksnd1)
+	create_hitbox(6,105-facing*30,5,4,20,5,slash1,obj_spark_hit1,0.5,1,5,24,self.id,3,1);
+	hitbox.hit_stun = 11
+      }
+    if timer = 121
+	interrupt = 1
+  }
+  }
+if ( timer > 199 )
+  {
+    switch ( timer )
+      {
+	case 202: image_index = 1; break;
+	case 204: image_index = 2; break;
+	case 206: image_index = 3; image_yscale *= 1.1; image_xscale *= 1.1; break;
+	case 210: image_index = 4; break;
+	case 212: image_index = 5; break;
+	case 214: image_index = 6; break;
+	case 216: image_index = 7; break;
+	case 218: image_index = 8; break;
+	case 220: image_index = 9; break;
+	case 222: image_index = 10; break;
+	case 224: image_index = 11; break;
+      }
+	if ( timer = 204 || timer = 218 )
+	{
+	sound_play(attacksnd1)
+	} 
+    if ( timer = 206 )
+    {
+	create_hitbox(5,35+facing*110,1,0,11,6,slash1,obj_spark_slash1,0.7,0.3,18,3,self.id,2,1);
+	hitbox.hit_stun = 12;
+	hitbox.di = 0;
+    }
+	if ( timer = 221 )
+	{
+	create_hitbox(5,35+facing*120,6.2,0.2,13,6,slash1,obj_spark_slash1,0.7,0.3,18,3,self.id,2,1);
+	hitbox.hit_stun = 8
+	hitbox.weight_kb = 1
+	}
+  }
+if ( timer > 299 )
+  {
+    switch ( timer )
+      {
+	case 302: image_index = 2; break;
+	case 304: image_index = 3; break;
+	case 305: image_index = 4; break;
+	case 306: image_index = 5; break;
+	case 309: image_index = 6; break;
+      }
+
+    if ( timer = 304 )
+      {
+	sound_play(attacksnd1)
+	create_hitbox(7,47+facing*86,5.85,2,17,5,slash1,obj_spark_hit1,0.8,0.8,18,6,self.id,6,1);
+	hitbox.hit_stun = 12
+      }
+    if timer = 319
+	interrupt = 1
+  }
+if ( timer > 399 )
+  {
+switch ( timer )
+    {
+	case 400: sprite_index = monkey_dash_attack_sprite; image_index = 1; break;
+	case 408: image_index = 2; break;
+	case 410: image_index = 3; break;
+	case 412: image_index = 4; break;
+	case 414: image_index = 5; break;
+	case 416: image_index = 3; break;
+	case 418: image_index = 4; break;
+	case 420: image_index = 5; break;
+	case 422: image_index = 3; break;
+	case 424: image_index = 4; break;
+	case 426: image_index = 5; break;
+	case 428: image_index = 3; break;
+	case 430: image_index = 4; break;
+	case 432: image_index = 5; break;
+	case 434: image_index = 3; break;
+	case 436: image_index = 4; break;
+	case 438: image_index = 6; break;
+	case 441: image_index = 7; break;
+	case 444: image_index = 8; break;
+	}
+    if ( timer = 410 )
+      {
+	sound_play(attacksnd2);
+	sound_play(bluefireball_sound);
+	create_hitbox(11,50+facing*80,8,4.6,10,5,fire1,obj_spark_fire1,0.8,0.55,6,9,self.id,27,2);
+	hitbox.hit_stun = 15
+	fireball = instance_create(x-2*size*(1-facing*2),y-11*size,obj_spark);
+	fireball.sprite_index = blue_fireball_sprite;
+	fireball.image_index = 0;
+	fireball.image_xscale = 1-facing*2;
+	fireball.image_speed = 0.5;
+	fireball.image_alpha = 0.8;
+	fireball.depth = -2;
+	fireball.snap = self.id;
+      }
+	if timer > 410 {
+	fireball.x = x-2*size*(1-facing*2)
+	fireball.y = y-11*size
+	}
+	if ( timer >= 411 && timer <= 437 )
+	{
+	hspeed = (6.5-facing*13) * size;
+	}
+	if ( timer >= 438 && timer <= 444 )
+	{
+	hspeed = (4.5-facing*9) * size;
+	}
+	if ( timer = 445 )
+	{
+	hspeed = (2.5-facing*5) * size;
+	}
+	if ( timer = 446 )
+	{
+	hspeed = (1-facing*2) * size;
+	}
+	if ( timer = 447 )
+	{
+	hspeed = 0;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+	transformspark = instance_create(x - 1 + facing * 2 * size,y-13 * size,obj_spark);
+	transformspark.sprite_index = b_transform_effect_sprite;
+	transformspark.image_index = 0
+	transformspark.image_speed = 1.5
+	transformspark.depth = -6;
+	transformspark.snap = self.id
+	transformspark.image_xscale = 0.3 * size
+	transformspark.image_yscale = 0.3 * size
+    timer = 0;
+    time = -1;
+  }

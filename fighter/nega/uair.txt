@@ -1,0 +1,94 @@
+if ( state_type == "jump" )
+{
+vspeed -= 0.1;
+state_type = "air_attack";
+attack_type = "uair";
+image_speed = 0;
+image_index = 0;
+sprite_index = harpy_uair_sprite;
+timer = 0;
+time = 34;
+timer_speed = 1;
+transformspark = instance_create(x + 2 - facing * 4 * size,y-13 * size,obj_spark);
+transformspark.sprite_index = b_transform_effect_sprite;
+transformspark.image_index = 0
+transformspark.image_speed = 1.5
+transformspark.depth = -6;
+transformspark.snap = self.id
+transformspark.image_xscale = 0.2 * size
+transformspark.image_yscale = 0.2 * size
+}
+switch ( timer )
+{
+case 2: shakey = -3; image_index = 1; break;
+case 4: shakey = -5; image_index = 2; break;
+case 6: shakey = -7; image_index = 3; break;
+case 8: shakey = -9; image_index = 4; image_xscale *= 1.1; image_yscale *= 1.1; break;
+case 11: image_index = 5; break;
+case 13: image_index = 6; break;
+case 15: image_index = 7; break;
+case 17: image_index = 8; image_xscale *= 1.1; image_yscale *= 1.1; break;
+case 20: image_index = 9; break;
+case 25: shakey = -7; image_index = 10; break;
+case 27: shakey = -5; break;
+case 27: shakey = -3; break;
+case 31: shakey = 0; image_index = 11; break;
+}
+
+if ( timer = 8 )
+{
+sound_play(attacksnd2);
+create_hitbox(5,90,1.6,0,5,4,slash1,obj_spark_slash3,0.8,0.6,8,36,self.id,8,2);
+hitbox.di = -1
+}
+
+if ( timer = 17 )
+{
+sound_play(attacksnd2);
+create_hitbox(5,80+facing*20,4.95,7.05,18,9,slash3,obj_spark_slash3,0.8,0.6,8,36,self.id,7,2);
+hitbox.hit_stun = 6
+}
+
+if ( air = 0 )
+{
+state_type = "land";
+attack_type = "none";
+shakey = 0
+timer = 0;
+time = 14;
+sprite_index = land_sprite;
+image_index = 0;
+transformspark = instance_create(x - 1 + facing * 2 * size,y-13 * size,obj_spark);
+transformspark.sprite_index = b_transform_effect_sprite;
+transformspark.image_index = 0
+transformspark.image_speed = 1.5
+transformspark.depth = -6;
+transformspark.snap = self.id
+transformspark.image_xscale = 0.3 * size
+transformspark.image_yscale = 0.3 * size
+}
+
+if ( timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+shakey = 0
+	state_type = "jump";
+	sprite_index = mid_jump_sprite;
+	image_index = 15;
+	timer = 0;
+	transformspark = instance_create(x - 1.5 + facing * 3 * size,y-15 * size,obj_spark);
+	transformspark.sprite_index = b_transform_effect_sprite;
+	transformspark.image_index = 0
+	transformspark.image_speed = 1.5
+	transformspark.depth = -6;
+	transformspark.snap = self.id
+	transformspark.image_xscale = 0.3 * size
+	transformspark.image_yscale = 0.3 * size
+    time =-1;
+  }
+  
+if (  hitbox.hit > 0 )
+      {
+	gravity = 0.9;
+	vspeed = -0.1;
+	  }	

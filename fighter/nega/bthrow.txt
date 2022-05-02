@@ -1,0 +1,74 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "bthrow";
+  image_speed = 0;
+  image_index = 1;
+  sprite_index = bthrow_sprite;
+  timer = 0;
+  time = 28;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+switch ( timer )
+{
+case 2: image_index = 2; break;
+case 4: image_index = 3; break;
+case 6: image_index = 4; break;
+case 22: image_index = 5; break;
+case 25: image_index = 6; break;
+}
+if ( timer = 0 )
+{
+target.x = x + 16 * size * (1-facing*2);
+target.y = y;
+}
+if ( timer = 1 )
+{
+target.x = x + 11 * size * (1-facing*2);
+target.y = y;
+}
+if ( timer = 2 )
+{
+target.x = x + 6 * size * (1-facing*2);
+target.y = y;
+}
+if ( timer = 3 )
+{
+target.x = x + 1 * size * (1-facing*2);
+target.y = y;
+}
+if ( timer = 4 )
+{
+target.x = x - 4 * size * (1-facing*2);
+target.y = y;
+}
+if ( timer = 5 )
+{
+target.x = x - 9 * size * (1-facing*2);
+target.y = y;
+}
+
+if ( timer = 6 )
+{
+target.x = x - 16 * size * (1-facing*2);
+target.y = y;
+play_attack_voice();
+sound_play(attacksnd3);
+create_throw_box(11,145-facing*110,6,5.15,16,8,kick3,obj_spark_hit3,0.6,0.6,-9,14,self.id,15);
+spark = instance_create(x - 10 * (1-facing*2) * size,y - 15 * size, obj_spark_shockwave)
+spark.image_xscale = 0.05 * size;
+spark.image_yscale = 0.05 * size;
+spark.depth = -1;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

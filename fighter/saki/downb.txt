@@ -6,7 +6,7 @@ if state_type = "jump" || state_type = "run" || state_type = "stand" || state_ty
         sprite_index =downb_sprite;
         image_index=-0.3;
         timer = 0;
-        time = 40;
+        time = 35;
         timer_speed=1;
         special = 0;
         intangible = 0
@@ -14,9 +14,10 @@ if state_type = "jump" || state_type = "run" || state_type = "stand" || state_ty
         if timer < time {
             if timer = 1
                 sound_play(attack_voice2);
-            if timer = 4 {
+            if timer = 2 {
                 sound_play(downb_sound);
-                create_hitbox(3,130-facing*80,6.1,0.25,0,4,fire2,obj_spark_shock,0.85,0.85,24,15,self.id,25,1);
+                //create_hitbox(3,130-facing*80,6.1,0.25,0,4,fire2,obj_spark_shock,0.85,0.85,24,15,self.id,20,1);
+				create_hitbox(3,105-facing*30,6,0.25,0,4,shock2,obj_spark_shock,1.05,0.85,27,15,self.id,20,1);
                 hitbox.di = 0.5
                 hitbox.reflect = 1
             }
@@ -37,15 +38,9 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     time =-1;
 }
         
-if ( timer <= 29 && air < max_jumps-1 )
-{
-    interrupting = 1
-    if ai
-        movejump = 1
-    if movejump = 1 
-{
-    state_type = "jump"
-    intangible = 0
-    time = 5
-}
-}
+if ( ((timer >= 4 || temp > 0 || hitbox.hit > 0 ) && timer < 22) && air<max_jumps-1 && (movejump || (ai && ( random (10) + ai_level ) >= 11)) )
+      {
+		special = 0;
+		CAN_shield = 0;
+		CAN_jump = 2;
+      }
