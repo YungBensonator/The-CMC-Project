@@ -1,0 +1,72 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "stilt";
+    timer = 0;
+    time = 38;
+    sprite_index = stilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	create_hurtbox_precise(self.id,999,stilt_mask)
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 14: image_index = 3; break;
+	case 18: image_index = 4; break;
+	case 22: image_index = 5; break;
+	case 130:
+	case 26: image_index = 6; break;
+	case 134:
+	case 30: image_index = 7; break;
+	case 103: sound_play(sword_sound1); image_index = 9; break;
+	case 105: hspeed = 8*(1-2*facing); image_index = 10; break;
+	case 108: hspeed = 0; image_index = 11; break;
+	case 110: image_index = 9; break;
+	case 112: image_index = 10; break;
+	case 113: image_index = 12; break;
+	case 115: image_index = 13; break;
+	case 118: image_index = 14; break;
+	case 122: image_index = 15; break;
+	case 125: image_index = 16; break;
+      }
+
+    if ( timer = 8 )
+	sound_play(attack_sound2);
+    if ( timer = 10 )
+      {
+	sound_play(attacksnd3);
+	create_hitbox(8,35+facing*110,5.3,0,10,5,kick3,obj_spark_hit1,0.75,0.5,14,20.5,self.id,12,2);
+	create_hitbox2(8,35+facing*110,4.9,0,10,5,kick3,obj_spark_hit2,0.4,0.4,27,20,self.id,12,2);
+      }
+    if ( timer = 112 )
+      {
+	sound_play(attack_sound3);
+	sound_play(sword_sound4);
+	sound_play(attacksnd4);
+	create_hitbox(10,angle_correct(40),6.8,8.5,8,5,slash3,obj_spark_hit4,1.15,1.75,31,19,self.id,6,3);
+	create_hitbox2(10,angle_correct(40),6.8,8.5,8,5,slash3,obj_spark_hit4,1,1,55,19,self.id,6,3);
+      }
+
+if (attacking || smash) && timer > 22 && timer < 100{
+	hitbox.hit = 0
+	smash = 0
+	time = 141
+	timer = 100
+	image_index = 8;
+}
+
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

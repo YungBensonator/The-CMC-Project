@@ -1,0 +1,138 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0.25;
+  image_index = 0;
+  sprite_index = final_smash_sprite;
+  timer = 0;
+  time = 256;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  //image_blend = c_black;
+  spark = -1;
+  temp_no_hurtbox = 1;
+  }
+  
+gravity_lock = 1;
+speed = 0;
+
+//if ( timer < 36 )
+  //image_blend = c_black;
+/*if ( timer >= 36 && timer < 40 )
+  {
+  image_blend = merge_color ( c_black , c_white , ( timer - 36 ) * 0.25 );
+  }
+if ( timer == 40 )
+  {
+  image_blend = c_white;
+  }*/
+
+if timer = 36
+	sound_play(fs_sound);
+
+if ( timer == 60 )
+  {
+		sound_play(fs_voice);
+  create_hitbox ( 8 , 30 + facing * 120 , 4 , 2 , -1 , 6 , kick3 , obj_spark_hit1 , 2.49 , 3.28 , -7.25 , 41.25 , self.id , 32 , 6 );
+  image_index = 15;
+  image_speed = 0;
+  }
+switch ( timer )
+  {
+  case 64: image_index = 16; break;
+  case 68: image_index = 17; break;
+  case 72: image_index = 18; break;
+  case 76: image_index = 19; break;
+  case 80: image_index = 20; break;
+  case 83: image_index = 21; break;
+  case 86: image_index = 22; break;
+  case 88: image_index = 23; break;
+  case 90: image_index = 24; break;
+  case 92: image_index = 25; break;
+  case 94: image_index = 26; break;
+  case 124: image_index = 27; break;
+  case 200: image_index = 28; break;
+  case 204: image_index = 29; break;
+  case 208: image_index = 30; break;
+  case 212: image_index = 31; break;
+  case 216: image_index = 32; break;
+  case 220: image_index = 33; break;
+  case 224: image_index = 34; break;
+  case 228: sprite_index = broken_sprite; image_index = 0; break;
+  case 233: image_index = 1; break;
+  case 238: image_index = 2; break;
+  case 243: image_index = 3; break;
+  case 248: sprite_index = final_smash_sprite; image_index = 35; break;
+  case 252: image_index = 36; break;
+  }
+//if ( timer == 210 ) image_blend = c_gray;
+//if ( timer == 211 ) image_blend = c_black;
+
+if ( timer == 72 )
+{
+hitbox.hitbox_x = size * (5.25-facing*10.5);
+hitbox.hitbox_y = 41.25*size;
+hitbox.image_xscale = 2.49*size;
+hitbox.image_yscale = 3.28*size;
+}
+
+if ( timer == 80 )
+  {
+  sound_play_pitch ( swingsnd3 , 0.5 );
+  }
+if ( timer == 92 )
+  {
+  create_hitbox ( 38 , 40 + facing * 100 , 9 , 15 , -1 , 18 , slash3 , obj_spark_impact , 4 , 5.5 , 74 , 48 , self.id , 6 , 6 );
+  sound_play_pitch ( clash1 , 0.4 );
+  screen_shake ( 4 , -20 );
+  sound_play_pitch ( explode1 , 0.3 );
+  duster = instance_create ( x + 80 * size * ( 1 - facing * 2 ) , y , obj_spark_shockwave );
+  duster.image_xscale *= 3;
+  duster.image_yscale *= 1.5;
+  }
+if ( timer == 100 )
+  {
+  create_hitbox ( 8 , 30 + facing * 120 , 4 , 2 , -1 , 6 , kick3 , obj_spark_hit1 , 2.54 , 2.50 , 5.50 , 36.00 , self.id , 100 , 6 );
+  }
+if ( timer == 200 )
+  {
+  sound_play_pitch ( explode_small , 0.3 );
+  }
+  
+//if ( image_blend == c_black )
+//  {
+  /*if ( spark > 0 )
+    with ( spark ) instance_destroy();
+  spark = instance_create ( x , y , obj_spark );
+  spark.alarm[0] = 2;
+  spark.image_index = image_index;
+  spark.image_blend = image_blend;
+  spark.depth = depth - 1;
+  spark.sprite_index = sprite_index;
+  spark.image_speed = 0;
+  spark.image_xscale = image_xscale;
+  spark.image_yscale = image_yscale;*/
+//  }
+
+if ( timer >= time - 1 )
+  {
+  //image_blend = c_white;
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    {
+    air = 1;
+    state_type = "jump"; 
+    }
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
