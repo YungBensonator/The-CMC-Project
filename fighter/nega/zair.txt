@@ -1,0 +1,131 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "jump") {
+	if canzair = 0
+	exit;
+	else if canzair = 1
+	canzair = 0
+        state_type = "air_attack";
+        attack_type = "zair";
+        sprite_index = bat_sprite;
+        image_index = 0;
+		image_speed = 0.2;
+        timer = 0;
+        time = 70;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        temp = 0
+        hitbox = -99
+	intangible = 0
+	hspeed = 0
+	vspeed = -0.1
+	temp = 0
+	air_move = 0
+	direction = facing*180
+	tempdirection = direction
+	transformspark = instance_create(x + 3 - facing * 6 * size,y-6 * size,obj_spark);
+	transformspark.sprite_index = b_transform_effect_sprite;
+	transformspark.image_index = 0
+	transformspark.image_speed = 1.5
+	transformspark.depth = -6;
+	transformspark.snap = self.id
+	transformspark.image_xscale = 0.3 * size
+	transformspark.image_yscale = 0.3 * size
+}
+if timer < time {
+    state_type = "air_attack";
+    if timer < 9 {
+	vspeed = -0.15
+	hspeed = 0
+	}
+    if timer = 9 {
+	sound_play (gliding_sound)
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        direction = facing*180
+	tempdirection = direction
+    speed = 4
+	temp = 1
+	create_hitbox(8,40+facing*100,7.6,2,15,6,punch3,obj_spark_hit3,0.85,0.6,2,8,self.id,55,2);
+    }
+    if temp = 1 {
+    if attacking || smashup || smashdown || smashleft || smashright
+	interrupt = 1
+    gravity = 0
+    if moveup = 1 || (ai && (ai_state = "recover" || offstage || (enemy.y < y-5))) {
+        if direction < 90 || direction > 270    {
+            direction+=10
+            if direction >= 30 && direction < 270
+            direction = 30
+            tempdirection = direction
+        }
+        else if direction > 90 && direction < 270 {
+            direction-=10
+            if direction <= 150
+            direction = 150
+            tempdirection = direction
+        }
+    }
+    else if (movedown = 1 || (!offstage && ai && enemy.y > y+5 && ai_state != "recover")) && !collision_point(x,y+1,obj_floor,1,1) && !collision_point(x,y+1,obj_platform,1,1) {
+        if facing = 0  { 
+            direction-=5
+            if direction <= 330
+            direction = 330
+            tempdirection = direction
+        }
+        else {
+            direction+=5
+            if direction >= 210
+            direction = 210
+            tempdirection = direction
+        }
+    }
+    else {
+        //direction += 1-facing*2
+        direction = tempdirection
+    }
+}
+if air = 0 {
+    state_type="land"
+    attack_type="none"
+    hspeed = 0
+    vspeed = 0
+    sprite_index = land_sprite
+    image_index = 0
+    image_speed = 0
+    timer=0
+    time=20
+	transformspark = instance_create(x - 1 + facing * 2 * size,y-13 * size,obj_spark);
+	transformspark.sprite_index = b_transform_effect_sprite;
+	transformspark.image_index = 0
+	transformspark.image_speed = 1.5
+	transformspark.depth = -6;
+	transformspark.snap = self.id
+	transformspark.image_xscale = 0.3 * size
+	transformspark.image_yscale = 0.3 * size
+}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if ( air = 0 )
+	{
+    state_type = "stand";
+	}
+    if ( air > 0 )
+	{
+    state_type = "fall";
+	sprite_index = fall_sprite;
+	image_speed = 0.2;
+	}
+    timer = 0;
+    time =-1;
+	transformspark = instance_create(x - 1.5 + facing * 3 * size,y-15 * size,obj_spark);
+	transformspark.sprite_index = b_transform_effect_sprite;
+	transformspark.image_index = 0
+	transformspark.image_speed = 1.5
+	transformspark.depth = -6;
+	transformspark.snap = self.id
+	transformspark.image_xscale = 0.3 * size
+	transformspark.image_yscale = 0.3 * size
+}

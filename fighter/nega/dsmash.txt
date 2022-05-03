@@ -1,0 +1,74 @@
+if ( state_type == "crouch" || state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dsmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dsmash_sprite;
+  timer = 0;
+  time = 77;
+  timer_speed = 1;
+  charge_frame = 20;
+  }
+switch ( timer )
+  {
+  case 2: image_index=1;  break;
+  case 4: image_index=2;  break;
+  case 6: image_index=3;  break;
+  case 8: image_index=4;  break;
+  case 24: image_index=5; break;
+  case 26: image_index=6;  break;
+  case 28: image_index=7;  break;
+  case 30: image_index=8;  break;
+  case 31: image_xscale /= 1.05; image_yscale /= 1.05; break;
+  case 35: image_xscale *= 1.05; image_yscale *= 1.05; break;
+  }
+if ( timer = 2 )
+	{
+	sound_play ( cloud_appear_sound );
+	proj1 = create_projectile (19,22+facing*136,7.1,5.5,40,15,shock3,obj_spark_hit4,0.4,1.2,19,33,self.id,250,char_custom2);
+	proj1.damage = attacker.smash_charge;
+	proj1.hit = 2;
+	proj1.no_clash = 1;
+	proj2 = create_projectile (19,158-facing*136,7.1,5.5,40,15,shock3,obj_spark_hit4,0.4,1.2,-20,33,self.id,250,char_custom2);
+	proj2.damage = attacker.smash_charge;
+	proj2.hit = 2;
+	proj2.no_clash = 1;
+	}
+if ( timer = 26 )
+{
+sound_play ( attacksnd3 );
+}
+if ( timer = 27 )
+	{
+	sound_stop ( cloud_appear_sound );
+	sound_play ( cloud_thunder_sound );
+	sound_play ( dsmash_voice );
+	proj1.timer = 199;
+	proj1.hit = 0;
+	proj2.timer = 199;
+	proj2.hit = 0;
+	spark1 = instance_create(proj1.x + 1 * (1-facing*2) * size, proj1.y + 31 * size,obj_spark);
+	spark1.sprite_index = dsmash_electric_impact;
+	spark1.image_speed = 0.5;
+	spark1.image_xscale = 0.35 * (1-facing*2) * size;
+	spark1.image_yscale = 0.35 * size;
+	spark2 = instance_create(proj2.x + 1 * (1-facing*2) * size,proj2.y + 31 * size,obj_spark);
+	spark2.sprite_index = dsmash_electric_impact;
+	spark2.image_speed = 0.5;
+	spark2.image_xscale = 0.35 * (1-facing*2) * size;
+	spark2.image_yscale = 0.35 * size;
+	shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 6;
+    shaker.xampl = 0;
+    shaker.time = 40;
+	}
+
+if ( timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

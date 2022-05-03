@@ -1,0 +1,272 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+air_move = 0;
+
+//---------------------------------------------------------------------------------------set up states------------------------------------------------------------------------------------------------------
+if ( state_type == "jump" || state_type = "stand" || state_type = "run" )
+{
+	if (floattemp != 0 && floattime > 0) 
+	{
+		floattemp = 0;
+		exit;
+	}
+		exit;
+	attacking = 0;
+	special = 0;
+	timer = 0;
+	air_move = 0;
+	hover = 0;
+	attack_type = "upb";
+	state_type = "air_attack";
+	image_speed = 0;
+	sprite_index = entry_sprite;
+	image_index = 4;
+	temp = 0;
+	temp2 = 0;
+	temp_facing = 0;
+	tempdirection = 0;
+	time = 116;
+	timer_speed = 1;
+	if ( moveright == 1 ) facing = 0;
+	if ( moveleft == 1 ) facing = 1;
+	floattime = 0; 
+}
+
+    switch ( timer )
+    {
+	case 6: image_index = 3; break;
+	case 12: image_index = 2; break;
+	case 18: image_index = 1; break;
+	case 24: image_index = 0; break;
+	case 107: image_index = 1; break;
+	case 109: image_index = 2; break;
+	case 111: image_index = 3; break;
+	case 113: image_index = 4; break;
+    }
+
+hspeed = 0;
+vspeed = 0;
+gravity_lock = 1;
+if timer > 40 && timer < 107
+ignore_physics = 1;
+//-------------------------------------------------------------------------------------Open initial portal-------------------------------------------------------------------------------------------------
+if ( timer == 0 )
+{
+sound_play ( entry_sound )
+spark = instance_create(x, y - 30,obj_spark)
+spark.sprite_index = portal_sprite;
+spark.image_xscale = 0.15 * size;
+spark.image_yscale = 0.15 * size;
+spark.image_speed = 0.20;
+spark.image_alpha = 0.02
+spark.depth = 1
+spark.alarm[0] = 48
+}
+
+if ( timer < 40 )
+{
+spark.image_alpha += 0.025
+spark.image_xscale += 0.0125 * size;
+spark.image_yscale += 0.0125 * size;
+if spark.image_alpha > 1
+spark.image_alpha = 1
+}
+if timer >= 34 && timer <= 44 {
+image_xscale *= 1-((timer-34)*.07);
+image_yscale *= 1-((timer-34)*.07);
+image_alpha -= 0.07
+y -= 2
+}
+if timer > 25 && timer < 35
+force_edge_grab = 1
+else
+force_edge_grab = 0
+if timer = 35
+intangible = 1
+
+//-------------------------------------------------------------------------------------------teleport-----------------------------------------------------------------------------------------------------
+
+if timer = 45 {
+with spark instance_destroy()
+visible = 1
+image_alpha = 0
+intangible = 1
+	if ( ai && ( offstage || ai_state = "recover" ) )
+	  {
+	    if ( y > nearest_edge.y )
+		moveup = 1;
+	    if ( x < nearest_edge.x )
+	      {
+		moveright = 1;
+		moveleft = 0;
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		moveleft = 1;
+		moveright = 0;
+	      }
+	  }
+	if ( moveright && !moveup && !movedown )
+	  {
+	    tempdirection = 0;
+	    facing = 0;
+	    temp = tempdirection;
+	  }
+	if ( moveleft && !moveup && !movedown )
+	  {
+	    tempdirection = 180;
+	    facing = 1;
+	    temp = tempdirection;
+	  }
+	if ( !moveright && !moveleft && !movedown )
+	  {
+	    tempdirection = 90;
+	    temp = tempdirection;
+	  }
+	if ( movedown && !moveright && !moveleft )
+	  {
+	    tempdirection = 270;
+	    temp = tempdirection;
+	  }
+	if ( moveup && moveright )
+	  {
+	    tempdirection = 45;
+	    facing = 0;
+	    temp = tempdirection;
+	  }
+	if ( moveup && moveleft )
+	  {
+	    tempdirection = 135;
+	    facing = 1;
+	    temp = tempdirection;
+	  }
+	if ( movedown && moveright )
+	  {
+	    tempdirection = 315;
+	    facing = 0;
+	    temp = tempdirection;
+	  }
+	if ( movedown && moveleft )
+	  {
+	    tempdirection = 225;
+	    facing = 1;
+	    temp = tempdirection;
+	  }
+	if ( analog_control )
+	  {
+	    var dis, dir;
+	    dis = point_distance ( 0 , 0 , holdx , holdy );
+	    dir = point_direction ( 0 , 0 , holdx , holdy );
+	    if ( dis > 0.5 )
+	      {
+                var dd;
+                dd = round ( dir / 45 ) * 45;
+                if ( abs ( dir - dd ) < 14 )
+                  dir = dd;
+		tempdirection = dir;
+		temp = tempdirection;
+		if ( dir < 85 || dir > 275 )
+		  facing = 0;
+		if ( dir > 95 && dir < 265 )
+		  facing = 1;
+	      }
+	  }
+	temp_facing = facing;
+	if ( facing = temp_facing )
+	    tempdirection = temp;
+	else
+	  {
+	    if ( temp < 180 )
+		tempdirection = 180 - temp;
+	    else
+		tempdirection = 360 - temp;
+	  }
+portal1 = create_projectile(0,361,0,0,0,0,-1,-1,0.1,0.1,0,15,self.id,22,char_custom3);
+portal2 = create_projectile(0,361,0,0,0,0,-1,-1,0.1,0.1,0,15,self.id,22,char_custom3);
+portal1.direction = tempdirection
+temp2 = choose(1,2)
+if temp2 = 1
+portal2.direction = portal1.direction + random(22) + 27;
+if temp2 = 2
+portal2.direction = portal1.direction - random(22) - 27;
+}
+
+//-------------------------------------------------------------------------------------Update Position to mid-point of Portals-------------------------------------------------------------------------------------------------
+
+if timer > 45 && timer <= 65 {
+if portal1.x > portal2.x
+x = portal1.x - ((portal1.x - portal2.x)*0.5)
+if portal1.x < portal2.x
+x = portal1.x + ((portal2.x - portal1.x)*0.5)
+if portal1.y > portal2.y
+y = portal1.y - ((portal1.y - portal2.y)*0.5) + 30
+if portal1.y < portal2.y
+y = portal1.y + ((portal2.y - portal1.y)*0.5) + 30
+}
+
+//-------------------------------------------------------------------------------------Open Destination Portals-------------------------------------------------------------------------------------------------
+if ( timer == 65 )
+{
+portal1.speed = 0
+portal2.speed = 0
+sound_play ( entry_sound )
+spark = instance_create(portal1.x, portal1.y,obj_spark)
+spark.sprite_index = portal_sprite;
+spark.image_xscale = 0.15 * size;
+spark.image_yscale = 0.15 * size;
+spark.image_speed = 0.20;
+spark.image_alpha = 0.02
+spark.depth = 1
+spark.alarm[0] = 51
+spark2 = instance_create(portal2.x, portal2.y,obj_spark)
+spark2.sprite_index = portal_sprite;
+spark2.image_xscale = 0.15 * size;
+spark2.image_yscale = 0.15 * size;
+spark2.image_speed = 0.20;
+spark2.image_alpha = 0.02
+spark2.depth = 1
+spark2.alarm[0] = 51
+}
+
+if ( timer < 105 && timer >= 65 )
+{
+spark.image_alpha += 0.025
+spark.image_xscale += 0.0125 * size;
+spark.image_yscale += 0.0125 * size;
+if spark.image_alpha > 1
+spark.image_alpha = 1
+spark2.image_alpha += 0.025
+spark2.image_xscale += 0.0125 * size;
+spark2.image_yscale += 0.0125 * size;
+if spark2.image_alpha > 1
+spark2.image_alpha = 1
+}
+if timer >= 105 && timer <= 115 {
+visible = 1
+intangible = 0
+if timer = 105 {
+image_alpha = 0.3
+x = spark.x
+y = spark.y+30*size
+}
+image_xscale *= 0.3+((timer-105)*.07);
+image_yscale *= 0.3+((timer-105)*.07);
+if timer > 105 {
+image_alpha += 0.07
+y -= 1
+if place_meeting(x,y,obj_floor)
+y -= 2
+}
+}
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+	visible = 1;
+	image_alpha = 1
+	attack_type = "none"
+    state_type = "fall";
+	intangible = 0;
+    timer = 0;
+    time = -1;
+  }

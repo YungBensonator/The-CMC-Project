@@ -1,0 +1,67 @@
+if ( state_type == "run" || state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "utilt";
+  image_speed = 0;
+  image_index = 1;
+  sprite_index = utilt_sprite;
+  timer = 0;
+  time = 39;
+  timer_speed = 1;
+  }
+switch ( timer )
+  {
+  case 4: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 7: image_yscale *= 0.99; break;
+  case 8: image_yscale *= 0.98; break;
+  case 9: image_yscale *= 0.97; break;
+  case 10: image_yscale *= 0.96; break;
+  case 11: image_yscale *= 0.95; break;
+  case 12: image_index = 4; break;
+  case 13: image_index = 5; break;
+  case 14: image_index = 6; image_yscale *= 1.02; image_xscale *= 1.02; break;
+  case 15: image_yscale *= 1.02; image_xscale *= 1.02; break;
+  case 22: image_index = 7; break;
+  case 25: image_index = 5; break;
+  case 29: image_index = 4; break;
+  case 31: image_index = 3; break;
+  case 33: image_index = 2; break;
+  case 35: image_index = 1; break;
+  }
+if ( timer = 37 && nega = 0 )
+{
+sprite_index = utilt_sprite;
+image_index = 0;
+}
+if ( timer = 37 && nega = 1 )
+{
+sprite_index = nega_stand_sprite;
+image_index = 0;
+}
+if ( timer = 12 )
+{
+create_hitbox(1,105-facing*30,5,0,5,1,punch1,obj_spark_hit1,0.45,1,5,14,self.id,2,1);
+create_hitbox2(1,80+facing*20,5,0,5,1,punch1,obj_spark_hit1,0.45,1,-5,14,self.id,2,1);
+}
+if ( timer = 15 )
+{
+sound_play(attacksnd1);
+sound_play(utiltspark_sound);
+spark = instance_create(x,y - 48 *size,obj_spark)
+spark.sprite_index = utiltspark_sprite;
+spark.image_speed = 0.5;
+spark.image_xscale = 0.4 * (1-facing*2) * size;
+spark.image_yscale = 0.4 * size;
+create_hitbox(8,90,4.5,6.5,10,8,magic3,obj_spark_shock,0.8,0.8,0,48,self.id,6,3);
+hitbox.hit_stun = 14;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

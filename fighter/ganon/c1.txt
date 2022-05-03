@@ -1,0 +1,75 @@
+proj_destroy = 0;
+moving_object = 1;
+visible = 1;
+absorb = 1;
+absorb2 = 1;
+if ( timer <= 1 )
+  {
+sound_play(attacker.ball_reflect_sound)
+    sprite_index = keepmain.energyball_sprite;
+    image_speed = 0.35;
+    visible = 1;
+    facing = attacker.facing;
+    hitlag_diff = 5;
+    temp = 0
+    temp2 = 0
+    starty = y
+    ganon = attacker
+  }
+if temp2 = 0 && y > starty - 6 && vspeed > -2 {
+	vspeed -= 0.5
+	image_angle += 3-facing*6
+	}
+if y <= starty - 6
+temp2 = 1
+if temp2 = 1 && y < starty + 6 && vspeed < 2 {
+	vspeed += 0.5
+	image_angle -= 3-facing*6
+	}
+if y >= starty + 6
+temp2 = 0
+if ( timer = time - 1 && proj_hits = 0 )
+  {
+    proj_hits += 1;
+    hit = 0;
+    launch = 0;
+    attack_success = 0;
+    target.hitby = 0;
+    damage = temp+2;
+    dir = 45+facing*90;
+    bkb = 7*attacker.size;
+    kbg = temp*0.5+2.75*attacker.size;
+    gfx = obj_spark_stun;
+    hitlag_frames = 10*attacker.size;
+    stun_scalar = 3+(temp*0.2);
+    shake_ampl = 0;
+    sound_play(ganon.ball_hit_sound)
+    sound_stop(ganon.ball_reflect_sound)
+    timer = 0;
+    time = 2;
+  }
+if proj_hits = 1 && hit = 1
+instance_destroy();
+if ( timer = 75 && proj_hits < 1 )
+    proj_hits = 1
+if place_meeting(x,y,attack_box) {
+sound_stop(ganon.ball_reflect_sound)
+sound_play(ganon.ball_reflect_sound)
+obj = instance_nearest(x,y,attack_box)
+obj.reflect = 1
+proj_hits = 0
+temp+=1
+image_xscale*=1.04
+image_yscale*=1.04
+hspeed += 0.25-facing*0.5
+hit = 0
+timer = 0
+time = 80
+}
+if temp = 6
+instance_destroy();
+if ( ( hit = 0 && timer >= time - 1 ) || next_to_lwall || next_to_rwall || under_ceiling || on_floor )
+  {
+    event_perform_object(obj_smoketrail,ev_alarm,0);
+    instance_destroy();
+  }
