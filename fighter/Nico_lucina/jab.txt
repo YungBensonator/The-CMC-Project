@@ -1,0 +1,95 @@
+if state_type = "stand" {
+hspeed = 0;
+state_type = "attack";
+attack_type = "jab";
+image_speed = 0;
+image_index = 0;
+sprite_index = jab_sprite;
+image_index = 0;
+timer = 0;
+time = 21;}
+
+if timer < time {
+
+switch ( timer ) {
+case 4: image_index = 1; break;
+case 6: image_index = 2; break;
+case 8: image_index = 3; break;
+case 10: image_index = 4; break;
+case 13: image_index = 5; break;
+
+case 53: image_index = 6; break;
+case 56: image_index = 7; break;
+case 58: image_index = 8; break; 
+case 60: image_index = 9; break;
+case 62: image_index = 10; break;
+case 64: image_index = 11; break;
+case 66: image_index = 12; break;
+case 68: image_index = 13; break;}
+
+//Sword trail shit starts here
+
+switch ( timer ) {
+case 4: sword_trail = create_sword_trail(self.id, 6, 30, spread_texture); sword_trail.index = 1; sword_trail.depth = 1; break;
+case 5: sword_trail.end_decay = 0.2; break;
+case 6: sword_trail.index += 1; sword_trail.end_decay = 0.4; break;
+case 7: sword_trail.end_decay = 0.6; break;
+case 8: sword_trail.index += 1; sword_trail.end_decay = 0.8; break;
+case 10: sword_trail.index += 1; sword_trail.end_decay = 1; break;
+case 11: sword_trail.end_decay = 1.33; break;
+case 12: sword_trail.end_decay = 1.66; break;
+case 13: with (sword_trail) {instance_destroy();} break;
+
+case 53: sword_trail = create_sword_trail(self.id, 6, 30, spread_texture); sword_trail.index = 1; sword_trail.depth = 1; break;
+case 54: sword_trail.end_decay = 0.2; break;
+case 55: sword_trail.end_decay = 0.5; break;
+case 56: sword_trail.index += 1; sword_trail.end_decay = 0.66; break;
+case 57: sword_trail.end_decay = 0.8; break;
+case 58: sword_trail.index += 1; sword_trail.end_decay = 1; break;
+case 59: sword_trail.end_decay = 1.2; break;
+case 60: sword_trail.index += 1; sword_trail.end_decay = 1.33; break;
+case 61: sword_trail.end_decay = 1.5; break;
+case 62: sword_trail.index += 1; sword_trail.end_decay = 1.6; break;
+case 63: sword_trail.end_decay = 1.66; break;
+case 64: sword_trail.end_decay = 1.8; break;
+case 65: sword_trail.end_decay = 2; break;
+case 66: sword_trail.end_decay = 2.22; break;
+case 67: sword_trail.end_decay = 2.5; break;
+case 68: with (sword_trail) {instance_destroy();} break;}
+
+//Sword trail shit ends here
+
+if timer = 14 && ai = 1 && random(10) > 2 {
+attacking = 1}
+
+if timer = 8 {
+if random(10) > 5 {play_attack_voice()}
+sound_play(choose(attack_sound1,attack_sound2,attack_sound4,attack_sound6))
+create_hitbox(3,270,1.5,0,5,1,slash1,obj_spark_slash2,1.45,1.82,28,20,self.id,3,1)
+hitbox.di = 0
+hitbox.sdi = 0}
+
+if timer >= 13 && timer <= 18 && attacking = 1 {
+time = 78
+timer = 50}
+
+if timer = 58 {
+sound_play(choose(attack_heavy1,attack_heavy2,attack_heavy3))
+sound_play(choose(attack_sound1,attack_sound2,attack_sound4,attack_sound6))
+create_hitbox(6,45+facing*90,5.43,6.22,10,2,slash3,obj_spark_slash2,1.45,1.82,28,20,self.id,5,2)}
+
+if timer = 60 {
+hitbox.damage = 5*size
+hitbox.dir = 60+facing*60
+hitbox.hitbox_x -= 25*(1-facing*2)*size
+hitbox.hitbox_y += 30*size
+hitbox.image_yscale -= 0.45*size
+hitbox.image_xscale += 0.95*size}
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+attack_type = "none";
+state_type = "stand";
+timer = 0;
+time =-1;}

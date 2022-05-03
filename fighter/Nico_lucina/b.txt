@@ -1,0 +1,53 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+state_type = "air_attack"
+attack_type = "b"
+image_speed = 0
+sprite_index = usmash_sprite
+image_index = 0
+timer = 0
+time = 39
+special = 1
+timer_speed = 1
+attacking = 0
+hspeed = 0
+if ai {special = 0}
+chargearrow = 0
+sound_play(b_voice)}
+
+if timer < time {
+
+switch ( timer ) {
+case 4: image_index = 1; break;
+case 8: image_index = 2; break;
+
+case 16: sprite_index = b_sprite; image_index = 0; break;
+case 20: image_index = 1; break;
+case 24: image_index = 2; break;
+case 28: image_index = 3; break;
+case 31: image_index = 4; break;}
+
+if timer = 24 && special = 1 && chargearrow < 40 {
+timer = 22
+chargearrow += 1}
+
+if timer = 14 {
+effect_create_above(ef_smokeup,x,y,1,c_silver);}
+
+if timer = 16 {sound_play(b_sound);}
+
+if timer = 28 {
+sound_play(b_shoot_sound);
+arrow = create_projectile(4+(0.5*chargearrow),35+facing*110,3.45+(0.1*chargearrow),4.12+(0.1*chargearrow),10,1,slash1,obj_spark_hit2,1,1,20,28,self.id,80,char_custom1)
+arrow.hspeed = ((6-facing*12)+((0.25-facing*0.5)*chargearrow))*size
+arrow.facing = facing
+arrow.alarm[0] = 80}
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+attack_type = "none";
+if air > 0 {state_type = "jump";}
+else {state_type = "stand";}
+timer = 0;
+time =-1;
+effect_create_above(ef_smokeup,x,y,1,c_silver);}

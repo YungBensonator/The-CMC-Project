@@ -1,0 +1,33 @@
+if sprite_index = stand_sprite {image_speed = 0.2;}
+
+if state_type = "crouch" {
+sprite_index = crouch_sprite;
+crouchgetuptimer = 5
+image_speed = 0;
+switch (timer) {
+case 0: image_index = 0; break;
+case 4: image_index = 1; break;}
+}
+
+if state_type = "stand" && crouchgetuptimer > 0 {
+image_speed = 0;
+crouchgetuptimer -= 1;
+sprite_index = crouch_sprite;
+image_index = 0;
+crouchtemp = 1;}
+
+if state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 {
+sprite_index = stand_sprite;
+image_index = 0;
+crouchtemp = 0;}
+
+if state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 {
+crouchgetuptimer = 0;
+crouchtemp = 0;}
+
+if sprite_index = walk_sprite {image_speed = 0.15;}
+if sprite_index = jump_sprite && state_type != "edge" {image_speed = 0.2}
+
+if attack_type!="upb" && attack_type!="utilt" && instance_exists(blurstandin){
+with(blurstandin){instance_destroy();}
+}

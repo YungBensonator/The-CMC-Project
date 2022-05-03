@@ -6,7 +6,7 @@ if state_type = "stand" || state_type = "run" || state_type = "crouch" {
         sprite_index = dsmash_sprite;
         image_index=0;
         timer = 0;
-        time = 20;
+        time = 50;
         timer_speed=1;
         charge_frame = 1;
 }
@@ -43,11 +43,18 @@ if ( timer < time )
 	create_hitbox(10,angle_correct(5),7.1,4.8,5,18,sf_punchs,obj_spark_impact,1.3,1,20,12,self.id,5,4);
 	}
 
+if facing = 0{
+    facing = 1
 
+  }
+   if facing = 1{
+    facing = 0
+
+  }
   }
 
 if (timer >= 5){
-if (attack_success || target.object_index == obj_enemy) && ( place_meeting ( target.x , target.y , attack_box )){
+if (attack_success || target.object_index == obj_enemy) && obj_score_control.stocks[target.number-1] == 1 &&  ( place_meeting ( target.x , target.y , attack_box )){
 				if ((target.weight <= .22 && target.percent > 140) || (target.weight > .22 && target.weight < .3 && target.percent > 150) || (target.weight > .3 && target.percent > 160)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;

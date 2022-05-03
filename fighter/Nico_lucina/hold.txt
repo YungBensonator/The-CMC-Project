@@ -1,0 +1,75 @@
+if time != -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "hold";
+image_speed = 0;
+sprite_index = grab_sprite;
+image_index = 1;
+target.attack_type = "none"
+timer = 0;
+time = -1;
+timer_speed=1;
+pummel = -1;}
+
+if attacking && pummel = -1 {
+attacking = 0;
+pummel = 0;
+sprite_index = stilt_sprite;
+image_speed = 0.25;
+image_index = 0;}
+
+if timer >= 0 {
+target.x = x + 18 * size * (1-facing*2);
+target.y = y * size;}
+
+if pummel = -1 {
+if facing = 0 {
+if moveright = 1
+attack_type = "fthrow";
+else if moveleft = 1
+attack_type = "bthrow";}
+if facing = 1 {
+if moveleft = 1
+attack_type = "fthrow";
+else if moveright = 1
+attack_type = "bthrow";}
+if moveup = 1 
+attack_type = "uthrow";
+if movedown = 1 {
+attack_type = "dthrow";
+movedown = 0; }
+}
+
+else {
+pummel += 1;
+
+if pummel = 8 {
+temp_timer = target.timer;
+temp_time = target.time;
+sound_play2(slash2)
+sound_play(attack_voice2)
+create_projectile(2,361,1,1,4,6,-1,obj_spark_hit1,1,1,15,20,self.id,2,0);}
+
+if pummel = 12 {
+image_speed = 0;
+target.state_type = "grabbed";
+target.sprite_index = target.flinch_sprite;
+target.timer = temp_timer;
+target.time = temp_time;
+target.timer_speed = 1;}
+
+if pummel = 25 {
+sprite_index = grab_sprite;
+image_speed = 0;
+image_index = 1;}
+
+if pummel >= 26 {
+pummel = -1;}
+
+}
+
+if target.state_type != "grabbed" {
+state_type = "flinch";
+sprite_index = flinch_sprite;
+time = 9;
+timer = 0;}

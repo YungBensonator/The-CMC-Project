@@ -1,0 +1,34 @@
+if state_type = "stand" || state_type = "run" { 
+state_type = "attack";
+attack_type = "stilt";
+timer = 0;
+time = 25;
+sprite_index = stilt_sprite;
+image_speed = 0;
+image_index = 0;
+hspeed = 0;}
+
+if timer < time {
+
+switch ( timer ) {
+case 4: image_index = 1; break;
+case 9: image_index = 2; break;
+case 12: image_index = 3; break;
+case 15: image_index = 4; break;
+case 18: image_index = 5; break;
+case 21: image_index = 6; break;}
+
+if timer = 9 {
+if random(10) > 3 {play_attack_voice()}
+sound_play(attack_estoque1)
+create_hitbox(8,25+facing*130,4.62,5.87,18,2,slash2,obj_spark_slash3,1.5,0.6,36,28,self.id,4,2);
+hitbox.sdi = 0
+hitbox.di = -1}
+
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+state_type = "stand";
+attack_type = "none";
+timer = 0;
+time = -1;}
