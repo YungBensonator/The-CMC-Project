@@ -1,3 +1,10 @@
+if downbCooldown > 0{
+    state_type = "broken"
+    sprite_index = broken_sprite
+    timer = 0
+    timer = 10
+    timer_speed = 1
+}
 fast_fall = 0
 fast_fall_temp = 0
 if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
@@ -7,9 +14,12 @@ if state_type = "jump" || state_type = "stand" || state_type = "run" || state_ty
         sprite_index = downb_sprite
         image_index=0
         timer = 0
-        time = 40
+        time = 120
 		hspeed = 0
+        buff = 0
+        
 }
+
 
 if ( timer < time )
     {
@@ -18,17 +28,38 @@ if ( timer < time )
 	case 30: image_index = 1;
     }
 
-	if timer = 5
+	if timer = 50
 	{
-	sound_play(downb_sound);
-		percent -= 5;
+    spiked_pepsi = choose(1,2,3)
+    sound_play(downb_sound);
+	
+    if (spiked_pepsi == 1){
+    run_speed = 8.5
+    walk_speed = 5.5;
+	dash_speed = 9.5;
+    }
+
+    if (spiked_pepsi == 2){
+        weight = .35
+        buff = 1
+        run_speed -= .5
+	dash_speed = -.5;
+
 	}
+ if (spiked_pepsi == 3){
+    max_jumps=6;
+    air_speed = 3 + 2;
+    fast_fall_multiplier = 2.5 + 1;
+    air_accel = 0.35 + .7;
+
+ }
   }
   
-
+    }
 
 
 if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    if spiked_pepsi
     attack_type = "none";
     if air > 0
         state_type = "jump";
@@ -36,4 +67,5 @@ if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
         state_type = "stand";
     timer = 0;
     time =-1;
+    downbCooldown = 400
 }

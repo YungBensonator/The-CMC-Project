@@ -89,14 +89,14 @@ if temp = 1 {
 if timer = 6 || timer = 9 || timer = 12 || timer = 25 || timer = 18 {
     temp2+=1
     image_index+=image_speed
-    create_hitbox(2,direction+7*(1-facing*2),4.5,0,3,5,slash2,obj_spark_slash2,1.3,0.7,10,16,self.id,2,3)
+    create_hitbox(2,direction+7.5*(1-facing*2),5.5,0,3,5,slash2,obj_spark_slash2,1.3,0.7,10,16,self.id,2,3)
     hitbox.di = 0.5
     hitbox.hit_stun = 4
 	hitbox.execute_on_hit = "attacker.has_hit = 1"
     if hitbox.direction = 361
     hitbox.direction = 0
 }
-if has_hit = 1 and timer <= 28  and timer >= 10{
+if attack_success and timer <= 30  and timer >= 6{
 	target.speed = 6
         target.direction = point_direction(target.x, target.y, x+ 36 * size * (1-facing*2), y - 0)
     }
@@ -123,9 +123,11 @@ if timer = 26 {
 }
 if timer = 30 && sprite_index = utilt_sprite {
     sound_play(attack_sound3)
-    create_hitbox(5,67+facing*44,5.4,7.55,9,10,slash2,obj_spark_slash3,1.15,1.1,26,25,self.id,5,4)
+    create_hitbox(5,67+facing*44,5.15,7.25,9,10,slash2,obj_spark_slash3,1.15,1.1,26,25,self.id,5,4)
     hitbox.hit_stun = 7
 }
+
+
 if timer = 32 && sprite_index = utilt_sprite {
     hitbox.hitbox_x = 18*(1-facing*2)
     hitbox.hitbox_y = 36
@@ -144,9 +146,9 @@ if vspeed > 0 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y
             timer=0
             time=8
 }
-if (timer >= 30){
+if (timer >= 24){
 if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
-				if ((target.weight <= .22 && target.percent > 110) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 140)){
+				if ((target.weight <= .22 && target.percent > 120) || (target.weight > .22 && target.weight < .3 && target.percent > 135) || (target.weight > .3 && target.percent > 150)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;
 				killspark.image_xscale = size * 0.75;
