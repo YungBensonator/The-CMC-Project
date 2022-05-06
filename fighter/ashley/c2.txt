@@ -1,0 +1,27 @@
+x = attacker.x + ( 25 * attacker.size ) * ( 1 - attacker.facing * 2 );
+y = attacker.y - 12 * attacker.size;
+image_xscale = attacker.size * ( 1 - attacker.facing * 2 );
+image_yscale = attacker.size;
+/////----------Full Charge-----------/////
+if ( timer == 4 && confuse )
+  {
+  with ( player )
+    {
+    if ( !team_attack && team == other.attacker.team ) continue;
+    if ( attack_type == "final_smash" ) continue;
+    if ( intangible ) continue;
+    if ( air != 0 ) continue;
+    if ( state_type == "broken" ) continue;
+    if ( place_meeting ( x , y , other.id ) )
+      {
+      shield_hp = 150;
+      state_type = "broken";   
+      timer = 0;
+      time = 95 + round(percent/13);
+      attack_type = "none"
+      sprite_index = broken_sprite;
+      speed = 0;
+      }
+    }
+  }
+if ( image_index >= image_number - 1 ) instance_destroy();

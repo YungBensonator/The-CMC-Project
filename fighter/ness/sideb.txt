@@ -1,3 +1,6 @@
+if sidebcoodown > 0{
+    exit
+}
 fast_fall = 0
 fast_fall_temp = 0
 if state_type = "run" || state_type = "stand" || state_type = "jump" {
@@ -20,7 +23,7 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" {
     image_speed = 0;
     image_index=4;
     timer = 0;
-    time = 42;
+    time = 48;
     timer_speed=1;
 }
 switch ( timer )
@@ -58,7 +61,7 @@ if timer = 18  {
     create_projectile(4,100-facing*20,2.4,0.1,8,4,magic3,obj_spark_fire1,1.2,0.75,16,15,self.id,36,ness_pkfire);
     proj.air = (air>0)
     proj.hit_stun = 2
-    proj.di = 0.7
+    proj.di = 0.95
     if air > 0 
         proj.sprite_index = pkfire_air_sprite
     else
@@ -79,10 +82,12 @@ if temp && air = 0 {
     attack_type="none";
     sprite_index = land_sprite;
     timer=0;
-    time=10;
+    time=20
+    sidebcoodown = 30;
 }
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
+    sidebcoodown = 30
     if air = 0
     state_type = "stand";
     else

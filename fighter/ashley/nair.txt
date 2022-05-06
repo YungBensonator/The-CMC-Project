@@ -1,0 +1,165 @@
+if state_type = "jump" {
+  sprite_index = nair_sprite;
+  state_type = "air_attack";
+  attack_type = "nair";
+  image_speed = 0;
+  image_index = 0;
+  timer = 0;
+  time = 78;
+}
+if timer < time {
+  state_type = "air_attack";
+switch ( timer )
+  {
+	case 1: image_index = 1;  break;
+	case 2: image_index = 2;  break;
+	case 3: image_index = 3;  break;
+	case 4: image_index = 4;  break;
+	case 5: image_index = 5;  break;
+	case 7: image_index = 6;  break;
+	case 9: image_index = 7;  break;
+	case 11: image_index = 8;  break;
+	case 13: image_index = 9;  break;
+	case 15: image_index = 10;  break;
+	case 17: image_index = 11;  break;
+	case 19: image_index = 12;  break;
+	case 21: image_index = 13;  break;
+	case 23: image_index = 14;  break;
+	case 25: image_index = 15;  break;
+	case 27: image_index = 16;  break;
+	case 29: image_index = 17;  break;
+	case 31: image_index = 10;  break;
+	case 34: image_index = 11;  break;
+	case 37: image_index = 12;  break;
+	case 40: image_index = 13;  break;
+	case 43: image_index = 14;  break;
+	case 46: image_index = 15;  break;
+	case 49: image_index = 16;  break;
+	case 52: image_index = 17;  break;
+	case 55: image_index = 18;  break;
+	case 58: image_index = 19;  break;
+	case 61: image_index = 20;  break;
+	case 63: image_index = 21;  break;
+	case 66: image_index = 22;  break;
+	case 69: image_index = 23;  break;
+	case 72: image_index = 24;  break;
+  }
+  if timer = 5 {
+    sound_play(swingsnd4);
+
+if (random(10) >= 6)
+    sound_play(laugh_voice1);
+
+    create_hitbox(13, 25 + 130 * facing, 5.25, 4.6, 12, 10, kick2, obj_spark_hit2, 1.6, 0.85, 0, 16, self.id, 50, 3);
+    hitbox.hit_stun = 9;
+    hspeed *= 0.75
+  }
+
+  if (timer == 4){
+	  	var xx, yy;
+		xx = 0;
+		yy = 13 * size;
+		spin_effect = create_blur(xx+x,y-yy,self.id);
+		spin_effect.sprite_index = spr_spin_blur;
+		spin_effect.image_xscale = 0.4 * size * 0.7 * (1-facing*2);
+		spin_effect.image_yscale = 0.25 * size * 0.7;
+		spin_effect.snap = self.id;
+		spin_effect.alarm[0] = 50;
+		spin_effect.anim_speed = 0.85;
+		spin_effect.loop = 5;
+		spin_effect.image_alpha = 0.33;
+
+		yy = 3;
+		spin_effect = create_blur(xx+x,y-yy,self.id);
+		spin_effect.sprite_index = spr_spin_blur;
+		spin_effect.image_xscale = 0.2 * size * 0.7 * (1-facing*2);
+		spin_effect.image_yscale = 0.18 * size * 0.7;
+		spin_effect.snap = self.id;
+		spin_effect.alarm[0] = 50;
+		spin_effect.anim_speed = 0.85;
+		spin_effect.loop = 5;
+		spin_effect.image_alpha = 0.25;
+  }
+
+  if timer = 15 || timer = 23 || timer = 31 || timer = 46 || timer = 61 {
+    sound_play(swingsnd4);
+  }
+
+  if timer = 10 {
+    hitbox.dir = 362
+    hitbox.damage = 9
+    hitbox.bkb = 4.6
+  }
+
+  if air = 0 {
+    state_type = "land";
+    attack_type = "none";
+
+    sprite_index = land_sprite;
+
+    timer = 0;
+
+    time = 15;
+  }
+ 
+
+}
+if attack_success && air != 0 {
+if ( (( hitbox.hit > 0 )) && (movejump || (ai && ( random (10) + ai_level ) >= 11)) )
+      {
+			dontrepeat = 0;
+			attack_type = "none";
+  			state_type = "jump";
+  			sprite_index = jump_sprite;
+			CAN_shield = 0;
+			CAN_jump = 2;
+      }
+}
+
+if (timer >= 4){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 165) || (target.weight > .22 && target.weight < .3 && target.percent > 180) || (target.weight > .3 && target.percent > 195)){
+			    killspark = instance_create(enemy.x-200,enemy.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 120
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 50;
+				spark.camera_r = enemy.x + 50;
+				spark.camera_u = enemy.y - 80;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	  
+
+if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" {
+  dontrepeat = 0;
+  attack_type = "none";
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 1;
+  image_speed = 0;
+  timer = 0;
+  time = -1;
+}

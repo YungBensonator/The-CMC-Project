@@ -1,0 +1,59 @@
+proj_destroy = 0
+absorb = 1;
+absorb2 = 1;
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    /*if !attacker.evil
+        sprite_index = attacker.id.shakanetsu_sprite
+    else*/
+        sprite_index = attacker.id.fireball_sprite
+    image_speed = 0.35;
+    visible=1;
+    temp = 1
+    proj_hits = 0
+    ryu = attacker
+    xspeed = 3.75
+    facing = ryu.facing
+    hitlag_diff = 5
+    priority = 3
+    }
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+if hit = 0 || (timer >= 1 && time = 11)
+hspeed = xspeed*(1-facing*2)
+else
+speed = 0
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.9)
+if timer = time+1 && proj_hits = 0 {
+proj_hits+=1
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+damage = round(attacker.size*5)
+bkb= attacker.size*4.85
+kbg = attacker.size*3.65
+dir = 25+facing*130
+hitlag_frames = 8
+shake_ampl = 0
+//sfx = kick3
+timer = 0
+time = 30
+}
+if timer = 75 && proj_hits<1 {
+proj_hits=1
+damage = round(attacker.size*5)
+bkb= attacker.size*4.85
+kbg = attacker.size*3.65
+dir = 25+facing*130
+hitlag_frames = 8
+shake_ampl = 0
+}
+moving_object = 1;
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self.id)   
+    instance_destroy()
+
+

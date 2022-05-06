@@ -1,0 +1,93 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0.5;
+        sprite_index = uair_sprite;
+        image_index=0.1;
+        timer = 0;
+        time = 30;
+        timer_speed=1;
+	canceltemp = 0;
+	attacktemp = 1
+	attacking = 1
+}
+        if timer < time {
+	if attack_success || attack_shielded
+	canceltemp = 1
+	if !attacking && sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52
+	attacktemp = 0
+            state_type = "air_attack";
+            if timer = 8 {
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3))
+                sound_play(attack_sound2);
+                create_hitbox(5,70+facing*40,6.15,2.2,9,5,sf_kick2,obj_spark_special1,0.55,0.75,12,34,self.id,7,1);
+                hitbox.shake_kb = 0.5
+                hitbox.shake_ampl = 2.5
+		image_speed = 0.25
+            }
+	if timer = 22
+	image_speed = 0
+	if timer <= 28 && canceltemp {
+	if sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52 {
+	if special > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		interrupt = 1;
+		else
+	    char_b();
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_sideb();
+	  }
+}
+}
+else
+sftemp_timer = 0
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=9; 
+            }
+	if timer = time-1
+	attacking = 0
+        }  
+if timer >= time && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    attacking = 0
+    }
+        

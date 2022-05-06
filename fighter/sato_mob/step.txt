@@ -1,0 +1,132 @@
+//obj_game_control.hud_visible = 0;
+//disablehud = 1;
+if ( state_type = "jump" && sprite_index == jump_sprite ){
+  if ( timer = 0 )
+    image_index = 0; //start out the jump from the jump sprite's very first frame instead of any later ones
+  if ( vspeed < 0 && image_index >= 0 )
+    image_index = 0; //stay in that first frame as long as you're going up (you can change the image index in the condition to a later one to loop back)
+  if ( vspeed >= 0 && image_index < 1 )
+    image_index = 1; //the moment you start falling, continue the animation
+
+}
+
+if state_type = "run" && sprite_index == run_sprite{
+	after_image(4,c_white,0.5)
+}
+
+if state_type = "run" && sprite_index == walk_sprite{
+	image_speed = 0.2
+}
+
+if state_type = "stand" && sprite_index == stand_sprite{
+	image_speed = 0.1
+}
+
+
+if !instance_exists(weapon_hud){
+    weapon_hud = create_custom_hud(hud_sprite,-65,-20,0.5,0.5,0,c_white)
+    weapon_hud.suguri = self.id
+	weapon_hud.owner = self.id
+	weapon_hud.number = number
+}
+
+if instance_exists(hitbox){
+	if hitbox.hit = 1 and hitbox.mob = 0{
+		hitbox.mob = 1
+		meter += hitbox.damage/2
+	}
+}
+if instance_exists(hitbox2){
+	if hitbox2.hit = 1 and hitbox2.mob = 0{
+		hitbox2.mob = 1
+		meter += hitbox2.damage/2
+	}
+}
+if instance_exists(hitbox3){
+	if hitbox3.hit = 1 and hitbox3.mob = 0{
+		hitbox3.mob = 1
+		meter += hitbox3.damage/2
+	}
+}
+
+if state_type = "air_flinch"{
+	meter += 0.2
+	cantupb = 0
+}
+if air = 0{
+	cantupb = 0
+}
+
+
+if meter > 100
+meter = 100
+
+if meter < 0
+meter = 0
+
+
+if meter < 25{
+	image_blend = c_white
+	boost = 0
+	can_hover = 0
+	walk_speed = 2;
+    run_speed = 3.9;
+	dash_speed = 6.1;
+    run_start_speed = 6.1;
+	weight = 0.22;
+	offense = 1
+}
+
+if meter >= 25 and mater < 50{
+	image_blend = c_white
+	after_image(5,c_aqua,0.5)
+	boost = 1
+	can_hover = 0
+	walk_speed = 2;
+    run_speed = 3.9;
+	dash_speed = 6.1;
+    run_start_speed = 6.1;
+	weight = 0.19;
+	offense = 1.1
+}
+if meter >= 50 and meter < 75{
+	image_blend = c_white
+	after_image(5,c_orange,0.5)
+	boost = 2
+	can_hover = 1
+	walk_speed = 2;
+    run_speed = 3.9;
+	dash_speed = 6.1;
+    run_start_speed = 6.1;
+	weight = 0.16;
+	offense = 1.2
+}
+if meter >= 75 and meter < 100{
+	image_blend = c_white
+	after_image(5,c_red,0.5)
+	boost = 3
+	can_hover = 1
+	walk_speed = 2;
+    run_speed = 3.9;
+	dash_speed = 6.1;
+    run_start_speed = 6.1;
+	weight = 0.12;
+	offense = 1.3
+}
+if meter >= 100{
+	image_blend = c_black
+	after_image(5,c_black,0.5)
+	boost = 4
+	can_hover = 1
+	walk_speed = 3;
+    run_speed = 4.9;
+	dash_speed = 4.9;
+    run_start_speed = 4.9;
+	weight = 0.08;
+	offense = 1.5
+	
+	shieldup = 0
+	if state_type = "air_dodge"{
+		state_type = "jump"
+	}
+}

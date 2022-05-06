@@ -1,0 +1,188 @@
+absorb = 0 // This attack may not be absorbed by PSI magnet
+absorb2 = 0
+moving_object = 1;
+if timer <= 1 && hit = 2 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.cloud11_sprite;
+    //hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.15;
+    visible =1
+    priority = 5
+   
+        parry_nodestroy = 1;
+	charge=0
+	nextlevel=0
+}
+    
+///////////////what do
+if timer > 10 && timer < 85 && nextlevel!=2 && timer mod 25 = 0
+{
+magolor=create_projectile(1 , 362 , 5.1 , 0 , 8 , 3 , punch1 , obj_spark_hit1 , 0.9 ,0.9 , 1 ,15 , attacker.id , 6 );
+magolor.sprite_index=attacker.id.shoot_me_sprite;
+magolor.hit=2
+
+}
+
+
+////////the stuff
+if timer = 10
+{
+vspeed=0
+sprite_index = attacker.id.cloud12_sprite
+}
+
+///Bump into people
+if timer > 10 && timer < 940 && collision_rectangle(x-8,y-12,x+8,y,player,0,1) && timer mod 9 = 0 
+{
+create_projectile(1 , 362 , 5.1 , 0 , 8 , 3 , punch1 , obj_spark_hit1 , 1 ,1 , 0 ,0 , attacker.id , 1 );
+}
+
+/// Jump on the cloud from Arle's code, thx whoever u are
+
+if (timer > 10 && timer < 940 && collision_rectangle(x-8,y-19,x+8,y,player,0,1) && timer mod 9 = 0) {
+zaPlayah = collision_rectangle(x - (sprite_width*0.35)*size,y-(sprite_height*0.8)*size,x + (sprite_width*0.35)*size,y,player,true,true)
+
+with (zaPlayah){
+state_type = "jump"
+sound_play(cloud_jump)
+attack_type = "none";
+sprite_index = jump_sprite
+time += 800
+countup += 1
+
+vspeed += -4.5
+}
+}
+
+
+////-----------Next-------level----------////
+if charge=1 && timer > 10 && timer < 940 && nextlevel=0
+{
+sprite_index = attacker.id.cloud21_sprite;
+image_speed=0.2
+image_index=0
+nextlevel=1
+}
+if sprite_index = attacker.id.cloud21_sprite && image_index=2
+{
+sprite_index = attacker.id.cloud22_sprite;
+}
+
+////-----------Final-level----------////
+if charge=2 && timer > 10 && timer < 940 && nextlevel=1
+{
+sprite_index = attacker.id.cloud31_sprite;
+image_speed=0.2
+image_index=0
+nextlevel=2
+
+}
+if sprite_index = attacker.id.cloud31_sprite && image_index=2
+{
+sprite_index = attacker.id.cloud32_sprite;
+sound_play ( lol );
+
+}
+
+
+/////////////////////////////////////////////
+if timer = 940
+{
+image_blend=c_black
+}
+if ( (timer >= 1000 && exploded = 0)){
+   
+    exploded = 1
+
+ 
+ 
+
+visible=0
+
+
+
+//////////Weak Charge
+if charge=0
+{
+     	sound_play ( elec );
+        screen_shake ( 2 , 2 );
+  	create_projectile ( 8 , 90 , 5 , 5.7 , 10 , 6 , shock2 , obj_spark_shock , 1.1 , 1.1 , 0 , -27 , attacker.id , 3 , -1 );
+ 	proj2=create_projectile ( 10 , 90 , 3 , 4.7 , 10 , 35 , shock2 , obj_spark_shock , 1.1 , 1.1 , 0 , -1 , attacker.id , 6 ,  -1 );
+        proj.absorb = 1
+
+	explodespark = instance_create(x *size,y+26 *size,obj_spark)
+	explodespark.sprite_index = keepmain.cloudthunder_sprite;
+	explodespark.image_xscale = 0.95 * size;
+        explodespark.image_yscale = 0.95 * size;
+	explodespark.snap = self.id;
+	explodespark.image_speed = 0.8;
+	explodespark.depth = 2;
+	
+	cloud = instance_create(x + 1 * (1-facing*2) *size ,y+1 ,obj_spark)
+	cloud . sprite_index = attacker.id.cloud13_sprite;
+	cloud . image_xscale = 1 * size;
+        cloud . image_yscale = 1 * size;
+	cloud . image_speed = 0.4;
+	cloud . depth = -2;
+
+
+
+}
+////Mid Cloud
+if charge=1
+{
+
+	sound_play ( elec );
+        screen_shake ( 3 , 4 );
+        create_projectile ( 12 , 90 , 5.9 , 6.5 , 15 , 9 , shock2 , obj_spark_shock , 1.6 , 1.6 , 0 , -27 , attacker.id , 3 , -1 );
+	proj.absorb = 1
+	proj2=create_projectile ( 14 , 90 , 3.9 , 5.7 , 10 , 45 , shock2 , obj_spark_shock , 1.6 , 1.6 , 0 , -1 , attacker.id , 6 ,  -1 );
+        proj2.absorb = 1
+	explodespark = instance_create(x *size,y+26 *size,obj_spark)
+	explodespark.sprite_index = keepmain.cloudthunder_sprite;
+	explodespark.image_xscale = 0.99 * size;
+        explodespark.image_yscale = 0.99 * size;
+	explodespark.snap = self.id;
+	explodespark.image_speed = 0.8;
+	explodespark.depth = 2;
+
+	cloud = instance_create(x + 1 * (1-facing*2) *size ,y+1 ,obj_spark)
+	cloud . sprite_index = attacker.id.cloud23_sprite;
+	cloud . image_xscale = 1 * size;
+        cloud . image_yscale = 1 * size;
+	cloud . image_speed = 0.4;
+	cloud . depth = -2;
+}
+
+if charge=2
+{
+
+        sound_play ( lol );
+        sound_play ( elec );
+        screen_shake ( 4 , 6 );
+        create_projectile ( 16 , 90 , 6 , 8 , 30 , 14 , shock3 , obj_spark_shock , 2 , 2 , 0 , -27 , attacker.id , 6 , -1 );
+	proj.absorb = 1
+	proj2=create_projectile ( 20 , 90 , 4 , 7.7 , 20 , 65 , shock2 , obj_spark_shock , 2 , 2 , 0 , -1 , attacker.id , 6 ,  -1 );
+       	proj.absorb = 1
+	explodespark = instance_create(x *size,y+26 *size,obj_spark)
+	explodespark.sprite_index = keepmain.cloudthunder_sprite;
+	explodespark.image_xscale = 1.03 * size;
+        explodespark.image_yscale = 1.03 * size;
+	explodespark.snap = self.id;
+	explodespark.image_speed = 0.55;
+	explodespark.depth = 2;
+	
+	cloud = instance_create(x + 1 * (1-facing*2) ,y+1 ,obj_spark)
+	cloud . sprite_index = attacker.id.cloud33_sprite;
+	cloud . image_xscale = 1 * size;
+        cloud . image_yscale = 1 * size;
+	cloud . image_speed = 0.5;
+	cloud . depth = -2;
+}
+}
+
+
+
+
+if ( y > obj_game_control.death_d )
+  instance_destroy();
+

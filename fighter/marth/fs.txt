@@ -1,0 +1,135 @@
+if ( state_type == "jump" || state_type == "run" || state_type == "stand" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = stilt_sprite;
+  image_index = 0;
+  timer = 10;
+  time = 240;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  background_blend = c_ltgray;
+  air_move = 0;
+  gravity = 0;
+  vspeed = 0;
+  change = 0;
+  grab_edge = 0;
+  freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 49;
+  freezer.dontpause = self.id;
+  }
+
+var i, u;
+
+if ( timer < 60 )
+  {
+  image_blend = c_white;
+  if ( timer mod 3 == 0 ) image_blend = c_blue;
+  if ( timer mod 12 == 1 ) instance_create ( x - 20 * size * (1-facing-facing) , y - 20 * size , obj_spark_effect );
+  }
+if ( timer > 60 && timer < 80 )
+  {
+  if ( target != -1 )
+    {
+    with ( proj )
+      {
+      instance_destroy();
+      }
+    create_homing_bubble ( 4 , 4 , 15 , 10 , self.id , 20 );
+    change = 0;
+    with ( player )
+      {
+      if ( intangible == 1 || intangible_frames >= 0 ) continue;
+      if ( team == other.team && !team_attack ) continue;
+      if ( place_meeting ( x , y , other.proj ) )
+        {
+        if ( state_type == "shielding" ) state_type = "stand";
+        timer_speed = 0;
+        for ( i = 0 ; i < 12 ; i += 1 ) alarm[i] = -1;
+        other.change += 1;
+        }
+      }
+    if ( change == 0 )
+      {
+      create_homing_bubble ( 2 , 2 , 15 , 10 , self.id , 20 );
+      }
+      else
+      {
+      //show_message ( string(change) );
+      for ( i = 0 ; i < change ; i += 1 )
+        {
+        u = instance_create ( x + 16 - i*16 , y - 64 - i*32, obj_stage_bg );
+        u . draw_script = critwindow_script;
+        u . attacker = self.id;
+        u . keepmain = keepmain;
+        u . alarm[0] = 60;
+        u . depth = -4;
+        u . timer = 26;
+        }
+      instance_create ( 0 , 0 , obj_flashscreen );
+      image_blend = c_white;
+      hspeed = 0;
+      sound_play ( fsdeplete_sound );
+      freezer = instance_create(x,y,obj_freeze);
+      freezer.alarm[0] = 59;
+      freezer.dontpause = self.id;
+      timer = 110;
+      exit;
+      }
+    }
+  proj . x = x + 15 * (1-facing*2 );
+  proj . y = y - 10;
+  after_image ( 2 , c_blue , 0.2 );
+  after_image ( 3 , c_blue , 0.2 );
+  after_image ( 4 , c_blue , 0.2 );
+  after_image ( 5 , c_blue , 0.2 );
+  image_blend = c_white;
+  if ( timer mod 3 == 0 ) image_blend = c_blue;
+  hspeed = 10 * (1-facing*2);
+  }
+
+switch ( timer )
+  {
+  case 1:
+    sound_play ( attack_voice3 );
+    sound_play ( fsboot_sound );
+    break;
+  case 54: image_index = 1; break;
+  case 56: image_index = 2; break;
+  case 58: image_index = 3; break;
+  case 60:
+    sprite_index = b_sprite;
+    image_index = 4;
+    sound_play ( fsdash_sound );
+    create_homing_bubble ( 2 , 2 , 15 , 10 , self.id , 20 );
+    break;
+  case 170:
+    sound_play ( fslaunch_sound );
+    create_hitbox ( 60 , 30+facing*120 , 16 , 6.2 , 30 , 20 , -1 , obj_spark_hit3 , 4 , 4 , 15 , 10 , self.id , 2 , 6 );
+  case 80:
+    timer = 80;
+    hspeed = 4 * size * (1-facing*2);
+    sprite_index = mid_jump_sprite;
+    image_index = 0;
+    image_speed = 0.25;
+    break;
+  case 108:
+    grab_edge = 1;
+    smash_power = 0;
+    hspeed = 0;
+    background_blend = c_white;
+    attack_type = "none";
+    intangible = 0;
+    if ( air > 0 )
+      state_type = "jump";
+      else
+      state_type = "stand";
+    timer = 0;
+    time = -1;
+    break;
+  case 110: image_blend = c_white; break;
+  }

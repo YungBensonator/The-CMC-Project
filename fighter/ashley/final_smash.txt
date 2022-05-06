@@ -1,0 +1,108 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = final_smash_sprite;
+  timer = 0;
+  time = 112;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  
+  spark = instance_create ( 0 , 0 , obj_camerazoom );
+  spark.camera_l = x - 8;
+  spark.camera_r = x + 8;
+  spark.camera_u = y - 4 - actual_height;
+  spark.camera_d = y + 4;
+  spark.camera_boundary_zoom = 120;
+  spark.alarm[0] = 60;
+
+  duster = instance_create ( 0 , 0 , obj_freeze );
+  duster.dontpause = self.id;
+  duster.alarm[0] = 60;
+  }
+  
+gravity_lock = 1;
+speed = 0;
+
+switch ( timer )
+  {
+
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 9: image_index = 3; sound_play(sideb_voice); break;
+  case 12: image_index = 4; break;
+  case 15: image_index = 5; break;
+  case 18: image_index = 6; break;
+  case 21: image_index = 7; break;
+  case 24: image_index = 8; break;
+
+ case 34: image_index = 9; break;
+ case 37: image_index = 10; break;
+ case 40: image_index = 11; break;
+ case 43: image_index = 12; break;
+ case 46: image_index = 13; break;
+ case 49: image_index = 14; break;
+
+ case 52: image_index = 15; break;
+ case 55: image_index = 16; break;
+ case 58: image_index = 17; break;
+ case 61: image_index = 18; break;
+ case 64: image_index = 19; break;
+ case 67: image_index = 20; break;
+ case 70: image_index = 21; break;
+
+  case 260: image_index = 22; break;
+  case 262: image_index = 23; break;
+  case 264: image_index = 24; break;
+  case 266: image_index = 25; break;
+  case 269: image_index = 26; break;
+  case 272: image_index = 27; break;
+  case 275: image_index = 28; break;
+  case 320: image_index = 29; break;
+  case 324: image_index = 30; break;
+
+  }
+  
+if ( timer == 46 )
+  {
+  sound_play ( pop_sound );
+  instance_create ( x + 24 * size * ( 1 - facing * 2 ) , y - 18 * size , obj_spark_shockwave );
+  create_projectile ( 6 , 362 , 6 , 4 , -1 , 2 , kick3 , -1 , 1 , 1 , 0 , 0 , self.id , 240 , char_custom4 );
+  proj.x = x + 24 * size * ( 1 - facing * 2 );
+  proj.y = y - 18 * size;
+  proj.sprite_index = final_smash_pot;
+  proj.image_index = 0;
+  proj.image_speed = 0.5;
+  proj.hit = 2;
+  proj.speed = 5;
+  proj.direction = 40 + facing * 100;
+  }
+if look=1 && timer > 90 && timer < 112 && L=0
+{
+timer=256
+time=330
+L=1
+}
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  state_type = "stand";
+  if air > 0
+  {
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 1;
+  image_speed = 0;
+  }
+  timer = 0;
+  time = -1;
+  }

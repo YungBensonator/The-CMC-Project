@@ -1,0 +1,35 @@
+moving_object = 1;
+absorb2 = 1;
+absorb = 1  // This attack may be absorbed by PSI magnet
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.fireball_sprite
+    if attacker.sftemp3 = 0 && attacker.temp = 0 && attacker.sftemp2 = 0
+    hspeed = (1.5+(attacker.temp3*0.5)) - attacker.id.facing*(3+(attacker.temp3*1))
+    else if attacker.temp = 0 && attacker.sftemp2 = 0 {
+    hspeed = 3 - attacker.id.facing*6
+    image_xscale = 0.5*(1-facing*2) * attacker.size;
+    image_yscale = 0.5 * attacker.size
+    }
+    else
+    hspeed = (2) - attacker.id.facing*(4)
+    image_xscale = 0.5*(1-facing*2) * attacker.size;
+    image_yscale = 0.5 * attacker.size
+    image_speed = 0.3;
+    visible =1
+    //priority = 3
+    if attacker.air > 0 {
+    sprite_index = attacker.id.shakanetsu_sprite
+    image_speed = 0.3;
+    if attacker.temp = 0 direction = 330 - 120*(hspeed<0)
+    hitshake_type = 2
+    image_angle = direction-facing*180
+        }
+    }
+if random(8) >= 7
+effect_create_below(ef_flare,x,y-8+random(16),0,c_purple) 
+if collision_point(x+sign(hspeed),y,obj_wall,1,1)
+    instance_destroy()
+if (collision_point(x+sign(hspeed),y+sign(vspeed),obj_floor,1,1)||collision_point(x+sign(hspeed),y+sign(vspeed),obj_platform,1,1))&& vspeed > 0    
+    instance_destroy()
+if timer = 30
+damage -= 2*attacker.size

@@ -1,0 +1,107 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 1;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 13;
+        timer_speed=1;
+	canceltemp = 0;
+	attacktemp = 1
+	attacking = 1
+}
+     if timer < time {
+	if attack_success || attack_shielded
+	canceltemp = 1
+	if !attacking && sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52
+	attacktemp = 0
+             state_type = "attack";
+	if timer = 1
+	image_speed = 0.5
+            if timer = 3 {
+                sound_play(attack_voice1);
+                create_hitbox(2,25+facing*130,2.2,0.1,7,3,sf_punch1,obj_spark_special1,0.75,0.5,12,13,self.id,2,1);
+        spark = instance_create(x+16*(1-facing*2)*size,y-18*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.1*size
+        spark.image_yscale *= 0.1*size
+        spark.image_blend = c_white
+        spark.image_alpha = 0.8 
+            }
+	if canceltemp {
+	if sftemp = 10008 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52 {
+	if special = 10008 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		interrupt = 1;
+		else
+	    char_b();
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_sideb();
+	  }
+	if ( attacking > 0 && movedown[1] = 1 ) || smashdown
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_dsmash();
+	  }	
+	if ( attacking > 0 && moveup[1] = 1 ) || smashup
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_usmash();
+	  }
+}
+}
+else
+sftemp_timer = 0
+            if timer = 7
+               image_speed = 0;
+	if timer = time-1
+	attacking = 0
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0;
+    attack_type = "none";
+    state_type = "crouch";
+    timer = 0;
+    time =-1;
+    attacking = 0
+    }
+        
+		if ( air >= 0 && timer >= 9 && temp != -1 && (smash || attacking || special || grabbing || movejump))
+      {
+    air_move = 1;
+    interrupt = 1;
+      }

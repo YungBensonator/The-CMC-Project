@@ -1,3 +1,4 @@
+if cantupb>2 {break;}
 fast_fall = 0
 fast_fall_temp = 0
 if (state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "shield" || state_type = "crouch")  {
@@ -71,10 +72,9 @@ if timer > 30 && timer < 205 && !instance_exists(proj) {
 	if air = 0
 	state_type = "stand"
 	else
-	state_type = "fall"
+	state_type = "tumble"
 	attack_type = "none"
     special = 0;
-    air = max_jumps-1
     exit;
 }
 if timer > 30 && ai && proj.temp = 0 && timer < 200 {
@@ -299,6 +299,7 @@ if ( next_to_rwall && hspeed > 1.6 ) || ( next_to_lwall && hspeed < -1.6 ) {
 	direct = direction*pi/180;
 	//show_message ( string ( direction ) );
 	state_type = "tumble"
+    cantupb += 1
 	timer = 0
 	time = -1
 	exit;
@@ -313,20 +314,59 @@ if ( timer >= 340 && timer < 360 )
   image_angle *= 1 - facing * 2;
   }
 
+
+
+        if (timer >= 301){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 40) || (target.weight > .22 && target.weight < .3 && target.percent > 55) || (target.weight > .3 && target.percent > 65)){
+					    killspark = instance_create(enemy.x-200,enemy.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 120
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 50;
+				spark.camera_r = enemy.x + 50;
+				spark.camera_u = enemy.y - 80;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	    
+
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     intangible=0
+    dontrepeat = 0
+    cantupb += 1
 	image_angle = 0;
     attack_type = "none";
     sound_stop(upb_sound)
     if air = 0
     state_type = "stand";
     else {
-        air = max_jumps
-        state_type = "fall";
+        state_type = "tumble";
     }
     timer = 0;
     time =-1;
     special = 0;
-	air = max_jumps;
 }
 

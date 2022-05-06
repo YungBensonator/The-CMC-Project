@@ -1,0 +1,167 @@
+
+moving_object = 1;
+absorb2 = 1
+parry_nodestroy = 1;
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    //sprite_index = attacker.id.projectile_sprite
+ 	resettemp=0
+    image_speed = 0.17;
+    visible =1
+    maxtime = time
+marxtemp=0
+depth=-1
+temp=0
+check=0
+no=0
+
+if chargetemp >=100 && clump=0{
+fart=create_homing_bubble(1,1,2,2,self.id,999);
+//fart.visible=1
+hit_stun=50
+
+}
+    }
+////=--------------------bounce-------------=////
+if ( vspeed > 0 )&& clump=0
+if ( on_floor || on_platform ) && clump=0
+  {
+  bounce += 1;
+  instance_create ( x , y , obj_spark_shockwave );
+  vspeed = -abs(hspeed);
+  }
+
+if ( vspeed < 0 )&& clump=0
+if ( under_ceiling) && clump=0
+  {
+  bounce += 1;
+  instance_create ( x , y , obj_spark_shockwave );
+  vspeed = abs(hspeed);
+  }
+
+////---------------Star Trail--------------------//
+if timer > 0 && timer < 999 && timer mod 3 = 0 && hit=0
+{
+    broom = create_projectile(3,270,1,0,10,0,punch3,obj_spark_hit3,0.2,0.2,0,irandom_range(-3, 7),self.id,40,char_custom3);
+    broom.sprite_index=keepmain.stars_sprite
+	broom.hit=2
+}
+
+////////////Power up stuff
+if chargetemp >=80 {
+//--------------Downb-Clouds---------------------//
+//wow this was so much easier
+if collision_rectangle(x-5,y-5,x+5,y+5,attacker.downb_cloud,0,0) && attacker.downb_cloud.charge<=2 && clump=0
+{
+spark = instance_create ( x , y , obj_spark_shockwave );
+attacker.downb_cloud.charge+=1
+instance_destroy();
+}
+fart.x=x
+fart.y=y
+}
+
+if chargetemp >=50 {
+///-----------------Dtilt Potion--------------------///
+if collision_rectangle(x-5,y-5,x+5,y+5,attacker.dtilt_potion,0,0) && clump=0
+{
+attacker.dtilt_potion.burn=1
+spark = instance_create ( x , y , obj_spark_shockwave );
+instance_destroy();
+}
+}
+
+///-----------------Upb-Stars--------------------///
+if collision_rectangle(x-5,y-5,x+5,y+5,attacker.upb_star,0,0) && clump=0 && attacker.upb_star.stay<=5
+{
+attacker.upb_star.starexplode=1
+spark = instance_create ( x , y , obj_spark_shockwave );
+instance_destroy();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////Starmaxing
+if clump=1
+{
+//beam charge
+if timer <= 1 && hit = 2 {         // Initialize sprite and speed during frame 1
+    //hspeed = (3 - attacker.facing*6)*attacker.size;
+    visible = 1
+	image_speed=0
+    //sprite_index = attacker.id.beam_charge_sprite;
+    facing = attacker.facing;
+    arch = attacker
+}
+
+if timer > 1
+{
+move_towards_point(x+40.5*(attacker.x-x),y+40.5*(attacker.y-y-20),3.5);
+}
+ if place_meeting(x,y,attacker) && timer > 1
+      {
+	instance_destroy();
+      }
+ 
+
+
+}
+
+
+//////////////////Turn people into pumpkins
+//--------------Downb-Clouds---------------------//
+//wow this was so much easier
+if ( target.intangible = 0 || target.state_type == "down" && target.attack_type != "final_smash") && target != -1 && target!= attacker && timer > 10 && bowsa=0 && clump=0 && hit=1
+{
+spark = instance_create ( x , y , obj_spark_shockwave );
+hit=2
+
+
+	food = instance_create(x*size,y*size,obj_spark)
+	food.sprite_index = keepmain.pumpkin_sprite;
+	food.image_xscale = target.xsize * size;
+        food.image_yscale = target.ysize * size;
+	food.snap = target.id;
+	food.image_speed = 0;
+	food.depth = -5;
+	food.alarm[0] = 9999
+
+food.x=target.x
+food.y=target.y-10
+bowsa=1
+target.visible=0
+
+choosenf3 = irandom_range(0, 20);
+
+if choosenf3 < 10
+{
+food.sprite_index = obj_game_control.food_spr;
+choosend = choose(1,2,3,4,5,6,7,8,9,)
+food.image_index = choosend;
+} 
+
+
+time=9100
+timer=9000
+}
+
+
+if bowsa=1 
+{
+visible=0
+hspeed=0
+vspeed=0
+}
+
+if timer = 9069
+{
+target.visible=1
+//target=-99
+instance_destroy();
+spark = instance_create ( target.x , target.y , obj_spark_shockwave );
+with ( food )
+instance_destroy();
+}

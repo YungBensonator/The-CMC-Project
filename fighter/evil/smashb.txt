@@ -1,0 +1,176 @@
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && can_sideb {
+	canceltemp = 0;
+    attacking = 0;
+    can_sideb = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "smashb"
+        sound_stop(sideb_voice)
+        state_type = "air_attack";
+        hspeed = 0;
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing;
+        sprite_index = final_smashspinold_sprite;
+        sound_play(smashb_voice)
+        image_speed = 0.6;
+        image_index=0;
+        instance_create(x+6-facing*12,y-16,obj_spark_effect)
+        time = 53;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+	if sftemp2 = 1
+	facing = 1
+	if sftemp2 = 2
+	facing = 0
+}
+	if timer > 1 {
+	attacktemp = 0
+	sftemp_timer = 0
+	}
+	if timer = 1
+        y-=3
+	if attack_success || attack_shielded
+	canceltemp = 0
+        if timer < time && attack_type = "smashb" {
+            hspeed = 0;
+            //if state_type != "air_attack"
+            vspeed = -0.4*size;
+            if random(5)>3 {
+                image_blend=c_yellow
+		alarm[7] = 8;
+		}
+            else image_blend=c_white
+            if timer >=8 && timer <= time-10 && (instance_exists(spark) || instance_exists(spark2)) {
+                spark.x = x+5*(1-facing*2)
+                spark.y = y - size*17
+                spark2.x = x+5*(1-facing*2)
+                spark2.y = y - size*17
+                if timer >= 38 {
+                    spark.image_alpha -= 0.05
+                    spark2.image_alpha -= 0.05
+		}
+		if spark.image_index = 7 {
+                spark2 = instance_create(x+5*(1-facing*2),y-15*size,obj_spark)
+                spark2.sprite_index = tatsu_wind_sprite
+                spark2.image_xscale = size*0.44*(1-facing*2)
+                spark2.image_yscale = size*0.44
+                spark2.depth = depth - 2
+                spark2.image_speed = 0.5
+                spark2.alarm[0] = 30
+		}
+		if spark2.image_index = 7 {
+                spark = instance_create(x+5*(1-facing*2),y-15*size,obj_spark)
+                spark.sprite_index = tatsu_wind_sprite
+                spark.image_xscale = size*0.44*(1-facing*2)
+                spark.image_yscale = size*0.44
+                spark.depth = depth - 2
+                spark.image_speed = 0.5
+                spark.alarm[0] = 30
+		}
+            }
+            if timer = 3 {
+                sound_play(ex_sound) }
+            if timer = 7 {
+                spark = instance_create(x+5*(1-facing*2),y-15*size,obj_spark)
+                spark.sprite_index = tatsu_wind_sprite
+                spark.image_xscale = size*0.44*(1-facing*2)
+                spark.image_yscale = size*0.44
+                spark.depth = depth - 2
+                spark.image_speed = 0.5
+                spark.alarm[0] = 30
+            }
+	    if timer < 11
+		heavy_armor = 10
+	    else
+		heavy_armor = 0
+	    if timer = 8 {
+		image_xscale *= 0.95;
+		image_yscale *= 0.95;
+		}
+	    if timer = 9 {
+		image_xscale *= 0.9;
+		image_yscale *= 0.9;
+		}
+            if timer = 10 || timer = 18 || timer = 26 {
+                sound_play(sideb_sound)
+                create_hitbox(2,170-facing*160,5.25,0.1,5,1,sf_kick3,obj_spark_special2,0.8,0.65,15,23,self.id,3,2)
+                hitbox.armor_break = 1
+                hitbox.di = 0
+                hitbox.attacker_hitlag_diff = 3
+                image_speed = 0.5;
+                image_index = 6;
+                }
+           if timer = 14 || timer = 22 || timer = 30 {
+                sound_play(sideb_sound)
+                create_hitbox(2,10+facing*160,5.25,0.1,5,1,sf_kick3,obj_spark_special2,0.8,0.65,-3,23,self.id,3,2)
+                hitbox.armor_break = 1
+                hitbox.di = 0
+                hitbox.attacker_hitlag_diff = 3
+                image_index = 8;
+           }
+           if timer = 14 || timer = 22 || timer = 30 {
+                spark.depth = depth + 1
+                spark2.depth = depth + 1
+            }
+            if timer = 26 || timer = 34 || timer = 38 {
+                spark.depth = depth - 1
+                spark2.depth = depth - 1
+            }
+           if timer = 34 {
+                intangible = 0;
+                image_index = 14
+                sound_play(ssmash_sound)
+                create_hitbox(3,19+facing*142,5.5,6.85,6,10,sf_kick3,obj_spark_special2,0.9,0.65,14,23,self.id,5,2)
+                hitbox.armor_break = 1
+                hitbox.attacker_hitlag_diff = 3
+                image_speed = 0.25;
+                }
+	    if timer = 35 {
+		image_xscale *= 1.05;
+		image_yscale *= 1.05;
+		}
+	    if timer = 36 {
+		image_xscale *= 1.1;
+		image_yscale *= 1.1;
+		}
+           if vspeed > 0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+		image_index = 0;
+		image_speed = 0.5;
+                image_blend=c_white
+                timer=0;
+                time=9;
+		exit; }
+	if timer <= 30 && canceltemp = 1 {
+	if sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52 {
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+    	    image_blend=c_white
+	    timer = 0;
+	    time = -1;
+	  }
+	if special > 0 && moveup != 1 && ( smash_power >= global.gs_fs_charge )
+	  {
+		interrupt = 0
+	    image_blend=c_white
+	  }
+}
+}
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0
+    attack_type = "none";
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    image_blend=c_white
+    sftemp2 = 0
+    }
+        

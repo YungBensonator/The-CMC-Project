@@ -1,0 +1,107 @@
+if state_type = "jump" || state_type = "stand" || state_type = "shielding" 
+{
+    if downb_cloud = 0 || !instance_exists(downb_cloud) {
+   	timer = 0;
+	time = 38
+	temp = 1
+    sprite_index = downb_sprite;
+	image_index = 0; 
+	}
+    else {
+   	timer = 50;
+	time = 82
+	temp = 2
+    	sprite_index = downb_sprite;
+	image_index = 0; 
+	}
+    state_type = "air_attack";
+    attack_type = "downb";
+  
+ 
+
+image_speed = 0;
+  
+    timer_speed=1;
+}
+if (timer < time)
+ {
+switch ( timer )
+      {
+
+  	case 8: image_index = 1; break;
+  	case 11: image_index = 2; break;
+ 	case 14: image_index = 3; break;
+  	case 17: image_index = 4; break;
+	case 26: image_index = 3; break;
+ 	case 29: image_index = 2; break;
+  	case 32: image_index = 1; break;
+	case 35: image_index = 0; break;
+
+	
+	
+
+	case 53: image_index = 1; break;
+	case 56: image_index = 2; break;
+	case 59: image_index = 3; break;
+	case 62: image_index = 4; break;
+	case 68: image_index = 3; break;
+ 	case 71: image_index = 2; break;
+  	case 74: image_index = 1; break;
+	case 77: image_index = 0; break;
+ 	
+	
+	
+      }
+if air = 0
+hspeed=0
+if temp = 1 {
+
+if timer = 12 {
+    sound_play(downb_sound);
+    downb_cloud = create_projectile(10,90,6.6,6,17,9,explodehit4,obj_spark_fire1,1,1,0,20,self.id,8002,char_custom1)
+    downb_cloud.hit = 2
+    downb_cloud.alarm[0] = 5000
+	countup = 0;
+	
+
+    downb_cloud.sprite_index = cloud11_sprite
+    //downb_cloud.use_palette = number
+    downb_cloud.depth=-2
+    downb_cloud.visible = 1
+
+    downb_cloud.vspeed=-3
+
+    //downb_cloud.charge=0
+		//downb_cloud.hit = 5
+                downb_cloud.priority = 5;
+           
+
+
+}
+
+}
+if temp = 2 {
+
+if timer = 62
+{
+
+ downb_cloud.timer = 8002
+}
+ 
+    if timer = 70
+	downb_cloud = 0
+}
+
+
+}
+
+if timer >= time-1 && state_type != "air_flinch" {
+ attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

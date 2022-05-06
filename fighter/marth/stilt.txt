@@ -1,0 +1,398 @@
+//----------------- Tipper Marth --------------------
+if notip = 0 {
+    if (state_type == "stand" || state_type == "run") {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 36;
+        timer_speed = 1;
+        xoff = 18; //Bigger is left
+        if facing = 1
+        xoff = 19
+        effscale = xsize / 2
+        yoff = 61; //Bigger is up
+    }
+
+
+    switch (timer) {
+        case 0:
+            image_index = 0;
+            break;
+        case 2:
+            image_index = 1;
+            break;
+        case 3:
+            image_index = 2;
+           
+            break;
+        case 4:
+            image_index = 3;
+            break;
+        case 5:
+            image_index = 4;
+            break;
+        case 6:
+            image_index = 5;
+            break;
+        case 7:
+            attacking = 0;
+            play_attack_voice();
+            image_index = 6;
+            sound_play(swingsnd2);
+            create_hitbox(9, 30 + 120 * facing, 6.4, 3.6, 5, 5, slash2, obj_spark_slash2, 0.42, 0.34, 23.10, 22.40, self.id, 6, 2);
+            hitbox.image_angle = 345.58;
+            create_hitbox2(9, 30 + 120 * facing, 6.4, 3.6, 5, 5, slash2, obj_spark_slash2, 0.29, 0.32, 29.40, 17.50, self.id, 6, 2);
+            hitbox2.image_angle = 7.99;
+            create_hitbox3(12, 30 + 120 * facing, 6.6, 5.6, 6, 7, slash3, obj_spark_slash3, 0.31, 0.41, 33.60, 7.70, self.id, 6, 3);
+            hitbox3.image_angle = 16.75;
+            break;
+        case 9:
+            hitbox.image_xscale = 0.41 * (1 - facing * 2) * size;
+            hitbox.image_yscale = 0.32 * size;
+            hitbox.hitbox_x = 24.50 * (1 - facing * 2) * size;
+            hitbox.hitbox_y = 25.20 * size;
+            hitbox.image_angle = 18.18;
+            hitbox2.image_xscale = 0.39 * (1 - facing * 2) * size;
+            hitbox2.image_yscale = 0.30 * size;
+            hitbox2.hitbox_x = 35 * (1 - facing * 2) * size;
+            hitbox2.hitbox_y = 28 * size;
+            hitbox2.image_angle = 0;
+            hitbox3.image_xscale = 0.38 * (1 - facing * 2) * size;
+            hitbox3.image_yscale = 0.29 * size;
+            hitbox3.hitbox_x = 45.50 * (1 - facing * 2) * size;
+            hitbox3.hitbox_y = 28 * size;
+            hitbox3.image_angle = 0;
+            image_index = 7;
+            break;
+        case 11:
+            hitbox.image_xscale = 0.35 * (1 - facing * 2) * size;
+            hitbox.image_yscale = 0.44 * size;
+            hitbox.hitbox_x = 22.40 * (1 - facing * 2);
+            hitbox.hitbox_y = 32.20 * size;
+            hitbox.image_angle = 333.14;
+            hitbox2.image_xscale = 0.31 * (1 - facing * 2) * size;
+            hitbox2.image_yscale = 0.32 * size;
+            hitbox2.hitbox_x = 28.70 * (1 - facing * 2);
+            hitbox2.hitbox_y = 40.60 * size;
+            hitbox2.image_angle = 318.65;
+            hitbox3.image_xscale = 0.29 * (1 - facing * 2) * size;
+            hitbox3.image_yscale = 0.33 * size;
+            hitbox3.hitbox_x = 35 * (1 - facing * 2);
+            hitbox3.hitbox_y = 46.90 * size;
+            hitbox3.image_angle = 316.47;
+            image_index = 8;
+            break;
+        case 13:
+            image_index = 9;
+            break;
+        case 19:
+            image_index = 10;
+            break;
+        case 25:
+            image_index = 11;
+            break;
+        case 31:
+            image_index = 12;
+            break;
+        case 35:
+            attack_type = "none";
+            state_type = "stand";
+            timer = 0;
+            time = -1;
+            break;
+    }
+
+    switch (timer){
+      //case 3:  eff.end_decay = 1; break;
+      case 4: eff = create_sword_trail(self.id, 9, 30, sword_texture); eff.index = 0; eff.end_decay += 2; eff.depth = depth + 0.1; eff.index = 1; eff.end_decay = 4; eff.max_frames = 5; break;
+      case 5: eff.index = 2; break;
+      case 6: eff.index = 3; break;
+      case 7: eff.index = 4; eff.end_decay = 4; break;
+      case 8:  break;
+      case 9: eff.index = 5;  eff.end_decay = 3; break;
+      case 11: eff.index = 6; eff.end_decay = 2; break;
+      case 12: break;
+      case 13: eff.index = 7; eff.end_decay = 2; break;
+      case 14: case 15: case 16: case 17: case 18: eff.end_decay += (1/5); break;
+      case 19: eff.index = 8; eff.end_decay = 3; break;
+      case 20: case 21: case 22: case 23: case 24: eff.end_decay += (1/7); break;
+      case 25: 
+        with (eff){
+          instance_destroy();
+        }
+        break;
+
+    }
+}
+
+//----------------- Spread Marth --------------------
+if notip = 1 {
+    if (state_type == "stand" || state_type == "run") {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 36;
+        timer_speed = 1;
+    }
+
+    switch (timer) {
+        case 0:
+            image_index = 0;
+            break;
+        case 2:
+            image_index = 1;
+            break;
+        case 3:
+            image_index = 2;
+            break;
+        case 4:
+            image_index = 3;
+            break;
+        case 5:
+            image_index = 4;
+            break;
+        case 6:
+            image_index = 5;
+            break;
+        case 7:
+            attacking = 0;
+            play_attack_voice();
+            image_index = 6;
+            sound_play(swingsnd2);
+            create_hitbox(11, 30 + 120 * facing, 6.5, 4.6, 5, 6, slash2, obj_spark_slash2, 0.45, 0.37, 23.10, 22.40, self.id, 6, 2);
+			hitbox.image_angle = 345.58;
+            create_hitbox2(11, 30 + 120 * facing, 6.5, 4.6, 5, 6, slash2, obj_spark_slash2, 0.32, 0.35, 29.40, 17.50, self.id, 6, 2);
+            hitbox2.image_angle = 7.99;
+            create_hitbox3(11, 30 + 120 * facing, 6.5, 4.6, 5, 6, slash3, obj_spark_slash3, 0.35, 0.45, 33.60, 7.70, self.id, 6, 2);
+            hitbox3.image_angle = 16.75;
+            if notip = 1 {
+                hitbox.damage = 11 * size;
+                hitbox3.damage = 11 * size;
+                hitbox.bkb = 7.8 * size;
+                hitbox3.bkb = 7.8 * size;
+                hitbox.kbg = 4.8 * size;
+                hitbox3.kbg = 4.8 * size;
+                hitbox.shield_damage = 6 * size;
+                hitbox3.shield_damage = 6 * size;
+                hitbox.hitlag_frames = 7 * size;
+                hitbox3.hitlag_frames = 7 * size;
+                hitbox3.sfx = slash2
+                hitbox3.gfx = obj_spark_slash2
+            }
+            break;
+        case 9:
+            hitbox.image_xscale = 0.41 * (1 - facing * 2) * size;
+            hitbox.image_yscale = 0.32 * size;
+            hitbox.hitbox_x = 24.50 * (1 - facing * 2) * size;
+            hitbox.hitbox_y = 25.20 * size;
+            hitbox.image_angle = 18.18;
+            hitbox2.image_xscale = 0.39 * (1 - facing * 2) * size;
+            hitbox2.image_yscale = 0.30 * size;
+            hitbox2.hitbox_x = 35 * (1 - facing * 2) * size;
+            hitbox2.hitbox_y = 28 * size;
+            hitbox2.image_angle = 0;
+            hitbox3.image_xscale = 0.38 * (1 - facing * 2) * size;
+            hitbox3.image_yscale = 0.29 * size;
+            hitbox3.hitbox_x = 45.50 * (1 - facing * 2) * size;
+            hitbox3.hitbox_y = 28 * size;
+            hitbox3.image_angle = 0;
+            image_index = 7;
+            break;
+        case 11:
+            hitbox.image_xscale = 0.35 * (1 - facing * 2) * size;
+            hitbox.image_yscale = 0.44 * size;
+            hitbox.hitbox_x = 22.40 * (1 - facing * 2);
+            hitbox.hitbox_y = 32.20 * size;
+            hitbox.image_angle = 333.14;
+            hitbox2.image_xscale = 0.31 * (1 - facing * 2) * size;
+            hitbox2.image_yscale = 0.32 * size;
+            hitbox2.hitbox_x = 28.70 * (1 - facing * 2);
+            hitbox2.hitbox_y = 40.60 * size;
+            hitbox2.image_angle = 318.65;
+            hitbox3.image_xscale = 0.29 * (1 - facing * 2) * size;
+            hitbox3.image_yscale = 0.33 * size;
+            hitbox3.hitbox_x = 35 * (1 - facing * 2);
+            hitbox3.hitbox_y = 46.90 * size;
+            hitbox3.image_angle = 316.47;
+            image_index = 8;
+            break;
+        case 13:
+            image_index = 9;
+            break;
+        case 19:
+            image_index = 10;
+            break;
+        case 25:
+            image_index = 11;
+            break;
+        case 31:
+            image_index = 12;
+            break;
+        case 34:
+            attack_type = "none";
+            state_type = "stand";
+            timer = 0;
+            time = -1;
+            break;
+    }
+      // animate vfx
+     switch (timer){
+      //case 3:  eff.end_decay = 1; break;
+      case 4: eff = create_sword_trail(self.id, 9, 30, spread_texture); eff.index = 0; eff.end_decay += 2; eff.depth = depth + 0.1; eff.index = 1; eff.end_decay = 4; eff.max_frames = 5; break;
+      case 5: eff.index = 2; break;
+      case 6: eff.index = 3; break;
+      case 7: eff.index = 4; eff.end_decay = 4; break;
+      case 8:  break;
+      case 9: eff.index = 5;  eff.end_decay = 3; break;
+      case 11: eff.index = 6; eff.end_decay = 2; break;
+      case 12: break;
+      case 13: eff.index = 7; eff.end_decay = 2; break;
+      case 14: case 15: case 16: case 17: case 18: eff.end_decay += (1/5); break;
+      case 19: eff.index = 8; eff.end_decay = 3; break;
+      case 20: case 21: case 22: case 23: case 24: eff.end_decay += (1/7); break;
+      case 25: 
+        with (eff){
+          instance_destroy();
+        }
+        break;
+
+    }
+}
+
+//----------------- Centered Marth --------------------
+if notip = 2 {
+    if (state_type == "stand" || state_type == "run") {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 36;
+        timer_speed = 1;
+
+    }
+
+    switch (timer) {
+        case 0:
+            image_index = 0;
+            break;
+        case 2:
+            image_index = 1;
+            break;
+        case 3:
+            image_index = 2;
+            break;
+        case 4:
+            image_index = 3;
+            break;
+        case 5:
+            image_index = 4;
+            break;
+        case 6:
+            image_index = 5;
+            break;
+        case 7:
+            attacking = 0;
+            play_attack_voice();
+            image_index = 6;
+            sound_play(swingsnd2);
+            create_hitbox2(12, 30 + 120 * facing, 6.6, 5.6, 7, 8, slash2, obj_spark_slash2, 0.29, 0.32, 29.40, 17.50, self.id, 6, 3);
+            hitbox2.image_angle = 7.99;
+            create_hitbox(11, 30 + 120 * facing, 6.5, 4.6, 6, 7, slash3, obj_spark_slash3, 0.42, 0.34, 23.10, 22.40, self.id, 6, 2);
+            hitbox.image_angle = 345.58;
+            create_hitbox3(7, 30 + 120 * facing, 6.3, 2.6, 4, 4, punch3, obj_spark_slash1, 0.31, 0.41, 33.60, 7.70, self.id, 6, 1);
+            hitbox3.image_angle = 16.75;
+            if notip = 2 {
+                hitbox.sfx = slash3
+                hitbox.gfx = obj_spark_slash3
+            }
+            break;
+        case 9:
+            hitbox.image_xscale = 0.41 * (1 - facing * 2) * size;
+            hitbox.image_yscale = 0.32 * size;
+            hitbox.hitbox_x = 24.50 * (1 - facing * 2) * size;
+            hitbox.hitbox_y = 25.20 * size;
+            hitbox.image_angle = 18.18;
+            hitbox2.image_xscale = 0.39 * (1 - facing * 2) * size;
+            hitbox2.image_yscale = 0.30 * size;
+            hitbox2.hitbox_x = 35 * (1 - facing * 2) * size;
+            hitbox2.hitbox_y = 28 * size;
+            hitbox2.image_angle = 0;
+            hitbox3.image_xscale = 0.38 * (1 - facing * 2) * size;
+            hitbox3.image_yscale = 0.29 * size;
+            hitbox3.hitbox_x = 45.50 * (1 - facing * 2) * size;
+            hitbox3.hitbox_y = 28 * size;
+            hitbox3.image_angle = 0;
+            image_index = 7;
+            break;
+        case 11:
+            hitbox.image_xscale = 0.35 * (1 - facing * 2) * size;
+            hitbox.image_yscale = 0.44 * size;
+            hitbox.hitbox_x = 22.40 * (1 - facing * 2);
+            hitbox.hitbox_y = 32.20 * size;
+            hitbox.image_angle = 333.14;
+            hitbox2.image_xscale = 0.31 * (1 - facing * 2) * size;
+            hitbox2.image_yscale = 0.32 * size;
+            hitbox2.hitbox_x = 28.70 * (1 - facing * 2);
+            hitbox2.hitbox_y = 40.60 * size;
+            hitbox2.image_angle = 318.65;
+            hitbox3.image_xscale = 0.29 * (1 - facing * 2) * size;
+            hitbox3.image_yscale = 0.33 * size;
+            hitbox3.hitbox_x = 35 * (1 - facing * 2);
+            hitbox3.hitbox_y = 46.90 * size;
+            hitbox3.image_angle = 316.47;
+            image_index = 8;
+            break;
+        case 13:
+            image_index = 9;
+            break;
+        case 19:
+            image_index = 10;
+            break;
+        case 25:
+            image_index = 11;
+            break;
+        case 31:
+            image_index = 12;
+            break;
+        case 35:
+            attack_type = "none";
+            state_type = "stand";
+            timer = 0;
+            time = -1;
+            break;
+    }
+
+     // animate vfx
+     switch (timer){
+      //case 3:  eff.end_decay = 1; break;
+      case 4: eff = create_sword_trail(self.id, 9, 30, centered_texture); eff.index = 0; eff.end_decay += 2; eff.depth = depth + 0.1; eff.index = 1; eff.end_decay = 4; eff.max_frames = 5; break;
+      case 5: eff.index = 2; break;
+      case 6: eff.index = 3; break;
+      case 7: eff.index = 4; eff.end_decay = 4; break;
+      case 8:  break;
+      case 9: eff.index = 5;  eff.end_decay = 3; break;
+      case 11: eff.index = 6; eff.end_decay = 2; break;
+      case 12: break;
+      case 13: eff.index = 7; eff.end_decay = 2; break;
+      case 14: case 15: case 16: case 17: case 18: eff.end_decay += (1/5); break;
+      case 19: eff.index = 8; eff.end_decay = 3; break;
+      case 20: case 21: case 22: case 23: case 24: eff.end_decay += (1/7); break;
+      case 25: 
+        with (eff){
+          instance_destroy();
+        }
+        break;
+
+    }
+}

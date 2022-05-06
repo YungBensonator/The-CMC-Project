@@ -1,0 +1,172 @@
+// usmash cloud
+
+hit = 2
+proj_destroy = 1;
+moving_object = 0;
+absorb = 0
+absorb2 = 0
+mintimer += 1
+temp3=0
+if timer < 2
+maxtime = time
+
+if ashley.attack_type = "usmash" && ashley.temp = 1 {
+timer = time - 140
+ashley.temp = 0
+}
+
+if box.hit = 1 {
+box.attack_success = 0
+box.timer = timer
+box.time = time
+}
+
+if ( time mod 4 == 0)
+{
+box.hit=0
+
+}
+
+
+vspeed = 0;
+if ( timer < 15 )
+  {
+  sprite_index = spr1;
+  image_speed = 0;
+  image_index = floor ( timer * 0.2 );
+  vspeed = -4 + timer / 15 * 4;
+  }
+
+if ( timer == 15 )
+  {
+  if ( cancelself ) timer = time - 140;
+  sprite_index = spr2;
+  image_speed = 0.125;
+  //362 6.1
+  box = create_projectile(3 , 362 , 5.1 , 0 , 8 , 5 , punch1 , obj_spark_hit1 , 1 ,1 , 0 ,0 , attacker.id , 600 );
+  box.hitstun=6;
+	
+  box.sprite_index = sprite_index
+  box.image_index = image_index
+  box.image_speed = image_speed
+  box.absorb = 0
+  box.absorb2 = 0
+  box.moving_object = 0
+
+
+  }
+
+if ( timer == time - 139 && temp = 0 )
+  {
+  sprite_index = spr3;
+  image_speed = 0.25;
+  image_index = 0;
+  }
+
+if timer = 730
+  {
+image_blend=c_black
+  }
+if timer = 733
+  {
+image_blend=c_white
+  }
+if timer = 736
+  {
+image_blend=c_black
+  }
+if timer = 739
+  {
+image_blend=c_white
+  }
+if timer = 742
+  {
+image_blend=c_black
+  }
+if timer = 745
+  {
+image_blend=c_white
+  }
+if timer = 748
+  {
+image_blend=c_black
+  }
+if ( sprite_index == spr3 )
+  {
+  with box instance_destroy();
+  switch ( level )
+    {
+    case 1:
+      if ( timer == time - 137 )
+        {
+	temp = 1
+        sound_play ( elec );
+        screen_shake ( 2 , 2 );
+  	create_projectile ( 8 , 90 , 5 , 5.7 , 10 , 6 , shock2 , obj_spark_shock , 0.9 , 1.4 , 0 , -27 , attacker.id , 3 , -1 );
+	
+ 	proj2=create_projectile ( 10 , 90 , 3 , 4.7 , 10 , 35 , shock2 , obj_spark_shock , 1.5 , 1.5 , 0 , -1 , attacker.id , 6 ,  -1 );
+       proj.absorb = 1
+	explodespark = instance_create(x *size,y+26 *size,obj_spark)
+	explodespark.sprite_index = keepmain.cloudthunder_sprite;
+	explodespark.image_xscale = 0.95 * size;
+        explodespark.image_yscale = 0.95 * size;
+	explodespark.snap = self.id;
+	explodespark.image_speed = 0.8;
+	explodespark.depth = 2;
+        }
+      if ( image_index >= 6 ) instance_destroy();
+      break;
+    case 2:
+      if ( timer == time - 137 )
+        {
+	temp = 1
+        sound_play ( elec );
+        screen_shake ( 3 , 4 );
+        create_projectile ( 12 , 90 , 5.9 , 6.5 , 15 , 9 , shock2 , obj_spark_shock , 0.9 , 2 , 0 , -27 , attacker.id , 3 , -1 );
+	proj.absorb = 1
+	proj2=create_projectile ( 14 , 90 , 3.9 , 5.7 , 10 , 45 , shock2 , obj_spark_shock , 1.6 , 1.6 , 0 , -1 , attacker.id , 6 ,  -1 );
+       proj.absorb = 1
+	explodespark = instance_create(x *size,y+26 *size,obj_spark)
+	explodespark.sprite_index = keepmain.cloudthunder_sprite;
+	explodespark.image_xscale = 0.99 * size;
+        explodespark.image_yscale = 0.99 * size;
+	explodespark.snap = self.id;
+	explodespark.image_speed = 0.8;
+	explodespark.depth = 2;
+        }
+      if ( image_index >= 6 ) instance_destroy();
+      break;
+    case 3:
+      if ( timer == time - 137 )
+        {
+	temp = 1
+        sound_play ( lol );
+        sound_play ( elec );
+        screen_shake ( 4 , 6 );
+        create_projectile ( 16 , 90 , 6 , 8 , 30 , 14 , shock3 , obj_spark_shock , 0.9 , 2 , 0 , -27 , attacker.id , 6 , -1 );
+	proj.absorb = 1
+	proj2=create_projectile ( 20 , 90 , 4 , 7.7 , 20 , 65 , shock2 , obj_spark_shock , 1.7 , 1.7 , 0 , -1 , attacker.id , 6 ,  -1 );
+       proj.absorb = 1
+	explodespark = instance_create(x *size,y+26 *size,obj_spark)
+	explodespark.sprite_index = keepmain.cloudthunder_sprite;
+	explodespark.image_xscale = 1.03 * size;
+        explodespark.image_yscale = 1.03 * size;
+	explodespark.snap = self.id;
+	explodespark.image_speed = 0.55;
+	explodespark.depth = 2;
+        }
+      if ( image_index >= 9 ) instance_destroy();
+      break;
+    }
+  }
+if timer < 15 || (timer > (time - 140)) {
+box.priority = 5
+priority = 5
+}
+else {
+box.priority = 5
+priority = 5
+
+}
+if timer >= time-1
+with box instance_destroy();

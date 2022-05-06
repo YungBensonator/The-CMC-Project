@@ -1,0 +1,190 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 16;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed *= 0.75;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+//charge = 0.1;
+  if ( charge == 15 )
+  temp = 1;
+  if ( air == 0 )
+    {
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.facing = facing;
+    }
+    else
+    {
+    vspeed -= 0.2;
+    }
+  }
+switch ( timer )
+  {
+  case 5: image_index=1;  break;
+  case 10: image_index=2; sound_play(bcharge_sound); break;
+  case 12: image_index=3; break;
+  
+  case 32: sprite_index = b2_sprite; image_index=1;  break;
+  case 34: image_index=2;  break;
+  case 36: image_index=3;  break;
+  case 38: image_index=4;  break;
+  case 50: image_index=2;  break;
+  case 54: sprite_index = ssmash_sprite; image_index = 5;  break;
+  case 56: image_index=2;  break;
+  case 58: image_index=1;  break;
+  case 60: image_index=0;  break;
+  }
+if ( air == 0 )
+{
+hspeed = 0;
+}
+if ( time == 16 )
+  {
+  if ( timer > 10 )
+    {
+    var backoff;
+    backoff = 0;
+    if ( collision_rectangle ( x - 30 - actual_width , y - 50 , x + 30 + actual_width , y + 10 , projectile_box , 0 , 1 )
+     ||  collision_rectangle ( x - 30 - actual_width , y - 50 , x + 30 + actual_width , y + 10 , attack_box , 0 , 1 ) )
+      backoff = 1;
+    if ( temp || special || ( ai && ( charge > 5 + random ( 10 ) || backoff ) ) )
+      {
+      if ( air == 0 )
+        {
+        duster = instance_create ( x , y , obj_dust_effect );
+        duster.facing = facing;
+        }
+        else
+        {
+        instance_create ( x , y - 20 * size , obj_spark_effect );
+        }
+      timer = 30;
+      time = 62;
+      exit;
+      }
+	if ( air == 0 && (moveleft = 1 || moveright = 1) ) 
+	{
+	runtimer = 0;
+    sound_stop(bcharge_sound)
+    image_blend = c_white;
+	sprite_index = roll_sprite;
+	image_index = 0;
+    attack_type = "none"
+    state_type = "dodge"
+    sound_play(roll_dodge_snd)
+    shieldup = 0;
+    timer = 0;
+    time = 29;
+    facing = moveright;
+    }
+    if shieldup = 1 {
+        sound_stop(bcharge_sound)
+        sound_stop(b_loop_sound)
+        flashing = true
+        alarm[7] = 3
+        if air = 0 {
+		state_type = "stand"
+		}
+		else
+		{
+		state_type="jump";
+		}
+        }
+    if ( timer == 15 )
+      {
+      if ( charge < 14 )
+        {
+        spark = instance_create ( x - 18 * size * ( 1-facing*2 ) , y - 23 * size , obj_spark_effect );
+		spark.sprite_index = global.electricity_spark;
+		spark.image_xscale = 0.02;
+		spark.image_yscale = 0.02;
+		spark.snap = self.id;
+        image_blend = c_yellow;
+		charge += 0.7;
+        flashing = 1;
+        alarm[7] = 2;
+        }
+	   if ( charge >= 14 )
+		{
+        sound_stop(bcharge_sound)
+        attack_type = "none"
+        state_type = "stand"
+		if air > 0
+		{
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 1;
+		image_speed = 0;
+		}
+        timer = 0
+        time = -1
+        image_blend = c_white
+        charge = 15
+		}
+      timer = 11;
+      }
+    }
+  }
+  else
+  {
+  if (timer == 30 )
+  {
+  sound_stop(bcharge_sound)
+  }
+  if ( timer == 32 )
+  {
+  sound_play ( b_voice );
+  }
+  if ( timer == 38 )
+    {
+    if ( air == 0 )
+      {
+      duster = instance_create ( x , y , obj_dust_effect );
+      duster.facing = facing;
+      }
+    sound_play ( b_sound );
+    if ( charge >= 15 )
+      {
+      create_projectile ( 8 , 30 + facing * 120 , 2 , 0 , 40 , 20 , shock3 , obj_spark_shock , 1 , 1 , 25 , 13 , self.id , 60 , char_custom2 );
+      proj.sprite_index = beam3_sprite;
+      proj.hit = 2;
+      proj.confuse = 1;
+      }
+      else
+    if ( charge > 6 )
+      {
+      create_projectile ( 7 , 30 + facing * 120 , 6 , 6 , 20 , 10 , shock2 , obj_spark_shock , 1 , 1 , 25 , 13 , self.id , 60 , char_custom2 );
+      proj.sprite_index = beam2_sprite;
+      }
+      else
+      {
+      create_projectile ( 4 , 30 + facing * 120 , 3 , 2 , 14 , 30 , shock1 , obj_spark_shock , 1 , 1 , 25 , 13 , self.id , 60 , char_custom2 );
+      proj.sprite_index = beam1_sprite;
+      }
+    proj.image_speed = 0.25;
+    charge = 0.1;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  sound_stop(bcharge_sound)
+  attack_type = "none";
+  state_type = "stand";
+  if air > 0
+  {
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 1;
+  image_speed = 0;
+  }
+  timer = 0;
+  time = -1;
+  }
