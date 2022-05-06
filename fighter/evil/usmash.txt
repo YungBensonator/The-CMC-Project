@@ -1,0 +1,113 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "usmash";
+        image_speed = 0.5;
+        sprite_index = usmash_sprite;
+        image_index=0.1;
+        timer = 0;
+        time = 42;
+        timer_speed=1;
+        charge_frame = 4
+}
+     if timer < time {
+	if timer > 1 {
+	attacktemp = 0
+	sftemp_timer = 0
+	}
+             state_type = "attack";
+            if timer = 4 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+		image_speed = 0
+            }
+		if timer = 4 || timer = 6 || timer = 8 {
+		hspeed = 2-facing*4 }
+		if timer = 9 {
+                sound_play(usmash_voice);
+		}
+		if timer = 11 {
+		image_speed = 1
+		hspeed = 1-facing*2 }
+            if timer = 14 {
+                sound_play(taunt_sound);
+		image_speed = 0;
+                create_hitbox(17,90,6.5,7,18,11,sf_punch3,obj_spark_special1,0.5,0.9,16,14,self.id,8,3);
+                create_hitbox2(17,90,6.5,7,18,11,sf_punch3,obj_spark_special1,0.8,0.35,19,5,self.id,8,3);
+		hitbox.hit_stun = 12
+		hitbox2.hit_stun = 12
+		spark2 = instance_create(x,y,obj_spark);
+		spark2.sprite_index = misogi_effect_sprite2;
+		spark2.image_speed = 0.5;
+		spark2.image_xscale = size*0.2;
+		spark2.image_yscale = size*0.2;
+		spark2.x = x+20*(1-facing*2);
+		spark2.y = y; 
+		hspeed = 0
+                }
+            if timer = 20 {
+            hitbox.damage = 10
+            hitbox.bkb = 5.6
+            hitbox.hitlag_frames = 9
+            hitbox2.damage = 10
+            hitbox2.bkb = 5.6
+            hitbox2.hitlag_frames = 9
+            }
+		if timer = 25
+		image_speed = 0.25
+		if timer = 32
+		image_speed = 0
+        }
+
+if (timer >= 14){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0)&& obj_score_control.stocks[target.number-1] == 1{
+				if ((target.weight <= .22 && target.percent > 130) || (target.weight > .22 && target.weight < .3 && target.percent > 145) || (target.weight > .3 && target.percent > 155)){
+			    killspark = instance_create(enemy.x-200,enemy.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				freezer2.alarm[0] = 120
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 50;
+				spark.camera_r = enemy.x + 50;
+				spark.camera_u = enemy.y - 80;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	  
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0
+    dontrepeat = 0
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
+		if ( air >= 0 && timer >= 0 && temp != -1 && (special || grabbing || movejump) && hitbox.hit > 0 )
+      {
+    air_move = 1;
+    interrupt = 1;
+      }

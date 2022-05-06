@@ -1,0 +1,66 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=-0;
+        timer = 0+boost;
+        time = 27;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+    }
+	
+	if timer = 8{
+		spark3 = instance_create(x+60*size*(1-facing*2),y+30,obj_spark_shockwave)
+		spark3.image_angle = 90
+		spark3.image_blend = c_cyan
+		spark3.image_alpha = 0.5
+		spark3.depth = depth - 1
+		spark3 = instance_create(x+60*size*(1-facing*2),y+30,obj_spark_shockwave)
+		spark3.image_angle = 90
+		spark3.image_blend = c_purple
+		spark3.image_alpha = 0.5
+		spark3.depth = depth - 1
+	}
+	
+	
+	if timer = 12{
+		sound_play(whiff_sound3);
+		play_attack_voice()
+		create_hitbox(9,angle_correct(315),6,1.1,30,15,sf_punch2,obj_spark_hit1,1.2,1.2,60,-30,self.id,4,4);
+		burst = instance_create(x+60*size*(1-facing*2),y+30*size,obj_jab_burst);
+		burst.image_xscale *= 0.3;
+		burst.image_yscale *= 0.3;
+		daeff2 = create_spark( 60 ,-30 , effect_sprite , 0.5 , 0.6*(1-facing*2) , 0.6 );
+		daeff2.depth = depth - 1
+	}
+	
+	
+	
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=21; }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+        

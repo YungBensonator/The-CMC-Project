@@ -1,0 +1,234 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    special = 1
+    attacking = 0
+    attack_type = "b"
+    temp = 0
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0;
+        sprite_index = b_charge_sprite;
+	image_speed = 0.5;
+	image_index = 0.5;
+	time = 55; }
+    else {
+        state_type = "air_attack";
+        sprite_index = b_air_sprite;
+        image_speed = 0;
+	image_index = 1;
+        time = 30;
+        }
+        timer = 0;
+        timer_speed=1;
+        air_move = 0
+        jabbing = 0;
+	if sftemp4 = 1
+	facing = 0
+	if sftemp4 = 2
+	facing = 1
+	sftemp4 = 0
+	temp3 = 0
+}
+        if timer < time {
+	if timer > 1 {
+	attacktemp = 0
+	sftemp_timer = 0
+	}
+	if air = 0
+	hspeed = 0
+	if timer <= 3 && timer > 0 && temp = 0 && (((moveright = 1 && facing = 0 && sftemp3 = 0 && sftemp2 = 0) || (moveleft = 1 && facing = 1 && sftemp3 = 0 && sftemp2 = 0)) || sftemp2 = 1) {
+                temp = 1
+                if air > 0 {
+                    sprite_index = b_air_sprite
+                    image_index = 0.1
+                    image_speed = 0.1
+                    time = 38
+                }
+                else
+                    time = 60
+		timer = 3
+                sound_play(ex_sound)
+            }
+	if timer = 4 && air > 0 && temp = 0
+	image_speed = 0.6
+	if timer = 4 && air = 0 {
+	particlevfx = instance_create(x-6*size*(1-facing*2),y-22*size,obj_spark)
+	chargevfx = instance_create(x-3*size*(1-facing*2),y-23*size,obj_spark)
+	particlevfx.sprite_index = metsu_particle_sprite
+	chargevfx.sprite_index = metsu_charge_sprite
+	particlevfx.image_index = 0
+	particlevfx.image_speed = 0
+	particlevfx.image_xscale = 0.4*(1-facing*2)
+	particlevfx.image_yscale = 0.4
+	particlevfx.alarm[0] = 7
+	chargevfx.image_index = 0
+	chargevfx.image_speed = 0.8
+	chargevfx.image_xscale = 0.4*(1-facing*2)
+	chargevfx.image_yscale = 0.4
+	chargevfx.alarm[0] = 7
+	}
+	if timer > 4 && timer < 8 {
+	particlevfx.x = x-9*size*(1-facing*2)
+	chargevfx.x = x-6*size*(1-facing*2)
+	particlevfx.y = y-22*size
+	chargevfx.y = y-23*size
+	}
+	if timer >= 8 && timer <= 10 {
+	particlevfx.x = x-8*size*(1-facing*2)
+	chargevfx.x = x-5*size*(1-facing*2)
+	particlevfx.y = y-20*size
+	chargevfx.y = y-21*size
+	}
+	if timer = 5 && air = 0 {
+	sprite_index = b_sprite;
+	image_index = 0;
+	image_speed = 0.38; }
+            if temp = 1 && frac(timer/2) == 0 && timer < 50 {
+		alarm[7] = 10
+                image_blend=c_yellow
+		}
+            else image_blend=c_white
+            if (timer = 9 || timer = 20) && air && (temp || sftemp2) {
+		with chargevfx instance_destroy();
+		with particlevfx instance_destroy();
+                sound_play(fire_sound);
+                sound_play(attack_voice1);
+                create_projectile(3.5 - 0.5*jabbing,65+facing*50,4.05+timer/40,0.2+0.2*(timer=20),11,7,sf_shell,obj_spark_special2,0.060,0.060,26,8,self.id,60,fireball_script);
+                proj.priority = 4
+		proj.shield_stun = 2
+		proj.hit_stun = 11;
+                vspeed = -0.25 - 1*(timer=21);
+			if timer = 9 {
+		image_speed = 0.5;
+		image_index = 1.5;
+		firevfx = instance_create(x+16*size*(1-facing*2),y-16*size,obj_spark);
+		firevfx.sprite_index = metsu_fire_sprite
+		firevfx.image_index = 0
+		firevfx.image_speed = 0.25
+		firevfx.image_xscale = 0.25*(1-facing*2)
+		firevfx.image_yscale = 0.25
+		firevfx.alarm[0] = 28
+                    proj.direction = 325 - facing*110
+		    firevfx.image_angle = 325 + facing*55
+		}
+			if timer = 20 {
+		image_speed = 0.1;
+		firevfx2 = instance_create(x+16*size*(1-facing*2),y-16*size,obj_spark);
+		firevfx2.sprite_index = metsu_fire_sprite
+		firevfx2.image_index = 0
+		firevfx2.image_speed = 0.25
+		firevfx2.image_xscale = 0.25*(1-facing*2)
+		firevfx2.image_yscale = 0.25
+		firevfx2.alarm[0] = 28
+                    proj.direction = 300 - facing*60
+		    firevfx2.image_angle = 300 + facing*110
+		}
+                proj.speed = 2.5
+            }
+            if timer = 10 && (!air || (!temp && !sftemp2)) {
+		image_speed = 0.15;
+                if air > 0 {
+		with chargevfx instance_destroy();
+		with particlevfx instance_destroy();
+		firevfx = instance_create(x+16*size*(1-facing*2),y-16*size,obj_spark);
+		firevfx.sprite_index = metsu_fire_sprite
+		firevfx.image_index = 0
+		firevfx.image_speed = 0.25
+		firevfx.image_xscale = 0.25*(1-facing*2)
+		firevfx.image_yscale = 0.25
+		firevfx.alarm[0] = 28
+		firevfx.image_angle = 330 + facing*60
+                    sound_play(fire_sound);
+                    sound_play(hadouken_voice);
+                    create_projectile(5-jabbing,65+facing*50,4.6,0.75,12,9,sf_shell,obj_spark_special2,0.060,0.060,26,8,self.id,60,fireball_script);
+                    proj.priority = 2
+		    proj.shield_stun = 2
+		    proj.hit_stun = 10
+                    if vspeed > 0
+                        vspeed = 0;
+                    hspeed*=0.75;
+                }
+                else {
+                   duster = instance_create(x,y,obj_dust_effect);
+                   duster.facing = facing; 
+                   if temp = 0 {
+		if special = 1
+		temp3 = 1
+		with chargevfx instance_destroy();
+		with particlevfx instance_destroy();
+		firevfx = instance_create(x+15*size*(1-facing*2),y-25*size,obj_spark);
+		firevfx.sprite_index = metsu_fire_sprite
+		firevfx.image_index = 0
+		firevfx.image_speed = 0.25
+		firevfx.image_xscale = 0.4*(1-facing*2)
+		firevfx.image_yscale = 0.4
+		firevfx.alarm[0] = 28
+                        sound_play(fire_sound);
+                        sound_play(hadouken_voice);
+                        create_projectile(6-jabbing,30+facing*120,4,0.8,14,8,sf_shell,obj_spark_special2,0.065,0.065,29,24,self.id,60,fireball_script);
+                        proj.priority = 2
+                        proj.shield_stun = 1.5
+                   }
+                   else {
+		with chargevfx instance_destroy();
+		with particlevfx instance_destroy();
+		firevfx = instance_create(x+15*size*(1-facing*2),y-25*size,obj_spark);
+		firevfx.sprite_index = shakanetsu_fire_sprite
+		firevfx.image_index = 0
+		firevfx.image_speed = 0.25
+		firevfx.image_xscale = 0.4*(1-facing*2)
+		firevfx.image_yscale = 0.4
+		firevfx.alarm[0] = 28
+                        sound_play(fire_sound);
+						sound_play(ex_sound)
+                        sound_play(shaku_voice);
+                        create_projectile(5-jabbing,30+facing*120,2,0,13,4,sf_shell,obj_spark_fire1,0.065,0.065,29,24,self.id,60,char_custom9);
+                        proj.priority = 3
+                   }
+                }
+            }
+	if timer > 10 && air > 0 {
+	firevfx.x = x+16*size*(1-facing*2)
+	firevfx.y = y-16*size
+	firevfx2.x = x+16*size*(1-facing*2)
+	firevfx2.y = y-16*size
+	}
+	if timer > 10 && air = 0 {
+	firevfx.x = x+15*size*(1-facing*2)
+	firevfx.y = y-25*size
+	}
+            if timer = 30
+                air_move = (air>0)
+            if image_index >= image_number - image_speed
+                image_speed = 0
+            if timer >= 14-(temp || sftemp2)*5 && timer <= 22-(temp || sftemp2)*2 {
+		if vspeed > 0.1
+                vspeed = 0.1
+		if hspeed > 2
+		hspeed = 2
+		if hspeed < -2
+		hspeed = -2
+		}
+            if air = 0 && ( state_type = "air_attack" || state_type = "air" ) {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=6; 
+            }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+    temp = 0
+    sftemp2 = 0
+    sftemp3 = 0
+    sftemp4 = 0
+    }
+        

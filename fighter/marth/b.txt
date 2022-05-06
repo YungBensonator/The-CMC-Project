@@ -1,0 +1,737 @@
+//----------------- Tipper Marth --------------------
+if notip = 0 {
+
+if ( state_type == "jump" || state_type == "run" || state_type == "stand" || state_type == "crouch" )
+  {
+  sound_play ( counter_sound );
+  instance_create ( x , y - size * 20 , obj_spark_effect );
+  state_type = "air_attack";
+  attack_type = "b";
+  image_index = 0;
+  image_speed = 0;
+  time = 80;
+  timer = 0;
+  timer_speed = 1;
+  special = 1;
+  change = 0;
+  charge = 0
+  if ( air > 0 ) hspeed *= 0.5;
+  }
+
+if ( air = 0 )
+sprite_index = b_sprite;
+else
+sprite_index = b_air_sprite;
+
+if ( change == 0 )
+{
+if ( timer = 1 && air = 0 )
+image_index = 1;
+if ( timer = 2 && air = 0 )
+image_index = 2;
+if ( timer = 3 && air = 0 )
+image_index = 3;
+if ( timer = 4 && air = 0 )
+image_index = 4;
+if ( timer = 5 && air = 0 )
+image_index = 5;
+if ( timer >= 6 && air = 0 )
+image_index = 6;
+if ( timer >= 6 && air > 0 )
+image_index = 5;
+
+if ( air > 0 )
+{
+switch ( timer )
+  {
+  case 1: image_index = 1; break;
+  case 2: image_index = 2; break;
+  case 3: image_index = 3; break;
+  case 4: image_index = 4; break;
+  case 5: image_index = 5; break;
+  }
+}
+
+if ( timer mod 3 == 0 && timer > 11 )
+  image_blend = c_blue;
+  else
+  image_blend = c_white;
+
+if ( ai )
+  {
+  special = 1;
+  if ( collision_rectangle ( x - 48 , y - 48 , x + 48 , y + 48 , player , 0 , 0 ) || collision_rectangle ( x - 48 , y - 48 , x + 48 , y + 48 , projectile_box , 0 , 0 ) )
+    special = 0;
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( special == 0 && timer > 11 )
+  {
+    hspeed = (timer*0.15) * size * ( 1 - facing*2 );
+  charge = timer/12
+  change = 1;
+  timer = 0;
+  time = 42;
+  }
+if ( timer > 65 )
+  {
+  if ( air == 0 )
+    hspeed = 4 * size * ( 1 - facing*2 );
+  if ( air > 0 )
+    hspeed = 10 * size * ( 1 - facing*2 );
+  charge = timer/12
+  change = 2;
+  timer = 0;
+  time = 42;
+  sound_play ( fsboot_sound );
+  }
+}
+else
+{
+image_blend = c_white;
+
+if ( timer >= 0 && timer <= 3 && air = 0 )
+image_index = 7;
+if ( timer >= 4 && timer <= 6 && air = 0 )
+image_index = 8;
+if ( timer >= 16 && timer <= 19 && air = 0 )
+image_index = 10;
+if ( timer >= 20 && timer <= 23 && air = 0 )
+image_index = 11;
+if ( timer >= 24 && timer <= 27 && air = 0 )
+image_index = 12;
+if ( timer >= 28 && timer <= 31 && air = 0 )
+image_index = 13;
+if ( timer >= 32 && timer <= 35 && air = 0 )
+image_index = 14;
+if ( timer >= 36 && timer <= 42 && air = 0 )
+image_index = 15;
+
+
+if ( air > 0 )
+{
+switch ( timer )
+  {
+  case 1: image_index = 6; break;
+  case 4: image_index = 7; break;
+  case 7: image_index = 8; break;
+  case 16: image_index = 10; break;
+  case 19: image_index = 11; break;
+  case 22: image_index = 12; break;
+  case 25: image_index = 13; break;
+  case 28: image_index = 14; break;
+  case 31: image_index = 15; break;
+  case 33: image_index = 16; break;
+  case 35: image_index = 17; break;
+  case 37: image_index = 18; break;
+  case 39: image_index = 19; break;
+  }
+}
+  if ( timer = 1 )
+  {
+    sound_play ( b_sound );
+    sound_play ( b_voice );
+    if ( change == 1 )
+    sound_play ( swingsnd1 );
+    else
+    sound_play ( swingsnd3 );
+  }
+  if ( timer = 7 )
+  {
+  if ( air = 0 )
+  {
+  create_hitbox ( 7+(charge*1.5) , 48+facing*84 , 4.75 + (charge/5) , 5.4 , 95 + (charge*1.89) , 12 , slash1 , obj_spark_hit3 , 0.68 , 0.31 , 25.90 , 17.50 , self.id , 8 , 2 );
+  create_hitbox2 ( 8+(charge*2) , 48+facing*84 , 4.9 + (charge/4.5) , 6.6 , 95 + (charge*1.89) , 12 , slash2 , obj_spark_slash3 , 0.39 , 0.30 , 40.60 , 16.80 , self.id , 8 , 2 );
+  create_hitbox3 ( 9+(charge*2.5) , 48+facing*84 , 5.1 + (charge/4) , 7.5 , 125 + (charge*1.89) , 15 , slash3 , obj_spark_slash3 , 0.40 , 0.29 , 51.80 , 16.10 , self.id , 8 , 2 );
+  }
+  if ( air > 0 )
+  {
+  create_hitbox ( 7+(charge*1.5) , 48+facing*84 , 4.75 + (charge/5) , 5.4 , 95 + (charge*1.89) , 12 , slash1 , obj_spark_hit3 , 0.68 , 0.31 , 25.90 , 21.50 , self.id , 8 , 2 );
+  create_hitbox2 ( 8+(charge*2) , 48+facing*84 , 4.9 + (charge/4.5) , 6.6 , 95 + (charge*1.89) , 12 , slash2 , obj_spark_slash3 , 0.39 , 0.30 , 40.60 , 20.80 , self.id , 8 , 2 );
+  create_hitbox3 ( 9+(charge*2.5) , 48+facing*84 , 5.1 + (charge/4) , 7.5 , 125 + (charge*1.89) , 15 , slash3 , obj_spark_slash3 , 0.40 , 0.29 , 51.80 , 20.10 , self.id , 8 , 2 );
+  }
+  }
+  if ( timer >= 7 && timer <= 15 && air = 0 )
+  {
+  image_index = 9;
+  hitbox.image_xscale = 0.68 * (1-facing*2) * size;
+  hitbox.image_yscale = 0.31 * size;
+  hitbox.hitbox_x = 25.90*(1-facing*2) * size;
+  hitbox.hitbox_y = 17.50 * size;
+  hitbox2.image_xscale = 0.39 * (1-facing*2) * size;
+  hitbox2.image_yscale = 0.30 * size;
+  hitbox2.hitbox_x = 40.60*(1-facing*2) * size;
+  hitbox2.hitbox_y = 16.80 * size;
+  hitbox3.image_xscale = 0.40 * (1-facing*2) * size;
+  hitbox3.image_yscale = 0.29 * size;
+  hitbox3.hitbox_x = 51.80*(1-facing*2) * size;
+  hitbox3.hitbox_y = 16.10 * size;
+  }
+  if ( timer >= 7 && timer <= 15 && air > 0 )
+  {
+  image_index = 8;
+  hitbox.image_xscale = 0.68 * (1-facing*2) * size;
+  hitbox.image_yscale = 0.31 * size;
+  hitbox.hitbox_x = 25.90*(1-facing*2) * size;
+  hitbox.hitbox_y = 21.50 * size;
+  hitbox2.image_xscale = 0.39 * (1-facing*2) * size;
+  hitbox2.image_yscale = 0.30 * size;
+  hitbox2.hitbox_x = 40.60*(1-facing*2) * size;
+  hitbox2.hitbox_y = 20.80 * size;
+  hitbox3.image_xscale = 0.40 * (1-facing*2) * size;
+  hitbox3.image_yscale = 0.29 * size;
+  hitbox3.hitbox_x = 51.80*(1-facing*2) * size;
+  hitbox3.hitbox_y = 20.10 * size;
+  }
+}
+
+if ( air == 0 ) hspeed *= 0.9;
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 5;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+    }
+
+}
+
+//----------------- Spread Marth --------------------
+if notip = 1 {
+
+if ( state_type == "jump" || state_type == "run" || state_type == "stand" || state_type == "crouch" )
+  {
+  sound_play ( counter_sound );
+  instance_create ( x , y - size * 20 , obj_spark_effect );
+  state_type = "air_attack";
+  attack_type = "b";
+  image_index = 0;
+  image_speed = 0;
+  time = 162;
+  timer = 0;
+  timer_speed = 1;
+  special = 1;
+  change = 0;
+  charge = 0
+  if ( air > 0 ) hspeed *= 0.5;
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( air = 0 )
+sprite_index = b_sprite;
+else
+sprite_index = b_air_sprite;
+
+if ( change == 0 )
+{
+if ( timer = 1 && air = 0 )
+image_index = 1;
+if ( timer = 2 && air = 0 )
+image_index = 2;
+if ( timer = 3 && air = 0 )
+image_index = 3;
+if ( timer = 4 && air = 0 )
+image_index = 4;
+if ( timer = 5 && air = 0 )
+image_index = 5;
+if ( timer >= 6 && air = 0 )
+image_index = 6;
+if ( timer >= 6 && air > 0 )
+image_index = 5;
+
+if ( air > 0 )
+{
+switch ( timer )
+  {
+  case 1: image_index = 1; break;
+  case 2: image_index = 2; break;
+  case 3: image_index = 3; break;
+  case 4: image_index = 4; break;
+  case 5: image_index = 5; break;
+  }
+}
+
+if ( timer mod 3 == 0 && timer > 11 )
+  image_blend = c_navy;
+  else
+  image_blend = c_white;
+
+if ( ai )
+  {
+  special = 1;
+  if ( collision_rectangle ( x - 48 , y - 48 , x + 48 , y + 48 , player , 0 , 0 ) || collision_rectangle ( x - 48 , y - 48 , x + 48 , y + 48 , projectile_box , 0 , 0 ) )
+    special = 0;
+  }
+if ( special == 0 && timer > 11 )
+  {
+    hspeed = 1 * size * ( 1 - facing*2 );
+  charge = timer/12
+  change = 1;
+  timer = 0;
+  time = 42;
+  }
+if ( timer = 50 || timer = 60 || timer = 70 || timer = 80 || timer = 90 || timer = 95 || timer = 100 || timer = 105 || timer = 110 || timer = 115 )
+  {
+   image_blend = make_color_rgb(141,71,255)
+  }
+if ( timer > 120 )
+  {
+  if ( air == 0 )
+    hspeed = 1 * size * ( 1 - facing*2 );
+  if ( air > 0 )
+    hspeed = 1 * size * ( 1 - facing*2 );
+  charge = timer/12
+  change = 2;
+  timer = 0;
+  time = 42;
+  screen_shake(2,4);
+  sound_play ( fsboot_sound );
+  }
+}
+else
+{
+image_blend = c_white;
+
+if ( timer >= 0 && timer <= 3 && air = 0 )
+image_index = 7;
+if ( timer >= 4 && timer <= 6 && air = 0 )
+image_index = 8;
+if ( timer >= 16 && timer <= 19 && air = 0 )
+image_index = 10;
+if ( timer >= 20 && timer <= 23 && air = 0 )
+image_index = 11;
+if ( timer >= 24 && timer <= 27 && air = 0 )
+image_index = 12;
+if ( timer >= 28 && timer <= 31 && air = 0 )
+image_index = 13;
+if ( timer >= 32 && timer <= 35 && air = 0 )
+image_index = 14;
+if ( timer >= 36 && timer <= 42 && air = 0 )
+image_index = 15;
+
+
+if ( air > 0 )
+{
+switch ( timer )
+  {
+  case 1: image_index = 6; break;
+  case 4: image_index = 7; break;
+  case 7: image_index = 8; break;
+  case 16: image_index = 10; break;
+  case 19: image_index = 11; break;
+  case 22: image_index = 12; break;
+  case 25: image_index = 13; break;
+  case 28: image_index = 14; break;
+  case 31: image_index = 15; break;
+  case 33: image_index = 16; break;
+  case 35: image_index = 17; break;
+  case 37: image_index = 18; break;
+  case 39: image_index = 19; break;
+  }
+}
+  if ( timer = 1 )
+  {
+    sound_play ( b_sound );
+    sound_play ( b_voice );
+    if ( change == 1 )
+    sound_play ( swingsnd1 );
+    else
+    sound_play ( swingsnd3 );
+  }
+  if ( timer = 7 )
+  {
+  if ( air = 0 )
+  {
+  create_hitbox ( 8+(charge*3.5) , 48+facing*84 , 4.9 + (charge/4.5) , 6 , 110 + (charge*1.89) , 16 , slash3 , obj_spark_slash3 , 0.68 , 0.31 , 25.90 , 17.50 , self.id , 8 , 3 );
+  create_hitbox2 ( 8+(charge*3.5) , 48+facing*84 , 4.9 + (charge/4.5) , 6 , 110 + (charge*1.89) , 16 , slash3 , obj_spark_slash3 , 0.39 , 0.30 , 40.60 , 16.80 , self.id , 8 , 3 );
+  create_hitbox3 ( 8+(charge*3.5) , 48+facing*84 , 4.9 + (charge/4.5) , 6 , 110 + (charge*1.89) , 16 , slash3 , obj_spark_slash3 , 0.40 , 0.29 , 51.80 , 16.10 , self.id , 8 , 3 );
+  }
+  if ( air > 0 )
+  {
+  create_hitbox ( 8+(charge*3.5) , 48+facing*84 , 4.9 + (charge/4.5) , 6 , 110 + (charge*1.89) , 16 , slash3 , obj_spark_slash3 , 0.68 , 0.31 , 25.90 , 21.50 , self.id , 8 , 3 );
+  create_hitbox2 ( 8+(charge*3.5) , 48+facing*84 , 4.9 + (charge/4.5) , 6 , 110 + (charge*1.89) , 16 , slash3 , obj_spark_slash3 , 0.39 , 0.30 , 40.60 , 20.80 , self.id , 8 , 3 );
+  create_hitbox3 ( 8+(charge*3.5) , 48+facing*84 , 4.9 + (charge/4.5) , 6 , 110 + (charge*1.89) , 16 , slash3 , obj_spark_slash3 , 0.40 , 0.29 , 51.80 , 20.10 , self.id , 8 , 3 );
+  }
+  }
+  if ( timer >= 7 && timer <= 15 && air = 0 )
+  {
+  image_index = 9;
+  hitbox.image_xscale = 0.68 * (1-facing*2) * size;
+  hitbox.image_yscale = 0.31 * size;
+  hitbox.hitbox_x = 25.90*(1-facing*2) * size;
+  hitbox.hitbox_y = 17.50 * size;
+  hitbox2.image_xscale = 0.39 * (1-facing*2) * size;
+  hitbox2.image_yscale = 0.30 * size;
+  hitbox2.hitbox_x = 40.60*(1-facing*2) * size;
+  hitbox2.hitbox_y = 16.80 * size;
+  hitbox3.image_xscale = 0.40 * (1-facing*2) * size;
+  hitbox3.image_yscale = 0.29 * size;
+  hitbox3.hitbox_x = 51.80*(1-facing*2) * size;
+  hitbox3.hitbox_y = 16.10 * size;
+  }
+  if ( timer >= 7 && timer <= 15 && air > 0 )
+  {
+  image_index = 8;
+  hitbox.image_xscale = 0.68 * (1-facing*2) * size;
+  hitbox.image_yscale = 0.31 * size;
+  hitbox.hitbox_x = 25.90*(1-facing*2) * size;
+  hitbox.hitbox_y = 21.50 * size;
+  hitbox2.image_xscale = 0.39 * (1-facing*2) * size;
+  hitbox2.image_yscale = 0.30 * size;
+  hitbox2.hitbox_x = 40.60*(1-facing*2) * size;
+  hitbox2.hitbox_y = 20.80 * size;
+  hitbox3.image_xscale = 0.40 * (1-facing*2) * size;
+  hitbox3.image_yscale = 0.29 * size;
+  hitbox3.hitbox_x = 51.80*(1-facing*2) * size;
+  hitbox3.hitbox_y = 20.10 * size;
+  }
+}
+
+if ( air == 0 ) hspeed *= 0.9;
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 5;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+    }
+}
+
+//----------------- Centered Marth --------------------
+if notip = 2 {
+
+if ( state_type == "jump" || state_type == "run" || state_type == "stand" || state_type == "crouch" )
+  {
+  sound_play ( counter_sound );
+  instance_create ( x , y - size * 20 , obj_spark_effect );
+  state_type = "air_attack";
+  attack_type = "b";
+  image_index = 0;
+  image_speed = 0;
+  time = 290;
+  timer = 0;
+  timer_speed = 1;
+  special = 1;
+  change = 0;
+  charge = 0
+  if ( air > 0 ) hspeed *= 0.5;
+  }
+sprite_index = b_roy_sprite;
+
+if ( change == 0 )
+{
+switch ( timer )
+  {
+  case 1: image_index = 1; break;
+  case 2: image_index = 2; break;
+  case 3: image_index = 3; break;
+  case 4: image_index = 4; break;
+  case 5: image_index = 5; break;
+  }
+
+if ( timer mod 3 == 0 && timer > 11 )
+  image_blend = c_red;
+  else
+  image_blend = c_white;
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( ai )
+  {
+  special = 1;
+  if ( collision_rectangle ( x - 48 , y - 48 , x + 48 , y + 48 , player , 0 , 0 ) || collision_rectangle ( x - 48 , y - 48 , x + 48 , y + 48 , projectile_box , 0 , 0 ) )
+    special = 0;
+  }
+if ( special == 0 && timer > 11 )
+  {
+    hspeed = 0.5 * size * ( 1 - facing*2 );
+  charge = timer/10.5
+  change = 1;
+  timer = 0;
+  time = 42;
+  }
+  if ( timer = 91 || timer = 101 || timer = 111 || timer = 121 || timer = 131 || timer = 141 || timer = 151 || timer = 161 )
+    {
+     screen_shake(0.7,0.9);
+    }
+  if ( timer = 171 || timer = 176 || timer = 181 || timer = 186 || timer = 191 || timer = 196 || timer = 201 || timer = 206 )
+    {
+     screen_shake(0.9,1);
+    }
+  if ( timer > 111 && timer <= 250 )
+    {
+    percent += 0.05;
+    }
+if ( timer > 250 )
+  {
+  if ( air == 0 )
+    hspeed = 1 * size * ( 1 - facing*2 );
+  if ( air > 0 )
+    hspeed = 1 * size * ( 1 - facing*2 );
+  charge = timer/12.5
+  change = 2;
+  timer = 0;
+  time = 42;
+  percent += 3;
+  screen_shake(2.3,5);
+  sound_play ( fsboot_sound );
+  }
+}
+else
+{
+image_blend = c_white;
+
+switch ( timer )
+  {
+  case 1: image_index = 6; break;
+  case 3: image_index = 7; break;
+  case 5: image_index = 8; break;
+  case 6: image_index = 9; break;
+  case 7: image_index = 10; break;
+  case 9: image_index = 11; break;
+  case 12: image_index = 12; break;
+  case 15: image_index = 13; break;
+  case 20: image_index = 14; break;
+  case 35: image_index = 15; break;
+  }
+
+  if ( timer = 1 )
+  {
+    sound_play ( b_sound );
+    sound_play ( b_voice );
+    if ( change == 1 )
+    sound_play ( swingsnd1 );
+    else
+    sound_play ( swingsnd3 );
+  }
+  if ( timer = 7 )
+  {
+  create_hitbox2 ( 9+(charge*2) , 48+facing*84 , 7 + (charge/2.2) , 4.8 , 65 + (charge*0.9) , 13 + (charge/4) , slash3 , obj_spark_slash3 , 0.85 , 0.50 , 26.60 , 41.80 , self.id , 8 , 3 );
+	hitbox2.image_angle = 350-facing*((2*350)-540)
+  create_hitbox ( 8+(charge*2.1) , 48+facing*84 , 7 + (charge/2.2) , 4.8 , 65 + (charge*0.9) , 13 + (charge/4) , slash3 , obj_spark_slash3 , 0.68 , 0.31 , 21.90 , 25.50 , self.id , 8 , 3 );
+	hitbox.image_angle = 45+facing*(180-(2*45))
+  create_hitbox3 ( 7+(charge*1.45) , 48+facing*84 , 6.55 + (charge/2.2) , 4.4 , 55 + (charge) , 11 + (charge/4) , slash2 , obj_spark_hit3 , 1.15 , 0.33 , 26.80 , 53.10 , self.id , 8 , 3 );
+	hitbox3.image_angle = 350-facing*((2*350)-540)
+  }
+  if ( timer = 9 )
+  {
+  hitbox.image_xscale = 0.68 * (1-facing*2) * size;
+  hitbox.image_yscale = 0.61 * size;
+  hitbox.hitbox_x = 27.90*(1-facing*2) * size;
+  hitbox.hitbox_y = 21.50 * size;
+  hitbox2.image_xscale = 0.9 * (1-facing*2) * size;
+  hitbox2.image_yscale = 0.40 * size;
+  hitbox2.hitbox_x = 40.60*(1-facing*2) * size;
+  hitbox2.hitbox_y = 30.80 * size;
+  hitbox2.image_angle = 300-facing*((2*300)-540)
+  hitbox3.image_xscale = 0.95 * (1-facing*2) * size;
+  hitbox3.image_yscale = 0.4 * size;
+  hitbox3.hitbox_x = 50.80*(1-facing*2) * size;
+  hitbox3.hitbox_y = 36.10 * size;
+  hitbox3.image_angle = 300-facing*((2*300)-540)
+  }
+  if ( timer = 12 )
+  {
+  hitbox.image_xscale = 0.6* (1-facing*2) * size;
+  hitbox.image_yscale = 0.6 * size;
+  hitbox.hitbox_x = 28.50*(1-facing*2) * size;
+  hitbox.hitbox_y = 13.50 * size;
+  hitbox2.image_xscale = 0.85 * (1-facing*2) * size;
+  hitbox2.image_yscale = 0.4 * size;
+  hitbox2.hitbox_x = 43.60*(1-facing*2) * size;
+  hitbox2.hitbox_y = 16.80 * size;
+  hitbox2.image_angle = 270
+  hitbox3.image_xscale = 0.90 * (1-facing*2) * size;
+  hitbox3.image_yscale = 0.46 * size;
+  hitbox3.hitbox_x = 54.80*(1-facing*2) * size;
+  hitbox3.hitbox_y = 16.10 * size;
+  hitbox3.image_angle = 270
+  }
+}
+
+if ( air == 0 ) hspeed *= 0.9;
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 5;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+    }
+}
+
+if change = 0 {
+if timer = 1 {
+  xoff = 54; //Bigger is left
+  if facing = 1
+  xoff = 55
+  effscale = xsize/2.5
+  yoff = 35+((air>0)*3); //Bigger is up
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = b1_effect_spr;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0.4;
+    eff.image_index = 0;
+    eff.alarm[0] = 300;
+    eff.snap = self.id
+	eff.visible = 0;
+    eff.depth = 1;
+}
+if eff.image_index > 3.5
+eff.image_index = 0
+}
+if change > 0 && notip < 2 {
+if timer = 1 {
+    eff.depth = -2
+
+    eff.image_speed = 0;
+    eff.image_index = 2;
+}
+if timer = 4 {
+    eff.image_speed = 0;
+    eff.image_index = 3;
+    eff2 = create_blur(x,y,self.id);
+	eff2.visible = 0;
+    eff2.sprite_index = b2_effect_spr;
+    eff2.image_xscale = (effscale*size)*(1-facing*2);
+    eff2.image_yscale = (effscale*size);
+    eff2.x = (x+(22*size*(1-facing*2))) - xoff*size*(1-facing*2);
+    eff2.y = y - yoff*size;
+    eff2.image_speed = 0;
+    eff2.image_index = 0;
+    eff2.alarm[0] = 40;
+    eff2.snap = self.id
+    eff2.depth = 1;
+    eff2.image_speed = 0;
+    eff2.image_index = 0;
+}
+if timer = 7 {
+    eff.image_speed = 0;
+    eff.image_index = 4;
+    eff2.image_speed = 0;
+    eff2.image_index = 1;
+}
+if timer = 9 {
+    eff.image_speed = 0;
+    eff.image_index = 5;
+    eff2.image_speed = 0;
+    eff2.image_index = 2;
+}
+if timer = 11 {
+    eff.image_speed = 0;
+    eff.image_index = 6;
+    eff2.image_speed = 0;
+    eff2.image_index = 3;
+}
+if timer = 16 {
+    eff.image_speed = 0;
+    eff.image_index = 7;
+    eff2.image_speed = 0;
+    eff2.image_index = 4;
+}
+if timer = 19 {
+    eff.image_speed = 0;
+    eff.image_index = 8;
+    eff2.image_speed = 0;
+    eff2.image_index = 5;
+}
+if timer = 22 {
+    eff.image_speed = 0;
+    eff.image_index = 9;
+    eff2.image_speed = 0;
+    eff2.image_index = 6;
+}
+if timer = 24 {
+    with (eff){
+      instance_destroy();
+    }
+    with (eff2){
+      instance_destroy();
+    }
+}
+}
+if change > 0 && notip = 2 {
+if timer = 1 {
+    with (eff){
+      instance_destroy();
+    }
+}
+if timer = 6 {
+  effscale = xsize/2
+    eff2 = create_blur(x,y,self.id);
+    eff2.sprite_index = broy_effect_spr;
+    eff2.image_xscale = (effscale*size)*(1-facing*2);
+    eff2.image_yscale = (effscale*size);
+    eff2.x = (x+(30*size*(1-facing*2))) - xoff*size*(1-facing*2);
+    eff2.y = (y-(28*size)) - yoff*size;
+    eff2.image_speed = 0;
+    eff2.image_index = 0;
+    eff2.alarm[0] = 40;
+    eff2.snap = self.id
+    eff2.depth = -2;
+}
+if timer = 7 {
+    eff2.image_speed = 0;
+    eff2.image_index = 1;
+}
+if timer = 9 {
+    eff2.image_speed = 0;
+    eff2.image_index = 2;
+}
+if timer = 12 {
+    eff2.image_speed = 0;
+    eff2.image_index = 3;
+}
+if timer = 15 {
+    eff2.image_speed = 0;
+    eff2.image_index = 4;
+}
+if timer = 19 {
+    with (eff2){
+      instance_destroy();
+    }
+}
+}
+  if (attack_type == "none"){
+    if (instance_exists(eff)){
+      with (eff){
+        instance_destroy();
+      }
+    }
+    if (instance_exists(eff2)){
+      with (eff2){
+        instance_destroy();
+      }
+    }
+  }

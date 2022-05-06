@@ -1,0 +1,95 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0+boost;
+        time = 32;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		meter = 100
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+	switch ( timer ){
+		case 5: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 11: image_index = 1; break;
+		case 14: image_index = 2; break;
+		case 17: image_index = 1; break;
+		case 20: image_index = 2; break;
+		case 23: image_index = 1; break;
+		case 26: image_index = 2; break;
+		
+		case 29: image_index = 3; break;
+    }
+	
+	
+	if timer = 5{
+		sound_play(whiff_sound1);
+		play_attack_voice()
+		duster = instance_create(x,y,obj_dust_effect)
+	    duster.facing = !facing;
+		duster.image_xscale *= 3
+		duster.image_yscale *= 1
+		duster = instance_create(x,y,obj_dust_effect)
+	    duster.facing = facing;
+		duster.image_xscale *= 3
+		duster.image_yscale *= 1
+		if meter > 5{
+		spark2 = instance_create(x+0*size*(1-facing*2),y-15,obj_spark_shockwave)
+		spark2.image_angle = 90
+		spark2.image_blend = c_aqua
+		spark2.image_alpha = 0.5
+		spark2.depth = depth - 1.5
+		spark3 = instance_create(x+0*size*(1-facing*2),y-15,obj_spark_shockwave)
+		spark3.image_angle = 90
+		spark3.image_blend = c_purple
+		spark3.image_alpha = 0.5
+		spark3.depth = depth - 1
+		}
+		orbit_dir = 0
+		distance_value = 80
+		if meter > 25
+		for (i = 0; i < 24; i += 1){
+			orbit_dir = i*15
+			orbit_x=x+(lengthdir_x(distance_value, orbit_dir));
+			orbit_y=(y - 20*size)+(lengthdir_y(distance_value, orbit_dir));
+			daeff = create_spark( 20+15*i ,10 , effect_sprite , 0.25+random(0.55) , 0.3*(1-facing*2) , 0.3 );
+			daeff.depth = depth -1
+			daeff.x=orbit_x;
+			daeff.y=orbit_y;
+			burst = instance_create(orbit_x,orbit_y,obj_jab_burst);
+			burst.image_xscale *= 0.3;
+			burst.image_yscale *= 0.3;
+			
+		}
+		if meter > 0{
+			create_hitbox(10,angle_correct(30),10,8,5,18,sf_punch3,obj_spark_hit1,12,12,00,15,self.id,1,4);
+			hitbox.execute_on_hit = "attacked.alarm[2] += 90"
+			hitbox.di = 0
+			hitbox.sdi = 0
+			meter -= 100
+		}
+		
+	}
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

@@ -30,20 +30,22 @@ sound_stop(charge_sound);
 if ( place_meeting ( target.x , target.y , projectile_box ) )
     {
     obj = instance_nearest ( target.x , target.y , projectile_box );
-    if ( obj.hit <= 2  ){
+    if ( obj.hit <= 2  ){ 
 		enemy.state_type = "flinch"
     if ( chargeshot.priority >= 4){
-if (dontrepeat = 0 && (sprite_index == b_shoot_sprite || instance_exists(chargeshot))){
+if (dontrepeat = 0 && (sprite_index == b_shoot_sprite || instance_exists(chargeshot) && obj_score_control.stocks[target.number-1] == 1)){
 				if ((target.weight <= .22 && target.percent > 85) || (target.weight > .22 && target.weight < .3 && target.percent > 95) || (target.weight > .3 && target.percent > 110)){
-				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+			killspark = instance_create(enemy.x-200,enemy.y-170,obj_spark);
 				killspark.sprite_index = killspark_sprite;
-				killspark.image_xscale = size * 0.75;
-				killspark.image_yscale = size * 0.95;
-				killspark.image_yscale = size * 0.95;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
 				killspark.image_index = 0;
-				killspark.image_speed = 0.055;
+				killspark.image_speed = 0.045;
 				killspark.alarm[0] = 100;
-				killspark.depth = depth + 2 ;
+				killspark.depth = depth + 5 ;
 				sound_play(killscreen_voice);
 				screen_shake(30,30);
 				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)

@@ -1,0 +1,124 @@
+absorb = 0
+absorb2 = 1
+moving_object = 1;
+proj_destroy = 1
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    image_speed = 0.35;
+    visible=1;
+    temp = 1
+    proj_hits = 1
+	image_index = 0
+	image_speed = 0
+    gravity = 0.45
+    hit = 0
+    priority = 1
+}
+if ( temp < 2 )
+{
+image_angle = ( 360 - 17.5 * timer ) * ( 1 - facing * 2 );
+}
+if attack_success = 1 && timer = time && temp = 2{
+time += 1
+attack_success=2;
+attacker.attack_hits-=1;
+}
+if hit = 2 && temp = 1 && hspeed = 0
+    hspeed = xspeed
+else if temp = 2
+    speed = 0
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.9)
+if timer = time+1 && proj_hits <= 2 {
+    proj_hits+=1
+    hit = 0
+    launch = 0
+    attack_success=0
+    target.hitby=0
+    timer = 0
+    time = 10
+    if proj_hits = 3 {
+        damage = round(attacker.size*4)
+        bkb= attacker.size*5
+        kbg = attacker.size*1.5
+        dir = 30+facing*120
+        hitlag_frames = round(3*attacker.size)
+        shake_ampl = 0
+        gfx = obj_spark_hit1
+    }
+}
+
+if timer = 24 && proj_hits<3 && temp = 2
+proj_hits=3
+
+if temp < 2 && (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self.id)) {
+	parry_nodestroy = 1;
+    if temp2 <= 0 {
+    bkb= attacker.size*5
+    kbg = attacker.size*1.5
+    temp = 2
+    timer = 2
+    time = 300
+    image_speed = 0.25
+    image_index = 1
+    hit = 0
+    vspeed = 0
+    gravity = 0
+    image_angle = 0
+    sound_play(choose(attacker.id.potionbreak_sound1, attacker.id.potionbreak_sound2, attacker.id.potionbreak_sound3))
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+    duster.image_xscale *= 0.3
+    duster.image_yscale *= 0.2
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = 1-facing; 
+    duster.image_xscale *= 0.3
+    duster.image_yscale *= 0.2 }
+    else
+    instance_destroy();
+}
+if image_index = 2
+{
+image_index = 2
+image_speed = 0
+}
+
+if image_index >= image_number - image_speed {
+    if temp = 2
+        instance_destroy()
+    else
+        image_speed = 0
+}
+
+if vspeed > 3.6
+    vspeed = 3.6
+
+if timer > 10 && timer < 90 && burn!=1 && timer mod 25 = 0
+{
+magolor=create_projectile(1 , 362 , 5.1 , 0 , 8 , 3 , punch1 , obj_spark_hit1 , 0.9 ,0.9 , 1 ,15 , attacker.id , 6 );
+magolor.sprite_index=attacker.id.shoot_me_sprite;
+magolor.hit=2
+} 
+
+if burn=1
+{
+
+if burning=0
+{
+burning=1
+    timer = 2
+    time = 325
+alarm[0] = 325
+hit=2
+
+}
+if timer mod 3 = 0
+{
+wee=irandom_range(-30,10)
+gee=irandom_range(25,30)
+fire=create_projectile ( 1 , 361 , 1 , 1 , -1 , -1 , fire1,obj_spark_fire1 , 0.1 , 0.1 , wee , gee , attacker.id , 12 , 1 );
+
+fire.depth=-3
+fire.sprite_index=keepmain.dthrow_fire_sprite;
+fire.image_speed=0.6
+}
+}

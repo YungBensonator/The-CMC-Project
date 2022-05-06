@@ -1,0 +1,140 @@
+if ( state_type = "down" )
+  {
+  state_type = "attack";
+  attack_type = "down_attack";
+  image_speed = 0;
+  sprite_index = down_attack_sprite;
+  image_index = 0;
+  timer = 1;
+  time = 43;
+  timer_speed = 1;
+  xoff = 66; //Bigger is left
+  if facing = 1
+  xoff = 67
+  effscale = xsize/1.85
+  yoff = 59; //Bigger is up
+  }
+
+if timer = 12 {
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = down_effect_spr;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 1;
+    eff.alarm[0] = 40;
+    eff.depth = -2;
+}
+if timer = 15 {
+  xoff = 56; //Bigger is left
+  if facing = 1
+  xoff = 57
+  effscale = xsize/1.85
+  yoff = 60; //Bigger is up
+    eff.image_speed = 0;
+    eff.image_index = 2;
+}
+if timer = 17 {
+  eff.image_alpha = 0;
+}
+if timer = 19 {
+  eff.image_alpha = 1;
+  effscale = xsize/1.55
+  xoff = 96; //Bigger is left
+  if facing = 1
+  xoff = 97
+  yoff = 71; //Bigger is up
+    eff.image_speed = 0;
+    eff.image_index = 3;
+}
+if timer = 20 {
+  xoff = 97; //Bigger is left
+  if facing = 1
+  xoff = 98
+  yoff = 67; //Bigger is up
+    eff.image_speed = 0;
+    eff.image_index = 4;
+}
+if timer = 22 {
+  eff.depth = 1
+  xoff = 92; //Bigger is left
+  if facing = 1
+  xoff = 93
+  yoff = 59; //Bigger is up
+    eff.image_speed = 0;
+    eff.image_index = 5;
+}
+if timer = 25 {
+  xoff = 85; //Bigger is left
+  if facing = 1
+  xoff = 86
+  yoff = 63; //Bigger is up
+    eff.image_speed = 0;
+    eff.image_index = 6;
+}
+if timer = 28 {
+  xoff = 88; //Bigger is left
+  if facing = 1
+  xoff = 89
+  yoff = 63; //Bigger is up
+    eff.image_speed = 0;
+    eff.image_index = 7;
+}
+if timer = 30 {
+    with (eff){
+      instance_destroy();
+    }
+}
+  if (attack_type == "none"){
+    if (instance_exists(eff)){
+      with (eff){
+        instance_destroy();
+      }
+    }
+  }
+if instance_exists(eff) {
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+}
+
+switch ( timer )
+  {
+  case 1: intangible = 1; break;
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 9: image_index = 3; break;
+  case 11: image_index = 4; break;
+  case 12:
+    play_attack_voice();
+    sound_play ( swingsnd1 );
+    create_hitbox(7,145-facing*110,5.4,4.9,4,3,slash2,obj_spark_slash2,1.31 , 0.75 , -30.80 , 14 ,self.id,4,3);
+    image_index = 5;
+    break;
+  case 15: image_index = 6; break;
+  case 17: image_index = 7; break;
+  case 19: image_index = 8; break;
+  case 20:
+    sound_play ( swingsnd1 );
+    create_hitbox(7,35+facing*110,5.4,4.9,4,3,slash2,obj_spark_slash2,1.31 , 0.75 , 30.80 , 17.50,self.id,4,3);
+    image_index = 9;
+    break;
+  case 22: image_index = 10; break;
+  case 25: image_index = 11; break;
+  case 28: intangible = 0; break;
+  case 31: image_index = 12; break;
+  case 34: image_index = 13; break;
+  case 37: image_index = 14; break;
+  case 40: image_index = 15; break;
+  }
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time =-1;
+  }
+        

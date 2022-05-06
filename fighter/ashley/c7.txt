@@ -1,0 +1,94 @@
+absorb = 0
+absorb2 = 0
+no_reflect = 1
+moving_object = 1;
+proj_destroy = 1
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    image_speed = 0.25;
+    visible=1;
+    //vspeed = attacker.size * (80);
+
+    ashley = attacker
+    direction = 270
+    hit = 2
+}
+
+if stay=0
+{
+if timer >=1 {
+vspeed +=0.2;
+}
+if ( on_floor || on_platform )
+  {
+    y = yprevious;
+    vspeed = 0;
+  }
+if timer = 2 {
+    hit = 0
+    visible = 1
+    vspeed = 0
+    }
+}
+/////Stay
+
+
+if timer > 10 && timer < 85 && starexplode!=1 && timer mod 25 = 0
+{
+magolor=create_projectile(1 , 362 , 5.1 , 0 , 8 , 3 , punch1 , obj_spark_hit1 , 0.9 ,0.9 , 1 ,15 , attacker.id , 6 );
+magolor.sprite_index=attacker.id.shoot_me_sprite;
+magolor.hit=2
+} 
+
+if stay=1
+{
+vspeed=0
+
+if starexplode=1
+{
+if starburst=0
+{
+
+ starburst=1
+ timer = 2
+ time = 1000
+alarm[0] = 9999
+starexplode=1
+}
+
+if timer mod 5 = 0 && timer <= 135
+{
+wee=irandom_range(-10,10)
+chooseny3 = choose(-1.5,-1,0,1,1.5,)
+fire=create_projectile ( 0.5 , 361 , 1 , 1 , 1 , -1 , shock2,obj_spark_shock , 0.5 , 0.5 , wee , 10 , attacker.id , 888 , char_custom9 );
+image_yscale+=0.01
+image_xscale+=0.01*(1-facing*2)
+fire.vspeed=-3
+fire.hspeed= chooseny3*size*(1-facing*2)
+fire.depth=-3
+fire.sprite_index=keepmain.stars_sprite;
+fire.image_speed=0.2
+}
+
+if timer = 140
+{
+spark = instance_create ( x , y , obj_spark_shockwave );
+for (i = 0; i < 17; i += 1){
+chooseny32 = choose(-3,-2.5,-2,-1.5,-1,0,1,1.5,2,2.5,3,)
+chooseny52 = choose(-3,-2,-1,0,1,2,3,)
+dee=create_projectile ( 1.5 , 361 , 1 , 1 , 4 , 6 , fire1,obj_spark_fire1 , 0.5 , 0.5 , 0 , 10 , attacker.id , 888 , char_custom9 );
+dee.vspeed=chooseny52
+dee.hit=2
+dee.hspeed= chooseny32*size*(1-facing*2)
+dee.depth=-3
+dee.sprite_index=keepmain.stars_sprite;
+dee.image_speed=0.6
+}
+}
+
+if timer = 142
+{
+//spark = instance_create ( x , y , obj_spark_shockwave );
+instance_destroy();
+}
+}
+}

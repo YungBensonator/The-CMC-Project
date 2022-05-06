@@ -1,0 +1,73 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0.2;
+sprite_index = dthrow_sprite;
+image_index=0;
+timer = 0;
+time = 55;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+}
+if timer < time {
+if ( timer >= 0 && timer <= 4 )
+{
+target.x = x + 20 * size * (1-facing*2);
+target.y = y - 14*size;
+}
+	if timer > 1
+	sftemp_timer = 0
+    if timer = 5
+	{
+    sound_play(dthrow_voice)
+	}
+	if ( timer >= 0 && timer <= 9 )
+	{
+    target.x = x +2 - facing*4 * size;
+	target.y = y - 10*size;
+	}
+    if ( timer >= 10 && timer <= 14 )
+	{
+    target.x = x -9 + facing*18 * size;
+	target.y = y - 10*size;
+	}
+	if ( timer >= 15 && timer <= 19 )
+	{
+	target.x = x -9 + facing*18 * size;
+    target.y = y -20 * size;
+	}
+    if ( timer >= 20 && timer <= 24 )
+	{
+    target.x = x -8 + facing*16 * size;
+	target.y = y -20 * size;
+	}
+	if ( timer >= 25 && timer <= 29 )
+	{
+	target.x = x;
+	target.y = y -20 * size;
+	}
+	if ( timer >= 30 && timer <= 32 )
+	{
+	target.x = x+5-facing*10 * size;
+	target.y = y -20 * size;
+	}
+	if ( timer = 30 )
+	{
+	image_speed = 0.5;
+	}
+    if timer = 32 {
+        script_execute(create_throw_box,7,270,10,0,1,1,-1,-1,0.8,0.8,5,25,self.id,1);
+        hitbox.hit_stun = 10;
+	hitbox.di = -1 }
+    if image_index >= image_number - image_speed
+	image_speed = 0
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

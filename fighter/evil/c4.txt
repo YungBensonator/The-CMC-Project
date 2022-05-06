@@ -1,0 +1,258 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "shielding" || state_type = "jump" {
+        hspeed = 0;
+        size = csize
+        attack_success = 0
+        image_speed = 0;
+        sprite_index = sideb_sprite;
+        image_index = 1;
+        sound_play(final_smash_sound1)
+        sound_play(coros_voice)
+        spark = instance_create(x,y-20,obj_spark)
+        spark.sprite_index = spark_sprite
+        spark.image_xscale = 0.5
+        spark.image_yscale = 0.5
+        spark.image_speed = 1
+        spark.image_alpha = 1
+        spark.depth = -2
+        //effect_create_above(ef_ring,x,y-18,0,c_white)
+        //background_blend=c_dkgray;
+        timer = 0
+        time = 318;
+        timer_speed=1;
+        intangible = 1;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        temp = 0
+        final_smashes+=1
+        air_move=0
+}
+if timer < time 
+{
+sftemp_timer = 0
+intangible = 1
+if timer = 1 {
+freezer = instance_create(x,y,obj_freeze)
+freezer.alarm[0] = 40
+}
+if temp = 1 {
+vspeed=0
+gravity_lock = 2 }
+     if timer = 3 {
+         image_index = 5.1;
+         image_speed = 0;
+         sound_play(roll_dodge_sound);
+         hspeed = (3.5-facing*7)*size
+         }
+     if timer >= 3 && timer < 26 {
+        air = 0
+        hspeed = (3.5-facing*7)*size
+        vspeed = 0
+        if cos(timer*pi)>0.5
+        after_image(7,c_maroon,0.8)
+        }
+     if timer >= 26 && timer < 30 {
+        air = 0
+        hspeed = (3-facing*6)*size
+        vspeed = 0
+        if cos(timer*pi)>0.5
+        after_image(6,c_white,0.7)
+        }
+     if timer >= 30 && timer <= 39 {
+        air = 0
+        hspeed = (2-facing*4)*size
+        vspeed = 0
+        }
+    if timer >= 4 && timer < 37 && collision_rectangle(x+20-facing*40,y-20,x-3+facing*6,y-2,player,1,1).intangible = 0 && attack_success==0 {
+        temp = 1
+        attack_success = 0
+        create_hitbox(0,270,1,0,-1,1,-1,obj_spark,1.1,0.9,22,18,self.id,10,6);
+        hitbox.armor_break = 1
+        if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = -1
+        FMODSoundPlay(crowd_recover2)
+     }
+    }
+    if timer = 43 {
+        hspeed = 0
+        attack_type = "none";
+        if air = 0
+        state_type = "stand";
+        else
+        state_type = "fall"
+        timer = 0;
+        time =-1;
+        smash_power = 0
+        intangible = 0
+        if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = self.id
+        FMODSoundPlay(crowd_nocontest)
+        sprite_index = final_smash_grab_sprite
+        image_index = 0
+     }
+        }
+    if timer > 3 && attack_success = 1 && timer < 42 && instance_exists(target) {
+       speed = 0
+       timer = 99
+       target.x = self.x+19-facing*38
+       target.y = y-1
+       target.speed=0
+       temp=1
+       sprite_index = final_smash_grab_sprite
+       image_index = 0
+       }
+    if timer >= 100 && timer < 303 {
+    target.time = 248;
+    target.timer = 0
+    target.sprite_index=target.flinch_sprite
+    target.state_type = "flinch"
+    target.speed = 0;
+    target.gravity_lock = 2;
+	target.ignore_physics = 1;
+    target.y = self.y-size;
+    target.x = x + (20 - facing*40)*size
+    target.gethit = 0;
+    target.timer_speed = 1
+    hspeed = 0 
+    target.intangible = 0
+    target.intangible_frames = 0
+    }
+    if timer = 146
+		{
+		 freeze = instance_create ( 0 , 0 , obj_freeze );
+         freeze.dontpause = self.id;
+		 blackscreen = instance_create(obj_game_control.camera_boundary_l - 1000, obj_game_control.camera_boundary_u - 1000,obj_spark)
+		 blackscreen.sprite_index = spr_solid;
+		 blackscreen.image_speed = 0;
+		 blackscreen.image_xscale = 2000;
+         blackscreen.image_yscale = 2000;
+		 blackscreen.image_blend = dkgray;
+		 blackscreen.depth = -14;
+		 blackscreen.alarm[0] = 300;
+		 }
+    if timer = 147 || timer = 163 || timer = 178 || timer = 192 || timer = 205 || timer = 218 || timer = 228 || timer = 238 || timer = 248 || timer = 256 {
+		target.gethit = 0;
+        create_hitbox(2,361,9,0,-1,2,choose(sf_punch3,sf_punch2,sf_punch3),-1,1.5,1,random(25)+3,random(19)+6,self.id,3,6);
+        hitbox.fx_x = -7 + round(random(13.6));
+        hitbox.fx_y = -5 + round(random(12));
+		hitbox.bkb = 9;
+        spark = create_spark(hitbox.fx_x + 12, hitbox.fx_y + 12, rd_spark, 0.8, size*0.4, size*0.4);
+        spark.image_angle = 15*(floor(random(23)));
+        spark.depth = -15;
+        }
+    if timer = 263 || timer = 270 || timer = 276 || timer = 282 || timer = 286 || timer = 289 || timer = 292 || timer = 294 || timer = 296 || timer = 298 || timer = 300 {
+        target.gethit = 0;
+        create_hitbox(2,361,11,0,-1,1,choose(sf_punch3,sf_punch3,sf_punch2,sf_punch3,sf_punch2),-1,1.5,1,random(25)+3,random(19)+9,self.id,1);
+        hitbox.fx_x = -7 + round(random(13.6));
+        hitbox.fx_y = -5 + round(random(12));
+		hitbox.bkb = 9;
+        spark = create_spark(hitbox.fx_x + 12, hitbox.fx_y + 12, rd_spark, 0.8, size*0.4, size*0.4);
+        spark.image_angle = 15*(floor(random(23)));
+        spark.depth = -15;
+        }
+    /*if timer = 302 {
+        target.gethit = 0
+        sprite_index = final_smash_end_sprite
+        image_index = 0
+        sound_play(final_smash_hit_sound)
+        create_hitbox(3,49+facing*82,8.8,8.25,-1,110,-1,obj_spark_special1,1,0.9,22,12,self.id,1); 
+        instance_create(0,0,obj_flashscreen)
+        sound_play(taunt_voice)
+        bg = instance_create(death_boundary_l,death_boundary_u,obj_spark)
+        bg.sprite_index = superbg_sprite
+        bg.image_speed = .2
+        bg.depth = 1
+        bg.image_xscale = 1
+        bg.image_yscale = 1
+        bg2 = instance_create(death_boundary_l,death_boundary_u,obj_spark)
+        bg2.sprite_index = superbg_end_sprite
+        bg2.image_speed = 0
+        bg2.snap = 0
+        bg2.depth = 0
+        bg2.image_xscale = 0.4
+        bg2.image_yscale = 0.4
+        }
+    if timer = 304 {
+        //target.gethit = 0
+        //script_execute(create_hitbox,1,49+facing*82,9.55,7.5,-1,5,-1,-1,0.9,0.7,17,15,self.id,4); 
+        with bg2 instance_destroy() }
+    if timer = 304
+        image_speed = 0.2
+    // Alternate version
+    if timer = 180 || timer = 183 || timer = 186 || timer = 189 || timer = 192 || timer = 195 || timer = 198 || timer = 201 || timer = 204 || timer = 207 {
+        create_hitbox(1.5-1.5*(target.hp <= 2*size)*(global.game_mode = "stamina"),361,4,0,-1,0,sf_punch3,-1,1.5,1,random(25)+3,random(19)+6,self.id,3,6); 
+        hitbox.fx_x = -7 + round(random(13.6))
+        hitbox.fx_y = -5 + round(random(12))
+		hitbox.depth = -15;
+        spark = create_spark(hitbox.fx_x + 12, hitbox.fx_y + 12, rd_spark, 0.8, size*0.4, size*0.4)
+        spark.image_angle = 15*(floor(random(23)))
+        spark.depth = -10
+    }
+    if timer = 210 || timer = 213 || timer = 216 || timer = 219 || timer = 222 || timer = 225 || timer = 228 || timer = 231 || timer = 234 || timer = 237 || timer = 240 || timer = 243 {
+        target.gethit = 0
+        create_hitbox(2-2*(target.hp <= 2*size)*(global.game_mode = "stamina"),361,4,0,-1,0,sf_punch3,-1,1.5,1,random(25)+3,random(19)+9,self.id,1); 
+        hitbox.fx_x = -7 + round(random(13.6))
+        hitbox.fx_y = -5 + round(random(12))
+		hitbox.depth = -15;
+        spark = create_spark(hitbox.fx_x + 12, hitbox.fx_y + 12, rd_spark, 0.8, size*0.4, size*0.4)
+        spark.image_angle = 15*(floor(random(23)))
+        spark.depth = -10
+    }
+    if timer = 246 || timer = 249 || timer = 252 || timer = 255 || timer = 258 || timer = 261 || timer = 264 || timer = 267 {
+        target.gethit = 0
+        create_hitbox(2-2*(target.hp <= 2*size)*(global.game_mode = "stamina"),361,5,0,-1,0,sf_punch3,-1,1.5,1,random(25)+3,random(19)+9,self.id,1); 
+        hitbox.fx_x = -7 + round(random(13.6))
+        hitbox.fx_y = -5 + round(random(12))
+		hitbox.depth = -15;
+        spark = create_spark(hitbox.fx_x + 12, hitbox.fx_y + 12, rd_spark, 0.8, size*0.4, size*0.4)
+        spark.image_angle = 15*(floor(random(23)))
+        spark.depth = -10
+    }
+    if timer >= 212 && timer < 270 && frac(timer/4)=0 {
+        target.gethit = 0
+        create_hitbox((3 + 1*(frac(timer/8)!=0))*(1 - (target.hp <= 4*size)*(global.game_mode = "stamina")),361,5,0,-1,0,sf_punch3,-1,1.5,1,random(25)+3,random(19)+9,self.id,1); 
+        hitbox.fx_x = -7 + round(random(13.6))
+        hitbox.fx_y = -5 + round(random(12))
+		hitbox.depth = -15;
+        spark = create_spark(hitbox.fx_x + 12, hitbox.fx_y + 12, rd_spark, 0.8, size*0.4, size*0.4)
+        spark.image_angle = 15*(floor(random(23)))
+        spark.depth = -10
+    }*/
+    if timer = 303 {
+		with freeze instance_destroy()
+		with blackscreen instance_destroy()
+        gethit = 0
+        shakex = 0
+        shakey = 0
+        target.gethit = 0
+        target.shakex = 0
+        target.shakey = 0
+        sprite_index = final_smash_end_sprite
+        image_index = 0
+        sound_play(final_smash_hit_sound)
+        create_hitbox(11,49+facing*82,9,8.15,-1,45,epic_punch,obj_spark_impact,0.6,0.6,24,12,self.id,2,5);
+		spark = create_spark(hitbox.fx_x + 12, hitbox.fx_y + 12, rd_spark, 0.8, size*0.5, size*0.5)
+		spark.image_angle = 15*(floor(random(23)))
+		spark.depth = -15
+		hitbox.di = 0
+		hitbox.throw = 0
+        hitbox.shake_kb = 90
+        hitbox.hitshake_type = 2
+        hitbox.hitonce = 1
+        instance_create(0,0,obj_flashscreen)
+        sound_play(taunt_voice)
+    }
+}
+    if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+	if air > 0
+	{
+    state_type = "fall";
+	}
+    timer = 0;
+    time =-1;
+    smash_power = 0
+    hspeed = 0
+    }

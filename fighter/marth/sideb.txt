@@ -1,0 +1,1522 @@
+// attacks
+// change = 0 - step 1 n
+// change = 1 - step 2 n
+// change = 2 - step 2 u
+// change = 3 - step 3 n
+// change = 4 - step 3 u
+// change = 5 - step 3 d
+// change = 6 - step 4 n
+// change = 7 - step 4 u
+// change = 8 - step 4 d
+
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type == "jump" || state_type == "run" || state_type == "stand" || state_type == "crouch" )
+  {
+  if air > 0
+  state_type = "air_attack";
+  else
+  state_type = "attack";
+  attack_type = "sideb";
+  sprite_index = dash_attack_sprite;
+  image_index = 0;
+  image_speed = 0;
+  time = 30;
+  timer = 0;
+  timer_speed = 1;
+  special = 0;
+  change = 0;
+
+  vspeed *= 0.1;
+  stall += .8;
+hspeed *= 0.65;
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) && change=0{
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+slide *= 0.8;
+if air > 0
+hspeed *=0.9
+
+  if (attack_type == "none"){
+    if (instance_exists(eff)){
+      with (eff){
+        instance_destroy();
+      }
+    }
+  }
+switch ( change )
+  {
+// change = 0 - step 1 n
+  case 0:
+    sprite_index = sidebhit1_sprite;
+    switch ( timer )
+      {
+	  case 0: image_index = 0; 
+  xoff = -52; //Bigger is left
+  if facing = 1
+  xoff = -51
+  effscale = xsize/2.0
+  yoff = 51; //Bigger is up
+  break;
+      case 3: 
+    image_index = 1; break;
+      case 6:
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit1_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(-1)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2;
+        sound_play ( swingsnd1 );
+		image_index = 2;
+        create_hitbox ( 3 , 30+facing*120 , 4 , 0 , 5 , 4 , slash1 , obj_spark_slash1 , 0.65 , 0.31 , 14.70 , 18.20 , self.id , 3 , 2 );
+		
+		hitbox.image_angle = 337.98;
+		create_hitbox2 ( 3 , 30+facing*120 , 4 , 0 , 5 , 4 , slash1 , obj_spark_slash1 , 0.45 , 0.32 , 28 , 15.40 , self.id , 3 , 2 );
+		hitbox2.image_angle = 0;
+        create_hitbox3 ( 4 , 30+facing*120 , 4 , 0 , 5 , 7 , slash2 , obj_spark_slash4 , 0.41 , 0.31 , 40.60 , 16.10 , self.id , 3 , 2 );
+		hitbox3.image_angle = 0;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+	hitbox.weight_kb = 1;
+	hitbox2.weight_kb = 1;
+	hitbox3.weight_kb = 1;
+        break;
+      case 10:
+    eff.image_speed = 0;
+    eff.image_index = 1; image_index = 3; break;
+	  case 12:
+    eff.image_speed = 0;
+    eff.image_index = 2; image_index = 4; break;
+	  case 14:
+    eff.image_speed = 0;
+    eff.image_index = 3; image_index = 5; break;
+  case 15: 
+    with (eff){
+      instance_destroy();
+    }
+  break;
+	  case 16: image_index = 6; break;
+	  case 18: image_index = 7; break;
+	  case 20: image_index = 8; break;
+	  case 22: image_index = 9; break;
+	  case 24: image_index = 10; break;
+	  case 27: image_index = 11; break;
+      }
+if notip != 2 {
+    if ( timer < 10 && air > 0 )
+      vspeed = -3+stall;
+}
+if notip = 2 {
+    if ( timer < 10 && air > 0 )
+      vspeed = -2+stall;
+}
+    // STEP 1->2
+    if ( timer >= 9 && timer <= 26 )
+      {
+      if ( random(10) < 5 && ai )
+        {
+        special = 1;
+        moveup = 0;
+        movedown = 0;
+        if ( enemy.y < y - 10 )
+          moveup = 1;
+          else
+          {
+          if ( random(10) < 4 )
+            movedown = 1;
+            else
+          if ( random(10) < 4 )
+            moveup = 1;
+          }
+        }
+      if ( special == 1 )
+        {
+        image_index = 0;
+        if ( air == 0 ) hspeed = 2.1 * size * (1-facing*2);  else { hspeed = 3.4 * size * (1-facing*2); vspeed *= 0.1; }
+        special = 0;
+        timer = 0;
+        time = 40;
+        if ( moveup )
+		  {
+          change = 2;
+		  sprite_index = jab2_sprite;
+		  }
+          else
+		  {
+          change = 1;
+		  sprite_index = sidebhit2low_sprite;
+		  image_index = 0;
+		  }
+        }
+      }
+    break;
+
+// change = 1 - step 2 n
+  case 1:
+    switch ( timer )
+      {
+      case 2: 
+    with (eff){
+      instance_destroy();
+    }
+    break;
+      case 8: 
+  xoff = -64; //Bigger is left
+  if facing = 1
+  xoff = -63
+  effscale = xsize/2.0
+  yoff = 47; //Bigger is up
+  image_index = 1; break;
+      case 11:
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit2low_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(-1)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2; image_index = 2; break;
+      case 14:
+    eff.image_speed = 0;
+    eff.image_index = 1; 
+        play_attack_voice();
+        sound_play ( swingsnd2 );
+        image_index = 3;
+		create_hitbox ( 3 , 45+facing*90 , 4.9 , 0 , 5 , 4 , slash1 , obj_spark_slash1 , 0.63 , 0.34 , 28 , 15.40 , self.id , 3 , 2 );
+	  
+		hitbox.image_angle = 342.59;
+        create_hitbox2 ( 3 , 45+facing*90 , 4.9 , 0 , 5 , 4 , slash1 , obj_spark_slash1 , 0.43 , 0.30 , 41.30 , 9.80 , self.id , 3 , 2 );
+		hitbox2.image_angle = 345.32;
+        create_hitbox3 ( 4 , 45+facing*90 , 4.5 , 0 , 5 , 4 , slash2 , obj_spark_slash4 , 0.43 , 0.29 , 51.80 , 5.60 , self.id , 3 , 2 );
+		hitbox3.image_angle = 345.96;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+	hitbox.weight_kb = 1;
+	hitbox2.weight_kb = 1;
+	hitbox3.weight_kb = 1;
+        break;
+	  case 18:
+    eff.image_speed = 0;
+    eff.image_index = 2;  image_index = 4; break;
+     	  case 21:
+    eff.image_speed = 0;
+    eff.image_index = 3;  image_index = 5; break;
+      	  case 23:
+    with (eff){
+      instance_destroy();
+    }
+  break;
+	  case 24: image_index = 6; break;
+	  case 28: image_index = 7; break;
+	  case 32: image_index = 8; break;
+	  case 36: image_index = 9; break;
+      }
+    // STEP 2->3
+    if ( timer >= 17 && timer <= 33 )
+      {
+      if ( random(10) < 5 && ai )
+        {
+        special = 1;
+        moveup = 0;
+        movedown = 0;
+        if ( enemy.y < y - 10 )
+          moveup = 1;
+          else
+          {
+          if ( random(10) < 4 )
+            movedown = 1;
+            else
+          if ( random(10) < 4 )
+            moveup = 1;
+          }
+        }
+      if ( special == 1 )
+        {
+        image_index = 0;
+        if ( air == 0 ) hspeed = 2.5 * size * (1-facing*2);  else { hspeed = 3.4 * size * (1-facing*2); vspeed *= 0.1; }
+        special = 0;
+        timer = 0;
+        time = 46;
+        if ( moveup )
+		  {
+		  sprite_index = sidebhit3high_sprite;
+		  image_index = 0;
+          change = 4;
+		  }
+          else
+        if ( movedown )
+		  {
+		  if ( air = 0 )
+		  {
+		  sprite_index = sidebhit3low_sprite;
+		  }
+		  if ( air > 0 )
+		  {
+		  sprite_index = sidebhit3lowair_sprite;
+		  }
+		  image_index = 0;
+          change = 5;
+		  }
+          else
+		  {
+		  sprite_index = sidebhit3side_sprite;
+		  image_index = 0;
+          change = 3;
+		  }
+        }
+      }
+    break;
+  
+// change = 2 - step 2 u
+  case 2:
+    switch ( timer )
+      {
+      case 2: 
+    with (eff){
+      instance_destroy();
+    }
+  xoff = -81; //Bigger is left
+  if facing = 1
+  xoff = -80
+  effscale = xsize/2.0
+  yoff = 80; //Bigger is up
+    break;
+      case 12:
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = jab2_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(-1)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2;
+        play_attack_voice();
+        sound_play ( swingsnd2 );
+        image_index = 1;
+	create_hitbox ( 4 , 45+facing*90 , 4.6 , 0 , 8 , 5 , slash1 , obj_spark_slash1 , 0.49 , 0.37 , 18.90 , 21.70 , self.id , 4 , 2 );
+	
+	hitbox.image_angle = 344.22;
+    create_hitbox2 ( 4 , 45+facing*90 , 4.6 , 0 , 8 , 5 , slash1 , obj_spark_slash1 , 0.38 , 0.32 , 30.10 , 18.20 , self.id , 4 , 2 );
+	hitbox2.image_angle = 0;
+    create_hitbox3 ( 5 , 45+facing*90 , 4.3 , 0 , 8 , 7 , slash2 , obj_spark_slash2 , 0.40 , 0.30 , 40.60 , 16.10 , self.id , 4 , 2 );
+	hitbox3.image_angle = 0;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+	hitbox.di = 0.2;
+	hitbox2.di = 0.2;
+	hitbox3.di = 0.2;
+	hitbox.weight_kb = 1;
+	hitbox2.weight_kb = 1;
+	hitbox3.weight_kb = 1;
+        break;
+      case 13:
+  	hitbox.image_xscale = 0.53 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.33 * size;
+    hitbox.hitbox_x = 16.10 * (1-facing*2) * size;
+    hitbox.hitbox_y = 30.10 * size;
+	hitbox.image_angle = 6.34;
+	hitbox2.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.36 * size;
+    hitbox2.hitbox_x = 25.20*(1-facing*2) * size;
+    hitbox2.hitbox_y = 37.10 * size;
+	hitbox2.image_angle = 340.93;
+	hitbox3.image_xscale = 0.32 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.40 * size;
+	hitbox3.hitbox_x = 30.80 * (1-facing*2) * size;
+    hitbox3.hitbox_y = 44.80 * size;
+	hitbox3.image_angle = 323.97;
+    image_index = 2;
+    eff.image_speed = 0;
+    eff.image_index = 1;
+        break;
+      case 14:
+	hitbox.image_xscale = 0.36 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.50 * size;
+	hitbox.hitbox_x = 7 * (1-facing*2) * size;
+	hitbox.hitbox_y = 28 * size;
+	hitbox.image_angle = 28.16;
+	hitbox2.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.37 * size;
+	hitbox2.hitbox_x = 1.40 * (1-facing*2) * size;
+	hitbox2.hitbox_y = 37.10 * size;
+	hitbox2.image_angle = 26.10;
+	hitbox3.image_xscale = 0.37 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.45 * size;
+	hitbox3.hitbox_x = -3.50*(1-facing*2) * size;
+	hitbox3.hitbox_y = 46.20 * size;
+	hitbox3.image_angle = 19.98;
+    image_index = 3;
+    eff.image_speed = 0;
+    eff.image_index = 2;
+        break;
+	  case 15:
+    eff.image_speed = 0;
+    eff.image_index = 3; image_index = 4; break;
+	  case 16: 
+    with (eff){
+      instance_destroy();
+    }
+    image_index = 5; break;
+	  case 22: image_index = 6; break;
+      case 28: image_index = 7; break;
+      case 34: image_index = 8; break;
+      }
+    // STEP 2->3
+    if ( timer >= 17 && timer <= 32 )
+      {
+      if ( random(10) < 5 && ai )
+        {
+        special = 1;
+        moveup = 0;
+        movedown = 0;
+        if ( enemy.y < y - 10 )
+          moveup = 1;
+          else
+          {
+          if ( random(10) < 4 )
+            movedown = 1;
+            else
+          if ( random(10) < 4 )
+            moveup = 1;
+          }
+        }
+      if ( special == 1 )
+        {
+        image_index = 0;
+        if ( air == 0 ) hspeed = 2.5 * size * (1-facing*2);  else { hspeed = 3.4 * size * (1-facing*2); vspeed *= 0.1; }
+        special = 0;
+        timer = 0;
+        time = 46;
+        if ( moveup )
+		  {
+		  sprite_index = sidebhit3high_sprite;
+		  image_index = 0;
+          change = 4;
+		  }
+          else
+        if ( movedown )
+		  {
+		  if ( air = 0 )
+		  {
+		  sprite_index = sidebhit3low_sprite;
+		  }
+		  if ( air > 0 )
+		  {
+		  sprite_index = sidebhit3lowair_sprite;
+		  }
+		  image_index = 0;
+          change = 5;
+		  }
+          else
+		  {
+		  sprite_index = sidebhit3side_sprite;
+		  image_index = 0;
+          change = 3;
+		  }
+        }
+      }
+    break;
+  
+// change = 3 - step 3 n
+  case 3:
+    switch ( timer )
+      {
+      case 1: 
+    with (eff){
+      instance_destroy();
+    }
+  xoff = 21; //Bigger is left
+  if facing = 1
+  xoff = 22
+  effscale = xsize/2.0
+  yoff = 65; //Bigger is up
+    break;
+	  case 2: image_index = 1; break;
+	  case 9: 
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit3side_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2; image_index = 2; break;
+	  case 10: image_index = 3;
+    eff.image_speed = 0;
+    eff.image_index = 1; break;
+      case 11:
+    eff.image_speed = 0;
+    eff.image_index = 2;
+        sound_play ( swingsnd3 );
+		create_hitbox ( 4 , 50+facing*80 , 5.2 , 0 , 5 , 5 , slash2 , obj_spark_slash2 , 0.42 , 0.34 , 26.10 , 22.40 , self.id , 5 , 2 );
+			
+        create_hitbox2 ( 4 , 50+facing*80 , 5.2 , 0 , 5 , 5 , slash2 , obj_spark_slash2 , 0.29 , 0.32 , 32.40 , 17.50 , self.id , 5 , 2 );
+        create_hitbox3 ( 5 , 50+facing*80 , 5.2 , 0 , 5 , 5 , slash2 , obj_spark_slash4 , 0.31 , 0.41 , 36.60 , 7.70 , self.id , 5 , 2 );
+	hitbox.hit_stun = 8;
+	hitbox2.hit_stun = 8;
+	hitbox3.hit_stun = 8;
+	hitbox.di = 0.2;
+	hitbox2.di = 0.2;
+	hitbox3.di = 0.2;
+	hitbox.weight_kb = 1;
+	hitbox2.weight_kb = 1;
+	hitbox3.weight_kb = 1;
+    image_index = 4;
+    break;
+    case 12:
+    eff.image_speed = 0;
+    eff.image_index = 3;
+    image_index = 5;
+  	hitbox.image_xscale = 0.41 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.32 * size;
+    hitbox.hitbox_x = 27.50*(1-facing*2) * size;
+    hitbox.hitbox_y = 25.20 * size;
+	hitbox.image_angle = 18.18;
+	hitbox2.image_xscale = 0.39 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.30 * size;
+    hitbox2.hitbox_x = 38 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 28 * size;
+	hitbox2.image_angle = 0;
+	hitbox3.image_xscale = 0.38 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.29 * size;
+	hitbox3.hitbox_x = 48.50*(1-facing*2) * size;
+    hitbox3.hitbox_y = 28 * size;
+	hitbox3.image_angle = 0;
+    break;
+    case 13:
+    eff.image_speed = 0;
+    eff.image_index = 4;
+    image_index = 6;
+    hitbox.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.44 * size;
+    hitbox.hitbox_x = 25.40 * (1-facing*2);
+    hitbox.hitbox_y = 32.20 * size;
+	hitbox.image_angle = 333.14;
+	hitbox2.image_xscale = 0.31 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.32 * size;
+    hitbox2.hitbox_x = 31.70 * (1-facing*2);
+    hitbox2.hitbox_y = 40.60 * size;
+	hitbox2.image_angle = 318.65;
+	hitbox3.image_xscale = 0.29 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.33 * size;
+	hitbox3.hitbox_x = 38*(1-facing*2);
+    hitbox3.hitbox_y = 46.90 * size;
+	hitbox3.image_angle = 316.47;
+    break;
+    case 14: image_index = 7;
+    eff.image_speed = 0;
+    eff.image_index = 5; break;
+	case 15: image_index = 8;
+    eff.image_speed = 0;
+    eff.image_index = 6; break;
+	case 16: image_index = 9;
+    eff.image_speed = 0;
+    eff.image_index = 7; break;
+	case 17: image_index = 10;
+    eff.image_speed = 0;
+    eff.image_index = 8; break;
+	case 18: image_index = 11;
+	with (eff){
+	instance_destroy(); } break;
+	case 35: image_index = 12; break;
+	case 38: image_index = 13; break;
+	case 41: image_index = 14; break;
+      }
+    // STEP 3->4
+    if ( timer >= 16 && timer <= 37 )
+      {
+      if ( random(10) < 5 && ai )
+        {
+        special = 1;
+        moveup = 0;
+        movedown = 0;
+        if ( enemy.y < y - 10 )
+          moveup = 1;
+          else
+          {
+          if ( random(10) < 4 )
+            movedown = 1;
+            else
+          if ( random(10) < 4 )
+            moveup = 1;
+          }
+        }
+      if ( special == 1 )
+        {
+        image_index = 0;
+        if ( air == 0 ) hspeed = 2.5 * size * (1-facing*2);  else { hspeed = 3.4 * size * (1-facing*2); vspeed *= 0.1; }
+        special = 0;
+        timer = 0;
+        time = 50;
+        if ( moveup )
+		  {
+		  sprite_index = sidebhit4high_sprite;
+		  image_index = 0;
+          change = 7;
+		  }
+          else
+        if ( movedown )
+		  {
+		  sprite_index = sidebhit4low_sprite;
+		  image_index = 0;
+          change = 8;
+		  }
+          else
+		  {
+		  sprite_index = sidebhit4side_sprite;
+		  image_index = 0;
+		  hspeed = 3.2 * size * (1-facing*2);
+          change = 6;
+		  }
+        if ( change == 8 )
+          time = 60;
+        }
+      }
+    break;
+  
+// change = 4 - step 3 u
+  case 4:
+    switch ( timer )
+      {
+      case 2: 
+    with (eff){
+      instance_destroy();
+    }
+  xoff = 32; //Bigger is left
+  if facing = 1
+  xoff = 33
+  effscale = xsize/2.0
+  yoff = 63; //Bigger is up
+    break;
+      case 3: image_index = 1; break;
+      case 11: image_index = 2; break;
+      case 13:
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit3high_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2;
+        sound_play ( swingsnd3 );
+        image_index = 3;
+    create_hitbox ( 4 , 70+facing*40 , 4.7 , 0.1 , 5 , 6 , slash2 , obj_spark_slash2 , 0.56 , 0.33 , 16.80 , 22.40 , self.id ,6 , 2 );
+	
+	hitbox.image_angle = 346.83;
+	create_hitbox2 ( 4 , 70+facing*40 , 4.7 , 0.1 , 5 , 6 , slash2 , obj_spark_slash2 , 0.46 , 0.32 , 30.10 , 19.60 , self.id ,6 , 2 );
+	hitbox2.image_angle = 345.30;
+    create_hitbox3 ( 5 , 70+facing*40 , 4.7 , 0.1 , 5 , 7 , slash2 , obj_spark_slash4 , 0.44 , 0.31 , 42.70 , 16.10 , self.id , 6 , 2 );
+	hitbox3.image_angle = 345.96;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+	hitbox.weight_kb = 1;
+	hitbox2.weight_kb = 1;
+	hitbox3.weight_kb = 1;
+        break;
+      case 15:
+    eff.image_speed = 0;
+    eff.image_index = 1;
+    image_index = 4;
+  	hitbox.image_xscale = 0.51 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.39 * size;
+    hitbox.hitbox_x = 18.20 * (1-facing*2) * size;
+    hitbox.hitbox_y = 31.50 * size;
+	hitbox.image_angle = 32.07;
+	hitbox2.image_xscale = 0.48 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.33 * size;
+    hitbox2.hitbox_x = 28.70 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 37.10 * size;
+	hitbox2.image_angle = 9.23;
+	hitbox3.image_xscale = 0.45 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.32 * size;
+	hitbox3.hitbox_x = 40.60*(1-facing*2) * size;
+    hitbox3.hitbox_y = 40.60 * size;
+	hitbox3.image_angle = 16.99;
+        break;
+      case 17:
+    eff.image_speed = 0;
+    eff.image_index = 2;
+    image_index = 5;
+  	hitbox.image_xscale = 0.53 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.35 * size;
+    hitbox.hitbox_x = 0.70 * (1-facing*2) * size;
+    hitbox.hitbox_y = 30.80 * size;
+	hitbox.image_angle = 346.35;
+	hitbox2.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.47 * size;
+    hitbox2.hitbox_x = -3.50 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 41.30 * size;
+	hitbox2.image_angle = 346.35;
+	hitbox3.image_xscale = 0.32 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.40 * size;
+	hitbox3.hitbox_x = -0.70*(1-facing*2) * size;
+    hitbox3.hitbox_y = 52.50 * size;
+	hitbox3.image_angle = 349.00;
+        break;
+      case 19: image_index = 6;
+    eff.image_speed = 0;
+    eff.image_index = 3; break;
+      case 22: image_index = 7;
+    eff.image_speed = 0;
+    eff.image_index = 4; break;
+      case 24: with (eff){ instance_destroy(); } break;
+      case 37: image_index = 8; break;
+	  case 40: image_index = 9; break;
+	  case 43: image_index = 10; break;
+      }
+    // STEP 3->4
+    if ( timer >= 18 && timer <= 38 )
+      {
+      if ( random(10) < 5 && ai )
+        {
+        special = 1;
+        moveup = 0;
+        movedown = 0;
+        if ( enemy.y < y - 10 )
+          moveup = 1;
+          else
+          {
+          if ( random(10) < 4 )
+            movedown = 1;
+            else
+          if ( random(10) < 4 )
+            moveup = 1;
+          }
+        }
+      if ( special == 1 )
+        {
+        image_index = 0;
+        if ( air == 0 ) hspeed = 2.5 * size * (1-facing*2);  else { hspeed = 3.4 * size * (1-facing*2); vspeed *= 0.1; }
+        special = 0;
+        timer = 0;
+        time = 50;
+        if ( moveup )
+		  {
+		  sprite_index = sidebhit4high_sprite;
+		  image_index = 0;
+          change = 7;
+		  }
+          else
+        if ( movedown )
+		  {
+		  sprite_index = sidebhit4low_sprite;
+		  image_index = 0;
+          change = 8;
+		  }
+          else
+		  {
+		  sprite_index = sidebhit4side_sprite;
+		  image_index = 0;
+		  hspeed = 3.2 * size * (1-facing*2);
+          change = 6;
+		  }
+        if ( change == 8 )
+          time = 60;
+        }
+      }
+    break;
+  
+// change = 5 - step 3 d
+  case 5:
+	if ( air = 0 )
+	{
+	sprite_index = sidebhit3low_sprite;
+	}
+	if ( air > 0 )
+	{
+	sprite_index = sidebhit3lowair_sprite;
+    switch ( timer )
+      {
+      case 6: 
+  xoff = 22; //Bigger is left
+  if facing = 1
+  xoff = 23
+  effscale = xsize/2.0
+  yoff = 59; //Bigger is up
+    break;
+      case 6: image_index = 1; break;
+      case 8: image_index = 2; break;
+      case 13: image_index = 3; break;
+      case 21: image_index = 5;
+    eff.image_speed = 0;
+    eff.image_index = 1; break;
+	  case 23: image_index = 6;
+    eff.image_speed = 0;
+    eff.image_index = 2; break;
+	  case 24: with (eff){ instance_destroy(); } break;
+	  case 25: image_index = 7; break;
+	  case 27: image_index = 8; break;
+	  case 29: image_index = 9; break;
+	  case 31: image_index = 10; break;
+	  case 34: image_index = 11; break;
+	  case 37: image_index = 12; break;
+	  case 40: image_index = 13; break;
+	  case 43: image_index = 14; break;
+      }
+	}
+
+      if timer = 2 
+    with (eff){
+      instance_destroy();
+    } 
+	if ( timer >= 3 && timer <= 6 && air = 0 )
+	image_index = 1;
+	if ( timer >= 7 && timer <= 8 && air = 0 )
+	image_index = 2;
+	if ( timer >= 9 && timer <= 10 && air = 0 )
+	image_index = 3;
+	if ( timer >= 13 && timer <= 14 && air = 0 ) {
+	if timer = 13 {
+  xoff = 32; //Bigger is left
+  if facing = 1
+  xoff = 33
+  effscale = xsize/2.0
+  yoff = 32; //Bigger is up
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit3low_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2; }
+	image_index = 4;
+	}
+	if ( timer = 15 && air = 0 )
+	{
+    eff.image_speed = 0;
+    eff.image_index = 1;
+	image_index = 5;
+	create_hitbox ( 4 , 270 , 5 , 0.1 , 5 , 6 , slash2 , obj_spark_slash2 , 0.52 , 0.34 , 22.40 , 13.30 , self.id , 5 , 2 );
+	
+	hitbox.image_angle = 336.97;
+	create_hitbox2 ( 4 , 270 , 5 , 0.1 , 5 , 6 , slash2 , obj_spark_slash2 , 0.35 , 0.32 , 32.90 , 7 , self.id , 5 , 2 );
+	hitbox2.image_angle = 336.50;
+    create_hitbox3 ( 5 , 270 , 5.5 , 0.1 , 5 , 6 , slash2 , obj_spark_slash4 , 0.37 , 0.32 , 42 , 3.50 , self.id , 5 , 2 );
+	hitbox3.image_angle = 335.06;
+	sound_play ( swingsnd3 );
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+	}
+	if ( timer >= 15 && timer <= 18 && air = 0 )
+	{
+	image_index = 5;
+	hitbox.bkb = 5 * size;
+	hitbox.kbg = 0.1 * size;
+	hitbox2.bkb = 5 * size;
+	hitbox2.kbg = 0.1 * size;
+	hitbox3.bkb = 5.5 * size;
+	hitbox3.kbg = 0.1 * size;
+	hitbox.image_xscale = 0.52 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.34 * size;
+    hitbox.hitbox_x = 22.40*(1-facing*2) * size;
+    hitbox.hitbox_y = 13.30 * size;
+	hitbox.image_angle = 336.97;
+	hitbox2.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.32 * size;
+    hitbox2.hitbox_x = 32.90*(1-facing*2) * size;
+    hitbox2.hitbox_y = 7 * size;
+	hitbox2.image_angle = 336.50;
+	hitbox3.image_xscale = 0.37 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.32 * size;
+	hitbox3.hitbox_x = 42*(1-facing*2) * size;
+    hitbox3.hitbox_y = 3.50 * size;
+	hitbox3.image_angle = 335.06;
+    image_index = 5;
+	}
+	if ( timer = 19 && timer = 20 && air = 0 )
+	{
+    eff.image_speed = 0;
+    eff.image_index = 2;
+	image_index = 6;
+	hitbox.bkb = 5 * size;
+	hitbox.kbg = 0.1 * size;
+	hitbox2.bkb = 5 * size;
+	hitbox2.kbg = 0.1 * size;
+	hitbox3.bkb = 5.5 * size;
+	hitbox3.kbg = 0.1 * size;
+	hitbox.image_xscale = 0.52 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.34 * size;
+    hitbox.hitbox_x = 21.40*(1-facing*2) * size;
+    hitbox.hitbox_y = 11.30 * size;
+	hitbox.image_angle = 336.97;
+	hitbox2.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.32 * size;
+    hitbox2.hitbox_x = 31.90 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 5 * size;
+	hitbox2.image_angle = 336.50;
+	hitbox3.image_xscale = 0.37 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.32 * size;
+	hitbox3.hitbox_x = 41*(1-facing*2) * size;
+    hitbox3.hitbox_y = 1.50 * size;
+	hitbox3.image_angle = 335.06;
+	}
+	if ( timer >= 21 && timer <= 22 && air = 0 ) {
+	with (eff) { instance_destroy(); } 
+	image_index = 7; }
+	if ( timer >= 23 && timer <= 24 && air = 0 ) 
+	image_index = 8; 
+	if ( timer >= 25 && timer <= 26 && air = 0 )
+	image_index = 9;
+	if ( timer >= 26 && timer <= 27 && air = 0 )
+	image_index = 10;
+	if ( timer >= 28 && timer <= 29 && air = 0 )
+	image_index = 11;
+	if ( timer >= 30 && timer <= 31 && air = 0 )
+	image_index = 12;
+	if ( timer >= 32 && timer <= 34 && air = 0 )
+	image_index = 13;
+	if ( timer >= 35 && timer <= 37 && air = 0 )
+	image_index = 14;
+	if ( timer >= 38 && timer <= 39 && air = 0 )
+	image_index = 15;
+	if ( timer >= 40 && timer <= 41 && air = 0 )
+	image_index = 16;
+	if ( timer >= 42 && timer <= 43 && air = 0 )
+	image_index = 17;
+	if ( timer >= 44 && timer <= 46 && air = 0 )
+	image_index = 18;
+	if ( timer = 15 && air > 0 )
+	{
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit3lowair_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2;
+	image_index = 4;
+	sound_play ( swingsnd3 );
+	create_hitbox ( 4 , 270 , 4 , 3 , 5 , 6 , slash2 , obj_spark_slash2 , 0.52 , 0.35 , 16.10 , 22.40 , self.id , 5 , 2 );
+	
+	hitbox.image_angle = 319.40;
+	create_hitbox2 ( 4 , 270 , 4 , 3 , 5 , 6 , slash2 , obj_spark_slash2 , 0.39 , 0.31 , 23.80 , 15.40 , self.id , 5 , 2 );
+	hitbox2.image_angle = 318.37;
+    create_hitbox3 ( 5 , 270 , 4.3 , 3 , 5 , 6 , slash2 , obj_spark_slash4 , 0.40 , 0.32 , 32.90 , 7.70 , self.id , 5 , 2 );
+	hitbox3.image_angle = 328.57;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+	}
+	if ( timer >= 15 && timer <= 20 && air > 0 )
+	{
+	image_index = 4;
+	hitbox.bkb = 4 * size;
+	hitbox.kbg = 2.5 * size;
+	hitbox2.bkb = 4 * size;
+	hitbox2.kbg = 2.5 * size;
+	hitbox3.bkb = 4.3 * size;
+	hitbox3.kbg = 3 * size;
+	hitbox.image_xscale = 0.52 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.35 * size;
+    hitbox.hitbox_x = 16.10 * (1-facing*2) * size;
+    hitbox.hitbox_y = 22.40 * size;
+	hitbox.image_angle = 319.40;
+	hitbox2.image_xscale = 0.39 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.31 * size;
+    hitbox2.hitbox_x = 23.80 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 15.40 * size;
+	hitbox2.image_angle = 318.37;
+	hitbox3.image_xscale = 0.40 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.32 * size;
+	hitbox3.hitbox_x = 32.90*(1-facing*2) * size;
+    hitbox3.hitbox_y = 7.70 * size;
+	hitbox3.image_angle = 328.57;
+	}
+	// STEP 3->4
+    if ( timer >= 19 && timer <= 35 )
+      {
+      if ( random(10) < 5 && ai )
+        {
+        special = 1;
+        moveup = 0;
+        movedown = 0;
+        if ( enemy.y < y - 10 )
+          moveup = 1;
+          else
+          {
+          if ( random(10) < 4 )
+            movedown = 1;
+            else
+          if ( random(10) < 4 )
+            moveup = 1;
+          }
+        }
+      if ( special == 1 )
+        {
+        image_index = 0;
+        if ( air == 0 ) hspeed = 2.5 * size * (1-facing*2);  else { hspeed = 3.4 * size * (1-facing*2); vspeed *= 0.1; }
+        special = 0;
+        timer = 0;
+        time = 50;
+        if ( moveup )
+		  {
+		  sprite_index = sidebhit4high_sprite;
+		  image_index = 0;
+          change = 7;
+		  }
+          else
+        if ( movedown )
+		  {
+		  sprite_index = sidebhit4low_sprite;
+		  image_index = 0;
+          change = 8;
+		  }
+          else
+		  {
+		  sprite_index = sidebhit4side_sprite;
+		  image_index = 0;
+		  hspeed = 3.2 * size * (1-facing*2);
+          change = 6;
+		  }
+        if ( change == 8 )
+          time = 60;
+        }
+      }
+    break;
+  
+// change = 6 - step 4 n
+  case 6:
+    switch ( timer )
+      {
+      case 1: 
+    with (eff){
+      instance_destroy();
+    }
+  xoff = 35; //Bigger is left
+  if facing = 1
+  xoff = 36
+  effscale = xsize/2.0
+  yoff = 71; //Bigger is up
+    break;
+      case 2: image_index = 1; break;
+      case 5: image_index = 2; break;
+	  case 8: image_index = 3; break;
+	  case 11: image_index = 4; break;
+	  case 14: image_index = 5; break;
+	  case 17: image_index = 6; break;
+	  case 20: image_index = 7; break;
+      case 23:
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit4side_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2;
+    play_attack_voice();
+    sound_play ( swingsnd2 );
+    image_index = 8; 
+    create_hitbox ( 6 , 45+facing*90 , 6 , 7.3 , 6 , 7 , slash2 , obj_spark_slash2 , 0.31 , 0.51 , 16.80 , 37.10 , self.id , 4 , 2 );
+	
+    create_hitbox2 ( 7 , 45+facing*90 , 6.4 , 8 , 6 , 10 , slash2 , obj_spark_slash3 , 0.31 , 0.31 , 19.60 , 48.30 , self.id , 4 , 2 );
+    create_hitbox3 ( 9 , 45+facing*90 , 6.7 , 8.8 , 6 , 13 , slash3 , obj_spark_slash4 , 0.33 , 0.35 , 19.60 , 57.40 , self.id , 4 , 2 );
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+    break;
+    case 24:
+    eff.image_speed = 0;
+    eff.image_index = 1;
+    image_index = 9;
+  	hitbox.image_xscale = 0.60 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.34 * size;
+    hitbox.hitbox_x = 23.10 *(1-facing*2) * size;
+    hitbox.hitbox_y = 27.30 * size;
+	hitbox.image_angle = 16.12;
+	hitbox2.image_xscale = 0.44 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.31 * size;
+    hitbox2.hitbox_x = 35.70 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 31.50 * size;
+	hitbox2.image_angle = 23.27;
+	hitbox3.image_xscale = 0.42 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.30 * size;
+	hitbox3.hitbox_x = 45.50*(1-facing*2) * size;
+    hitbox3.hitbox_y = 35.70 * size;
+	hitbox3.image_angle = 21.80;
+    break;
+    case 25:
+    eff.image_speed = 0;
+    eff.image_index = 2;
+	image_index = 10;
+  	hitbox.image_xscale = 0.55 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.32 * size;
+    hitbox.hitbox_x = 22.40 * (1-facing*2) * size;
+    hitbox.hitbox_y = 16.80 * size;
+	hitbox.image_angle = 348.90;
+	hitbox2.image_xscale = 0.38 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.34 * size;
+    hitbox2.hitbox_x = 35.70 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 14 * size;
+	hitbox2.image_angle = 352.48;
+	hitbox3.image_xscale = 0.36 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.32 * size;
+	hitbox3.hitbox_x = 46.20*(1-facing*2) * size;
+    hitbox3.hitbox_y = 11.90 * size;
+	hitbox3.image_angle = 357.88;
+	break;
+    case 26:
+    eff.image_speed = 0;
+    eff.image_index = 3;
+	image_index = 11;
+	hitbox.image_xscale = 0.36 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.47 * size;
+    hitbox.hitbox_x = 18.90 * (1-facing*2) * size;
+    hitbox.hitbox_y = 12.60 * size;
+	hitbox.image_angle = 1.76;
+	hitbox2.image_xscale = 0.32 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.37 * size;
+    hitbox2.hitbox_x = 25.90 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 4.90 * size;
+	hitbox2.image_angle = 332.06;
+	hitbox3.image_xscale = 0.37 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.38 * size;
+	hitbox3.hitbox_x = 34.30*(1-facing*2) * size;
+    hitbox3.hitbox_y = 1.40 * size;
+	hitbox3.image_angle = 337.46;
+	break;
+	case 27:
+    eff.image_speed = 0;
+    eff.image_index = 4; image_index = 12; break;
+	case 29:
+    eff.image_speed = 0;
+    eff.image_index = 5; image_index = 13; break;
+      case 31: 
+    with (eff){
+      instance_destroy();
+    }
+	break;
+	case 32: image_index = 14; break;
+	case 34: image_index = 15; break;
+	case 36: image_index = 16; break;
+	case 38: image_index = 17; break;
+	case 40: image_index = 18; break;
+	case 42: image_index = 19; break;
+	case 44: image_index = 20; break;
+	case 46: image_index = 21; break;
+	case 48: image_index = 22; break;
+      }
+    break;
+  
+// change = 7 - step 4 u
+  case 7:
+    switch ( timer )
+    {
+      case 1: 
+    with (eff){
+      instance_destroy();
+    }
+  xoff = 32; //Bigger is left
+  if facing = 1
+  xoff = 33
+  effscale = xsize/2.0
+  yoff = 68; //Bigger is up
+    break;
+    case 8: image_index = 1; break;
+    case 11: image_index = 2; break;
+	case 14: image_index = 3; break;
+	case 17: image_index = 4; break;
+    case 20:
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit4high_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 1;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -2;
+    play_attack_voice();
+    sound_play ( swingsnd2 );
+    image_index = 5;
+    create_hitbox ( 6 , 80+facing*20 , 7.9 , 6.15 , 7 , 6 , slash2 , obj_spark_slash2 , 0.60 , 0.31 , 15.40 , 28 , self.id , 6 , 2 );
+	
+	hitbox.image_angle = 353.29;
+	create_hitbox2 ( 6 , 80+facing*20 , 7.9 , 6.15 , 7 , 6 , slash2 , obj_spark_slash2 , 0.39 , 0.34 , 26.30 , 26.60 , self.id , 6 , 2 );
+	hitbox2.image_angle = 0;
+    create_hitbox3 ( 8 , 80+facing*20 , 5.9 , 7 , 7 , 13 , slash3 , obj_spark_slash3 , 0.43 , 0.34 , 37.10 , 26.60 , self.id , 6 , 2 );
+	hitbox3.image_angle = 0;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+    break;
+    case 21:
+    eff.image_speed = 0;
+    eff.image_index = 2;
+    image_index = 6;
+  	hitbox.image_xscale = 0.56 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.32 * size;
+    hitbox.hitbox_x = 15.40 *(1-facing*2) * size;
+    hitbox.hitbox_y = 32.90 * size;
+	hitbox.image_angle = 13.55;
+	hitbox2.image_xscale = 0.36 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.35 * size;
+    hitbox2.hitbox_x = 26.60 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 38.50 * size;
+	hitbox2.image_angle = 35.34;
+	hitbox3.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.39 * size;
+	hitbox3.hitbox_x = 33.60*(1-facing*2) * size;
+    hitbox3.hitbox_y = 44.80 * size;
+	hitbox3.image_angle = 317.86;
+    break;
+    case 23:
+    eff.image_speed = 0;
+    eff.image_index = 3;
+    image_index = 7;
+  	hitbox.image_xscale = 0.28 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.51 * size;
+    hitbox.hitbox_x = 13.30 *(1-facing*2) * size;
+    hitbox.hitbox_y = 36.40 * size;
+	hitbox.image_angle = 312.06;
+	hitbox2.image_xscale = 0.36 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.34 * size;
+    hitbox2.hitbox_x = 18.20 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 45.50 * size;
+	hitbox2.image_angle = 0;
+	hitbox3.image_xscale = 0.35 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.38 * size;
+	hitbox3.hitbox_x = 18.90*(1-facing*2) * size;
+    hitbox3.hitbox_y = 56 * size;
+	hitbox3.image_angle = 0;
+    break;
+    case 25:
+    eff.image_speed = 0;
+    eff.image_index = 4;
+	image_index = 8;
+	hitbox.image_xscale = 0.31 * (1-facing*2) * size;
+	hitbox.image_yscale = 0.51 * size;
+    hitbox.hitbox_x = 11.20 *(1-facing*2) * size;
+    hitbox.hitbox_y = 38.50 * size;
+	hitbox.image_angle = 354.29;
+	hitbox2.image_xscale = 0.37 * (1-facing*2) * size;
+	hitbox2.image_yscale = 0.39 * size;
+    hitbox2.hitbox_x = 8.40 * (1-facing*2) * size;
+    hitbox2.hitbox_y = 50.40 * size;
+	hitbox2.image_angle = 18.78;
+	hitbox3.image_xscale = 0.36 * (1-facing*2) * size;
+	hitbox3.image_yscale = 0.37 * size;
+	hitbox3.hitbox_x = 1.90*(1-facing*2) * size;
+    hitbox3.hitbox_y = 58.10 * size;
+	hitbox3.image_angle = 0;
+	break;
+    case 27:
+    eff.image_speed = 0;
+    eff.image_index = 5; image_index = 9; break;
+      case 29: 
+    with (eff){
+      instance_destroy();
+    }
+	break;
+	case 30: image_index = 10; break;
+	case 32: image_index = 11; break;
+	case 34: image_index = 12; break;
+	case 36: image_index = 13; break;
+	case 38: image_index = 14; break;
+	case 40: image_index = 15; break;
+	case 42: image_index = 16; break;
+	case 44: image_index = 17; break;
+	case 46: image_index = 18; break;
+	case 48: image_index = 19; break;
+    }
+    break;
+  
+// change = 8 - step 4 d
+  case 8:
+    switch ( timer )
+      {
+      case 1: 
+    with (eff){
+      instance_destroy();
+    }
+  xoff = -85; //Bigger is left
+  if facing = 1
+  xoff = -84
+  effscale = xsize/2.0
+  yoff = 64; //Bigger is up
+    break;
+	  case 3: image_index = 1; break;
+	  case 6: image_index = 2; break;
+	  case 9: image_index = 3; break;
+      case 11: image_index = 4; break;
+      case 13:
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = sidebhit4low_effect_spr;
+    //eff.image_xscale = size;
+    eff.image_xscale = (effscale*size)*(-1)*(1-facing*2);
+    eff.image_yscale = (effscale*size);
+    eff.x = x - xoff*size*(1-facing*2);
+    eff.y = y - yoff*size;
+    eff.image_speed = 0;
+    eff.image_index = 0;
+    eff.alarm[0] = 40;
+    eff.snap = self.id
+    eff.depth = -6;
+        play_attack_voice();
+        sound_play ( swingsnd1 );
+        image_index = 5;
+    create_hitbox ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.62 , 0.35 , 30.10 , 12.60 , self.id , 2 , 1 );
+	
+	hitbox.image_angle = 0;
+	create_hitbox2 ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.43 , 0.32 , 44.10 , 12.60 , self.id , 2 , 1 );
+	hitbox2.image_angle = 3.95;
+    create_hitbox3 ( 2 , 30+facing*120 , 2 , 0 , 9 , 2 , slash1 , obj_spark_slash4 , 0.42 , 0.31 , 56 , 14.70 , self.id , 2 , 1 );
+	hitbox3.image_angle = 9.95;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+        break;
+      case 15:
+    eff.image_speed = 0;
+    eff.image_index = 1; image_index = 6; break;
+      case 19:
+    eff.image_speed = 0;
+    eff.image_index = 2;
+        sound_play ( swingsnd1 );
+        image_index = 7;
+    create_hitbox ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.58 , 0.35 , 30.80 , 12.60 , self.id , 2 , 1 );
+	
+	hitbox.image_angle = 2.60;
+	create_hitbox2 ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.44 , 0.32 , 43.40 , 16.80 , self.id , 2 , 1 );
+	hitbox2.image_angle = 15.95;
+    create_hitbox3 ( 2 , 30+facing*120 , 2 , 0 , 9 , 2 , slash1 , obj_spark_slash4 , 0.39 , 0.29 , 53.20 , 21 , self.id , 2 , 1 );
+	hitbox3.image_angle = 22.62;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+        break;
+      case 21:
+    eff.image_speed = 0;
+    eff.image_index = 3; image_index = 8; break;
+      case 25:
+    eff.image_speed = 0;
+    eff.image_index = 4;
+        sound_play ( swingsnd1 );
+        image_index = 9;
+    create_hitbox ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.65 , 0.33 , 31.50 , 10.50 , self.id , 2 , 1 );
+	
+	hitbox.image_angle = 348.49;
+	create_hitbox2 ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.39 , 0.32 , 45.50 , 6.30 , self.id , 2 , 1 );
+	hitbox2.image_angle = 345.17;
+    create_hitbox3 ( 2 , 30+facing*120 , 2 , 0 , 9 , 2 , slash1 , obj_spark_slash4 , 0.37 , 0.31 , 55.30 , 2.80 , self.id , 2 , 1 );
+	hitbox3.image_angle = 341.57;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+        break;
+	  case 27:
+    eff.image_speed = 0;
+    eff.image_index = 5; image_index = 10; break;
+	  case 30:
+    eff.image_speed = 0;
+    eff.image_index = 6; image_index = 11; break;
+      case 31:
+    eff.image_speed = 0;
+    eff.image_index = 7;
+        sound_play ( swingsnd1 );
+        image_index = 12;
+    create_hitbox ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.59 , 0.30 , 33.60 , 12.60 , self.id , 2 , 1 );
+	
+	hitbox.image_angle = 0;
+	create_hitbox2 ( 2 , 30+facing*120 , 2 , 0 , 8 , 2 , slash1 , obj_spark_slash1 , 0.42 , 0.29 , 44.10 , 12.60 , self.id , 2 , 1 );
+	hitbox2.image_angle = 4.57;
+    create_hitbox3 ( 2 , 30+facing*120 , 2 , 0 , 9 , 2 , slash1 , obj_spark_slash4 , 0.42 , 0.27 , 55.30 , 14.70 , self.id , 2 , 1 );
+	hitbox3.image_angle = 7.13;
+	hitbox.di = 0.3;
+	hitbox2.di = 0.3;
+	hitbox3.di = 0.3;
+        break;
+      case 33:
+    eff.image_speed = 0;
+    eff.image_index = 8;
+    eff.image_alpha = 0; image_index = 13; break;
+	  case 34:
+    eff.image_speed = 0;
+    eff.image_index = 8; image_index = 14; break;
+      case 37:
+    eff.image_speed = 0;
+    eff.image_index = 9;
+    eff.image_alpha = 1;
+        sound_play ( swingsnd3 );
+        image_index = 15;
+    create_hitbox ( 3 , 30+facing*120 , 3.9 , 3.3 , 10 , 6 , slash2 , obj_spark_slash2 , 0.64 , 0.32 , 34.30 , 14 , self.id , 2 , 1 );
+	
+	hitbox.image_angle = 2.25;
+	create_hitbox2 ( 3 , 30+facing*120 , 3.9 , 3.3 , 10 , 6 , slash2 , obj_spark_slash2 , 0.38 , 0.32 , 46.90 , 15.40 , self.id , 2 , 1 );
+	hitbox2.image_angle = 0;
+    create_hitbox3 ( 5 , 30+facing*120 , 4.2 , 4.2 , 12 , 6 , slash3 , obj_spark_slash3 , 0.37 , 0.31 , 56.70 , 16.80 , self.id , 2 , 1 );
+	hitbox3.image_angle = 0;
+	hitbox.hit_stun = 5;
+	hitbox2.hit_stun = 5;
+	hitbox3.hit_stun = 5;
+        break;
+      case 39:
+    eff.image_speed = 0;
+    eff.image_index = 10; image_index = 16; break;
+      case 40: 
+    with (eff){
+      instance_destroy();
+    }
+	break;
+      case 41: image_index = 17; break;
+	  case 52: image_index = 18; break;
+	  case 53: image_index = 19; break;
+	  case 54: image_index = 20; break;
+	  case 55: image_index = 21; break;
+	  case 56: image_index = 22; break;
+	  case 57: image_index = 23; break;
+	  case 58: image_index = 24; break;
+	  case 59: image_index = 25; break;
+      }
+    break;
+  }
+
+if (sprite_index ==  sidebhit4high_sprite && image_index > 6){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat == 0) && obj_score_control.stocks[target.number-1] == 1{
+				if ((target.weight <= .22 && target.percent > 105) || (target.weight > .22 && target.weight < .3 && target.percent > 115) || (target.weight > .3 && target.percent > 130)){
+					    killspark = instance_create(enemy.x-200,enemy.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 78
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 50;
+				spark.camera_r = enemy.x + 50;
+				spark.camera_u = enemy.y - 80;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	
+	
+
+if ( timer >= time - 1 )
+  {
+    attack_type = "none";
+    dontrepeat = 0
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 5;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+  }
+
+if ( timer > 3 )
+  {
+  switch ( change )
+    {
+    case 0:
+    case 1:
+    case 3:
+    case 6:
+      after_image ( 2 , c_red , 0.2 );
+      after_image ( 3 , c_red , 0.2 );
+      after_image ( 4 , c_red , 0.2 );
+      after_image ( 5 , c_red , 0.2 );
+      break;
+    case 2:
+    case 4:
+    case 7:
+      after_image ( 2 , c_blue , 0.2 );
+      after_image ( 3 , c_blue , 0.2 );
+      after_image ( 4 , c_blue , 0.2 );
+      after_image ( 5 , c_blue , 0.2 );
+      break;
+    default:
+      after_image ( 2 , c_lime , 0.2 );
+      after_image ( 3 , c_lime , 0.2 );
+      after_image ( 4 , c_lime , 0.2 );
+      after_image ( 5 , c_lime , 0.2 );
+      break;
+    }
+  }
+if timer < time-10 && vspeed > 0
+vspeed *= 0.98

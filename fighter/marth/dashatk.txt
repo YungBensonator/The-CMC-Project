@@ -1,0 +1,69 @@
+if ( state_type == "run" || state_type == "stand" )
+  {
+  state_type = "attack";
+  attack_type = "dash";
+  image_speed = 0;
+  sprite_index = dash_attack_sprite;
+  image_index = 5;
+  timer = 0;
+  time = 50;
+  timer_speed = 1;
+  }
+
+hspeed *= 0.95;
+
+switch ( timer )
+  {
+  case 10: image_index = 0; break;
+  case 12:
+    sound_play ( swingsnd1 );
+    play_attack_voice();
+    image_index = 1;
+    create_hitbox ( 10 , 45+facing*90 , 4.2 , 3.6 , 7 , 6 , slash2 , obj_spark_slash2 , 0.48 , 0.46 , 16.10 , 1.40 , self.id , 4 , 1 );
+    create_hitbox2 ( 12 , 45+facing*90 , 4.3 , 4 , 9 , 6 , slash2 , obj_spark_slash2 , 0.21 , 0.13 , 7.00 , -2.10 , self.id , 4 , 2 );
+    create_hitbox3 ( 9 , 45+facing*90 , 4 , 3.4 , 6 , 6 , slash2 , obj_spark_slash2 , 0.70 , 0.74 , 11.20 , 16.10 , self.id , 4 , 1 );
+    hitbox2.hit_stun = 20;
+    break;
+  case 13:
+    image_index = 2;
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 23.10
+    hitbox.hitbox_y = size * 4.90
+    hitbox.image_xscale = size * 0.54
+    hitbox.image_yscale = size * 0.50
+    hitbox2.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 22.40
+    hitbox2.hitbox_y = size * -2.80
+    hitbox2.image_xscale = size * 0.66
+    hitbox2.image_yscale = size * 0.23
+    hitbox3.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 11.20
+    hitbox3.hitbox_y = size * 16.10
+    hitbox3.image_xscale = size * 0.70
+    hitbox3.image_yscale = size * 0.74
+    break;
+  case 14:
+    image_index = 3;
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 22.40
+    hitbox.hitbox_y = size * 20.30
+    hitbox.image_xscale = size * 0.60
+    hitbox.image_yscale = size * 0.90
+    hitbox2.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 31.50
+    hitbox2.hitbox_y = size * 28.70
+    hitbox2.image_xscale = size * 0.31
+    hitbox2.image_yscale = size * 0.56
+    hitbox3.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 11.20
+    hitbox3.hitbox_y = size * 16.10
+    hitbox3.image_xscale = size * 0.70
+    hitbox3.image_yscale = size * 0.74
+    break;
+  case 15: image_index = 4; break;
+  case 17: image_index = 5; break;
+  case 40: interrupt = 1; break;
+  case 49:
+    attack_type = "none";
+    if ( air == 0 )
+      state_type = "stand";
+      else
+      state_type = "jump";
+    timer = 0;
+    time =-1;
+    break;
+  }
