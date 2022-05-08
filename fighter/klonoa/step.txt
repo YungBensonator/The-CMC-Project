@@ -1,0 +1,81 @@
+if state_type = "jump" {
+    force_edge_grab = 0;
+    if sprite_index != mid_jump_sprite  {
+        sprite_index = jump_sprite;
+        if ( vspeed < -grav * 5 )
+          {
+          image_index = 0;
+          image_speed = 0;
+          }
+          else
+          {
+          image_speed = 0.5;
+          }
+    }
+    else {
+        if ( image_index < 4 ) image_index += 4;
+        if ( timer == 12 || timer == 24 )
+          {
+          sound_play ( mid_jump_voice );
+          }
+        if timer = 0 {
+            vspeed = 2.8*size
+      	    boosting_frames = 7 + mid_jump_speed / 0.75;
+	    }
+    }
+    climbing = 0;
+}
+
+if(air = 0)
+{
+	moojump = 0;
+	downb_float = 0;
+}
+
+if ( gravity_lock == 0 )
+  {
+  if ( boosting_frames > 0 )
+    {
+    if ( air == 0 )
+      {
+      boosting_frames = 0;
+      }
+      else
+    if ( attack_type != "none" && !holdjump )
+      {
+      boosting_frames = 0;
+      }
+      else if state_type != "flinch" && state_type != "air_flinch"
+      {
+      if vspeed > -mid_jump_speed*size
+        vspeed -= size * 0.8;
+      boosting_frames -= 1;
+      }
+     else {
+      boosting_frames = 0;
+    }
+    }
+  }
+  else
+  boosting_frames = 0;
+
+//if ( state_type == "air_flinch" ) { dir = 150; if ( timer mod 2 == 0 ) sound_play ( why ); speed = 34; }
+if ( sprite_index == stand_sprite ) image_speed = 0.125;
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 12: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=2;  break;
+  case 14: shakey=12*size;  break;
+  case 16: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 18: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 20: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 22: sprite_index=land_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 26: image_index=1;  break;
+  case 30: image_index=2;  break;
+  }
+}

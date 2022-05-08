@@ -1,0 +1,100 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "bair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bair_sprite;
+  timer = 0;
+  time = 48;
+  timer_speed = 1;
+  create_hurtbox_precise(self.id,50,bair_mask)
+  }
+  
+switch ( timer )
+  {
+  case 4: image_index = 1; break;
+  case 8: image_index = 2; break;
+  case 9: image_index = 3; break;
+  case 10: image_index = 4; break;
+  case 11: image_index = 5; break;
+  case 12: image_index = 6; break;
+  case 13: image_index = 7; break;
+  case 14: image_index = 8; break;
+  case 15: image_index = 9; break;
+  case 16: image_index = 10; break;
+  case 17: image_index = 11; break;
+  case 18: image_index = 12; break;
+  case 19: image_index = 13; break;
+  case 20: image_index = 14; break;
+  case 21: image_index = 15; break;
+  case 22: image_index = 16; break;
+  case 24: image_index = 23; break;
+  case 29: image_index = 24; break;
+  case 34: image_index = 25; break;
+  }
+  
+if ( timer == 8 || timer == 16 )
+  {
+  sound_play ( swingsnd1 );
+  create_hitbox ( 2 , 20 + facing * 140 , 4 , 0 , 4 , 3 , sf_punch1 , obj_spark_special1 , 1.15 , 0.4 , -12.45 , 17.69 , self.id , 2 , 0 );
+  hitbox.weight_kb = 1;
+  }
+if ( timer == 12 || timer == 20 )
+  {
+  sound_play ( swingsnd1 );
+  create_hitbox ( 2 , 160 - facing * 140 , 4 , 0 , 4 , 3 , sf_punch1 , obj_spark_special1 , 1.15 , 0.4 , 12.45 , 17.69 , self.id , 2 , 0 );
+  hitbox.weight_kb = 1;
+  }
+if ( timer == 24 )
+  {
+  hspeed = air_speed * ( 1 - facing * 2 ) * 2.5;
+  vspeed = -1.6 * size;
+  spark = instance_create ( x - 30 * size * ( 1 - facing * 2 ) , y - 30 * size , obj_spark_shockwave );
+  spark.image_blend = c_lime;
+  spark = instance_create ( x - 30 * size * ( 1 - facing * 2 ) , y - 30 * size , obj_spark );
+  spark.sprite_index = global.explosion_spark2;
+  spark.image_speed = 0.8;
+  spark.image_xscale = 0.3 * size;
+  spark.image_yscale = 0.3 * size;
+  spark.image_blend = c_lime;
+  spark.image_angle = random ( 360 );
+  spark.image_index = 0;
+  sound_play ( explode_small );
+  screen_shake ( 2 , 4 );
+  create_hitbox ( 5 , 115 - facing * 50 , 8 , 5.7 , 11 , 9 , sf_kick2 , obj_spark_special2 , 1 , 0.9 , -13.36 , 15.69 , self.id , 4 , 0 );
+  create_hitbox2 ( 7 , 115 - facing * 50 , 8.5 , 5.7 , 13 , 10 , sf_kick2 , obj_spark_special2 , 0.4 , 0.4 , -30 , 27.3 , self.id , 4 , 0 );
+  }
+if ( timer >= 25 && grab )
+{
+  state_type = "stand";
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+  char_hold();
+}
+
+if ( air == 0 )
+  {
+  state_type = "land";
+  attack_type = "none";
+  sprite_index = land_sprite;
+  time = 7;
+  timer = 0;
+  }
+
+if ( timer >= time - 1 )
+	{
+	hspeed = air_speed * ( 1 - facing * 2 );
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

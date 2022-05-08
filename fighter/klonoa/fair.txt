@@ -1,0 +1,90 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "fair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fair_sprite;
+  timer = 0;
+  time = 39;
+  timer_speed = 1;
+  create_hurtbox_precise(self.id,40,fair_mask)
+  }
+  
+switch ( timer )
+  {
+  case 5: image_index = 1; break;
+  case 12: image_index = 2; break;
+  case 14: image_index = 3; break;
+  case 15: image_index = 4; break;
+  case 16: image_index = 5; break;
+  case 18: image_index = 6; break;
+  case 20: image_index = 7; break;
+  case 22: image_index = 8; break;
+  case 24: image_index = 9; break;
+  case 26: image_index = 10; break;
+  }
+  
+if ( timer == 3 )
+  {
+  instance_create ( x - 9 * size * ( 1 - facing * 2 ) , y - 20 * size , obj_spark_effect );
+  }
+if ( timer == 12 )
+  {
+  sound_play ( swingsnd3 );
+  if ( random ( 1.5 ) < 1 )
+    {
+    if ( random ( 3 ) < 2 )
+      sound_play ( choose ( attack_voice5 , attack_voice8 ) );
+      else
+      play_attack_voice();
+    }
+  create_hitbox ( 8 , 30 + facing * 120 , 6.4 , 5.3 , 25 , 9 , sf_punch2 , obj_spark_special2 , 0.65 , 0.65 , -15.07 , 39.96 , self.id , 8 , 4 );
+  }
+if ( timer == 14 )
+  {
+  hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 1.97;
+  hitbox.hitbox_y = size * 37.99;
+  hitbox.image_xscale = size * 0.84;
+  hitbox.image_yscale = size * 0.97;
+  }
+if ( timer == 16 )
+  {
+  hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 30.17;
+  hitbox.hitbox_y = size * 15.72;
+  hitbox.image_xscale = size * 0.75;
+  hitbox.image_yscale = size * 1.4;
+  }
+if ( timer == 18 )
+  {
+  htibox.damage = 6 * size;
+  hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 0;
+  hitbox.hitbox_y = size * -13.76;
+  hitbox.image_xscale = size * 1.35;
+  hitbox.image_yscale = size * 0.99;
+  hitbox.dir = 30 + (!facing) * 120;
+  }
+  
+if ( air == 0 )
+  {
+  state_type = "land";
+  attack_type = "none";
+  sprite_index = land_sprite;
+  time = 18;
+  timer = 0;
+  }
+
+if ( timer >= time - 1 )
+	{
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

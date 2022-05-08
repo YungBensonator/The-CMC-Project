@@ -1,0 +1,95 @@
+// final smash projectile
+
+if ( hit == 0 )
+  {
+  hspeed = 5 - facing * 10;
+  //sprite_index = spr_collision_bubble_alt;
+  }
+
+if ( hits_left > 0 )
+  {
+  if ( light != 0 )
+    {
+    with ( light ) instance_destroy();
+    light = 0;
+    }
+  light = instance_create ( x ,  y , obj_spark );
+  light.sprite_index = spr_ring;
+  light.image_xscale = 3.5;
+  light.image_yscale = 3.5;
+  light.image_angle = random ( 360 );
+  light.image_speed = 0;
+  light.alarm[0] = 2;
+  light.image_alpha = 0.5;
+  light.draw_color_only = 1;
+  if ( orb != 0 )
+    {
+    with ( orb ) instance_destroy();
+    orb = 0;
+    }
+  orb = instance_create ( x - 1 + random ( 2 ) , y - 1 + random ( 2 ) , obj_spark );
+  orb.sprite_index = bullet_sprite;
+  orb.image_xscale = 3;
+  orb.image_yscale = 3;
+  orb.image_angle = -2 + random ( 2 );
+  orb.image_speed = 0;
+  orb.alarm[0] = 2;
+  orb.image_alpha = 0.9;
+  if ( light2 != 0 )
+    {
+    with ( light2 ) instance_destroy();
+    light2 = 0;
+    }
+  light2 = instance_create ( x ,  y , obj_spark );
+  light2.sprite_index = spr_light;
+  light2.image_xscale = 4;
+  light2.image_yscale = 4;
+  light2.image_blend = c_aqua;
+  light2.image_angle = random ( 360 );
+  light2.image_speed = 0;
+  light2.alarm[0] = 2;
+  light2.image_alpha = 0.5;
+  light2.draw_color_only = 1;
+  if ( timer mod 2 == 0 )
+    {
+    var l, d;
+    l = random ( 48 );
+    d = random ( 360 );
+    spark = instance_create ( x + lengthdir_x ( l , d ) , y + lengthdir_y ( l , d ) , obj_spark );
+    spark.sprite_index = spr_light;
+    spark.image_speed = 0;
+    spark.image_alpha = 0.64;
+    spark.alarm[0] = 62;
+    spark.alpha_add = -0.01;
+    spark.image_xscale = 0.2 + random ( 0.3 );
+    spark.image_yscale = spark.image_xscale;
+    spark.image_angle = random ( 360 );
+    spark.angle_add = random ( 360 );
+    }
+  if ( hit == 1 )
+    {
+    if ( timer == time - 2 )
+      {
+      hit = 0;
+      if ( hits_left == 6 )
+        {
+        image_xscale *= 1.9;
+        image_yscale *= 1.5;
+        }
+      hits_left -= 1;
+      if ( hits_left == 0 )
+        {
+        gfx = obj_spark_impact;
+        sfx = epic_punch;
+        bkb = 9;
+        kbg = 9;
+        light.alpha_add = -0.01;
+        light.alarm[0] = 48;
+        light.angle_add = -180 + random ( 360 );
+        light2.alpha_add = -0.01;
+        light2.alarm[0] = 48;
+        light2.angle_add = -180 + random ( 360 );
+        }
+      }
+    }
+  }

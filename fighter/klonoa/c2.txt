@@ -1,0 +1,98 @@
+// neutral b throw projectile
+
+angle += anglerotate;
+
+if ( man.status_cancel || man.next_to_rwall || man.next_to_lwall || man.state_type == "out" )
+  {
+  instance_destroy();
+  exit;
+  }
+
+x = man.x;
+y = man.y - man.actual_height * 0.5;
+image_xscale = man.actual_width / 20;
+image_yscale = man.actual_height / 34;
+//instance_create ( x , y , obj_spark_effect );
+if ( hit == 0 ) hit = 1;
+hit_player [ ( man.number - 1 ) * SLOTS_PER_FIGHTER + man.slot ] = 1;
+
+man.state_type = "air_flinch";
+man.attack_type = "none";
+man.timer = timer;
+man.time = time + 3;
+man.alarm[0] = 2;
+man.speed = sp;
+man.direction = dirr;
+man.vspeed -= man.grav;
+if ( man.team == attacker.team )
+  {
+  man.sprite_index = man.spot_dodge_sprite;
+  man.sprite_angle = 0;
+  if ( man.movejump )
+    {
+    man.sprite_index = man.jump_sprite;
+    man.state_type = "jump";
+    man.air = 1;
+    man.attack_type = "none";
+    man.timer = 0;
+    man.time = -1;
+    man.vspeed = -man.short_hop_speed * man.size;
+    instance_destroy();
+    }
+  }
+  else
+  {
+  man.sprite_index = man.tumble_sprite;
+  man.sprite_angle = angle;
+  if ( man.movejump )
+    {
+    man.movejump = 0;
+    smash += 1;
+    if ( smash >= 4 + floor ( man.percent * 0.035 ) )
+      {
+      man.sprite_index = man.jump_sprite;
+      man.state_type = "jump";
+      man.attack_type = "none";
+      man.timer = 0;
+      man.time = -1;
+      man.vspeed = -man.short_hop_speed * man.size;
+      instance_destroy();
+      }
+    }
+  }
+
+if ( man.air == 0 && dirr >= 260 and dirr <= 280 )
+  {
+  man.state_type = "air_flinch";
+  man.vspeed = sp * 2;
+  man.timer = 0;
+  man.time = 10;
+  instance_destroy();
+  exit;
+  }
+
+if ( timer >= time - 2 )
+  {
+  man.hspeed *= 0.5;
+  instance_destroy();
+  }
+
+var i;
+for ( i = 0 ; i < MAX_FIGHTERS * SLOTS_PER_FIGHTER ; i += 1 )
+  {
+  if ( i == ( man.number - 1 ) * SLOTS_PER_FIGHTER + man.slot ) continue;
+  if ( hit_player[i] )
+    {
+    man.vspeed = -7;
+    man.hspeed = hspeed * 0.5;
+    man.timer = 0;
+    man.time = 20;
+    instance_destroy();
+    }
+  }
+
+if ( timer mod 2 == 0 )
+  {
+  with ( man )
+    after_image ( 6 , c_black , .3 );
+  }
