@@ -29,13 +29,14 @@ if timer < time
 	sound_play(attack_sound1);
 	play_attack_voice()
 	if !ktime
-	create_hitbox(12,160-facing*140,5.85,5.90,4,6.5,goku_hit,obj_spark_hit4,1.4,0.5,-10,9,self.id,4,1);
+	create_hitbox(12,160-facing*140,5.5,6,4,6.5,goku_hit,obj_spark_hit4,1.4,0.5,-10,9,self.id,4,1);
 	else
-	create_hitbox(12,160-facing*140,5.85,6.20,4,9,strong_punch,obj_spark_impact,1.1,0.4,-11,12,self.id,4,1);
+	create_hitbox(12,160-facing*140,5,6.25,4,9,strong_punch,obj_spark_impact,1.1,0.4,-11,12,self.id,4,1);
 	hitbox.hit_stun = 12
 	}
   if (timer >= 10){ 
-			if (attack_success) && (dontrepeat = 0 && temp_spawn >= 2) && (!ktime && target.percent > 135 || ktime && target.percent > 82) {
+			if (attack_success || target.object_index == obj_enemy) && dontrepeat = 0 && (obj_score_control.stocks[target.number-1] == 1){	
+				if ((target.weight <= .22 && (!ktime && target.percent > 105 || ktime && target.percent > 90)) || (target.weight > .22 && target.weight < .3 && (!ktime && target.percent > 130 || ktime && target.percent > 115)) || (target.weight > .3 && (!ktime && target.percent > 140 || ktime && target.percent > 120))){
 				dontrepeat = 1;
 				killspark = instance_create(enemy.x-235,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;
@@ -64,10 +65,11 @@ if timer < time
 				spark2.alarm[0] = 25
 			
 				}	
-
+}
 				}
             if air = 0 {
                 state_type="land";
+				dontrepeat = 0;
                 attack_type="none";
                 sprite_index = land_sprite;
                 timer=0;
@@ -79,12 +81,14 @@ snapvanish = 1;
 timer = 0;
 time = -1;
 state_type = "jump";
+dontrepeat = 0;
 attack_type = "none";
 dontrepeat = 0;
 char_upb();
 }
 if ( timer >= time - 1 )
   {
+	  dontrepeat = 0;
   if snapvanish = 2
 	snapvanish = 0
   attack_type = "none";

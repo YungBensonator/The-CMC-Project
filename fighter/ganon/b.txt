@@ -141,26 +141,43 @@ if ( timer < time )
 	    intangible = 1
 	if timer = 7 {
 	    play_attack_voice();
-	    create_hitbox(4,366+facing,5,0,5,5,punch1,obj_spark_hit,0.54 , 0.97 , 23 , 39 ,self.id,11,2);
-	    hitbox.reflect = 1;
+	    caper = create_projectile(4,361,5,0,5,5,punch1,obj_spark_hit,0.54 , 0.97 , 23 , 39 ,self.id,11,caper_script);
+
 	    }
 	if ( timer = 11 )
       {
-	hitbox.hitbox_x = size * (10.25-facing*20.5);
-	hitbox.hitbox_y = 29.25*size;
-	hitbox.image_xscale = 1.27*size;
-	hitbox.image_yscale = 0.69*size;
+	caper.hitbox_x = size * (10.25-facing*20.5);
+	caper.hitbox_y = 29.25*size;
+	caper.image_xscale = 1.27*size;
+	caper.image_yscale = 0.69*size;
       }
 	if ( timer = 15 )
       {
-	hitbox.hitbox_x = size * (-10.00+facing*20);
-	hitbox.hitbox_y = 37.50*size;
-	hitbox.image_xscale = 0.53*size;
-	hitbox.image_yscale = 0.72*size;
+	caper.hitbox_x = size * (-10.00+facing*20);
+	caper.hitbox_y = 37.50*size;
+	caper.image_xscale = 0.53*size;
+	caper.image_yscale = 0.72*size;
       }
 	if timer = 18
 	    intangible = 0;
     }
+
+if ( place_meeting ( target.x , target.y , attack_box ) ){
+	if (target.facing = 1){ 
+		target.facing = 0;
+		target.hspeed *= 1.2;
+		}
+	if (target.facing = 0){ 
+		target.facing = 1;
+		target.hspeed *= 1.2;
+		}
+	if (target.state_type = "edge") {
+		    target.state_type = "jump";
+		    target.x += 30 * (1-facing*2);
+		}
+}
+
+
   }
 
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
