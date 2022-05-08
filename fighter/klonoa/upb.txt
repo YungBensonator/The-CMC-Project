@@ -1,0 +1,382 @@
+if ( state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" ) 
+{
+	if((instance_exists(Moo_ball) && Moo_ball.speed != 0) || moojump != 0)
+	{
+		if(air = 0){state_type = "crouch";}
+		exit;
+	}
+	
+	attacking = 0;
+	special = 0;
+	attack_type = "upb";
+	state_type = "air_attack";
+	time = 55;
+	timer = 0;
+	timer_speed = 1;
+
+	if ( air = 0 ){hspeed = 0;}
+	sprite_index = usmash_sprite;
+	image_index = 0;
+	image_speed = 0;
+	whirlwind = 0;
+	temp = -1;
+	part = 1;
+	MooPosition = 42;
+
+	if( air > 0){vspeed = -1}
+	jtimer = 0;
+	jtime = 0;
+	if(moveleft){facing = 1;}
+	if(moveright){facing = 0;}
+} 
+  
+if ( part = 1 ) //IF GRABBED
+{
+	if(timer < 8 && vspeed < 0){vspeed -= 0.25; }
+	if(timer = 8 )
+	{
+		Moo = instance_create ( x + 16 * size * ( 1 - facing * 2 ) , y - 17 * size , obj_spark );
+		Moo.sprite_index = moo_sprite;
+		Moo.image_xscale = 1;
+		Moo.image_yscale = 1;
+		Moo.image_index = 0;
+		Moo.image_speed = 0.25;
+		Moo.alarm[0] = 300;
+		
+		sound_play ( windbullet1_sound );
+		
+		timer = 0;
+		part = 2;
+	}  
+	
+	switch ( timer )
+	{
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break;
+		case 12: image_index = 4; break;
+		case 40: image_index = 3; break;
+		case 44: image_index = 2; break;
+		case 48: image_index = 1; break;
+		case 52: image_index = 0; break;
+	}
+}
+  
+  
+  
+if ( part = 2 ) //IF GRABBING
+{
+
+	Moo.xprev = x;
+	Moo.yprev = y;
+	whirlwind += 1;
+	
+	if(!instance_exists(Moo) && temp <= 0)
+	{
+		Moo = instance_create ( x  , y - MooPosition * size , obj_spark );
+		Moo.sprite_index = moo_sprite;
+		Moo.image_xscale = 1;
+		Moo.image_yscale = 1;
+		Moo.image_index = 0;
+		Moo.image_speed = 0.25;
+		Moo.alarm[0] = 300;
+		
+		timer = 0;
+		part = 2;
+	}
+	
+	if ( whirlwind >= 12 && temp < 10 )
+	{
+		whirlwind = 0;
+		spark = instance_create ( Moo.x , Moo.y , obj_spark );
+		spark.sprite_index = spr_ring;
+		spark.image_xscale = Moo.actual_width / 20;
+		spark.image_yscale = 0.12;
+		spark.image_speed = 0;
+		spark.vspeed = -(Moo.actual_height / 32);
+		spark.alpha_add = -1/64;
+		spark.alarm[0] = 32;
+		spark.image_alpha = 0.5;
+		spark.snap = self.id;
+		spark.depth = Moo.depth - 2;
+	}
+	
+	if ( air > 0){air_move = 1;}
+	else
+	{air_move = 0;}
+
+	switch ( timer )
+	{
+		case 1: image_index = 5; break;
+		case 4: image_index = 6; break;
+	}
+
+	if ( timer < 8 )
+	{
+		Moo.x = x;
+		Moo.y = ( y - MooPosition * size + Moo.y ) * 0.5;
+		exit;
+	}
+	
+	if ( timer = 8 )
+	{
+		//special = 0;
+		if ( air = 0 )
+		sprite_index = b_idle_sprite;
+		else
+		sprite_index = b_jump_sprite;
+		image_speed = 0;
+		temp = 0;
+	}
+	
+	
+	
+	
+	
+	/// throw
+	if ( temp >= 10 && temp < 60 )
+	{
+		if ( air = 0 ) {hspeed *= 0.8;}
+		sprite_index = b_throw_sprite;
+		temp += 1;
+		switch ( temp - 10 )
+		{
+			case 6: image_index = 1; break;
+			case 8: image_index = 2; break;
+			case 10: image_index = 3; break;
+			case 14: image_index = 4; break;
+			case 24: image_index = 5; break;
+		}
+		
+		if ( temp < 18 )
+		{
+			Moo.x = ( Moo.x + x + 24 * ( 1 - facing * 2 ) * size ) * 0.5;
+			Moo.y = ( Moo.y + y - 18 * size ) * 0.5;
+		}
+		
+		if ( temp = 18 ) //throw forward
+		{
+			if(instance_exists (Moo)) with (Moo){ instance_destroy();}
+			instance_create ( x - 3 * size * ( 1 - facing * 2 ) , y - 16 * size , obj_spark_effect );
+			sound_play ( attack_voice2 );
+			Moo_ball = create_projectile ( 6 , 60 + facing * 60 , 6 , 3 , 45 , 15 , kick2 , obj_spark_hit2 , 1 , 1 , 24 , 18 , self.id , 120 , mooball );
+			
+			Moo_ball.hspeed = 3.25*(1-facing*2);
+			Moo_ball.sprite_index = moo_sprite;
+			Moo_ball.image_xscale = 1;
+			Moo_ball.image_yscale = 1;
+			Moo_ball.dirr = facing * 180;
+			Moo_ball.anglerotate = -20 * ( 1 - facing * 2 );
+			Moo_ball.angle = 0;
+		}
+		
+		if ( temp >= 35 )
+		{
+			if ( air > 0 ){state_type = "jump";}
+			else
+			{state_type = "stand";}
+			timer = 0;
+			time = -1;
+			attack_type = "none";
+			exit;
+		}
+		exit;
+	}
+	
+	/// bounce-off
+	if ( temp >= 100 && temp < 160 )
+	{
+		hspeed = 0;
+		air_move = 0;
+		//vspeed = -grav * size;
+		fast_fall = 0;
+		fast_fall_temp = 0;
+		sprite_index = b_bounce_sprite;
+		image_speed = 0;
+		temp += 1;
+		switch ( temp - 100 )
+		{
+			case 3: image_index = 1; break;
+			case 6: image_index = 2; break;
+			case 9: image_index = 3; break;
+			case 12: image_index = 4; break;
+		}
+		
+		if ( temp < 112 )
+		{
+			vspeed = -grav * size;
+			if ( collision_line ( x , y , Moo.x , Moo.y , obj_platform , 1 , 1 ) )
+			Moo.x = x;
+			Moo.vspeed = 5;
+		}
+		
+		if ( temp >= 112 )//throw down
+		{
+			if(instance_exists (Moo)) with (Moo){ instance_destroy();}
+			instance_create ( x - 3 * size * ( 1 - facing * 2 ) , y - 16 * size , obj_spark_effect );
+			sound_play ( wahoo_voice );
+			Moo_ball = create_projectile ( 5 , 60 + facing * 60 , 6 , 3 , 45 , 15 , kick2 , obj_spark_hit2 , 1 , 1 , 0 , 0 , self.id , 30 , mooball );
+			
+			Moo_ball.vspeed = 5;
+			Moo_ball.sprite_index = moo_sprite;
+			Moo_ball.image_xscale = 1;
+			Moo_ball.image_yscale = 1;
+			Moo_ball.dirr = 280-facing*20;
+			Moo_ball.anglerotate = -20 * ( 1 - facing * 2 );
+			Moo_ball.angle = 0;
+			
+			//Moo.state_type = "air_flinch";
+			//Moo.timer = 0;
+			//Moo.time = 30;
+			Moo.alarm[0] = 30;
+			Moo.timer_speed = 1;
+			sprite_index = jump_sprite;
+			vspeed = -jump_speed * size;
+			air = 1;
+			state_type = "jump";
+			timer = 0;
+			time = -1;
+			attack_type = "none";
+		}
+		moojump += 1;
+		exit;
+	}
+
+	
+	
+	
+	
+	
+	
+	Moo.x = x;
+	Moo.y = y - MooPosition * size;//where its held
+	// landing
+	if ( temp > 0 && temp < 5 )
+	{
+		hspeed *= 0.5;
+		temp -= 1;
+		exit;
+	}
+	// landing
+	if ( air = 0 && sprite_index = b_jump_sprite && vspeed >= 0 )
+	{
+		temp = 4;
+		sprite_index = b_land_sprite;
+		duster = instance_create ( x + 3 * size , y + 1 , obj_dust_effect );
+		duster.image_xscale *= 0.6 * size;
+		duster.image_yscale *= 0.6 * size;
+		duster.facing = 0;
+		duster = instance_create ( x - 3 * size , y + 1 , obj_dust_effect );
+		duster.image_xscale *= 0.6 * size;
+		duster.image_yscale *= 0.6 * size;
+		duster.facing = 1;
+		exit;
+	}
+	
+	
+	if ( special || ai )
+	{
+		temp = 10;
+		sprite_index = b_throw_sprite;
+		image_index = 0;
+		image_speed = 0;
+	}
+	
+	
+	
+	
+	if(jtimer < jtime){ jtimer += 1;}
+	
+	
+	///just holding and moving
+	if ( air = 0 )
+	{
+		if(temp <= 0){image_speed = 0.25;}
+		if ( movejump ) || ((moveup) && special = 1) { jtime = 3 }
+		if(jtimer > 0 && jtimer = jtime)
+		{
+			y -= 2;
+			if(movejump) || ((moveup) && special = 1){ vspeed = -jump_speed * size; movejump = 0;} else { vspeed = -(short_hop_speed+1) * size;movejump = 0;}
+			sound_play ( jump_sound );
+			sprite_index = b_jump_sprite;
+			jtimer = 0;
+			jtime = 0;
+			exit;
+		}
+		
+		if ( moveright )
+		{
+			gfx_try_splash ( x , y , 0.2 , 0.35 , 6 );
+			if ( temp = 0 || temp = -2 )
+			{
+				duster = instance_create ( x , y + 1 , obj_dust_effect );
+				duster.image_xscale *= size * 0.7;
+				duster.image_yscale *= size * 0.7;
+				duster.facing = 0;
+				temp = -1;
+			}
+			facing = 0;
+			sprite_index = b_run_sprite;
+			hspeed = ( run_speed + walk_speed ) * 0.5 * size;
+		}
+		else
+		if ( moveleft )
+		{
+			gfx_try_splash ( x , y , 0.2 , 0.35 , 6 );
+			if ( temp = 0 || temp = -1 )
+			{
+				duster = instance_create ( x , y + 1 , obj_dust_effect );
+				duster.image_xscale *= size * 0.7;
+				duster.image_yscale *= size * 0.7;
+				duster.facing = 1;
+				temp = -2;
+			}
+			facing = 1;
+			sprite_index = b_run_sprite;
+			hspeed = -( run_speed + walk_speed ) * 0.5 * size;
+		}
+		else
+		{
+			sprite_index = b_idle_sprite;
+			hspeed *= 0.85;
+		}
+		if(timer = time-2){timer -= 1;}
+	}
+	else
+	{
+		//air_move = 1;
+		if ( movejump ) || ((moveup) && special = 1)
+		{
+			temp = 100;
+		}
+		sprite_index = b_jump_sprite;
+		if ( moveright )
+		{
+			facing = 0;
+		}
+		else
+		if ( moveleft )
+		{
+			facing = 1;
+		}
+	
+		if(timer = time-2){timer -= 1;}
+		Moo.alarm[0] += 1;
+	}
+	exit;
+}
+
+
+
+
+if ( timer >= time - 1 )
+{
+	attack_type = "none";
+	if ( air = 0 )
+	state_type = "stand";
+	else
+	state_type = "jump";
+	timer = 0;
+	time = -1;
+	moojump += 1;
+}

@@ -1,0 +1,61 @@
+// Sideb proj
+
+moving_object = 1;
+absorb2 = 1
+image_speed = 0.25;
+if ( hspeed > 0 ) {image_xscale = abs ( image_xscale );}
+if ( hspeed < 0 ) {image_xscale = -abs ( image_xscale );}
+
+if ( timer mod 2 == 0 )
+{
+  //after_image ( 5 , c_lime , .6 );
+}
+
+if ( speed != 0 )
+{
+  hs = hspeed;
+  vs = vspeed;
+}
+
+if ( timer == time - 2 && speed == 0 )
+{
+  //time = alarm[0] + 2;
+  hspeed = hs;
+  vspeed = vs;
+}
+
+if ( vspeed > 0 )
+if ( on_floor || on_platform )
+{
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  vspeed = -abs(hspeed);
+  instance_destroy();
+}
+if ( hspeed > 0 )
+if ( next_to_rwall )
+{
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  hspeed = -abs(hspeed);
+  instance_destroy();
+}
+if ( hspeed < 0 )
+if ( next_to_lwall )
+{
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  hspeed = abs(hspeed);
+  instance_destroy();
+}
+if ( vspeed < 0 )
+if ( under_ceiling )
+{
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  vspeed = abs(hspeed);
+  instance_destroy();
+}
+
+if ( bounce >= 4 )
+  instance_destroy();

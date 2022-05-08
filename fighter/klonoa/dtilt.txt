@@ -1,0 +1,67 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "crouch" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dtilt";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dtilt_sprite;
+  timer = 0;
+  time = 41;
+  timer_speed = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 5: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 7: image_index = 4; break;
+  case 10: image_index = 5; break;
+  case 15: image_index = 6; break;
+  case 18: image_index = 7; break;
+  case 36: image_index = 8; x += 6 * size * ( 1 - facing * 2 ); break;
+  case 39: image_index = 9; x += 5 * size * ( 1 - facing * 2 ); break;
+  }
+
+if ( timer >= 5 && timer < 7 )
+  {
+  hspeed = 0.8 * ( 1 - facing * 2 ) * size;
+  }
+if ( timer == 7 )
+  {
+  sound_play ( attacksnd2 );
+  if ( random ( 2.5 ) < 1 )
+    {
+    if ( random ( 5 ) < 1 )
+      sound_play ( attack_voice11 );
+      else
+      play_attack_voice();
+    }
+  create_hitbox ( 7 , 20 + facing * 140 , 5.6 , 4.6 , 14 , 7 , kick2 , obj_spark_hit4 , 0.72 , 0.55 , 1.31 , 10.48 , self.id , 11 , 0 );
+  create_hitbox2 ( 9 , 20 + facing * 140 , 6.6 , 4.6 , 30 , 10 , kick3 , obj_spark_hit3 , 0.40 , 0.67 , 12.45 , 11.14 , self.id , 4 , 0 );
+  	var burst;
+    //78, 36
+	burst = instance_create(place_x(65)+x,place_y(25)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+  }
+if ( timer >= 7 && timer < 18 )
+  {
+  hspeed = 3.5 * ( 1 - facing * 2 ) * size;
+  }
+if ( timer == 18 )
+  {
+  duster = instance_create ( x , y + 1 , obj_dust_effect );
+  duster.facing = facing;
+  hspeed *= 0.5; 
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "crouch";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,572 @@
+if ( state_type == "shielding" || state_type == "stand" || state_type == "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "hold";
+    image_speed = 0;
+    image_index = 0;
+    temp = 0;
+    timer = 0;
+    time = 30;
+    timer_speed = 1;
+    grab = 0;
+    target = -1;
+    attacking = 0;
+  }
+
+if ( air == 0 )
+  {
+  hspeed *= 0.9;
+  }
+  else
+  {
+  air_move = 1;
+  }
+
+// GRAB
+if ( temp == 0 )
+  {
+  if ( air == 0 )
+    sprite_index = grab_sprite1;
+    else
+    sprite_index = grab_sprite2;
+  if ( timer == 6 )
+    {
+    sound_play ( swingsnd4 );
+    }
+  if ( timer >= 6 && timer < 10 )
+    {
+    var a;
+    a = 0;
+    target = collision_rectangle ( x + 5 * ( 1 - facing * 2 ) * size , y - 22 * size ,
+      x + 25 * ( 1 - facing * 2 ) * size , y - 6 * size , player , 0 , 1 );
+    if ( target > 0 )
+    if ( target.status_cancel == 0 )
+    if ( target.team != team || global.gs_team_attack )
+    if ( target.intangible == 0 && target.super_armor < 2 )
+    if ( string(target.state_type) != "grabbed" && string(target.state_type) != "down"
+      && string(target.state_type) != "edge" )
+    if ( string(target.attack_type) != "fthrow" && string(target.attack_type) != "bthrow"
+      && string(target.attack_type) != "uthrow" && string(target.attack_type) != "dthrow"
+      && string(target.attack_type) != "hold" )
+      {
+      a = 1;
+      moveleft = 0;
+      moveup = 0;
+      moveright = 0;
+      movedown = 0;
+      if ( target.stop_sounds[0] != -1 )
+        sound_stop ( target.stop_sounds[0] );
+      if ( target.stop_sounds[1] != -1 )
+        sound_stop ( target.stop_sounds[1] );
+      target.super_armor = 0;
+      target.armor_frames = 0;
+      target.hitby = self.id;
+      target.interrupt = 0;
+      instance_create ( ( target.x + x ) * 0.5 , target.y - 10 , obj_grab_spark );
+      sound_play ( catchsnd );
+      target.state_type = "grabbed";
+      target.attack_type = "none";
+      target.timer_speed = 1;
+      target.stunned = 0;
+      target.timer = 0;
+      target.speed = 0;
+      target.time = min ( 360 , 52 + floor(target.percent*1.3) );
+      target.sprite_index = target.flinch_sprite;
+      target.facing = !facing;
+      target.gethit = 0;
+      target.attacker = self.id;
+      target.slide = 0;
+      slide = 0;
+      target.alarm[2] = -1;
+      timer = 0;
+      time = target.time;
+      if ( target.stunner > 0 )
+        {
+        with ( target.stunner )
+          instance_destroy();
+        target.stunner = -1;
+        }
+      super_armor = 1;
+      armor_frames = 10;
+      combo_damage = 0;
+      target.x = x + 16 * ( 1 - facing * 2 ) * size;
+      target.y = y;
+      temp = 1;
+      }
+    if ( a == 0 ) target = -1;
+    }
+  switch ( timer )
+    {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 12: image_index = 4; break;
+    case 22: image_index = 5; break;
+    case 26: image_index = 6; break;
+    }
+  }
+  
+if ( temp > 0 && temp < 3 )
+  {
+  fast_fall = 0;
+  fast_fall_temp = 0;
+  if ( vspeed > fall_speed * size - size - grav )
+    vspeed = fall_speed * size - size - grav;
+  if ( ( string(target.state_type) != "air_flinch" && string(target.state_type) != "grabbed" ) || point_distance ( x , y , target.x , target.y ) > speed + 40 * size )
+    {
+    if ( air == 0 )
+      state_type = "stand";
+      else
+      state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    debug_message ("Shit" );
+    exit;
+    }
+  target.x = x + 16 * ( 1 - facing * 2 ) * size;
+  target.y = y;
+  target.depth = depth + 1;
+  target.hard_hit = 0;
+  target.sprite_angle = 0;
+  }
+
+if ( temp > 2 )
+  {
+  fast_fall = 0;
+  fast_fall_temp = 0;
+  if ( floor ( temp ) == temp && target > 0 )
+    {
+    target.time = time + 3;
+    target.timer = timer;
+    target.alarm[0] = 20;
+    target.x = x + 16 * ( 1 - facing * 2 ) * size;
+    target.y = y;
+    target.depth = depth + 1;
+    target.state_type = "air_flinch";
+    target.hard_hit = 0;
+    target.sprite_angle = 0;
+    }
+  }
+
+// HOLD
+if ( temp == 1 )
+  {
+  if ( air == 0 )
+    sprite_index = grab_sprite1;
+    else
+    sprite_index = grab_sprite2;
+  image_index = 2;
+  if ( movejump && air == 0 )
+    {
+    movejump = 0;
+    sound_play ( jump_sound );
+    vspeed = -jump_speed * size * 0.9;
+    duster = instance_create ( x + 3 , y + 1 , obj_dust_effect );
+    duster.facing = 0;
+    duster = instance_create ( x - 3 , y + 1 , obj_dust_effect );
+    duster.facing = 1;
+    }
+  if ( attacking )
+    {
+    pummel = 0;
+    if ( air > 0 )
+      vspeed -= size;
+    sound_play_pitch ( swingsnd5 , 1.4 + random ( 0.2 ) );
+    attacking = 0;
+    temp = 2;
+    timer -= 1;
+    sprite_index = pummel_sprite;
+    image_index = 0;
+    exit;
+    }
+  if ( ( facing == 0 && moveright ) || ( facing == 1 && moveleft ) || ( ai && random ( 4 ) < 1 ) )
+    {
+    timer = 0;
+    time = 30;
+    target.timer = 0;
+    target.time = 32;
+    temp = 3;
+    image_index = 0;
+    exit;
+    }
+  if ( moveup || ( ai && random ( 3 ) < 1 ) )
+    {
+    timer = 0;
+    time = 30;
+    target.timer = 0;
+    target.time = 32;
+    temp = 4;
+    image_index = 0;
+    exit;
+    }
+  if ( movedown || ( ai && random ( 2 ) < 1 ) )
+    {
+    timer = 0;
+    time = 32;
+    target.timer = 0;
+    target.time = 34;
+    temp = 5;
+    image_index = 0;
+    exit;
+    }
+  if ( moveright || moveleft || ai )
+    {
+    timer = 0;
+    time = 30;
+    target.timer = 0;
+    target.time = 32;
+    temp = 6;
+    image_index = 0;
+    exit;
+    }
+  }
+
+// PUMMEL
+if ( temp == 2 )
+  {
+  pummel += 1;
+  if ( vspeed > -size && air > 0 )
+    vspeed -= grav * 1.3;
+  switch ( pummel )
+    {
+    case 3: sound_play_pitch ( swingsnd5 , 1.4 + random ( 0.2 ) ); image_index = 1; break;
+    case 6: sound_play_pitch ( swingsnd5 , 1.4 + random ( 0.2 ) ); image_index = 2; break;
+    case 9: sound_play_pitch ( swingsnd5 , 1.4 + random ( 0.2 ) ); image_index = 3; break; 
+    case 12: image_index = 4; break;
+    }
+  target.x += -2 + random ( 4 );
+  if ( pummel == 3 )
+    {
+    temp_timer = target.timer;
+    temp_time = target.time;
+    create_projectile ( 2 , 361 , 6 , 1 , 4 , 3 , punch2 , obj_spark_hit1 , 0.6 , 0.6 , 16 , 8 , self.id , 2 , no_script );
+    timer -= 1;
+    }
+  if ( pummel == 4 )
+    {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+    timer = temp_timer;
+    time = temp_time;
+    }
+  if ( pummel >= 24 )
+    {
+    pummel = -1;
+    temp = 1;
+    }
+  }
+
+// FTHROW
+if ( floor ( temp ) == 3 && target > 0 )
+  {
+  time = 27;
+  if ( timer < 12 )
+    {
+    target.alarm[0] = 10;
+    target.time += 1;
+    }
+  if ( timer < 13 )
+    {
+    if ( air == 0 )
+      sprite_index = fthrow_sprite1;
+      else
+      sprite_index = fthrow_sprite2;
+    }
+  switch ( timer )
+    {
+    case 2: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 6: image_index = 3; break;
+    case 8: image_index = 4; break;
+    case 10: image_index = 5; break;
+    case 12: image_index = 6; break;
+    }
+  if ( timer < 4 )
+    {
+    target.x = x - timer * 2.5 * ( 1 - facing * 2 ) * size;
+    }
+  if ( timer >= 4 && timer <= 12 )
+    {
+    target.x = x - 10 * ( 1 - facing * 2 ) * size + ( timer - 4 ) * 2.5 * ( 1 - facing * 2 );
+    target.y = y - ( timer - 4 ) * size;
+    }
+  if ( timer == 12 )
+    {
+    if air > 0
+    vspeed = -4.4 * size;
+    sound_play ( swingsnd2 );
+    play_attack_voice();
+    create_throw_box ( 6 , 60 + facing * 60 , 7.2 , 1.8 , 7 , 1 , -1 , -1 , 1 , 1 , 16 , 10 , self.id , 2 );
+    hitbox.hit_stun = 21;
+    hitbox.weight_kb = 1;
+    temp = 3.5;
+    }
+  if ( sprite_index == fthrow_sprite1 )
+    {
+    time = 28;
+    switch ( timer )
+      {
+      case 15: image_index = 7; break;
+      case 18: image_index = 8; break;
+      case 21: image_index = 9; break;
+      case 24: image_index = 10; break;
+      }
+    }
+    else
+    {
+    time = 31;
+    switch ( timer )
+      {
+      case 15: image_index = 7; break;
+      case 18: image_index = 8; break;
+      case 21: image_index = 9; break;
+      case 24: image_index = 10; break;
+      case 27: image_index = 11; break;
+      }
+    }
+  }
+
+// UTHROW
+if ( floor ( temp ) == 4 && target > 0 )
+  {
+  time = 40;
+  if ( vspeed > -3 && timer < 24 )
+    vspeed -= grav * 2 * size;
+  if ( air == 0 )
+    sprite_index = uthrow_sprite1;
+    else
+    sprite_index = uthrow_sprite2;
+  if ( timer < 27 )
+    {
+    target.alarm[0] = 10;
+    target.time += 1;
+    }
+  if ( timer == 1 )
+    {
+    sound_play(swingsnd3)
+    sound_play ( attack_voice9 );
+    image_index = 0.25;
+    image_speed = 0.25;
+    }
+  if ( timer >= 0 && timer <= 8 )
+    {
+    target.x = x + ( 16 - timer * 4 ) * ( 1 - facing * 2 ) * size;
+    target.y = y + timer * 0.25 * size;
+    }
+  if ( timer > 8 && timer < 20 )
+    {
+    target.x = x + ( -16 + ( timer - 8 ) * 2.5 ) * ( 1 - facing * 2 ) * size;
+    target.y = y + ( 2 - ( timer - 8 ) * 0.4 ) * size;
+    target.depth = depth - 1;
+    }
+  if ( timer >= 20 && timer < 28 )
+    {
+    target.x = x + ( 14 - ( timer - 20 ) * 2 ) * ( 1 - facing * 2 ) * size;
+    target.y = y + ( -3 - ( timer - 20 ) * 0.5 ) * size;
+    target.depth = depth + 1;
+    }
+  if ( timer == 27 )
+    {
+    vspeed = -1.6 * size;
+    sound_play ( attacksnd2 );
+    create_throw_box ( 8 , 90 , 6.75 , 0.6 , 7 , 1 , -1 , -1 , 1 , 1 , 0 , 10 , self.id , 2 );
+    hitbox.hit_stun = 12;
+    temp = 4.5;
+    }
+  }
+  
+// DTHROW
+if ( floor ( temp ) == 5 && target > 0 )
+  {
+  time = 32;
+  target.depth = depth + 1;
+  if ( timer < 18 )
+    {
+    if ( timer < 4 )
+      target.x = x + ( 16 + timer * 4 ) * size * ( 1 - facing * 2 );
+      else
+      target.x = x + 32 * size * ( 1 - facing * 2 );
+    }
+  if ( timer < 18 )
+    {
+    target.alarm[0] = 10;
+    target.time += 1;
+    if ( air == 0 )
+      sprite_index = dthrow_sprite1;
+      else
+      sprite_index = dthrow_sprite2;
+    }
+  switch ( timer )
+    {
+    case 1: image_index = 0; break;
+    case 3: image_index = 1; break;
+    case 5: image_index = 2; break;
+    case 7: image_index = 3; break;
+    case 11: image_index = 4; break;
+    case 14: image_index = 5; break;
+    case 16: image_index = 6; break;
+    case 18: image_index = 7; break;
+    }
+  if ( sprite_index == dthrow_sprite2 )
+    {
+    switch ( timer )
+      {
+      case 23: image_index = 8; break;
+      case 27: image_index = 9; break;
+      }
+    }
+    else
+    {
+    switch ( timer )
+      {
+      case 22: image_index = 8; break;
+      case 25: image_index = 9; break;
+      case 28: image_index = 10; break;
+      }
+    }
+  if ( timer == 7 )
+    {
+    sound_play ( attacksnd1 );
+    target.timer = 0;
+    target.timer_speed = 1;
+    target.time = 3;
+    target.alarm[2] = -1;
+    create_projectile ( 4 , 45 + facing * 90 , 6 , 0 , 5 , 4 , punch1 , obj_spark_hit1 , 1 , 1 , 16 , 10 , self.id , 3 , no_script );
+    }
+  if ( timer == 18 )
+    {
+    sound_play ( attacksnd2 );
+    create_throw_box ( 6 , 30 + facing * 120 , 6.7 , 3 , 7 , 4 , punch2 , obj_spark_hit2 , 1 , 1 , 16 , 10 , self.id , 2 );
+    hitbox.hit_stun = 10;
+    if ( air == 0 )
+    {
+      hitbox.dir = 368;
+      hitbox.bkb = 3;
+      hitbox.kbg = 0;
+      hitbox.hit_stun = 1;
+    }
+    else
+    {
+      hspeed = -3.7 * ( 1 - facing * 2 ) * size;
+      vspeed = -2.5 * size;
+    }
+    temp = 5.5;
+    }
+  }
+  
+// BTHROW
+if ( floor ( temp ) == 6 && target > 0)
+  {
+  time = 80;
+  if ( vspeed > -1.4 && timer < 56 )
+    vspeed -= grav * 1.65 * size;
+  if ( timer < 56 )
+  {
+    target.alarm[0] = 10;
+    target.time += 1;
+    if ( hspeed > 1.55 )
+    {
+      hspeed = 1.55;
+    }
+    else if ( hspeed < -1.55 )
+    {
+      hspeed = -1.55;
+    }
+  }
+  sprite_index = bthrow_sprite;
+  if ( timer == 1 )
+    sound_play ( swingsnd3 );
+  if ( timer == 26 )
+    sound_play_pitch ( swingsnd3 , 1.4 );
+  if ( timer == 41 )
+    sound_play_pitch ( swingsnd3 , 1.9 );
+  if ( timer == 49 )
+    sound_play_pitch ( swingsnd3 , 2.4 );
+  switch ( timer )
+    {
+    case 3: case 26: case 41: case 49: image_index = 1; break;
+    case 6: case 28: case 42: case 50: image_index = 2; break;
+    case 9: case 30: case 43: image_index = 3; break;
+    case 12: case 32: case 44: image_index = 4; break;
+    case 15: case 34: case 45: image_index = 5; break;
+    case 18: case 36: case 46: image_index = 6; break;
+    case 21: case 38: case 47: image_index = 7; break;
+    case 24: case 40: case 48: image_index = 0; break;
+    case 51: image_index = 19; break;
+    case 52: image_index = 20; break;
+    case 54: image_index = 21; break;
+    case 56: image_index = 22; break;
+    case 68: image_index = 23; break;
+    case 74: image_index = 24; break;
+    }
+  if ( image_index < 8 )
+    {
+    switch ( image_index )
+      {
+      case 0: target.depth = depth - 1; target.x = x + 12 * ( 1 - facing * 2 ) * size; break;
+      case 1: target.depth = depth + 1; target.x = x + 7 * ( 1 - facing * 2 ) * size; break;
+      case 2: target.depth = depth + 1; target.x = x; break;
+      case 3: target.depth = depth + 1; target.x = x - 7 * ( 1 - facing * 2 ) * size; break;
+      case 4: target.depth = depth + 1; target.x = x - 12 * ( 1 - facing * 2 ) * size; break;
+      case 5: target.depth = depth - 1; target.x = x - 7 * ( 1 - facing * 2 ) * size; break;
+      case 6: target.depth = depth - 1; target.x = x; break;
+      case 7: target.depth = depth - 1; target.x = x + 7 * ( 1 - facing * 2 ) * size; break;
+      }
+    }
+  if ( timer > 50 && timer <= 56 )
+    {
+    target.depth = depth + 1;
+    target.x = x - 18 * ( 1 - facing * 2 ) * size;
+    }
+  if ( timer == 56 )
+    {
+    hspeed = air_speed * ( 1 - facing * 2 ) * 2.5;
+    vspeed = -1.6 * size;
+    spark = instance_create ( x - 26 * size * ( 1 - facing * 2 ) , y - 23 * size , obj_spark_shockwave );
+    spark.image_blend = c_lime;
+    spark = instance_create ( x - 26 * size * ( 1 - facing * 2 ) , y - 23 * size , obj_spark );
+    spark.sprite_index = global.explosion_spark2;
+    spark.image_speed = 0.8;
+    spark.image_xscale = 0.3 * size;
+    spark.image_yscale = 0.3 * size;
+    spark.image_blend = c_lime;
+    spark.image_angle = random ( 360 );
+    spark.image_index = 0;
+    sound_play ( explode_small );
+    screen_shake ( 2 , 4 );
+    create_throw_box ( 7 , 143 - facing * 106 , 6.4 , 5.8 , 12 , 11 , sf_kick2 , obj_spark_special2 , 1.15 , 1.00 , -13.76 , 11.79 , self.id , 4 );
+    hitbox.hit_stun = 9;
+    temp = 6.5;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  if ( temp < 3 )
+  if ( target > 0 && point_distance ( x , y , target.x , target.y ) < 20 * size + speed )
+    {
+    target.state_type = "air_flinch";
+    target.timer = 0;
+    target.time = 3;
+    target.vspeed = -5 * target.size;
+    state_type = "flinch";
+    time = 15;
+    timer = 0;
+    attack_type = "none";
+    exit;
+    }
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    {
+    shieldup = 0;
+    state_type = "jump";
+    }
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+  }
