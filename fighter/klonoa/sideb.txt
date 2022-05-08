@@ -1,0 +1,234 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  attack_type = "sideb";
+  time = 2;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = sideb3_sprite;
+  image_speed = 0;
+  timer_speed = 1;
+  if ( air == 0 )
+    {
+    special = 1;
+    temp = 1;
+    image_index = 4;
+    }
+    else
+    {
+    special = 0;
+    temp = 0;
+    image_index = 0;
+    autocancel = 0;
+    }
+  }
+  
+if ( temp == 0 )
+  {
+  // aerial version
+  time = 55;
+  switch ( timer )
+    {
+    case 12: image_index = 1; break;
+    case 15: image_index = 2; break;
+    case 17: image_index = 3; break;
+    case 19: image_index = 4; break;
+    case 22: image_index = 5; break;
+    case 52: image_index = 6; break;
+    }
+  if ( timer == 2 )
+    {
+    sound_play_pitch ( swingsnd1 , 1.3 );
+    spark = instance_create ( x , y , obj_spark );
+    spark.image_speed = 0;
+    spark.sprite_index = sidebp_sprite;
+    }
+  if ( timer >= 2 && timer < 22 )
+    {
+    spark.image_xscale = xsize * ( 1 - facing * 2 );
+    spark.image_yscale = ysize;
+    spark.alarm[0] = 2;
+    }
+  if ( timer >= 2 && instance_exists ( spark ) )
+    {
+    if ( image_index <= 1 )
+      {
+      spark.x = x - 19 * size * ( 1 - facing * 2 );
+      spark.y = y - 28 * size;
+      }
+    if ( image_index == 2 )
+      {
+      spark.x = x;
+      spark.y = y - 40 * size;
+      }
+    if ( image_index == 3 )
+      {
+      spark.x = x + 19 * size * ( 1 - facing * 2 );
+      spark.y = y - 28 * size;
+      }
+    if ( image_index == 4 )
+      {
+      spark.x = x + 30 * size * ( 1 - facing * 2 );
+      spark.y = y - 10 * size;
+      }
+    }
+  if ( timer == 22 )
+    {
+    sound_play_pitch ( swingsnd5 , 0.7 );
+    instance_create ( x + 20 * size * ( 1 - facing * 2 ) , y - 10 * size , obj_spark_effect );
+    create_projectile ( 2 , 54 + facing * 72 , 4 , 2 , 1 , 5 , slash2 , obj_spark_slash4 , xsize * ( 1 - facing * 2 ) , ysize , 30 , 10 , self.id , 180 , char_custom1 );
+    proj.hspeed = 4 * size * ( 1 - facing * 2 );
+    proj.vspeed = 4 * size;
+    proj.hs = proj.hspeed;
+    proj.vs = proj.vspeed;
+    proj.facing = facing;
+    proj.sprite_index = sidebp_sprite;
+    proj.rel = 0;
+    proj.di = 4;
+    }
+  if ( air == 0 )
+    {
+    sprite_index = crouch_sprite;
+    state_type = "land";
+    attack_type = "none";
+    if timer > 25 {
+	autocancel = 1;
+	}
+    timer = 0;
+    if autocancel = 0 {
+	time = 26;
+	}
+    if autocancel = 1 {
+	time = 9;
+	}
+    }
+  }
+  else
+  {
+  // ground version
+  time = 55;
+  if ( timer >= 6 && timer < 13 && ( temp >= 10 || !special || ( ai && random ( 3 ) < 1 ) ) )
+    {
+    if ( moveright ) facing = 0;
+    if ( moveleft ) facing = 1;
+    special = 0;
+    timer = 13;
+    }
+  switch ( timer )
+    {
+    case 3: image_index = 3; break;
+    case 6:
+      sprite_index = sideb1_sprite;
+      image_index = 0;
+      image_speed = 0.2;
+      break;
+    case 13:
+      sprite_index = sideb2_sprite;
+      image_index = 0;
+      image_speed = 0;
+      break;
+    case 14: image_index = 1; break;
+    case 15: image_index = 2; break;
+    case 16: image_index = 3; break;
+    case 46: image_index = 4; break;
+    case 51: image_index = 5; break;
+    }
+  if ( timer == 3 )
+    {
+    sound_play_pitch ( swingsnd1 , 1.3 );
+    spark = instance_create ( x , y , obj_spark );
+    spark.image_speed = 0;
+    spark.sprite_index = sidebp_sprite;
+    }
+  if ( timer >= 3 && timer < 16 )
+    {
+    spark.image_xscale = xsize * ( 1 - facing * 2 );
+    spark.image_yscale = ysize;
+    spark.alarm[0] = 2;
+    if ( image_index == 1 )
+      {
+      spark.x = x + 19 * size * ( 1 - facing * 2 );
+      spark.y = y - 28 * size;
+      }
+    if ( image_index == 2 )
+      {
+      spark.x = x + 25 * size * ( 1 - facing * 2 );
+      spark.y = y - 18 * size;
+      }
+    if ( sprite_index == sideb1_sprite )
+      {
+      spark.x = x;
+      spark.y = y - 40 * size;
+      }
+    if ( sprite_index == sideb3_sprite )
+      {
+      spark.x = x + 19 * size * ( 1 - facing * 2 );
+      spark.y = y - 28 * size;
+      }
+    }
+  if ( timer == 12 )
+    {
+    timer = 6;
+    temp += 0.6;
+    }
+  if ( timer == 6 )
+    {
+    duster = instance_create ( x , y + 1 , obj_spark );
+    duster.snap = self.id;
+    duster.sprite_index = spr_dust2;
+    duster.image_xscale = 0.6-facing*1.2;
+    duster.image_yscale = 0.4;
+    duster.image_angle = 0;
+    duster.image_speed = 0.8;
+    duster.image_alpha = 0.75;
+    }
+  if ( timer == 16 )
+    {
+    instance_create ( x + 20 * size * ( 1 - facing * 2 ) , y - 10 * size , obj_spark_effect );
+    var a;
+    a = 4;
+    switch ( floor ( temp ) )
+      {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+        sound_play_pitch ( swingsnd5 , 0.7 );
+        create_projectile ( 2 , 54 + facing * 72 , 4 , 2 , 1 , 7 , slash2 , obj_spark_slash4 , xsize * ( 1 - facing * 2 ) , ysize , 30 , 10 , self.id , 180 , char_custom1 );
+        break;
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+        sound_play_pitch ( swingsnd5 , 0.5 );
+        create_projectile ( 4 , 45 + facing * 90 , 6 , 4 , 4 , 6 , slash3 , obj_spark_slash3 , xsize * ( 1 - facing * 2 ) , ysize , 30 , 10 , self.id , 180 , char_custom1 );
+        a = 7;
+        break;
+      default:
+        sound_play_pitch ( swingsnd5 , 0.3 );
+        create_projectile ( 6 , 30 + facing * 120 , 8 , 5.7 , 16 , 5 , crush , obj_spark_slash2 , xsize * ( 1 - facing * 2 ) , ysize , 30 , 10 , self.id , 180 , char_custom1 );
+        a = 10;
+        break;
+      }
+    proj.hspeed = a * size * ( 1 - facing * 2 );
+    proj.hs = proj.hspeed;
+    proj.vs = proj.vspeed;
+    proj.facing = facing;
+    proj.sprite_index = sidebp_sprite;
+    proj.rel = 0;
+    proj.di = 4;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

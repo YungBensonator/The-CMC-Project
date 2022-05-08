@@ -1,0 +1,44 @@
+if ( timer < 0 )
+  {
+  visible = 0;
+  image_alpha = 0;
+  }
+if ( timer >= 0 && timer < 5 )
+  {
+  sprite_index = entry_sprite;
+  image_index = 0;
+  image_speed = 0;
+  visible = 1;
+  image_blend = c_black;
+  image_alpha = ( timer + 10 ) * 0.2;
+  }
+if ( timer >= 5 && timer < 10 )
+  {
+  image_blend = merge_color ( c_black , c_white , ( timer + 5 ) * 0.2 );
+  }
+if ( timer == 10 )
+  sound_play ( entry_voice );
+if ( timer >= 10 && timer < 90 )
+  {
+  image_blend = c_white;
+  visible = 1;
+  image_alpha = 1;
+  sprite_index = entry_sprite;
+  image_index = floor ( timer * 0.25 ) mod 5;
+  image_speed = 0;
+  }
+if ( timer == 90 )
+  {
+  instance_create ( x + 27 * size * ( 1 - facing * 2 ) , y - 36 * size , obj_spark_effect );
+  image_index = 10;
+  image_speed = 0.25;
+  }
+if ( timer >= 110 )
+  {
+  visible = 1;
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+  }
