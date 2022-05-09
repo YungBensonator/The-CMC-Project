@@ -1,0 +1,61 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "fthrow";
+    timer = 0;
+    time = 41;
+    sprite_index = fthrow_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.timer_speed = 0;
+    target.alarm[0] = 50;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 10: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 14: image_index = 5; break;
+	//case 16: image_index = 5; break;
+	case 21: image_index = 6; break;
+	case 25: image_index = 7; break;
+	case 28: image_index = 8; break;
+	case 35: image_index = 9; break;
+	case 38: image_index = 10; break;
+      }
+	if ( timer >= 0 && timer <= 9 )
+	{
+	target.x = x + 5 * size * (1-facing*2);
+	target.y = y;
+	}
+    if ( timer >= 10 && timer <= 16 )
+      {
+	target.x = x + size * (13-facing*26);
+	target.y = y - 8*size;
+      }
+    if ( timer = 14 )
+      {
+	play_attack_voice();
+	sound_play(swingsnd2);
+	create_hitbox(1,45+facing*90,1.75,0,8,5,kick2,obj_spark_hit3,0.5,0.4,16,14,self.id,1,5);
+	hitbox.di = 0;
+	instance_create(x+size*(20-facing*40),y-20*size,obj_spark_effect);
+      }
+    if ( timer = 16 ) {
+	create_throw_box(6,50+facing*80,4.6,4.5,1,1,-1,obj_spark_effect,0.6,0.5,14,16,self.id,1); }
+    if timer = 425 {
+        interrupt = 1 }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

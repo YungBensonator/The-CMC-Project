@@ -1,0 +1,232 @@
+//-----------------------------STAND-------------------------------------------//
+if ( state_type == "stand" && sprite_index == stand_sprite )
+  image_speed = 0.2;
+
+//-----------------------------CROUCH-------------------------------------------//
+if ( state_type == "crouch" )
+{
+  if ( facing = 0 && moveright = 1 )
+  {
+    sprite_index = crawl_sprite;
+    image_speed = 0.25;
+    hspeed = 0.8;
+  }
+  if ( facing = 0 && moveleft = 1 )
+  {
+    sprite_index = crawl_sprite;
+    image_speed = 0.25;
+    hspeed = -0.6;
+  }
+  if ( facing = 1 && moveright = 1 )
+  {
+    sprite_index = crawl_sprite;
+    image_speed = 0.25;
+    hspeed = 0.6;
+  }
+  if ( facing = 1 && moveleft = 1 )
+  {
+    sprite_index = crawl_sprite;
+    image_speed = 0.25;
+    hspeed = -0.8;
+  }
+}
+
+//-----------------------------RUN-------------------------------------------//
+if ( state_type == "run" )
+{
+  //Walking
+  if ( sprite_index != walk_sprite )
+  {
+    image_speed = 0;
+  }
+  //Dash
+  if ( runtimer >= 0 && runtimer < 50 )
+  {
+    sprite_index = dash_sprite;
+    switch ( runtimer )
+    {
+      case 2: image_index = 0; break;
+      case 4: image_index = 1; break;
+      case 6: image_index = 2; break;
+      case 8: image_index = 3; break;
+      case 10: image_index = 4; break;
+      case 12: image_index = 5; break;
+    }
+    //Dash brake
+  }
+  else if ( runtimer >= 60 && runtimer < 90 && dash_end == 1 )
+  {
+    sprite_index = dash_sprite;
+    if ( runtimer < 62 )
+    {
+      image_index = 6;
+    }
+    else if ( runtimer < 64 )
+    {
+      image_index = 7;
+    }
+    else if ( runtimer < 66 )
+    {
+      image_index = 8;
+    }
+    else if ( runtimer < 68 )
+    {
+      image_index = 9;
+    }
+    else if ( runtimer < 70 )
+    {
+      image_index = 10;
+    }
+    else if ( runtimer < 72 )
+    {
+      image_index = 11;
+    }
+    else if ( runtimer < 74 )
+    {
+      image_index = 12;
+    }
+    else if ( runtimer < 76 )
+    {
+      image_index = 13;
+    }
+  }
+  //Run brake
+  else if ( runtimer >= 60 && runtimer < 90 && dash_end == 0 )
+  {
+    sprite_index = brake_sprite;
+    if ( runtimer < 61 )
+    {
+      image_index = 0;
+    }
+    else if ( runtimer < 62 )
+    {
+      image_index = 1;
+    }
+    else if ( runtimer < 63 )
+    {
+      image_index = 2; 
+    }
+    else if ( runtimer < 64 )
+    {
+      image_index = 3;
+    }
+    else if ( runtimer < 65 )
+    {
+      image_index = 4;
+    }
+    else if ( runtimer < 66 )
+    {
+      image_index = 5;
+    }
+    else if ( runtimer < 67 )
+    {
+      image_index = 6;
+    }
+    else if ( runtimer < 68 )
+    {
+      image_index = 7;
+    }
+    else if ( runtimer < 69 )
+    {
+      image_index = 8;
+    }
+    else if ( runtimer < 70 )
+    {
+      image_index = 9; 
+    }
+    else if ( runtimer < 71 )
+    {
+      image_index = 10;
+    }
+    else if ( runtimer < 72 )
+    {
+      image_index = 11;
+    }
+    else if ( runtimer < 73 )
+    {
+      image_index = 12;
+    }
+    else
+    {
+      image_index = 13;
+    }
+  }
+  //Turn While running
+  else if ( runtimer >= -30 && runtimer <= -10 )
+  { 
+    sprite_index = turn_sprite;
+    switch ( runtimer )
+    {
+      case -30: image_index = 0; break;
+      case -29: image_index = 1; break;
+      case -28: image_index = 2; break;
+      case -27: image_index = 3; break;
+      case -26: image_index = 4; break;
+      case -25: image_index = 5; break;
+      case -24: image_index = 6; break;
+      case -23: image_index = 7; break;
+      case -22: image_index = 8; break;
+      case -21: image_index = 9; break;
+      case -20: image_index = 10; break;
+      case -19: image_index = 11; break;
+    }
+    if ( runtimer >= -20 )
+    {
+      sprite_index = run_sprite;
+      image_speed = 0.3;
+    }
+  } 
+  //Run normally
+  else if ( runtimer >= 50 && runtimer < 60 )
+  {
+    sprite_index = run_sprite;
+    image_speed = 0.5;
+  }
+}
+
+//-----------------------------JUMP-------------------------------------------//
+if ( state_type == "jump" )
+{
+  if ( sprite_index == jump_sprite )
+    image_speed = 0.5;
+  if ( sprite_index == mid_jump_sprite )
+    image_speed = 0.8;
+}
+
+//-----------------------------DODGE-------------------------------------------//
+if ( sprite_index = air_dodge_sprite )
+{
+  image_speed = 0;
+  switch ( timer )
+  {
+    case 0: image_index = 0; break;
+    case 1: image_index = 1; break;
+    case 2: image_index = 2; break;
+    case 3: image_index = 3; break;
+    case 4: image_index = 4; break;
+    case 5: image_index = 5; break;
+    case 6: image_index = 6; break;
+    case 7: image_index = 7; break;
+    case 8: image_index = 8; break;
+    case 9: image_index = 9; break;
+    case 10: image_index = 10; break;
+    case 11: image_index = 11; break;
+    case 12: image_index = 12; break;
+    case 13: image_index = 13; break;
+    case 14: image_index = 14; break;
+    case 15: image_index = 15; break;
+    case 16: image_index = 16; break;
+  }
+}
+
+//-----------------------------CLIMB-------------------------------------------//
+if ( attack_type = "edge_climb" )
+{
+  customedgeclimb = 1;
+  image_speed = 0.4;
+}
+
+//-----------------------------MISC-------------------------------------------//
+if ( state_type == "broken" && sprite_index == broken_sprite )
+  image_speed = 0.5;
+if ( air = 0 ) { sidebtemp = 0; }

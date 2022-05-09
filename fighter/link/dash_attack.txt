@@ -1,0 +1,218 @@
+if (hiddenskills == 0) {
+  if (state_type = "run") {
+    state_type = "attack";
+    attack_type = "dash_attack";
+    timer = 0;
+    time = 43;
+    sprite_index = dash_attack_sprite;
+    image_speed = 0;
+    image_index = 0;
+	create_hurtbox_precise(self.id, 45, dash_attack_mask)
+
+  }
+
+  if (timer < time) {
+    switch ( timer ) {
+      case 3: image_index = 1; break;
+      case 6: image_index = 2; break;
+      case 11: image_index = 3; break;
+      case 14: image_index = 4; break;
+      case 18: image_index = 5; break;
+      case 20: image_index = 6; break;
+      case 22: image_index = 7; break;
+      case 24: image_index = 8; break;
+      case 30: image_index = 9; break;
+      case 32: image_index = 10; break;
+      case 34: image_index = 11; break;
+      case 40: image_index = 12; break;
+    }
+
+    switch (timer){
+      case 14:
+        sword_trail = create_sword_trail2(self.id,3,6,0,0,30,sword_texture);
+        sword_trail.visible_frames = 3;
+        sword_trail.per_frame_radius = true;
+        sword_trail.tip_radius[3] = 38;
+        sword_trail.base_radius[3] = 11;
+        sword_trail.tip_radius[2] = 10;
+        sword_trail.base_radius[2] = 3;
+        sword_trail.tip_radius[1] = 22;
+        sword_trail.base_radius[1] = 7;
+        sword_trail.tip_radius[0] = 0;
+        sword_trail.base_radius[0] = 0;
+        with(sword_trail) interpolate_sword_trail();
+        sword_trail.color_blend = sword_color;
+        sword_trail.index = 1;
+        break;
+      case 15: case 16: case 17:
+        sword_trail.visible_frames -= (1/4);
+        break;
+      case 18:
+        sword_trail.visible_frames = 2;
+        sword_trail.index = 2;
+        break;
+      case 19:
+        sword_trail.visible_frames = 1.5;
+      case 20:
+        sword_trail.visible_frames = 2;
+        sword_trail.index = 3;
+        break;
+      case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33:
+        sword_trail.visible_frames = ease_out_cubic(1,0, (timer-21)/12 );//-= (1/13);
+        break;
+      case 34:
+        with (sword_trail){
+          instance_destroy();
+        }
+        break;
+    }
+
+    if (timer == 1) {
+      duster = instance_create(x - 6 + facing * 12, y, obj_dust_effect)
+      duster.facing = facing
+      duster.image_alpha = 0.75
+      sound_play(jump_sound);
+      hspeed = size * (4 - facing * 8);
+    }
+
+    if (timer == 20) {
+      play_attack_voice();
+      sound_play(swing_sound3);
+      create_hitbox(11, 20 + facing * 140, 5.2, 6.42, 15, 8, slash3, obj_spark_slash2, 1, 1.2, 26, 19, self.id, 14, 2);
+      hspeed = size * (3 - facing * 6);
+    }
+
+    if (timer == 28) {
+      hitbox.damage = 7 * size;
+      hitbox.bkb = 4.2 * size;
+      hitbox.sfx = slash1;
+    }
+
+    if (timer == 22){
+      hspeed = 0;
+    }
+
+}
+
+if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch") {
+  state_type = "stand";
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+}
+
+}
+if hiddenskills = 1 {
+  if (state_type = "run") {
+    state_type = "attack";
+    attack_type = "dash_attack";
+    timer = 0;
+    time = 43;
+    sprite_index = roll2_sprite;
+    image_speed = 0;
+    image_index = 0;
+    x += size * (3 - facing * 16);
+  }
+
+  if (timer < time) {
+    switch (timer) {
+      case 2:
+        image_index = 1;
+        break;
+      case 4:
+        image_index = 2;
+        break;
+      case 6:
+        image_index = 3;
+        break;
+      case 8:
+        image_index = 4;
+        break;
+      case 10:
+        image_index = 5;
+        break;
+      case 12:
+        image_index = 6;
+        break;
+      case 16:
+        image_index = 12;
+        sprite_index = jab_sprite;
+        break;
+      case 20:
+        image_index = 14;
+        break; //stab
+      case 24:
+        image_index = 15;
+        break;
+      case 36:
+        image_index = 16;
+        break;
+      case 40:
+        image_index = 17;
+        break;
+    }
+
+    if (timer >= 4 && timer < 20) {
+      hspeed = size * (4 - facing * 8);
+    }
+    if timer = 10
+    create_hitbox(2, 20 + facing * 140, 6.5, 0, 8, 4, punch2, obj_spark_hit2, 0.8, 0.8, 0, 16, self.id, 8, 2);
+    if (timer = 20) {
+      play_attack_voice();
+      sound_play(swingsnd2);
+      create_hitbox(10, 20 + facing * 140, 4.9, 6.42, 15, 8, slash2, obj_spark_slash2, 1.1, 0.4, 32, 16, self.id, 14, 2);
+      hspeed = size * (3 - facing * 6);
+    }
+    if (timer = 25) {
+      hitbox.damage = 6 * size;
+      hitbox.bkb = 4.2 * size;
+      hitbox.sfx = slash1;
+      hspeed = size * (3 - facing * 6);
+    }
+    if (timer = 28)
+      hspeed *= 0.8;
+    if (timer = 33)
+      hspeed = 0;
+  }
+
+   if (timer >= 10){
+if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 150)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+  
+
+  if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch") {
+    dontrepeat = 0;
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+}

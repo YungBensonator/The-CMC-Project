@@ -1,0 +1,344 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fs_start_sprite;
+  timer = 0;
+  time = 356;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  vspeed = 0;
+  change = 0;
+  grab_edge = 0;
+  freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 39;
+  freezer.dontpause = self.id;
+  chase = 20;
+  bounce = 0;
+  }
+
+var i;
+gravity_lock = 1;
+air_move = 0;
+
+if ( timer >= 40 && timer < 60 )
+  {
+  if ( target != -1 )
+    {
+    with ( proj )
+      {
+      instance_destroy();
+      }
+    create_homing_bubble ( 1 * size, 1 * size, 0, 5 * size, self.id , 20 );
+    change = 0;
+    with ( player )
+      {
+      if ( intangible == 1 || intangible_frames >= 0 ) continue;
+      if ( team == other.team && !team_attack ) continue;
+      if ( place_meeting ( x , y , other.proj ) )
+        {
+        if ( state_type == "shielding" ) state_type = "stand";
+        timer_speed = 0;
+        for ( i = 0 ; i < 12 ; i += 1 ) alarm[i] = -1;
+        other.change += 1;
+        }
+      }
+    if ( change == 0 )
+      create_homing_bubble ( 1 * size, 1 * size, 0, 5 * size, self.id , 20 );
+    else
+      timer = 120;
+    }
+  proj.x = x;
+  proj.y = y - 5 * size;
+  hspeed = 10 * ( 1 - facing * 2 );
+  }
+
+if ( timer >= 120 && timer < 300 )
+  {
+  ignore_physics = 1;
+  if ( chase > 0 && timer < 293 )
+    {
+    chase -= 1;
+    if ( hspeed > 0 && ( x > view_xview + view_wview ) )
+      {
+      savedir = -direction+225;
+      direction = -direction+225;
+      bounce += 0.02;
+      }
+    if ( hspeed < 0 && x < view_xview )
+      {
+      savedir = -direction+225;
+      direction = -direction+225;
+      bounce += 0.02;
+      }
+    if ( vspeed < 0 && y < view_yview )
+      {
+      savedir = -direction-45;
+      direction = -direction-45;
+      bounce += 0.02;
+      }
+    if ( vspeed > 0 && ( ( y > view_yview + view_hview ) || ( collision_point ( x , y , obj_floor , 1 , 1 ) ) ) )
+      {
+      savedir = -direction-45;
+      direction = -direction-45;
+      bounce += 0.02;
+      }
+    }
+  if ( chase = 0 && timer < 293 )
+    {
+    move_towards_point ( target.x , target.y - 2 * target.size , 20 );
+    chase = 20;
+    }
+  if ( timer >= 293 && timer < 300 )
+    {
+    move_towards_point ( zoom.x , zoom.y - 2 , 20 );
+    chase = 0;
+    }
+  image_angle = direction-180*facing;
+  if ( timer < 293 && place_meeting ( x , y , enemy ) )
+    {
+    create_projectile ( 2 , 80 + facing * 20 , 2.5 , 0 , -1 , 25 , shock2 , obj_spark_shock , 1.5 , 1.5 , 1 , 10 , self.id , 3 , no_script );
+    proj.x = target.x;
+    proj.y = target.y;
+    }
+  if ( timer mod 20 = 0 )
+    percent += 1;
+  if ( timer mod 10 = 0 )
+    sound_play_pitch ( fs_sound2 , 1+bounce );
+  }
+
+if ( ( timer > 40 && timer < 60 ) || ( timer > 120 && timer < 300 ) )
+  {
+  if ( instance_exists ( spark ) )
+    {
+    spark.x = x;
+    spark.y = y - 9 * size;
+    with ( spark )
+      {
+      if image_index >= 4.2;
+      image_index = 0;
+      }
+    }
+  else
+    {
+    spark = instance_create ( x , y - 9 * size , obj_spark );
+    spark.sprite_index = fs_orb_sprite;
+    spark.image_alpha = 0.7;
+    spark.image_speed = 0.4;
+    spark.image_xscale *= 0.5 * size;
+    spark.image_yscale *= 0.5 * size;
+    }
+  }
+
+if ( timer >= 308 && timer < 311 )
+  if ( proj.hit > 0 )
+  {
+    with ( proj ) instance_destroy();
+  }
+
+switch ( timer )
+  {
+    /////////Final Smash Start/////////
+    case 1: sound_play ( fs_voice ); sound_play ( fs_sound ); break;
+    case 2: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 6: image_index = 3; break;
+    case 8: image_index = 4; break;
+    case 10: image_index = 5; break;
+    case 12: image_index = 6; break;
+    case 14: image_index = 7; break;
+    case 16: image_index = 8; break;
+    case 18: image_index = 9; break;
+    case 20: image_index = 10; break;
+    case 22: image_index = 11; break;
+    case 24: image_index = 12; break;
+    case 26: image_index = 13; break;
+    case 28: image_index = 14; break;
+    case 30: image_index = 15; break;
+    case 32: image_index = 16; break;
+    case 34: image_index = 17; break;
+    case 36: image_index = 18; break;
+    case 38: image_index = 19; break;
+    case 40:
+      image_index = 20;
+      create_homing_bubble ( 1 * size, 1 * size, 0, 5 * size, self.id , 20 );
+      spark = instance_create ( x , y - 9 * size , obj_spark );
+      spark.sprite_index = fs_orb_sprite;
+      spark.image_alpha = 0.7;
+      spark.image_speed = 0.4;
+      spark.image_xscale *= 0.5 * size;
+      spark.image_yscale *= 0.5 * size;
+      break;
+    case 42: image_index = 21; break;
+    case 44:
+      sprite_index = fs_travel_sprite;
+      image_index = 0;
+      image_speed = 0.2;
+      break;
+    /////////Final Smash Fail/////////
+    case 60:
+      if instance_exists ( spark ) { with ( spark ) { instance_destroy(); } }
+      sprite_index = fs_fail_sprite;
+      image_index = 0;
+      image_speed = 0;
+      timer = 60;
+      hspeed = 0;
+      break;
+    case 62: image_index = 1; break;
+    case 64: image_index = 2; break;
+    case 66: image_index = 3; break;
+    case 68: image_index = 4; break;
+    case 70: image_index = 5; break;
+    case 72: image_index = 6; break;
+    case 74: image_index = 7; break;
+    case 76:
+      image_index = 8;
+      sound_stop ( fs_voice );
+      sound_play ( fs_voice2 );
+      break;
+    case 78: image_index = 9; break;
+    case 80: image_index = 10; break;
+    case 82: image_index = 11; break;
+    case 84: image_index = 12; break;
+    case 86: image_index = 13; break;
+    case 88: image_index = 14; break;
+    case 90: image_index = 15; break;
+    case 92: image_index = 16; break;
+    case 94: image_index = 17; break;
+    case 96: image_index = 18; break;
+    case 98: image_index = 19; break;
+    case 100: image_index = 20; break;
+    case 102: image_index = 21; break;
+    case 104: image_index = 22; break;
+    case 106: image_index = 23; break;
+    case 108: image_index = 24; break;
+    case 110: image_index = 25; break;
+    case 112:
+      grab_edge = 1;
+      smash_power = 0;
+      attack_type = "none";
+      intangible = 0;
+      if ( air = 0 )
+	{
+	state_type = "land";
+	sprite_index = land_sprite;
+	image_index = 0;
+	timer = 0;
+	time = 15;
+	}
+      else
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 24;
+	timer = 0;
+	time = -1;
+	}
+      chase = 0;
+      break;
+    /////////Final Smash Travel/////////
+    case 120:
+      create_projectile ( 2 , 80 + facing * 20 , 2.5 , 0 , -1 , 25 , shock2 , obj_spark_shock , 1.5 , 1.5 , 1 , 10 , self.id , 3 , no_script );
+      proj.x = target.x;
+      proj.y = target.y;
+      sprite_index = fs_travel_sprite;
+      direction = 5+facing*170;
+      savedir = direction;
+      image_speed = 0.2;
+      image_index = 0;
+      speed = 20;
+
+      zoom = instance_create ( target.x , target.y , obj_camerazoom );
+      zoom.camera_l = x - 50;
+      zoom.camera_r = x + 50;
+      zoom.camera_u = y - 50;
+      zoom.camera_d = y + 50;
+      zoom.camera_boundary_zoom = 50;
+      zoom.alarm[0] = 236;
+
+      break;
+    /////////Final Smash Finish/////////
+    case 300:
+      if instance_exists ( spark ) { with ( spark ) { instance_destroy(); } }
+      sprite_index = fs_finish_sprite;
+      ignore_physics = 1;
+      image_index = 0;
+      image_speed = 0;
+      image_angle = 0;
+      x = zoom.x;
+      y = zoom.y;
+      speed = 0;
+      chase = 0;
+      break;
+    case 302: image_index = 1; break;
+    case 304: image_index = 2; break;
+    case 306: image_index = 3; break;
+    case 308:
+      create_projectile ( 20 , 80 + facing * 20 , 6.75 , 6.5 , -1 , 50 , shock3 , obj_spark_shock , 2 , 2 , 1 , 10 , self.id , 3 , no_script )
+      instance_create ( 0 , 0 , obj_flashscreen );
+      sound_play ( downb_hit_sound );
+      sound_play ( fs_sound3 );
+      image_index = 4;
+      percent += 5;
+
+      shock = instance_create(x,y,obj_spark);
+      shock.sprite_index = downb_thunder_hit_sprite;
+      shock.image_index = 0;
+      shock.image_speed = 0.375;
+      shock.image_xscale = 0.45*size;
+      shock.image_yscale = 0.45*size;
+      break;
+    case 310: image_index = 5; break;
+    case 312: image_index = 6; break;
+    case 314: image_index = 7; break;
+    case 316: image_index = 8; break;
+    case 318: image_index = 9; break;
+    case 320: image_index = 10; break;
+    case 322: image_index = 11; break;
+    case 324: image_index = 12; break;
+    case 326: image_index = 13; break;
+    case 328: image_index = 14; break;
+    case 330: image_index = 15; break;
+    case 332: image_index = 16; break;
+    case 334: image_index = 17; break;
+    case 336: image_index = 18; break;
+    case 338: image_index = 19; break;
+    case 340: image_index = 20; break;
+    case 342: image_index = 21; break;
+    case 344: image_index = 22; break;
+    case 346: image_index = 23; break;
+    case 348: image_index = 24; break;
+    case 350: image_index = 25; break;
+    case 352: image_index = 26; break;
+    case 354: image_index = 27; break;
+  }
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air = 0 )
+    {
+    state_type = "land";
+    sprite_index = land_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 15;
+    }
+  else
+    {
+    state_type = "jump";
+    sprite_index = jump_sprite;
+    image_index = 24;
+    timer = 0;
+    time = -1;
+    }
+  chase = 0;
+  }

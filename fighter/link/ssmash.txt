@@ -1,0 +1,190 @@
+if (state_type = "stand" || state_type = "run") {
+  state_type = "attack";
+  attack_type = "ssmash";
+  timer = 0;
+  time = 42;
+  sprite_index = ssmash2_sprite;
+  image_speed = 0;
+  image_index = 0;
+  charge_frame = 8;
+  hspeed = 0;
+  temp = 0;
+  create_hurtbox_precise(self.id, 42, ssmash2_mask)
+}
+
+if (timer < time) {
+  // Animate sprite
+  switch (timer) {
+    case 2: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 6: image_index = 3; break;
+    case 7: image_index = 4; break;
+    case 10: image_index = 5; break;
+    case 11: image_index = 6; break;
+    case 12: image_index = 7; break;
+    case 16: image_index = 8; break;
+    case 20: image_index = 9; break;
+    case 37: image_index = 10; break;
+    case 39: image_index = 11; break;
+    case 41: image_index = 12; break;
+    case 99: image_index = 11; break;
+    case 101: image_index = 12; break;
+    case 105: image_index = 13; break;
+    case 109: image_index = 14; break;
+    case 115: image_index = 15; break;
+    case 120: image_index = 16; break;
+    case 125: image_index = 17; break;
+  }
+
+  // Animate VFX
+  switch (timer){
+      case 11:
+        sword_trail = create_sword_trail2(self.id,5,9,10,5,40,sword_texture);
+        sword_trail.visible_frames = 2;
+        sword_trail.per_frame_radius = true;
+        sword_trail.tip_radius[4] = 11;
+        sword_trail.base_radius[4] = 2
+        sword_trail.tip_radius[3] = 11;
+        sword_trail.base_radius[3] = 4;
+        sword_trail.tip_radius[2] = 60;
+        sword_trail.base_radius[2] = 28;
+        sword_trail.tip_radius[1] = 23;
+        sword_trail.base_radius[1] = 13;
+        sword_trail.tip_radius[0] = 10;
+        sword_trail.base_radius[0] = 5;
+        sword_trail.index = 0;
+        sword_trail.color_blend = sword_color;
+        with(sword_trail) interpolate_sword_trail();
+    case 12: 
+      sword_trail.index = 2; 
+      sword_trail.visible_frames = 1; 
+      break;
+    case 16: 
+      sword_trail.index = 3; 
+      sword_trail.visible_frames = 2; 
+      break;
+    case 17: case 18: case 19: sword_trail.visible_frames -= (1/8); break;
+    case 20: 
+      sword_trail.index = 4; 
+      sword_trail.depth = depth + 0.1; 
+      break;
+    case 21: case 22: case 23: case 24: case 25: sword_trail.visible_frames -= (1/5)*2; break;
+    case 26: with(sword_trail) instance_destroy();
+    case 101:
+        sword_trail = create_sword_trail2(self.id,11,16,10,5,30,sword_texture);
+        sword_trail.visible_frames = 2;
+        sword_trail.per_frame_radius = true;
+        sword_trail.tip_radius[4] = -11;
+        sword_trail.base_radius[4] = -10;
+        sword_trail.tip_radius[3] = -2;
+        sword_trail.base_radius[3] = 0;
+        sword_trail.tip_radius[2] = -59;
+        sword_trail.base_radius[2] = -25;
+        sword_trail.tip_radius[1] = -21;
+        sword_trail.base_radius[1] = 0;
+        sword_trail.tip_radius[0] = 10;
+        sword_trail.base_radius[0] = 5;
+        sword_trail.index = 1;
+        sword_trail.depth = depth + 0.1;
+        sword_trail.color_blend = sword_color;
+        with(sword_trail) interpolate_sword_trail();
+        break;
+    case 105:
+        sword_trail.index = 2;
+        sword_trail.visible_frames = 1;
+        break;
+    case 109:
+        sword_trail.visible_frames = 2;
+        sword_trail.depth = depth - 0.1;
+        sword_trail.index = 3;
+        break;
+    case 110: case 111: case 112: case 113: case 114:
+        sword_trail.visible_frames -= (1/6); break;
+    case 115:
+        sword_trail.index = 4;
+        break;
+    case 116: case 117: case 118: case 119:
+        sword_trail.visible_frames -= (1/5)*2;
+        break;
+    case 120:
+        with (sword_trail) instance_destroy(); break;
+  }
+  
+  if (timer > 6 && timer < 15){
+    x += size * (1 - facing * 2);
+  }
+  
+  if (timer == 12) {
+    sound_play(swing_sound3);
+    create_hitbox(5, 50 + facing * 80, 5.5, 0.5, 10, 5, slash3, obj_spark_slash2, 0.95, 1, 24, 20, self.id, 5, 3);
+    hitbox.hit_stun = 8;
+    hitbox.charge_hitlag = 0.1;
+    x += size * (8 - facing * 16);
+    duster = instance_create(x, y, obj_dust_effect);
+    duster.facing = facing;
+    instance_create(x + size * (8 - facing * 16), y - 17 * size, obj_spark_effect);
+  }
+
+  if (timer >= 20 && timer < 36 && (attacking || smash)){
+    temp = 1
+  }
+  
+  if (timer = 36 && (attacking || smash || temp)) {
+	with (hurtbox)
+		instance_destroy()
+	  create_hurtbox_precise(self.id, 42, ssmash_mask)
+
+    timer = 97;
+    sprite_index = ssmash_sprite;
+    image_index = 9;
+    time = 148;
+    sound_play(ssmash_voice);
+    sound_play(swing_sound4);
+    x += size * (7 - facing * 14);
+    instance_create(x + size * (11 - facing * 22), y - 19 * size, obj_spark_effect);
+  }
+  if (timer == 101){
+    create_hitbox(15, 40 + facing * 100, 5.95, 7.65, 25, 12, slash3, obj_spark_slash2, 1.1, 1.05, 34, 23, self.id, 6, 4);
+  }
+    
+}
+
+   if (timer >= 101){
+if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 135) || (target.weight > .3 && target.percent > 150)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+
+
+if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch") {
+  state_type = "stand";
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+}

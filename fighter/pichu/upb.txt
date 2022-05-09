@@ -1,0 +1,277 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type  = "jump" {
+        state_type = "air_attack";
+        attack_type = "upb";
+        image_speed = 0;
+        sprite_index = upb_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 31;
+        timer_speed=1;
+        vspeed = 0
+        if air = 0 {
+            hspeed = 0
+	    temp = 0
+        } else {
+            hspeed*=0.2
+	    temp = 1
+	}
+        if ai && ai_state = "recover"
+        {
+        movedown = 0
+        if x > room_width/2
+            facing = 1
+        else 
+        facing = 0 }
+        air_move=0
+	temp2 = 0
+	tempup = 0
+	tempdown = 0
+	tempright = 0
+	templeft = 0
+	force_edge_grab = 2;
+}
+        if timer < time {
+		switch (timer)
+		{
+		case 2: image_index = 1; break;
+		case 4: image_index = 2; break;
+		case 6: image_index = 3; break;
+		case 7: image_index = 4; break;
+		case 8: image_index = 5; break;
+		case 9: image_index = 6; break;
+		case 10: image_index = 7; break;
+		case 11: image_index = 8; break;
+		case 12: image_index = 9; break;
+		case 13: image_index = 10; break;
+		case 14: image_index = 11; break;
+		case 15: image_index = 12; break;
+		case 16: image_index = 13; break;
+		case 17: image_index = 14; break;
+		case 18: image_index = 15; break;
+		
+		case 20: sprite_index = upb_sprite2; image_index = 0; break;
+		case 21: image_index = 1; break;
+		case 22: image_index = 2; break;
+		case 23: image_index = 3; break;
+		case 24: image_index = 4; break;
+		case 25: image_index = 5; break;
+		case 26: image_index = 6; break;
+		case 27: image_index = 7; break;
+		case 28: image_index = 8; break;
+		case 29: image_index = 9; break;
+		case 30: image_index = 10; break;
+		case 47: image_index = 2; break;
+		case 48: image_index = 3; break;
+		case 49: image_index = 4; break;
+		case 50: image_index = 5; break;
+		case 51: image_index = 6; break;
+		case 52: image_index = 7; break;
+		case 53: image_index = 8; break;
+		case 54: image_index = 9; break;
+		case 55: image_index = 10; break;
+		}
+            air_move=0
+             if timer < 20 || (timer > 23 && timer < 45) || (timer > 49 && timer < 54)  {
+             speed = 0
+             temp_fall_speed = 0
+             }
+            if timer = 12 || timer = 40
+                intangible = 1
+	    if (timer = 19) dir = -1;
+	    if timer > 25
+		force_edge_grab = 1;
+            if timer = 20 || timer = 46 {
+                if ai && ai_state = "recover" {
+                    if x < nearest_edge.x && dir != 45 {
+                        moveright = 1;
+                        moveleft = 0;
+                    } else if x > nearest_edge.x && dir != 135 {
+                        moveleft = 1;
+                        moveright = 0;
+                    }
+					
+                    if (y > nearest_edge.y + 10 || dir == 0 || dir == 180) moveup = 1;
+					else moveup = 0;
+					
+					if ((dir == 45 && moveright && moveup) || (dir == 135 && moveleft && moveup)) {
+						moveright = 0;
+						moveleft = 0;
+					}
+                    movedown = 0;
+					
+                } else if ai {
+					moveright = 0;
+					moveleft = 0;
+					moveup = 0;
+					movedown = 0;
+				}
+                if (moveup || tempup) && (!moveright || !tempright) && (!moveleft || !templeft) && dir != 90 {
+                dir = 90
+                duster = instance_create(x,y,obj_dust_effect);
+                vspeed = -50
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+		sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,dir,3.6,1,8,5,shock2,obj_spark_shock,0.7,1,2,18,self.id,5,3);
+		percent += 1;
+                }
+                else if (moveup || tempup) && (moveright || tempright) && (!moveleft || !templeft) && dir != 45 {
+                dir = 45
+                duster = instance_create(x,y,obj_dust_effect);
+                vspeed = -35
+                hspeed = 35
+                facing = 0
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,dir,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+                else if (moveup || tempup) && (!moveright || !tempright) && (moveleft || templeft) && dir != 135 {
+                dir = 135
+                duster = instance_create(x,y,obj_dust_effect);
+                vspeed = -35
+                hspeed = -35
+                facing = 1
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,dir,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+                else if (!moveup || !tempup) && (!moveright || !tempright) && (moveleft || templeft) && (!movedown || !tempdown) && dir != 180 {
+                dir = 180
+                duster = instance_create(x,y,obj_dust_effect);
+                hspeed = -50
+                facing = 1
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,55+facing*70,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+                else if (!moveup || !tempup) && (moveright || tempright) && (!moveleft || !templeft) && (!movedown || !tempdown) && dir != 0 {
+                dir = 0
+                duster = instance_create(x,y,obj_dust_effect);
+                hspeed = 50
+                facing = 0
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,55+facing*70,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+                else if (!moveup || !tempup) && (moveright || tempright) && (!moveleft || !templeft) && (movedown || tempdown) && dir != 315 {
+                dir = 315
+                duster = instance_create(x,y,obj_dust_effect);
+                hspeed = 35
+                vspeed = 35
+                temp_fall_speed = vspeed - fall_speed
+                facing = 0
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,55+facing*70,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+                else if (!moveup || !tempup) && (!moveright || !tempright) && (moveleft || templeft) && (movedown || tempdown) && dir != 225 {
+                dir = 225
+                duster = instance_create(x,y,obj_dust_effect);
+                hspeed = -35
+                vspeed = 35
+                temp_fall_speed = vspeed - fall_speed
+                facing = 1
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,55+facing*70,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+                else if (!moveup || !tempup) && (!moveright || !tempright) && (!moveleft || !templeft) && (movedown || tempdown) && dir != 270 {
+                dir = 270
+                duster = instance_create(x,y,obj_dust_effect);
+                hspeed = 0
+                vspeed = 50
+                temp_fall_speed = vspeed - fall_speed
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,55+facing*70,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+                else if timer = 20 {
+                dir = 90
+                duster = instance_create(x,y,obj_dust_effect);
+                hspeed = 0
+                vspeed = 0
+                temp_fall_speed = vspeed - fall_speed
+                if ( timer < 30 ) { sound_play(upb_voice); } else { sound_play(upb_voice2); }
+                sound_play(upb_sound)
+                duster.facing = facing; 
+                create_hitbox(4,55+facing*70,3.6,1,8,5,shock2,obj_spark_shock,0.67,0.64,4.60,5.20,self.id,5,3);
+		percent += 1;
+                }
+		else
+		    timer = 54;
+            }
+            if timer = 22 || timer = 48 {
+                speed = 0 + (air>0)*2
+                direction = dir
+                temp_fall_speed = 0
+		tempup = 0
+		tempdown = 0
+		tempright = 0
+		templeft = 0
+            }
+            if timer = 26 || timer = 54
+                intangible = 0
+	    if (timer >= 23 && timer <= 29) || (timer >= 49 && timer <= 55) && !air && temp {
+		state_type = "land";
+		attack_type = "none";
+		sprite_index = land_sprite;
+		image_index = 0;
+		timer = 0;
+		time = 20;
+		intangible = 0;
+		if (movejump || (ai && ( random (10) + ai_level ) >= 11)) {		
+			special = 0;
+			CAN_shield = 0;
+			CAN_jump = 1; }
+	    }
+            if ((timer >= 23 && timer <= 30) || (timer >= 10 && timer < 20)) && (moveright || moveleft || moveup || (movedown && air))  {
+                temp2 = 1
+		tempup = 0
+		tempdown = 0
+		tempright = 0
+		templeft = 0
+		if moveright
+			tempright = 1
+		if moveleft
+			templeft = 1
+		if moveup
+			tempup = 1
+		if movedown
+			tempdown = 1
+            }
+	    if timer = 30 && temp2 = 1 {
+                time = 56
+                timer = 38
+                temp_fall_speed = 0
+		}
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    air = max_jumps;
+    attack_type = "none";
+    if air {
+        state_type = "fall";
+        sprite_index = fall_sprite;
+    }
+    else 
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    temp_fall_speed = 0
+    intangible = 0;
+}

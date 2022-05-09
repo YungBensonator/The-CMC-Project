@@ -1,0 +1,53 @@
+moving_object = 1;
+absorb2 = 1;
+//use_palette = "number";
+use_palette = number;
+//if (timer > 1 && hit = 0 )
+if timer > 1
+  {
+    after_image(4,make_color_rgb(107,75,40),0.85)  
+  }
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.arrow_sprite;
+    hspeed = ( max(7,damage * 1.5) / attacker.size - 4 ) * (1-facing*2);
+    image_speed = 0;
+    vspeed = -0.4;
+    visible = 1;   
+  }
+if (timer == 1){
+  trail = create_trail(self.id,17,sprite_get_height(sprite_index)*image_yscale,keepmain.arrow_texture); 
+  trail.depth = 1; 
+  var eff;
+  eff = instance_create(x,y,obj_smash_charge);
+  
+  eff.image_yscale = 0.66 * keepmain.ysize;
+  eff.image_xscale = eff.image_yscale * (1-facing*2);
+  show_debug_message(1-facing*2);
+  eff.x = x + 10 * eff.image_xscale;
+  eff.depth = depth - 0.1;
+}
+trail.x = x;
+trail.y = y-2*keepmain.ysize;
+trail.alarm[0] = 2;
+if hit = 1 {
+    with (trail) instance_destroy();
+    instance_destroy()
+}
+if ( !is_on_floor(self) )
+  {
+    if ( vspeed < 6 && hit = 0 )
+	    vspeed += 0.12;
+  }
+else
+if ( vspeed > 0 )
+  {
+    speed = 0;
+    hit = 2;
+  }
+if ( next_to_rwall || next_to_lwall )
+    instance_destroy();
+if ( hit == 0 )
+     image_angle = clamp( normalize_angle(direction + facing * 180), 0, 360 );
+else
+    speed = 0;

@@ -1,0 +1,151 @@
+///////////////////////////////////Crouch shit I stole from ogg
+if ( state_type = "crouch" ){
+    
+    image_speed = 0;
+    crouchgetuptimer = min(3,timer)
+    switch (timer){
+        case 0: image_index = 0; sprite_index = crouch_sprite; break;
+        case 3: image_index = 1; break;
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+    image_index = 0;
+	sprite_index = crouch_sprite;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+
+if (state_type == "run") {
+	//Walking
+	if (sprite_index != walk_sprite){
+		image_speed = 0;
+	}
+	//Dash
+	if (runtimer >= 0 && runtimer < 50){
+		sprite_index = dash_sprite;
+		switch (runtimer){
+			case 1: image_index = 0; break;
+			case 3: image_index = 1; break;
+			case 5: image_index = 2; break;
+		}
+	//Stop running during the initial dash
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 1) {
+		sprite_index = brake_sprite;
+		if (runtimer < 63){
+			image_index = 0;
+		} else if (runtimer < 67){
+			image_index = 1;
+		} else {
+			image_index = 2;
+		}
+	//Stop running (run brake)
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 0){
+		sprite_index = brake_sprite;
+
+		if (runtimer < 63){
+			image_index = 0;
+		} else if (runtimer < 66){
+			image_index = 1;
+		} else {
+			image_index = 2; 
+		}
+	//Turn While running
+	} else if (runtimer >= -30 && runtimer <= -10) { 
+		sprite_index = turn_sprite;
+		switch (runtimer){
+			case -30: image_index = 0; break;
+			case -27: image_index = 1; break;
+			case -24: image_index = 2; break;
+		}
+		if (runtimer >= -20){
+			sprite_index = run_sprite;
+			image_speed = 0.35;
+		}
+	} 
+	//Run normally
+	else if (runtimer >= 50 && runtimer < 60){
+		sprite_index = run_sprite;
+		image_speed = 0.35;
+	} 
+	
+}
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 22: image_index = 1; break;
+  case 26: image_index = 2; break;
+  case 30: image_index = 3; break;
+  case 34: image_index = 4; break;
+  }
+}
+
+if sprite_index = stand_sprite
+{
+image_speed = 0.2;
+}
+
+if sprite_index = henrytaunt_sprite
+{
+image_speed = 4;
+}
+
+if ( sprite_index = jump_sprite and image_index >= 7 )
+{
+image_index = 7;
+}
+
+if ( sprite_index = mid_jump_sprite and image_index >= 6 )
+{
+image_index = 6;
+}
+
+if sprite_index = sleep_sprite
+{
+image_speed = 0.2;
+}
+
+if state_type == "flinch" or state_type == "air_flinch" and super_armor > 0
+{
+super_armor = 0;
+}
+
+if ( state_type = "out" or state_type = "dead" )
+{
+fully_charged = 0;
+chargelvl = 0;
+}
+
+if ( burrytemp > 0 && attack_type != "hold" )
+{
+burrytemp -= 1;
+}
+if( burrytemp < 0 )
+{
+burrytemp = 0
+}
+if ( burrytemp > 180 )
+{
+burrytemp = 180;
+}

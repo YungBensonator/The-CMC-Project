@@ -1,0 +1,37 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "fthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fthrow_sprite;
+  timer = 0;
+  time = 25;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+switch(timer)
+{
+case 02: image_index = 01; break;
+case 04: image_index = 02; break;
+case 14: image_index = 03; break;
+case 17: image_index = 04; sound_play(attack_sound7); sound_play(attack_voice3); break;
+case 20: image_index = 05; break;
+case 23: image_index = 06; break;
+}
+
+if ( timer == 17 )
+  {
+  create_throw_box ( 12 , angle_correct(22) , 6.2 , 5.8 , 14 , 8 , punch3 , obj_spark_hit3 , 0.72 , 0.72 , 16.80 , 10.50 , self.id , 2 );
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

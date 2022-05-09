@@ -1,0 +1,92 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dthrow_sprite;
+  timer = 0;
+  time = 46;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  sound_play(attack_voice5);
+  }
+  
+switch(timer)
+{
+case 03: image_index = 01; break;
+case 06: image_index = 02; break;
+case 09: image_index = 03; break;
+case 29: image_index = 04; sound_play(attack_voice10); break;
+case 31: image_index = 05; break;
+case 33: image_index = 06; break;
+case 43: image_index = 07; break;
+}
+
+
+if ( timer < 3 )
+{
+	target.x = x + place_x(29);
+    target.y = y + place_y(34) + target.actual_height * 0.5;
+}
+
+if (timer >= 3 and timer < 6)
+{
+    target.x = x + place_x(22);
+	target.y = y + place_y(32) + target.actual_height * 0.5;
+}
+
+if (timer >= 6 and timer < 9)
+{
+    target.x = x + place_x(18);
+	target.y = y + place_y(17) + target.actual_height * 0.5;
+}
+
+if (timer >= 9 and timer < 29)
+{
+    target.x = x + place_x(17);
+	target.y = y + place_y(16) + target.actual_height * 0.5;
+}
+
+if (timer = 29 or timer = 30 )
+{
+    target.x = x + place_x(28);
+	target.y = y + place_y(20) + target.actual_height * 0.5;
+}
+
+if (timer = 31 or timer = 32 )
+{
+    target.x = x + place_x(40);
+	target.y = y + place_y(39) + target.actual_height * 0.5;
+}
+
+if ( timer == 33 )
+  {
+  if ( burrytemp = 0)
+    {
+    
+    create_hitbox_impaler ( 9 , 285 - facing * 30 , 6.5 , 5.5 , 15 , 8 , punch3 , obj_spark_hit4 , 0.79 , 0.56 , 14 , 6.30 , self.id , 3 , 3 );
+    burrytemp = 180;
+	
+    }
+    
+    else
+    
+    {
+     create_throw_box( 9 , 285 - facing * 30 , 6.5 , 5.5 , 15 , 8 , punch3 , obj_spark_hit4 , 0.79 , 0.56 , 14 , 6.30 , self.id , 3 , 3 );
+    }
+	
+    target.x = x + place_x(38);
+	target.y = y + place_y(56) + target.actual_height * 0.5;
+	
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

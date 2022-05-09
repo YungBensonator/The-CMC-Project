@@ -1,0 +1,77 @@
+moving_object = 1;
+absorb2 = 1;
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.boomerang_sprite;
+    if ( speed = 0 )
+	hspeed = 6 - attacker.facing * 12;
+    image_speed = 0;
+    visible = 1;
+    if ( attacker.moveup )
+	vspeed = -2.2;
+    else
+    if ( attacker.movedown )
+	vspeed = 2.2;
+    if ( hspeed > 0 )
+	facing = 0;
+    else
+	facing = 1;
+  }
+hspeed -= 0.2 - facing * 0.4;
+image_angle += 40;
+if ( image_angle >= 360 )
+    image_angle = 0;
+if ( returning )
+  {
+    if ( attacker.y - 10 < y + vspeed && vspeed > -3 )
+	vspeed -= 0.25;
+    if ( attacker.y - 10 > y + vspeed && vspeed < 3 )
+	vspeed += 0.25;
+    if ( place_meeting(x,y,attacker) )
+      {
+	if ( attacker.air = 0 && attacker.attack_type = "none" && attacker.state_type = "stand" )
+	  {
+	    attacker.state_type = "land";
+	    attacker.timer = 0;
+	    attacker.time = 10;
+	    if ( attacker.sideb_boom_sprite > 0 )
+		attacker.sprite_index = attacker.sideb_boom_sprite;
+	    attacker.image_speed = 0;
+	    attacker.image_index = 2;
+	  }
+	sound_play(keepmain.sideb_sound2);
+	keepmain.boomerang = 0;
+	instance_destroy();
+      }
+  }
+if ( image_angle = 300 && instance_exists(attacker) && timer <= 199 )
+    sound_play(keepmain.sideb_sound);
+if ( !returning && ( abs(hspeed) < 0.5 || ( ( next_to_rwall || next_to_lwall ) && hit = 0 ) ) )
+  {
+    hspeed = 0;
+    returning = 1;
+    timer = 2;
+  }
+if ( is_on_floor(self) && vspeed > 0 )
+    vspeed *= -0.85;
+if ( hit > 0 && returning < 2 )
+  {
+    returning = 2;
+    timer = 2;
+    time = 233;
+    hspeed = 0;
+  }
+if ( ( x < obj_game_control.death_l || x > obj_game_control.death_r || y < obj_game_control.death_u || y > obj_game_control.death_d ) || timer >= 256 )
+  {
+    keepmain.boomerang = 0;
+    instance_destroy();
+  }
+if place_meeting(x,y,attack_box) && returning < 2 {
+        sound_play(clash1)
+        instance_create(x,y,obj_shield_spark)
+        part_particles_create(psys_front,x,y,ptype_clash,11 );
+    hspeed = 0;
+    returning = 2;
+    timer = 2;
+    time = 233;
+}

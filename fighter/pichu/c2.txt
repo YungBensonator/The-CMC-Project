@@ -1,0 +1,38 @@
+absorb = 0
+absorb2 = 0
+if initialized = 0 {
+pika = attacker
+priority = 3
+initialized = 1
+no_clash = 1
+}
+if timer = 1 {
+cloudbox = create_projectile(5,angle_correct(270),12,0,22,7,shock3,obj_spark_shock,3.5,3.5,5,200,pika.id,45,no_script);
+cloudbox.hit_stun = 12
+ cloudbox.di = -1
+cloudbox.hit_script = char_custom3;
+cloudbox.hit = 1
+cloudbox.priority = 5
+cloudbox.no_clash = 1
+    var i;
+    for (i = 0; i < MAX_FIGHTERS * SLOTS_PER_FIGHTER; i += 1)
+    cloudbox.hit_player[i] = hit_player[i]
+    cloudbox.spawner = self.id
+}
+if timer = 2 {
+    bolt = create_projectile(6,270,8,1.25,14,1,shock3,obj_spark_stun,0.6,0.1,0,pika.y-(pika.thunder_height*43),pika.id,200,pika.thunder_script);
+    bolt.y = pika.y - (pika.thunder_height*1.8);
+    bolt.stun_scalar = 0.1;
+    bolt.stun_base = 6;
+    bolt.depth = 1
+    bolt.pika = pika.id;
+    bolt.hit = 1
+    bolt.hit_script = char_custom3;
+    var i;
+    for (i = 0; i < MAX_FIGHTERS * SLOTS_PER_FIGHTER; i += 1)
+    bolt.hit_player[i] = hit_player[i]
+    bolt.spawner = self.id
+}
+
+if !instance_exists(cloudbox) && !instance_exists(bolt)
+instance_destroy();

@@ -1,0 +1,245 @@
+fast_fall = 0
+fast_fall_temp = 0
+
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    attacking = 0;
+    instance_create ( x - 3 * size * ( 1 - facing * 2 ) , y - 6 * size , obj_spark_effect );
+    timer = 0;
+    attack_type = "sideb"
+    state_type = "air_attack";
+    hspeed = 0;
+    image_speed = 0;
+	if ( !air )
+	  {
+		if ( percent >= 100 )
+		  sprite_index = sideb_ground_sprite2;
+		if ( percent < 100 )
+		  sprite_index = sideb_ground_sprite;
+	  }
+	else
+	  {
+		if ( percent >= 100 )
+		  sprite_index = sideb_air_sprite2;
+		if ( percent < 100 )
+		  sprite_index = sideb_air_sprite;
+	  }
+    image_index = 0;
+    time = 93;
+    timer_speed = 1;
+    special = 1;
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+    sound_play(sideb_sound);
+    air_move = 0;
+  }
+
+if ( !air )
+  {
+    if ( sprite_index = sideb_air_sprite )
+      sprite_index = sideb_ground_sprite;
+    if ( sprite_index = sideb_air_sprite2 )
+      sprite_index = sideb_ground_sprite2;
+  }
+
+if ( timer < time )
+  {
+	/////////Side B Start Weak/////////
+	if ( sprite_index = sideb_ground_sprite || sprite_index = sideb_air_sprite )
+	  switch ( timer )
+		{
+		case 4: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 8: image_index = 3; break;
+		case 10: image_index = 4; break;
+		case 12: image_index = 5; break;
+		case 15: image_index = 6; break;
+		case 17: image_index = 7; break;
+		case 19: image_index = 8; break;
+		case 21: image_index = 9; break;
+		}
+	/////////Side B Start Strong/////////
+	if ( sprite_index = sideb_ground_sprite2 || sprite_index = sideb_air_sprite2 )
+	  switch ( timer )
+		{
+		case 4: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 8: image_index = 3; break;
+		case 10: image_index = 4; break;
+		case 13: image_index = 5; break;
+		case 16: image_index = 6; break;
+		case 19: image_index = 7; break;
+		case 21: image_index = 8; break;
+		}
+	/////////Side B Launch Weak/////////
+	if ( sprite_index = sideb_launch_sprite )
+	switch ( timer )
+	  {
+		case 23: image_index = 0; break;
+		case 26: image_index = 1; break;
+		case 29: image_index = 2; break;
+		case 32: image_index = 3; break;
+		case 50: image_index = 4; break;
+		case 53: image_index = 5; break;
+		case 56: image_index = 6; break;
+		case 59: image_index = 7; break;
+		case 62: image_index = 8; break;
+		case 65: image_index = 9; break;
+		case 68: image_index = 10; break;
+		case 71: image_index = 11; break;
+		case 74: image_index = 12; break;
+		case 77: image_index = 13; break;
+		case 80: image_index = 14; break;
+		case 83: image_index = 15; break;
+		case 86: image_index = 16; break;
+		case 89: image_index = 17; break;
+		case 92: image_index = 18; break;
+	  }
+	/////////Side B Launch Strong/////////
+	if ( sprite_index = sideb_launch_sprite2 )
+	switch ( timer )
+	  {
+		case 23: image_index = 0; break;
+		case 26: image_index = 1; break;
+		case 29: image_index = 2; break;
+		case 32: image_index = 3; break;
+		case 35: image_index = 4; break;
+		case 38: image_index = 5; break;
+		case 41: image_index = 6; break;
+		case 53: image_index = 7; break;
+		case 56: image_index = 8; break;
+		case 59: image_index = 9; break;
+		case 62: image_index = 10; break;
+		case 65: image_index = 11; break;
+		case 68: image_index = 12; break;
+		case 74: image_index = 13; break;
+		case 78: image_index = 14; break;
+		case 83: image_index = 15; break;
+		case 86: image_index = 16; break;
+		case 89: image_index = 17; break;
+		case 92: image_index = 18; break;
+	  }
+	state_type = "air_attack";
+	if ( sidebtemp = 0 )
+	  {
+	    if ( timer < 23 )
+	      {
+		speed = 0
+		temp_fall_speed = 0
+	      }
+	  }
+	if ( timer = 3 && percent >= 100 )
+		sound_play(flail_voice);
+	if ( timer = 23 && percent < 100 )
+		sound_play(usmash_voice);
+	if ( timer = 23 )
+	  {
+		if ( sprite_index = sideb_ground_sprite || sprite_index = sideb_air_sprite )
+		sprite_index = sideb_launch_sprite;
+		if ( sprite_index = sideb_ground_sprite2 || sprite_index = sideb_air_sprite2 )
+		sprite_index = sideb_launch_sprite2;
+		image_index = 0;
+		sound_play(sideb_sound2);
+		vspeed = -3 * size;
+		hspeed = ( 4.5 - facing * 9 ) * size;
+		duster = instance_create(x,y,obj_dust_effect);
+		duster.facing = facing;
+		duster.image_xscale = 0.2*size;
+		duster.image_yscale = 0.2*size;
+		duster.depth = 0;
+		if ( percent > 125 )
+		temp = 125
+		else
+		temp = percent
+		create_hitbox(temp*0.2,40+facing*100,temp*.065,temp*.06,temp*0.75,1+temp*0.2,kick3,obj_spark_hit4,0.7,0.5,4,8,self.id,30,3);
+		if ( percent >= 100 )
+		  {
+			super_armor = 1;
+			sound_play(electric_sound);
+			spark = instance_create( x - 1 * (1-facing*2) * size, y - 3 * size,obj_spark)
+			spark.sprite_index = global.electricity_spark
+			spark.image_index = 0;
+			spark.image_xscale = 0.15 * (1-facing*2) * size;
+			spark.image_yscale = 0.3 * size;
+			spark.image_speed = 0.5;
+			spark.image_alpha = 0.9;
+			spark.snap = self.id;
+			hitbox.sfx = shock3;
+			hitbox.gfx = obj_spark_shock;
+		  }
+	  }
+	if ( timer >= 23 && timer < 58 )
+	  {
+		//a = after_image ( 3 , c_yellow , .5 );
+		if ( spark.image_index > 8 )
+		spark.image_index = 0
+		if frac(timer/8) = 0
+		effect_create_above(ef_smoke,x,y-7*size,0,c_ltgray);
+	  }
+	if ( timer = 29 )
+	  {
+		super_armor = 0;
+		hitbox.damage = temp*0.12;
+		hitbox.bkb = temp*0.07;
+		hitbox.kbg = temp*0.065;
+		hitbox.shield_damage = temp*0.4;
+		hitbox.hitlag_frames = temp*0.1;
+	  }
+	if ( timer > 29 )
+		hspeed *= 0.95
+	if ( timer = 58 )
+		with ( spark ) { instance_destroy(); }
+	if ( timer = 71 )
+		hspeed = 0;
+	if ( timer >= 26 && timer < 53 ) && !air
+	  {
+		with ( spark ) { instance_destroy(); }
+		state_type = "land";
+		attack_type = "none";
+		if ( percent >= 100 )
+		  {
+			sprite_index = sideb_land_sprite2;
+			time = 28;
+		  }
+		if ( percent < 100 )
+		  {
+			sprite_index = sideb_land_sprite;
+			time = 24;
+		  }
+		image_index = 0;
+		image_speed = 0.5;
+		timer = 0;
+		super_armor = 0;
+	  }
+	if ( timer >= 53 && !air )
+	  {
+		with ( spark ) { instance_destroy(); }
+		state_type = "land";
+		attack_type = "none";
+		sprite_index = land_sprite;
+		image_index = 0;
+		timer = 0;
+		if ( percent >= 100 )
+			time = 28;
+		if ( percent < 100 )
+			time = 24;
+		super_armor = 0;
+	  }
+  }
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    sidebtemp = 1;
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+	  {
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 24
+	  }
+    timer = 0;
+    time = -1;
+    special = 0;
+  }
