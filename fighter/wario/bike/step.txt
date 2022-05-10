@@ -1,0 +1,280 @@
+base_scale = abs ( image_xscale );
+if ( hit_time > 0 )
+{
+  shakex = 2 * cos ( pi * hit_time );
+  hit_time -= 1;
+}
+else
+{
+  can_hit = 1;
+  shakex = 0;
+}
+mask_index = sprite_index;
+image_speed = 0;
+if ( string ( wario.attack_type ) != "sideb" && string ( wario.attack_type ) != "smashb" )
+{
+  visible = 1;
+  sound_stop ( wario.sideb_loop_sound );
+  //attacked_script = bike_attacked;
+}
+if ( visible = 0 )
+{
+  //attacked_script = -1;
+  hit_time = 0;
+  can_pick_up = 0;
+}
+else
+{
+  if ( on_floor || on_platform )
+    can_pick_up = 0;
+  else
+    can_pick_up = 0;
+}
+/*if ( riding = 0 )
+{
+  with ( player )
+  {
+    if ( self.id != other.wario )
+    {
+      if ( ( attack_type = "sideb" or attack_type = "smashb" ) and timer = 0 and distance_to_point ( other.x , other.y ) <= size * 24 )
+      {
+        if instance_exists ( wariobike ) with ( wariobike ) instance_destroy();
+        if ( other.wario.on_bike = 1 )
+        {
+          other.wario.on_bike = 0;
+          other.wario.state_type = "flinch";
+          other.wario.time = 15;
+          other.wario.timer = 0;
+        }
+        if ( other.riding > 0 && other.rider != self.id )
+        {
+          other.rider.on_bike = 0;
+          other.rider.state_type = "flinch";
+          other.rider.time = 15;
+          other.rider.timer = 0;
+          other.rider.shakex = 0;
+          other.rider.shakey = 0;
+          other.rider = 0;
+          other.riding = 0;
+        }
+        other.riding = 1;
+        other.rider = self.id;
+        timer = 8;
+        time = 300;
+        on_bike = 1;
+        bike = other;
+        attack_type = "bike";
+        state_type = "vehicle";
+        other.owner = self.id;
+        other.attacker = self.id;
+      }
+    }
+  }
+}
+if ( riding = 1 )
+{
+  with ( rider )
+  {
+    wario = other.wario;
+    on_bike = 1;
+    if ( vehicle_sprite = 0 )
+      vehicle_sprite = air_dodge_sprite;
+    time = 300;
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    temp_no_hurtbox = 1;
+    state_type = "vehicle";
+    if ( on_bike = 1 )
+    {
+      sprite_index = vehicle_sprite;
+      bike.attacker = self.id;
+      bike.x = x;
+      bike.y = y;
+      bike.alarm[0] += 1;
+      bike.image_xscale = bike.base_scale - facing * ( bike.base_scale * 2 );
+      bike.image_yscale = bike.base_scale;
+      visible = 1;
+      with ( bike )
+      {
+        snap_x = place_x ( 39 );
+        snap_y = place_y ( 34 );
+      }
+      shakex = bike.snap_x - ( 1 * size ) * facing;
+      shakey = bike.snap_y;
+      if ( timer = 10 )
+      {
+        charge = 5;
+        time = 297;
+        duster = instance_create ( x , y , obj_dust_effect );
+        duster.facing = facing;
+        timer = 10;
+        temp = 2.5 + charge / 2;
+        hspeed = ( temp - facing * temp * 2 ) * ( 1 - ( air > 0 ) * 0.5 );
+        if ( air > 0 )
+          vspeed = -2.5;
+        sprite_index = vehicle_sprite;
+        //sound_loop ( wario.sideb_loop_sound )
+        heavy_armor = 6;
+      }
+      if ( timer >= 10 && temp > 0.1 )
+      {
+        if ( ai = 1 )
+        {
+          if ( !enemy.offstage )
+          {
+            if ( enemy.x < x && enemy_dist > 33 )
+            {
+              moveleft = 1;
+              moveright = 0;
+            }
+            if ( enemy.x > x && enemy_dist > 33 )
+            {
+              moveright = 1;
+              moveleft = 0;
+            }
+          }
+          else
+          {
+            if ( room_width / 2 < x )
+            {
+              moveleft = 1;
+              moveright = 0;
+            }
+            else
+            {
+              moveright = 1;
+              moveleft = 0;
+            }
+          }
+        }
+        if ( abs( hspeed ) > 1 && collision_point( x + sign ( hspeed ) , y , obj_wall , 1 , 1 ) )
+          hspeed = 0;
+        if ( air < max_jumps - 1 && ( movejump || ( ai && ( ai_state = "recover" || offstage ) ) ) )
+        {
+          sound_stop ( wario.sideb_loop_sound );
+          sound_play ( wario.sideb_end_sound1 );
+          sound_play ( wario.sideb_end_sound2 );
+          vspeed = -8 * size;
+          state_type = "jump";
+          timer = -4;
+          time = -1;
+          bike.visible = 1;
+          on_bike = 0;
+          bike.rider = 0;
+          bike.riding = 0;
+          attack_type = "none";
+          special = 0;
+          attacking = 0;
+          special = 0;
+          attack_type = "none";
+          hspeed *= 0.5;
+        }
+        if ( cos ( timer * pi / 8 ) >= 0.8 && temp != -1 )
+          effect_create_above ( ef_smokeup , x - size * ( 1 - facing * 2 ) * 22 , y - size * 19 , 0 , c_dkgray )
+        if ( temp > 0 )
+        {
+          if ( air = 0 && abs ( hspeed ) < temp && temp > 0 && !collision_point ( x + 1 * ( 1 - facing * 2 ) , y , obj_wall , 1 , 0 ) && ( ( moveleft && facing ) || ( moveright && !facing ) ) )
+            hspeed += 0.035 * ( temp - facing * temp * 2 );
+          //if ( !collision_point ( x , y , obj_platform , 0 , 1 ) && !collision_point ( x , y , obj_floor , 0 , 1 ) )
+          //{
+          //  gravity = grav;
+          //  temp = -1;
+          //  hspeed *= 0.65;
+          //}
+          if ( attack_success = 0 and timer mod 10 = 0 && !instance_exists ( proj ) )
+          {
+            attacks -= 1;
+            create_projectile ( 8 + abs( hspeed ) / 4 , 30 + facing * 120 , 5.95 , 3 + abs ( hspeed ) / 4 , 9 , 4 , kick3 , obj_spark_hit4 , 1.4 , 0.9 , 10 , 14 , self.id , 10 , -1 );
+            proj.wario_stolen = 1;
+            proj.hit_item[bike.item_id] = 1;
+            proj.hspeed = hspeed;
+            proj.vspeed = vspeed;
+          }
+        }
+      }
+      if ( moveleft = 1 && facing = 0 && air = 0 )
+      {
+        moveright = 0;
+        facing = 1;
+        attack_success = 0;
+        sound_stop ( wario.sideb_start_sound );
+        sound_play ( wario.sideb_start_sound );
+        hspeed *= 0.3;
+      }
+      if ( moveright = 1 && facing = 1 && air = 0 )
+      {
+        moveleft = 0;
+        facing = 0;
+        attack_success = 0;
+        sound_stop ( wario.sideb_start_sound );
+        sound_play ( wario.sideb_start_sound );
+        hspeed *= 0.3;
+      }
+      if ( temp > 0 && moveup && angle < 45 )
+        angle += 2;
+      if ( angle > 0 )
+        angle -= 1;
+      if ( facing = 0 )
+        image_angle = angle;
+      else
+        image_angle = -angle;
+      if ( timer > 20 && ( timer <= 280 && ( timer = 280 || shieldup = 1 || ( movejump = 1 && air >= max_jumps - 1 ) || ( special = 1 && temp > 0 && timer > 20 ) ) ) )
+      {
+        temp = -1;
+        sound_stop ( wario.sideb_loop_sound );
+        sound_play ( wario.sideb_end_sound1 );
+        sound_play ( wario.sideb_end_sound2 );
+        vspeed = -8 * size;
+        state_type = "jump";
+        timer = -4;
+        time = -1;
+        on_bike = 0;
+        bike.rider = 0;
+        bike.riding = 0;
+        attack_type = "none";
+        special = 0;
+        attacking = 0;
+        //air = max_jumps;
+        //sprite_index = roll_sprite
+        //image_speed = 0.25
+        //image_index = 0
+        //hspeed *= 0.75
+        timer = 281;
+        bike.visible = 1;
+        image_angle = 0;
+        angle = 0;
+        }
+      if ( timer > 280 && temp = -1 )
+        hspeed = 0.4 - facing * 0.8;
+    }
+    if ( timer >= time - 2 && state_type != "flinch" && state_type != "air_flinch" )
+    {
+      attack_type = "none";
+      if ( air > 0 )
+        state_type = "jump";
+      else
+        state_type = "stand";
+      timer = 0;
+      time = -1;
+      effect_create_above ( ef_smokeup , x , y , 0 , c_silver )
+      sound_stop ( wario.sideb_loop_sound ) 
+      on_bike = 0;
+      bike.rider = 0;
+      bike.riding = 0;
+    }
+  }
+}*/
+
+if ( instance_exists( wario ) )
+  wario.wariobike = self.id;
+
+/*if ( visible && alarm[0] <= 120 && frac( timer / 3 ) <= 0.35 )
+  image_alpha = 0.25;
+else
+  image_alpha = 1;*/
+
+if ( visible && hp <= 0 || alarm[0] <= 2 )
+{
+  ruined = 1;
+  instance_destroy();
+}

@@ -1,0 +1,182 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 47;
+        timer_speed=1;
+        charge_frame = 7;
+}
+var hspeed_offset;
+hspeed_offset = 0.75;
+if (timer < time){
+	// Animate vfx
+	switch (timer){
+		case 7:
+			blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_texture, /*Start frame*/ 6, /*Apex Frame*/ 8, /*End frame*/ 12, /*CCW*/ 0, /*girth*/ 4.5, 15);
+			blur.h_squish = 4;
+			blur.v_squish = 3; 
+			blur.push_y = -2*size;
+			blur.index = 0;
+			blur.image_index = 0;
+			blur.solid = 0.8;
+			break;
+		case 8: 
+			blur.index = 1;
+			blur.image_index = 1;
+			break;
+		case 9: 
+			blur.index = 2;
+			blur.image_index = 2; 
+			break;
+		case 10: blur.index = 2.5; break;
+		case 11: blur.index = 3; break;
+		case 12: blur.index = 3.5; break;
+		case 13: blur.index = 4; break;
+		case 14: blur.index = 4.33; break;
+		case 15: blur.index = 4.66; break;
+		case 16: blur.index = 5; blur.image_index = 3; blur.start_index = 1;break;
+		case 17: blur.index = 5.5; break;
+		case 18: blur.index = 6; blur.image_index = 4; break;
+		case 19: blur.index = 6.25; break;
+		case 20: blur.index = 6.5; break;
+		case 21: blur.index = 6.75; break;
+		case 22:
+			with (blur){
+				instance_destroy();
+			}
+			break;
+	}
+	switch (timer){
+		case 0: image_index = 1; break;
+		case 2: image_index = 2; break;
+		case 4: image_index = 3; break;
+		case 6: image_index = 4; break;
+		case 7: image_index = 5; break;
+		case 8: hspeed = (3.5-facing*7) * hspeed_offset;
+			image_index = 6; 
+			break;
+		case 9:
+			image_index = 7;
+			sound_play(ssmash_voice);
+			duster = instance_create(x,y,obj_dust_effect);
+            		duster.facing = facing; 
+			create_hitbox ( 19 , 40+facing*100 , 6.2 , 7.95 , 22 , 6 , slash3 , obj_spark_slash2 , 0.52 , 0.46 , 20.30 , 33.60 , self.id , 3 , 3 );	//Hands hitbox
+			create_hitbox2 ( 17 , 40+facing*100 , 5.8 , 7.65 , 18 , 5 , punch3 , obj_spark_hit2 , 0.43 , 0.43 , 14.70 , 25.90 , self.id , 3 , 2 );	//Elbow hitbox
+			create_hitbox3 ( 16 , 40+facing*100 , 5.5 , 6.5 , 15 , 3 , punch2 , obj_spark_hit2 , 0.32 , 0.29 , 10.50 , 19.60 , self.id , 3 , 2 );	//Shoulder hitbox
+			hspeed = (3.5-facing*7) * hspeed_offset;
+			break;
+		case 11: 
+			//Position updates of hitboxes
+			//Hand hitbox
+			hitbox.sprite_index = spr_collision_bubble_ext;
+			sprite_set_offset(hitbox.sprite_index,16,16);
+			hitbox.hitbox_x = 26.60*(1-facing*2);
+			hitbox.hitbox_y = 2.80;
+			hitbox.image_angle = 100 -(30*facing);
+			//Elbow hitbox
+			hitbox2.sprite_index = spr_collision_bubble_ext;
+			sprite_set_offset(hitbox2.sprite_index,16,16);
+			hitbox2.hitbox_x = 16.8*(1-facing*2);
+			hitbox2.hitbox_y = 6.3;
+			hitbox2.image_angle = 100-(30*facing);
+			//Shoulder hitbox
+			hitbox3.sprite_index = spr_collision_bubble_ext;
+			sprite_set_offset(hitbox3.sprite_index,16,16);
+			hitbox3.hitbox_x = 11.2*(1-facing*2);
+			hitbox3.hitbox_y = 11.9;
+			hitbox3.image_angle = 100-(30*facing);
+			
+			sound_play(attack_sound5);
+			image_index = 8;
+			break;
+		case 12:
+			//Make extended hitboxes into normal hitboxes
+			hitbox.sprite_index = spr_collision_bubble;
+			hitbox.image_angle = 0;
+			hitbox2.sprite_index = spr_collision_bubble;
+			hitbox2.image_angle = 0;
+			hitbox3.sprite_index = spr_collision_bubble;
+			hitbox3.image_angle = 0;
+			hspeed = (4-facing*8) * hspeed_offset;
+			break;
+		case 13:
+			image_index = 9;
+			hspeed = (3-facing*6) * hspeed_offset;
+			//Create the wind box
+			create_wind(0.65*(1-facing*2),0.8,18.90,9,10,0,2);
+			proj.sprite_index = spr_collision_bubble_ext;
+			proj.facing = facing;
+			sprite_set_offset(proj.sprite_index,16,16);
+			break;
+		case 16:
+			image_index = 10;
+			hspeed = (2 - facing*4) * hspeed_offset;
+			break;
+		case 20:
+			image_index = 11;
+			hspeed = 0;
+			break;
+		case 25:
+			image_index = 12;
+			break;
+		case 30:
+			image_index = 13;
+			break;
+		case 33:
+			image_index = 14;
+			break;
+		case 39:
+			image_index = 15;
+			break;
+		case 42:
+			image_index = 16;
+			break;
+		
+	}
+}
+/*
+        if timer < time {
+             state_type = "attack";
+            if timer = 8
+                sound_play(ssmash_voice);
+            if timer = 8 || timer = 12 || timer = 13
+                hspeed = 3.5-facing*7 
+            if timer = 12 {
+                hspeed = 3.75-facing*7.5 
+                instance_create(x+12-facing*24,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                sound_play(attack_sound5);
+                create_hitbox(15,50+facing*80,6.3,6.15,22,6,slash3,obj_spark_slash2,0.65,0.5,16,15,self.id,9,2); 
+                hspeed = 4-facing*8
+                create_hitbox2(12,50+facing*80,5.6,6,18,6,slash2,obj_spark_slash1,0.75,0.7,19,17,self.id,9,2); 
+                hitbox2.charge_dmg = 0.9
+            }
+            if timer = 13 {
+                hspeed = 3-facing*6
+                image_speed = 0.2
+            }
+            if timer = 16 {
+                hitbox.damage = 10*size
+                hitbox.kbg = 4*size
+                hspeed = 2 - facing*4
+                set_hitlag(hitbox,5)
+            }
+            if timer = 21 {
+                hspeed = 0
+            }
+            if image_index > image_number-image_speed*2
+                image_speed = 0
+            }  
+			*/
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

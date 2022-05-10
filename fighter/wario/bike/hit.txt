@@ -1,0 +1,35 @@
+if visible && hit_time <= 0 {
+    hitbox = hitbox_hit_by;
+    if hitbox <= 0
+        exit;
+	if hitbox.wario_stolen = 1{
+		hitbox.hit = 0
+	    exit;
+	}
+    if hitbox.hit < 2 {
+        /*if hitbox.dir <= 25 
+            dir = 0
+        else if (hitbox.dir >= 155 && hitbox.dir <= 180)
+            dir = 180
+        else if hitbox.dir = 361 || hitbox.dir = 362
+            dir = 0 + (hitbox.x<x)*180
+        else
+            dir = hitbox.dir
+        FMODSoundPlay(hitbox.sfx)
+        if hitbox.gfx > 0 {
+            gfx = instance_create(x-4+random(8),y-24+random(8),hitbox.gfx)
+            gfx.image_xscale += 0.03*hitbox.damage
+            gfx.image_yscale += 0.03*hitbox.damage
+            gfx.number = hitbox.attacker.number
+            gfx.kb = hitbox.bkb + hitbox.kbg
+            gfx.dir = dir
+            gfx.target = self.id
+        }*/
+        hitbox_hitspark ( hitbox_hit_by , ( hitbox_hit_by.x + x ) * 0.5 , ( hitbox_hit_by.y + y ) * 0.5 );
+        object_stun ( hitbox_hit_by , hitbox_hit_by.hitlag_frames );
+        hit_time = round(hitbox.hitlag_frames) + 4
+        holder = hitbox.attacker.id
+        can_hit = 1
+        hp -= hitbox.damage
+    }
+}

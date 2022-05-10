@@ -1,9 +1,11 @@
-fast_fall = 0;
+ if (sidebrecover > 0){
+	exit;
+  }
+  fast_fall = 0;
 fast_fall_temp = 0;
 if ( state_type == "run" || state_type == "stand" || state_type == "jump" )
   {
-  if sidebrecover = 1
-	exit;
+ 
   attacking = 0;
   special = 0;
   combo_failure = 0;
@@ -31,7 +33,7 @@ if ( timer >= 1 && timer < 12 )
   hspeed = 0;
   vspeed = 0;
   unsnap = 1;
-  sidebrecover = 1
+  
   }
 
 if ( timer >= 64 && timer < 79 )
@@ -105,6 +107,7 @@ switch ( timer )
 	special = 1
     break;
   case 40:
+  sidebrecover = 80
    attack_type = "none";
     if ( air == 0 ) {
       state_type = "stand";
@@ -163,6 +166,7 @@ switch ( timer )
 	special = 1
     break;
   case 93:
+  sidebrecover = 100
    attack_type = "none";
     if ( air == 0 ) {
       state_type = "stand";
@@ -214,6 +218,7 @@ switch ( timer )
     image_index = 0;
     break;
   case 151:
+  sidebrecover = 100
     attack_type = "none";
     if ( air == 0 ) {
       state_type = "stand";
@@ -221,7 +226,6 @@ switch ( timer )
       else {
 	if grounded = 1 {
 	state_type = "jump"
-	sidebrecover = 1
 	}
 	else {
            state_type = "fall";
@@ -267,8 +271,8 @@ while ( place_meeting ( x , y , obj_ceiling ) )
 while ( place_meeting ( x , y , obj_wall ) )
   x -= 1 - facing * 2;
 
-   if (timer >= 134){
-if (attack_success || target.object_index == obj_enemy) && obj_score_control.stocks[target.number-1] == 1 && ( dontrepeat = 0){
+   if (timer >= 135){
+if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 &&  dontrepeat = 0){
 				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 125) || (target.weight > .3 && target.percent > 140)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;
@@ -297,4 +301,4 @@ if (attack_success || target.object_index == obj_enemy) && obj_score_control.sto
 				}
 				}
         
-  }	   
+  }

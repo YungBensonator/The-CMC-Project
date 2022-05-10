@@ -1,0 +1,113 @@
+
+	boom = create_gfx(keepmain.x,keepmain.y, egg_parts_sprite,300,1,1,char_custom6);
+	boom.step_script = char_custom7;
+	boom.keepmain = keepmain;
+	boom.attacker = attacker;
+	boom.spr_twinkle_yellow = attacker.spr_twinkle_yellow;
+	boom.depth = -1;
+
+	//boom.step_script = char_custom7;
+
+with (trail){
+	instance_destroy();
+}
+with (glow){
+	instance_destroy();
+}
+with (boom){
+	
+	//Create stuff
+	spark_sprite = attacker.spark_sprite;
+	shock_sprite = attacker.shock_sprite;
+	light_sprite = attacker.light_sprite;
+	glow_sprite = attacker.glow_sprite;
+	
+	twinkle_red = attacker.spr_twinkle_red;
+	twinkle_blue = attacker.spr_twinkle_blue;
+	twinkle_yellow = attacker.spr_twinkle_yellow;
+	show_debug_message("Boom attacker: " + string(attacker));
+	egg_sprite = keepmain.egg_parts_sprite;
+	show_debug_message("Yellow asdf: " + string(twinkle_yellow));
+	scale = 0.35;
+
+	spark_x = x;
+	spark_y = y;
+	spark_alpha = 0;
+	spark_index = 0;
+
+	light_x[2] = x;
+	light_y[2] = y;
+	light_angle[2] = 0;
+	light_alpha[2] = 0;
+	light_index[2] = 0;
+	light_scale[2] = 1*scale;
+
+	light_x[1] = x;
+	light_y[1] = y;
+	light_angle[1] = 0;
+	light_alpha[1] = 0;
+	light_index[1] = 0;
+	light_scale[1] = 1*scale;
+
+	light_x[0] = x;
+	light_x[0] = y;
+	light_angle[0] = 0;
+	light_alpha[0] = 0;
+	light_index[0] = 0;
+	light_scale[0] = 1*scale;
+
+	light_angle_seed = random_range(0, 360);
+
+	shock_x = x;
+	shock_y = y;
+	shock_alpha = 0;
+	shock_index = 0;
+	shock_scale = 0.5*scale;
+
+	glow_x = x;
+	glow_y = y;
+	glow_scale = 0.6*scale;
+	glow_alpha = 0.8;
+
+	sparkle_num = 0;
+	sparkle_grav = 0.035*scale;
+	sparkle_scatter = 5;
+	star_scale = 0.25;
+	for (i = sparkle_num-1; i >= 0; i -= 1){
+		var spd;
+		spd = 3*scale*random_range(0.4,1.2);
+		sparkle_sprite[i] = choose(spr_twinkle_blue, spr_twinkle_red, spr_twinkle_yellow);
+		sparkle_scale[i] = 1*scale*random_range(0.8,1.2)*star_scale;
+		//sparkle_direction[i] = choose(45, 135, 225, 315);
+		sparkle_direction[i] = random_range(-15,195);
+		sparkle_vspeed[i] = lengthdir_y(spd, sparkle_direction[i]);
+		sparkle_hspeed[i] = lengthdir_x(spd, sparkle_direction[i]);
+		sparkle_x[i] = x + random_range(-sparkle_scatter*scale, sparkle_scatter*scale);
+		sparkle_y[i] = y + random_range(-sparkle_scatter*scale, sparkle_scatter*scale);
+		sparkle_alpha[i] = 1;
+		timer_offset[i] = random_range(0,50);
+	}
+
+	egg_piece_sprite = spr_egg_shards;
+	spd = 3.5*scale;
+	egg_direction[0] = -320;
+	egg_direciton[1] = -130;
+	egg_direction[2] = -210;
+	egg_direction[3] = -0;
+	egg_direction[4] = -330;
+
+	egg_grav = 0.15*scale;
+	for (i = 4; i >= 0; i -= 1){
+		egg_vspeed[i] = lengthdir_y(spd, egg_direction[i]);
+		egg_hspeed[i] = lengthdir_x(spd, egg_direction[i]);
+		egg_scale[i] = scale*2;
+		egg_alpha[i] = 1;
+		egg_x[i] = x;
+		egg_y[i] = y;
+	}
+
+
+	timer = 0;
+	time = 15;
+
+}

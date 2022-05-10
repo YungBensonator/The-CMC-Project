@@ -1,0 +1,150 @@
+if timer <= 1 {
+    image_speed = 0;
+    sprite_index = attacker.shine_device_sprite;
+    falco = attacker
+    facing = falco.facing
+    visible = 1;
+    reflect = 1;
+    absorb = 0;
+    hspeed = (1-facing*2)*4.5;
+    proj_destroy = -1;
+	temp = 0;
+	temptimer = 0;
+	temptimer2 = 0;
+}
+
+//--------------------------------------------------------------------------Shine Start-Up Effect------------------------------------------------------------------------------------------------------
+if ( temptimer = 1 )
+{
+attacker.shine_startup_vfx = instance_create( x,y,obj_spark );
+attacker.shine_startup_vfx.sprite_index = attacker.shine_startup_sprite;
+attacker.shine_startup_vfx.image_xscale = 0.45 * size;
+attacker.shine_startup_vfx.image_yscale = attacker.shine_startup_vfx.image_xscale
+attacker.shine_startup_vfx.image_speed = 0.6;
+attacker.shine_startup_vfx.x = x;
+attacker.shine_startup_vfx.y = y;
+}
+
+//--------------------------------------------------------------------------Shine Loop Effect------------------------------------------------------------------------------------------------------
+if ( timer >= 3 && temp = 0 )
+{
+	if !instance_exists ( attacker.shine_loop_vfx ) && !instance_exists ( attacker.shine_reflect_vfx )
+	{
+	attacker.shine_loop_vfx = instance_create( x,y,obj_spark );
+	attacker.shine_loop_vfx.sprite_index = attacker.shine_loop_sprite;
+	attacker.shine_loop_vfx.image_xscale = 0.28 * size;
+	attacker.shine_loop_vfx.image_yscale = attacker.shine_loop_vfx.image_xscale
+	attacker.shine_loop_vfx.image_speed = 0.4;
+	attacker.shine_loop_vfx.x = x;
+	attacker.shine_loop_vfx.y = y;
+	}
+}
+
+//--------------------------------------------------------------------------Shine Reflect Effect------------------------------------------------------------------------------------------------------
+if ( reflect = 2 && temp = 0 )
+{
+temptimer2 = -5;
+temp = 1;
+sound_play( attacker.reflect_sound )
+if ( instance_exists ( attacker.shine_startup_vfx ) )
+  {
+	with ( attacker.shine_startup_vfx )
+	{
+	instance_destroy();
+	}
+  }
+if ( instance_exists ( attacker.shine_loop_vfx ) )
+  {
+	with ( attacker.shine_loop_vfx )
+	{
+	instance_destroy();
+	}
+  }
+if ( instance_exists ( attacker.shine_reflect_vfx ) )
+  {
+	with ( attacker.shine_reflect_vfx )
+	{
+	instance_destroy();
+	}
+  }
+attacker.shine_reflect_vfx = instance_create( x,y,obj_spark );
+attacker.shine_reflect_vfx.sprite_index = attacker.shine_reflect_sprite;
+attacker.shine_reflect_vfx.image_xscale = 0.85 * size;
+attacker.shine_reflect_vfx.image_yscale = attacker.shine_reflect_vfx.image_xscale
+attacker.shine_reflect_vfx.image_speed = 0.6;
+attacker.shine_reflect_vfx.x = x;
+attacker.shine_reflect_vfx.y = y;
+}
+
+//--------------------------------------------------------------------------For Resuming to Shine Loop effect------------------------------------------------------------------------------------------------------
+
+if ( temptimer2 = 0 && temp = 1 )
+{
+temp = 0;
+}
+
+//--------------------------------------------------------------------------Stuff that runs every frame------------------------------------------------------------------------------------------------------
+temptimer += 1
+temptimer2 += 1
+x += attacker.id.hspeed;        // Update position relative to Falco
+y += attacker.id.vspeed;
+if temptimer >= 2 {
+    hspeed = (4.5 - temptimer*0.33)*(1-facing*2)
+    if abs(hspeed) > 4.5
+     hspeed *= 4.5/hspeed
+
+
+			attacker.shine_startup_vfx.hspeed = (4.5 - temptimer*0.33)*(1-facing*2)
+			if abs(attacker.shine_startup_vfx.hspeed) > 4.5
+			attacker.shine_startup_vfx.hspeed *= 4.5/attacker.shine_startup_vfx.hspeed
+			attacker.shine_startup_vfx.x += attacker.id.hspeed;        // Update position relative to Falco
+			attacker.shine_startup_vfx.y += attacker.id.vspeed;
+
+			attacker.shine_loop_vfx.hspeed = (4.5 - temptimer*0.33)*(1-facing*2)
+			if abs(attacker.shine_loop_vfx.hspeed) > 4.5
+			attacker.shine_loop_vfx.hspeed *= 4.5/attacker.shine_loop_vfx.hspeed
+			attacker.shine_loop_vfx.x += attacker.id.hspeed;        // Update position relative to Falco
+			attacker.shine_loop_vfx.y += attacker.id.vspeed;
+
+			attacker.shine_reflect_vfx.hspeed = (4.5 - temptimer*0.33)*(1-facing*2)
+			if abs(attacker.shine_reflect_vfx.hspeed) > 4.5
+			attacker.shine_reflect_vfx.hspeed *= 4.5/attacker.shine_reflect_vfx.hspeed
+			attacker.shine_reflect_vfx.x += attacker.id.hspeed;        // Update position relative to Falco
+			attacker.shine_reflect_vfx.y += attacker.id.vspeed;
+
+//-----------------------------------------------------------------------------------End of Move------------------------------------------------------------------------------------------------------
+    if string(falco.attack_type) != "downb" || temptimer >= 28
+	{
+			if ( instance_exists ( attacker.shine_startup_vfx ) )
+		  {
+			with ( attacker.shine_startup_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		if ( instance_exists ( attacker.shine_loop_vfx ) )
+		  {
+			with ( attacker.shine_loop_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		if ( instance_exists ( attacker.shine_reflect_vfx ) )
+		  {
+			with ( attacker.shine_reflect_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+    instance_destroy()
+	}
+}
+if timer > 1 && attacker != falco {
+    instance_destroy();
+    with falco {
+	state_type = "jump";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+    }
+}

@@ -1,0 +1,108 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+	if air = 0 {
+        hspeed = 0;
+	}
+        state_type = "air_attack";
+        attack_type = "b";
+        image_speed = 0;
+        sprite_index = item_forward_sprite;
+        image_index=0;
+        timer = 0;
+        time = 30;
+        timer_speed=1;
+        target1 = -99
+}
+if timer < time {
+	switch ( timer ) {
+	case 1: image_index = 0; break;	
+	case 5: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 13: image_index = 3; break;
+	case 17: image_index = 4; break;
+	case 21: image_index = 5; break;
+	}
+	
+	air_move=0;
+    if timer = 8 {
+        target =-99
+        sound_play(swingsnd5);
+        create_homing_bubble(0.58,0.5,12,10,self.id,7);
+    }
+    if timer >= 9 && timer<24 && time = 30 && target != -1
+        { if  target.intangible = 0 && target.attack_type != "final_smash" {
+        target.state_type = "air_flinch"
+        target.attack_type = "none"
+		target.sprite_index = target.flinch_sprite;
+        target.timer = 0
+        target.time = 60
+        target.timer_speed = 0
+        target.alarm[0] = 2
+        time = 85
+        timer = 40
+        image_index = 0
+        sound_play(catchsnd)
+        instance_create(target.x,target.y-9,obj_grab_spark)
+        sprite_index = b_shake_sprite;
+        image_speed = 0.5;
+        target1 = target; }
+    }
+}
+if timer >= 40 && timer < time-20 {
+    if timer = 45
+        sound_play(dsmash_voice)
+    if frac(timer/8)=0 {
+    sound_play2 ( coin )
+        create_hitbox(1,361,2,0,1,1,-1, obj_coin_spark,0.6,0.6,6,12,self.id,1,5)
+        hitbox.hit_stun = 7
+    }
+    if target1 > 0 {
+        target1.state_type = "air_flinch"
+        target1.attack_type = "none"
+        target1.timer = 0
+        target1.time = 60
+        target1.timer_speed = 0
+        target1.alarm[0] = 2
+        target1.shakey = 7*sin(timer*pi/6)
+        target1.x = x+size*(1-facing*2)*9
+        target1.y = y-size*3
+        target1.gethit = 0
+    }
+    speed = 0
+    gravity = 0
+    if (special = 1 || (ai && random(10)>9.25-cpu_leve[number-1]*0.1)) && time < 125 {
+        time += 5
+        special = 0
+    }
+}  
+if time >= 85
+{
+    if timer = time-15 {
+        sound_play(swingsnd5)
+        target1.alarm[0]=-1
+        target1.timer_speed = 1
+        target1.state_type = "air_flinch"
+        target1.gethit = 0
+        create_hitbox(6,75+facing*30,4.6,3.35,12,1,kick3,-1,0.6,0.6,6,12,self.id,4,5)
+	hitbox.hitstun = 7
+	image_speed = 0;
+	image_index = 18;
+    }
+if image_index >= 18 && timer < time-15
+	{
+	image_index = -17;
+	}
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	}
+    timer = 0;
+    time =-1;
+}

@@ -1,0 +1,77 @@
+if ( state_type = "jump" )
+  {
+    armor_frames = 0;
+    state_type = "air_attack";
+    attack_type = "nair";
+    timer = 0;
+    time = 45;
+    sprite_index = nair_sprite;
+    image_speed = 0;
+    image_index = 0;
+    vspeed -= 0.1;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 7: image_index = 3; break;
+	case 9: image_index = 4; break;
+	case 22: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 26: image_index = 7; break;
+	case 28: image_index = 8; break;
+	case 30: image_index = 9; break;
+	case 32: image_index = 10; break;
+	case 34: image_index = 11; break;
+      }
+
+    if ( timer = 5 )
+      {
+	play_attack_voice();
+	sound_play(attack_sound2);
+	create_hitbox(10,25+facing*130,4,5,12,6,kick3,obj_spark_hit4,1 , 0.99 , 15 , 14.70,self.id,18,2);
+		 hitbox.hit_stun = 5;
+		hitbox.di = 1.2;
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(49)+x,place_y(27)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+      }
+    if ( timer = 8 )
+      {
+	hitbox.damage = size*7.5;
+	hitbox.bkb = 4*size
+        hitbox.kbg = 3.8*size;
+	hitbox.sfx = kick2;
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 11.20
+    hitbox.hitbox_y = size * 14.70
+    hitbox.image_xscale = size * 0.75 
+    hitbox.image_yscale = size *  0.75
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0
+      }
+	  
+
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 13;
+	sprite_index = land_sprite;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "jump";
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 25;
+    timer = 0;
+    time = -1;
+  }

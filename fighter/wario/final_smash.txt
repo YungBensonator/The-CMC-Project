@@ -1,0 +1,274 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch" || state_type = "shielding" )
+{
+  temp = 0;
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  sprite_index = final_smash_start_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 107;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  attack_success = 0;
+  sound_play ( final_smash_sound1 );
+  effect_create_above ( ef_ellipse , x , y , 1 , c_white );
+  freezer  = instance_create ( x , y , obj_freeze );
+  freezer.dontpause = self.id;
+  freezer.alarm[0] = 52;
+  attack_time = 40;
+  air_move = 0;
+  /*spark = instance_create ( x , y - size * 48 , obj_spark );
+  spark.sprite_index = final_smash_garlic_sprite;
+  spark.image_speed = 0;
+  spark.alarm[0] = 20;
+  spark.image_xscale *= size * 0.9;
+  spark.image_yscale *= size * 0.9;*/
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 4: image_index = 1; break;
+    case 8: image_index = 2; break;
+    case 12: image_index = 3; break;
+    case 16: image_index = 4; break;
+    case 20: image_index = 5; break;
+    case 28: image_index = 6; break;
+    case 32: image_index = 7; break;
+    case 36: image_index = 8; break;
+    case 40: image_index = 9; break;
+    case 44: image_index = 10; break;
+    case 48: image_index = 11; break;
+    case 52: image_index = 12; break;
+    case 82: sprite_index = final_smash_fail_sprite; image_index = 0; break;
+    case 85: image_index = 1; break;
+    case 88: image_index = 2; break;
+    case 91: image_index = 3; break;
+    case 94: image_index = 4; break;
+    case 97: image_index = 5; break;
+    case 100: image_index = 6; break;
+    case 103: image_index = 7; break;
+    case 151: sprite_index = final_smash_success_sprite; image_index = 0; break;
+    case 154: image_index = 1; break;
+    case 210: image_index = 2; break;
+    case 220: image_index = 3; break;
+    case 230: image_index = 4; break;
+    case 240: image_index = 5; break;
+    case 250: image_index = 6; break;
+    case 260: image_index = 7; break;
+    case 270: image_index = 8; break;
+    case 280: image_index = 9; break;
+    case 290: image_index = 10; break;
+    case 300: image_index = 11; break;
+    case 310: image_index = 12; break;
+    case 320: image_index = 13; break;
+    case 330: image_index = 14; break;
+    case 340: image_index = 15; break;
+    case 350: image_index = 16; break;
+    case 353: image_index = 17; break;
+    case 356: image_index = 18; break;
+    case 359: image_index = 19; break;
+    case 362: image_index = 20; break;
+    case 365: image_index = 21; break;
+    case 368: image_index = 22; break;
+    case 371: image_index = 23; break;
+    case 374: image_index = 24; break;
+    case 377: image_index = 25; break;
+    case 380: image_index = 26; break;
+    case 383: image_index = 27; break;
+    case 386: image_index = 28; break;
+    case 389: image_index = 29; break;
+    case 392: image_index = 30; break;
+    case 395: image_index = 31; break;
+    case 398: image_index = 32; break;
+    case 401: image_index = 33; break;
+    case 404: image_index = 34; break;
+    case 407: image_index = 35; break;
+  }
+  air_move = 0;
+  gravity_lock = 2;
+  if ( timer < 350 )
+  {
+    vspeed = 0;
+    if ( temp = 1 )
+      speed = 0;
+  }
+  /*if ( timer < 20 )
+  {
+    spark.x += 0.2 * size * ( 1 - facing * 2 );
+    spark.y += 1.25 * size;
+  }
+  if ( timer = 12 )
+  {
+    spark = instance_create ( x , y - 21 * size , obj_spark_shockwave )
+    spark.image_xscale *= size * 0.8;
+    spark.image_yscale *= size * 0.8;
+    spark.image_blend = make_color_rgb ( 255, 250 , 130 );
+    sound_play ( finalsmash_sound1 );
+    sound_play ( winlaugh_voice );
+  }*/
+  if ( timer = 2 )
+  {
+    sound_play ( winlaugh_voice );
+  }
+  if ( timer = 12 )
+  {
+    sound_play ( finalsmash_sound1 );
+  }
+  if ( timer = 52 )
+  {
+    sound_play ( finalsmash_sound2 );
+  }
+  if ( ( timer >= 53 && timer < 81 ) && collision_rectangle ( x + 26 * size * ( 1 - facing * 2 ) , y - 20 * size , x , y - 2 * size , player , 1 , 1 ) && attack_success == 0 )
+  {
+    create_hitbox ( 6 , angle_correct ( 15 ) , 11.6 , 1.2 , -1 , 25 , punch4 , obj_spark_hit4 , 1.25 , 1 , 20 , 12 , self.id , 10 , 6 );
+    hitbox.shake_type = 1;
+    hitbox.hitshake_type = 2;
+    hitbox.shake_ampl = 1.3;
+    hitbox.armor_break = 1;
+  }
+  if ( timer = 52 )
+  {
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.image_xscale *= 0.85 * size;
+    duster.image_yscale *= 0.7 * size;
+    duster.facing = facing;
+    hspeed = 7 * size * ( 1 - facing * 2 );
+    //camera.following_state = 0;
+  }
+  if ( timer >= 52 && timer < 82 )
+  {
+    air = 0;
+    vspeed = 0;
+    if ( cos ( timer * pi ) > 0.5 )
+      after_image ( 6 , c_white , 0.75 );
+  }
+  if ( timer >= 52 && timer < 70 )
+    hspeed = 6.5 * size * ( 1 - facing * 2 );
+  if ( timer >= 70 && timer < 76 )
+    hspeed = 4 * size * ( 1 - facing * 2 );
+  if ( timer >= 76 && timer < 82 )
+    hspeed = 2 * size * ( 1 - facing * 2 );
+  if ( timer = 82 )
+  {
+    hspeed = 0;
+    sound_play ( final_smash_voice2 );
+  }
+  if ( ( timer > 51 && timer < 90 ) && attack_success = 1 && instance_exists ( target ) )
+  {
+    speed = 0;
+    timer = 150;
+    time = 411;
+    target.x = x + 19 * size * ( 1 - facing * 2 );
+    target.y = y - 1 * size;
+    target.speed = 0;
+    target1 = target;
+    temp = 1;
+  }
+  if ( timer = 150 || timer = 410 )
+  {
+    smoke = instance_create ( x , y - 21 * size , obj_spark );
+    smoke.sprite_index = final_smash_smoke_sprite;
+    smoke.image_speed = 1.4;
+    smoke.image_angle = random ( 360 );
+    smoke.depth = depth - 0.1;
+    smoke.image_xscale = ( xsize / 8 ) * size;
+    smoke.image_yscale = ( ysize / 8 ) * size;
+  }
+  if ( timer >= 150 && timer <= 350 )
+  {
+    target1.time = 210;
+    target1.timer = 0;
+    target1.sprite_index = target1.flinch_sprite;
+    target1.state_type = "flinch";
+    target1.speed = 0;
+    target1.gravity_lock = 2;
+    target1.ignore_physics = 1;
+    target1.sprite_angle = 0;
+    target1.x = x + 20 * size * ( 1 - facing * 2 );
+    target1.y = y;
+  }
+  if timer = 152
+  {
+    sound_play ( final_smash_voice1 );
+    sound_play ( finalsmash_sound3 );
+  }
+  if ( timer >= 210 && timer <= 340 && timer mod 10 == 0 )
+  {
+    sound_play ( choose ( attack_sound1 , attack_sound2 , attack_sound3 , attack_sound4)  );
+    sound_play ( choose ( attack_voice1 , attack_voice2 , attack_voice3 , attack_voice4)  );
+    create_hitbox ( 1 , 90 , 6 , 0.1 , -1 , 1 , -1 , obj_spark_hit4 , 1 , 1 , 24 , 16 , self.id , 1 , 6 ); 
+    FMODSoundPlay ( choose ( punch1 , punch2 , punch3 , kick1 , kick2 , kick3 ) );
+  }
+  if ( timer = 350 )
+  {
+    target1.intangible = 0;
+    create_hitbox ( 20 , angle_correct ( 45 ) , 10 , 7.6 , -1 , 13 , explodehit3 , obj_spark_hit2 , 1.5 , 1.5 , 20 , 16 , self.id , 3 , 6 ); 
+    hitbox.shake_type = 0;
+    sound_play ( sideb_go_voice );
+    sound_play ( downb_fart4 );
+    sound_play ( finalsmash_sound4 );
+    spark = instance_create ( x , y - 7 * size , obj_spark );
+    spark.sprite_index = fart_sprite;
+    spark.image_speed = 0.05;
+    spark.image_xscale *= 0.33 * size;
+    spark.image_yscale = spark.image_xscale;
+    spark.vspeed = -0.2 * size;
+    duster = instance_create ( x + 3 * size , y , obj_dust_effect );
+    duster.facing = 1 - facing;
+    duster.image_alpha = 0.75;
+    duster.image_xscale *= 0.7 * size;
+    duster.image_yscale *= 0.4 * size;
+    duster.image_blend = c_olive;
+    duster = instance_create ( x - 3 * size , y , obj_dust_effect );
+    duster.facing = facing;
+    duster.image_alpha = 0.75;
+    duster.image_xscale *= 0.7 * size;
+    duster.image_yscale *= 0.4 * size;
+    duster.image_blend = c_olive;
+    hspeed = -3 * size * ( 1 - facing * 2 );
+    vspeed = -9 * size;
+  }
+  if ( timer >= 350 && timer < 380 )
+  {
+    hspeed *= 0.9;
+    vspeed *= 0.9;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  hspeed = 0;
+  smash_power = 0;
+  intangible = 0;
+  attack_type = "none";
+  if ( air > 0 )
+  {
+    if ( temp = 0 )
+    {
+      state_type = "fall"
+      sprite_index = fall_sprite;
+      image_index = 0;
+    }
+    else
+    {
+      state_type = "jump";
+      air = 2;
+    }
+  }
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  if ( temp = 0 )
+    crowd_call ( 2 , 100 );
+  else
+  {
+    attack_hits -= 15;
+    attacks -= 15;
+  }
+}

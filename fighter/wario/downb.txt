@@ -1,0 +1,257 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" {
+        moveleft = 0
+        moveright = 0
+        if air = 0 {
+        hspeed = 0
+        air_move = 0
+        }
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0.35;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 48;
+        timer_speed=1;
+        temp = fart_pow
+        fart_pow = 0
+}
+if temp <= 15 {
+    time = 75 
+    if image_index >= image_number - image_speed
+        image_speed = 0
+if timer < 8 {
+	vspeed = 0;
+	gravity = 0;
+	}
+    if timer = 8 {
+        sound_play(downb_fart1)
+        spark = instance_create(x,y-7*size,obj_spark)
+        spark.sprite_index = fart_sprite
+        spark.image_speed = 0.05
+        spark.image_xscale *= 0.1*size
+        spark.image_yscale = spark.image_xscale
+        spark.vspeed = -0.25*size
+        duster = instance_create(x+3*size,y,obj_dust_effect)
+        duster.facing = 1-facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 0.6*size
+        duster.image_yscale *= 0.4*size
+        duster.image_blend = c_olive   
+        duster = instance_create(x-3*size,y,obj_dust_effect)
+        duster.facing = facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 0.6*size
+        duster.image_yscale *= 0.4*size
+        duster.image_blend = c_olive   
+        create_hitbox(1+temp/25,362,4+temp/30,0.5+temp/30,6+round(temp/8),5,explodehit1,obj_spark_hit2,0.7,0.5,0,6,self.id,5,1);   
+    }
+    if timer = 40 {
+        sprite_index = downb_weak_sprite
+        image_index = 0
+        image_speed = 0.3;
+    }
+    if timer = 50
+        sound_play(downb_voice)
+}
+else if temp <= 44 { 
+    time = 41
+    if image_index >= image_number - image_speed
+        image_speed = 0
+if timer < 6 {
+	vspeed = 0;
+	gravity = 0;
+	}
+    if timer = 6 {
+        sound_play(downb_fart2)
+        spark = instance_create(x,y-7*size,obj_spark)
+        spark.sprite_index = fart_sprite
+        spark.image_speed = 0.05
+        spark.image_xscale *= (0.15+temp/300)*size
+        spark.image_yscale = spark.image_xscale
+        spark.vspeed = -0.25*size
+        duster = instance_create(x+3*size,y,obj_dust_effect)
+        duster.facing = 1-facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 0.7*size
+        duster.image_yscale *= 0.4*size
+        duster.image_blend = c_olive   
+        duster = instance_create(x-3*size,y,obj_dust_effect)
+        duster.facing = facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 0.7*size
+        duster.image_yscale *= 0.4*size
+        duster.image_blend = c_olive 
+        instance_create(x,y,obj_down_impact)  
+        create_hitbox(9+temp/20,362,4.5+temp/15,4.5+temp/18,6+round(temp/8),round(6+(temp/18)),explodehit2,obj_spark_hit2,0.7+temp/450,0.55+temp/480,0,3,self.id,5,4); 
+        hitbox.shake_ampl = 0.4
+        screen_shake(2.9,11)
+        vspeed = -size*(4.5 + temp/25)
+    }
+    if timer = 13 {
+        sprite_index = downb_strong_sprite
+        image_index = 0
+        image_speed = 0.2
+    }
+}
+else if temp <= 110 { 
+    time = 46
+    if image_index >= image_number - image_speed
+        image_speed = 0
+if timer < 6 {
+	vspeed = 0;
+	gravity = 0;
+	}
+    if timer = 6 {
+        sound_play(downb_fart3)
+        spark = instance_create(x,y-7*size,obj_spark)
+        spark.sprite_index = fart_sprite
+        spark.image_speed = 0.05
+        spark.image_xscale *= (0.25+temp/400)*size
+        spark.image_yscale = spark.image_xscale
+        spark.vspeed = -0.25*size
+        duster = instance_create(x+3*size,y,obj_dust_effect)
+        duster.facing = 1-facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 0.7*size
+        duster.image_yscale *= 0.4*size
+        duster.image_blend = c_olive   
+        duster = instance_create(x-3*size,y,obj_dust_effect)
+        duster.facing = facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 0.7*size
+        duster.image_yscale *= 0.4*size
+        duster.image_blend = c_olive 
+        instance_create(x,y,obj_down_impact)  
+        create_hitbox(9+temp/20,362,5.5+temp/40,5+temp/35,6+round(temp/8),round(6+(temp/16)),explodehit3,obj_spark_hit2,1.7+temp/480,1.5+temp/500,0,4,self.id,5,4); 
+        hitbox.shake_ampl = 0
+        hitbox.armor_break = 1
+        screen_shake(3.3,12)
+        vspeed = -size*(5 + temp/25)
+        create_smoke(self.id,25,c_olive,0,0)
+    }
+    if timer = 12 {
+        sprite_index = downb_strong_sprite
+        image_index = 0
+        image_speed = 0.2
+    }
+}
+else if temp > 110 { 
+    time = 59
+    if image_index >= image_number - image_speed
+        image_speed = 0
+if timer < 6 {
+	vspeed = 0;
+	gravity = 0;
+	}
+    if timer = 6 {
+        sound_play(downb_fart4)
+        spark = instance_create(x,y-7*size,obj_spark)
+        spark.sprite_index = fart_sprite
+        spark.image_speed = 0.05
+        spark.image_xscale *= (0.375)*size
+        spark.image_yscale = spark.image_xscale
+        duster = instance_create(x+7*size,y,obj_dust_effect)
+        duster.facing = 1-facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 1.1*size
+        duster.image_yscale *= 0.8*size
+        duster.image_blend = c_olive   
+        duster = instance_create(x-7*size,y,obj_dust_effect)
+        duster.facing = facing
+        duster.image_alpha = 0.75   
+        duster.image_xscale *= 1.1*size
+        duster.image_yscale *= 0.8*size
+        duster.image_blend = c_olive 
+        instance_create(x,y,obj_down_impact)  
+        create_hitbox(22,362,8.2,8.5,85,16,explodehit4,obj_spark_hit4,3,1.3,0,7,self.id,8,4); 
+        hitbox.shake_ampl = 0
+        hitbox.armor_break = 1
+        hitbox.bloom = 3
+        super_armor = 2
+        screen_shake(3.5,12)
+        vspeed = -11.5*size
+    }
+    if timer = 7 {
+        hitbox.damage = 27*size
+        hitbox.bkb = size*7.2
+        hitbox.kbg = size*7.4
+        hitbox.hitlag_frames = round(14*size)
+        hitbox.shield_damage = 55
+        hitbox.dir = 70 + facing*40
+        vspeed -= size*grav
+        create_smoke(self.id,35,c_olive,1,0)
+    }
+    if timer = 8 {
+        hitbox.damage = 21*size
+        hitbox.bkb = size*6.7
+        hitbox.kbg = size*6.9
+        hitbox.hitlag_frames = round(12*size)
+        hitbox.shield_damage = 42
+        vspeed -= size*grav
+    }
+    if timer = 11 {
+        sprite_index = downb_strong_sprite
+        image_index = 0
+        image_speed = 0.15
+        vspeed -= size*grav
+    }
+    if ( y < obj_game_control.death_u - 32 )
+    {
+      intangible = 0;
+      state_type = "air_flinch";
+    }
+}
+if ( air = 0 )
+    hspeed = 0;
+ 
+
+ 
+if (timer >= 8){
+if (attack_success || target.object_index == obj_enemy) && ( dontrepeat = 0) && sprite_index == downb_strong_sprite{
+				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 135) || (target.weight > .3 && target.percent > 150)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  attack_type = "none";
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	}
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+}

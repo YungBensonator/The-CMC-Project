@@ -1,0 +1,562 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = final_smash_sprite;
+  timer = 0;
+  time = -1;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 1;
+  arwingtimer = 10; // Arwing Laser
+  arwingtimer2 = 181; // Arwing Smart Bomb
+  temp = 0; // Startup, Arwing and End Phases
+  temp2 = 0; //Arwing Vertical Movement
+  temp3 = 0; //Used for sound effects
+  temp4 = 0; //Arwing shooting
+  hacceleration = 0;
+  vaccelerate = 0;
+  turntimer = 0;
+  turndelay = 0;
+  arwingboost = 0;
+  arwingbrake = 0;
+  fuel = 250;
+  target = -99
+  }
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( temp = 0 || temp = 1 )
+{
+gravity = 0;
+gravity_lock = 1;
+}
+
+//STARTUP
+if ( temp = 0 )
+{
+switch ( timer )
+{
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 6: image_index = 3; break;
+case 8: image_index = 4; break;
+case 10: image_index = 5; break;
+case 12: image_index = 6; break;
+case 14: image_index = 7; break;
+case 16: image_index = 8; break;
+case 18: image_index = 9; break;
+case 20: image_index = 10; break;
+case 22: image_index = 11; break;
+case 24: image_index = 12; break;
+case 26: image_index = 13; break;
+case 28: image_index = 14; break;
+case 30: image_index = 15; break;
+}
+if ( timer = 1 )
+{
+sound_play(final_smash_voice)
+}
+if ( timer >= 0 && timer <= 30 )
+{
+hspeed = 0;
+vspeed = 0;
+gravity_lock = 1;
+}
+if ( timer > 30 && timer < 100 )
+{
+ignore_physics = 1;
+hspeed = 0;
+vspeed = -10;
+if ( timer mod 4 < 2 && ( sprite_index = final_smash_sprite ) )
+{
+image_index = 16;
+}
+else
+{
+image_index = 17;
+}
+}
+if ( y < obj_game_control.camera_boundary_u - 16 )
+{
+sprite_index = arwing_sprite;
+image_speed = 0;
+image_blend = c_black;
+timer = 0;
+temp = 1;
+}
+}
+
+
+
+//-------------------------------------------------------------------------------ARWING-------------------------------------------------------------------------------
+if ( temp = 1 )
+{
+air = 1;
+
+if ( timer = 1 )
+{
+image_blend = c_white;
+}
+metal_transformation = 0;
+
+
+//-----------------------------------------------------------------------------TIMER & FUEL---------------------------------------------------------------------------
+arwingtimer += 1;
+arwingtimer2 += 1;
+
+if ( fuel < 250 && arwingboost = 0 && arwingbrake = 0 )
+{
+fuel += 3;
+}
+if ( fuel > 250 )
+{
+fuel = 150;
+}
+if ( fuel < 0 )
+{
+fuel = 0;
+}
+
+if ( arwingtimer2 = 180 )
+{
+sound_play ( arwing_bomb_refresh_sound );
+}
+
+//------------------------------------------------------------------------------MOVEMENT------------------------------------------------------------------------------
+
+
+//HORIZONTAL MOVEMENT
+if ( arwingbrake = 0 )
+{
+if ( facing = 0 )
+{
+hspeed = 4.5 + hacceleration;
+}
+
+if ( facing = 1 )
+{
+hspeed = -4.5 - hacceleration;
+}
+}
+
+
+//TURNING
+if ( turndelay > 0 )
+{
+turndelay -= 1;
+}
+
+if ( moveright = 1 && facing = 1 ) || ( moveleft = 1 && facing = 0 )
+{
+turntimer += 1;
+}
+else
+{
+turntimer = 0;
+}
+
+if ( ( turntimer = 10 && facing = 1 && turndelay = 0 ) || x < obj_game_control.camera_boundary_l - 25 )
+{
+turndelay = 25;
+turntimer = 0;
+facing = 0;
+}
+
+if ( ( turntimer = 10 && facing = 0 && turndelay = 0 ) || x > obj_game_control.camera_boundary_r + 25 )
+{
+turndelay = 25;
+turntimer = 0;
+facing = 1;
+}
+
+
+//BOOST
+
+if ( movejump = 1 && fuel > 0 )
+{
+arwingboost = 1;
+fuel -= 2;
+if ( temp3 = 0 )
+{
+sound_play ( arwing_boost_sound );
+temp3 = 1;
+}
+
+if ( hacceleration < 4 )
+	{
+	hacceleration += 0.5
+	}
+if ( hacceleration > 4 )
+	{
+	hacceleration = 4
+	}
+}
+if ( ( movejump = 0 || fuel <= 0 ) && arwingboost = 1 )
+{
+sound_stop ( arwing_boost_sound );
+arwingboost = 0;
+temp3 = 0;
+movejump = 0;
+}
+
+if ( arwingboost = 0 )
+{
+if ( hacceleration > 0 )
+	{
+	hacceleration -= 1;
+	}
+if ( hacceleration < 0 )
+	{
+	hacceleration = 0;
+	}
+}
+
+//BRAKE
+
+if ( shieldup = 1 && fuel > 0 )
+{
+arwingbrake = 1;
+fuel -= 2;
+	if ( temp3 = 0 )
+	{
+	sound_play ( arwing_brake_sound );
+	temp3 = 1;
+	}
+	if ( facing = 0 )
+	{
+	hspeed = 2;
+	}
+	if ( facing = 1 )
+	{
+	hspeed = -2;
+	}
+}
+
+if ( ( shieldup = 0 || fuel <= 0 ) && arwingbrake = 1 )
+{
+sound_stop ( arwing_brake_sound );
+arwingbrake = 0;
+temp3 = 0;
+shieldup = 0;
+}
+
+
+//VERTICAL MOVEMENT
+
+vspeed = vaccelerate/4.5;
+
+if ( vaccelerate < -20 )
+{
+vaccelerate = -20;
+}
+if ( vaccelerate > 20 )
+{
+vaccelerate = 20;
+}
+if ( ( vaccelerate > 0 && moveup = 0 && temp2 = 2 ) || ( vaccelerate < 0 && movedown = 0 && temp2 = 1 ) )
+{
+vaccelerate = 0;
+temp2 = 0;
+}
+
+if ( movedown = 0 && vaccelerate > 0 )
+{
+vaccelerate -= 1;
+}
+if ( movedown = 1 && vaccelerate < 20 )
+{
+temp2 = 1;
+vaccelerate += 2;
+}
+
+if ( moveup = 0 && vaccelerate < 0 )
+{
+vaccelerate += 1;
+}
+if ( moveup = 1 && vaccelerate < 20 )
+{
+temp2 = 2;
+vaccelerate -= 2;
+}
+
+
+//HIT WALL
+
+//----------------------------------------------------------------------------AI---------------------------------------
+
+if temp = 1 and ai{
+if  !instance_exists(theHome) and target < 0{
+theHome = create_homing_bubble ( 25 ,25, 50 , 15 , self.id , 3 );
+}
+
+if target > -1{
+if target.state_type != "out" and target.state_type != "respawn"{
+if target.x < x-40*scale{
+moveleft = 1
+moveright = 0
+}
+else if target.x > x+40*scale{
+moveright = 1
+moveleft = 0
+}
+if target.y < y{
+moveup = 1
+movedown = 0
+}
+else if target.y > y{
+movedown = 1
+moveup = 0
+}
+attacking = 1
+special = 1
+         }
+else{
+if x > obj_game_control.respawn_x{
+moveleft = 1
+moveright = 0
+}
+else if x < obj_game_control.respawn_x{
+moveright = 1
+moveleft = 0
+}
+if y < obj_game_control.respawn_y{
+movedown = 1
+moveup = 0
+}
+else if y > obj_game_control.respawn_y{
+moveup = 1
+movedown = 0
+}
+attacking = 0
+special = 0
+}
+
+   }
+   
+}
+
+
+//----------------------------------------------------------------------------ATTACK------------------------------------------------------------------------
+
+if ( attacking = 1 && arwingtimer >= 10 )
+{
+arwingtimer = 0;
+temp4 = 1;
+}
+if ( arwingtimer = 1 && temp4 = 1 )
+{
+temp4 = 0;
+create_projectile(10,40+facing*100,7,6.25,40,1,fire3,obj_spark_fire1,1,1,17,10,self.id,80,char_custom6)
+proj.speed = 15;
+proj.image_xscale = 0.1 * (1-facing*2) * size;
+proj.image_yscale = 0.1 * size;
+proj.direction = 180*facing
+proj.sprite_index = arwing_laser_sprite;
+proj.visible = 1;
+proj.depth = -2;
+spark = instance_create( x,y,obj_spark );
+spark.sprite_index = arwing_laser_shot_sprite;
+spark.image_xscale = 0.2 * (1-facing*2) * size;
+spark.image_yscale = 0.2 * size;
+spark.image_speed = 0.5;
+spark.x = x + 2 * (1-facing*2) * size;
+spark.y = y - 10 * size;
+spark.snap = self.id;
+sound_play( arwing_blast_sound )
+}
+
+
+
+if ( special = 1 && arwingtimer2 >= 180 )
+{
+arwingtimer2 = 0;
+temp4 = 1;
+special = 0;
+}
+if ( arwingtimer2 = 1 && temp4 = 1 )
+{
+sound_play ( arwing_bomb_fire_sound );
+smartbomb = instance_create ( x + 10 * (1-facing*2) * size, y - 6 * size, global.itm_kind[35] );
+if ( facing = 0 )
+{
+smartbomb.hspeed = 10;
+}
+if ( facing = 1 )
+{
+smartbomb.hspeed = -10;
+}
+smartbomb.weight = 0;
+smartbomb.can_pick_up = 0;
+smartbomb.thrown = 99;
+}
+if ( instance_exists ( smartbomb ) && special = 1 )
+{
+smartbomb.hp = 0;
+}
+
+
+
+
+
+//------------------------------------------------------------------------------END--------------------------------------------------------------------------
+if ( timer >= 800 && timer <= 900 )
+{
+image_blend = merge_color ( c_white , c_black , 0.25 + lengthdir_x ( 0.25 , timer * 50 ) );
+alarm[7] = 2;
+}
+if ( timer = 900 )
+{
+if ( instance_exists ( hitbox ) )
+{
+with ( hitbox )
+{
+instance_destroy();
+}
+}
+if ( instance_exists(landmaster_hover) )
+{
+with ( landmaster_hover )
+{
+instance_destroy();
+}
+}
+if ( instance_exists(landmaster_hover2) )
+{
+with ( landmaster_hover2 )
+{
+instance_destroy();
+}
+}
+sound_play(landmaster_end_sound);
+temp2 = 0;
+temp = 3;
+timer = 0;
+time = 60;
+}
+}
+
+//To ensure the sound would stop even if the Arwing duration has ended.
+if ( smartbomb.hp <= 0 )
+{
+sound_stop ( arwing_bomb_fire_sound );
+}
+
+if ( temp = 3 )
+{
+if ( ai = 1 )
+{
+if ( offstage = 0 )
+{
+moveleft = 0;
+moveright = 0;
+}
+if ( offstage = 1 )
+{
+if x < nearest_edge.x
+{
+moveright = 1;
+moveleft = 0;
+}
+if x > nearest_edge.x
+{
+moveleft = 1;
+moveright = 0;
+}
+}
+
+
+}
+
+
+if ( timer >= 1 && moveright = 1 && air > 0 )
+{
+hspeed = 2 * size;
+}
+if ( timer >= 1 && moveleft = 1 && air > 0 )
+{
+hspeed = -2 * size;
+}
+if ( timer >= 1 && moveleft = 0 && moveright = 0 && air > 0 )
+{
+hspeed = 0;
+}
+
+
+if ( air = 0 )
+{
+switch ( timer )
+{
+case 36: image_index = 2; break;
+case 39: image_index = 3; break;
+case 42: image_index = 4; break;
+case 45: image_index = 5; break;
+case 48: image_index = 6; break;
+case 50: image_index = 7; break;
+case 52: image_index = 8; break;
+case 54: image_index = 9; break;
+}
+}
+
+if ( timer = 0 )
+{
+sound_stop(landmaster_movestart_sound);
+sound_stop(landmaster_move_sound);
+sound_stop(landmaster_brake_sound);
+sound_stop(landmaster_hover_sound);
+sprite_index = fall_sprite;
+image_index = 0;
+image_speed = 0;
+visible = 0;
+vspeed = 0;
+/*landmaster_end = instance_create( x,y,obj_spark );
+landmaster_end.sprite_index = landmaster_end_sprite;
+landmaster_end.image_xscale = 0.5 * (1-facing*2) * size;
+landmaster_end.image_yscale = 0.5 * size;
+landmaster_end.image_speed = 0;
+landmaster_end.image_index = 0;
+landmaster_end.x = x;
+landmaster_end.y = y;
+landmaster_end.alarm[0] = 30;*/
+}
+if ( timer = 1 )
+{
+vspeed = -8 * size;
+landmaster_end.image_index = 1;
+visible = 1;
+}
+if ( timer > 1 && air = 0 && temp2 = 0 )
+{
+hspeed = 0;
+sprite_index = entry_sprite;
+image_speed = 0;
+image_index = 1;
+timer = 33;
+temp2 = 1;
+}
+}
+
+if ( timer >= time - 1 && temp = 3 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air = 0 )
+  {
+  state_type = "stand";
+  }
+  else
+  {
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 10;
+  }
+  timer = 0;
+  time = -1;
+  }

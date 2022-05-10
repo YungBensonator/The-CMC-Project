@@ -1,0 +1,121 @@
+moving_object = 1;
+absorb2 = 1;
+image_angle += 20;
+use_palette = number;
+if ( timer <= 1 )
+  {
+    sprite_index = keepmain.egg_sprite;
+    image_speed = 0.1;
+    visible = 1;
+  }
+ if (timer ==1){
+	 	trail = create_trail(self.id,30,sprite_get_height(sprite_index)*image_yscale*0.6,keepmain.spr_egg_trail); 
+		trail.depth = 1;
+		/*
+		glow = create_spark(x,y,keepmain.spr_egg_glow,0,0,1,1);
+		glow = instance_create(x,y,obj_spark);
+		glow.sprite_index = keepmain.spr_egg_glow;
+		glow.keepmain = keepmain;
+		glow.image_speed = 0;
+		*/
+		
+		// Glow effect is for the glow behind the egg and the sparkles
+		glow = create_gfx(x,y,keepmain.spr_egg_glow,300,1,1,char_custom2);
+		glow.keepmain = keepmain;
+		glow.glow_sprite = keepmain.spr_egg_glow;
+		glow.glow_scale = 0.2*image_xscale;
+		
+		glow.timer = 0;
+		glow.prevx = x;
+		glow.prevy = y;
+
+		with (glow){
+			depth = 0.99;	//Sligtly infront of the rainbow
+			x = other.x-32*other.image_xscale*0.15;
+			y = other.y-32*other.image_xscale*0.15;
+			STAR_TIMER = 0;
+			STAR_SIZE = 1;
+			STAR_X = 2;
+			STAR_Y = 3;
+			STAR_SPRITE = 4;
+			star_particles[10,STAR_SPRITE] = 0;
+			star_index = 0;
+			star_particles[0, STAR_TIMER] = 1;	// A star 'exists' when its timer is above zero
+			star_particles[0, STAR_SIZE] =  other.image_xscale*0.15;
+			star_particles[0, STAR_X] = x;
+			star_particles[0, STAR_Y] = y;
+			star_particles[0, STAR_SPRITE] = other.keepmain.spr_twinkle_yellow;
+			star_time = 30;
+		}
+ }
+ trail.x = x;
+ trail.y = y;
+ 
+ //glow.x = x-128*image_xscale*glow.glow_scale;
+ //glow.y = y-128*image_yscale*glow.glow_scale;
+ 
+ with (glow){
+	glow_scale += 0.0033*sin(timer*0.4);
+	x = other.x
+	y = other.y
+	timer += 1;
+	var a;
+	a = point_direction(x,y,prevx,prevy);
+	
+	var free;
+	free = false;
+	for (i = 0; i < 10; i+= 1){
+		// Update active stars
+		if (star_particles[i, STAR_TIMER] > 0){
+			star_particles[i, STAR_TIMER] += 1;
+			if (star_particles[i, STAR_TIMER] > star_time-15){	    //Star is ready transition to disappear
+				star_particles[i, STAR_SIZE] *= 0.8;
+				
+			} else if (star_particles[i, STAR_TIMER] >= star_time){	// Make star no longer active
+				star_particles[i, STAR_TIMER] = 0;
+				
+			} else { // Update star as normal
+				star_particles[i, STAR_SIZE] += 0.005*sin(star_particles[i, STAR_TIMER]*0.5);
+			}
+			
+		} else if (star_particles[i, STAR_TIMER] == 0){	//Star in this index is not active, see if we should activate it
+			if (random(1000)>990){
+				star_particles[i, STAR_SIZE] =  other.image_xscale*0.15;
+				star_particles[i, STAR_X] = x;
+				star_particles[i, STAR_Y] = y + random_range(-5*other.image_xscale,5*other.image_xscale);
+				star_particles[i, STAR_SPRITE] = choose(other.keepmain.spr_twinkle_yellow,
+														other.keepmain.spr_twinkle_red,
+														other.keepmain.spr_twinkle_blue
+														);
+				star_particles[i, STAR_TIMER] = 1;
+			}
+		}
+	}
+	
+ }
+ 
+ 
+ show_debug_message(string(sprite_get_xoffset(glow.sprite_index)));
+ 
+if ( !is_on_floor(self) && hit = 0 && visible && !collision_point(x+sign(hspeed),y+sign(vspeed),obj_wall,1,1) )
+  {
+    if ( vspeed < 4 )
+	vspeed += 0.15;
+  }
+else
+if ( ( vspeed > 0 || collision_point(x+hspeed,y+vspeed,obj_wall,0,1) || hit >= 1 ) && visible )
+  {
+    kb = 24; gfx_sweat64_gen();
+    speed = 0;
+    timer = time - 5;
+    sound_play(keepmain.upb_sound2);
+    visible = 0;
+	trail.start_end = true;
+	with (trail){
+		instance_destroy();
+	}
+	with (glow){
+		instance_destroy();
+	}
+	instance_destroy()
+  }

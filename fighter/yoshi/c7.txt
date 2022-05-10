@@ -1,0 +1,131 @@
+//Egg explosion step event
+//show_debug_message("I'm a step event");
+
+//Animate spark
+switch (timer){
+    case 0: 
+        spark_index = 0; 
+        spark_alpha = 1; 
+    
+        shock_index = 0;
+        shock_alpha = 1;
+        break;
+    case 2: spark_index = 1; break;
+    case 3: shack_index = 1; break;
+    case 4: spark_index = 2; break;
+    case 6: 
+        spark_index = 3; 
+        shock_index = 2;
+        break;
+    case 7: spark_alpha = 0; break;
+    case 9: shock_index = 3; break;
+    case 10: shock_alpha = 0; break;
+}
+
+//Animate shockwave
+var shock_start;
+shock_start = 4;
+switch (timer){
+    case 0+shock_start: 
+        shock_index = 0;
+        shock_alpha = 1;
+        break;
+    case 6+shock_start: 
+        spark_index = 1; 
+        shock_index = 2;
+        break;
+    case 9+shock_start: 
+        shock_index = 2; 
+        break;
+    case 12+shock_start:
+        shock_index = 3;
+        break;
+    case 13+shock_start: 
+        shock_alpha = 0; 
+        break;
+}
+if (timer >= shock_start && timer < shock_start+6){
+    shock_scale += 0.15*scale;
+} else {
+	shock_scale += 0.075*scale;
+}
+//Animate glow
+if (timer >= time -10){
+    glow_scale *= 0.8;
+} 
+glow_scale += 0.1*scale*sin(timer*.5);
+
+//Animate lights
+var light_start;
+var light_offset;
+light_start = 0;    // Frame first light will appear
+light_offset = 2;   // Frames inbetween each light's appearance
+
+for (i = 0; i < 3; i+= 1){
+
+    switch (timer){
+        case 0+light_start+light_offset*i:
+            light_index[i] = 0;
+            light_alpha[i] = 1;
+            light_angle[i] = light_angle_seed+(45*i);
+            light_scale[i] *= random_range(0.9,1.2);
+            break;
+        case 3+light_start+light_offset*i:
+            light_index[i] = 1;
+            break;
+        case 6+light_start+light_offset*i:
+            light_index[i] = 2;
+            break;
+        case 8+light_start+light_offset*i:
+            light_alpha[i] = 0;
+            break;
+    }
+    
+
+    if (light_alpha[i] == 1){
+        light_scale[i] += 0.05*scale;
+    }
+}
+
+
+//Animate twinkle explosion
+
+/*
+for (i = 0; i < sparkle_num; i+= 1){
+    sparkle_x[i] += sparkle_hspeed[i];
+    sparkle_y[i] += sparkle_vspeed[i];
+    sparkle_vspeed[i] += sparkle_grav;
+    sparkle_scale[i] += sin(timer+timer_offset[i]*.15)*scale*0.1;
+    if (timer >= time - 10){
+        sparkle_scale[i] *= 0.8;
+    }
+} 
+*/
+//Animate the egg shells
+var dis_time;
+for (i = 0; i < 5; i+=1){
+    egg_x[i] += egg_hspeed[i];
+    egg_y[i] += egg_vspeed[i];
+    egg_vspeed[i] += egg_grav;
+}
+
+var pop_start;
+pop_start = 5;
+switch (timer){
+    case 8+pop_start: egg_alpha[3] = 0; break;
+    case 11+pop_start: egg_alpha[1] = 0; break;
+    case 13+pop_start: egg_alpha[0] = 0; break;
+    case 14+pop_start: egg_alpha[2] = 0; break;
+    case 18+pop_start: egg_alpha[4] = 0; break;
+}
+
+
+
+timer += 1;
+
+if (timer > time){
+    with(self){
+		instance_destroy();
+	}	
+}
+

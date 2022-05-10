@@ -1,0 +1,289 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" )
+  {
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+    special = 1;
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 40;
+	if ( air = 0 )
+	{
+    sprite_index = downb_sprite;
+	}
+	if ( air > 0 )
+	{
+    sprite_index = downb_air_sprite;
+	}
+    image_speed = 0;
+    image_index = 0;
+    if ( air > 0 && stall < 1 )
+	{
+	vspeed = -0.5;
+	stall += .8;
+	}
+    air_move = 0;
+    temp = 0; //used for looping
+	temp2 = 0;
+	temp3 = 0; // To check if the B button is pressed to activate Brawl Shine.
+	temp4 = 0; // Used for Brawl Shine.
+  }
+
+fast_fall = 0;
+fast_fall_temp = 0;  
+
+//----------------------------------------------------------------------MELEE SHINE-------------------------------------------------------------------
+if ( temp4 = 0 )
+{
+	if target > 0
+	target.techlock = 1
+    hspeed *= 0.9
+    if ( timer <= 15 && vspeed > 0.5*size && stall < 1 )
+	{
+	vspeed = 0.5*size;
+	}
+
+	if ( timer >= 0 && air = 0 )
+	{
+    sprite_index = downb_sprite;
+	}
+	if ( timer >= 0 && air > 0 )
+	{
+    sprite_index = downb_air_sprite;
+	}
+    if ( timer = 1 )
+      {
+		if ( temp = 0 )
+		{
+		sound_play(downb_sound3);
+		}
+		create_hitbox(3,90,5.95,3.85,0,0.1,fire3,obj_spark_shock,1.14 , 1.09 , 0 , 18,self.id,1,5);
+		hitbox.no_clash = 1;
+		hitbox.hit_stun = 6.5;
+		hitbox.di = -1;
+		hitbox.weight_kb = 1;
+		proj = create_projectile(0,361,0,0,0,0.1,-1,-1,1.14 , 1.09 , 0 , 18,self.id,10,char_custom4);
+		proj.reflect = 1;
+		proj.hit = 2;
+		
+		//Shine start-up effect
+		shine_startup_vfx = instance_create( x,y,obj_spark );
+		shine_startup_vfx.sprite_index = shine_startup_sprite;
+		shine_startup_vfx.image_xscale = 0.45 * size;
+		shine_startup_vfx.image_yscale = shine_startup_vfx.image_xscale
+		shine_startup_vfx.image_speed = 0.6;
+		shine_startup_vfx.x = x + 0.4 * (1-facing*2) * size;
+		shine_startup_vfx.y = y - 18 * size;
+		shine_startup_vfx.snap = self.id;
+      }
+    if ( timer = 4 && temp = 1 )
+      {
+	    with ( proj2 ) instance_destroy();
+		proj2 = create_projectile(0,361,0,0,0,0,-1,-1,1.14 , 1.09 , 0 , 18,self.id,30,char_custom4);
+		proj2.reflect = 1;
+		proj2.hit = 2;
+      }
+	  if ( timer >= 3 && timer < 23 && temp = 1 )
+      {
+	  	if !instance_exists ( shine_loop_vfx ) && !instance_exists ( shine_reflect_vfx )
+		{
+		shine_loop_vfx = instance_create( x,y,obj_spark );
+		shine_loop_vfx.sprite_index = shine_loop_sprite;
+		shine_loop_vfx.image_xscale = 0.28 * size;
+		shine_loop_vfx.image_yscale = shine_loop_vfx.image_xscale
+		shine_loop_vfx.image_speed = 0.4;
+		shine_loop_vfx.x = x + 0.4 * (1-facing*2) * size;
+		shine_loop_vfx.y = y - 18 * size;
+		shine_loop_vfx.snap = self.id;
+		}
+      }
+    if ( timer >= 3 )
+      {
+        if ( facing = 0 && moveleft = 1 )
+           facing = 1;
+        else
+			if ( facing = 1 && moveright = 1 )
+			facing = 0;
+      }
+	  
+	  
+    if ( ((timer >= 4 || temp > 0 || hitbox.hit > 0 ) && timer < 22) && air<max_jumps-1 && (movejump || (ai && ( random (10) + ai_level ) >= 11)) )
+      {
+		special = 0;
+		CAN_shield = 0;
+		CAN_jump = 2;
+      }
+	if ( timer >= 11 || temp > 0 )
+	{
+	if ( ai && ( random(100)<1 || ( enemy.proj > 0 && !instance_exists ( enemy.proj ) ) ) )
+		special = 0
+	}
+	if ( proj.reflect = 2 && temp2 = 0 )
+		{
+		temp2 = 1;
+		sound_play( reflect_sound )
+		if ( instance_exists ( shine_startup_vfx ) )
+		  {
+			with ( shine_startup_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		if ( instance_exists ( shine_loop_vfx ) )
+		  {
+			with ( shine_loop_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		if ( instance_exists ( shine_reflect_vfx ) )
+		  {
+			with ( shine_reflect_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		shine_reflect_vfx = instance_create( x,y,obj_spark );
+		shine_reflect_vfx.sprite_index = shine_reflect_sprite;
+		shine_reflect_vfx.image_xscale = 0.85 * size;
+		shine_reflect_vfx.image_yscale = shine_reflect_vfx.image_xscale
+		shine_reflect_vfx.image_speed = 0.6;
+		shine_reflect_vfx.x = x + 0.4 * (1-facing*2) * size;
+		shine_reflect_vfx.y = y - 18 * size;
+		shine_reflect_vfx.snap = self.id;
+		}
+    if ( timer >= 12 && timer < 21 )
+		{
+		if ( special = 1 ){
+			timer = 3;
+			temp = 1;
+			temp2 = 0;
+		}
+
+		if ( timer >= 1 && timer < 21 && special = 0 )
+		{
+		temp = 0;
+		with ( proj2 ) instance_destroy();
+		if ( instance_exists ( shine_loop_vfx ) )
+		  {
+			with ( shine_loop_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+			if ( air = 0 )
+			  {
+			  timer = time - 19;
+			  }
+			else
+			{
+			  {
+			  air_move = 1;
+			  timer = time - 19;
+			  }
+			}
+		}
+	}
+}
+//----------------------------------------------------------------------BRAWL SHINE-------------------------------------------------------------------
+if ( special = 0 && temp3 = 0 )
+{
+temp3 = 1;
+}
+if ( special = 1 && temp3 = 1 && temp4 = 0 && timer >= 8 )
+{
+temp4 = 1;
+timer = 0;
+time = 58;
+sprite_index = downb_kick_sprite;
+image_index = 0;
+}
+if ( temp4 = 1 )
+	{
+		switch ( timer )
+		{
+		case 2: image_index = 1; break;
+		case 4: image_index = 2; break;
+		case 6: image_index = 3; break;
+		case 7: image_index = 4; break;
+		case 8: image_index = 5; break;
+		case 9: image_index = 6; break;
+		case 10: image_index = 7; break;
+		case 11: image_index = 8; break;
+		case 12: image_index = 9; break;
+		case 13: image_index = 10; break;
+		case 14: image_index = 11; break;
+		case 15: image_index = 12; break;
+		case 16: image_index = 13; break;
+		case 36: image_index = 14; break;
+		case 40: image_index = 15; break;
+		case 44: image_index = 16; break;
+		case 48: image_index = 17; break;
+		case 52: image_index = 18; break;
+		}
+	if ( timer = 0 )
+	{
+		if ( instance_exists ( shine_startup_vfx ) )
+		  {
+			with ( shine_startup_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		if ( instance_exists ( shine_loop_vfx ) )
+		  {
+			with ( shine_loop_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		if ( instance_exists ( shine_reflect_vfx ) )
+		  {
+			with ( shine_reflect_vfx )
+			{
+			instance_destroy();
+			}
+		  }
+		if ( instance_exists ( proj ) )
+		  {
+			with ( proj )
+			{
+			instance_destroy();
+			}
+		  }
+	}
+	if ( timer = 8 )
+	{
+	sound_play(downb_sound);
+	proj2 = create_projectile(4.5,20+facing*140,7.35,2.65,10,0.1,shock3,obj_spark_shock,1.14 , 1.09,21,23,self.id,40,char_custom3);
+	proj2.mask_index = shine_mask_sprite;
+	proj2.image_xscale = 0.7;
+	proj2.image_yscale = 0.7;
+	proj2.hitlag_diff = 5;
+	proj2.hit_stun = 10;
+	proj2.di = 0.1;
+	}
+	if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+ }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 ) {
+		state_type = "stand";
+		timer = 0;
+	}
+	else
+	{
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 12;
+		timer = 0;
+	}
+    attack_type = "none";
+    time = -1;
+  }

@@ -1,0 +1,63 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "utilt";
+    timer = 0;
+    time = 29;
+    sprite_index = utilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 3: image_index = 2; break;
+	case 4: image_index = 3; break;
+	case 5: image_index = 4; break;
+	case 6: image_index = 5; break;
+	case 8: image_index = 6; break;
+	case 10: image_index = 7; break;
+	case 12: image_index = 8; break;
+	case 15: image_index = 9; break;
+	case 18: image_index = 10; break;
+	case 21: image_index = 11; break;
+	case 24: image_index = 12; break;
+      }
+
+    if ( timer = 6 )
+      {
+	if ( random(10) > 1.2 )
+	    play_attack_voice();
+	sound_play(attack_sound1);
+	create_hitbox(10,95-facing*10,4.1,5.7,11,7,kick2,obj_spark_hit2,0.99 , 0.75 , 16.80 , 18.20,self.id,8,2);
+	hitbox.hit_stun = 9;
+      }
+    if ( timer = 8 )
+      {
+	hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 11.90
+    hitbox.hitbox_y = size * 32.20
+    hitbox.image_xscale = size * 1.04
+    hitbox.image_yscale = size * 0.73
+    hitbox.image_angle = ( 1 - facing * 2 ) * 6.58
+      }
+    if ( timer = 10 )
+      {
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * -3.50
+    hitbox.hitbox_y = size * 36.40
+    hitbox.image_xscale = size * 0.98
+    hitbox.image_yscale = size * 1.03
+    hitbox.image_angle = ( 1 - facing * 2 ) * 35.62
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

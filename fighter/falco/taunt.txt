@@ -1,0 +1,61 @@
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 89;
+        timer_speed=1;
+		var i;
+  for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  {
+	if ( db_charname[global.gs_character[i],0] == "Fox" )
+	{
+		foxtaunt=1
+	}
+  }
+}
+	switch ( timer )
+	{
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+	case 36: image_index = 9; break;
+	case 40: image_index = 10; break;
+	case 44: image_index = 11; break;
+	case 48: image_index = 12; break;
+	case 52: image_index = 13; break;
+	case 56: image_index = 14; break;
+	case 60: image_index = 15; break;
+	case 64: image_index = 16; break;
+	case 68: image_index = 17; break;
+	case 73: image_index = 18; break;
+	case 78: image_index = 19; break;
+	case 83: image_index = 20; break;
+	}
+if ( timer = 9 ) && foxtaunt!=1
+{
+sound_play(choose(taunt_voice,taunt_voice2));
+}
+if ( timer = 9 ) && foxtaunt=1
+{
+sound_play(taunt_voice_fox);
+}
+if ( timer = 68 )
+{
+sound_play(swingsnd5)
+create_hitbox(1,40+facing*100,1,0,5,1,punch3,obj_spark_hit1,0.56 , 0.56 , 11.90 , 18.90,self.id,3,1);
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
