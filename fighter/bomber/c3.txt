@@ -1,0 +1,244 @@
+absorb = 0 // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+moving_object = 1;
+proj_destroy = 0
+priority = 1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.lightning_bomb_sprite
+    //hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.25;
+    visible =1
+
+burst=0
+flash=0
+lightningtimer=0
+wait=0
+novaspawn=0
+detonatetemp=0 
+grow=0
+ waiting2=0
+
+expand=0
+crossup=10
+crossdown=-10
+crosright=10
+crossleft=-10
+
+}
+//////Charged temp
+
+if timer <= 1 && hit = 2 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.lightning_bomb_sprite
+    //hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.25;
+    visible =1
+
+flash=0
+lightningtimer=0
+wait=0
+novaspawn=0
+detonatetemp=0 
+grow=0
+ waiting2=0
+
+expand=0
+crossup=10
+crossdown=-10
+crosright=10
+crossleft=-10
+
+}
+
+////////////////Stuff
+
+
+if !is_on_floor(self.id) && burst!=1
+    vspeed += 0.3
+
+if vspeed > 4.5
+    vspeed = 4.5
+
+//if hit!=0
+   // visible = 0
+
+/////////////////////////////////////////////////////////////////////
+///////////////////////////Charged-----------Stuff///////////////////
+/////////////////////////////////////////////////////////////////////
+
+if chargedtemp=0
+{
+if ((is_on_floor(self.id) && vspeed >= 0) ||collision_point(x+sign(hspeed),y-3,obj_wall,1,1))  && hit = 0 && zappy=0|| hit > 0 && zappy=0
+{
+visible =0 
+zappy+=1
+hspeed=0
+burst=1
+vspeed=0
+}
+////Main Explosion
+if zappy=1
+{
+dcircle=create_projectile(10,90,6,4,10,80,shock1,obj_spark_shock,0.1,0.1,0,10,attacker.id,999,char_custom2)	
+dcircle.hit=2
+dcircle.temp=0
+create_projectile(5,90,6,0,10,10,shock1,obj_spark_shock,1,1,0,10,attacker.id,5,no_script)
+proj.hit_attacker = 1
+timer = 40000
+time= 40070
+zappy=5
+}
+
+///Cross Explosion
+//step 1
+if timer = 40000 
+{
+expand=1
+a=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,5,attacker.id,5,char_custom2)
+b=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,-5,attacker.id,5,char_custom2)
+c=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,-5,10,attacker.id,5,char_custom2)
+d=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,5,10,attacker.id,5,char_custom2)
+
+a.temp=1
+b.temp=1
+c.temp=1
+d.temp=1
+}
+
+//step 2
+if timer = 40010 
+{
+expand=1
+a=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,20,attacker.id,5,char_custom2)
+b=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,-20,attacker.id,5,char_custom2)
+c=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,-20,10,attacker.id,5,char_custom2)
+d=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,20,10,attacker.id,5,char_custom2)
+
+a.temp=1
+b.temp=1
+c.temp=1
+d.temp=1
+}
+
+//step 3
+if timer = 40020 
+{
+expand=1
+a=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,35,attacker.id,5,char_custom2)
+b=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,-35,attacker.id,5,char_custom2)
+c=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,-35,10,attacker.id,5,char_custom2)
+d=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,35,10,attacker.id,5,char_custom2)
+
+a.temp=1
+b.temp=1
+c.temp=1
+d.temp=1
+}
+
+//step 4
+if timer = 40030 
+{
+expand=1
+a=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,59,attacker.id,5,char_custom2)
+b=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,0,-50,attacker.id,5,char_custom2)
+c=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,-50,10,attacker.id,5,char_custom2)
+d=create_projectile(1,361,3,0,10,1,shock1,obj_spark_shock,1,1,50,10,attacker.id,5,char_custom2)
+
+a.temp=1
+b.temp=1
+c.temp=1
+d.temp=1
+}
+
+if expand=4
+{
+  instance_destroy()
+}
+}
+
+//////////////////////////////////////////
+///////////////Large--------Charge////////
+//////////////////////////////////////////
+if chargedtemp=1
+{
+if ((is_on_floor(self.id) && vspeed >= 0) ||collision_point(x+sign(hspeed),y-3,obj_wall,1,1)) && hit = 2 {
+  
+lightningtimer+=0.5
+
+if lightningtimer>=70
+{
+detonatetemp=1
+}
+
+hspeed=0
+
+ /*
+    shaker = instance_create(x,y,obj_shakescreen2)
+    shaker.ampl = 1.2
+    shaker.time = 7
+    instance_destroy()
+*/
+}
+
+/////////////Detonate
+//////Fully Charged
+if detonatetemp=1 && novaspawn=0
+{
+ nova=create_projectile(10,110-facing*40,10,10,16,4,-1,-1,0.9,0.9,0,100,self.id,10,no_script)
+ nova.sprite_index = attacker.id.lightning_strike_sprite
+ nova.hit=2
+ nova.vspeed=10
+novaspawn=1
+}
+
+if novaspawn=1 && wait < 10 && !instance_exists(nova)
+{
+wait+=0.5
+image_yscale += 0.02;
+image_xscale += 0.02;
+}
+
+if wait=6
+{
+
+	circle=create_projectile(10,90,6,4,10,80,shock1,obj_spark_shock,0.1,0.1,0,10,attacker.id,999,char_custom2)	
+	circle.hit=2
+	circle.temp=0
+}
+
+if wait=10
+{
+
+    expl1 = instance_create(x,y+4,obj_spark)
+    expl1.sprite_index = global.explosion_spark;
+    expl1.image_index = 0;
+    expl1.image_speed = 1;
+    expl1.image_xscale = 0.6;
+    expl1.image_yscale = 0.6;
+
+    expl2 = instance_create(x,y+4,obj_spark)
+    expl2.sprite_index = global.electricity_spark;
+    expl2.image_xscale = 0.5
+    expl2.image_yscale = 0.5
+
+create_projectile(15,90,7,6,10,150,shock1,obj_spark_shock,2.5,2.5,0,10,attacker.id,25,no_script)
+//instance_destroy()
+wait=20
+flash=1
+}
+//////////////////////////////
+///////////Sparks/////////////
+//////////////////////////////
+
+if timer mod 2 = 0 && flash = 1
+{
+chosenx = irandom_range(-35,35)
+choseny = irandom_range(-50,50)
+	explodespark = instance_create(x+chosenx ,y+choseny,obj_spark)
+	explodespark.sprite_index = global.electricity_spark;
+        explodespark.image_xscale = 0.6
+        explodespark.image_yscale = 0.6
+}
+}
+
+if ( y > obj_game_control.death_d )
+  instance_destroy();

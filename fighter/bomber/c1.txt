@@ -1,0 +1,118 @@
+absorb = 0 // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+moving_object = 1;
+proj_destroy = 0
+priority = 1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.bomb_sprite
+    //hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.25;
+    visible =1
+    bomber = attacker
+}
+/*if collision_point(x,y-1,obj_slope_left2,1,1)
+    y+=hspeed*0.5
+if collision_point(x,y-1,obj_slope_right2,1,1)
+    y-=hspeed*0.5
+if collision_point(x,y-1,obj_slope_left,1,1)
+    y+=hspeed
+if collision_point(x,y-1,obj_slope_right,1,1)
+    y-=hspeed*/
+
+if !is_on_floor(self.id)
+    vspeed += 0.3
+else
+    vspeed = 0
+if vspeed > 4.5
+    vspeed = 4.5
+if hit!=0
+    visible = 0
+
+if collision_point(x+sign(hspeed),y-3,obj_wall,1,1) && hit = 0 || hit > 0 {
+    hit_attacker = 1
+    sound_play(explode1)
+    instance_create(x,y-4,obj_spark_explode1)
+    shaker = instance_create(x,y,obj_shakescreen2)
+    shaker.ampl = 1.3
+    shaker.time = 8
+if jam=0
+{
+    proj1 = create_projectile(2,90,6,2,3,8,explodehit1,obj_spark_fire1,0.2,0.2,0,4,bomber.id,14,char_custom5);
+    proj1.direction = 0
+    proj1.hit = 2
+    proj1.bomber = bomber
+    proj2 = create_projectile(2,90,6,2,3,8,explodehit1,obj_spark_fire1,0.2,0.2,0,4,bomber.id,14,char_custom5);
+    proj2.direction = 180
+    proj2.hit = 2
+    proj2.bomber = bomber
+    proj3 = create_projectile(2,90,6,2,3,8,explodehit1,obj_spark_fire1,0.2,0.2,0,4,bomber.id,14,char_custom5);
+    proj3.direction = 90
+    proj3.hit = 2
+    proj3.bomber = bomber
+    proj4 = create_projectile(2,90,6,2,3,8,explodehit1,obj_spark_fire1,0.2,0.2,0,4,bomber.id,14,char_custom5);
+    proj4.direction = 270
+    proj4.hit = 2
+    proj4.bomber = bomber
+    instance_destroy()
+
+proj1.fury=0
+proj2.fury=0
+proj3.fury=0
+proj4.fury=0
+}
+
+if jam=1
+{
+    proj1 = create_projectile(4,90,6,4,6,8,explodehit1,obj_spark_fire1,0.4,0.4,0,4,bomber.id,14,char_custom5);
+    proj1.direction = 0
+    proj1.hit = 2
+    proj1.bomber = bomber
+    proj2 = create_projectile(4,90,6,4,6,8,explodehit1,obj_spark_fire1,0.4,0.4,0,4,bomber.id,14,char_custom5);
+    proj2.direction = 180
+    proj2.hit = 2
+    proj2.bomber = bomber
+    proj3 = create_projectile(4,90,6,4,6,8,explodehit1,obj_spark_fire1,0.4,0.4,0,4,bomber.id,14,char_custom5);
+    proj3.direction = 90
+    proj3.hit = 2
+    proj3.bomber = bomber
+    proj4 = create_projectile(4,90,6,4,6,8,explodehit1,obj_spark_fire1,0.4,0.4,0,4,bomber.id,14,char_custom5);
+    proj4.direction = 270
+    proj4.hit = 2
+    proj4.bomber = bomber
+    instance_destroy()
+
+proj1.fury=1
+proj2.fury=1
+proj3.fury=1
+proj4.fury=1
+}
+
+if jam=2
+{
+    proj1 = create_projectile(6,90,7,5,10,8,explodehit1,obj_spark_fire1,0.6,0.6,0,4,bomber.id,14,char_custom5);
+    proj1.direction = 0
+    proj1.hit = 2
+    proj1.bomber = bomber
+    proj2 = create_projectile(6,90,7,5,10,8,explodehit1,obj_spark_fire1,0.6,0.6,0,4,bomber.id,14,char_custom5);
+    proj2.direction = 180
+    proj2.hit = 2
+    proj2.bomber = bomber
+    proj3 = create_projectile(6,90,7,5,10,8,explodehit1,obj_spark_fire1,0.6,0.6,0,4,bomber.id,14,char_custom5);
+    proj3.direction = 90
+    proj3.hit = 2
+    proj3.bomber = bomber
+    proj4 = create_projectile(6,90,6,5,10,8,explodehit1,obj_spark_fire1,0.6,0.6,0,4,bomber.id,14,char_custom5);
+    proj4.direction = 270
+    proj4.hit = 2
+    proj4.bomber = bomber
+    instance_destroy()
+
+proj1.fury=2
+proj2.fury=2
+proj3.fury=2
+proj4.fury=2
+
+}
+
+
+}

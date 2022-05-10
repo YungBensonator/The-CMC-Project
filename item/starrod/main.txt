@@ -19,9 +19,9 @@ if ( sprite_exists ( starrodp_spr ) )
 
 
 ~~ENTER:
-sprite_index = obj_items_control.starrod_spr;
-sprite_air = obj_items_control.starrod_spr;
-sprite_held = obj_items_control.starrodh_spr;
+sprite_index = obj_game_control.starrod_spr;
+sprite_air = obj_game_control.starrod_spr;
+sprite_held = obj_game_control.starrodh_spr;
 air_spr_y = -14;
 shadow = 4;
 image_xscale = 0.86;
@@ -92,7 +92,7 @@ if ( thrown <= 0 ) exit;
 if ( !item_candamage() ) exit;
 if ( !item_candamageatk ( thrown ) ) exit;
 hit_timer = 18;
-last_hit_proj = create_projectile ( 8 , 0+facing*180 , 7 + min ( 1.7 , speed * 0.2 ) , 3.4 , 10 , 10 , punch2 , obj_spark_hit2 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
+last_hit_proj = create_projectile ( 6 , 0+facing*180 , 5 + min ( 1.0 , speed * 0.2 ) , 4.5 , 10 , 10 , punch2 , obj_spark_hit2 , 1 , 1 , 0 , 12 , thrown , 3 , -1 );
 hspeed *= -0.3;
 vspeed = -3;
 thrown = -99;
@@ -165,7 +165,7 @@ switch ( attack_type )
     switch ( timer )
       {
       case 5:
-        sound_play ( obj_items_control.starrod_jab_snd );
+        sound_play ( obj_game_control.starrod_jab_snd );
         image_index = item_swing_frame;
         image_speed = ( image_number - image_index ) / ( time - timer );
         item_posupdate();
@@ -193,7 +193,7 @@ switch ( attack_type )
     switch ( timer )
       {
       case 8:
-        sound_play ( obj_items_control.starrod_tilt_snd );
+        sound_play ( obj_game_control.starrod_tilt_snd );
         image_index = item_swing_frame;
         image_speed = ( image_number - image_index ) / ( time - timer );
         item_posupdate();
@@ -248,19 +248,19 @@ switch ( attack_type )
 
         if ( held_item.shoot < held_item.limit )
           {
-          sound_play ( obj_items_control.starrod_smash_snd );
+          sound_play ( obj_game_control.starrod_smash_snd );
           create_projectile ( 6 , 48+facing*84 , 5.25 , 4.5 , 7 , 12 , slash3 , obj_spark_slash2 , 0.5 , 0.5 , 0 , 0 , self.id , 100 , char_item );
           proj.hspeed = 7 - facing * 14;
           proj.item_parent = held_item.object_index;
           proj.x = held_item.x + 15 * ( 1 - facing * 2 );
           proj.y = held_item.y - 5;
           proj.mask_index = spr_item_mask2;
-          proj.sprite_index = obj_items_control.starrodp_spr;
+          proj.sprite_index = obj_game_control.starrodp_spr;
           held_item.shoot += 1;
           }
           else
           {
-          sound_play ( obj_items_control.starrod_empty_snd );
+          sound_play ( obj_game_control.starrod_empty_snd );
           }
         break;
       }

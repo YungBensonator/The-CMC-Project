@@ -1,5 +1,5 @@
 ~~INIT:
-plum_spr = ispr_add_alpha ( "item/plum/plum.png" , 1 , 0 , 0 , 18 , 16 );
+plum_spr = ispr_add_alpha ( "item/plum/plum.png" , 2 , 0 , 0 , 18 , 16 );
 plum_impact_snd = isound_add ( "item/plum/impact.wav" , 0 , 0 );
 plum_stick_snd = isound_add ( "item/plum/stick.wav" , 0 , 0 );
 
@@ -8,14 +8,16 @@ if ( sprite_exists ( plum_spr ) )
   spr_delete ( plum_spr );
 
 ~~ENTER:
-sprite_index = obj_items_control.plum_spr;
-sprite_air = obj_items_control.plum_spr;
-sprite_held = obj_items_control.plum_spr;
+sprite_index = obj_game_control.plum_spr;
+sprite_air = obj_game_control.plum_spr;
+sprite_held = obj_game_control.plum_spr;
 mask_index = spr_item_mask3;
 
-custom_land_snd = obj_items_control.plum_impact_snd;
-plum_impact_snd = obj_items_control.plum_impact_snd;
-plum_stick_snd = obj_items_control.plum_stick_snd;
+custom_land_snd = obj_game_control.plum_impact_snd;
+plum_impact_snd = obj_game_control.plum_impact_snd;
+plum_stick_snd = obj_game_control.plum_stick_snd;
+
+is_special = 0;
 
 image_xscale = 0.7;
 image_yscale = 0.7;
@@ -29,6 +31,12 @@ sticked = noone;
 shadow = 9;
 hit_timer = 0;
 platform = noone;
+if ( floor(random_range(0,20)) == 2){
+  is_special = 1;
+} else {
+  is_special = 0;
+}
+
 
 ~~LAND:
 if ( sticked > 0 )
@@ -40,6 +48,7 @@ if ( instance_exists ( platform ) )
   with ( platform )
     instance_destroy();
 ~~STEP:
+
 if ( hit_timer > 0 ) 
   {
   shakex = -3 + floor ( random ( 7 ) );
@@ -190,6 +199,7 @@ if ( dying_timer < 120 )
   if ( sticked < 0 )
     visible = 1;
   }
+  image_index = is_special;
 ~~PLAYER CONTACT:
 if ( hit_timer > 0 ) exit;
 if ( held > 0 ) exit;

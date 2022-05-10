@@ -1,0 +1,131 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" {
+    attacking = 0;
+    timer = 0;
+    attack_type = "b"
+    state_type = "air_attack";
+    hspeed = 0;
+    image_speed = 0.5;
+    sprite_index = b_sprite;
+    image_index = 0;
+    time = 152;
+    timer_speed = 1;
+    special = 1;
+    temp5 = 0;
+    yea = 0
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+    if air > 0
+    temp = 1
+    else
+        temp = 0
+
+
+}
+
+if sprite_index = b_sprite {
+    if ai == 1 && random(40) > 35
+    special = 0
+
+
+    if timer = 4 {
+        sound_play(b_sound)
+        spark = instance_create(x + 12 - facing * 24, y - 10, obj_spark)
+        spark.sprite_index = bomb_sprite
+        spark.image_xscale = (0.9 - facing * 1.8) * size
+        spark.image_yscale = 0.9 * size
+        spark.image_speed = 0.15
+        spark.snap = self.id
+        spark.x_snap = size * (12 - facing * 24)
+        spark.y_snap = 10 * size
+    }
+    if timer > 4 && instance_exists(spark) {
+        if spark.image_index >= spark.image_number - spark.image_speed
+        spark.image_index = 0
+    }
+    if timer >= 50 && timer <=99 && special = 1 {
+        spark.image_xscale = (1.3 - facing * 2.6) * size
+        spark.image_yscale = 1.3 * size
+        spark.image_speed = 0.25
+        spark.x_snap = size * (18 - facing * 36)
+        spark.y_snap = 16 * size
+        yea = 1
+}
+
+        if timer >= 100 && special = 1 {
+            spark.image_xscale = (1.7 - facing * 3.4) * size
+            spark.image_yscale = 1.7 * size
+            spark.image_speed = 0.55
+            spark.x_snap = 70
+            spark.y_snap = 84 * size
+            yea = 2
+
+        }
+
+    
+    if special = 0 && timer > 9 {
+        sound_play(choose(attack_voice1));
+        if timer < 150 {
+            if instance_exists(spark)
+            with spark instance_destroy();
+            sound_play(b_kick_sound);
+            if yea = 0
+        {
+        create_projectile(0, 90, 6.6, 5.5, 16, 8, explodehit2, obj_spark_fire1, 0.9, 0.9, 12, 1, self.id, 70, bomber_bomb_script);
+        proj.hspeed = (2.4 + (timer - 5) / 50) * (1 - facing * 2)
+        proj.jam = 0
+    }
+    if yea = 1 {
+        create_projectile(0, 90, 6.6, 5.5, 16, 8, explodehit2, obj_spark_fire1, 1.3, 1.3, 12, 1, self.id, 60, bomber_bomb_script);
+        proj.jam = 1
+            proj.hspeed = (1.4 + (timer - 5) / 50) * (1 - facing * 2)
+    }
+    if yea = 2 {
+
+        create_projectile(0, 90, 6.6, 5.5, 16, 8, explodehit2, obj_spark_fire1, 1.7, 1.7, 12, 1, self.id, 50, bomber_bomb_script);
+        proj.jam = 2
+           proj.hspeed = (0.8 + (timer - 5) / 50) * (1 - facing * 2)
+    }
+
+//70 - (timer - 10)
+    image_index = 3;
+    create_hitbox(5, 65 + facing * 50, 4.75, 4, 0, 1, kick2, obj_spark_hit1, 1, 1, 12, 5, self.id, 3, 1);
+
+      sprite_index = b_kick_sprite;
+    time = 44;
+    timer = 1;
+    image_speed = 0.2;
+}
+}
+}
+if timer = 150 {
+    sound_play(explode1);
+    //sound_play(fly_voice1)
+    //create_projectile(0,90,6.6,5.5,16,8,explodehit2,obj_spark_fire1,0.9,0.9,12,1,self.id,1,bomber_bomb_script);
+    create_projectile(12, 90, 6.6, 5.5, 16, 8, explodehit2, obj_spark_fire1, 2.9, 2.9, 12, 1, self.id, 1, bomber_bomb_script);
+    //create_hitbox(6,100-facing*20,4.75,4,9,5,kick2,obj_spark_hit1,0.6,0.3,12,1,self.id,3,1);
+
+      sprite_index = b_kick_sprite;
+    time = 35;
+    timer = 1;
+    image_speed = 0.25;
+    special = 0
+    instance_create(x + size * (1 - facing * 2) * 3, y - 10 * size, obj_spark_explode1)
+}
+
+if image_index >= image_number - image_speed
+image_speed = 0
+
+if sprite_index = b_kick_sprite {
+    if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "jump";
+        else
+            state_type = "stand";
+        timer = 0;
+        time = -1;
+        special = 0
+    }
+}

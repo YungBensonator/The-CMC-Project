@@ -1,0 +1,122 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = hold_sprite;
+  timer = 0;
+  time = 30;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  }
+
+if ( timer == 0 )
+  {
+  duster = instance_create ( x , y , obj_dust_effect );
+  duster.facing = facing;
+  sound_play ( swingsnd3 );
+  create_projectile ( 3 , 90 , 3 , 3 , -1 , 120 , kick3 , obj_spark_hit2 , 1.6 , 1.6 , 16 , 16 , self.id , 100 , no_script );
+  proj.di = 0;
+  }
+if ( timer < 100 )
+  {
+  vspeed = 0;
+  proj.x = x + 16 * size * ( 1 - facing * 2 );
+  proj.y = y - 16 * size;
+  if ( timer mod 3 == 0 )
+    after_image ( 8 , c_red , .3 );
+  hspeed = 8 * ( 1 - facing * 2 );
+  if ( proj.hit )
+    {
+    sound_play_pitch ( explode1 , .5 );
+    timer = 101;
+    instance_create ( x , y , obj_flashscreen );
+    sprite_index = final_smash_sprite;
+	sound_play (final_smash_voice);
+    image_index = 0;
+    time = 340;
+    target1 = target;
+    tx = target.x;
+    ty = target.y;
+    }
+  }
+  
+if ( timer > 100 && timer < 302 )
+  {
+  speed = 0;
+  gravity_lock = 2;
+  target1.x = tx;
+  target1.y = ty;
+  target1.speed = 0;
+  }
+
+if ( timer == 104 ) image_index = 1;
+if ( timer == 108 ) image_index = 2;
+if ( timer == 128 ) image_index = 3;
+if ( timer >= 148 && timer < 300 )
+  {
+  if ( (timer - 148) mod 12 == 0 )
+    {
+    image_index = 4;
+    image_speed = 0.5;
+    }
+  if ( timer mod 6 == 0 )
+    {
+    create_projectile ( 1 , 90 , 2 , 3 , -1 , 20 , choose ( punch3 , punch2 , punch4 , sf_punch2 , sf_punch3 ) ,
+      choose ( obj_spark_hit1 , obj_spark_hit2 ) , 2.5 , 2.5 , 16 , 16 , self.id , 100 , no_script );
+    proj.di = 0;
+    }
+  }
+if ( timer == 300 )
+  {
+  instance_create ( x , y , obj_flashscreen );
+  image_index = 23;
+  image_speed = 0;
+  }
+if ( timer >= 300 && timer < 302 )
+  {
+  x = ( target1.x + x ) * 0.5;
+  }
+if ( timer == 302 )
+  {
+  gravity_lock = 0;
+  sprite_index = uair_sprite;
+  image_index = 1;
+  create_projectile ( 10 , 70 + facing * 40 , 8.6 , 11.4 , -1 , 10 , -1 , obj_spark_impact , 3 , 3 , 16 , 16 , self.id , 3 , no_script );
+  sound_play (final_smash_finish);
+  vspeed = -4 * size;
+  hspeed = 1 - facing * 2;
+  hspeed *= size;
+  }
+if ( timer == 304 )
+  image_index = 2;
+if ( timer >= 304 && timer < 340 )
+  {
+  if ( vspeed >= 0 )
+    {
+    hspeed *= 0.75;
+    vspeed = 0;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    {
+    air = 1;
+    state_type = "jump"; 
+    }
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

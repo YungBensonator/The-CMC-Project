@@ -1,0 +1,54 @@
+absorb = 0 // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+moving_object = 1;
+proj_destroy = 0
+priority = 1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.ice_bomb_sprite
+    //hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.25;
+    visible =1
+}
+if !is_on_floor(self.id)
+    vspeed += 0.3
+if vspeed > 4.5
+    vspeed = 4.5
+if hit!=0
+    visible = 0
+if ((is_on_floor(self.id) && vspeed >= 0) ||collision_point(x+sign(hspeed),y-3,obj_wall,1,1)) && hit = 0 || hit > 0 {
+    sound_play(explode_small)
+    expl1 = instance_create(x,y+4,obj_spark)
+    expl1.sprite_index = global.explosion_spark;
+    expl1.image_blend = merge_color(c_aqua,c_white,0.6)
+    expl1.image_index = 0;
+    expl1.image_speed = 1;
+    expl1.image_xscale = 0.6;
+    expl1.image_yscale = 0.6;
+    expl2 = instance_create(x,y+4,obj_spark)
+    expl2.sprite_index = global.ice_spark2
+    expl2.image_xscale = 0.5
+    expl2.image_yscale = 0.5
+    shaker = instance_create(x,y,obj_shakescreen2)
+    shaker.ampl = 1.2
+    shaker.time = 7
+    instance_destroy()
+}
+if shooptemp=1
+{
+  hit_attacker = 1
+    sound_play(explode1)
+    spark = instance_create(x,y-4,obj_spark_explode1)
+    spark.image_xscale *= 1.75
+    shaker = instance_create(x,y,obj_shakescreen2)
+    shaker.ampl = 1.75
+    shaker.time = 8
+    hit = 0
+    visible = 0
+    sprite_index = spr_collision_bubble
+    image_xscale *= 1.3
+    exploded = 1
+    timer = 1492
+   
+    proj4 = create_projectile(9,90,6,5,10,8,explodehit1,obj_spark_fire1,1.2,1.2,0,4,bomber.id,14,no_script);
+
+}

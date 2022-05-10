@@ -1,0 +1,46 @@
+absorb = 0 // This attack may not be absorbed by PSI magnet
+absorb2 = 0
+moving_object = 1;
+if timer <= 1 && hit = 2 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.bomb_sprite
+    //hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0.25;
+    visible =1
+    priority = 5
+    bomber = attacker
+    parry_nodestroy = 1;
+wa=0
+}
+if wa<1
+{
+if !is_on_floor(self.id)
+    vspeed += 0.3
+if is_on_floor(self.id)
+    vspeed += -10.3
+}
+if ( timer >= 25 && exploded = 0 ){
+    //hit_attacker = 1
+    sound_play(explode1)
+    spark = instance_create(x,y-4,obj_spark_explode1)
+    spark.image_xscale *= 2.25
+    shaker = instance_create(x,y,obj_shakescreen2)
+    shaker.ampl = 1.75
+    shaker.time = 8
+    hit = 0
+    visible = 0
+    sprite_index = spr_collision_bubble
+    image_xscale *= 1.3
+ 
+    proj1 = create_projectile((10+(smash_charge/20)),90,(6.25+(smash_charge/120)),(6.25+(smash_charge/120)),10,8,explodehit4,obj_spark_fire1,1.2,1.2,0,4,bomber.id,3,no_script);
+  
+vspeed=0
+
+ instance_destroy();
+   
+}
+    
+ 
+
+if ( y > obj_game_control.death_d )
+  instance_destroy();
+

@@ -1,0 +1,79 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "jump" || state_type = "stand" || state_type = "crouch") {
+    if remote = 0 || !instance_exists(remote) {
+	time = 47
+	temp = 1
+    image_speed = 0.15;
+    sprite_index = downb_sprite;
+	}
+    else {
+	time = 25
+	temp = 2
+    image_speed = 0;
+    sprite_index = b_sprite;
+	}
+    attacking = 0;
+    timer = 0;
+    attack_type = "downb";
+    image_index=0;
+    timer_speed=1;      
+    special = 0;
+    attack_type = "downb";
+    if air != 0
+        state_type = "air_attack";
+    else {
+        state_type = "attack"
+        hspeed = 0
+    }
+}
+if temp = 1 {
+	vspeed = 0;
+	hspeed = 0;
+	
+if timer < 22 && image_index >= 2
+image_index = 2
+if timer = 22 {
+    sound_play(b_sound);
+    remote = create_projectile(10,90,6.6,6,17,9,explodehit4,obj_spark_fire1,0.9,0.9,6,0,self.id,1492,bomber_mine_script)
+    remote.hit = 2
+    remote.alarm[0] = 1492
+    remote.hit_attacker = 1
+    remote.sprite_index = red_bomb_sprite
+    remote.visible = 1
+    remote.image_index = 0
+    remote.image_speed = 0.2
+    image_index = 4
+    image_speed = 0.075
+}
+if image_index >= image_number - image_speed
+image_speed = 0
+
+if air = 0
+    hspeed = 0
+}
+if temp = 2 {
+    if timer = 1 {
+	sound_play(downb_sound);
+	instance_create(x+size*(7-facing*14),y-16*size,obj_spark_effect);
+    }
+    if timer = 14 {
+    shaker = instance_create(x,y,obj_shakescreen2)
+    shaker.ampl = 2
+    remote.timer = 1490
+    }
+    if timer = 20
+	remote = 0
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+}
+

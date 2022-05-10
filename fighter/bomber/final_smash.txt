@@ -1,0 +1,145 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        grab_edge = 0
+        can_die = 0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.3
+        sprite_index = upb_fly_sprite
+        image_index=0
+        timer = 0
+        time = 690
+        temp = 0
+        timer_speed=1
+        intangible = 1
+        final_smashes+=1
+        speed = 0
+        sound_play(final_smash_sound1)
+        smash_power = 0
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        instance_create(0,0,obj_flashscreen)
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 25
+        attack_time = 20
+        air_move=0
+        special = 0
+}
+if timer < time {
+intangible = 1
+    if temp = 0
+    speed = 0
+    gravity_lock = 1;
+     if timer = 31 {
+         sprite_index = final_smash_sprite
+         image_speed = 0.3
+         image_index = 0
+         temp = 1       
+         if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_launch1)
+         }
+     }
+    if temp = 1 {
+            if ai = 1 && enemy.intangible != 1 { //&& ai_state != "recover"  {
+            if y < 20 {
+                movedown=1
+                y+=1
+                moveup=0
+                }
+            else {
+            if enemy.x > x {
+                moveright=1
+                moveleft = 0 }
+            else { moveleft = 1
+                moveright = 0 }
+            if enemy.y > y+12 || collision_point(x+2*(1-facing*2),y-1,obj_wall,1,1) {
+                movedown = 1
+                moveup = 0 }
+            else if enemy.y < y+12 {
+                moveup = 1
+                movedown = 0 }
+                }
+            if abs(enemy.x-x) < 25*size && random(20)>15 && enemy.y > y-8
+                attacking = 1
+            }
+            if ai = 1 && enemy.intangible = 1 {
+                if x > room_width/2+30 {
+                    moveright = 0
+                    moveleft = 1
+                    }
+                if x < room_width/2-30 {
+                    moveright = 1
+                    moveleft = 0
+                    }
+                if y > room_height/2+10 || collision_point(x+2*(1-facing*2),y,obj_wall,1,1) {
+                    moveup = 1
+                    movedown = 0
+                    }
+                else if y < room_height/2-15 {
+                    moveup = 0
+                    movedown = 1
+                    }
+                }
+        if attack_success = 1 && random(30)>25 && distance_to_object(target) > 16
+            attack_success=0
+        if timer < time-25 && sin(timer*pi/6)=1 && attack_time <= 17 {
+                //attacks-=1
+                //attack_hits-=1
+                create_hitbox(4,40+facing*100,6.5,1.75,-1,4,slash2,obj_spark_slash2,1.1,0.4,-2,18,self.id,1,6) }
+        if movedown = 1 && vspeed < 4
+            vspeed+=0.175
+         if moveup = 1 && vspeed > -4
+            vspeed-=0.25
+          if moveright = 1 && hspeed < 4.25
+            hspeed+=0.175
+          if moveleft = 1 && hspeed > -4.25
+            hspeed -=0.175
+          if hspeed > 0 facing = 0
+          else if hspeed < 0 facing = 1
+          if speed > 0.5 speed -= 0.075
+          if (special || attacking) && attack_time = 0 {
+            attack_time = 48
+            image_index = 0
+            sprite_index = final_smash_drop_sprite
+            image_speed = 0.25 }
+          if attack_time = 37 {
+            create_projectile(6,80+facing*20,6.2,6.9,-1,8,explodehit3,obj_spark_fire1,1,1,4,9,self.id,120,bomber_bomb_script)
+            sound_play(b_sound);
+proj.jam=2
+          }
+          if attack_time = 26 {
+            sprite_index = final_smash_sprite
+            image_speed = 0.3
+          }
+          if attack_time > 0
+          attack_time-=1
+    }
+    if timer = time-25 {
+        //sound_play(final_smash_sound_2
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        sound_stop(final_smash_sound)
+        temp = 0
+        speed = 0
+        sprite_index = mid_jump_sprite;
+        image_index = 0
+        image_speed =0.25
+        air = 1
+    }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attacking = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    grab_edge=1
+    can_die=1
+}

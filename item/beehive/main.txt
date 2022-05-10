@@ -13,10 +13,10 @@ if ( sprite_exists ( beehivep_spr ) )
 if ( sprite_exists ( bees_spr ) )
   spr_delete ( bees_spr );
 ~~ENTER:
-sprite_index = obj_items_control.beehive_spr;
-sprite_air = obj_items_control.beehive_spr;
-sprite_held = obj_items_control.beehiveh_spr;
-mask_index = obj_items_control.beehiveh_spr;
+sprite_index = obj_game_control.beehive_spr;
+sprite_air = obj_game_control.beehive_spr;
+sprite_held = obj_game_control.beehiveh_spr;
+mask_index = obj_game_control.beehiveh_spr;
 air_spr_y = 0;
 type = "heavy";
 hit_timer = 0;
@@ -50,6 +50,8 @@ shakey *= 0.25;
 if ( hp <= 0 )
   {
   sound_play ( cratebreaksnd );
+  if ( heracross_unlock = 0 and !instance_exists ( obj_training ) )
+    heracross_unlock = 1;
   var i, o;
   o = instance_create ( x , y - 19 , obj_spark_hit4 );
   o.image_xscale *= 3;
@@ -69,7 +71,7 @@ if ( hp <= 0 )
     create_projectile ( 0 , 362 , 1 , 1 , 0 , 1 , -1 , -1 , 1 , 1 , 0 , 32 , last_attacker , 300 + floor ( random ( 300 ) ) , char_item );
     proj.item_parent = global.itm_kind[item_index];
     proj.hit = 2;
-    proj.sprite_index = obj_items_control.bees_spr;
+    proj.sprite_index = obj_game_control.bees_spr;
     proj.goal = bee_target;
     }
   repeat ( 6 )
@@ -81,7 +83,7 @@ if ( hp <= 0 )
     o = instance_create ( x , y - 8 - 12 * i , obj_spark );
     o.depth = -5;
     o.image_speed = 0;
-    o.sprite_index = obj_items_control.beehivep_spr;
+    o.sprite_index = obj_game_control.beehivep_spr;
     o.image_index = i;
     o.speed = 7 + random ( 3 );
     o.direction = random(360);

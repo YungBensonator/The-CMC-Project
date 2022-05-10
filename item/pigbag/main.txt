@@ -2,80 +2,153 @@
  
 pigbag_grounded_spr = ispr_add_alpha ( "item/pigbag/pigbag_grounded.png" , 1 , 0 , 1 , 6 , 10 );
 pigbag_air_spr = ispr_add_alpha ( "item/pigbag/pigbag_air.png" , 1 , 0 , 1 , 37 , 19 );
+pigbag_chomp_spr = ispr_add ( "item/pigbag/pigbag_chomp.png" , 5 , 1 , 1, 1,  1 , 21 , 19 );
+pigbag_spit_spr = ispr_add ( "item/pigbag/pigbag_spit.png" , 3 , 1 , 1, 1,  1 , 9, 17 );
+pigbag_eff = ispr_add ( "item/pigbag/pigbag_effect.png" , 15 , 1 , 1, 1,  1 , 34, 34 );
+pigbag_short_snd = isound_add ( "item/pigbag/pigbag_sound.wav" , 0 , 0 );
+pigbag_long_snd = isound_add ( "item/pigbag/pigbag_sound_long.wav" , 0 , 0 );
+
+//34, 34
+//9, 17
 ~~DEINIT:
  
 if ( sprite_exists ( pigbag_grounded_spr ) )
    spr_delete ( pigbag_grounded_spr );
 if ( sprite_exists ( pigbag_air_spr ) )
    spr_delete ( pigbag_air_spr );
+if ( sprite_exists (pigbag_chomp_spr)){
+    spr_delete ( pigbag_chomp_spr);
+}
  
 ~~ENTER:
  
-sprite_index = obj_items_control.pigbag_grounded_spr;
-sprite_air = obj_items_control.pigbag_grounded_spr;
-sprite_held = obj_items_control.pigbag_grounded_spr;
+sprite_index = obj_game_control.pigbag_grounded_spr;
+sprite_air = obj_game_control.pigbag_grounded_spr;
+sprite_held = obj_game_control.pigbag_grounded_spr;
 image_speed = 0;
 image_index = 0;
 air_spr_y = -8;
-image_xscale = 0.75;
-image_yscale = 0.75;
+image_xscale = 1;
+image_yscale = 1;
 collision_type = 2;
 weight = 0.25;
 shadow = 5;
-state_type = "UNOPENED";
+//state_type = "UNOPENED";
 xx = x;
 yy = y;
 i = 0;
- 
+type="batter";
+batter_jab = 1;
+batter_stilt = 1;
+batter_dash = 1;
+batter_ssmash = 1;
+batter_udtiltsmash = 1;
+batter_nair = 0;
+batter_fair = 0;
+
+UNOPENED = 0;
+ASCEND = 1;
+state_type = "UNOPENED";
+ascend_time = random_range(30,120);
+target = -1;
+target1 = -1;
+temp = 0;
+index = 0;
+target1 = -1;
+_targetSize = 1;
+_timer = 0;
 ~~LAND:
-if ( thrown > 0 )
+if ( thrown <= 0 )
 {
-    state_type = "OPEN";
+    state_type = "UNOPENED";
     speed = 0;
 }
  
  
 ~~STEP:
-if (held > 0)
-{
-    if (facing > 0)
-        {
-        sprite_angle = 140;
+execute_file("dev.gml"); exit;
+switch (state_type){
+    case UNOPENED:
+        if ( held > 0 && held.timer_speed != 0 ){
+            if ( held.state_type != "air_flinch" && held.state_type != "flinch" && held.state_type != "tumble" ){
+                if ( held.attack_type == "jab" && held.attack_type != "edge_attack" && held.attack_type != "edge_roll"
+                    && held.attack_type != "edge_jump" ) {
+                    held.state_type = "air_attack";
+                    held.attack_type = "item_batter_jab";
+                    held.timer = -1;
+                    held.time = 600;
+                }
+
+                if (held.attack_type == "item_batter_jab"){
+                    sprite_index = obj_game_control.pigbag_air_spr;
+                    held.held_item = -1;
+                    held = -99;
+                    state_type = ASCENED;
+                    onwer = held;
+                }
+            }
         }
-    else
-        {
-        sprite_angle = 35;
-        }
-    facing = held.facing;
+        break;
+    case ASCEND:
+        vspeed = -1;
+        break;
 }
+
+// if (held > 0)
+// {
+//     if (facing > 0)
+//         {
+//         sprite_angle = 140;
+//         }
+//     else
+//         {
+//         sprite_angle = 35;
+//         }
+//     facing = held.facing;
+// }
  
-if (thrown > 0){
-	hspeed = 2;
-    if (i <= 30){
-        i = i + 1;
-    }
+// if (thrown > 0){
+// 	hspeed = 2;
+//     if (i <= 30){
+//         i = i + 1;
+//     }
    
-    if (i >= 30 && state_type = "UNOPENED"){
-        xx = x;
-        yy = y;
-        state_type = "OPEN";
-    }
-}
+//     if (i >= 30 && state_type = "UNOPENED"){
+//         xx = x;
+//         yy = y;
+//         state_type = "OPEN";
+//     }
+// }
  
-if (state_type = "OPEN")
-{
-    sprite_angle = 0;
-    x=xx;
-    y=yy;
-    sprite_air = obj_items_control.pigbag_air_spr;
-    sprite_index = obj_items_control.pigbag_air_spr;
-    sprite_held = obj_items_control.pigbag_air_spr;
-    image_index = 0;
-    image_xscale = (1-facing*2);
-}
+// if (state_type = "OPEN")
+// {
+//     sprite_angle = 0;
+//     x=xx;
+//     y=yy;
+//     sprite_air = obj_game_control.pigbag_air_spr;
+//     sprite_index = obj_game_control.pigbag_air_spr;
+//     sprite_held = obj_game_control.pigbag_air_spr;
+//     image_index = 0;
+//     image_xscale = (1-facing*2);
+// }
  
  
 ~~HIT:
- 
+
  
 ~~PLAYER CONTACT:
+
+
+~~PLAYER EVENT:
+if ( timer == -1){
+    state_type = "air_attack";
+    attack_type = "item_batter_jab";
+    timer_speed = 1;
+    timer = 0;
+    time = 50;
+}
+sprite_index = item_heavy_sprite;
+image_index = 0;
+image_speed = 0;
+
+~~END OF FILE

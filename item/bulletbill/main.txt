@@ -21,9 +21,9 @@ if ( sprite_exists ( bulletbill_fire_spr ) )
 
 ~~ENTER:
 
-sprite_index = obj_items_control.bulletbill_held_spr;
-sprite_air = obj_items_control.bulletbill_held_spr;
-sprite_held = obj_items_control.bulletbill_held_spr;
+sprite_index = obj_game_control.bulletbill_held_spr;
+sprite_air = obj_game_control.bulletbill_held_spr;
+sprite_held = obj_game_control.bulletbill_held_spr;
 image_speed = 0;
 image_index = 0;
 air_spr_y = -8;
@@ -88,10 +88,10 @@ if ( timer == -1 )
   held_item.image_alpha = 0;
   air_move = 0;
   intangible = 1;
-  sound_play ( obj_items_control.billstart_snd );
+  sound_play ( obj_game_control.billstart_snd );
   
   dust = instance_create (x , y - 10 * size , obj_spark)
-  dust.sprite_index = obj_items_control.bulletbill_smoke_spr;
+  dust.sprite_index = obj_game_control.bulletbill_smoke_spr;
   dust.image_index = 0;
   dust.image_xscale = 1.2;
   dust.image_yscale = 1.2;
@@ -196,17 +196,17 @@ if ( timer <= 1 )
 		lel = instance_nearest(x,y,obj_edge);
 		if ( y < lel.y + 4 )
 		{
-			if ( x < obj_items_control.camera_boundary_l + 128 )
+			if ( x < obj_game_control.camera_boundary_l + 128 )
 				a = random(erro*3);
 				else
-			if ( x > obj_items_control.camera_boundary_r - 128 )
+			if ( x > obj_game_control.camera_boundary_r - 128 )
 				a = 180-random(erro*3);
 				else
 			{
 				if ( instance_exists(e_obj) )
 				{
-					if ( e_obj.x > obj_items_control.camera_boundary_l + 64
-						&& e_obj.x < obj_items_control.camera_boundary_r - 64
+					if ( e_obj.x > obj_game_control.camera_boundary_l + 64
+						&& e_obj.x < obj_game_control.camera_boundary_r - 64
 						&& e_obj.y < lel.y + 4 )
 						a = point_direction(x,y,e_obj.x,e_obj.y) - erro+random(erro*2);
 				}
@@ -230,14 +230,14 @@ if ( timer == timing_begin )
 {
 	visible = 0;
 	bulletbill = instance_create ( x , y - 15, obj_spark );
-	bulletbill.sprite_index = obj_items_control.bulletbill_spr;
+	bulletbill.sprite_index = obj_game_control.bulletbill_spr;
 	bulletbill.image_xscale = 0.5 * size;
 	bulletbill.image_yscale = 0.5 * (1-facing*2) * size;
 	bulletbill.image_angle = temp;
 	bulletbill.image_index = 0;
 	bulletbill.image_speed = 0;
 	bulletbill.alarm[0] = 1000;
-	sound_play ( obj_items_control.billblast_snd );
+	sound_play ( obj_game_control.billblast_snd );
 	create_hitbox ( 25 , 30+facing*120 , 6 , 6 , 100 , 1 , punch3 , obj_spark_hit1 , 1.55 , 0.97 , 0 , 15 , self.id , 55 , 5 );
 	hitbox.image_angle = temp;
 }
@@ -246,7 +246,7 @@ if ( timer == timing_begin )
 if ( timer >= timing_begin && timer < timing_end && !instance_exists (firetrail) )
 {
 	firetrail = instance_create (bulletbill.x, bulletbill.y, obj_spark)
-	firetrail.sprite_index = obj_items_control.bulletbill_fire_spr;
+	firetrail.sprite_index = obj_game_control.bulletbill_fire_spr;
 	firetrail.image_xscale = 0.4 * size;
 	firetrail.image_yscale = 0.4 * size;
 	firetrail.image_index = 0;
@@ -288,7 +288,7 @@ if ( timer >= timing_begin && timer < timing_end )
 //IMPACT
 if ( ( ( ( on_floor || on_platform ) && vspeed > 1 ) || ( next_to_rwall && hspeed > 1 ) || ( next_to_lwall && hspeed < -1 ) || ( under_ceiling && vspeed < -1 ) ) && timer > timing_begin && timer < timing_end )
 {
-	sound_stop ( obj_items_control.billblast_snd );
+	sound_stop ( obj_game_control.billblast_snd );
 	spark = instance_create(x,y,obj_spark_explode1);
 	spark.image_xscale = 1 * size;
 	spark.image_yscale = 1 * size;
@@ -315,9 +315,9 @@ if ( timer >= timing_end )
 	}
 	if !instance_exists ( spark )
 	{
-		sound_play ( obj_items_control.billfinish_snd );
+		sound_play ( obj_game_control.billfinish_snd );
 		dust = instance_create (x , y - 10 * size , obj_spark)
-		dust.sprite_index = obj_items_control.bulletbill_smoke_spr;
+		dust.sprite_index = obj_game_control.bulletbill_smoke_spr;
 		dust.image_index = 0;
 		dust.image_xscale = 1;
 		dust.image_yscale = 1;
