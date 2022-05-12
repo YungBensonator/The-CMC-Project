@@ -1,0 +1,91 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 49;
+        timer_speed=1;
+        charge_frame = 12;
+}
+        if timer < time {
+		switch (timer)
+		{
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 12: image_index = 3; break;
+		case 14: image_index = 4; break;
+		case 17: image_index = 5; break;
+		case 19: image_index = 6; break;
+		case 21: image_index = 7; break;
+		case 23: image_index = 8; break;
+		case 25: image_index = 9; break;
+		case 27: image_index = 10; break;
+		case 29: image_index = 11; break;
+		case 31: image_index = 12; break;
+		case 33: image_index = 13; break;
+		case 37: image_index = 14; break;
+		case 41: image_index = 15; break;
+		case 45: image_index = 16; break;
+		}
+             if timer = 3
+                sound_play(ssmash_voice);
+             if timer = 13
+				{
+                spark = instance_create(x + 7 * (1-facing*2) * size, y + 12 * size ,obj_spark)
+				spark.sprite_index = ssmash_effect_sprite;
+				spark.image_xscale = 0.37 * (1-facing*2) * size;
+				spark.image_yscale = 0.37 * size;
+				spark.image_speed = 1.05;
+				spark.depth = -3;
+				}
+            if timer = 17 {
+                duster=instance_create(x,y,obj_dust_effect)
+                duster.facing=facing;
+                sound_play(ssmash_voice2);
+                sound_play(ssmash_sound);
+                create_hitbox(14,32+facing*116,5.8,7.7,22,14,shock3,obj_spark_shock,0.7,0.4,21,7,self.id,14,5);
+                hitbox.charge_dmg = 0.85
+                hitbox.charge_kb = 0.9
+                hitbox.charge_hitlag = 0.9
+                hitbox.shake_ampl = 0.7
+				create_hitbox2(14,32+facing*116,5.8,7.7,22,14,shock3,obj_spark_shock,0.65,0.65,40,6,self.id,14,5);
+                hitbox2.charge_dmg = 0.85
+                hitbox2.charge_kb = 0.9
+                hitbox2.charge_hitlag = 0.9
+                hitbox2.shake_ampl = 0.7
+                }
+            if timer = 20 {
+                hitbox.damage=12*size
+                hitbox.kbg=6*size
+                hitbox.bkb=5.5*size
+                hitbox.shield_damage=15
+                hitbox.hitlag_frames = round(10*size)
+				hitbox2.damage=12*size
+                hitbox2.kbg=6*size
+                hitbox2.bkb=5.5*size
+                hitbox2.shield_damage=15
+                hitbox2.hitlag_frames = round(10*size)
+                }
+            if timer = 20 {
+                hitbox.damage=9*size
+                hitbox.kbg=5.5*size
+                hitbox.bkb=5*size
+                hitbox.shield_damage=12
+                hitbox.hitlag_frames = round(9*size)
+				hitbox2.damage=9*size
+                hitbox2.kbg=5.5*size
+                hitbox2.bkb=5*size
+                hitbox2.shield_damage=12
+                hitbox2.hitlag_frames = round(9*size)
+                }
+            }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

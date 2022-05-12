@@ -1,0 +1,196 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+    attacking = 0;
+    timer = 0;
+    attack_type = "sideb"
+    state_type = "air_attack";
+    hspeed = 0;
+	sprite_index = sideb_sprite1;
+    image_speed = 0;
+    time = 113;
+    timer_speed = 1;
+    temp = 0;
+    special = 1;
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+    sound_play(sideb_sound);
+    air_move=0
+}
+		if ( sprite_index = sideb_sprite1 )
+		switch (timer)
+		{
+		case 1: image_index = 1; break;
+		case 2: image_index = 2; break;
+		case 3: image_index = 3; break;
+		case 4: image_index = 4; break;
+		case 5: image_index = 5; break;
+		case 6: image_index = 6; break;
+		case 7: image_index = 7; break;
+		case 8: image_index = 8; break;
+		case 9: image_index = 9; break;
+		case 10: image_index = 10; break;
+		}
+		if ( sprite_index = sideb_sprite2 )
+		switch (timer)
+		{
+		case 1: image_index = 0; break;
+		case 3: image_index = 1; break;
+		case 5: image_index = 2; break;
+		case 7: image_index = 3; break;
+		case 9: image_index = 4; break;
+		case 11: image_index = 5; break;
+		case 13: image_index = 6; break;
+		case 15: image_index = 7; break;
+		case 17: image_index = 8; break;
+		case 18: image_index = 9; break;
+		case 20: image_index = 10; break;
+		case 22: image_index = 11; break;
+		case 24: image_index = 12; break;
+		case 26: image_index = 3; break;
+		case 29: image_index = 4; break;
+		case 32: image_index = 5; break;
+		case 35: image_index = 6; break;
+		case 38: image_index = 7; break;
+		case 40: image_index = 8; break;
+		case 42: image_index = 9; break;
+		case 44: image_index = 10; break;
+		case 46: image_index = 11; break;
+		}
+if (cos(timer*pi/8) = 1) && (timer < 100) && (time = 113)
+{
+sound_play(sideb_charge_sound)
+gfx_ef_crown ( x , y );
+}
+if ai_state = "recover" && timer > 22 || (distance_to_object(enemy)<18 || abs(enemy.y-y) < 20 && abs(enemy.x-x) < 50) && ai = 1 && timer >= 13
+    special = 0
+        if time = 113 && special = 0 && timer > 12 {
+            sound_stop(sideb_sound);
+            sound_play(sideb_launch_sound)
+        if timer <= 14  {
+                sound_play(spin_sound)
+                sound_play(sideb_voice)
+                create_hitbox(6,30+facing*120,5.5,4.7,12,6,kick2,obj_spark_hit1,0.65,0.5,7,9,self.id,31,3)
+                sprite_index = sideb_sprite2
+                time = 48
+                timer = 1
+                image_speed = 0
+                hspeed = (4 - facing*8)*size
+                vspeed = -3*size
+                temp=3.8
+                }
+        else if timer <= 25 {
+                sound_play(spin_sound)
+                sound_play(sideb_voice)
+                create_hitbox(10,30+facing*120,6,5.7,16,7,kick2,obj_spark_hit2,0.65,0.5,7,9,self.id,31,3)
+                sprite_index = sideb_sprite2
+                time = 48
+                timer = 1
+                image_speed = 0
+                vspeed = -3.2*size
+                hspeed = (5 - facing*10)*size
+                temp=4.8
+                }
+        else if timer <= 40  {
+                sound_play(spin_sound)
+                sound_play(sideb_voice)
+                create_hitbox(14,30+facing*120,6.5,6.8,19,8,kick2,obj_spark_hit2,0.65,0.5,7,9,self.id,32,3)
+                sprite_index = sideb_sprite2
+                time = 48
+                timer = 1
+                image_speed = 0
+                hspeed = (5.7 - facing*11.4)*size
+                vspeed = -3.4*size
+                temp=5.4
+                }
+        else if timer <= 60  {
+                sound_play(spin_sound)
+                sound_play(sideb_voice)
+                create_hitbox(18,30+facing*120,6.7,7.7,24,9,kick3,obj_spark_hit2,0.65,0.5,7,9,self.id,33,3)
+                hitbox.armor_break = 1
+                sprite_index = sideb_sprite2
+                time = 48
+                timer = 1
+                image_speed = 0
+                hspeed = (6.5 - facing*13)*size
+                vspeed = -3.5*size
+                temp=6.2
+                }
+        else if timer <= 85 {
+                sound_play(spin_sound)
+                sound_play(sideb_voice)
+                create_hitbox(21,30+facing*120,7.4,8.55,30,11,kick3,obj_spark_shock,0.65,0.5,7,9,self.id,33,3)
+                hitbox.armor_break = 1
+                sprite_index = sideb_sprite2
+                time = 48
+                timer = 1
+                image_speed = 0
+                hspeed = (7.4 - facing*14.8)*size
+                vspeed = -3.6*size
+                temp=7
+                }
+        else if timer <= 110 {
+                sound_play(spin_sound)
+                sound_play(sideb_voice)
+                create_hitbox(24,30+facing*120,7.7,9,36,12,kick3,obj_spark_shock,0.65,0.6,7,9,self.id,33,3)
+                hitbox.armor_break = 1
+                sprite_index = sideb_sprite2
+                time = 48
+                timer = 1
+                image_speed = 0
+                hspeed = (7.7 - facing*14.4)*size
+                vspeed = -3.65*size
+                temp=7.5
+                }
+        } 
+if timer >= 111 && special = 1 && sprite_index = sideb_sprite1 {
+        sound_play(spin_sound)
+        sound_play(sideb_launch_sound)
+        sound_play(sideb_voice)
+        create_hitbox(27,32+facing*116,8,9.9,50,14,kick3,obj_spark_shock,0.65,0.6,7,9,self.id,33,3)
+        hitbox.armor_break = 1
+        sprite_index = sideb_sprite2
+        time = 52
+        timer = 1
+        image_speed = 0
+        hspeed = (8- facing*16)*size
+        vspeed = -3.65*size
+        temp=8
+}
+    if timer <= 45 && temp!=0 && abs(hspeed) > 0.5 {
+        hspeed = (temp - facing*2*temp)*size 
+        if frac(timer/8) = 0
+            effect_create_above(ef_smoke,x,y-7*size,0,c_ltgray);
+    }
+    if timer = 46 && temp!=0 && abs(hspeed) > 0.5 {
+        hspeed*=0.5
+        //sound_play(stop_sound)
+    }
+	if timer > 20 && temp != 0
+	force_edge_grab = 1
+    if temp != 0 && hitbox.hit > 0
+        hspeed = 0
+    if temp!=0 && air = 0 && timer > 7 {
+                state_type="land";
+                attack_type="none";
+				hspeed*=0.51
+                sprite_index = sideb_sprite3;
+                timer=60;
+                time=74; }
+	
+	if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	hspeed = 1 - facing*2;
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 17;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+	special = 0;
+    }
+

@@ -1,0 +1,66 @@
+if state_type = "stand" || state_type = "run" {
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "jab"
+	sprite_index = jab_sprite;
+	image_speed = 0;
+	image_index = 0.1
+	timer = 0;
+	time = 21;
+}
+	if timer < time {
+    		switch ( timer )
+		{
+			case 2: image_index = 1; break;
+			case 3: image_index = 2; break;
+			case 4: image_index = 3; break;
+			case 5: image_index = 4; break;
+			case 8: image_index = 5; break;
+			case 12: image_index = 6; break;
+			case 16: image_index = 7; break;
+		}
+
+		if ( timer == 1 ) 
+		{ 
+		  gfx_ef_whiff ( x + ( 28 - 56 * facing ) * size , y - actual_height * 0.5 , 1 , 1 , 180 * facing );
+ 		 //gfx_ef_whiffspark ( x + 40 - 80 * facing , y - actual_height * 0.5 , 1 );
+		}
+            if timer = 2 {
+                sound_play(attacksnd1);
+                create_hitbox(2-temp2,30+facing*120,2.35,0.8,4,2,punch1,obj_spark_hit1,0.65,0.45,14,7,self.id,3,1);
+	    var burst;
+		burst = instance_create(place_x(56)+x,place_y(32)+y,obj_jab_burst);
+    		burst.snap = self.id;
+		burst.image_xscale = xsize * 0.4;
+  		burst.image_yscale = ysize * 0.4;				
+                }
+	    if timer >= 5 && timer < 13 && attacking = 1 && grab && temp = 1 {
+		attacking = 0
+		state_type = "stand"
+		attack_type = "none"
+		timer = 0
+		time = -1
+		char_grab();
+		}
+	    if timer = 3
+		hitbox.hitbox_x = 15-facing*30
+	    if timer = 4
+		hitbox.hitbox_x = 11-facing*22
+	    if timer = 5
+		hitbox.hitbox_x = 7-facing*14
+           
+	if ( timer = 8 && attacking = 1 )
+	{
+	timer = 1;
+	}
+	if timer = 11
+	{
+	interrupt = 1;
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

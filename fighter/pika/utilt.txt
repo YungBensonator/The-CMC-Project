@@ -1,0 +1,163 @@
+if state_type = "stand" || state_type = "run" {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "utilt";
+    image_speed = 0;
+    sprite_index = utilt_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 26;
+    timer_speed = 1;
+}
+if timer < time {
+
+
+    // Animate sprite
+    switch (timer) {
+        case 1:
+            image_index = 1;
+            break;
+        case 3:
+            image_index = 2;
+            break;
+        case 5:
+            image_index = 3;
+            break;
+        case 7:
+            image_index = 4;
+            break;
+        case 9:
+            image_index = 5;
+            break;
+        case 11:
+            image_index = 6;
+            break;
+        case 13:
+            image_index = 7;
+            break;
+        case 15:
+            image_index = 8;
+            break;
+        case 17:
+            image_index = 9;
+            break;
+        case 19:
+            image_index = 10;
+            break;
+        case 21:
+            image_index = 11;
+            break;
+
+
+    }
+
+    // Animate VFX
+    switch (timer) {
+        case 5: // New sprite frame
+			blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_texture, /*Start frame*/ 2, /*Apex Frame*/ 6, /*End frame*/ 8, /*CCW*/ 0, /*girth*/ 6.5, 15);
+			blur.index = 0.5;
+			blur.image_index = 0;
+			blur.push_x = -3 * size * (1-facing*2);
+			break;
+		case 7:	// New sprite frame
+			blur.index = 1;
+			blur.image_index = 1;
+			break;
+		case 8:
+			blur.index = 1.5;
+			break;
+		case 9: // New sprite frame
+			blur.index = 2;
+			break;
+		case 10:
+			blur.index = 2.5;
+			break;
+		case 11: // New sprite frame
+			blur.index = 3;
+			break;
+		case 12:
+			blur.index = 3.5;
+			break;
+		case 13: // New sprite frame 
+			blur.index = 4;
+			blur.image_index = 3;
+			break;
+		case 15:
+			blur.image_index = 4;
+			break;
+		case 17:
+			blur.image_index = 5;
+			break;
+		case 20:
+			with(blur)instance_destroy();
+			break;
+    }
+	
+    if (timer = 3)
+        sound_play(tail_sound);
+    if (timer = 5) {
+        if random(10)>7
+			play_attack_voice()
+        create_hitbox2(7, 80 + facing * 20, 4.5, 5, 5, 2, slap_m, obj_spark_hit1, 0.5, 0.3, -8.80, 14.40, self.id, 10, 2);
+        hitbox2.hit_stun = 8
+        create_hitbox(6, 80 + facing * 20, 4.5, 4.75, 5, 2, slap_s, obj_spark_hit1, 0.6, 0.8, -20.80, 12, self.id, 10, 2);
+        hitbox.hit_stun = 8
+    }
+    if (timer = 7) {
+        hitbox.hitbox_x = size * (1 - (facing * 2)) * -11.20
+        hitbox.hitbox_y = size * 23.20
+        hitbox.image_xscale = size * 0.78
+        hitbox.image_yscale = size * 0.36
+        hitbox2.hitbox_x = size * (1 - (facing * 2)) * -1.60
+        hitbox2.hitbox_y = size * 16.80
+        hitbox2.image_xscale = size * 0.25
+        hitbox2.image_yscale = size * 0.34
+        hitbox2.damage = 6 * size;
+        hitbox2.bkb = 5.25 * size;
+        hitbox2.kbg = 5 * size;
+        hitbox2.sfx = slap_s;
+    }
+    if (timer = 9) {
+        hitbox.hitbox_x = size * (1 - (facing * 2)) * -0.80
+        hitbox.hitbox_y = size * 30.40
+        hitbox.image_xscale = size * 0.51
+        hitbox.image_yscale = size * 0.68
+        hitbox2.hitbox_x = size * (1 - (facing * 2)) * 0
+        hitbox2.hitbox_y = size * 13.60
+        hitbox2.image_xscale = size * 0.31
+        hitbox2.image_yscale = size * 0.39
+    }
+    if (timer = 11) {
+        hitbox.hitbox_x = size * (1 - (facing * 2)) * 18.40
+        hitbox.hitbox_y = size * 24.80
+        hitbox.image_xscale = size * 0.47
+        hitbox.image_yscale = size * 0.48
+        hitbox.dir = 100 - facing * 20
+        hitbox.kbg = 2 * size
+        hitbox2.hitbox_x = size * (1 - (facing * 2)) * 9.60
+        hitbox2.hitbox_y = size * 15.20
+        hitbox2.image_xscale = size * 0.37
+        hitbox2.image_yscale = size * 0.39
+        hitbox2.dir = 100 - facing * 20
+        hitbox2.kbg = 2 * size
+    }
+    if (timer = 13) {
+        hitbox.hitbox_x = size * (1 - (facing * 2)) * 19.20
+        hitbox.hitbox_y = size * 1.60
+        hitbox.image_xscale = size * 0.55
+        hitbox.image_yscale = size * 0.30
+        hitbox2.hitbox_x = size * (1 - (facing * 2)) * 12.80
+        hitbox2.hitbox_y = size * 8.80
+        hitbox2.image_xscale = size * 0.45
+        hitbox2.image_yscale = size * 0.21
+    }
+
+}
+
+
+if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+}

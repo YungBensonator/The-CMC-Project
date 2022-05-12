@@ -1,0 +1,86 @@
+if timer >= 15 {
+  priority = 3;
+  absorb = 1;
+}
+if hit > 0 && !temp = 3
+{
+visible = 1;
+}
+	pika.flare01.image_angle += 5
+	pika.flare02.image_angle += 5
+	pika.flare02.x = x
+	pika.flare02.y = y
+	pika.flare03.image_angle -= 5
+	if image_yscale < 0.45
+	image_yscale += 0.02
+if temp < 2 && (collision_line ( x , y , x , y + vspeed , obj_floor , 1 , 1 ) || collision_line ( x , y , x , y + vspeed , obj_platform , 1 , 1 ) || collision_point(x,y,pika,1,1)) {
+    vspeed = 0;
+    temp = 2;
+    visible = 0;
+    image_xscale = 1;
+    image_yscale = 1;
+    //hit = 0;
+    if collision_point(x,y,pika,1,1) && temp<3 && pika.temp=0 {
+		sound_play(pika.downb_hit_sound);
+        hit = 2;
+        temp = 3;
+		visible = 0;
+        with pika {
+            create_hitbox(12,362,7.3,7,22,13,shock3,obj_spark_shock,0.85,0.9,0,13,self.id,6,4);
+            hitbox.shield_stun = 1.75;
+            create_hitbox2(10,362,6.8,6.5,22,11,shock3,obj_spark_shock,1.2,1.25,0,18,self.id,7,4);
+            hitbox2.shield_stun = 1.8
+            spark = instance_create(x,y,obj_spark)
+            spark.sprite_index = downb_thunder_hit_sprite
+			spark.image_index = 0
+            spark.image_speed = 0.375
+            spark.image_xscale = 0.45*size
+            spark.image_yscale = 0.45*size
+            image_index = 11
+            timer = 50
+            time = 85
+            temp = 1
+            if air != 0
+                vspeed = -4.9 }
+    }
+    else {
+	sound_play(explode1);
+      instance_create(x,y,obj_spark_explode1);
+    }
+    timer = 17;
+    time = image_number/0.5+16;
+    y-=7;
+}
+
+if initialized = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = pika.downb_thunder_sprite
+    image_speed = 0.35;
+    image_index =0;
+    vspeed = 7
+    visible=1
+    temp = 0
+    bolt = self.id
+    initialized = 1
+   }
+if timer>time && hit > 0 && temp=0 {
+    vspeed = 5.5
+    visible=1
+    temp = 1
+    timer = 17
+    time = 140
+    }
+if timer = 20 && temp = 1 {
+    hit = 1
+    temp = 0 }
+if timer >= time - 1{
+  with(pika.flare01)
+    instance_destroy();
+  with(pika.flare02)
+    instance_destroy();
+  with(pika.flare03)
+    instance_destroy();
+}
+if timer < time-1 && ysize < 0.45
+ysize += 0.1
+//if distance_to_object(pika)<5
+//hit = 2

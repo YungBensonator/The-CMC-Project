@@ -1,0 +1,156 @@
+if state_type = "jump" {
+    state_type = "air_attack";
+    attack_type = "dair";
+    image_speed = 0;
+    sprite_index = dair_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 47;
+    timer_speed = 1;
+}
+if timer < time {
+    switch (timer) {
+        case 2:
+            image_index = 1;
+            break;
+        case 4:
+            image_index = 2;
+            break;
+        case 6:
+            image_index = 3;
+            break;
+        case 8:
+            image_index = 4;
+            break;
+        case 10:
+            image_index = 5;
+            break;
+        case 14:
+            image_index = 6;
+            break;
+        case 16:
+          
+			
+			
+            break;
+        case 18:
+            image_index = 8;
+			  image_index = 7;
+			
+			//spin VFX
+			head_spin = create_blur(place_x(23)+x,y+place_y(58),self.id);
+			head_spin.sprite_index = spr_spin_blur;
+			head_spin.image_xscale = 0.12 * size  * (1-facing*2);
+			head_spin.image_yscale = 0.12 * size ;
+			head_spin.snap = self.id;
+			head_spin.alarm[0] = 40;
+			head_spin.image_index = 0;
+			head_spin.anim_speed = 1;
+			head_spin.image_alpha = 0.75;
+			//head_spin.image_angle = angle_correct(90);
+			head_spin.loop = 1;
+            break;
+        case 20:
+            image_index = 9;
+            break;
+        case 22:
+            image_index = 10;
+            break;
+        case 24:
+            image_index = 11;
+            break;
+        case 27:
+            image_index = 12;
+            break;
+        case 30:
+            image_index = 13;
+            break;
+        case 33:
+            image_index = 14;
+            break;
+        case 35:
+            image_index = 15;
+            break;
+        case 37:
+            image_index = 16;
+            break;
+        case 38:
+            image_index = 17;
+            break;
+        case 40:
+            image_index = 18;
+            break;
+        case 41:
+            image_index = 19;
+            break;
+        case 42:
+            image_index = 20;
+            break;
+        case 43:
+            image_index = 21;
+            break;
+        case 44:
+            image_index = 22;
+            break;
+        case 45:
+            image_index = 23;
+            break;
+        case 46:
+            image_index = 24;
+            break;
+    }
+    if timer = 14 {
+        sound_play(electric_sound);
+        play_attack_voice();
+        spark = create_spark(-4 * (1 - facing * 2) * size, 4 * size, global.electricity_spark, 0.3, 0.2, 0.3)
+        spark.xscale = 1 * size;
+        spark.yscale = 1 * size;
+        spark.image_angle = -90;
+        spark.image_speed = 0.5;
+        spark.image_alpha = 0.8;
+        spark.snap = self.id;
+        create_hitbox(12, angle_correct(270), 4, 6.5, 20, 11, shock3, obj_spark_shock, 0.60, 0.75, -0.80, 0, self.id, 19, 4);
+    }
+    if timer = 18 {
+        hitbox.damage = round(9 * size)
+        hitbox.bkb *= 0.85
+        hitbox.kbg *= 0.75
+        hitbox.hitlag_frames = round(8 * size)
+        hitbox.shield_damage = round(12 * size)
+    }
+    if air = 0 {
+        state_type = "land";
+        if timer < 38 && timer <= 15 {
+            with hitbox instance_destroy();
+            create_hitbox(7, 362, 6, 2.5, 5, 7, shock2, obj_spark_hit1, 0.5, 0.5, 9, 8, self.id, 4, 1);
+            hitbox.remain = 1
+        }
+        duster = instance_create(x + 2 - facing * 4, y, obj_dust_effect);
+        duster.facing = 1 - facing;
+        duster.image_alpha = 0.75
+        duster = instance_create(x - 2 + facing * 4, y, obj_dust_effect);
+        duster.facing = facing;
+        duster.image_alpha = 0.75
+        instance_create(x, y, obj_down_impact);
+        hspeed = 0;
+        attack_type = "none";
+        sprite_index = land_sprite;
+        image_index = 0
+        image_speed = 0
+        temp_fall_speed = 0
+        timer = 0;
+        time = 13;
+    }
+}
+if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    sprite_index = jump_sprite;
+    image_index = 17;
+    image_speed = 0;
+    if air > 0
+    state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+}
