@@ -1,0 +1,74 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" && air < max_jumps {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb"
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0;
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing; }
+    else {
+        state_type = "air_attack";
+    }
+    image_speed = 0.3;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 42;
+    timer_speed=1;
+    if moveright = 1 facing = 0
+    if moveleft = 1 facing = 1
+}
+        if timer < time {
+	if timer > 25
+	    force_edge_grab = 1
+            if timer = 8 {
+                intangible = 1;
+                sound_play(upb_sound1);
+                sound_play(upb_sound2);
+                create_hitbox2(15,50+facing*50,7,5,17,9,fire3,obj_spark_fire1,0.88,0.88,4,19,self.id,15,4);
+                create_hitbox(15,50+facing*50,7,5,17,9,fire3,obj_spark_fire1,0.5,0.5,17,28,self.id,15,4);
+                
+                hspeed = 4.3 - facing*8.6;
+                vspeed = -9;
+                image_speed = 0.25
+                after_image(4,c_aqua,0.85)
+                instance_create(x+10*(1-facing*2)*size,y-18*size,obj_spark_effect)
+                flashing = true
+                alarm[7] = 3
+                air_move = 0
+            }
+            if timer = 12 || timer = 14 || timer = 16 || timer = 18 || timer = 20 {
+                hspeed = 3.8 - facing*7.6;
+                after_image(5,c_teal,0.8)
+                hitbox.damage = 11*size
+                hitbox2.damage = 11*size
+                hitbox.kbg = 5*size
+                hitbox2.kbg = 5*size
+                hitbox.bkb = 6.5*size
+                hitbox2.bkb = 6.5*size
+                set_hitlag(hitbox,8)
+                set_hitlag(hitbox2,8)
+            }
+            if timer = 17 {
+                intangible = 0
+            }
+            if timer >= 24 && timer <= 26
+                hspeed = 1-facing*2
+            if timer >= 24 && timer <= 33 {
+                vspeed -= size*0.13
+                air_move = 1
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }
+        

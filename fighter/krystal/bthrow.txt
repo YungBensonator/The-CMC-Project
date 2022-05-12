@@ -1,0 +1,52 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "bthrow";
+image_speed = 0.25;
+sprite_index = bthrow_sprite;
+image_index=0.25;
+timer = 0;
+time = 38;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+}
+if timer < time {
+	if ( timer <= 3 )
+	{
+	target.x = x + 15 * size * (1-facing*2);
+	target.y = y;
+	}
+    if ( timer >= 4 && timer <= 7 )
+		{
+        target.x = x +(8 - facing*16)*size;
+        target.y = y-3;
+        }
+    if ( timer >= 8 && timer <= 11 )
+		{
+        target.x = x -(10 - facing*20)*size;
+        target.y = y-3;
+        } 
+    if ( timer >= 12 && timer <= 23 )
+		{
+        target.x = x -(15 - facing*30)*size;
+        target.y = y-3*size;
+        }
+    if timer = 23 {
+        sound_play(swingsnd2);
+        sound_play(choose(attack_voice1,attack_voice2));
+        target.gethit = 0
+        create_throw_box(9,145-facing*110,6,6,1,11,magic3,obj_spark_shock,0.6,0.5,-15,16,self.id,3,5)
+        hitbox.shake_kb = 5
+        instance_create(x+20-facing*40,y-20,obj_spark_effect); }
+    //if timer = 27
+        //script_execute(create_throw_box,6,145-facing*110,6.85+kaioken,3.7+kaioken*1,1,1,-1,obj_spark_effect,0.6,0.5,14,16,self.id,1)
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    facing = 1-facing
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

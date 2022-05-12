@@ -1,0 +1,45 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" {
+    attacking = 0
+    attack_type = "downb"
+    image_index = 0
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0;
+        sprite_index = downb_sprite; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.5;
+        sprite_index = downb_sprite;
+    }
+        image_speed = 0.25;
+        timer = 0;
+        time = 56;
+        timer_speed=1;
+}
+        if timer = 10
+            sound_play(downb_start_sound)
+        if timer = 24 {
+            sound_play(downb_sound);
+            spark = instance_create(x+(17-facing*34)*size,y-13*size,obj_spark_shockwave)
+            spark.image_xscale *= 0.1*size
+            spark.image_yscale *= 0.4*size
+            spark.image_blend = c_aqua
+            create_projectile(9,50+facing*80,4,0.75,16,10,shock2,obj_spark_stun,0.7-facing*1.4,0.7,20,13,self.id,55,krystal_downb_laser);
+            vspeed *= 0.8;
+	    proj.stun_scalar = 2.5
+		proj.di = 0;
+		proj.sdi = 0;
+        }
+    if air = 0 {
+        hspeed=0 
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+}
+        

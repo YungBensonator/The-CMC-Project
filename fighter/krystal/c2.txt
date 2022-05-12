@@ -1,0 +1,73 @@
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+dir = 362
+moving_object=1;
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.staff_sprite
+    if speed == 0  
+        hspeed=4 - attacker.id.facing*8
+    image_speed = 0
+    visible =1
+    if kryst.moveup
+        vspeed = -2
+    else if kryst.movedown
+        vspeed = 2
+    if hspeed > 0
+        directio = 0
+    else
+        directio = 1
+}
+hspeed -= (0.075 - directio*0.15)
+if returning {
+    if kryst.y-10 < y + vspeed && vspeed > - 3
+        vspeed -= 0.25
+    if kryst.y-10 > y + vspeed && vspeed < 3
+        vspeed += 0.25
+    if collision_point(x,y,kryst,1,1) && attacker = kryst {
+        if kryst.timer_speed > 0 && kryst.air = 0 && (string(kryst.attack_type) = "sideb" || string(kryst.attack_type) = "none") && !kryst.intangible {
+            kryst.state_type = "land"
+            kryst.timer = 0
+            kryst.time = 10
+            kryst.sprite_index = kryst.stilt_sprite
+            kryst.image_index = 0
+            kryst.image_speed = 0
+        }
+        kryst.staff = 0
+        sound_play(catchsnd)
+        instance_destroy()
+    }
+}
+
+image_angle += 30
+if image_angle = 360
+image_angle = 0
+
+if image_angle = 300 && instance_exists(kryst) && timer < 200
+    sound_play(kryst.sideb_sound)
+
+if returning = 0 && (abs(hspeed) < 0.5 || ((collision_point(x+sign(hspeed),y,obj_wall,1,1)) && hit = 0)) {
+    hspeed = 0
+    returning = 1
+    timer = 2
+}
+if is_on_floor(self) && vspeed > 0
+    vspeed *= -0.85
+if hit > 0 && returning = 0 {
+    returning = 1
+    timer = 2
+    time = 233
+    hspeed = 0 
+}
+if (x < obj_game_control.death_l || x > obj_game_control.death_r || y < obj_game_control.death_u || y > obj_game_control.death_d) || timer>225 {
+    kryst.staff = 0
+    instance_destroy()
+}
+if place_meeting(x,y,attack_box) && returning < 2 {
+        sound_play(clash1)
+        instance_create(x,y,obj_shield_spark)
+        part_particles_create(psys_front,x,y,ptype_clash,11 );
+    hspeed = 0;
+    returning = 2;
+    timer = 2;
+    time = 233;
+}

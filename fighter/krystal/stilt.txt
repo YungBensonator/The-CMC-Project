@@ -1,0 +1,61 @@
+if state_type = "run" || state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0.3;
+        sprite_index = stilt_sprite;
+        image_index=0.6;
+        timer = 0;
+        time =33;
+        timer_speed=1;
+}
+
+        if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+            /*if timer = 7 {
+                duster = instance_create(x+(6-facing*12)*size,y,obj_dust_effect)
+                duster.facing = 1-facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.6*size
+                duster.image_yscale *= 0.4*size
+                duster = instance_create(x-(6+facing*12)*size,y,obj_dust_effect)
+                duster.facing = facing
+                sound_play(sideb_sound);
+                if random(10)>1
+                    sound_play(choose(attack_voice1,attack_voice2,attack_voice3))
+                create_hitbox(1.5,30+facing*120,2.5,0,4,2,punch2,obj_spark_hit1,0.9,0.9,11,16,self.id,3,2);
+                hspeed = size*(1.5 - facing*3)
+            }
+            if timer = 10 || timer = 13 || timer = 16 || timer = 19 || timer = 22 {
+                create_hitbox(1.5,40+facing*100,1.6,0,3,2,punch2,obj_spark_hit1,0.9,0.9,12,16,self.id,3,2);
+                hitbox.hit_stun = -1
+            }
+            if timer = 25 {
+                create_hitbox(2,30+facing*120,5.7,5.8,4,2,punch3,obj_spark_hit1,0.9,0.9,13,16,self.id,4,2);
+                hitbox.hit_stun = 7;
+            }
+            if timer >= 8 && timer <= 13
+                hspeed = size*(1-facing*2)*(1 - (timer-13)*0.15)
+            if timer = 14
+                hspeed = 0*/
+            if timer < 13
+                hspeed = size*(1-facing*2)
+            else
+                hspeed = 0
+            if timer = 15 {
+                sound_play(staff_sound3);
+                if random(10)>1
+                    sound_play(choose(attack_voice1,attack_voice2,attack_voice3))
+                create_hitbox(12,25+facing*130,5.8,6.2,17,7,kick2,obj_spark_hit3,1.2,0.6,25,16,self.id,3,3);
+                hspeed = size*(1.5 - facing*3)
+            }
+            if image_index >= image_number - image_speed
+                image_speed = 0
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

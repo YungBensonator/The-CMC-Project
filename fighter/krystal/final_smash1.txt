@@ -1,0 +1,191 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        air_move=0
+        grab_edge = 0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.2
+        sprite_index = final_smash_sprite
+        image_index=0
+        timer = 0
+        time = 75
+        temp = 0
+        timer_speed=1
+        intangible = 1
+        final_smashes+=1
+        speed = 0
+        //sound_play(final_smash_voice1)
+        sound_play(final_smash_sound1)
+        background_blend=c_gray
+        smash_power = 0
+        effect_create_below(ef_ellipse,x,y,1,c_yellow)
+        image_blend = c_white
+        target1 = -99
+        //instance_create(0,0,obj_flashscreen)
+}
+if timer < time {
+    if timer = 4 {
+        create_hitbox(6,90,6.5,0,-1,7,kick3,obj_spark_stun,1.4,1.3,1,15,self.id,1,6)
+        hitbox.armor_break = 1
+    }
+    if timer >= 6 && timer <= 8 && attack_success && instance_exists(target) {
+        target.state_type = "air_flinch"
+        target.attack_type = "none"
+        target.timer = 0
+        target.time = 50
+        target.timer_speed = 0
+        target.alarm[0] = 280
+        time = 288
+        timer = 90
+        x = target.x
+        y = target.y
+        image_speed = 0.25
+        image_index = 0
+        sound_play(catchsnd)
+        instance_create(target.x,target.y-9,obj_grab_spark)
+        temp = 1
+        target1 = target
+        freezer = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 140
+        camera.following_state = number
+        target1.facing = 1-facing
+    }
+    if timer > 20
+    speed = 0
+    gravity = 0
+    if timer >= 2 && timer <= 20 {
+        vspeed = -5 + timer/5
+    }
+    if timer = 20 {
+        vspeed = 0
+        spark = instance_create(x,y-15,obj_spark)
+        spark.image_speed = 0.25
+        spark.sprite_index = final_smash_energy_sprite
+        spark.image_xscale = 0.8*size
+        spark.image_yscale = 0.8*size
+        spark.depth = depth+1
+    }
+    if timer = 28 {
+        create_projectile(15,80+facing*20,7,7,-1,9,slash3,obj_spark_slash3,0.8,0.8,0,13,self.id,200,krystal_sword);
+        proj.num = 0
+        create_projectile(15,100-facing*20,7,7,-1,9,slash3,obj_spark_slash3,0.8,0.8,0,13,self.id,200,krystal_sword);
+        proj.num = 1
+        create_projectile(15,80+facing*20,7,7,-1,9,slash3,obj_spark_slash3,0.8,0.8,0,13,self.id,200,krystal_sword);
+        proj.num = 2
+        create_projectile(15,100-facing*20,7,7,-1,9,slash3,obj_spark_slash3,0.8,0.8,0,13,self.id,200,krystal_sword);
+        proj.num = 3
+        sound_play(sideb_sound)
+        shaker= instance_create(x,y,obj_shakescreen3)
+        shaker.ampl = 3.5
+    }
+     if timer = 34 {
+         //room_speed =60*game_speed
+         temp=1
+         create_hitbox(15,362,8.5,6.5,-1,8,kick3,obj_spark_shock,1,1,0,15,self.id,1,6);
+         spark = instance_create(x,y-15*size,obj_spark_shockwave);
+         spark.image_xscale *= 1.3*size
+         spark.image_yscale *= 1.3*size
+         sound_play(final_smash_sound2)
+     }
+     if timer > 20 && timer < 40 && random(7) > 5
+        effect_create_above(ef_spark,x+random(30)-facing*25,y-30+random(35),0,c_white)
+     if timer >= 90 && timer <= 209 && instance_exists(target1) {
+        target1.x = x
+        target1.y = y+9*size
+        target1.alarm[0] = 200
+        target1.state_type = "air_flinch"
+        if timer < 190 || timer > 250
+            background_blend = c_dkgray
+        else
+            background_blend = c_black
+     }
+     if timer = 128 {
+        create_projectile(8,120,7/size,0,-1,round((9/size)/hitlag_constant),slash3,obj_spark_slash2,0.8*(1-facing*2),0.8,0,4,self.id,200,krystal_sword1);
+        proj.num = 0
+        proj.hit_stun = 10
+        sound_play(sideb_sound)
+        proj.only_hit = target1
+        target1.gethit = 0
+     }
+     if timer = 142 {
+        create_projectile(8,60,7/size,0,-1,round((9/size)/hitlag_constant),slash3,obj_spark_slash2,0.8*(1-facing*2),0.8,0,4,self.id,200,krystal_sword1);
+        proj.num = 2
+        proj.hit_stun = 10
+        sound_play(sideb_sound)
+        proj.only_hit = target1
+        target1.gethit = 0
+     }
+     if timer = 156 {
+        create_projectile(8,120,7/size,0,-1,round((9/size)/hitlag_constant),slash3,obj_spark_slash2,0.8*(1-facing*2),0.8,0,4,self.id,200,krystal_sword1);
+        proj.num = 1
+        proj.hit_stun = 10
+        sound_play(sideb_sound)
+        proj.only_hit = target1
+        target1.gethit = 0
+     }
+     if timer = 170 {
+        create_projectile(8,60,7/size,0,-1,round((9/size)/hitlag_constant),slash3,obj_spark_slash2,0.8*(1-facing*2),0.8,0,4,self.id,200,krystal_sword1);
+        proj.num = 3
+        proj.hit_stun = 10
+        sound_play(sideb_sound)
+        proj.only_hit = target1
+        image_index = 0 
+        image_speed = 0.2
+        target1.gethit = 0
+     }
+     
+     if timer = 209 {
+        sound_play(final_smash_sound2)
+        shaker= instance_create(x,y,obj_shakescreen3)
+        shaker.ampl = 4
+        shaker.time = 30
+        spark = instance_create(x,y-15*size,obj_spark_shockwave);
+        spark.image_xscale *= 1.2*size
+        spark.image_yscale *= 1.2*size
+        spark.image_alpha = 1
+        spark = instance_create(x,y-15*size,obj_spark_shockwave);
+        spark.image_xscale *= 1.4*size
+        spark.image_yscale *= 1.4*size
+        spark.image_blend = c_purple
+        spark.image_alpha = 1
+        target1.alarm[0] = -1
+        target1.timer_speed = 1
+        freezer.alarm[0] = 1
+        freezer.dontpause = target1
+        create_projectile(15,60+facing*60,7.85,8.8,-1,round((40/size)/hitlag_constant),specialhit,obj_spark_slash3,0.8,0.8,0,13,self.id,200,no_script);
+        proj.hitonce = 1
+        proj.shake_ampl = 0
+        proj.bloom = 5
+        if instance_exists(target1) {
+            proj.only_hit = target1
+            target1.gethit = 0
+        }
+    }
+    if timer = 215 || timer = 230 {
+        spark = instance_create(x,y-15*size,obj_spark_shockwave);
+         spark.image_xscale *= 1.5*size
+         spark.image_yscale *= 1.5*size
+    }
+     if image_index >= image_number - image_speed
+        image_speed = 0
+     if timer >= time - 20
+        camera.following_state = 0
+}
+intangible = 1
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    grab_edge=1
+    can_die=1
+    y-=2
+}
