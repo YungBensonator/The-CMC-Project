@@ -1,0 +1,18 @@
+if ( timer = 1 && hit = 0 )
+{
+  sprite_index = attacker.id.sideb_car_sprite;
+  if ( speed == 0 )
+    hspeed = ( 1 - attacker.facing * 2 ) * 3 * attacker.size;
+  image_speed = 0;
+  visible = 1;
+}
+moving_object = 1;
+absorb2 = 1;
+if ( hit = 0 )
+  image_angle -= 4 * ( 1 - facing * 2 );
+if ( hit > 0 || ( hit = 0 && is_on_floor ( self ) ) || ( collision_point ( x + sign ( hspeed ) , y , obj_wall , 1 , 1 ) && exploded = 0 ) )
+{
+  instance_create ( x , y , obj_spark_explode1 );
+  sound_play ( explode1 );
+  instance_destroy();
+}

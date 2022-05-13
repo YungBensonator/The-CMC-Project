@@ -1,0 +1,52 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "fthrow";
+  image_speed = 0.2;
+  sprite_index = fthrow_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 40;
+  timer_speed = 1;
+  target . timer_speed = 0;
+  target . alarm [ 0 ] = 50;
+  }
+if ( timer >= 0 && timer <= 4 )
+{
+target . x = x + 4 * ( 1 - facing * 2 ) * size;
+target . y = y - 2 * size;
+}
+if ( timer >= 5 && timer <= 9 )
+{
+target.x = x + 7 * ( 1 - facing * 2 ) * size;
+target.y = y - 3 * size;
+}
+if ( timer >= 10 && timer <= 14 )
+{
+target.x = x + 10 * ( 1 - facing * 2 ) * size;
+target.y = y - 4 * size;
+}
+if ( timer = 15 )
+{
+target.x = x + 7 * ( 1 - facing * 2 ) * size;
+target.y = y - 3 * size;
+}
+if ( timer == 16 )
+  {
+  sound_play(attack_sound2);
+  sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+  target.x = x + 7 * ( 1 - facing * 2 ) * size;
+  target.y = y - 3 * size;
+  create_throw_box ( 7 , 33 + facing * 114 , 6 , 4.5 , 1 , 4 , kick2 , obj_spark_hit4 , 
+    0.8 , 0.8 , 14 , 6 , self.id , 1 );
+  }
+if image_index >= image_number - image_speed
+image_speed = 0
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

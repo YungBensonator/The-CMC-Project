@@ -1,0 +1,51 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0.3;
+        sprite_index = utilt_sprite;
+        image_index=0.3;
+        timer = 0;
+        time = 33;
+        timer_speed=1;
+		create_hurtbox_precise(self.id,33,utilt_mask)
+}
+        if timer < time {
+             state_type = "attack";
+            if timer = 5 {
+                create_hitbox2(1.5,80+facing*20,4.9,0,7,4,magic2,obj_spark_shock,0.5,0.65,-4,16,self.id,3,2);
+                create_hitbox(1.5,110-facing*40,4.8,0,7,4,magic2,obj_spark_shock,0.5,0.65,4,20,self.id,3,2); 
+                spark = create_spark(0,27,pk_sprite,0.3,0.75,0.75)
+                spark.vspeed = -0.5*size
+                play_attack_voice();
+                sound_play(utilt_sound);
+                duster = instance_create(x+(-6+facing*12)*size,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_yscale *= 0.3*size
+                duster.image_xscale *= 0.3*size
+                duster = instance_create(x+(6-facing*12)*size,y,obj_dust_effect)
+                duster.facing = 1-facing
+                duster.image_alpha = 0.75
+                duster.image_yscale *= 0.3*size
+                duster.image_xscale *= 0.3*size
+            }
+            if timer = 7 {
+		sound_play(psi_sound1);
+                create_hitbox(8,105-facing*30,5.65,2.75,12,7,magic2,obj_spark_shock,0.75,0.85,0,33,self.id,8,2); 
+                hitbox.hit_stun = 12;
+            }
+            if timer = 16 {
+                hitbox.damage = size*6
+                hitbox.kbg = 4*size
+            }
+            if timer = 26
+                interrupt = 1
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

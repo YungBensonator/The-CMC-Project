@@ -1,0 +1,107 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+xdir += xsp;
+ydir += ysp;
+if ( ydir < 0 ) ydir += 360;
+if ( ydir > 360 ) ydir -= 360;
+if ( xdir < 0 ) xdir += 360;
+if ( xdir > 360 ) xdir -= 360;
+
+if ( timer == 4 )
+  {
+  instance_create ( x , y - 12 , obj_spark_effect );
+  repeat ( 3 )
+    gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+  }
+
+if ( timer == 4 || timer == 732 )
+  {
+  sound_play2 ( sfx[0] );
+  }
+if ( timer == 14 || timer == 742 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+  }
+if ( timer == 24 || timer == 752 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+  }
+
+if ( timer < 50 )
+  {
+  if ( xsize < 1 ) xsize += 0.05;
+  if ( ysize < 1 ) ysize += 0.05;
+  repeat ( 1 + ( yoff > -4 ) + ( yoff > -8 ) + ( yoff > -12 ) + ( yoff > -20 ) )
+  if ( yoff > -24 ) yoff -= 0.5;
+  }
+  else
+  {
+  xsize = 1;
+  ysize = 1;
+  yoff = -24;
+  }
+  
+if ( timer >= 120 && timer <= 720 )
+  {
+  if ( collision_circle ( x , y - 48 , 50 , attack_box , 1 , 1 ) )
+    {
+    with ( attack_box )
+      {
+      if ( attacker.team == other.attacker.team ) continue;
+      if ( collision_circle ( other.x , other.y - 48 , 50 , self.id , 1 , 0 ) )
+        {
+        if ( priority < 5 )
+        if ( hit < 2 )
+          hit = 2;
+        }
+      }
+    }
+  if ( collision_circle ( x , y - 48 , 50 , projectile_box , 1 , 1 ) )
+    {
+    with ( projectile_box )
+      {
+      if ( attacker.team == other.attacker.team ) continue;
+      if ( collision_circle ( other.x , other.y - 48 , 50 , self.id , 1 , 0 ) )
+        {
+        if ( priority < 5 )
+        if ( hit < 2 )
+          hit = 2;
+        }
+      }
+    }
+  }
+  
+if ( timer == 120 )
+  {
+  sprite_index = spr[1];
+  image_index = 0;
+  image_speed = 0;
+  }
+if ( timer == 122 )
+  {
+  image_index = 1;
+  }
+if ( timer == 124 )
+  {
+  screen_shake ( 3 , 7 );
+  image_index = 2;
+  }
+  
+if ( timer == 724 )
+  {
+  image_speed = 0.5;
+  }
+if ( timer == 734 )
+  {
+  image_speed = 0;
+  image_index = 7;
+  }
+if ( timer >= 860 )
+  {
+  instance_destroy();
+  }

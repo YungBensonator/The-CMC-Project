@@ -1,0 +1,153 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" && air < max_jumps {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb"
+    hspeed = 0
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0;
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing; }
+    else {
+        state_type = "air_attack";
+        }
+        image_speed = 0;
+        sprite_index = upb_sprite;
+        image_index= 0;
+        time = 33;
+        timer_speed=1;
+        intangible = 1
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+	temp = 0
+}
+        if timer < time {
+		switch (timer) {
+		case 2: image_index = 1; break;
+		case 3: image_index = 2; break;
+		case 4: image_index = 3; break;
+		case 5: image_index = 4; break;
+		case 6: image_index = 5; break;
+		case 9: image_index = 6; break;
+		case 12: image_index = 7; break;
+		case 15: image_index = 8; break;
+		case 18: image_index = 9; break;
+		case 20: image_index = 10; break;
+		case 22: image_index = 11; break;
+		case 24: image_index = 12; break;
+		case 26: image_index = 13; break;
+		case 28: image_index = 14; break;
+		case 30: image_index = 15; break;
+		case 32: image_index = 16; break;
+		}
+	if timer > 25
+		force_edge_grab = 1
+	    if timer = 3 {
+	    image_blend = c_red
+	    alarm[7] = 10
+	    }
+	    if timer = 4 {
+		if facing = 0 && moveleft {
+		temp = 1
+		facing = 1
+		}
+		if facing = 1 && moveright {
+		temp = 1
+		facing = 0
+		}
+	    }
+            if timer = 5 {
+                sound_play(up_b_sound);
+		if temp = 0
+                create_hitbox(9,75+facing*30,8,0+(temp*4.25),10,2,fire2,obj_spark_fire1,0.8,0.8,10,17,self.id,5,4);
+		if temp = 1
+                create_hitbox(9,110-facing*40,8,0+(temp*4.25),10,2,fire2,obj_spark_fire1,0.8,0.8,10,17,self.id,5,4);
+                hitbox.shake_ampl = 0
+                hitbox.weight_kb = 1
+                instance_create(x + (1-facing*2)*size*(7),y-size*11,obj_spark_effect)
+                //hspeed = 4 - facing*8;
+                //vspeed = -6;
+            }
+            if timer = 6
+                intangible = 0
+	    if timer = 9
+		image_blend = c_white
+            if timer = 8 
+		{
+                vspeed = -5.25*size
+		}
+            if timer = 8 || timer = 10 || timer = 12 || timer = 14 || timer = 16 {
+                hspeed = (3 - facing*6)*size;
+                vspeed -= 0.15*size*grav/0.3;
+            }
+            if timer = 6 || timer = 7 {
+                vspeed = size*(-10.5);
+                hspeed = (4 - facing*8)*size
+            }
+            if timer = 17 {
+                 create_hitbox(6,50+facing*80,6.4,4.85,5,16,explodehit2,obj_spark_fire1,0.8,0.8,13,27,self.id,6,3);
+                 explosion_spark = instance_create(x+(20-facing*40)*size,y-36,obj_spark_explode1);
+		 explosion_spark.image_xscale = 0.4;
+		 explosion_spark.image_yscale = 0.4;
+		 explosion_spark.image_speed *= 2;
+                 hitbox.shake_ampl = 0.6
+                 hitbox.hit_stun = 4
+                 hspeed *= 0.8
+                 }
+            if timer < 15 && frac(timer/2) = 0
+            after_image(4,c_white,0.5)
+	if timer = 20 
+	{	
+	moveleft = 0;
+	moveright = 0;
+	movejump = 0;
+	}
+	if timer >= 21 && timer <= 27 && superwalljump = 1 
+		{
+        if ( next_to_rwall && ( movejump || moveleft ) && walljump_lock != 0 )
+          {
+	  vspeed = -size * mid_jump_speed;
+          moveright = 0;
+          intangible = 0;
+          attack_type = "wall_jump";
+		sprite_index = wall_jump_sprite;
+        image_index= 0;
+          walljump_lock = 0;
+          facing = 1;
+	  superwalljump = 0;
+	  air = max_jumps-1;
+          exit;
+          }
+        if ( next_to_lwall && ( movejump || moveright ) && walljump_lock != 1 )
+          {
+	  vspeed = -size * mid_jump_speed;
+          moveleft = 0;
+          intangible = 0;
+          attack_type = "wall_jump";
+		  sprite_index = wall_jump_sprite;
+        image_index= 0;
+          walljump_lock = 1;
+          facing = 0;
+	  superwalljump = 0;
+	  air = max_jumps-1;
+          exit;
+          }
+        }
+    }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    hspeed = 1 - facing*2;
+	doublecheck = 1;
+	image_blend = c_white;
+        attack_type = "none";
+	air = max_jumps;
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }
+        

@@ -1,0 +1,168 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "dthrow";
+    timer = 0;
+    time = 51;
+    sprite_index = objection_sprite_old;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.timer_speed = 0;
+    target.alarm[0] = 100;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 8: image_index = 1; break;
+	case 16: image_index = 2; break;
+	case 24: image_index = 3; break;
+	case 32: image_index = 4; break;
+      }
+
+    if ( timer <= 24 )
+      {
+	target.x = x + 20 * size * (1-facing*2);
+	psychelock.x = x + 20 * size * (1-facing*2);
+      }
+	if ( timer <= 1 )
+	{
+	target.y = y;
+	psychelock.y = y - 15 * size;
+	}
+	if ( timer = 2 )
+	{
+	target.y = y - 2 * size;
+	psychelock.y = y - 18 * size;
+	}
+	if ( timer = 3 )
+	{
+	target.y = y - 4 * size;
+	psychelock.y = y - 20 * size;
+	}
+	if ( timer = 4 )
+	{
+	target.y = y - 6 * size;
+	psychelock.y = y - 22 * size;
+	}
+	if ( timer = 5 )
+	{
+	target.y = y - 8 * size;
+	psychelock.y = y - 24 * size;
+	}
+	if ( timer = 6 )
+	{
+	target.y = y - 10 * size;
+	psychelock.y = y - 26 * size;
+	}
+	if ( timer = 7 )
+	{
+	target.y = y - 12 * size;
+	psychelock.y = y - 28 * size;
+	}
+	if ( timer = 8 )
+	{
+	target.y = y - 14 * size;
+	psychelock.y = y - 30 * size;
+	}
+	if ( timer = 9 )
+	{
+	target.y = y - 16 * size;
+	psychelock.y = y - 32 * size;
+	}
+	if ( timer = 10 )
+	{
+	target.y = y - 18 * size;
+	psychelock.y = y - 34 * size;
+	}
+	if ( timer = 11 )
+	{
+	target.y = y - 20 * size;
+	psychelock.y = y - 36 * size;
+	}
+	if ( timer = 12 )
+	{
+	target.y = y - 22 * size;
+	psychelock.y = y - 38 * size;
+	}
+	if ( timer = 13 )
+	{
+	target.y = y - 24 * size;
+	psychelock.y = y - 40 * size;
+	}
+	if ( timer = 14 )
+	{
+	target.y = y - 26 * size;
+	psychelock.y = y - 42 * size;
+	}
+	if ( timer = 15 )
+	{
+	target.y = y - 28 * size;
+	psychelock.y = y - 44 * size;
+	}
+	if ( timer = 16 )
+	{
+	target.y = y - 30 * size;
+	psychelock.y = y - 46 * size;
+	}
+	if ( timer = 17 )
+	{
+	target.y = y - 32 * size;
+	psychelock.y = y - 48 * size;
+	}
+	if ( timer = 18 )
+	{
+	target.y = y - 34 * size;
+	psychelock.y = y - 50 * size;
+	}
+	if ( timer = 19 )
+	{
+	target.y = y - 36 * size;
+	psychelock.y = y - 52 * size;
+	}
+	if ( timer = 20 )
+	{
+	target.y = y - 38 * size;
+	psychelock.y = y - 54 * size;
+	}
+	if ( timer = 21 )
+	{
+	target.y = y - 40 * size;
+	psychelock.y = y - 56 * size;
+	}
+	if ( timer >= 22 && timer <= 24 )
+	{
+	target.y = y - 42 * size;
+	psychelock.y = y - 58 * size;
+	}
+    if ( timer = 24 )
+      {
+	sound_stop(holdit_voice);
+	sound_play(takethat_voice);
+	sound_play(shatter_sound);
+	create_throw_box(8,325-facing*110,4.5+(pummelcharge*0.2),2.5+(pummelcharge*0.2),1,1,-1,obj_spark_effect2,0.9,1,20,50,self.id,1);
+	if charge = 0
+	sound_play(taunt5_voice)
+	else if charge = 1
+	sound_play(taunt6_voice)
+	else if charge = 3
+	sound_play(aha_voice)
+	else if charge = 5
+	sound_play(taunt9_voice)
+	else if charge = 9
+	sound_play(utilt_voice)
+	charge += 1;
+        flashing = 1;
+        alarm[7] = 12;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

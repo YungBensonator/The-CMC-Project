@@ -1,0 +1,60 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "bthrow";
+    timer = 0;
+    time = 51;
+    sprite_index = objection_sprite_old;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.timer_speed = 0;
+    target.alarm[0] = 100;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 8: image_index = 1; break;
+	case 16: image_index = 2; break;
+	case 24: image_index = 3; break;
+	case 32: image_index = 4; break;
+      }
+	if ( timer <= 24 )
+	{
+	target.x = x + 20 * size * (1-facing*2);
+	target.y = y;
+	psychelock.x = x + 20 * size * (1-facing*2);
+	psychelock.y = y - 15 * size;
+	}
+    if ( timer = 24 )
+      {
+	sound_stop(holdit_voice);
+	sound_play(shatter_sound);
+	create_throw_box(8,160-facing*140,5.8+(pummelcharge*0.3),5.65+(pummelcharge*0.3),1,1,-1,obj_spark_effect2,0.9,0.9,10,10,self.id,1);
+	if charge = 0
+	sound_play(taunt5_voice)
+	else if charge = 1
+	sound_play(taunt6_voice)
+	else if charge = 3
+	sound_play(aha_voice)
+	else if charge = 5
+	sound_play(taunt9_voice)
+	else if charge = 9
+	sound_play(utilt_voice)
+	else
+	sound_play(takethat_voice);
+	charge += 1;
+        flashing = 1;
+        alarm[7] = 12;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

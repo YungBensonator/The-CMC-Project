@@ -1,0 +1,112 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" )
+  {
+  if ( air >= max_jumps )
+    exit;
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 80;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite1;
+  image_index = 0;
+  image_speed = 0.5;
+  timer_speed = 1;
+  air_move = 0;
+  sound_play ( upb_sound );
+  if ( air == 0 )
+    vspeed = -1;
+  }
+if timer > 25
+force_edge_grab = 1
+if ( timer == 2 )
+  {
+  create_projectile ( 0 , 0 , 0 , 0 , 1 , 1 , -1 , -1 , 1 , 1 , 0 , 0 , self.id , 88 , char_custom1 );
+  proj.tingle = self.id;
+  proj.depth = depth - 1;
+  proj.hit = 2;
+  proj.sprite_index = balloon_sprite1;
+  proj.tx = 0;
+  proj.ty = 0;
+  }
+
+if ( timer >= 2 && timer < 16 )
+  {
+  speed = 0;
+  gravity_lock = 1;
+  }
+
+if ( timer == 16 )
+  {
+  if ( random ( 10 ) < 3 )
+    sound_play ( upb_voice );
+  sprite_index = upb_sprite2;
+  temp = percent;
+  proj.depth = depth + 1;
+  proj.ty = -8;
+  }
+if ( timer >= 16 )
+  {
+  super_armor = 1;
+  armor_frames = 2;
+  gravity_lock = 1;
+  if ( vspeed > -2.5 * size )
+    vspeed -= 0.25 * size;
+  if ( vspeed < -2.5 * size )
+    vspeed = -3.5 * size;
+  if ( moveleft )
+    {
+    facing = 1;
+    hspeed = -2.5 * size;
+    }
+  if ( moveright )
+    {
+    facing = 0;
+    hspeed = 2.5 * size;
+    }
+  if ( (attacking || special || movedown) && timer > 30 )
+    timer = time;
+  if ( percent > temp )
+    {
+    //sound_play ( upbpop_sound );
+    vspeed = -4 * size;
+    state_type = "fall";
+    attack_type = "none";
+    gravity_lock = 0;
+    super_armor = 0;
+    armor_frames = 0;
+    timer = 0;
+    time = -1;
+    exit;
+    }
+    else
+    temp = percent;
+  }
+
+if ( timer = 20 || timer = 40 || timer = 60 )
+  {
+  create_projectile ( 7 , 60 + facing * 60 , 5.5 , 3.1 , 9 , 5 , explodehit1 , obj_spark_fire1 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom3 );
+      proj.sprite_index = bomb_sprite;
+      proj.direction = 65+random(25) + facing*25;
+      proj.speed = (6.5+random(4.1))*size;
+      proj.image_speed = 0.1;
+  }
+
+if ( timer >= time - 1 )
+  {
+  gravity_lock = 0;
+  attack_type = "none";
+  if ( air > 0 )
+    {
+    air = max_jumps;
+    state_type = "jump";
+    }
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

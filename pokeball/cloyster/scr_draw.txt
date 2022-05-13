@@ -1,0 +1,22 @@
+draw_sprite_ext ( sprite_index , -1 , x + lengthdir_x ( 6 , xdir ) , y + yoff + lengthdir_y ( 6 , ydir ) , xsize * 0.65 , ysize * 0.65 , 0 , image_blend , 1 );
+var s, a;
+if ( timer > 120 )
+  {
+  s = min ( 1 , ( timer - 120 ) * 0.05 ) * 0.9;
+  if ( timer > 700 )
+    a = max ( 0 , 1 - ( timer - 700 ) * 0.025 );
+    else
+    a = 1;
+  
+  texture_set_interpolation ( 1 );
+  draw_sprite_ext ( spr[2] , 1 , x , y - 48 , s , s , xdir , c_white , a * 0.75 );
+  draw_sprite_ext ( spr[2] , 1 , x , y - 48 , s , s , ydir , c_white , a * 0.75 );
+  draw_set_blend_mode ( bm_add );
+  draw_sprite_ext ( spr[2] , 0 , x , y - 48 , s + 0.015 + lengthdir_y ( 0.015 , xdir ) ,
+  s + 0.015 - lengthdir_y ( 0.015 , xdir ) , ydir + xdir , c_white , a * 0.8 );
+  draw_sprite_ext ( spr[2] , 0 , x , y - 48 , s + 0.015 - lengthdir_x ( 0.015 , ydir ) ,
+  s + 0.015 + lengthdir_x ( 0.015 , ydir ) , -ydir + xdir , c_white , a * 0.8 );
+  draw_sprite_ext ( spr[2] , 2 , x , y - 48 , s , s , ydir - xdir , c_white , a );
+  draw_set_blend_mode ( bm_normal );
+  texture_set_interpolation ( global.dinterpolation );
+  }

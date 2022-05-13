@@ -1,0 +1,60 @@
+moving_object = 1;
+absorb = 1;
+absorb2 = 1;
+if ( timer <= 1 && hit = 0 )
+  {
+    shadow = attacker
+    temp = 0
+    if shadow.chaosboost > 0
+    temp2 = 1
+    sprite_index = keepmain.chaosburst_sprite;
+    image_speed = 0.35;
+    visible = 1;
+    hspeed = attacker.size * (2 + (temp2*2)) * (1-facing*2);
+  }
+if temp2 {
+hit = 2
+image_alpha = 0.6
+}
+
+
+if timer = 65 && temp = 0 {
+temp = 1
+sprite_index = keepmain.roaming_sprite;
+image_xscale = 0.8
+image_yscale = 0.8
+image_speed = 0.25
+hit = 0
+}
+
+if shadow.chaosboost = 0 && temp = 1 {
+    temp2 = 0
+    instance_destroy() }
+
+if temp = 0 && timer > 30 {
+hspeed *=0.98
+}
+
+if temp = 1 {
+image_alpha = 1
+
+hspeed = 0
+vspeed = 0
+
+if shadow.x < x
+x -= 1.2
+if shadow.x > x
+x += 1.2
+
+if (shadow.y-15) < y
+y -= 0.6
+if (shadow.y-15) > y
+y += 0.6
+
+if ((x > (shadow.x - 5))&& (x < (shadow.x + 5))) && ((y > (shadow.y - 20))&& (y < (shadow.y - 10))) {
+temp2 = 0
+instance_destroy()
+}
+}
+if (hit = 0 && (timer = time-2)) || (hit > 0 && (timer < time-1))
+temp2 = 0

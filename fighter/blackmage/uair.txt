@@ -1,0 +1,67 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 32;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+    {
+	case 6: image_index = 1; break;
+	
+	case 8: image_index = 1; break;
+	
+	case 12: image_index = 2; break;
+	case 16: image_index = 2; break;
+	
+	case 27: image_index = 1; break;
+	case 29: image_index = 0; break;
+	
+    }
+	  
+	
+	if timer = 12{
+		sound_play(shocker_sound2);
+		create_hitbox(10,angle_correct(90),7.5,2.5,13,8,shock1,obj_spark_shock,0.9,1.6,abs(place_x(21)),-place_y(-8),self.id,6,3);
+	}
+	
+	
+	
+	
+	if timer = 12{
+		vfxthing = create_spark ( -abs(place_x(19)),-place_y(7) , uair_sprite_eff , 0.75 , image_xscale*0.3 , image_yscale*0.3 );
+		vfxthing.alarm[0] = 15
+		vfxthing.depth = depth + 1
+		vfxthing.image_angle = 90-facing*180
+		vfxthing.snap = self.id
+		vfxthing.script = char_custom7;
+		vfxthing.owner = self.id;
+		vfxthing.keepmain = self.keepmain;
+	}
+	
+	
+	if air = 0 {
+		vfxthing.alpha_add = -0.2
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=12; }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+  timer = 20
+  image_index = 6
+  time = -1;
+  }		

@@ -1,0 +1,45 @@
+if state_type = "stand" || state_type = "run" {
+hspeed = 0;
+state_type = "attack";
+attack_type = "utilt";
+timer = 0;
+time = 27;
+sprite_index = utilt_sprite;
+image_speed = 0.25;
+image_index = 0;
+}
+
+if timer = 8 {
+sound_play(swing_sound2);
+create_hitbox(10,70+facing*40,6,5,10,7,punch2,obj_spark_hit2,0.6,0.7,-5,24,self.id,4,4);
+hitbox.hit_stun = 7
+}
+if timer = 9 {
+hitbox.hitbox_x = -2+facing*4;
+hitbox.hitbox_y = 25;
+}
+if timer = 10 {
+hitbox.hitbox_x = 1-facing*2;
+hitbox.hitbox_y = 26;
+}
+if timer = 11 {
+hitbox.hitbox_x = 6-facing*12;
+hitbox.hitbox_y = 18;
+}
+
+if timer = 16 {
+image_speed = 0.2;
+}
+
+if timer = 20 {
+image_speed = 0;
+}
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  interrupt = 0;
+  }

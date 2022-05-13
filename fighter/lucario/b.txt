@@ -1,0 +1,488 @@
+if global.gs_form[number-1] = 0
+{
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" {
+    attacking = 0
+    special = 0
+    attack_type = "b"
+    if charge < 140 {
+        state_type = "air_attack";
+        hspeed = 0;
+        sprite_index = b_sprite;
+        temp = 0
+        image_speed = 0
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+        sound_play(b_sound2)
+        time = 145; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.4;
+        sprite_index = b_shoot_sprite;
+        image_index = 0
+        image_speed = 0.25
+        temp = 1
+        time = 25
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+        sound_play(b_sound2)
+        }
+        image_index=0;
+        timer = 0;
+        timer_speed=1;
+        attack_success = 0
+        spark2 = -99
+        spark = -98
+}
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	      shieldup = 0
+        if instance_exists(spark2)
+        with spark2 instance_destroy()
+         sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+        sound_play(b_sound2)
+        attack_type = "none"
+	    timer = 145;
+	    char_sideb();
+	  }
+
+if shieldup = 1 && air = 0 {
+        flashing = true
+        alarm[7] = 3
+        state_type = "shielding"
+        timer = 0
+        time = -1
+        attack_type = "none"
+        shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+        }
+if ( movejump == 1 && timer > 10  )
+  {
+  timer = 144;
+ with spark2 instance_destroy()
+ sound_stop(b_sound1)
+ sound_stop(b_sound2)
+ sound_stop(b_sound3)
+ sound_play(b_sound2)
+   if (air == 0){
+    state_type = "stand";
+    vspeed = -mid_jump_speed + 2.5;
+    }
+    else if (movejump == 1 && timer > 10 && special == 0){
+        vspeed = -mid_jump_speed + 2.5;
+    }
+
+    else{
+    state_type = "air";
+ }
+ }
+
+if temp=1 { 
+    if timer = 6 {
+        spark = instance_create(x-6+facing*12,y,obj_spark)
+        spark.snap = self.id
+        spark.sprite_index = spr_dust2
+        spark.image_xscale = 0.6-facing*1.2
+        spark.image_yscale = 0.45
+        spark.image_speed = 0.5
+        spark.image_alpha = 0.75
+        spark.depth = 0
+        if instance_exists(spark2)
+            with spark2 instance_destroy();
+        spark2 = instance_create(x-11+facing*22,y-16,obj_spark)
+        spark2.snap = self.id
+        spark2.sprite_index = sphere_sprite
+        spark2.image_xscale = size*(1-facing*2)*(charge+20)/200*(0.7+aura/20)
+        spark2.image_yscale = size*(charge+20)/200*(0.7+aura/20)
+        spark2.image_speed = 0.2
+        spark2.image_alpha = 0.9
+        spark2.depth = 1
+    }
+    if timer = 12 {
+        time = 32
+        if instance_exists(spark2)
+        with spark2 instance_destroy()
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+        if charge > 139 {
+        spark = instance_create(x,y,obj_down_impact)
+        spark.image_xscale = 0.8 }
+        hspeed = (-1+facing*2)*charge/28
+        sound_play(b_throw_sound)
+        if charge <= 50 {
+            sound_play(b_voice1)
+            sound_play(b_shoot_sound2)
+        }
+        else if charge <= 139 {
+            sound_play(b_voice2)
+            sound_play(b_shoot_sound3)
+        }
+        else {
+            sound_play(b_voice3)
+            sound_play(b_shoot_sound1)
+        }
+        spark = instance_create(x+(18-facing*36)*size,y-20*size,obj_spark_shockwave)
+        spark.image_xscale *= (0.1+charge/640)*size
+        spark.image_yscale *= (0.1+charge/640)*size*4
+        spark.image_blend = c_purple
+        spark.image_alpha = 0.6
+        // fully charged, full aura: 35.674 damage, 8.7 base knockback, 8.56 knockback growth, 56 shield damage
+        aura_ball = create_projectile(3+round(charge/5)*(0.5+aura/15),22+facing*136,(2+charge/32)*(0.8+aura/20),(0.75+charge/18)*(0.6+aura/20),3+round((aura+5)*0.25*charge/10),round((2+(charge/9))*(0.75+aura/20)),aura1*(charge<35) + aura2*((charge>=35) && (charge<100)) + aura3*(charge>=100),obj_spark_aura,(charge+25)/200*(0.7+aura/20),(charge+25)/200*(0.7+aura/20),20,16,self.id,120+round(charge/2),aura_sphere_script);
+        charge  = 0
+        if fully_charged
+            proj.priority += 2
+        fully_charged = 0
+    } 
+    if timer = 22
+        hspeed = 0
+}
+else {
+    if timer = 1 || timer=20 || timer = 40 || timer = 60 || timer = 80 || timer = 100 || timer = 120 {
+        sprite_index = b_sprite;
+        image_speed = 0;
+        spark = instance_create(x-6+facing*12,y,obj_spark)
+        spark.snap = self.id
+        spark.sprite_index = spr_dust2
+        spark.image_xscale = 0.6-facing*1.2
+        spark.image_yscale = 0.45
+        spark.image_speed = 0.5
+        spark.image_alpha = 0.75
+        spark.depth = 0
+        spark2 = instance_create(x-11+facing*22,y-17*size,obj_spark)
+        spark2.snap = self.id
+        spark2.sprite_index = sphere_sprite
+        spark2.image_xscale = size*(1-facing*2)*(charge+25)/200*(0.7+aura/20)
+        spark2.image_yscale = size*(charge+25)/200*(0.7+aura/20)
+        spark2.image_speed = 0.35
+        spark2.image_alpha = 0.9
+        spark2.depth = 1
+        if timer = 20 {
+            sound_stop(b_sound1)
+            sound_stop(b_sound2)
+            sound_stop(b_sound3)
+            sound_loop(b_sound3)
+        }
+    }
+    if timer > 2 && timer < 130 && instance_exists(spark) {
+        spark.x = x 
+        spark.y = y 
+    }
+    if timer > 2 && timer < 139 && instance_exists(spark2) {
+        spark2.image_xscale = size*(1-facing*2)*(charge+25)/200*(0.7+aura/20)
+        spark2.image_yscale = size*(charge+25)/200*(0.7+aura/20)
+        if abs(sin(timer*pi/4)=1) {
+            aurab = create_projectile(1,angle_correct(90),2.5,1.8,3,3,aura1,obj_spark_aura,0.2+charge/150,0.2+charge/150,-10,18,self.id,4,no_script);
+            aurab.hit_stun = 17
+			aurab.di = -1
+        }
+    }
+    if ai && timer >= 30 && (distance_to_object(enemy) || collision_rectangle(x+4*(1-facing*2),y,x+30*(1-facing*2),y-33,projectile_box,1,1)) < 29 && random(20)>16.5 {
+            if random(10)>2.5 {
+			runtimer = 0
+            sound_stop(b_sound1)
+            sound_stop(b_sound2)
+            sound_stop(b_sound3)
+            sprite_index = roll_sprite
+			image_index = 0
+            attack_type = "none"
+            state_type = "dodge"
+            if instance_exists(spark2)
+                with spark2 instance_destroy()
+            timer = 0
+            time = 29 }
+            else { 
+                special = 1
+            }
+    }
+    if charge < 140
+            charge+=1
+    else
+        fully_charged = 1
+    if special = 1 {
+        temp = 1
+        timer = 1
+        time = 25
+        special = 0
+        sprite_index = b_shoot_sprite;
+        image_index = 0
+        image_speed = 0.3
+		sound_stop(b_voice4)   
+        }
+    if shieldup = 1 {
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+		sound_stop(b_voice4)
+        flashing = true
+        alarm[7] = 3
+        if air = 0
+		{
+		state_type = "stand"
+        if instance_exists(spark2)
+        with spark2 instance_destroy();
+		}
+        else
+		{
+		state_type="jump";
+		if instance_exists(spark2)
+		with spark2 instance_destroy();
+        }
+        }
+    if timer = 140 {
+        timer = 119
+        if time < 155 {
+            time = 155
+            sound_loop(b_sound1)
+        }
+    }
+    if charge = 25 {
+        sound_play(b_voice4)
+        }
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer = time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0;
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+}
+        
+}        
+if global.gs_form[number-1] = 1
+{
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" {
+    attacking = 0
+    special = 0
+    attack_type = "b"
+    if charge < 140 {
+        state_type = "air_attack";
+        hspeed = 0;
+        sprite_index = b_sprite;
+        temp = 0
+        image_speed = 0
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+        sound_play(b_sound2)
+        time = 145; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.4;
+        sprite_index = b_shoot_sprite;
+        image_index = 0
+        image_speed = 0.25
+        temp = 1
+        time = 25
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+        sound_play(b_sound2)
+        }
+        image_index=0;
+        timer = 0;
+        timer_speed=1;
+        attack_success = 0
+        spark2 = -99
+        spark = -98
+}
+if temp=1 { 
+    if timer = 6 {
+        spark = instance_create(x-6+facing*12,y,obj_spark)
+        spark.snap = self.id
+        spark.sprite_index = spr_dust2
+        spark.image_xscale = 0.6-facing*1.2
+        spark.image_yscale = 0.45
+        spark.image_speed = 0.5
+        spark.image_alpha = 0.75
+        spark.depth = 0
+        if instance_exists(spark2)
+            with spark2 instance_destroy();
+        spark2 = instance_create(x-11+facing*22,y-16,obj_spark)
+        spark2.snap = self.id
+        spark2.sprite_index = sphere_sprite
+        spark2.image_xscale = size*(1-facing*2)*(charge+20)/200*(0.7+aura/20)
+        spark2.image_yscale = size*(charge+20)/200*(0.7+aura/20)
+        spark2.image_speed = 0.2
+        spark2.image_alpha = 0.9
+        spark2.depth = 1
+    }
+    if timer = 12 {
+        time = 32
+        if instance_exists(spark2)
+        with spark2 instance_destroy()
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+        if charge > 139 {
+        spark = instance_create(x,y,obj_down_impact)
+        spark.image_xscale = 0.8 }
+        hspeed = (-1+facing*2)*charge/28
+        sound_play(b_throw_sound)
+        if charge <= 50 {
+            sound_play(b_voice1)
+            sound_play(b_shoot_sound2)
+        }
+        else if charge <= 139 {
+            sound_play(b_voice2)
+            sound_play(b_shoot_sound3)
+        }
+        else {
+            sound_play(b_voice3)
+            sound_play(b_shoot_sound1)
+        }
+        spark = instance_create(x+(18-facing*36)*size,y-20*size,obj_spark_shockwave)
+        spark.image_xscale *= (0.1+charge/640)*size
+        spark.image_yscale *= (0.1+charge/640)*size*4
+        spark.image_blend = c_purple
+        spark.image_alpha = 0.6
+        // fully charged, full aura: 35.674 damage, 8.7 base knockback, 8.56 knockback growth, 56 shield damage
+       create_projectile(2+round(charge/6),25+facing*130,1.5+charge/32,0.6+charge/20,1.5+round(charge/6),2+ceil(charge/6),aura1*(charge<35) + aura2*((charge>=35) && (charge<100)) + aura3*(charge>=100),obj_spark_aura,(charge+25)/200*(0.7+aura/20),(charge+25)/200*(0.7+aura/20),20,16,self.id,120+round(charge/2),aura_sphere_script);
+        charge  = 0
+        if fully_charged
+            proj.priority += 1
+        fully_charged = 0
+    } 
+    if timer = 22
+        hspeed = 0
+}
+else {
+    if timer = 1 || timer=20 || timer = 40 || timer = 60 || timer = 80 || timer = 100 || timer = 120 {
+        sprite_index = b_sprite;
+        image_speed = 0;
+        spark = instance_create(x-6+facing*12,y,obj_spark)
+        spark.snap = self.id
+        spark.sprite_index = spr_dust2
+        spark.image_xscale = 0.6-facing*1.2
+        spark.image_yscale = 0.45
+        spark.image_speed = 0.5
+        spark.image_alpha = 0.75
+        spark.depth = 0
+        spark2 = instance_create(x-11+facing*22,y-17*size,obj_spark)
+        spark2.snap = self.id
+        spark2.sprite_index = sphere_sprite
+        spark2.image_xscale = size*(1-facing*2)*(charge+25)/200*(0.7+aura/20)
+        spark2.image_yscale = size*(charge+25)/200*(0.7+aura/20)
+        spark2.image_speed = 0.35
+        spark2.image_alpha = 0.9
+        spark2.depth = 1
+        if timer = 20 {
+            sound_stop(b_sound1)
+            sound_stop(b_sound2)
+            sound_stop(b_sound3)
+            sound_loop(b_sound3)
+        }
+    }
+    if timer > 2 && timer < 130 && instance_exists(spark) {
+        spark.x = x 
+        spark.y = y 
+    }
+    if timer > 2 && timer < 139 && instance_exists(spark2) {
+        spark2.image_xscale = size*(1-facing*2)*(charge+25)/200*(0.7+aura/20)
+        spark2.image_yscale = size*(charge+25)/200*(0.7+aura/20)
+        if abs(sin(timer*pi/4)=1) {
+            create_projectile(1,150-facing*120,2.2,0,3,3,aura1,obj_spark_aura,0.2+charge/150,0.2+charge/150,-10,18,self.id,4,no_script);
+            proj.hit_stun = 15
+			proj.di = 0.5
+        }
+    }
+    if ai && timer >= 30 && (distance_to_object(enemy) || collision_rectangle(x+4*(1-facing*2),y,x+30*(1-facing*2),y-33,projectile_box,1,1)) < 29 && random(20)>16.5 {
+            if random(10)>2.5 {
+			runtimer = 0
+            sound_stop(b_sound1)
+            sound_stop(b_sound2)
+            sound_stop(b_sound3)
+            sprite_index = roll_sprite
+			image_index = 0
+            attack_type = "none"
+            state_type = "dodge"
+            if instance_exists(spark2)
+                with spark2 instance_destroy()
+            timer = 0
+            time = 29 }
+            else { 
+                special = 1
+            }
+    }
+    if (moveleft = 1 || moveright = 1) && air = 0 {
+			runtimer = 0
+            sound_stop(b_sound1)
+            sound_stop(b_sound2)
+            sound_stop(b_sound3)
+			sound_stop(b_voice4)
+			sprite_index = roll_sprite
+			image_index = 0
+            attack_type = "none"
+            state_type = "dodge"
+            sound_play(roll_dodge_snd)
+            shieldup = 0
+            if instance_exists(spark2)
+            with spark2 instance_destroy()
+            timer = 0
+            time = 29
+            facing = moveright
+			}
+    if charge < 140
+            charge+=1
+    else
+        fully_charged = 1
+    if special = 1 {
+        temp = 1
+        timer = 1
+        time = 25
+        special = 0
+        sprite_index = b_shoot_sprite;
+        image_index = 0
+        image_speed = 0.3
+		sound_stop(b_voice4)   
+        }
+    if shieldup = 1 {
+        sound_stop(b_sound1)
+        sound_stop(b_sound2)
+        sound_stop(b_sound3)
+		sound_stop(b_voice4)
+        flashing = true
+        alarm[7] = 3
+        if air = 0
+		{
+		state_type = "stand"
+        if instance_exists(spark2)
+        with spark2 instance_destroy();
+		}
+        else
+		{
+		state_type="jump";
+		if instance_exists(spark2)
+		with spark2 instance_destroy();
+        }
+        }
+    if timer = 140 {
+        timer = 119
+        if time < 155 {
+            time = 155
+            sound_loop(b_sound1)
+        }
+    }
+    if charge = 25 {
+        sound_play(b_voice4)
+        }
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer = time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+}
+}  

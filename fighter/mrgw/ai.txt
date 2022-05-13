@@ -1,0 +1,100 @@
+if ai_timer >= time-2
+ai_state="idle"
+if air = 0 {
+if collision_rectangle(x-13,y-13,x+10,y,item,0,0) && hold_item = 0 && instance_nearest(x,y-5,item).holder = 0 && instance_nearest(x,y-5,item).grab > 0 {
+        attack_type = "none";
+        state_type = "land";
+        sprite_index=land_sprite;
+        timer = 0;
+        time = 3;
+        hold_item = 1;
+        held_item = instance_nearest(x,y-5,item);
+        held_item.holder = id;
+        held_item.state_type = "held"
+        sound_play(itemgetsnd);
+        attacking = 0;
+        exit
+        }  
+else {
+if distance_to_object(enemy) < 18 {
+    //timer=0
+    if smash_power >= global.gs_fs_charge && enemy.air = 0 {
+    if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+        facing=1-facing;
+    attack_type = "final_smash" }
+    else {
+    if enemy.y>y-10*size {
+    if held_item = -1 {
+    if enemy.percent < 90 {
+        if temp3 >= 3
+            attack_type = choose("downb","jab","downb","downb","utilt","grab","grab","jab","downb","sideb","dtilt","downb","dtilt","downb","jab","downb")
+        else
+            attack_type = choose("jab","jab","dtilt","utilt","utilt","grab","grab","jab","dsmash","sideb","dtilt","utilt","dtilt","grab","jab","usmash")
+    }
+    else {
+        if temp3 >= 3
+            attack_type = choose("downb","jab","downb","downb","utilt","grab","grab","jab","downb","sideb","dtilt","downb","dtilt","downb","dsmash","downb")
+        else
+            attack_type = choose("jab","usmash","dtilt","dtilt","utilt","grab","utilt","dsmash","grab","usmash","dtilt","usmash","dtilt","ssmash","sideb")
+    }
+    }
+    else
+    attack_type = "itemfthrow"
+    }
+    else {
+    if held_item = -1
+    attack_type = choose("usmash","utilt","utilt","utilt","usmash","ssmash","usmash","utilt","utilt","utilt","utilt","usmash","b","utilt","upb")
+    else
+    attack_type = choose("itemfthrow","itemuthrow") }
+    exit
+    }
+    }
+else {
+    //timer=0
+    if held_item = -1 {
+    if smash_power >= global.gs_fs_charge && abs(enemy.y-self.y) < 55*size {
+    if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+        facing=1-facing;
+    attack_type = "final_smash" }
+    else {
+        if enemy.y >= y - size*12
+        attack_type = choose("ssmash","dsmash","dtilt","utilt","stilt","b","dsmash","stilt","dtilt","dtilt","jab","sideb")
+        else
+        attack_type = choose("b","utilt","stilt","ssmash","usmash","utilt","sideb","stilt","ssmash","utilt","usmash","ssmash","sideb","jab") 
+        }
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+    }
+}
+}
+else if offstage && enemy.y > y-5 {
+        attack_type = "fair"
+}
+else {
+    //timer=0
+    if held_item = -1 {
+    if smash_power >= global.gs_fs_charge && enemy.air = 0 {
+    if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+        facing=1-facing;
+    attack_type = "final_smash" }
+    else {
+    if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x){
+    if enemy.y > y + 6*size {
+        attack_type = choose("dair","dair","sideb","dair","nair","nair","fair","dair","nair","fair","dair","fair","nair")
+    }
+    else if enemy.y < y - 14*size
+        attack_type = choose("uair","uair","uair","uair","uair","nair","bair","nair","fair","b","uair","nair","uair")
+    else {
+        attack_type = choose("nair","fair","fair","uair","nair","fair","nair","sideb","fair","nair","dair","nair")
+    }
+    }
+    else
+    attack_type = choose("bair","bair","nair","bair","bair","bair","nair","bair","nair","bair","bair","bair","bair")
+    }
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+}

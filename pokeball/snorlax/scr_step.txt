@@ -1,0 +1,103 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+if ( state )
+  {
+  if ( !instance_exists ( proj1 ) )
+    proj1 = create_projectile ( 14 , 40 , 12 , 4 , 60 , 12 , kick3 , obj_spark_hit4 , 3.1 , 6 , 0 , 0 , attacker , 50 , no_script );
+  proj1.x = x + 50;
+  proj1.y = y - 72;
+  proj1.time = proj.timer + 3;
+  if ( !instance_exists ( proj2 ) )
+    proj2 = create_projectile ( 14 , 140 , 12 , 4 , 60 , 12 , kick3 , obj_spark_hit4 , 3.1 , 6 , 0 , 0 , attacker , 50 , no_script );
+  proj2.x = x - 50;
+  proj2.y = y - 72;
+  proj2.time = proj.timer + 3;
+  if ( timer == 4 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetFrequency ( i , FMODInstanceGetFrequency ( i ) * 0.4 );
+    }
+  if ( timer == 14 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetFrequency ( i , FMODInstanceGetFrequency ( i ) * 0.36 );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+    }
+  if ( timer == 24 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetFrequency ( i , FMODInstanceGetFrequency ( i ) * 0.32 );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+    }
+  if ( timer >= 360 )
+    {
+    instance_destroy();
+    }
+  if ( hitlag > 0 )
+    {
+    hitlag -= 1;
+    }
+  y += 7;
+  if ( y >= obj_game_control.death_d + 320 )
+    {
+    instance_destroy();
+    }
+  }
+  else
+  {
+  if ( timer == 4 )
+    {
+    sound_play2 ( sfx[0] );
+    instance_create ( x , y - 12 , obj_spark_effect );
+    repeat ( 3 )
+      gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+    }
+  if ( timer == 14 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+    }
+  if ( timer == 24 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+    }
+  if ( image_index < 12 )
+    image_index += 0.2;
+  if ( image_index >= 8 )
+    {
+    if ( !instance_exists ( proj1 ) )
+      proj1 = create_projectile ( 8 , 135 , 7 , 3 , 24 , 7 , kick2 , obj_spark_hit3 , 1.5 , 2.6 , 0 , 0 , attacker , 50 , no_script );
+    proj1.x = x - 20;
+    proj1.y = y - 32;
+    proj1.time = proj1.timer + 3;
+    if ( !instance_exists ( proj2 ) )
+      proj2 = create_projectile ( 8 , 45 , 7 , 3 , 24 , 7 , kick2 , obj_spark_hit3 , 1.5 , 2.6 , 0 , 0 , attacker , 50 , no_script );
+    proj2.x = x + 20;
+    proj2.y = y - 32;
+    proj2.time = proj2.timer + 3;
+    if ( image_index < 9 )
+      y -= 3;
+      else
+      y -= 7;
+    }
+  if ( timer >= 200 )
+    {
+    with ( proj1 ) instance_destroy();
+    proj1 = noone;
+    with ( proj2 ) instance_destroy();
+    proj2 = noone;
+    depth = -9;
+    xsize = 2.1;
+    ysize = 2.1;
+    timer = 0;
+    state = 1;
+    y = obj_game_control.death_u - 96;
+    sprite_index = spr[1];
+    image_index = 0;
+    image_speed = 0.25;
+    }
+  }

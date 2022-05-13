@@ -1,0 +1,55 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch" {
+        hspeed = 0
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0.1
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 60
+        timer_speed=1
+        temp = 0
+}
+if timer < time {
+    hspeed *= 0.8
+    if timer = 10
+        image_speed = 0.25
+    if timer = 26 {
+        target =-1
+        sound_play(b_sound);
+        create_homing_bubble(1.75,1.25,26,16,self.id,12); 
+        create_homing_bubble(1.75,1.25,-26,16,self.id,12);
+    }
+    if timer >= 27 && temp = 0 && target != -1 && target.intangible = 0 && string(target.attack_type) != "final_smash" && target.air = 0 {
+        temp = 1
+        if target.state_type != "broken" {
+            with target {
+                if air = 0 {
+                    shield_hp = 150;
+                    state_type = "broken";   
+                    timer = 0;               // Enter broken shield stunned state
+                    time = 75 + round(percent/15);
+                    attack_type = "none"
+                    sprite_index = broken_sprite;
+                    speed = 0 }
+                }
+            }
+        }
+    }
+    if air = 0 {
+        air_move = 0
+        state_type = "attack"
+        hspeed=0 
+    }
+    if image_index >= image_number - image_speed
+                image_speed=0;
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+}
+        

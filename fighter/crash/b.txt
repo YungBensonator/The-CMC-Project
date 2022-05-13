@@ -1,0 +1,94 @@
+if nblock = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+state_type = "air_attack";
+air_move = 1;
+attack_type = "b";
+sprite_index = b_sprite;
+image_index = 0;
+image_speed = 0.3;
+timer = 0;
+time = 17;
+special = 0;
+extended = 0;
+}
+if timer < time {
+if timer = 1 {
+	sound_play(spin_sound);
+        if ( random ( 4 ) < 1 )
+	sound_play(attack_voice7);
+	}
+if timer >= 1 && timer < 7 && air != 0 && extended = 0 {
+	vspeed = 0;
+	}
+if timer > 1 && air != 0 {
+	if vspeed < 0 {
+		vspeed = 0;
+		}
+	if vspeed > 1 && extended < 10 {
+		vspeed = 1;
+		}
+	}
+if moveleft = 1 && moveright = 0 {
+	hspeed -= 0.3;
+	}
+if moveleft = 0 && moveright = 1 {
+	hspeed += 0.3;
+	}
+if hspeed > 3 {
+	hspeed = 3;
+	}
+if hspeed < -3 {
+	hspeed = -3;
+	}
+if timer < 4
+intangible = 1
+if timer = 4 {
+	create_hitbox(8,362,9.4,0,20,8,kick3,obj_spark_hit4,1.2,1.05,0,12,self.id,10,4);
+	hitbox.whirl = 1
+	intangible = 0;
+	}
+if timer >= 7 && timer < 15 && extended < 25 && special = 1 {
+	timer = 5
+        sprite_index = b_sprite;
+	special = 0;
+	intangible = 0;
+	if vspeed > 0 && air != 0 && extended < 10 {
+		vspeed -= 0.8;
+		}
+	if extended < 25 {
+		with hitbox instance_destroy();
+		create_hitbox(3,362,7.4,0,7,4,kick1,obj_spark_hit2,1.2,1.05,0,12,self.id,10,2);
+		hitbox.push = 1
+		sound_play(spin_sound);
+		hitbox.shield_stun = -8
+		}
+	if extended < 25 && extendlock = 0 {
+		extended += 1;
+		extendlock = 4;
+		}
+	}
+if extendlock > 0
+extendlock -= 1
+if timer >= time - 4 {
+	sprite_index = stand_sprite;
+	image_speed = 0.25;
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+
+	nblock = 15;
+	attack_type = "none";
+	if ( air > 0 )
+		{
+        state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 4;
+		}
+	else 
+        state_type = "stand";
+
+        timer = 0;
+
+        time =-1;
+
+	    }

@@ -1,0 +1,55 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 22;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    image_index = timer
+	  
+	
+	if timer = 3
+	{
+	sound_play(whiff_sound1);
+	create_hitbox(5,angle_correct(85),7,0,5,4,kick1,obj_spark_hit1,0.8,0.4,abs(place_x(69)),-place_y(55),self.id,10,3);
+	hitbox.hit_stun = 15
+	}
+	
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130))/size, -place_y(104)/size, self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	}
+	*/
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = 4; }
+	else {state_type = "stand";}
+    attack_type = "none";
+    timer = 12;
+    time = -1;
+  }
+        
+

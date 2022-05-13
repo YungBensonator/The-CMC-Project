@@ -1,0 +1,318 @@
+if ( air = max_jumps ) exit;
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+    state_type = "air_attack";
+    attack_type = "upb";
+    timer = 0;
+    time = 71;
+    sprite_index = upb_extremespeed2_sprite;
+    image_speed = 0;
+    image_index = 3;
+    speed = 0;
+    air_move = 0;
+    lucario = self.id
+    if ( air = 0 )
+      {
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+      }
+  }
+
+  switch ( timer )
+  {
+  case 3: image_index = 2; break;
+  case 6: image_index = 1; break;
+  case 9: image_index = 0; break;
+  case 20: image_index = 1; break;
+  case 22: image_index = 2; break;
+  case 24: image_index = 3; break;
+  case 26: image_index = 4; break;
+  case 28: image_index = 5; break;
+  
+  case 52: sprite_index = mid_jump_sprite; image_index = 1; image_angle = 0; break;
+  case 54: image_index = 2; break;
+  case 57: image_index = 3; break;
+  case 59: image_index = 4; break;
+  case 61: image_index = 5; break;
+  case 63: image_index = 6; break;
+  case 65: image_index = 7; break;
+  case 67: image_index = 8; break;
+  case 69: image_index = 9; break;
+  
+  case 160: image_index = 6; image_angle = 0; break;
+  case 163: image_index = 7; break;
+  case 166: image_index = 8; break;
+  case 169: image_index = 9; break;
+  case 172: image_index = 10; break;
+  case 175: image_index = 11; break;
+  case 178: image_index = 12; break;
+  }
+  
+    air_move = 0;
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    force_edge_grab = 1;
+    gravity = 0;
+    gravity_lock = 1;
+
+	if timer = 0 {
+	sound_play(upb_sound1);
+	spark1 = instance_create(x,y-15*size,obj_spark_effect);
+	spark1.image_xscale = 0.3
+	spark1.image_yscale = 0.3
+	}
+	if timer <= 28 {
+	if ( moveright && !moveup && !movedown )
+	  {
+	    direction = 0;
+            after_image(10,c_blue,0.85)
+	  }
+	if ( moveleft && !moveup && !movedown )
+	  {
+	    direction = 180;
+            after_image(10,c_blue,0.85)
+	  }
+	if ( !moveright && !moveleft && !movedown )
+	  {
+	    direction = 90;
+            after_image(10,c_blue,0.85)
+	  }
+	if ( movedown && !moveright && !moveleft )
+	  {
+	    direction = 270;
+            after_image(10,c_blue,0.85)
+	  }
+	if ( moveup && moveright )
+	  {
+	    direction = 45;
+            after_image(10,c_blue,0.85)
+	  }
+	if ( moveup && moveleft )
+	  {
+	    direction = 135;
+            after_image(10,c_blue,0.85)
+	  }
+	if ( movedown && moveright )
+	  {
+	    direction = 315;
+            after_image(10,c_blue,0.85)
+	  }
+	if ( movedown && moveleft )
+	  {
+	    direction = 225;
+            after_image(10,c_blue,0.85)
+	  }
+	speed = 0;
+	}
+	if timer = 26
+	sound_play(upb_sound2)
+    if ( timer >= 28 && timer <= 50 )
+      {
+	if timer = 28 {
+	create_hitbox(1,direction,8.4,0,6,1,aura1,obj_spark_aura,0.65,1,0,17,self.id,1,1);      
+	}
+	if hitbox.hit = 0 {
+	create_hitbox(1,direction,7.4,0,6,1,aura1,obj_spark_aura,0.4,0.4,0,27,self.id,6,1); }
+	image_angle = (direction-90);
+	speed = 7.25*size;
+        after_image(10,c_blue,0.85)
+	if ( moveright && !moveup && !movedown )
+	  {
+	        if direction <= 180 && direction > 0 {  
+                        after_image(10,c_blue,0.85)        		
+                        direction-=5 }
+    		else if direction > 180 && direction < 360 {
+                        after_image(10,c_blue,0.85) 
+        		direction+=5 }
+	  }
+	if ( moveleft && !moveup && !movedown )
+	  {
+	        if direction < 180 && direction > 0 {
+                        after_image(10,c_blue,0.85)   
+        		direction+=5 }
+    		else if direction > 180 && direction < 360 {
+                        after_image(16,c_blue,0.85) 
+        		direction-=5 }
+    		if direction = 0 {
+                        after_image(10,c_blue,0.85) 
+			direction-=5 }
+	  }
+	if ( !moveright && !moveleft && moveup )
+	  {
+    		if direction < 90 || direction > 270 {
+                        after_image(10,c_blue,0.85)    
+        		direction+=5 }
+    		else if direction > 90 && direction <= 270 {
+                        after_image(10,c_blue,0.85) 
+        		direction-=5 }
+	  }
+	if ( movedown && !moveright && !moveleft )
+	  {
+    		if direction <= 90 || direction > 270 {
+                        after_image(10,c_blue,0.85)    
+        		direction-=5 }
+    		else if direction > 90 && direction < 270 {
+                        after_image(10,c_blue,0.85) 
+       			direction+=5 }
+	  }
+	if ( moveup && moveright )
+	  {
+    		if direction < 45 || direction > 225 {
+                        after_image(10,c_blue,0.85) 
+			direction+=5 }
+    		else if direction > 45 && direction <= 225 {
+                        after_image(10,c_blue,0.85) 
+			direction-=5 }
+	  }
+	if ( moveup && moveleft )
+	  {
+    		if direction < 135 || direction > 315 {
+                        after_image(10,c_blue,0.85) 
+			direction+=5 }
+    		else if direction > 135 && direction <= 315 {
+                        after_image(10,c_blue,0.85) 
+			direction-=5 }
+	  }
+	if ( movedown && moveright )
+	  {
+    		if direction <= 135 || direction > 315 {
+                        after_image(10,c_blue,0.85) 
+			direction-=5 }
+    		else if direction > 135 && direction < 315 {
+                        after_image(10,c_blue,0.85) 
+			direction+=5 }
+	  }
+	if ( movedown && moveleft )
+	  {
+    		if direction <= 45 || direction > 225 {
+                        after_image(10,c_blue,0.85) 
+			direction-=5 }
+    		else if direction > 45 && direction < 225 {
+                        after_image(10,c_blue,0.85) 
+			direction+=5 }
+	  }
+	  if hspeed > 0 {
+	  facing = 0;
+	  }
+	  if hspeed < 0 {
+	  facing = 1;
+	  }
+        if ( next_to_rwall && moveright && walljump_lock != 0 )
+        {
+		time = -1;
+        moveright = 0;
+        moveleft = 0;
+        movejump = 0;
+        holdjump = 0;
+        intangible = 0;
+		hspeed = 0;
+        vspeed = 0;
+        gravity = 0;
+        attack_type = "wall_cling";
+		sprite_index = wall_cling_sprite;
+        image_index= 0;
+		image_angle = 0;
+        walljump_lock = 0;
+        facing = 0;
+		air = max_jumps;
+        exit;
+        }
+        if ( next_to_lwall && moveleft && walljump_lock != 1 )
+        {
+		time = -1;
+        moveright = 0;
+        moveleft = 0;
+        movejump = 0;
+        holdjump = 0;
+        intangible = 0;
+		hspeed = 0;
+        vspeed = 0;
+        gravity = 0;
+        attack_type = "wall_cling";
+		sprite_index = wall_jump_sprite;
+        image_index= 0;
+		image_angle = 0;
+        walljump_lock = 1;
+        facing = 1;
+		air = max_jumps;
+        exit;
+        }
+       }
+	if timer = 51 {
+		create_hitbox(4,direction,8.6,0,6,6,aura1,obj_spark_aura,0.5,0.5,0,27,self.id,6,2);
+		speed *= 0.45
+		gravity_lock = 0;
+		gravity = 1;
+	}
+	if timer >= 52 && timer <= 71 && air = 0 {
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+	shakex = 0;
+	shakey = 0;
+    timer = 0;
+    time = 20; 
+    }
+	/*if timer > 151 && timer < 167 && image_angle != 0 && air = 0
+	{
+	if image_angle <= 180 && image_angle > 15 {
+	image_angle -= 20
+        after_image(10,c_blue,0.85) }
+	if image_angle < 20 && image_angle > 3 {
+	image_angle -= 3
+        after_image(10,c_blue,0.85) }
+	if image_angle < 3 && image_angle > 0 {
+	image_angle -= 1
+        after_image(10,c_blue,0.85) }
+	if image_angle > 180 && image_angle < 345 {
+	image_angle += 20
+        after_image(10,c_blue,0.85) }
+	if image_angle > 340 && image_angle < 357 {
+	image_angle += 3
+        after_image(10,c_blue,0.85) }
+	if image_angle > 357 && image_angle != 0 {
+	image_angle += 1
+        after_image(10,c_blue,0.85) }
+	}
+	if ( timer = 167 )
+	{
+	image_angle = 0
+        after_image(10,c_blue,0.85)
+	}*/
+	
+	if ( timer >= 28 && timer <= 51 && air = 0 && vspeed > 0 )
+	{
+	time = 180;
+	timer = 160;
+	sprite_index = final_smash_end_sprite;
+	image_index = 6;
+	image_angle = 0;
+	hspeed = 0;
+	gfx_land_effect ( x , y , actual_width );
+	}
+	if ( timer = 51 && air = 0 )
+	{
+	time = 180;
+	timer = 160;
+	sprite_index = final_smash_end_sprite;
+	image_index = 6;
+	image_angle = 0;
+	hspeed = 0;
+	gfx_land_effect ( x , y , actual_width );
+	}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  if air > 0
+  {
+  state_type = "fall";
+  }
+  timer = 0;
+  time =-1;
+  }

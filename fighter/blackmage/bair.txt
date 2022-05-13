@@ -1,0 +1,67 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0.;
+        sprite_index = bair_sprite;
+        image_index=0;
+        timer = 0;
+		if cleaver_catched >= 1
+		time = 15
+	    else
+        time = 22;
+        timer_speed=1;
+}
+if timer < time && state_type = "air_attack" {
+            attacking = 0;
+            state_type = "air_attack";
+			
+switch ( timer )
+      {
+	case 3: image_index = 0; break;
+	case 6: image_index = 1; break;
+	case 9: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 18: image_index = 3; break;
+
+      }
+			
+    if timer = 6 {
+		sound_play(swingsnd2);
+		effectjab = create_spark(-30,15,self.id);
+		effectjab.sprite_index = slash_sprite4;
+		effectjab.image_speed = 0.2;
+		effectjab.image_alpha = 0.7;
+		effectjab.image_xscale = image_xscale*0.55 * (-1);
+		effectjab.image_yscale = image_yscale*0.6;
+		effectjab.depth = depth - 2;
+		effectjab.snap = self.id
+		effectjab.alarm[0] = 15
+        effectjab.glow = 0.1;
+		effectjab.script = char_custom7;
+		effectjab.owner = self.id;
+		effectjab.keepmain = self.keepmain;
+		if random(10)> 5
+		play_attack_voice()
+		create_hitbox(8,155-facing*130,6.7,6.5,16,8,magic2,obj_spark_stun,1,0.8,-12,15,self.id,10,2);
+		}
+		
+		
+        if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14; }
+        }  
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,72 @@
+if zange=0
+{
+moving_object = 1;
+absorb2 = 1;
+if !is_on_floor(self) && !collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 0 {   
+    if vspeed < 5
+    vspeed += 0.25
+    priority = 2
+    }
+else    {               
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    instance_destroy() }
+    
+if timer <= 1 && hit = 0 {       
+    sprite_index = attacker.id.ball_sprite
+    hspeed = (5.8 - attacker.id.facing*11.6)*(attacker.balltype*0.8+0.2)
+    image_speed = 0
+    visible=1
+    vspeed=-3*(1.5-attacker.balltype*0.5)
+}
+color = c_white
+if attacker.balltype = 0
+image_blend = c_teal
+if attacker.balltype = 1
+image_blend = c_orange
+if attacker.balltype = 2
+image_blend = c_purple
+
+if timer mod 2 = 0
+instance_create(x ,y,obj_spark_effect)
+
+
+if abs(vspeed) < 1 && hit = 0     
+    timer += 1
+if hit = 0 image_angle += -15 + 30*facing
+}
+
+////Zange why
+if zange=1
+{
+moving_object = 1;
+absorb2 = 1;
+if !is_on_floor(self) && !collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 2 {   
+    if vspeed < 5
+    vspeed += 0.35
+    }
+if is_on_floor(self) && bounce=0
+{
+vspeed=-3.5
+bounce=1
+dietimer=0
+}
+if bounce = 1 && dietimer=13   {               
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    instance_destroy() }
+    if bounce = 1 && dietimer<13
+{
+dietimer+=1
+}
+if timer <= 1 && hit = 2 {       
+    sprite_index = attacker.id.ball_sprite
+    //hspeed = (5.8 - attacker.id.facing*11.6)*(attacker.balltype*0.8+0.2)
+    image_speed = 0
+    visible=1
+    vspeed=-3.5*(1.5-attacker.balltype*0.5)
+}
+
+effect_create_below(ef_spark,x,y,0,color);
+if abs(vspeed) < 1 && hit = 2     
+    timer += 1
+if hit = 2 image_angle += -15 + 30*facing
+}

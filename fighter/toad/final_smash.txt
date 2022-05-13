@@ -1,0 +1,101 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" )  {
+        size = csize
+        sound_play(final_smash_sound)
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 1;
+        time = 76;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        background_blend=c_ltgray
+        smash_power = 0
+        /*freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 59*/
+        instance_create(x,y-20,obj_spark_effect2);
+        air_move=0
+        //camera.following_state = number
+}
+speed=0
+gravity_lock = 1;
+
+if timer < time {
+ switch ( timer ) {
+				
+				case 4: image_index = 1; break;
+				case 7: image_index = 2; break;
+				case 10: image_index = 3; break;
+				case 13: image_index = 4; break;
+				case 16: image_index = 3; break;
+				case 19: image_index = 4; break;
+				case 22: image_index = 3; break;
+				case 25: image_index = 4; break;
+				case 27: image_index = 3; break;
+				case 30: image_index = 4; break;
+				case 33: image_index = 3; break;
+				case 36: image_index = 4; break;
+				case 39: image_index = 3; break;
+				case 42: image_index = 4; break;
+				case 45: image_index = 5; break;
+				case 48: image_index = 6; break;
+			
+				case 54: sprite_index=downb_throw_sprite;  break;
+				case 55: image_index = 1; break;
+				case 57: image_index = 2; break;
+				case 59: image_index = 3; break;
+				case 60: image_index = 4; break;
+				
+			 }
+    intangible = 1
+    if timer = 45
+        sound_play(final_smash_voice);
+    if ( timer = 48 )
+      {
+      spark = instance_create ( x + 4 * size * ( 1 - facing * 2 ) , y - 5 * size , obj_spark );
+      spark.sprite_index = powblock_sprite;
+      spark.image_index = 0 + 1 * ( air != 0 );
+      spark.image_speed = 0;
+      spark.image_xscale = 1.5;
+      spark.image_yscale = 1.5;
+      spark.alarm[0] = 13;
+      }
+    if ( timer == 49 || timer == 50 || timer == 51 ) { spark.x += 1; spark.y -= 1; }
+    if ( timer == 52 )
+      {
+      spark.y = y - 20 * size;
+      spark.x = x;
+      }
+    if ( timer == 53 || timer == 54 ) spark.y -= 2;
+    if ( timer == 55 || timer == 56 ) spark.y += 2;
+    if timer = 60 {
+        //sound_play(final_smash_voice);
+        sound_play(throw_sound);
+        create_projectile(45,90,9,7,-1,20,kick3,obj_spark_hit4,1,1,10,20,id,190,char_custom2);
+        proj.toad = self.id;
+
+        proj.sprite_index = powblock_sprite;
+        proj.image_index = 0 + 1 * ( air != 0 );
+        proj.image_speed = 0;
+        proj.image_xscale = 1.5;
+        proj.image_yscale = 1.5;
+    
+        effect_create_below(ef_ellipse,x,y,1,c_aqua)
+        camera.following_state = 0
+        }
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

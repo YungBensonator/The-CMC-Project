@@ -1,0 +1,104 @@
+reflect = -1
+absorb = -1
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    special = 0;
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 54;
+    sprite_index = sideb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    if charge >= 5
+	sound_play(realization_sound)
+    if charge >= 10
+	sound_play(shatter_sound)
+  }
+
+if ( timer < time )
+  {
+    if ( air = 0 )
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 10: image_index = 5; break;
+	case 12: image_index = 6; break;
+	case 14: image_index = 7; break;
+      }
+    else
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 14: image_index = 4; break;
+      }
+	if ( timer <= 11 )
+	    hspeed = size * (1-facing*2);
+    if ( timer = 12 )
+      {
+	sound_play(takethat_voice);
+	sound_play(objection_sound);
+	if charge < 5
+		create_projectile(12,45+facing*90,6.5,3.5,35,14,punch3,obj_spark_hit3,2.2,1.65,33.1,21,self.id,9,no_script);
+		proj.no_reflect = 1
+	if charge >= 5 && charge < 10 {
+		create_projectile(16,45+facing*90,7,7.5,45,16,punch4,obj_spark_hit4,2.2,1.65,33.1,21,self.id,9,no_script);
+		proj.no_reflect = 1
+		charge -= 2
+		}
+	if charge >= 10 {
+		screen_shake(6,10);
+		create_projectile(35,45+facing*90,7.3,8.5,250,20,smash_up,obj_spark_explode2,2.2,1.65,33.1,21,self.id,9,no_script);
+		proj.no_reflect = 1
+		proj.armor_break = 1;
+		charge = 0
+	  }
+	spark = instance_create(x,y,obj_spark);
+	spark.sprite_index = shout_takethat_sprite;
+	spark.image_speed = 0;
+	spark.image_xscale = size;
+	spark.image_yscale = size;
+	spark.x = x + size * (33.1-facing*66.2);
+	spark.y = y - 21*size;
+	spark.wright = self.id;
+	spark.stick = 0.25;
+	spark.script = char_custom6;
+	spark.keepmain = keepmain;
+      }
+	if timer = 23 {
+	with proj instance_destroy();
+	with spark instance_destroy();
+	}
+
+    if ( air = 0 )
+      {
+	if timer > 11
+	hspeed = 0;
+	sprite_index = sideb_sprite;
+	if ( timer >= 14 )
+	    image_index = 7;
+      }
+    else
+	sprite_index = airobjection_sprite;
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+  }

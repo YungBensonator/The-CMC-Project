@@ -1,0 +1,261 @@
+if state_type = "jump" || state_type = "stand" || state_type = "shielding" {
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 50;
+    sprite_index = downb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    vspeed -= 0.1;
+    temp = 0
+    jumptemp = 0;
+hspeed*=0.6
+}
+
+if (timer < time) {
+    switch (timer) {
+        case 3:
+            image_index = 1;
+            break;
+        case 6:
+            image_index = 2;
+            break;
+        case 9:
+            image_index = 3;
+            break;
+        case 12:
+            image_index = 4;
+            break;
+        case 15:
+            image_index = 5;
+            break;
+        case 18:
+            image_index = 6;
+            break;
+            //throw
+        case 196:
+            image_index = 0;
+            break;
+        case 199:
+            image_index = 1;
+            break;
+        case 202:
+            image_index = 2;
+            break;
+        case 205:
+            image_index = 3;
+            break;
+        case 208:
+            image_index = 4;
+            break;
+            //pp throw
+        case 501:
+            image_index = 0;
+            break;
+        case 504:
+            image_index = 1;
+            break;
+        case 507:
+            image_index = 2;
+            break;
+        case 510:
+            image_index = 3;
+            break;
+        case 513:
+            image_index = 4;
+            break;
+
+    }
+    if timer = 1 {
+        target = -1;
+    }
+    if timer = 20 && air = 0 {
+        temp = 1
+        aicon = instance_create(x, y - 1, obj_spark)
+garf=irandom_range(0, 3);
+        aicon.sprite_index = veggie_sprite;
+        aicon.image_index = garf;
+        aicon.image_speed = 0;
+        aicon.alarm[0] = 99999
+        aicon.image_xscale = 0.85 * (1 - facing * 2) * size
+        aicon.image_yscale = 0.85 * size
+        aicon.x = x + -4 * (1 - facing * 2) * size
+		/*
+		if (facing == 1){
+			aicon.x += 8 * size;
+		} */
+		
+        aicon.y = y - 38 * size
+        timer = 110;
+        time = 160;
+        sound_play(downb_sound);
+        sound_play(downb_voice);
+    }
+
+    if timer = 20 && air = 1 {
+        temp = 2
+        create_homing_bubble(1.1, 1.1, -1, -14, self.id, 4);
+        sound_play(downb_voice);
+    }
+    if timer = 25 && air = 1 {
+        attack_type = "none";
+        state_type = "jump";
+    }
+    //throw people
+    if (timer >= 20 && timer <= 30 && target > 0)
+        if (target.intangible = 0 && target.attack_type != "final_smash") {
+            sprite_index = downb_throw_sprite;
+            timer = 500;
+            time = 525;
+            image_speed = 0;
+            target.state_type = "air_flinch";
+            target.attack_type = "none";
+            target.sprite_index = target.flinch_sprite;
+            sound_play(downbair_sound);
+        }
+    if (timer >= 500 && timer <= 512 && target > 0) {
+        target.ignore_physics = 1;
+        target.state_type = "air_flinch";
+        target.timer = 0;
+        target.time = 20;
+        target.alarm[0] = 400;
+        target.x = x + -4 * (1 - facing * 2) * size
+        target.y = y - 16 * size
+        //target.visible = 1;
+
+    }
+    if timer = 513 {
+        with aicon instance_destroy();
+        sound_play(throw_sound);
+        sound_play(downb_throw_voice);
+
+        create_projectile(12, 0 + 180 * facing, 6.25, 4, 40, 6, koopa_hit, obj_spark_hit3, 0.95, 0.95, 10, 42, id, 3, no_script);
+
+    }
+
+
+    if timer > 20 && timer < 204 {
+        aicon.x = x + -4 * (1 - facing * 2) * size
+		
+		// Turnip alignment fix hack
+		aicon.image_xscale = 0.85 * (1 - facing * 2) * size
+		aicon.image_yscale = 0.85  * size
+		if (facing == 0){
+			//aicon.x += 8 * size;
+		}
+		
+		
+        aicon.y = y - 38 * size
+        if aicon.image_index >= aicon.image_number - aicon.image_speed
+        aicon.image_index = 0;
+    }
+
+    if (timer > 150 && timer < 160) {
+        timer = 110;
+        time = 160;
+    }
+    //da bigshit
+    if (timer > 110 && timer < 160) {
+        //ai thingie
+        if ai && ( timer = 150 || distance_to_object ( enemy ) < 120 ) {
+            special = 1;
+            attacking = 1;
+        }
+        //move
+        if moveright && air = 0 {
+            facing = 0
+            sprite_index = downb_walk_sprite;
+            hspeed += 1.1
+            image_speed = 0.25;
+        }
+
+        if moveleft && air = 0 {
+            facing = 1
+            sprite_index = downb_walk_sprite;
+            image_speed = 0.25;
+            hspeed -= 1.1;
+        }
+        //move air
+        if moveleft && air = 1 {
+            hspeed -= 1.1;
+        }
+
+        if moveright && air = 1 {
+            hspeed += 1.1;
+        }
+        //stop moving
+        if !moveleft && !moveright {
+            sprite_index = downb_stand_sprite;
+            image_index = 1;
+            hspeed = 0;
+        }
+        //speed caps
+        if hspeed < -1 * size
+        hspeed = -1.8 * size
+        if hspeed > 1 * size
+        hspeed = 1.8 * size
+        //Jump
+        if movejump && jumptemp = 0 {
+            jumptemp = 1
+            sprite_index = downb_jump_sprite;
+            vspeed = -6;
+        }
+
+        if air = 1 {
+            sprite_index = downb_jump_sprite;
+        }
+        //land
+        if air = 0 && jumptemp = 1 || air = 0 && vspeed > 0.1 {
+            sprite_index = downb_sprite;
+
+            jumptemp = 0
+
+        }
+        //throw
+        if special = 1 || attacking = 1 {
+            if air = 0 {
+                sprite_index = downb_throw_sprite;
+                timer = 195;
+                time = 250;
+                image_speed = 0;
+            }
+
+            if air = 1 {
+                sprite_index = downb_throw_sprite;
+                timer = 195;
+                time = 240;
+                image_speed = 0;
+            }
+
+        }
+
+    }
+
+    if timer = 205 {
+        with aicon instance_destroy();
+        sound_play(throw_sound);
+        sound_play(downb_throw_voice);
+        image_speed = 0;
+        hspeed = 0;
+        vegi=create_projectile(13, 25 + facing * 130, 6.25, 2.6, 16, 8, koopa_hit, obj_spark_hit3, 0.95, 0.95, 10, 16, id, 120, toad_veggie_script);
+	vegi.type=garf
+	vegi.image_index=garf
+
+    }
+
+}
+
+if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    with aicon instance_destroy();
+    sprite_index = jump_sprite;
+    image_index = 7;
+    image_speed = 0;
+    if air > 0
+    state_type = "jump";
+    else
+        state_type = "stand";
+
+    timer = 0;
+    time = -1;
+}

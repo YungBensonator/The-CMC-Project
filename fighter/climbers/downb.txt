@@ -1,0 +1,115 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 1;
+  attack_type = "downb";
+  time = 85;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed *= 0.7;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+  if ( air == 0 )
+    {
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.facing = facing;
+    if ( partner != 0 )
+      {
+      if ( instance_exists ( partner ) )
+      if ( partner.state_type == "stand"
+        || partner.state_type == "run"
+        || partner.state_type == "jump"
+        || partner.state_type == "crouch"
+        || partner.state_type == "land" )
+      if ( partner.ai_action == "none" )
+        {
+        partner.x = x;
+        partner.y = y;
+        partner.facing = !facing;
+        temp = 1;
+        }
+      }
+    }
+  }
+
+if ( temp == 1 )
+  {
+  partner.facing = !facing;
+  }
+
+if ( air == 0 )
+  {
+  hspeed = 0;
+  }
+  else
+  {
+  air_move = 0;
+  hspeed *= 0.99;
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( timer == 5 )
+  {
+  instance_create ( x , y - 10*size , obj_spark_effect );
+  }
+if ( timer == 10 )
+  {
+  if ( boss <= 0 )
+    sound_play ( downb_sound );
+    else
+    sound_play ( downb_sound2 );
+  }
+
+if ( timer > 10 && timer < 70 )
+  {
+    if solo && timer = 40
+	timer = 60
+  if ( timer mod 4 == 0 )
+    {
+    create_projectile ( 2+(solo*.5) , 362 , 0.05+(solo*((timer>60)*2.85)) , 1.6 , 2 , 1 , ice1 , obj_spark_ice3 , 0.7 , 0.7 , 8 , 6 , self.id , 10 , char_custom2 );
+    proj.di = 4-(solo*5);
+    if solo
+    proj.hit_stun = 12
+    proj.sprite_index = blizzard_sprite;
+    proj.image_angle = random(360);
+    proj.anglespeed = -10 + random(20);
+    proj.speed = 3 + random(1);
+    proj.direction = facing*150+random(30);
+    proj.image_xscale = proj.image_yscale;
+    if ( timer mod 8 == 0 )
+      proj.dir = 362;
+      else
+      proj.dir = 361;
+    if timer > 60 && solo
+	proj.dir = 170-facing*160
+    if ( partner != 0 )
+      {
+      if ( partner.facing == facing && partner.attack_type == "downb" )
+        {
+        proj.damage = 0.5*size;
+        proj.dir = 361;
+        }
+      }
+    }
+  image_index = choose ( 1 , 2 );
+  }
+	if timer > 15 && timer < 60 && special = 0
+	timer = 60
+	if timer > 70
+	image_index = 3;
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

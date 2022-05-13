@@ -1,0 +1,84 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    attacking = 0
+    attack_type = "b"
+    special = 0;
+    sprite_index = b_sprite;
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.8;
+        }
+        image_speed = 0;
+        image_index=0;
+        timer = 0;
+        time = 45;
+        timer_speed=1;
+}
+if ( air == 0 )
+  sprite_index = b_sprite;
+  else
+  sprite_index = b_sprite2;
+switch ( timer )
+  {
+  case 3: shakex = -1 + facing * 2; break;
+  case 4: image_index = 1; break;
+  case 11: shakex = 0; break;
+  case 12: image_index = 2; break;
+  case 14: shakex = 1 - facing * 2; break;
+  case 15: shakex = 2 - facing * 4; image_index = 3; break;
+  case 16: shakex = 1 - facing * 2; break;
+  case 18: shakex = 0; image_index = 4; break;
+  }
+        if timer < time {
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+	    if timer = 12
+		{ image_blend = merge_color ( c_white , c_red , .4 ); alarm[7] = 5; }
+            if timer = 15 {
+                duster = instance_create(x-6+facing*12,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_yscale *= 0.6*size
+                duster.image_xscale *= 0.8*size
+                spark = instance_create(x+(15-facing*26)*size,y-13.5*size,obj_spark_shockwave)
+                spark.image_xscale *= 0.1*size
+                spark.image_yscale *= 0.4*size
+                spark.image_blend = c_orange
+                spark.image_alpha = 0.9
+                create_projectile(4,15+facing*150,3,1,7,4,-1,obj_spark_hit1,0.85,0.85,15,17,self.id,200,char_custom2);
+                sound_play(pill_sound);
+		proj.carry = pill_hitsound;
+		proj.hit_stun = 10
+            }
+	if timer = 17
+	image_blend = c_white;
+	if timer = 42 {
+		interrupt = 1;
+		}
+if air = 0 {
+        air_move = 0
+        state_type = "attack"
+	}
+
+if image_index >= image_number - image_speed
+    image_speed = 0
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 6;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+    }
+        

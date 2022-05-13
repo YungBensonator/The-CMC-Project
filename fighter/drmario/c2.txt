@@ -1,0 +1,53 @@
+// This script controls Mario's Fire Ball projectile. Similar scripts are to be used to control other projectiles. 
+// Such scripts should not be executed when the timer_speed is equal to 0, as written in the projectile_box object Step event. 
+
+// If a script like this is not used, a projectile created using the create_projectile function will behave like a normal hitbox, except
+// that no hitlag will affect the fighter who fired the projectile. 
+absorb = 0  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+moving_object = 1
+
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = choose(attacker.id.b_yellow_sprite,attacker.id.b_blue_sprite,attacker.id.b_red_sprite,attacker.id.b_yellowblue_sprite,attacker.id.b_yellowred_sprite,attacker.id.b_redblue_sprite);
+    hspeed = 2 - attacker.id.facing*4
+    image_speed = 0.1;
+    visible=1
+    temp = 1
+    pill_sound = attacker.pillland_sound
+    vspeed = 2.5
+    priority = 2
+    }
+
+if ( hit == 0 )
+  {
+    if vspeed < 4.5
+    vspeed += 0.15
+
+  if ( abs(vspeed) < 1 ) timer+=1;
+  
+  image_angle += -15 + 30*facing
+  
+  if ( on_floor || on_platform )
+    {
+    if ( vspeed > 0 )
+      {
+      instance_create ( x , y , obj_smoke );
+      x = xprevious;
+      y = yprevious;
+      if vspeed > 3.5 {
+      sound_stop(pill_sound)
+      sound_play(pill_sound)
+      }
+      vspeed *= -0.95;
+      }
+    }
+  if ( timer == time - 2 && speed > 0 )
+    instance_create ( x , y , obj_smoke );
+  if ( under_ceiling && vspeed < 0 ) vspeed = 0;
+  if ( next_to_rwall && hspeed > 0 ) hspeed *= -1;
+  if ( next_to_lwall && hspeed < 0 ) hspeed *= -1;
+  }
+if hit = 1 {
+hit = 2
+sound_play(carry)
+}

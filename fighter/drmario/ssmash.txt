@@ -1,0 +1,60 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+        charge_frame = 5;
+}
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 10: image_index = 2; break;
+  case 11: shakex = 0.5-facing; break;
+  case 12: shakex = 0; image_index = 3; break;
+  case 13: image_index = 4; break;
+  case 14: shakex = 2-facing*4; break;
+  case 15: shakex = 0; break;
+  case 16: shakex = 1-facing*2; break;
+  case 17: shakex = 0; break;
+  case 40: image_index = 5; break;
+  case 42: image_index = 6; break;
+  }
+        if timer < time {
+            state_type = "attack";
+            if timer = 7 {
+		sound_play(ssmash_voice);
+                instance_create(x+10-facing*20,y-20,obj_spark_effect)
+		}
+            if timer = 13 {
+		image_speed = 0;
+                duster = instance_create(x-6+facing*12,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                sound_play(ssmash_sound);
+		sound_play(electric_sound);
+                create_hitbox(17,25+facing*130,6.8,7.8,25,14,electric3,obj_spark_shock2,0.6,0.6,21,13,self.id,6,4);
+            }
+if timer >= 13 && timer <= 18
+{
+
+garf=irandom_range(0, 360);
+     spark = create_spark(25,12,global.electricity_spark,1,0.1*(1-facing*2),0.35)
+     spark.image_alpha = 1
+spark.image_angle=garf*(1*facing-2)
+}
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

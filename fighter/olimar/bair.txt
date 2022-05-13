@@ -1,0 +1,143 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "bair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bair_sprite;
+  timer = 0;
+  time = 40;
+  timer_speed = 1;
+  }
+if timer < time {
+	state_type = "air_attack";
+	if timer >= 1 && timer < 47 {
+		pikmin[0].state = 6;
+		pikmin[0].attack = "bair";
+		pikmin[0].image_speed = 0;
+		pikmin[0].image_index = 0;
+		}
+	if timer = 1 {
+		image_index = 0;
+		pikmin[0].image_index = 0;
+		}
+	if timer >= 1 && timer <= 2 {
+		pikmin[0].x = x+(4-facing*8);
+		pikmin[0].y = y-4;
+		}
+	if timer = 3 {
+		image_index = 1;
+		pikmin[0].image_index = 1;
+		}
+	if timer >= 3 && timer <= 4 {
+		pikmin[0].x = x+(6-facing*12);
+		pikmin[0].y = y-9;
+		}
+	if timer = 5 {
+		image_index = 2;
+		}
+	if timer >= 5 && timer <= 6 {
+		pikmin[0].x = x+(2-facing*4);
+		pikmin[0].y = y-4;
+		}
+	if timer = 7 {
+		image_index = 3;
+		pikmin[0].image_index = 3;
+		}
+	if timer >= 7 && timer <= 8 {
+		pikmin[0].x = x-(8-facing*16);
+		pikmin[0].y = y-3;
+		}
+	if timer = 9 {
+		image_index = 4;
+		pikmin[0].image_index = 4;
+		sound_play(swingsnd2);
+		play_attack_voice();
+		}
+	if timer >= 9 && timer <= 11 {
+		pikmin[0].x = x-(12-facing*24);
+		pikmin[0].y = y-9;
+		}
+	if timer = 10 && pikmin[0] != 0 {
+		if pikmin[0].type = 0 {
+			create_hitbox ( 14 , 145-facing*110 , 5.3 , 6.65 , 16 , 7 , fire1 , obj_spark_fire1 , 0.75 , 0.49 , -12.40 , 6.98 , self.id , 4 , 1 );
+			}
+		if pikmin[0].type = 1 {
+			create_hitbox ( 14 , 145-facing*110 , 5.1 , 6.3 , 13 , 5 , kick2 , obj_spark_hit2 , 0.75 , 0.49 , -12.40 , 6.98 , self.id , 4 , 1 );
+			}
+		if pikmin[0].type = 2 {
+			create_hitbox ( 12 , 135-facing*90 , 5.5 , 4.5 , 11 , 11 , shock1 , obj_spark_shock , 0.75 , 0.49 , -12.40 , 6.98 , self.id , 4 , 1 );
+  			hitbox.hit_stun = 12
+			}
+		if pikmin[0].type = 3 {
+			create_hitbox ( 14 , 145-facing*110 , 5.4 , 6.2 , 17 , 6 , kick3 , obj_spark_hit3 , 0.75 , 0.49 , -12.40 , 6.98 , self.id , 4 , 1 );
+			}
+		if pikmin[0].type = 4 {
+			create_hitbox ( 5 , 145-facing*110 , 5.3 , 4.7 , 6 , 4 , punch1 , obj_spark_hit1 , 0.75 , 0.49 , -12.40 , 6.98 , self.id , 4 , 1 );
+  			hitbox.hit_stun = 8
+			}
+		}
+	if timer >= 12 && timer <= 14 {
+		pikmin[0].x = x-(12-facing*24);
+		pikmin[0].y = y-10;
+		}
+	if timer = 12 && pikmin[0] != 0 {
+		hitbox.damage *= 0.75;
+		image_index = 5;
+		}
+	if timer = 15 {
+		image_index = 6;
+		}
+	if timer >= 15 && timer <= 38 {
+		pikmin[0].x = x-(2-facing*4);
+		pikmin[0].y = y-8;
+		}
+	if timer = 16 {
+		pikmin[0].image_index = 0;
+		}
+	if timer > 29 {
+		image_index += 0.3;
+		}
+	if timer >= 33 && timer <= 35 {
+		pikmin[0].x = x-(4-facing*8);
+		pikmin[0].y = y-5;
+		}
+	if timer >= 36 && timer < 38 {
+		pikmin[0].x = x+(9-facing*18);
+		pikmin[0].y = y-12;
+		}
+	if timer = 38 {
+		pikmin[0].state = 1;
+		pikmin[0].attack = "none";
+		pikmin[0].image_speed = 0.25;
+		script_execute(char_custom2);
+		}
+	if air = 0 {
+		state_type = "land";
+		attack_type = "none";
+		sprite_index = land_sprite;
+		timer = 0;
+		time = 8;
+		pikmin[0].state = 1;
+		pikmin[0].attack = "none";
+		pikmin[0].image_speed = 0.25;
+		script_execute(char_custom2);
+		}
+	}
+		
+	
+		
+if ( timer >= time - 1 )
+  {
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+  }

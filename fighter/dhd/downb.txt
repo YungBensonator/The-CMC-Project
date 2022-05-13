@@ -1,0 +1,209 @@
+// 0 - 14 - load
+// 15 - launch
+// 16 - fall (17 wraps back to it)
+// 18 - pounce begin
+// 19 - 30 - pounce
+// 26 - POUNCE HIT
+
+if ( instance_exists ( target ) )
+if ( target . attack_type == "final_smash" ) target = noone;
+if ( state_type == "jump" )
+  {
+  if ( pounce_block > 0 ) exit;
+  hspeed = 0;
+  vspeed = 0;
+  pounce_block = 60;
+  state_type = "air_attack";
+  attack_type = "downb";
+  image_speed = 0;
+  sprite_index = downb2_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 30;
+  timer_speed = 1;
+  }
+  else
+if ( state_type == "stand" || state_type == "crouch" || state_type == "run" )
+  {
+  if ( pounce_block > 0 ) exit;
+  special = 1;
+  pounce_block = 60;
+  state_type = "air_attack";
+  attack_type ="downb";
+  image_speed = 0;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 100;
+  timer_speed = 1;
+  }
+air_move = 0;
+pounce_block = 60;
+
+if ( ai && timer = 11 )
+{
+special = 0
+} 
+
+if ( timer == 2 && sprite_index == downb_sprite )
+  sound_play ( pouncehold_sound );
+if ( timer <= 14 )
+  {
+  hspeed = 0;
+  vspeed = 0;
+  }
+if ( sprite_index == downb_sprite && special && timer == 12)
+  {
+  timer -= 1;
+  }
+if ( timer == 15 )
+  {
+  pounce_fall = 0;
+  if ( sprite_index == downb_sprite )
+    {
+    air = 1;
+    hspeed = 5.5 * ( 1 - facing * 2 );
+    vspeed = -3.5;
+    }
+    else
+    {
+    hspeed = 0.5 * ( 1 - facing * 2 );
+    vspeed = 5.5;
+    fall_lock = 0;
+    }
+  target = noone;
+  proj = noone;
+  }
+if ( timer == 17 )
+  {
+  pounce_fall += 1;
+  if ( pounce_fall >= 38 )
+    {
+    timer = time;
+    }
+    else
+    {
+    timer = 16;
+    }
+  }
+if ( timer == 16 )
+  {
+  if ( air == 0 && proj != noone )
+    {
+    pounce_block = 60;
+    state_type = "land";
+    attack_type = "none";
+    sprite_index = land_sprite;
+    time = 18;
+    timer = 0;
+    hspeed = 0;
+    exit;
+    }
+  if ( target > 0 )
+    {
+    target . state_type = "air_flinch";
+    target . attack_type = "none";
+    target . timer = 0;
+    target . time = 50;
+    target . timer_speed = 0;
+    target . alarm [ 0 ] = 2;
+    timer = 18;
+    }
+  if ( !instance_exists ( proj ) )
+  if ( sprite_index == downb_sprite )
+    {
+    if ( image_index < 4 ) image_index += 0.25;
+    create_homing_bubble ( 0.4 , 1.1 , 6 , 12 , self.id , 2 );
+    }
+    else
+    {
+    if ( image_index < 5 ) image_index += 0.25;
+    create_homing_bubble ( 1.1 , 0.4 , 0 , 13 , self.id , 2 );
+    }
+  }
+if ( timer == 19 )
+  {
+  x = target.x - 8 * ( 1 - facing - facing );
+  y = target.y - 12;
+  image_speed = 0;
+  if ( sprite_index == downb_sprite )
+    image_index = 5;
+    else
+    image_index = 6;
+  }
+if ( timer >= 19 && timer <= 30 )
+  {
+  if ( timer < 26 )
+    {
+    speed = 0;
+    gravity = 0;
+    intangible = 1;
+    }
+  air_move = 0;
+  if ( timer < 26 )
+    {
+    target . sprite_index = target . flinch_sprite;
+    target . state_type = "air_flinch";
+    target . attack_type = "none";
+    target . timer = 0;
+    target . time = 10;
+    target . timer_speed = 0;
+    target . alarm [ 0 ] = 2;
+    target . facing = 1-facing;
+    if ( movejump && sprite_index == downb2_sprite) 
+      {
+      pounce_block = 60;
+      vspeed = -mid_jump_speed;
+      attack_type = "none";
+      air = max_jumps - 1;
+      state_type = "jump";
+      timer = 0;
+      time = -1;
+      exit;
+      }
+    if ( movejump && sprite_index == downb_sprite) 
+      {
+      pounce_block = 60;
+      vspeed = -mid_jump_speed;
+      attack_type = "none";
+      air = max_jumps - 1;
+      state_type = "jump";
+      timer = 0;
+      time = -1;
+      exit;
+      }
+    }
+    else
+  if ( timer == 26 )
+    {
+    sound_play ( pounce_sound );
+    hspeed = 0;
+    vspeed = -4;
+    if ( sprite_index == downb_sprite )
+      create_throw_box ( 9 , 368 , 4.4 , 1.2 , 0 , 0 , kick2 , obj_spark_hit4 ,
+        1 , 1 , 14 , 12 , self.id , 3 );
+      else
+      create_throw_box ( 9 , 368 , 4.4 , 1.2 , 0 , 0 , kick2 , obj_spark_hit4 ,
+        1 , 1 , 0 , 0 , self.id , 3 );
+	hitbox.hit_stun = 11
+	intangible = 0;
+    }
+	else
+	{
+	time = -1;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  pounce_block = 60;
+  if ( timer > 17 )
+    {
+    state_type = "jump";
+    }
+    else
+    state_type = "fall";
+  timer = 0;
+  time =-1;
+  }

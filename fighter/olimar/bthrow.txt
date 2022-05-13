@@ -1,0 +1,83 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "bthrow";
+  image_speed = 0.15;
+  image_index = 0;
+  sprite_index = grab_sprite;
+  timer = 0;
+  time = 30;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  if facing = 0 {
+	facing = 1;
+	}
+  else {
+	facing = 0;
+	}
+  }
+if ( timer <= 12 )
+{
+target.x = x + 30 * size * (1-facing*2);
+target.y = y;
+}
+if timer = 6 {
+	pikmin[0].attack = "bthrow";
+	}
+if time >= 10 && timer < 12 {
+	pikmin[0].x += 5-facing*10;
+	}
+if timer >= 12 {
+	pikmin[0].x = x + (20-facing*40);
+	}
+if timer = 5 {
+	sound_play(swingsnd2);
+	}
+if pikmin[0].type = 0 {
+if ( timer == 12 )
+  {
+  create_throw_box ( 10 , 25 + 130 * facing , 5.2 , 5.2 , 6 , 5 , fire2 , obj_spark_fire , 0.7 , 0.7 , 20 , 10 , self.id , 2 );
+  }
+}
+else if pikmin[0].type = 1 {
+if ( timer == 12 )
+  {
+  create_throw_box ( 10 , 20 + 140 * facing , 5.6 , 6.6 , 6 , 5 , punch2 , obj_spark_hit2 , 0.7 , 0.7 , 20 , 10 , self.id , 2 );
+  }
+}
+else if pikmin[0].type = 2 {
+if ( timer == 12 )
+  {
+  create_throw_box ( 10 , 25 + 130 * facing , 4.7 , 5.2 , 6 , 5 , shock1 , obj_spark_shock2 , 0.7 , 0.7 , 20 , 10 , self.id , 2 );
+  hitbox.hit_stun = 8
+  }
+}
+else if pikmin[0].type = 3 {
+if ( timer == 12 )
+  {
+  create_throw_box ( 10 , 25 + 130 * facing , 5.6 , 5.3 , 6 , 5 , kick2 , obj_spark_hit3 , 0.7 , 0.7 , 15 , 20 , self.id , 2 );
+  }
+}
+else if pikmin[0].type = 4 {
+if ( timer == 12 )
+  {
+  create_throw_box ( 10 , 25 + 130 * facing , 4.6 , 4.6 , 6 , 5 , punch1 , obj_spark_hit1 , 0.7 , 0.7 , 15 , 20 , self.id , 2 );
+  hitbox.hit_stun = 12
+  }
+}
+if timer = 28 {
+	pikmin[0].attack = "none";
+	}
+if timer = 29 {
+	script_execute(char_custom2);
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

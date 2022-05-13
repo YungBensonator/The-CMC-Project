@@ -16,9 +16,9 @@ if ( sprite_exists ( supershot_spr ) )
 
 
 ~~ENTER:
-sprite_index = obj_game_control.superscopeg_spr;
-sprite_air = obj_game_control.superscopeg_spr;
-sprite_held = obj_game_control.superscope_spr;
+sprite_index = obj_items_control.superscopeg_spr;
+sprite_air = obj_items_control.superscopeg_spr;
+sprite_held = obj_items_control.superscope_spr;
 air_spr_y = -23;
 type = "batter";
 image_xscale = 0.5;
@@ -112,7 +112,7 @@ if ( vermin.damage > 2 )
 
 ~~CUSTOM:
 moving_object = 1;
-sprite_index = obj_game_control.supershot_spr;
+sprite_index = obj_items_control.supershot_spr;
 mask_index = spr_item_mask2;
 image_index = 0;
 image_speed = 0;
@@ -135,7 +135,7 @@ if ( timer == -1 )
   timer = 0;
   time = 60;
   image_speed = 0;
-  sound_play ( obj_game_control.superready_snd );
+  sound_play ( obj_items_control.superready_snd );
   superscopecharge = 0;
   temp2 = 0;
   attacking = 1;
@@ -161,11 +161,11 @@ if ( timer == 20 || timer == 25 || timer == 30 || timer == 35 || timer == 40 || 
     {
     image_index = item_shoot_frame;
     image_speed = ( image_number - image_index ) / 25;
-    sound_play ( obj_game_control.superempty_snd );
+    sound_play ( obj_items_control.superempty_snd );
     instance_create ( held_item.x + 28 * ( 1 - facing * 2 ) , held_item.y - 4 , obj_smoke );
     exit;
     }
-  sound_play ( obj_game_control.supershot1_snd );
+  sound_play ( obj_items_control.supershot1_snd );
   create_projectile ( 1 , 320-facing*100 , 1 , 1 , 1 , 1 , shock2 , obj_spark_shock , 1 , 1 , 30 , 0 , self.id , 150 , char_item );
   proj.hspeed = 5 - facing * 10;
   proj.item_parent = held_item.object_index;
@@ -203,7 +203,7 @@ if ( timer == 20 || timer == 25 || timer == 30 || timer == 35 || timer == 40 || 
   }
   if ( timer = 80 )
   {
-  sound_play ( obj_game_control.supercharge_snd );
+  sound_play ( obj_items_control.supercharge_snd );
   }
   if ( timer >= 80 && timer <= 180 )
   {
@@ -231,12 +231,12 @@ if ( timer == 20 || timer == 25 || timer == 30 || timer == 35 || timer == 40 || 
     {
     image_index = item_shoot_frame;
     image_speed = ( image_number - image_index ) / 25;
-    sound_play ( obj_game_control.superempty_snd );
+    sound_play ( obj_items_control.superempty_snd );
     instance_create ( held_item.x + 28 * ( 1 - facing * 2 ) , held_item.y - 4 , obj_smoke );
     exit;
     }
-  sound_stop ( obj_game_control.supercharge_snd );
-  sound_play ( obj_game_control.supershot2_snd );
+  sound_stop ( obj_items_control.supercharge_snd );
+  sound_play ( obj_items_control.supershot2_snd );
   create_projectile ( 1 + round(superscopecharge/3.5), 35+facing*110 , 6.5 , 1.5 + round(superscopecharge/20) , 1 + round(superscopecharge/3.5), 1 + round(superscopecharge/3.5), shock2 , obj_spark_shock , 1 , 1 , 0 , 0 , self.id , 150 , char_item );
   proj.hspeed = (1-facing*2) * (5 + round(superscopecharge/6.5));
   proj.item_parent = held_item.object_index;

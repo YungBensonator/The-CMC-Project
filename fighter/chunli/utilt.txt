@@ -1,0 +1,105 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0.45;
+        sprite_index = utilt_sprite;
+        image_index=0.2;
+        timer = 0;
+        time = 30;
+        timer_speed=1;
+	attacking = 0;
+	temp4 = 0;
+}
+     if timer < time {
+		if attack_success
+		temp4 = 1
+             state_type = "attack";
+            if timer = 13 {
+                if random(10)>1
+		sound_play(swingsnd2);
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4));
+               create_hitbox(7,75+facing*30,5.35,2,11,8,sf_kick2,obj_spark_special1,0.52,1,18,31,self.id,5,3); 
+               hitbox.shake_ampl = 0.3
+               hitbox.shake_type = 1
+		hitbox.hit_stun = 7;
+            }
+		if timer <= 22 && temp4 {
+     		CAN_jump = 2;
+     		}
+	if timer <= 24 && temp4 {
+	if special > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		char_final_smash();
+		else
+	    char_b();
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    if (moveleft[1] >0) || (moveright[1] > 0)
+	    char_smashb();
+		else
+	    char_sideb();
+	  }
+	if attacking > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_jab();
+	    kickcancel = 1;
+	  }
+	if ( attacking > 0 && movedown[1] = 1 ) || smashdown
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_dsmash();
+	  }	
+	if ( attacking > 0 && moveup[1] = 1 ) || smashup
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_usmash();
+	  }
+}
+     if timer = 28
+     interrupt = 1
+     if image_index >= image_number-image_speed
+        image_speed = 0
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

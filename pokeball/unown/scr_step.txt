@@ -1,0 +1,122 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+depth = -9;
+
+if ( mode == 0 )
+  {
+  if ( timer == 7 )
+    {
+    sound_play2 ( sfx[0] );
+    instance_create ( x , y , obj_spark_effect );
+    repeat ( 3 )
+      gfx_sweat_gen ( x , y , 2.6 , 0.5 , 260 + random ( 20 ) );
+    }
+  if ( timer == 17 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+    }
+  if ( timer == 27 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+    }
+  
+  x += hs;
+  y += vs;
+  if ( hs < lengthdir_x ( 8 , dir ) )
+    hs += 0.1;
+  if ( hs > lengthdir_x ( 8 , dir ) )
+    hs -= 0.1;
+  if ( vs < lengthdir_y ( 8 , dir ) )
+    vs += 0.1;
+  if ( vs > lengthdir_y ( 8 , dir ) )
+    vs -= 0.1;
+    
+  if ( x < obj_game_control.death_l
+    || x > obj_game_control.death_r
+    || y < obj_game_control.death_u
+    || y > obj_game_control.death_d )
+    {
+    mode = 1;
+    unown_to_spawn = 0;
+    timer = 0;
+    for ( i = 0 ; i < top_cap ; i += 1 )
+      {
+      unown_i[i] = -1;
+      unown_x[i] = 0;
+      unown_y[i] = 0;
+      unown_timer[i] = 0;
+      unown_hs[i] = lengthdir_x ( 10 , dir ) - 0.08 + random ( 0.16 );
+      unown_vs[i] = lengthdir_y ( 10 , dir ) - 0.08 + random ( 0.16 );
+      }
+    }
+  exit;
+  }
+  
+var not_dead, o, xx, yy;
+not_dead = 0;
+xx = obj_game_control.camera_boundary_l;
+yy = obj_game_control.camera_boundary_u;
+
+if ( timer == 4 || ( string_length ( str ) > 10 && timer mod 20 == 0 ) )
+  {
+  o = sound_play2 ( sfx[0] );
+  FMODInstanceSetFrequency ( o , FMODInstanceGetFrequency ( o ) * ( 0.16 + random ( 0.04 ) ) );
+  if ( string_length ( str ) < 16 )
+    FMODInstanceSetVolume ( o , FMODInstanceGetVolume ( o ) * 0.5 );
+  if ( string_length ( str ) < 13 )
+    FMODInstanceSetVolume ( o , FMODInstanceGetVolume ( o ) * 0.5 );
+  if ( random ( 3 ) < 1 || timer < 6 )
+    FMODInstanceSetVolume ( o , FMODInstanceGetVolume ( o ) * 0.6 );
+  }
+
+if ( timer < 60 ) not_dead = 1;
+if ( timer mod 8 == 0 )
+  {
+  i = timer / 8 - 1;
+  if ( string_length ( str ) > 1 )
+    {
+    unown_i [ i ] = ord ( string_char_at ( str , 1 ) ) - 1;
+    str = string_delete ( str , 1 , 1 );
+    unown_x [ i ] = target_x - 32 + random ( 64 );
+    unown_y [ i ] = target_y - 112 + random ( 224 );
+    }
+  }
+
+for ( i = 0 ; i < top_cap ; i += 1 )
+  {
+  if ( unown_i[i] < 0 ) continue;
+  not_dead = 1;
+  if ( unown_timer[i] )
+    unown_timer[i] -= 1;
+    else
+    {
+    o = collision_rectangle ( unown_x[i] + xx - 14 , unown_y[i] + yy - 14
+                            , unown_x[i] + xx + 14 , unown_y[i] + yy + 14
+                            , player , 0 , 1 );
+    if ( o > 0 )
+      {
+      create_projectile ( 4 , 80 + random ( 20 ) , 8.3 , 2 , 8 , 3 , kick1 , obj_spark_hit1 , 1.4 , 1.4 , 0 , 0 , attacker , 6 , no_script );
+      proj.x = unown_x[i] + xx;
+      proj.y = unown_y[i] + yy;
+      unown_timer[i] = 3;
+      }
+    }
+  unown_x [ i ] += unown_hs [ i ];
+  unown_y [ i ] += unown_vs [ i ];
+  if ( ( ende == 0 && unown_x [ i ] < -96 )
+    || ( ende == 1 && unown_x [ i ] > w + 96 ) )
+    {
+    unown_i [ i ] = -1;
+    }
+  }
+  
+if ( not_dead == 0 )
+  {
+  //show_message ( "A" );
+  instance_destroy();
+  }

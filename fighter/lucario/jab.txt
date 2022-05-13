@@ -1,0 +1,167 @@
+if global.gs_form[number-1] = 0
+{
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "jab";
+        image_speed = 0;
+        sprite_index = jab_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 49;
+        timer_speed=1;
+}
+        if timer < time {
+switch ( timer )
+{
+                case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break; //hitbox 1 start
+		case 13: image_index = 4; break; 
+		case 16: image_index = 5; break;
+		case 18: image_index = 6; break; //jab 1 end
+		case 21: image_index = 7; break; //hitbox 2 start
+		case 24: image_index = 8; break;
+                case 26: image_index = 9; break; //jab 2 end
+                case 29: image_index = 10; break;
+                case 31: image_index = 11; break;  //hitbox 3 start
+                case 41: image_index = 12; break;
+                case 45: image_index = 13; break;
+                case 49: image_index = 14; break;
+}
+             state_type = "attack";
+            if timer = 6 {
+                create_spark(9,3,stilt_aura_sprite,1,(0.35+aura/80)*(1-facing*2),0.35+aura/80)
+            }
+            if timer = 9 {
+                sound_play(attack_sound1);
+                create_hitbox(3+round(aura/4),20+facing*140,1.5,0,4,5,aura2,obj_spark_aura,0.85+aura/50,0.75+aura/50,23,15,self.id,5,1);
+                hitbox.di = 0.3
+                hitbox.hit_stun = 9
+            }
+            if (timer = 9 || timer = 17) && ai = 1 && random(10)>1
+                attacking = 1
+            if timer >= 16 && timer < 20 && attacking  = 1 {
+                timer = 21;
+                image_index = 7;
+            }
+            if timer = 21 {
+                image_index = 8;
+                sound_play(attack_sound2);
+                create_hitbox(3+round(aura/10),85+facing*30,1.7,0,5,5,aura1,obj_spark_aura,0.7,0.5,23,20,self.id,3,1);
+                attacking = 0
+                hitbox.hit_stun = 9;
+                create_spark(23,22,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+            if timer >= 25 && timer < 28 && attacking  = 1 {
+                timer = 29;
+                image_index = 10;
+            }
+            if timer = 31 {
+                if !collision_point(x+size*(6-facing*12),y-1,obj_wall,0,1)
+                hspeed+= size*(1.3-facing*2.6)
+                sound_play(attack_sound3);
+                play_attack_voice();
+                create_hitbox(6+round(aura/7),40+facing*100,6.75+(aura/10),1.5+(aura/8),7,6,aura2,obj_spark_aura,0.8+aura/50,0.9+aura/50,28,20,self.id,4,2);
+                attacking = 0
+                hitbox.hit_stun = 4;
+                create_spark(26,12,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+            if timer = 32 {
+                create_spark(29,22,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+            if timer = 33 {
+                create_spark(35,30,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+}
+if (timer >= time-1 || timer = 20 || timer = 49) && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+
+}        
+if global.gs_form[number-1] = 1
+{
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "jab";
+        image_speed = 0;
+        sprite_index = jab_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 49;
+        timer_speed=1;
+}
+        if timer < time {
+switch ( timer )
+{
+                case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break; //hitbox 1 start
+		case 13: image_index = 4; break; 
+		case 16: image_index = 5; break;
+		case 18: image_index = 6; break; //jab 1 end
+		case 21: image_index = 7; break; //hitbox 2 start
+		case 24: image_index = 8; break;
+                case 26: image_index = 9; break; //jab 2 end
+                case 29: image_index = 10; break;
+                case 31: image_index = 11; break;  //hitbox 3 start
+                case 41: image_index = 12; break;
+                case 45: image_index = 13; break;
+                case 49: image_index = 14; break;
+}
+             state_type = "attack";
+            if timer = 6 {
+                create_spark(9,3,stilt_aura_sprite,1,(0.35+aura/80)*(1-facing*2),0.35+aura/80)
+            }
+            if timer = 9 {
+                sound_play(attack_sound1);
+                create_hitbox(3,20+facing*140,1.5,0,4,5,aura2,obj_spark_aura,0.85,0.75,23,15,self.id,5,1);
+                hitbox.di = 0.3
+                hitbox.hit_stun = 9
+            }
+            if (timer = 9 || timer = 17) && ai = 1 && random(10)>1
+                attacking = 1
+            if timer >= 16 && timer < 20 && attacking  = 1 {
+                timer = 21;
+                image_index = 7;
+            }
+            if timer = 21 {
+                image_index = 8;
+                sound_play(attack_sound2);
+                create_hitbox(3,85+facing*30,1.7,0,5,5,aura1,obj_spark_aura,0.7,0.5,23,20,self.id,3,1);
+                attacking = 0
+                hitbox.hit_stun = 9;
+                create_spark(23,22,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+            if timer >= 25 && timer < 28 && attacking  = 1 {
+                timer = 29;
+                image_index = 10;
+            }
+            if timer = 31 {
+                if !collision_point(x+size*(6-facing*12),y-1,obj_wall,0,1)
+                hspeed+= size*(1.3-facing*2.6)
+                sound_play(attack_sound3);
+                play_attack_voice();
+                create_hitbox(6,40+facing*100,6.75,1.5,7,6,aura2,obj_spark_aura,0.8,0.9,28,20,self.id,4,2);
+                attacking = 0
+                hitbox.hit_stun = 4;
+                create_spark(26,12,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+            if timer = 32 {
+                create_spark(29,22,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+            if timer = 33 {
+                create_spark(35,30,aura_flame_sprite,1,0.2+aura/80,0.2+aura/80)
+            }
+}
+if (timer >= time-1 || timer = 20 || timer = 49) && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+}

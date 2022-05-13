@@ -1,0 +1,90 @@
+if (state_type = "jump") {
+        state_type = "air_attack";
+        attack_type = "zair";
+        image_speed = 0.4;
+        sprite_index = zair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 39;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        temp = 0
+        hitbox = -99
+	intangible = 0
+}
+if timer < time {
+    state_type = "air_attack";
+    if timer = 13 
+        instance_create(x+4*size*(1-facing*2),y-size*15,obj_spark_effect)
+    if timer >= 18 && timer <= 23 {
+        if collision_rectangle(x+(5-facing*10)*size,y-12*size,x+(42-facing*84)*size,y-30*size,obj_edge_left,1,1) {
+            facing = 0
+            edge = instance_nearest(x+20*size,y-5*size,obj_edge_left)
+            y = edge.y + sprite_get_height(sprite_index)*image_yscale - 13
+            x = edge.x-7*size
+            temp = 1
+            state_type = "jump"
+            attack_type = "none"
+        }
+        if collision_rectangle(x+(5-facing*10)*size,y-12*size,x+(42-facing*84)*size,y-30*size,obj_edge_right,1,1) {
+            facing = 1
+            edge = instance_nearest(x+20*size,y-5*size,obj_edge_right)
+            y = edge.y + sprite_get_height(sprite_index)*image_yscale - 13
+            x = edge.x+7*size
+            state_type = "jump"
+            attack_type = "none"
+            temp = 1
+        }
+    }
+    if (timer >= 13 && timer <= 17) || (timer > 23 && timer < 26) {
+        if collision_rectangle(x+(5-facing*10)*size,y-12*size,x+(25-facing*50)*size,y-30*size,obj_edge_left,1,1) {
+            facing = 0
+            edge = instance_nearest(x+20*size,y-5*size,obj_edge_left)
+            y = edge.y + sprite_get_height(sprite_index)*image_yscale - 13
+            x = edge.x-7*size
+            temp = 1
+            state_type = "jump"
+            attack_type = "none"
+        }
+        if collision_rectangle(x+(5-facing*10)*size,y-12*size,x+(25-facing*50)*size,y-30*size,obj_edge_right,1,1) {
+            facing = 1
+            edge = instance_nearest(x+20*size,y-5*size,obj_edge_right)
+            y = edge.y + sprite_get_height(sprite_index)*image_yscale - 13
+            x = edge.x+7*size
+            state_type = "jump"
+            attack_type = "none"
+            temp = 1
+        }
+    }
+    if timer = 15 {
+        create_hitbox(7,35+facing*110,5.2,2.5,11,7,kick2,obj_spark_hit4,1.6,0.4,42,10,self.id,3,4)
+        hitbox.shake_type = 1
+        hitbox.shake_ampl = 0.5
+        hitbox.hit_stun = 7 
+    }
+    if timer = 11
+        sound_play(swingsnd5)
+    if timer = 36
+        image_speed = 0.175
+    } 
+    if air = 0
+        hspeed = 0 
+if air = 0 {
+    state_type="land"
+    attack_type="none"
+    sprite_index = land_sprite
+    image_index = 0
+    image_speed = 0
+    timer=0
+    time=7
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+}

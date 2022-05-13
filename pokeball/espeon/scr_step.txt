@@ -1,0 +1,55 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+moving_object = 1;
+
+// gravity
+if ( !on_floor && !on_platform )
+  {
+  if ( vspeed < 4 )
+    vspeed += 0.5;
+  }
+  else
+  {
+  vspeed = 0;
+  }
+
+if ( timer == 4 || timer == 732 )
+  {
+    sound_play2 ( sfx[0] );
+    instance_create ( x , y - 12 , obj_spark_effect );
+    repeat ( 3 )
+	gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+  }
+if ( timer == 14 || timer == 742 )
+  {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+  }
+if ( timer == 24 || timer == 752 )
+  {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+  }
+
+if ( timer = 8 )
+    image_speed = 0;
+if ( timer = 30 )
+    image_speed = 0.25;
+if ( timer = 50 )
+    image_speed = 0;
+if ( timer = 220 )
+    image_speed = 0.25;
+if ( timer = 236 )
+    image_speed = 0;
+if ( timer >= 260 )
+    instance_destroy();
+
+if ( timer >= 45 && timer <= 210 && timer mod 6 = 0 )
+  {
+    with ( player )
+    if ( percent > 0 && collision_rectangle(other.x - other.light_left,-100,other.x + other.light_right,other.y+16,self.id,0,0) )
+	percent -= 1;
+  }

@@ -1,0 +1,87 @@
+if ( state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "bair";
+    timer = 0;
+    time = 35;
+    sprite_index = bair_sprite;
+    image_speed = 0;
+    image_index = 0;
+    vspeed -= 0.1;
+  }
+
+if ( timer < time )
+  {
+if hitbox.hit > 0 || hitbox2.hit > 0
+chaostemp = 1
+    switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 8: image_index = 6; break;
+	case 10: image_index = 5; break;
+	case 13: image_index = 6; break;
+	case 16: image_index = 5; break;
+	case 19: image_index = 6; break;
+	case 22: image_index = 7; break;
+	case 25: image_index = 8; break;
+	case 28: image_index = 9; break;
+	case 32: image_index = 10; break;
+      }
+
+    if ( timer = 10 )
+      {
+	burst = instance_create(x+10*(1-facing*2),y-14,obj_spark);
+	burst.sprite_index = chaosburst_sprite;
+	burst.image_xscale = 0.45
+	burst.image_yscale = 0.45
+	burst.image_speed = 1
+	burst.image_index = 0
+	burst.alarm[0] = 25
+	burst.depth = 1
+	burst2 = instance_create(x+10*(1-facing*2),y-14,obj_spark);
+	burst2.sprite_index = chaosburst_sprite2;
+	burst2.image_xscale = 0.05
+	burst2.image_yscale = 0.05
+	burst2.image_speed = 0
+	burst2.image_index = 0
+	burst2.depth = 0
+	burst2.snap = self.id
+	burst2.alarm[0] = 10
+	play_attack_voice();
+	sound_play(psi_sound2);
+	create_hitbox(14,155-facing*130,6,7,60,12,magic3,obj_spark_darkness,0.57,0.57,-13,21,self.id,3,5);
+	hitbox.shake_ampl = 1.15;
+	create_hitbox2(11,155-facing*130,5.5,5,10,7,magic2,obj_spark_darkness,0.85,0.85,-15,22,self.id,10,5);
+      }
+     if ( timer = 10 && chaosboost > 0 ) {
+    create_hitbox(17,155-facing*130,6.2,7.5,80,15,magic3,obj_spark_shock,0.57,0.57,-13,21,self.id,3,5);
+	hitbox.shake_ampl = 1.15;
+	create_hitbox2(13,155-facing*130,5.5,5.8,20,8,magic2,obj_spark_darkness,0.85,0.85,-15,22,self.id,10,5);
+     }
+	burst.x = x-15*(1-facing*2)
+	burst.y = y-22
+	burst2.x = x-15*(1-facing*2)
+	burst2.y = y-22
+	burst2.image_alpha -= 0.1
+	burst2.image_xscale += 0.01
+	burst2.image_yscale += 0.01
+
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 12;
+	sprite_index = land_sprite;
+	with burst instance_destroy()
+	with burst2 instance_destroy()
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

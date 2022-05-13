@@ -1,0 +1,70 @@
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 0
+moving_object = 1;
+proj_destroy = 0;
+if(timer <= 1 && !temp)         // Initialize sprite and speed during frame 1
+{
+    sprite_index = attacker.id.psycho_iris_sprite;
+    image_speed = 0.1;
+    visible = true;
+    temp = true;
+    //fire_sound = attacker.fire_sound3;
+    priority = 1;
+    target=0
+    facing = attacker.id.facing;
+
+    hspeed = 1.25*(1-2*facing);
+    vspeed = 0;
+    deflect=0
+    track=0
+}
+
+
+if (attacker.id.moveright){
+	hspeed = 1.25;
+	if (facing)
+		facing = 0;
+}
+else if (attacker.id.moveleft){
+	hspeed = -1.25;
+	if (!facing)
+		facing = 1;
+}
+
+if (attacker.id.moveup){
+	vspeed = -1.25;
+	if(attacker.id.moveright){
+		hspeed = 0.885;
+		vspeed = -0.885;
+	}
+	else if(attacker.id.moveleft){
+		hspeed = -0.885;
+		vspeed = -0.885;
+	}
+}
+else if (attacker.id.movedown){
+	vspeed = 1.25;
+	if(attacker.id.moveright){
+		hspeed = 0.885;
+		vspeed = 0.885;
+	}
+	else if(attacker.id.moveleft){
+		hspeed = -0.885;
+		vspeed = 0.885;
+	}
+}
+
+if attacker.id.fsbuffer == 22 {
+	bomb1 = create_projectile (8,40+facing*100,4.35,9.3,-1,8,explodehit3,obj_spark_impact, 1 , 1 , 0 , 0 , attacker.id , 80 , attacker.id.waluigi_bomb_script);
+	bomb1.hspeed = 4.2*(1-2*facing);
+	bomb1.vspeed = -1.5;
+	bomb1.image_xscale = 1*(1-2*facing)*size;
+	bomb2 = create_projectile (8,40+facing*100,4.35,9.3,-1,8,explodehit3,obj_spark_impact, 1 , 1 , 0 , 0 , attacker.id , 80 , attacker.id.waluigi_bomb_script);
+	bomb2.hspeed = 3.6*(1-2*facing);
+	bomb2.vspeed = -3.5;
+	bomb2.image_xscale = 1*(1-2*facing)*size;
+	bomb3 = create_projectile (8,40+facing*100,4.35,9.3,-1,8,explodehit3,obj_spark_impact, 1 , 1 , 0 , 0 , attacker.id , 80 , attacker.id.waluigi_bomb_script);
+	bomb3.hspeed = 3.0*(1-2*facing);
+	bomb3.vspeed = -5.5;
+	bomb3.image_xscale = 1*(1-2*facing)*size;
+}

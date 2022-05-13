@@ -1,0 +1,129 @@
+//Ult Start
+
+if global.gs_form[number-1] = 0
+{
+if ( state_type = "jump" )
+  {
+    vspeed -= 0.1;
+    state_type = "air_attack";
+    attack_type = "uair";
+    image_speed = 0;
+    sprite_index = uair_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 40;
+    timer_speed = 1;
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    state_type = "air_attack";
+    if ( timer = 7 )
+      {
+	sound_play(attack_voice2);
+	create_projectile(2,90,5.3,0,9,6,kick1,obj_spark_hit2,0.9,0.9,1,44,self.id,30,char_custom4);
+  	proj.alarm[0] = 30;
+	proj.image_angle = 90 - 180 * facing;
+	proj.size = size;
+	proj.use_palette = number;
+	//proj.stop_on_hit = 0;
+	proj.di = 0.7;
+	proj.hit_stun = 3;
+
+      }
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	sprite_index = uair_land_sprite;
+	timer = 0;
+	time = 8;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+  }
+}
+
+//Classic Start
+
+if global.gs_form[number-1] = 1
+{
+if ( state_type = "jump" )
+  {
+    vspeed -= 0.1;
+    state_type = "air_attack";
+    attack_type = "uair";
+    image_speed = 0;
+    sprite_index = uair_sprite2;
+    image_index = 0;
+    timer = 0;
+    time = 40;
+    timer_speed = 1;
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 7: image_index = 1; break;
+	case 14: image_index = 0; break;
+	case 20: image_index = 1; break;
+	case 27: image_index = 0; break;
+      }
+    state_type = "air_attack";
+    if ( timer = 7 || timer = 20 )
+      {
+	sound_play(attack_voice2);
+	create_hitbox(7+(timer=20)*2,90,3.5+(timer=20)*2,1+(timer=20)*4.5,9,5,fire2,obj_spark_hit2,0.72,0.85,-5,36,self.id,7,3);
+	hitbox.di = 0.7;
+	hitbox.hit_stun = 2;
+	create_wind(1.5,3.5,1,80,0,-6.3,6)
+	poof = instance_create ( x - 5 * ( 1 - facing * 2 ) * size , y - 35 * size , obj_spark );
+	poof.sprite_index = poof_sprite;
+	poof.image_speed = 0;
+	poof.image_xscale = image_xscale + 0.2 * ( 1 - facing * 2 ) * size;
+	poof.image_yscale = image_yscale + 0.2 * size;
+	poof.image_angle = 90 - 180 * facing;
+	poof.number = -number;
+	poof.depth = depth;
+	poof.snap = self.id;
+	poof.alarm[0] = 4;
+      }
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	sprite_index = uair_land_sprite2;
+	timer = 0;
+	time = 8;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+  }
+}

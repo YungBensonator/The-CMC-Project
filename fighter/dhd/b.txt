@@ -1,0 +1,130 @@
+// timer 0 - 18 - first shot 		(warp to 30)
+// timer 30 - 40 - wait period 1 	(warp to 50 or 90)
+// timer 50 - 56 - second shot 		(warp to 60)
+// timer 60 - 70 - wait period 2	(warp to 80 or 90)
+// timer 80 - 86 - third shot		(warp to 90)
+// timer 90 - 98 - hide gun		(end state)
+
+// shots occur at frames: 15, 51, 81
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" )
+  {
+  attacking = 0;
+  attack_type = "b";
+  special = 0;
+  if ( air == 0 )
+    {
+    state_type = "attack";
+    hspeed = 0;
+    }
+    else
+    {
+    state_type = "air_attack";
+    hspeed *= 0.5;
+  }
+  image_speed = 0.5;
+  sprite_index = b_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 99;
+  timer_speed = 1;
+}
+
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( timer == 19 )
+  {
+  image_index = 5;
+  image_speed = 0;
+  //timer = 30;
+  }
+
+if ( timer == 57 )
+  {
+  image_index = 5;
+  image_speed = 0;
+  //timer = 60;
+  }
+
+if ( timer >= 30 && timer < 41 && special )
+  {
+  timer = 50;
+  special = 0;
+  }
+
+if ( timer >= 60 && timer < 71 && special )
+  {
+  timer = 80;
+  special = 0;
+  }
+
+if ( timer == 41 || timer == 71)
+  {
+  image_index = 10;
+  image_speed = 0.5;
+  timer = 90;
+}
+
+if ( timer == 15 || timer == 51 || timer == 81)
+  {
+  sound_play ( zapper_sound );
+  image_index = 7.5;
+  image_speed = 0.5;
+  duster = instance_create ( x-6+facing*12 , y , obj_dust_effect );
+  duster.facing = facing;
+  duster.image_alpha = 0.75;
+  duster.image_yscale *= 0.8 * size;
+  duster.image_xscale *= 0.8 * size;
+  spark = instance_create ( x + ( 28 - facing * 56 ) * size , y - 28 * size , obj_spark_shockwave );
+  spark.image_xscale *= 0.1*size;
+  spark.image_yscale *= 0.4*size;
+  spark.image_blend = c_white;
+  spark.image_alpha = 0.7;
+  create_projectile( 5 , 30 + facing * 120 , 5.25 , 1.5 , 5 , 5 , kick1 , obj_spark_hit4 , 0.43 , 0.43 , 24 , 24 , self.id , 20 , dhd_zapper );
+   proj.shield_stun = 1.2;
+proj.hit_stun = 10;
+  proj . sprite_index = bullet_sprite;
+  proj . visible = 1;
+  proj . hspeed = 6 * ( 1 - facing - facing );
+  proj . vspeed = 0;
+  proj . shield_stun += 8;
+}
+/*if timer = 16 {
+    target =-1
+    create_homing_bubble(1.5,1,20,10,self.id,12);
+}
+if timer >= 17 && temp = 0 && target != -1 && target.intangible = 0 && string(target.attack_type) != "final_smash" && target.air = 0 {
+    temp = 1
+    if target.state_type != "broken" {
+        with target {
+            if air = 0 {
+                shield_hp = 150;
+                state_type = "broken";   
+                timer = 0;               // Enter broken shield stunned state
+                time = 65 + round(percent/15);
+                attack_type = "none"
+                sprite_index = broken_sprite;
+                speed = 0 
+            }
+        }
+    }
+}*/
+
+
+if ( air == 0 )
+  {
+  air_move = 0;
+  state_type = "attack";
+  hspeed = 0;
+  }
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "air";
+  if ( air == 0 )
+    state_type = "stand";
+  timer = 0;
+  time =-1;
+  }

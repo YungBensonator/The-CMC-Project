@@ -1,0 +1,237 @@
+if global.gs_form[number-1] = 0
+{
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && air < max_jumps )
+  {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb";
+    state_type = "air_attack";
+    if ( air = 0 )
+	hspeed = 0;
+    else
+	hspeed *= 0.5;
+    image_speed = 0;
+    sprite_index = land_sprite;
+    image_index = 0;
+    time = 72;
+    timer_speed = 1;
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+    air_move = 0;
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    if ( timer > 25 )
+	force_edge_grab = 1
+    if ( timer = 5 )
+      {
+	intangible = 1;
+	sprite_index = upb_sprite;
+	image_index = 0;
+	image_speed = 0.25;
+	var sp;
+	sp = create_spark(0,0,men_sprite,0,size*0.7,size*0.7);
+	sp.image_index = 0;
+	sp.image_speed = 0.25;
+	sp.number = -number;
+	//y -= 2 * size;
+	hspeed = size * ( 0.75 - facing * 1.5 );
+	vspeed = -12 * size;
+	duster = instance_create( x , y + 2 * size , obj_dust_effect );
+	duster.facing = facing;
+      }
+    if ( timer < 3 )
+      {
+	vspeed = 0;
+	gravity = 0;
+      }
+    if ( timer = 3 )
+      {
+	air = max_jumps;
+	sound_play( ssmash_voice )
+	create_hitbox(7,angle_correct(366),7,4,15,6,punch4,obj_spark_hit4,0.9,0.9,1,17,self.id,14,3);
+	create_hitbox2(7,angle_correct(83),7,4,15,6,punch4,obj_spark_hit4,0.9,0.9,21,17,self.id,2,3);
+	create_hitbox3(7,angle_correct(83),7,4,15,6,punch4,obj_spark_hit4,0.9,0.9,-21,17,self.id,2,3);
+	hitbox.di = 0.7;
+	hitbox.hit_stun = 6;
+	hspeed = ( 1 - facing * 2 ) * size;
+	vspeed = -24 * size;
+	hover = 0;
+      }
+    if ( timer = 8 || timer = 12 || timer = 16 || timer = 20 )
+      {
+	hspeed = size * ( 2 - facing * 4 );
+	intangible = 0;
+	vspeed = size * ( -12 + timer/2);
+      }
+    if ( timer = 9 )
+      {
+	hitbox.damage = 5 * size;
+	hitbox.kbg = 6 * size;
+	hitbox.bkb = 2.6 * size;
+	hitbox.dir = 65 + facing * 50;
+	hitbox.hit_stun = 2.6;
+      }
+    if ( timer > 25 )
+	force_edge_grab = 1;
+    if ( sprite_index = upb_sprite && image_index >= image_number - image_speed )
+	image_speed = 0;
+    if ( timer = 29 )
+      {
+	sprite_index = nair_sprite2;
+	sound_play( upb_sound2 );
+	image_index = 0;
+	image_speed = 0;
+	if ( ai ) movedown = 0;
+	air_move = 1;
+      }
+    if ( sprite_index = nair_sprite2 )
+      {
+	if ( timer = 32 )
+	    image_index = 1;
+	if ( timer = 35 )
+	    image_index = 2;
+      }
+    if ( timer > 35 && timer < 69 )
+      {
+	interrupt = 1;
+	if ( vspeed > 0.6 )
+	    vspeed = 0.6;
+	air = 3
+	if ( timer >= 68 )
+	    timer = 35
+	if ( abs(hspeed) > size * 2 )
+	    hspeed *= abs(2/hspeed);
+	image_angle = ( 3 - facing * 6 ) * hspeed/size;
+      }
+  }
+if ( ( air = 0 || is_on_floor(self.id) || vspeed = 0 ) && timer >= 34 )
+  {
+    state_type = "land";
+    sprite_index = land_sprite;
+    attack_type = "none";
+    hspeed = 0;
+    timer = 0;
+    time = 14;
+  }
+
+if ( timer >= 36 && ( movedown || ( ai && ( !offstage || ( offstage && y > nearest_edge.y ) ) ) ) && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+  }
+}
+else
+{
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && air < max_jumps )
+  {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb";
+    state_type = "air_attack";
+    hspeed *= 0.5;
+    image_speed = 0;
+    sprite_index = land_sprite;
+    image_index = 0;
+    time = 37;
+    timer_speed = 1;
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    if ( timer > 25 )
+	force_edge_grab = 1
+    if ( timer = 5 )
+      {
+	intangible = 1;
+	sprite_index = upb_sprite;
+	image_index = 0;
+	image_speed = 0.2;
+	var sp;
+	sp = create_spark(0,0,men_sprite,0,size*0.7,size*0.7);
+	sp.image_index = 0;
+	sp.image_speed = 0.25;
+	sp.number = -number;
+	y -= 2 * size;
+	vspeed = -6 * size;
+	duster = instance_create( x , y + 2 * size , obj_dust_effect );
+	duster.facing = facing;
+      }
+    if ( timer < 3 )
+      {
+	vspeed = 0;
+	gravity = 0;
+      }
+    if ( timer = 3 )
+      {
+	air = max_jumps;
+	sound_play( ssmash_voice )
+	create_hitbox(7,angle_correct(366),7,4,15,6,punch4,obj_spark_hit4,0.9,0.9,1,17,self.id,14,3);
+	create_hitbox2(7,angle_correct(75),7,4,15,6,punch4,obj_spark_hit4,0.9,0.9,21,17,self.id,2,3);
+	create_hitbox3(7,angle_correct(75),7,4,15,6,punch4,obj_spark_hit4,0.9,0.9,-21,17,self.id,2,3);
+	hitbox.di = 0.7;
+	hitbox.hit_stun = 6;
+	vspeed = -size * 6.9;
+	hover = 0;
+      }
+    if ( timer = 8 || timer = 12 || timer = 16 || timer = 20 )
+      {
+	intangible = 0;
+	vspeed = size * ( -7 + timer/22 );
+      }
+    if ( timer = 9 )
+      {
+	hitbox.damage = 5 * size;
+	hitbox.kbg = 6 * size;
+	hitbox.bkb = 2.6 * size;
+	hitbox.dir = 65 + facing * 50;
+	hitbox.hit_stun = 2.6;
+      }
+    if ( timer > 25 )
+	force_edge_grab = 1;
+    if ( sprite_index = upb_sprite && image_index >= image_number - image_speed )
+	image_speed = 0;
+  }
+if ( ( air = 0 || is_on_floor(self.id) || vspeed = 0 ) && timer >= 34 )
+  {
+    state_type = "land";
+    sprite_index = land_sprite;
+    attack_type = "none";
+    hspeed = 0;
+    timer = 0;
+    time = 14;
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+  }
+}

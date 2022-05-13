@@ -1,0 +1,51 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=4;
+        timer = 0;
+        time = 16;
+        timer_speed=1;
+}
+
+    switch ( timer )
+      {
+	case 6: image_index = 1; break;
+	case 12: image_index = 0; break;
+
+    }
+	
+	if timer = 6{
+		effectjab = create_spark(abs(place_x(60)),0,0);
+		effectjab.sprite_index = dtilt_sprite_eff;
+		effectjab.image_speed = 0.4;
+		effectjab.image_alpha = 1;
+		effectjab.image_xscale = image_xscale*0.58;
+		effectjab.image_yscale = image_yscale*0.58;
+		effectjab.depth = depth - 2;
+		//effectjab.snap = self.id
+		effectjab.alarm[0] = 15
+		effectjab.glow = 0.3;
+		effectjab.script = char_custom7;
+		effectjab.owner = self.id;
+		effectjab.keepmain = self.keepmain;
+	}
+	
+    if timer = 7{
+		play_attack_voice()
+	    sound_play(crystal_sound2);
+	    create_hitbox(7,60+facing*60,4.5,5.5,12,7,ice1,obj_spark_hit3,1.15,0.4,abs(place_x(60)),-place_y(24),self.id,6,2);
+      }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "crouch";
+    attack_type = "none";
+    timer = 6;
+    time = -1;
+	sprite_index = crouch_sprite;
+	image_index = 2;
+	crouchgetuptimer = 6;
+  }

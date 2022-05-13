@@ -1,0 +1,48 @@
+if ( pounce_block > 0 && attack_type != "downb" )
+  {
+ // if ( frac ( pounce_block / 22 ) == 0 )
+  //  {
+  //  //effect_create_above ( ef_spark , x , y - 20 * size , 0 , c_white );
+ //   }
+  pounce_block -= 1;
+  }
+
+if state_type = "crouch" && facing = 0 && moveright = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = 0.15;
+	hspeed = 0.8;
+	}
+if state_type = "crouch" && facing = 0 && moveleft = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = image_number - 0.15;
+	hspeed = -0.6;
+	}
+if state_type = "crouch" && facing = 1 && moveright = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = 0.15;
+	hspeed = 0.6;
+	}
+if state_type = "crouch" && facing = 1 && moveleft = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = image_number - 0.15;
+	hspeed = -0.8;
+	}
+if state_type = "land" {
+	sound_stop(upb_sound2);
+	}
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 15: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=2;  break;
+  case 18: shakey=12*size;  break;
+  case 21: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 24: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 27: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 30: sprite_index=land_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}

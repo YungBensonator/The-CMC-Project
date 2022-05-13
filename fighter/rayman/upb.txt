@@ -1,0 +1,242 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" ) 
+  {
+  if cantupb=0
+  {
+	if moveleft
+		facing=1
+	if moveright
+		facing=0
+    special = 1;
+    attack_type = "upb";
+    time = 110;
+    timer = 0;
+	hspeed=0
+	vspeed=0
+	ceiltemp=0
+    state_type = "air_attack";
+    sprite_index = crouch_sprite;
+    image_index = 0;
+    timer_speed = 1;
+	sound_play(ting_snd)
+	bouncepad = instance_create(x,y,obj_spark);
+	bouncepad.sprite_index=mushroom_sprite
+	bouncepad.image_speed=0
+	bouncepad.image_xscale=(xsize*size*1.2)*(1-facing*2)
+	bouncepad.image_yscale=ysize*size*1.2
+	bouncepad.depth=depth+3
+	bouncepad.image_angle=350-160*facing-(180*facing)
+	fuck=bouncepad.image_yscale
+	image_angle=bouncepad.image_angle
+	smoke = instance_create(x+5*(1-facing*2),y-9,obj_spark);
+	smoke.sprite_index=smoke_fx
+	smoke.image_speed=1.4
+	smoke.image_angle=random(360)
+	smoke.depth=bouncepad.depth-1
+	smoke.image_xscale=(xsize/8)*size
+	smoke.image_yscale=(ysize/8)*size
+	
+	shakey=-(12*1.2)*size
+	shakex=(4*1.2)*size*(1-facing*2)
+	lumposx=0
+	lumposy=1
+	lumcount=-1
+	num=0
+    }
+    else
+    exit;
+  }
+	if timer>0
+	{
+		
+		fast_fall = 0;
+		fast_fall_temp = 0;
+	}	
+	if timer=3
+		sound_play(choose(lum_appear1_snd,lum_appear2_snd,lum_appear3_snd))
+	if timer<100
+		air_move = 0;
+	else
+		air_move=1
+	if timer<60
+	{
+		speed=0
+		gravity_lock = 1;
+	}	
+	if timer<49 && timer>17 && !special
+		timer = 55
+	if timer mod 3=0 && timer <=17 && timer>0
+	{
+		lumcount+=1
+		lum[lumcount] = instance_create(x+( (10+ (10*(1+lumposx)) )*(1-facing*2) ),y-120 + 90*lumposy,obj_spark)
+		lumposx+=1
+		lumposy/=1.5
+		lum[0].sprite_index =lum_awake_sprite
+		lum[1].sprite_index=lum_asleep_sprite
+		lum[2].sprite_index=lum_asleep_sprite
+		lum[3].sprite_index=lum_asleep_sprite
+		if timer<4
+		dirthing=point_direction(x,y,lum[0].x,lum[0].y)
+		scalex=lum[lumcount].image_xscale
+		scaley=lum[lumcount].image_yscale
+		lum[lumcount].image_xscale=scalex*(1-facing*2)*size
+		lum[lumcount].image_yscale=scaley*size
+		lum[lumcount].loop=50
+		lum[lumcount].image_speed=0.25
+		lum[lumcount].depth=depth
+		
+	}
+	//no deleto pls
+	lum[4].visible=0
+	
+	if timer>50 && timer<60
+	{
+		sprite_index=land_sprite
+	}	
+	
+	if timer=61
+	{
+		shakex=0
+		shakey=0
+		sound_play(bouncepad_snd)
+		sprite_index=air_dodge_sprite
+		image_speed=.4
+		speed=8.5*size
+	}
+	
+	y_bounce = ease_out_elastic(.2,1.2,(timer-60)/40);
+	x_bounce = ease_out_elastic(.8,1.2,(timer-60)/20);
+	if timer>60 && timer<80
+	{
+		if timer mod 4 = 2
+		{
+			bouncepad.image_blend=make_color_rgb(0,110,255)
+		}
+		if timer mod 4 = 0
+		{
+			bouncepad.image_blend=c_white
+		}
+		
+		bouncepad.image_xscale= x_bounce *size*(1-facing*2)
+		bouncepad.image_yscale= y_bounce *size
+	}
+	
+	if timer=85
+	{
+		smoke = instance_create(bouncepad.x+5*(1-facing*2),bouncepad.y-9,obj_spark);
+		smoke.sprite_index=smoke_fx
+		smoke.image_speed=1.4
+		smoke.image_angle=random(360)
+		smoke.depth=bouncepad.depth-1
+		smoke.image_xscale=(xsize/8)*size
+		smoke.image_yscale=(ysize/8)*size
+		with(bouncepad)
+			instance_destroy()
+	}	
+	if timer>61 && timer<75 && timer mod 2=0
+	{	
+		create_hitbox ( 2 , dirthing+6*(1-facing*2) , 5.5 , 0 , shielddamg , 3 , kick1 , obj_spark_hit1 , 1 , 1.5 , -1 , 12.15 , self.id , 1 , 3 );
+		hitbox.image_angle = image_angle;
+		
+		hitbox.weight_kb=1
+		hitbox.di=-1
+			if timer>72
+			{
+				hitbox.dir=45+90*facing
+				hitbox.bkb=6.2*size
+			}
+	}
+	if x<lum[num].x+20*size && x>lum[num].x-20*size && y>lum[num].y-15*size && y<lum[num].y+15*size
+		{
+			instance_create(lum[num].x,lum[num].y,obj_spark_effect);
+			lum[num+1].sprite_index=lum_awake_sprite
+			sound_play(choose(lum_collect1_snd,lum_collect2_snd))
+			if num<3
+				sound_play(choose(lum_pick1_snd,lum_pick2_snd,lum_pick3_snd))
+			else if num=3
+				sound_play(choose(alllum1_snd,alllum2_snd,alllum3_snd))
+			num+=1
+			if num<5
+			with(lum[num-1])
+				instance_destroy()
+		}
+	if num<4 && timer<75
+	{
+		if ceiltemp=0
+		{
+			if !under_ceiling
+			{
+				direction=point_direction(x,y,lum[num].x,lum[num].y)+10*facing
+			}
+			else if timer>60
+				direction=dirthing
+		}
+		if (next_to_lwall && facing=1) || (next_to_rwall && facing=0)
+		{
+			ceiltemp=1
+			angle=angle_correct(70)
+			direction=angle
+		}
+		
+		if timer>60 && timer<65
+			image_angle=direction-90
+	}
+	
+	if timer=75
+	{
+		image_angle=0
+		sprite_index=upb_sprite
+		image_speed=0
+		image_index=0
+	}
+	if timer>75
+	{
+		hspeed*=0.95
+		if timer>90
+			vspeed*=0.75
+	}
+	switch(timer)
+	{
+		case 77: image_index=1; break
+		case 79: image_index=2; break
+		case 81: image_index=3; break
+		case 82: image_index=4; break
+		case 84: image_index=5; break
+		case 87: image_index=6; break
+		case 90: image_index=7; break
+		case 96: image_index=8; break
+		case 100: image_index=9; break
+		case 103: image_index=10; break
+	}
+
+	if timer=80
+		force_edge_grab=1	
+
+	if timer=86
+	{
+		sound_play(swingsnd5)
+		play_attack_voice()
+	}
+	
+	if timer=90
+	{
+
+    create_hitbox ( 6 , 40+100*facing , 6.5 , 5.3 , 10 , 5 , kick3 , obj_spark_hit3 , 1.11 , 0.9 , 23.75 , 25.65 , self.id , 3 , 3 );
+		hitbox.image_angle = ( 1 - facing * 2 ) * 28.39;
+	create_hitbox2 ( 3 , 170-160*facing , 4.8 , 4.1 , 4 , 2 , kick2 , obj_spark_hit2 , 1.03 , 0.51 , -13.30 , 3.80 , self.id , 2 , 2 );
+	var burst;
+    //78, 36
+	burst = instance_create(place_x(61)+x,place_y(7)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+    	}
+	if ( timer = time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	cantupb=1
+    state_type = "jump";
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 5;
+    timer = 0;
+    time = -1;
+  }

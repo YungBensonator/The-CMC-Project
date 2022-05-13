@@ -1,0 +1,180 @@
+if final_smashing == 1 {
+	intangible = 1;
+	smash_power_gain = 0;
+	smashing_time -= 1;
+	smashing_littlehit += 1;
+	smashing_bighit += 1;
+	spark_time += 1;
+	if ((spark_made = 0) && (smashing_littlehit >= 0)) {
+                if ( instance_exists ( fsspark ) ) with ( fsspark ) instance_destroy();
+		fsspark = instance_create(x + 6 * size * (1-facing*2), y - 38 * size, obj_spark);
+		fsspark.sprite_index = final_smash_spark1;
+		fsspark.image_speed = 0.5;
+		fsspark.image_xscale = 0.5-facing*1;
+		temp = alarm[0];
+		alarm[0]=temp;
+		spark_made = 1;
+		}
+	if spark_time = 10 {
+		spark_made = 0;
+		spark_time = 0;
+		}
+
+	if (smashing_littlehit >= 15) {
+		sound_play_pitch ( fs_sound1 , 0.5 + random(0.2) );
+		create_projectile(3,40+facing*100,2.1,0.3,3,5,shock2,obj_spark_shock,1,1,24,26,self.id,4,char_custom5);
+		proj.rob = self.id;
+		smashing_littlehit = 0;
+		}
+	if (smashing_bighit >= 180) {
+		sound_play_pitch ( fs_sound2 , 0.8 + random(0.2) );
+		create_projectile(15,40+facing*100,5.1,7.3,17,7,shock3,obj_spark_shock,1.4,1.4,22,26,self.id,5,char_custom5);
+		proj.rob = self.id;
+		smashing_bighit = 0;
+		smashing_littlehit = -20;
+		//fsspark2 = instance_create(x + 6 * size * (1-facing*2), y - 38 * size, obj_spark);
+		//fsspark2.sprite_index = final_smash_spark2;
+		//fsspark2.image_speed = 0.3;
+		//fsspark2.image_xscale = 0.5-facing*1;
+		var xx, yy, aa;
+		xx = x + xsize*itmpnt_frame_get_x ( data_slot_occupied , sprite_index-sprite_start , floor(image_index) , 5 ) * (1-2*facing) * size;
+		yy = y + ysize*itmpnt_frame_get_y ( data_slot_occupied , sprite_index-sprite_start , floor(image_index) , 5 ) * size;
+		aa = itmpnt_frame_get_a ( data_slot_occupied , sprite_index-sprite_start , floor(image_index) , 5 ) * (1-facing*2);
+                spark = instance_create ( xx , yy , obj_spark_shockwave );
+		spark.image_yscale *= 2 - 4 * facing;
+		spark.image_xscale *= 0.5;
+		spark.image_angle = aa;
+		repeat ( 14 ) {
+			spark = instance_create ( xx , yy , obj_spark_effect );
+			spark.speed = 6 + random ( 4 );
+			spark.direction = aa - 20 + random ( 40 ) + 180 * facing;
+			spark.image_blend = c_fuchsia;
+			}
+		temp = alarm[0];
+		alarm[0]=temp;
+		}
+	if (smashing_time == 0) {
+		final_smashing = 0;
+		smash_power_gain = 1.1;
+		intangible = 0;
+		}
+
+if ( fsspark > 0 && instance_exists ( fsspark ) )
+  {
+  fsspark.x = x + xsize*itmpnt_frame_get_x ( data_slot_occupied , sprite_index-sprite_start , floor(image_index) , 5 ) * (1-2*facing) * size;
+  fsspark.y = y + ysize*itmpnt_frame_get_y ( data_slot_occupied , sprite_index-sprite_start , floor(image_index) , 5 ) * size;
+  fsspark.image_yscale = abs(fsspark.image_yscale) * ( 1 - facing * 2 );
+  fsspark.image_angle = -90+itmpnt_frame_get_a ( data_slot_occupied , sprite_index-sprite_start , floor(image_index) , 5 ) * (1-facing*2);
+  var f;
+  f = itmpnt_frame_get_p ( data_slot_occupied , sprite_index-sprite_start , floor(image_index) , 5 );
+  if ( f == 8 )
+    fsspark.visible = 0;
+    else
+    {
+    fsspark.visible = 1;
+    if ( f mod 2 == 1 )
+      fsspark.depth = depth + 1;
+      else
+      fsspark.depth = depth - 1;
+    }
+
+if ( timer mod 2 == 0 )
+  {
+  spark = instance_create ( fsspark.x , fsspark.y , obj_spark );
+  spark.sprite_index = global.spark_sprite2;
+  spark.image_xscale = 0.04;
+  spark.image_yscale = 0.04;
+  spark.image_angle = random(360);
+  spark.angle_add = -60+random(120)+90;
+  spark.image_speed = 0.5;
+  spark.direction = 60+random(60)+fsspark.image_angle + facing * 180;
+  spark.speed = 2+random(4);
+  }
+  }
+
+}
+
+if ( final_smashing = 1 && ( state_type = "entry" || state_type = "respawn" || state_type = "out" || state_type = "dead" ) )
+{
+final_smashing = 0;
+if ( instance_exists ( fsspark ) ) with ( fsspark ) instance_destroy();
+sound_stop ( fssound1 );
+sound_stop ( fssound2 );
+}
+
+/*if (smashing_time == 0) {
+		final_smashing = 0;
+		smash_power_gain = 1.1;
+		intangible = 0;
+		}*/
+if state_type == "stand" {
+	image_speed = 0.2;
+	}
+
+if ( chargeb < 900 ) chargeb += 1;
+//afterimage stuff
+if ( chargeb > 590 ){
+    a = after_image ( 2 , c_red , .5 );
+    a.image_xscale *= 1.15;
+    a.image_yscale *= 1.05;
+    a.x += -1 + floor ( random ( 2 ) );
+    a.y += -1 + floor ( random ( 2 ) );
+} 
+
+if ( chargeb = 591 ){
+    sound_play(psi_sound);
+}
+//end of afterimage stuff
+if air = 0 {
+	charge -= 1;
+	}
+if charge < 0 {
+	charge = 0;
+	}
+if sprite_index == roll_sprite && state_type == "dodge"
+	{
+	image_speed = 0;
+	switch ( timer )
+	{
+	case 0: image_index = 0; break;
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 3: image_index = 3; break;
+	case 4: image_index = 4; break;
+	case 5: image_index = 5; break;
+	case 6: image_index = 6; break;
+	case 7: image_index = 7; break;
+	case 9: image_index = 0; break;
+	case 11: image_index = 1; break;
+	case 13: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 17: image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 21: image_index = 6; break;
+	case 23: image_index = 7; break;
+	}
+	}
+if sprite_index == ukemi_sprite {
+	image_speed = 0.5;
+	}
+if attack_type = "none"
+{
+cooldown = 0;
+}
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; image_index=0; break;
+  case 18: image_index=2;  break;
+  case 20: image_index=3;  break;
+  case 22: image_index=4;  break;
+  case 24: image_index=5;  break;
+  case 26: image_index=6;  break;
+  case 28: image_index=7;  break;
+  case 30: image_index=8;  break;
+  }
+}

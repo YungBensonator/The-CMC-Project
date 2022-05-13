@@ -1,0 +1,574 @@
+if state_type = "land" || state_type = "respawn" || state_type = "edge" || state_type = "stand"
+    can_sideb = 1;	
+
+if ( number > 0 )
+if global . gs_form[number-1] = 1
+  final_smash_script = char_custom1;
+if global . gs_form[number-1] = 2
+  final_smash_script = char_custom7;
+if ( state_type == "attack" && attack_type == "none" && sprite_index == edge_sprite )
+image_speed = 0.5;
+
+// SF inputs for enhanced specials start here
+// sf temps used to track input orders.  A set of 5 numbers are assigned to each individual enhance possibility.
+// For example, the very first one sets sftemp = 1, and the comment says its for facing right enhanced B.
+// Thus, it can be concluded that sftemp 1-5 are for tracking a facing right enhanced nB.  So on and so forth.
+// sftemp_timer will be used to make sure the inputs happen in quick succession, otherwise the attempt is failed.
+// Shoryu or Shoryuken = Up B.  Tatsumaki or Tatsu = Side B.  nB = Neutral B.  Shakanetsu = Red Hadoken.  
+// Enhanced Neutral B and Shakanetsu are NOT the same, enhanced nB is the blue fireball but bigger and stronger.  Thus there are 3 versions of neutral b: normal, enhanced, and Shakanetsu
+// Possible inputs are as follows (look at your keyboards numpad to understand direction notation and assume facing right)
+// Enhanced Shoryu = 623 B, OR 33 B, OR 323B
+// Enhanced Tatsu = 214 B
+// Enhanced nB = 236 B
+// Shakanetsu = (4)1236 B.  The 4 is optional.
+
+if sftemp_timer > 0
+    sftemp_timer -= 1
+if sftemp_timer2 > 0
+    sftemp_timer2 -= 1
+
+if sftemp_timer <= 0 {
+    sftemp = 0
+    sftemp_timer2 = 0
+    }
+if sftemp_timer2 = 0
+    sftemp_timer = 0
+if ( moveleft || moveright || movedown ) && !moveup && sftemp_timer < 1 {
+    if ((moveright && !moveleft) || (moveleft && !moveright)) && !movedown {
+	if moveleft
+	    sftemp = 1
+	if moveright
+	    sftemp = 6
+	}
+    if ((moveright && !moveleft) || (moveleft && !moveright)) && movedown {
+	if moveright
+	    sftemp = 11
+	if moveleft
+	    sftemp = 16
+	}
+    if movedown && !moveleft && !moveright {
+	sftemp = 41				// Either enhanced nB or enhanced Tatsu
+	}
+sftemp_timer = 10
+sftemp_timer2 = 30
+}
+    if sftemp = 1 && (moveup || moveright)
+	sftemp_timer = 0
+    if sftemp = 2 && ((moveleft && !movedown) || moveup || moveright || (!moveup && !movedown && !moveright && !moveleft))
+	sftemp_timer = 0
+    if sftemp = 3 && ((moveright && !movedown) || moveup || (moveleft && !movedown) || (!moveup && !movedown && !moveright && !moveleft))
+	sftemp_timer = 0
+    if sftemp = 4 && ((!moveright && movedown) || moveup || moveleft || (!moveup && !movedown && !moveright && !moveleft))
+	sftemp_timer = 0
+    if sftemp = 4 && ((!moveright && movedown) || moveup || moveleft || (!moveup && !movedown && !moveright && !moveleft))
+	sftemp_timer = 0
+    if sftemp = 5 && (!moveright)
+	sftemp_timer = 0
+    if sftemp = 6 && (moveup || moveleft)
+	sftemp_timer = 0
+    if sftemp = 7 && ((moveright && !movedown) || moveup || moveleft || (!moveup && !movedown && !moveright && !moveleft))
+	sftemp_timer = 0
+    if sftemp = 8 && ((moveright && !movedown) || moveup || (moveleft && !movedown) || (!moveup && !movedown && !moveright && !moveleft))
+	sftemp_timer = 0
+    if sftemp = 9 && ((!moveleft && movedown) || moveup || moveright || (!moveup && !movedown && !moveright && !moveleft))
+	sftemp_timer = 0
+    if sftemp = 10 && (!moveleft)
+	sftemp_timer = 0
+    if sftemp = 11 && (moveleft || moveup || (moveright && !movedown))
+	sftemp_timer = 0
+    if sftemp = 12 && (moveleft || moveup || (moveright && !movedown))
+	sftemp_timer = 0
+    if sftemp = 13 && (moveleft || moveup || (moveright && !movedown) || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 16 && ((moveleft && !movedown) || moveup || moveright)
+	sftemp_timer = 0
+    if sftemp = 17 && ((moveleft && !movedown) || moveup || moveright)
+	sftemp_timer = 0
+    if sftemp = 18 && ((moveleft && !movedown) || moveup || moveright || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 21 && ((moveleft && !movedown) || moveup || moveright)
+	sftemp_timer = 0
+    if sftemp = 22 && ((moveleft && !movedown) || moveup || moveright || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 26 && ((moveright && !movedown) || moveup || moveleft)
+	sftemp_timer = 0
+    if sftemp = 27 && ((moveright && !movedown) || moveup || moveleft || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 41 && ((moveright && !movedown) || moveup || (moveleft && !movedown) || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 42 && ((!moveright && movedown) || moveup || moveleft || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 43 && (!moveright)
+	sftemp_timer = 0
+    if sftemp = 46 && ((!moveright && movedown) || moveup || moveleft || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 47 && (!moveright)
+	sftemp_timer = 0
+    if sftemp = 51 && ((!moveleft && movedown) || moveup || moveright || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 52 && (!moveleft)
+	sftemp_timer = 0
+    if sftemp = 56 && ((!moveleft && movedown) || moveup || moveright || (!moveright && !moveleft && !moveup && !movedown))
+	sftemp_timer = 0
+    if sftemp = 57 && (!moveleft)
+	sftemp_timer = 0
+
+if sftemp_timer > 0 {
+    if sftemp = 1 && moveleft && movedown && !moveright && !moveup {
+	sftemp = 2
+	sftemp_timer = 7		// Facing right Shakanetsu
+	}
+    if ( sftemp = 2 || sftemp = 16 ) && movedown && !moveright && !moveleft && !moveup {
+	sftemp = 3
+	sftemp_timer = 7		// Facing right Shakanetsu
+	}
+    if sftemp = 3 && movedown && moveright && !moveleft && !moveup {
+	sftemp = 4
+	sftemp_timer = 7		// Facing right Shakanetsu
+	}
+    if sftemp = 4 && moveright && !moveleft && !movedown && !moveup {
+	sftemp = 5
+	sftemp_timer = 7		// Facing right Shakanetsu
+	}
+    if sftemp = 6 && moveright && movedown && !moveleft && !moveup {
+	sftemp = 7
+	sftemp_timer = 7		// Facing left Shakanetsu
+	}
+    if ( sftemp = 7 || sftemp = 11 ) && movedown && !moveright && !moveleft && !moveup {
+	sftemp = 8
+	sftemp_timer = 7		// Facing left Shakanetsu
+	}
+    if sftemp = 8 && movedown && moveleft && !moveright && !moveup {
+	sftemp = 9
+	sftemp_timer = 7		// Facing left Shakanetsu
+	}
+    if sftemp = 9 && moveleft && !moveright && !movedown && !moveup {
+	sftemp = 10
+	sftemp_timer = 7		// Facing left Shakanetsu
+	}
+    if (sftemp = 11) && ((movedown || !movedown) && !moveright && !moveleft && !moveup) {
+	sftemp = 12
+	sftemp_timer = 7		// Facing right enhanced Shoryuken
+	}
+    if sftemp = 12 && movedown && moveright && !moveleft && !moveup {
+	sftemp = 13
+	sftemp_timer = 7		// Facing right enhanced Shoryuken
+	}
+    if sftemp = 8 && movedown && moveright && !moveleft && !moveup {
+	sftemp = 13
+	sftemp_timer = 7		// Facing right enhanced Shoryuken
+	}
+    if (sftemp = 16) && (movedown || !movedown) && !moveright && !moveleft && !moveup {
+	sftemp = 17
+	sftemp_timer = 7		// Facing left enhanced Shoryuken
+	}
+    if sftemp = 17 && movedown && moveleft && !moveright && !moveup {
+	sftemp = 18
+	sftemp_timer = 7		// Facing left enhanced Shoryuken
+	}
+    if sftemp = 3 && movedown && moveleft && !moveright && !moveup {
+	sftemp = 18
+	sftemp_timer = 7		// Facing left enhanced Shoryuken
+	}
+    if sftemp = 1 && movedown && !moveleft && !moveright && !moveup {
+	sftemp = 21
+	sftemp_timer = 7		// Facing left enhanced Shoryuken
+	}
+    if sftemp = 21 && movedown && moveleft && !moveright && !moveup {
+	sftemp = 22
+	sftemp_timer = 7		// Facing left enhanced Shoryuken
+	}
+    if sftemp = 6 && movedown && !moveleft && !moveright && !moveup {
+	sftemp = 26
+	sftemp_timer = 7		// Facing right enhanced Shoryuken
+	}
+    if sftemp = 26 && movedown && moveright && !moveleft && !moveup {
+	sftemp = 27
+	sftemp_timer = 7		// Facing right enhanced Shoryuken
+	}
+    if sftemp = 41 && movedown && moveright && !moveleft && !moveup && facing = 0 {
+	sftemp = 42
+	sftemp_timer = 7		// Facing right enhanced nB
+	}
+    if sftemp = 41 && movedown && moveright && !moveleft && !moveup && facing = 1 {
+	sftemp = 46
+	sftemp_timer = 7		// Facing left enhanced Tatsumaki
+	}
+    if sftemp = 41 && movedown && moveleft && !moveright && !moveup && facing = 0 {
+	sftemp = 51
+	sftemp_timer = 7		// Facing right enhanced Tatsumaki
+	}
+    if sftemp = 41 && movedown && moveleft && !moveright && !moveup && facing = 1 {
+	sftemp = 56
+	sftemp_timer = 7		// Facing left enhanced nB
+	}
+    if sftemp = 42 && moveright && !moveleft && !movedown && !moveup {
+	sftemp = 43
+	sftemp_timer = 7		// Facing right enhanced nB
+	}
+    if sftemp = 46 && moveright && !moveleft && !movedown && !moveup {
+	sftemp = 47
+	sftemp_timer = 7		// Facing left enhanced Tatsumaki
+	}
+    if sftemp = 51 && moveleft && !moveright && !movedown && !moveup {
+	sftemp = 52
+	sftemp_timer = 7		// Facing right enhanced Tatsumaki
+	}
+    if sftemp = 56 && moveleft && !moveright && !movedown && !moveup {
+	sftemp = 57
+	sftemp_timer = 7		// Facing left enhanced nB
+	}
+}
+
+
+///////cb face enemy///////
+/*if enemy.x>x && enemy_dist < 33000 && !(enemy.x<x) && air = 0 && attack_type = "none" && (state_type = "stand" || state_type = "crouch" || sprite_index = walk_sprite)
+{
+	facing = 0;
+	if (moveleft)
+	{image_speed = -image_speed}
+}
+
+if enemy.x<x && enemy_dist < 33000 && !(enemy.x>x) && air = 0 && attack_type = "none" && (sprite_index = stand_sprite || state_type = "crouch" || sprite_index = walk_sprite)
+{
+	facing = 1;
+	if (moveright)
+	{image_speed = -image_speed}
+}*/
+
+
+
+///////////////////////////////////////////////////////////cb-input rework///////////////////////////////////////////////////////////
+//hadouken timer
+if INnb_timer_R > 0 {INnb_timer_R -= 1}
+if INnb_timer_R <= 0 {INnb_timer_R = 0  INnb_state_R = 0}
+if INnb_timer_L > 0 {INnb_timer_L -= 1}
+if INnb_timer_L <= 0 {INnb_timer_L = 0  INnb_state_L = 0}
+//shakunetsu timer
+if EXnb_timer_R > 0 {EXnb_timer_R -= 1}
+if EXnb_timer_R <= 0 {EXnb_timer_R = 0  EXnb_state_R = 0}
+if EXnb_timer_L > 0 {EXnb_timer_L -= 1}
+if EXnb_timer_L <= 0 {EXnb_timer_L = 0  EXnb_state_L = 0}
+//shoryuken timer
+if EXub_timer_R > 0 {EXub_timer_R -= 1}
+if EXub_timer_R <= 0 {EXub_timer_R = 0  EXub_state_R = 0}
+if EXub_timer_L > 0 {EXub_timer_L -= 1}
+if EXub_timer_L <= 0 {EXub_timer_L = 0  EXub_state_L = 0}
+//tatsumaki timer
+if EXsb_timer_R > 0 {EXsb_timer_R -= 1}
+if EXsb_timer_R <= 0 {EXsb_timer_R = 0  EXsb_state_R = 0}
+if EXsb_timer_L > 0 {EXsb_timer_L -= 1}
+if EXsb_timer_L <= 0 {EXsb_timer_L = 0  EXsb_state_L = 0}
+
+
+if ( proj.hit = 1 || hitbox.hit = 1 )
+      {
+		cbtemp = 1;
+      }
+	  
+if (timer = time || timer = 0)
+{
+	cbtemp = 0;
+}	
+
+
+if glitch_transformation = 0
+if ((state_type != "fall" && state_type != "land" && state_type != "flinch" && state_type != "air_Rlinch" && state_type != "tumble" && state_type != "edge" && state_type != "grabbed" && state_type != "down" && state_type != "out" && state_type != "respawn" && state_type != "dodge" && state_type != "air_dodge" && state_type != "shielding" && state_type != "ukemi" && state_type != "locked" && state_type != "broken" && state_type != "heavy" && state_type != "entry") && ( attack_type != "b" && attack_type != "upb" && attack_type != "downb" && attack_type != "sideb" && attack_type != "smashb" && attack_type != "final_smash" && attack_type != "grab"))
+	{
+//////////////////////////////////////////////////////////facing right//////////////////////////////////////////////////////////
+
+	//hadouken start
+	if (facing = 0 && !attacking && movedown && (!moveup && !moveright && !moveleft) && INnb_state_R = 0)
+	{
+		INnb_timer_R = 7;
+		INnb_state_R = 1;
+	}
+	if (facing = 0 && !attacking && movedown && moveright && (!moveup && !moveleft) && INnb_state_R = 1)
+	{
+		INnb_timer_R = 7;
+		INnb_state_R = 2;
+	}
+	if (facing = 0 && !attacking && moveright && (!moveup && !movedown && !moveleft) && INnb_state_R = 2)
+	{
+		INnb_timer_R = 7;
+		INnb_state_R = 3;
+	}
+	
+	
+	if ((facing = 0 && moveright && attacking && !smash && INnb_state_R = 3 && EXnb_state_R != 4) && (timer <= 5 || cbtemp = 1))
+	{
+		INnb_timer_R = 0;
+		INnb_state_R = 0;
+	    sftemp3 = 1
+		if sftemp = 5 || sftemp = 10
+		sftemp2 = 1
+		if sftemp = 5 || sftemp = 43
+		sftemp4 = 1
+		if sftemp = 10 || sftemp = 57
+		sftemp4 = 2
+	    sftemp = -1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_b();
+	  }
+	  //hadouken end
+	  
+	  //shakunetsu start
+	  if (!attacking && moveleft  && EXnb_state_R = 0)
+	{
+		EXnb_timer_R = 7;
+		EXnb_state_R = 1;
+	}
+	if (!attacking && movedown && (!moveup && !moveright && !moveleft) && EXnb_state_R = 1)
+	{
+		EXnb_timer_R = 7;
+		EXnb_state_R = 2;
+	}
+	if (!attacking && movedown && moveright && (!moveup && !moveleft) && EXnb_state_R = 2)
+	{
+		EXnb_timer_R = 7;
+		EXnb_state_R = 3;
+	}
+	if (facing = 0 && !attacking && moveright && (!moveup && !movedown && !moveleft) && EXnb_state_R = 3)
+	{
+		EXnb_timer_R = 7;
+		EXnb_state_R = 4;
+	}
+	
+	
+	if ((facing = 0 && moveright && attacking && !smash && EXnb_state_R = 4) && (timer <= 5 || cbtemp = 1))
+	{
+		EXnb_timer_R = 0;
+		EXnb_state_R = 0;
+	    sftemp2 = 1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_b();
+	  }
+	  //shakunetsu end
+	  
+	  //shoryuken start
+	if (facing = 0 && !attacking && moveright && (!moveup && !moveleft) && EXub_state_R = 0)
+	{
+		EXub_timer_R = 10;
+		EXub_state_R = 1;
+	}
+	if (facing = 0 && !attacking && movedown &&( !moveright && !moveup && !moveleft) && EXub_state_R = 1)
+	{
+		EXub_timer_R = 10;
+		EXub_state_R = 2;
+	}
+	if (facing = 0 && !attacking && moveright && movedown && (!moveup && !moveleft) && EXub_state_R = 2)
+	{
+		EXub_timer_R = 10;
+		EXub_state_R = 3;
+	}
+	
+	
+	if ((facing = 0 && moveright && movedown && attacking && !smash && EXub_state_R = 3 && EXnb_state_R != 4) && (timer <= 5 || cbtemp = 1))
+	{
+		EXub_timer_R = 0;
+		EXub_state_R = 0;
+	    if sftemp = 13 || sftemp = 27
+	    sftemp2 = 1
+	    if sftemp = 18 || sftemp = 22
+	    sftemp2 = 2
+	    sftemp = -1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	  //shoryuken end 
+	  
+	  //tatsumaki start
+	if (facing = 0 && !attacking && movedown && (!moveup && !moveright && !moveleft) && EXsb_state_R = 0)
+	{
+		EXsb_timer_R = 7;
+		EXsb_state_R = 1;
+	}
+	if (facing = 0 && !attacking && movedown && moveleft && (!moveup && !moveright) && EXsb_state_R = 1)
+	{
+		EXsb_timer_R = 7;
+		EXsb_state_R = 2;
+	}
+	if (!attacking && moveleft && (!moveup && !movedown && !moveright) && EXsb_state_R = 2)
+	{
+		EXsb_timer_R = 7;
+		EXsb_state_R = 3;
+	}
+	
+	
+	if ((moveleft && attacking && !smash && EXsb_state_R = 3 && EXnb_state_R != 4) && (timer <= 5 || cbtemp = 1))
+	{
+		EXsb_timer_R = 0;
+		EXsb_state_R = 0; 
+	    if sftemp = 47
+	    sftemp2 = 1
+	    if sftemp = 52
+	    sftemp2 = 2
+	    sftemp = -1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_smashb();
+		facing = 0;
+	  }
+	  //tatsumaki end 
+
+
+//////////////////////////////////////////////////////////facing left//////////////////////////////////////////////////////////
+
+	//hadouken start
+	if (facing = 1 && !attacking && movedown && (!moveup && !moveright && !moveright) && INnb_state_L = 0)
+	{
+		INnb_timer_L = 7;
+		INnb_state_L = 1;
+	}
+	if (facing = 1 && !attacking && movedown && moveleft && (!moveup && !moveright) && INnb_state_L = 1)
+	{
+		INnb_timer_L = 7;
+		INnb_state_L = 2;
+	}
+	if (facing = 1 && !attacking && moveleft && (!moveup && !movedown && !moveright) && INnb_state_L = 2)
+	{
+		INnb_timer_L = 7;
+		INnb_state_L = 3;
+	}
+	
+	
+	if ((facing = 1 && moveleft && attacking && !smash && INnb_state_L = 3 && EXnb_state_L != 4) && (timer <= 5 || cbtemp = 1))
+	{
+		INnb_timer_L = 0;
+		INnb_state_L = 0;
+	    sftemp3 = 1
+		if sftemp = 5 || sftemp = 10
+		sftemp2 = 1
+		if sftemp = 5 || sftemp = 43
+		sftemp4 = 1
+		if sftemp = 10 || sftemp = 57
+		sftemp4 = 2
+	    sftemp = -1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_b();
+	  }
+	  //hadouken end
+
+	//shakunetsu start
+	  if (!attacking && moveright  && EXnb_state_L = 0)
+	{
+		EXnb_timer_L = 7;
+		EXnb_state_L = 1;
+	}
+	if (!attacking && movedown && (!moveup && !moveright && !moveleft) && EXnb_state_L = 1)
+	{
+		EXnb_timer_L = 7;
+		EXnb_state_L = 2;
+	}
+	if (!attacking && movedown && moveleft && (!moveup && !moveright) && EXnb_state_L = 2)
+	{
+		EXnb_timer_L = 7;
+		EXnb_state_L = 3;
+	}
+	if (facing = 1 && !attacking && moveleft && (!moveup && !movedown && !moveright) && EXnb_state_L = 3)
+	{
+		EXnb_timer_L = 7;
+		EXnb_state_L = 4;
+	}
+	
+	
+	if ((facing = 1 && moveleft && attacking && !smash && EXnb_state_L = 4) && (timer <= 5 || cbtemp = 1))
+	{
+		EXnb_timer_L = 0;
+		EXnb_state_L = 0;
+	    sftemp2 = 1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_b();
+	  }
+	  //shakunetsu end
+
+	  //shoryuken start
+	if (facing = 1 && !attacking && moveleft && (!moveup && !moveright) && EXub_state_L = 0)
+	{
+		EXub_timer_L = 10;
+		EXub_state_L = 1;
+	}
+	if (facing = 1 && !attacking && movedown &&( !moveleft && !moveup && !moveright) && EXub_state_L = 1)
+	{
+		EXub_timer_L = 10;
+		EXub_state_L = 2;
+	}
+	if (facing = 1 && !attacking && moveleft && movedown && (!moveup && !moveright) && EXub_state_L = 2)
+	{
+		EXub_timer_L = 10;
+		EXub_state_L = 3;
+	}
+	
+	
+	if ((facing = 1 && moveleft && movedown && attacking && !smash && EXub_state_L = 3 && EXnb_state_L != 4) && (timer <= 5 || cbtemp = 1))
+	{
+		EXub_timer_L = 0;
+		EXub_state_L = 0;
+	    if sftemp = 13 || sftemp = 27
+	    sftemp2 = 1
+	    if sftemp = 18 || sftemp = 22
+	    sftemp2 = 2
+	    sftemp = -1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	  //shoryuken end 
+	  
+	  //tatsumaki start
+	if (facing = 1 && !attacking && movedown && (!moveup && !moveright && !moveleft) && EXsb_state_R = 0)
+	{
+		EXsb_timer_R = 7;
+		EXsb_state_R = 1;
+	}
+	if (facing = 1 && !attacking && movedown && moveright && (!moveup && !moveleft) && EXsb_state_R = 1)
+	{
+		EXsb_timer_R = 7;
+		EXsb_state_R = 2;
+	}
+	if ( !attacking && moveright && (!moveup && !movedown && !moveleft) && EXsb_state_R = 2)
+	{
+		EXsb_timer_R = 7;
+		EXsb_state_R = 3;
+	}
+	
+	
+	if (( moveright && attacking && !smash && EXsb_state_R = 3 && EXnb_state_R != 4) && (timer <= 5 || cbtemp = 1))
+	{
+		EXsb_timer_R = 0;
+		EXsb_state_R = 0;
+	    if sftemp = 47
+	    sftemp2 = 1
+	    if sftemp = 52
+	    sftemp2 = 2
+	    sftemp = -1
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_smashb();
+		facing = 1;
+	  }
+	  //tatsumaki end 
+}
+
+/////////////////////////////////////////////////////////cb-input rework end/////////////////////////////////////////////////////////

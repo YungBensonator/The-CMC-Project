@@ -1,0 +1,77 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump"  {
+        hspeed = 0
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+}
+        if timer < time {
+            state_type = "air_attack";
+			switch ( timer ) {
+			case 1: image_index = 0; break;
+			case 3: image_index = 1; break;
+			case 5: image_index = 2; break;
+			case 7: image_index = 3; break;
+			case 9: image_index = 4; break;
+			case 11: image_index = 5; break;
+			case 13: image_index = 6; break;
+		
+			}
+			
+          if timer >= 0 && timer <= 13
+	{
+	hspeed = 0;
+	vspeed = 0;
+	}
+            if timer = 3 {
+                sound_play(dair_sound1);
+            }
+            if timer = 14 {
+                temp_fall_speed = 2.26
+                create_hitbox(10,270,5.75,3.5,13,7,punch3,obj_spark_hit3,0.75,0.8,0,6,self.id,20,1);
+                   // sound_play(attack_voice2)
+                hspeed = 0
+                vspeed = 5.8 * size;
+                hitbox.hit_stun = 3
+            }
+            if timer > 14 && timer < 75 && timer_speed > 0 {
+                vspeed = 5.25 * size;
+                hspeed = 0
+            }
+            if air = 0 {
+                state_type="land";
+                duster = instance_create ( x , y + 1 * size , obj_dust_effect_bold );
+                duster.image_xscale *= 0.8 * size;
+                duster.image_yscale *= 0.7 * size;
+                duster.facing = facing;
+                duster = instance_create ( x , y + 1 * size , obj_dust_effect_bold );
+                duster.image_xscale *= 0.8 * size;
+                duster.image_yscale *= 0.7 * size;
+                duster.facing = !facing;
+                hspeed = 0;
+                attack_type="none";
+                sprite_index = dair_land_sprite;
+                image_index = 0
+                image_speed = 0.19
+                temp_fall_speed = 0
+                timer=0;
+                time=20;
+                sound_play(dair_sound2); }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    temp_fall_speed = 0
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

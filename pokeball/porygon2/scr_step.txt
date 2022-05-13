@@ -1,0 +1,82 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+moving_object = 1;
+vspeed = 0;
+
+if ( timer < 70 )
+  {
+  rotate += 18;
+  if ( rotate >= 360 ) rotate -= 360;
+  }
+
+if ( image_index < target_index )
+  image_index += 0.5;
+if ( image_index > target_index )
+  image_index -= 0.5;
+
+if ( timer == 4 )
+  {
+  sound_play2 ( sfx[0] );
+  instance_create ( x , y - 12 , obj_spark_effect );
+  repeat ( 3 )
+    gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+  create_projectile ( 12 , 20 + facing * 140 , 11.2 , 3 , 40 , 6 , kick3 , obj_spark_hit3 , 1.5 , 1.5 , 0 , 0 , attacker , 35 , no_script );
+  }
+if ( timer == 14 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+  }
+if ( timer == 24 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+  }
+if ( timer > 4 && timer < 10 )
+  {
+  hspeed = 9 - facing * 18;
+  if ( timer > 7 )
+    hspeed *= 1 - ( timer - 7 ) * 0.08;
+  }
+if ( timer == 10 )
+  {
+  hspeed = 0;
+  target_index = 0;
+  }
+if ( timer >= 4 && timer <= 38 )
+  {
+  proj.x = x;
+  proj.y = y - 16;
+  }
+
+if ( timer == 70 )
+  sound_play2 ( sfx[1] );
+if ( timer >= 70 && timer <= 80 )
+  {
+  if ( rsize < 0.8 ) rsize += 0.1;
+  }
+if ( timer >= 80 && timer <= 90 )
+  {
+  i = 255 - 255 * ( ( timer - 80 ) * 0.1 );
+  image_blend = make_color_rgb ( i , i , i );
+  }
+if ( timer >= 90 && timer <= 100 )
+  {
+  if ( rsize > 0 )
+    {
+    rsize -= 0.1;
+    xsize -= 0.1;
+    }
+  if ( rsize < 0 )
+    {
+    rsize = 0;
+    xsize = 0;
+    }
+  if ( rsize == 0 ) instance_destroy();
+  }
+  
+if ( timer == 100 )
+  instance_destroy();

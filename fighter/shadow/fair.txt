@@ -1,0 +1,99 @@
+if ( state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "fair";
+    timer = 0;
+    time = 43;
+    sprite_index = fair_sprite;
+    image_speed = 0;
+    image_index = 0;
+    vspeed -= 0.1;
+	create_hurtbox_precise(self.id,43,fair_mask)
+
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 5; break;
+	case 6: image_index = 6; break;
+	case 8: image_index = 5; break;
+	case 11: image_index = 6; break;
+	case 14: image_index = 5; break;
+	case 17: image_index = 6; break;
+	case 22: image_index = 7; break;
+	case 27: image_index = 8; break;
+	case 32: image_index = 9; break;
+      }
+
+if hitbox.hit > 0 || hitbox2.hit > 0
+chaostemp = 1
+    if ( timer = 6 )
+      {
+	burst = instance_create(x+10*(1-facing*2),y-14,obj_spark);
+	burst.sprite_index = chaosburst_sprite;
+	burst.image_xscale = 0.45*size
+	burst.image_yscale = 0.45*size
+	burst.image_speed = 1
+	burst.image_index = 0
+	burst.depth = 1
+	burst.snap = self.id
+	burst2 = instance_create(x+10*(1-facing*2),y-14,obj_spark);
+	burst2.sprite_index = chaosburst_sprite2;
+	burst2.image_xscale = 0.05*size
+	burst2.image_yscale = 0.05*size
+	burst2.image_speed = 0
+	burst2.image_index = 0
+	burst2.depth = 0
+	burst2.snap = self.id
+	burst2.alarm[0] = 10
+	play_attack_voice();
+	sound_play(psi_sound1);
+	create_hitbox2(11,40+facing*100,6,3,14,7,magic3,obj_spark_darkness,0.55,0.55,13,16,self.id,6,5);
+	hitbox2.hit_stun = 10;
+	create_hitbox(10,40+facing*100,6,3,12,6,magic3,obj_spark_darkness,0.88,0.88,16,18,self.id,10,5);
+	hitbox.hit_stun = 8;
+      }
+    if ( timer = 6 && chaosboost > 0 ) {
+    create_hitbox2(13,40+facing*100,6,4,18,8,magic3,obj_spark_shock,0.55,0.55,13,16,self.id,6,5);
+	hitbox2.hit_stun = 10;
+	create_hitbox(12,40+facing*100,6,4,16,7,magic3,obj_spark_darkness,0.88,0.88,16,18,self.id,10,5);
+	hitbox.hit_stun = 8;
+    }
+	burst.x = x+16*(1-facing*2)*size
+	burst.y = y-18*size
+	burst2.x = x+16*(1-facing*2)*size
+	burst2.y = y-18*size
+	burst2.image_alpha -= 0.1
+	burst2.image_xscale += 0.01*size
+	burst2.image_yscale += 0.01*size
+    if ( timer = 8 )
+      {
+	hitbox.damage = 7*size;
+	hitbox.bkb = 5*size;
+	hitbox.kbg = 5*size;
+	hitbox.sfx = magic1;
+      }
+	if timer > 33
+	interrupt = 1
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 10;
+	sprite_index = land_sprite;
+	with burst instance_destroy()
+	with burst2 instance_destroy()
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

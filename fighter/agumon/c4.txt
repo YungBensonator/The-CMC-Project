@@ -1,0 +1,28 @@
+priority = 3
+limit = 1
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.baby_flame_sprite
+    image_speed = 0.5 //0.2
+    visible =1
+}
+moving_object = 1;
+if hit = 1 {
+    megaflame=instance_create(x,y,obj_spark_explode1)
+    megaflame.image_yscale*=size*2
+    megaflame.image_xscale*=size*2
+sound_play(explode1)
+instance_destroy()
+}
+if timer = 50 { //65
+    megaflame=instance_create(x,y,obj_spark_explode1)
+    megaflame.image_yscale*=size*2
+    megaflame.image_xscale*=size*2
+sound_play(explode1)
+instance_destroy()
+}
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || (is_on_floor(self) && vspeed >= 0)) && hit = 0{
+    megaflame=instance_create(x,y,obj_spark_explode1)
+    megaflame.image_yscale*=size*2
+    megaflame.image_xscale*=size*2
+sound_play(explode1)
+instance_destroy()}

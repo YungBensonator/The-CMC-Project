@@ -1,0 +1,120 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch" {
+
+    if (facing = 0 and moveleft) {
+        facing = 1
+    }
+    if (facing = 1 and moveright) {
+        facing = 0
+    }
+    attacking = 0;
+    special = 0;
+    state_type = "air_attack"
+    attack_type = "sideb"
+    image_speed = 0
+    sprite_index = sideb_sprite
+    image_index = 0
+    timer = 0
+    time = 100
+    timer_speed = 1
+    temp = 1
+    bouncetemp = 0
+	has_hit = 0
+
+}
+if timer < time {
+
+    switch ( timer ){
+		case 2: image_index = 1; break;
+		case 4: image_index = 2; break;
+		case 6: image_index = 2; break;
+		case 8: image_index = 3; break;
+		case 9: image_index = 4; break;
+		case 10: image_index = 5; break;
+		case 11: image_index = 6; break;
+		case 12: image_index = 7; break;
+		case 13: image_index = 8; break;
+		case 14: image_index = 9; break;
+		case 15: image_index = 10; break;
+		case 16: image_index = 11; break;
+		case 17: image_index = 12; break;
+		case 18: image_index = 13; break;
+		case 19: image_index = 14; break;
+		case 20: image_index = 15; break;
+		case 21: 
+		sprite_index = sideb_sprite2; 
+		image_speed = 1; 
+		image_index = 0; 
+		break;
+	}
+
+    if timer = 1
+    hspeed = 0
+	
+	if timer = 20{
+		sound_play(sideb_sound);
+		
+	}
+
+    if timer = 20 {
+        instance_create(x, y - actual_height * 0.5, obj_spark_shockwave);
+        create_hitbox(12, 15 + 150 * facing, 6.1, 5.4, 10, 20, kick2, obj_spark_hit2, 1.4, 1.4, 0, 21, self.id, 80, 2)
+		hitbox.sdi = 8
+
+		//hitbox.execute_on_hit = "attacker.has_hit = 1"
+    }
+    if timer > 20 and timer < 75 and hitbox.hit = 0 and bouncetemp != 1 and air = 0 {
+        //vspeed=9
+        hspeed = 6.5 - facing * 13
+    }
+    if timer > 20 and timer < 75 and hitbox.hit = 0 and bouncetemp != 1 and air != 0 {
+        //vspeed=9
+        hspeed = 6 - facing * 12
+    }
+	
+	if timer >= 20 and timer <= 75 and timer mod 4 = 0{
+		//sound_play(whiff_sound1);
+	}
+	
+	if ( timer >= 25 )
+    force_edge_grab = 1
+	if collision_point(x,y+-8,obj_shield,true,false) && bouncetemp=0 && timer > 20 && timer < 100
+{
+        vspeed = -5
+        hspeed = -2 - facing * -4
+        bouncetemp = 1
+        time = 265
+        timer = 230
+}
+
+    if attack_success && bouncetemp=0 {
+        vspeed = -8
+        hspeed = -2 - facing * -4
+        bouncetemp = 1
+        time = 265
+        timer = 230
+    }
+
+
+    if timer > 75 and timer < 90
+    hspeed *= 0.2
+
+    if timer = 80
+    image_speed = 0.3
+    if timer = 85
+    image_speed = 0.2
+    if timer = 90
+    image_speed = 0
+}
+if timer >= time - 1 and state_type != "flinch" and state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else{
+		if has_hit = 0
+        state_type = "jump";
+		else
+		state_type = "jump";
+	}
+    timer = 0;
+    time = -1;
+}

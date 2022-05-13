@@ -1,0 +1,190 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "crouch" || state_type = "stand" || state_type = "run" || state_type = "jump" {
+        hspeed = 0;
+	vspeed=-0.1
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 1;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 240;
+        timer_speed=1;
+        target = -1;
+        if ( air = 0 )
+	temp = 0;
+        else
+	temp = 1;
+	temp2=0;
+}
+if ( timer < time )
+  {
+//magolor was here
+if timer > 15
+{
+hspeed=0
+}
+//blockblock
+if timer =10
+{
+	//intangible = 1;
+    	heavy_armor = 8
+	defense=3;
+}
+//rise
+if timer >= 10 && timer < 25 {
+vspeed=-1.8
+temp=1
+}
+//marx was here
+if timer > 10 && timer < 25
+image_xscale = 1 * size * sin( (timer-start_frame) * 0.5 );
+
+
+//hitboxes while growing
+if ( timer = 13 || timer = 16 || timer = 19 || timer = 22 )
+{
+ create_hitbox3(1,363,1.3,0,2,3,kick3,obj_spark_hit3,0.7,0.2,-1,30,self.id,2,2);
+ create_hitbox(1,60+60*facing,4.3,0,2,3,kick3,obj_spark_hit3,0.8,0.8,-7,15,self.id,2,5);
+ create_hitbox2(1,120+-60*facing,4.3,0,2,3,kick3,obj_spark_hit3,0.8,0.8,7,15,self.id,2,2);
+
+  hitbox.hit_stun = 6;
+	hitbox.sdi=0.4
+	hitbox.di=0.4
+  hitbox2.hit_stun = 6;
+	hitbox2.sdi=0.4
+	hitbox2.di=0.4
+  hitbox3.hit_stun = 6;
+	hitbox3.sdi=0.4
+	hitbox3.di=0.4
+}
+
+//grow
+if timer > 10 && timer < 15
+{
+//image_xscale = 0.85*(1-facing*2)*size;
+image_yscale = 0.85*size;
+}
+if timer > 15 && timer < 25
+{
+//image_xscale = 0.95*(1-facing*2)*size;
+image_yscale = 0.95*size;
+}
+
+///////////end grow///////////////////////////
+
+//float/shake
+if timer >= 25 && timer <= 35
+{
+vspeed=-0.1
+}
+if timer = 25
+{
+ flashing = true
+ alarm[7] = 2
+}
+
+if timer > 24 && timer < 196
+{
+image_xscale = 1.15*(1-facing*2)*size;
+image_yscale = 1.15*size;
+}
+if timer >= 25 && timer <= 35
+{
+chosenx = choose(-3,-2,-1,0,1,2,3,)
+choseny = choose(-5,-4,-3,-2,-1,0,1,2,3,4,5,)
+shakex=chosenx*size*(1-facing*2);
+shakey=choseny*size*(1-facing*2);
+
+}
+//-----------------fall------------------//
+if ( temp = 1 )
+      {
+	if ( timer = 36 )
+	  {
+		shakex=0*size*(1-facing*2);
+		shakey=0*size*(1-facing*2);
+	    vspeed = fall_speed + temp_fall_speed - 0.1;
+	    temp_fall_speed = 9*size;
+		create_hitbox(16,270,6.3,7.15,50,18,kick3,obj_spark_hit3,1,1,-1,11,self.id,175,5);
+	  }
+	if ( timer >= 36 && timer <= 195 )
+	  {
+	    if ( vspeed < fall_speed + temp_fall_speed - 0.15 )
+		vspeed += 5.35*size;
+	    else
+		vspeed = fall_speed + temp_fall_speed - 0.15;
+	  }
+
+	if ( air = 0 && temp2 = 0 && timer > 36)
+	  {
+	    temp2 = 1;
+		//Dr. Context sound - sound_play(realdownb_sound);
+	    sound_play(downb_sound2);
+	    with ( hitbox )
+		instance_destroy();
+	    create_hitbox(8,362,6.20,2.65,28,6,kick2,obj_spark_hit1,2.2,0.3,2,4,self.id,3,5);
+	    vspeed = 0;
+	    image_speed=0
+		image_index=0
+	    instance_create(x,y+1,obj_down_impact);
+	    shaker = instance_create(0,0,obj_shakescreen2);
+	    shaker.ampl = 5;
+	    shaker.xampl = 0;
+	    shaker.time = 10;
+	  }
+      }
+//qyuuiter
+if ( ( timer >= 196 || ( special && timer >= 70 ) ) && temp < 2 )
+      {
+	timer = 196;
+	temp = 2;
+	temp_fall_speed = 0;
+	sound_play(downb_voice);
+	//Dr. Context Sound -  sound_play(downbprep_sound);
+	sound_play(downb_sound1);
+	heavy_armor=0;
+	sprite_index = air_dodge_sprite;
+	image_speed=0.20
+	if ( instance_exists(hitbox) )
+	with ( hitbox )
+	    instance_destroy();
+	vspeed = -5*size;
+	if ( air = 0 )
+	    air = 1;
+      }
+//shrinki
+if timer > 196 && timer < 202
+{
+image_xscale = 0.95*(1-facing*2)*size;
+image_yscale = 0.95*size;
+}
+if timer > 202 && timer < 212
+{
+image_xscale = 0.85*(1-facing*2)*size;
+image_yscale = 0.85*size;
+}
+if timer > 212
+{
+image_xscale = 0.75*size*(1-facing*2);
+image_yscale = 0.75*size;
+}
+
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+	image_xscale = 0.75*size*(1-facing*2);
+	image_yscale = 0.75*size;
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,255 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time =30;
+  timer = 0;
+  state_type = "air_attack";
+if air = 0
+  hspeed = 0
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0.17;
+  timer_speed = 1;
+  failed = 0;
+  }
+if air = 0 {
+hspeed = 0
+if ( timer == 2 )
+  {
+  var i, free;
+  free = -1;
+  for ( i = 0 ; i < 4 ; i += 1 )
+    {
+    if ( pikmin[i] == 0 )
+      {
+      free = i;
+      break;
+      }
+    }
+  if ( free >= 0 )
+    {
+    i = free;
+    // pluckin
+    sound_play(pluck_sound);
+    pikmin[i] = instance_create ( x , y , playerfriend );
+    pikmin[i].parent = self.id;
+    pikmin[i].follow_lag = 3 + 5 * i;
+    pikmin[i].type = floor ( random ( 5 ) );
+    pikmin[i].hp = 18;
+    if ( pikmin[i].type == 2 )
+      pikmin[i].hp = 25;
+    if ( pikmin[i].type == 4 )
+      pikmin[i].hp = 12;
+    if ( pikmin[i].type == 3 )
+      pikmin[i].hp = 30;
+    pikmin[i].keepmain = keepmain;
+    pikmin[i].step_script = char_custom1;
+    pikmin[i].attack = "b";
+    }
+    else
+    {
+    // no pluck, full queue
+    state_type = "stand";
+    char_downb();
+    exit;
+    time = 71
+    timer = 50
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0.5;
+    failed = 1;
+    }
+  }
+if failed = 0 {
+if timer > 3 && timer < 7 {
+	for ( i = 0; i < 4; i += 1) {
+		if pikmin[i] == 0 {
+			free = i-1;
+			break;
+			}
+		}
+	if ( free >= 0 ) {
+		pikmin[free].y = y - 15 + cos(timer/6)*20;
+		pikmin[free].x = x + (-1+facing*2) * timer;
+		pikmin[free].image_angle += 20-facing*40;
+		}
+	}
+if timer = 9 {
+	for ( i = 0; i < 4; i += 1) {
+		if pikmin[i] == 0 {
+			free = i-1;
+			break;
+			}
+		}
+	if ( free >= 0 ) {
+		pikmin[free].image_angle = 0;
+		pikmin[free].attack = "none";
+		pikmin[free].sprite_index = pikmin_stand_sprite[pikmin[free].type];
+		}
+	}
+	}
+if timer = 10
+timer = 29
+}
+if air != 0 {
+if timer = 1 {
+state_type = "stand";
+char_downb();
+exit;
+    time = 71
+    timer = 50
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0.5;
+	failed = 1;
+	if vspeed >= 0
+	vspeed -= 4.65
+	}
+}
+if ( timer == 58 )
+  {
+  sound_play(whistle_sound);
+  
+  var i, a, action;
+  // action 0 - switch
+  // action 1 - call all
+  action = 0;
+  for ( i = 0 ; i < 4 ; i += 1 )
+    {
+    if ( pikmin[i] == 0 ) continue;
+    pikmin[i].raring_to_go = 0;
+    if ( pikmin[i].attack == "none" )
+      {
+      pikmin[i].raring_to_go = 1;
+      if ( state == 1 && hit_script != 0 )
+        {
+        action = 1;
+        }
+      }
+    }
+    
+  debug_message ( "downb: " + string ( action ) );
+    
+  if ( action == 0 )
+    {
+    var must_repeat;
+    must_repeat = -1;
+    repeat ( 2 )
+      {
+      if ( must_repeat == -1 )
+        debug_message ( "REPEAT GO!!!!!!!!" );
+      debug_message ( "down b go" );
+      var temp_pikmin;
+      var temp_pikmin_num;
+      var current_main;
+      var start_cycle;
+      var current_cycle, current_num;
+      var finish;
+      start_cycle = -1;
+      for ( i = 0 ; i < 3 ; i += 1 )
+        temp_pikmin_num[i] = 0;
+      for ( i = 0 ; i < 4 ; i += 1 )
+        {
+        if ( pikmin[i] == 0 ) continue;
+        switch ( pikmin[i].type )
+          {
+          case 0: a = 0; break;
+          case 1: a = 2; break;
+          case 2: a = 1; break;
+          case 3: a = 4; break;
+          case 4: a = 3; break;
+          }
+        if ( start_cycle == -1 )
+          start_cycle = a;
+        temp_pikmin[a,temp_pikmin_num[a]] = pikmin[i];
+        temp_pikmin_num[a] += 1;
+        }
+      if ( start_cycle == -1 )
+        break;
+      debug_message ( "start cycle: " + string ( start_cycle ) );
+      debug_message ( "red pikmin: " + string ( temp_pikmin_num[0] ) );
+      debug_message ( "yellow pikmin: " + string ( temp_pikmin_num[1] ) );
+      debug_message ( "blue pikmin: " + string ( temp_pikmin_num[2] ) );
+      debug_message ( "white pikmin: " + string ( temp_pikmin_num[3] ) );
+      debug_message ( "purple pikmin: " + string ( temp_pikmin_num[4] ) );
+      if ( must_repeat == -1 )
+        {
+        start_cycle = ( start_cycle + 1 ) mod 5;
+        while ( temp_pikmin_num[start_cycle] == 0 )
+          {
+          start_cycle = ( start_cycle + 1 ) mod 5;
+          }
+        }
+      current_main = 0;
+      current_cycle = start_cycle;
+      current_num = 0;
+      finish = 0;
+      for ( i = 0 ; i < 4 ; i += 1 )
+        {
+        debug_message ( "assign: " + string ( current_main ) + " <- " + string ( current_cycle ) );
+        pikmin[current_main] = temp_pikmin[current_cycle, current_num];
+        current_main += 1;
+        current_num += 1;
+        while ( current_num == temp_pikmin_num[current_cycle] )
+          {
+          current_cycle = ( current_cycle + 1 ) mod 5;
+          current_num = 0;
+          if ( current_cycle == start_cycle )
+            finish = 1;
+          }
+        if ( finish )
+          break;
+        }
+      for ( i = 0 ; i < 4 ; i += 1 )
+        {
+        if ( pikmin[i].follow_lag != 3 + 5 * i )
+          {
+          //must_repeat = 0;
+          }
+        pikmin[i].follow_lag = 3 + 5 * i;
+        }
+      if ( must_repeat < 1 )
+        break;
+      must_repeat = -1;
+      }
+    }
+  for ( i = 0 ; i < 4 ; i += 1 )
+    {
+    if ( pikmin[i] == 0 ) continue;
+    if ( pikmin[i].raring_to_go )
+      {
+      // make pikmin jump
+      }
+    }
+  }
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+	}
+  timer = 0;
+  time = -1;
+  for ( i = 0; i < 4; i += 1) {
+		if pikmin[i] == 0 {
+			free = i-1;
+			break;
+			}
+		}
+  if pikmin[3] != 0 {
+	free = 3;
+		}
+  if ( free >= 0 ) {
+	  pikmin[free].image_angle = 0;
+	  pikmin[free].attack = "none";
+	  pikmin[free].sprite_index = pikmin_stand_sprite[pikmin[free].type];
+	  }
+  }

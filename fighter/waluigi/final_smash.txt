@@ -1,0 +1,128 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch" || state_type = "shielding" {
+        hspeed = 0;
+        target = -98
+        size = csize
+        time = 315;
+        intangible = 1;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        temp = 1
+	special = 0;
+        final_smashes+=1
+        attack_success = 0
+        image_speed = 0;
+        sprite_index = final_smash_sprite2;
+        image_index=0;
+        timer = 0
+        air_move=0
+	fsbuffer = 0;
+        sound_play(super)
+	sound_play(joy6);
+        sound_play(final_smash_voice)
+        //effect_create_above(ef_ring,x,y-18,0,c_white)
+	effSpotlight = instance_create(x,y , obj_spark);
+	effSpotlight.sprite_index = spotlight_sprite;
+	effSpotlight.image_xscale = 1* size;
+	effSpotlight.image_yscale = 1 * size;
+	effSpotlight.image_index = 0;
+	effSpotlight.image_speed = 0;
+	effSpotlight.depth = -90;
+	effSpotlight.image_alpha = 0.6;
+	effSpotlight.glow = 0.3;
+	effSpotlight.snap = self.id;
+	effSpotlight.x = x-721;
+	effSpotlight.y = y-796;
+	instance_create(x+20*(1-2*facing),y-30*size,obj_spark_effect);
+	instance_create(x-20*(1-2*facing),y-0*size,obj_spark_effect);
+	instance_create(x-30*(1-2*facing),y-40*size,obj_spark_effect);
+	instance_create(x+30*(1-2*facing),y-10*size,obj_spark_effect);
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.alarm[0] = 40
+	spark = instance_create ( 0 , 0 , obj_camerazoom );
+	spark.camera_l = x - 8;
+	spark.camera_r = x + 8;
+	spark.camera_u = y - 4 - actual_height;
+	spark.camera_d = y + 4;
+	spark.camera_boundary_zoom = 120;
+	spark.alarm[0] = 40;
+}
+if temp = 1
+speed=0
+gravity_lock = 2;
+
+
+if (timer >= 215)
+	altimer = 0;
+
+if(!altimer){
+	switch(timer){
+		case 20:
+		case 53:
+		case 83:
+		case 113:
+		case 143:
+		case 173:
+		case 203:
+		case 233:image_index = 1; break;
+		case 50:
+		case 80:
+		case 110:
+		case 140:
+		case 170:
+		case 200:
+		case 230: image_index = 2; break;
+
+		case 238: image_index = 0; sound_stop(joy3); sound_stop(joy4); sound_stop(joy5); sound_stop(joy6); sound_play(joy5); sound_play(upb_voice4); 
+			instance_create(x+20*(1-2*facing),y-30*size,obj_spark_effect);
+			instance_create(x-20*(1-2*facing),y-0*size,obj_spark_effect);
+			instance_create(x-30*(1-2*facing),y-40*size,obj_spark_effect);
+			instance_create(x+30*(1-2*facing),y-10*size,obj_spark_effect); break;
+	}
+}
+else{
+	altimer += 1;
+	if (altimer >= 31)
+		altimer = 0;
+}
+
+switch(altimer){
+	case 4: image_index = 4; break;
+	case 9: image_index = 5; benis = instance_create(x+7*(1-2*facing),y-15*size,obj_spark_effect); benis.image_xscale = 1.5; benis.image_yscale = 1.5; break;
+}
+     
+fsbuffer -= 1;
+
+if (timer = 30){
+	PSIris = create_projectile ( 0 , 361 , 0 , 0 , 0.1 , 0.1 , -1, -1, 1 , 1 , 10 ,  28 , self.id , 180, char_custom6);
+	PSIris.hit = 2;
+	PSIris.image_xscale = 1*size;
+	PSIris.depth = -91;
+}
+
+if (special && timer < 215 && !fsbuffer){
+	altimer = 1;
+	image_index = 3;
+	fsbuffer = 30;
+	special = 0;
+
+	sound_stop(joy3);
+	sound_stop(joy4);
+	sound_stop(joy5);
+	sound_stop(joy6);
+	sound_play(upb_voice3);
+	sound_play(choose(joy3,joy4,joy6));
+}
+
+if timer >= 310 {
+    effSpotlight.image_speed = 9999;
+    attack_type = "none";
+    if (air)
+	state_type = "jump";
+    else
+	state_type = "stand";
+    timer = 0;
+    intangible = 0;
+    time =-1;
+    smash_power = 0
+    hspeed = 0
+}

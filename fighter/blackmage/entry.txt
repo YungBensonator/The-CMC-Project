@@ -1,0 +1,89 @@
+if ( timer == 0 )
+{
+sprite_index = entry_sprite;
+image_speed = 0;
+image_index = 0;
+
+visible = 1;
+image_alpha = 0;
+shakex = -45 * (1-facing*2) * size;
+shakey = -60 * size;
+timer = 0;
+timer_speed = 1;
+temp = 0;
+temp2 = 0;
+}
+
+if ( timer = 1 )
+{
+sound_play(teleport_sound);
+sound_play(encounter_sound);
+
+eff = instance_create( x , y , obj_spark);
+eff.sprite_index = upb_effect_sprite;
+eff.image_xscale = 0.6 * size;
+eff.image_yscale = 0.8 * size;
+eff.image_alpha = 1;
+eff.image_index = 1;
+eff.image_speed = 0.5;
+eff.image_angle = 90;
+eff.depth = -7;
+eff.snap = self.id;
+
+visible = 1;
+image_alpha = 1;
+}
+
+if ( timer = 2 )
+{
+eff.snap = -99;
+}
+
+if ( timer >= 1 && timer <= 5 )
+{
+shakex += 3 * (1-facing*2) * size;
+shakey -= 2 * size;
+}
+
+if ( timer >= 6 && timer <= 9 )
+{
+shakex += 3 * (1-facing*2) * size;
+shakey -= 1 * size;
+}
+
+if ( timer >= 10 && timer <= 30 )
+{
+shakex += 1.5 * (1-facing*2) * size;
+}
+
+if ( timer >= 10 && shakey < 0 )
+{
+temp += 0.5;
+shakey += ( 3 + temp )* size;
+}
+
+if ( shakey >= 0 && temp2 = 0 )
+{
+shakex = 0;
+shakey = 0;
+timer = 31;
+image_index = 1;
+temp2 = 1;
+gfx_land_effect ( x , y , actual_width );
+}
+
+switch ( timer )
+      {
+	  case 33: image_index = 2; break;
+	  case 60: image_index = 3; break;
+      }
+
+
+if ( timer >= 100 )
+{
+state_type = "stand";
+sprite_index = stand_sprite;
+vspeed = 0;
+timer = 0;
+time = -1;
+}

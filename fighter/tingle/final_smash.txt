@@ -1,0 +1,193 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0.25;
+  image_index = 0;
+  sprite_index = final_smash_sprite1;
+  timer = 0;
+  timer_speed = 1;
+  time = 100;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  caught_num = 0;
+  caught[0] = 0;
+  temp = 0;
+  }
+  
+speed = 0;
+gravity_lock = 1;
+
+var i;
+if ( timer < 112 )
+for ( i = 0 ; i < caught_num ; i += 1 )
+  {
+  caught[i].di = 0;
+  caught[i].state_type = "air_flinch";
+  caught[i].attack_type = "none";
+  caught[i].timer_speed = 0;
+  caught[i].timer = 0;
+  caught[i].time = 30;
+  caught[i].alarm[2] = -1;
+  caught[i].alarm[1] = -1;
+  }
+
+if ( temp )
+  {
+  time = 160;
+  if ( timer mod 5 == 0 && timer <= 100 )
+    {
+    sound_play ( rupee_sound );
+    for ( i = 0 ; i < caught_num ; i += 1 )
+      {
+      create_projectile ( 1 , 90 , 3 , 3 , -1 , 2 , kick2 , -1 , 1 , 1 , 0 , 0 , self.id , 2 , no_script );
+      proj.x = caught[i].x;
+      proj.y = caught[i].y;
+      proj.only_hit = caught[i];
+      spark = instance_create ( caught[i].x , caught[i].y - caught[i].actual_height * 0.5 , obj_spark );
+      spark.sprite_index = rupee_sprite[floor(random(7))];
+      spark.image_xscale = 0.6 + random ( 0.6 );
+      spark.image_yscale = spark.image_xscale;
+      spark.image_angle = random ( 360 );
+      spark.angle_add = -20 + random ( 40 );
+      spark.gravity_direction = 270;
+      spark.gravity = 0.25;
+      spark.alpha_add = -1/60;
+      spark.alarm[0] = 59;
+      spark.image_speed = 0;
+      spark.speed = random ( 7 );
+      spark.direction = random ( 360 );
+      spark.depth = -9;
+      }
+    }
+    
+  if ( timer == 100 )
+    {
+    sprite_index = final_smash_sprite3;
+    image_speed = 0.25;
+    image_index = 0;
+    }
+  if ( timer == 112 )
+    {
+    sound_play ( choose ( attack_voice1 , attack_voice4 ) );
+    sound_play ( swingsnd5 );
+    instance_create ( x , y - 5 , obj_spark_effect );
+    create_projectile ( 12 , 60 + facing * 60 , 8 , 9 , -1 , 10 , kick3 , obj_spark_hit4 , 1 , 1 , 2 , 16 , self.id , 240 , char_custom5 );
+    proj.sprite_index = final_smash_sprite_map;
+    proj.hspeed = 12 - facing * 24;
+    proj.hs = proj.hspeed;
+    }
+  if ( timer == 116 )
+    {
+    image_index = 4;
+    image_speed = 0;
+    }
+    
+  if ( timer >= time - 1 )
+    {
+    smash_power = 0;
+    attack_type = "none";
+    intangible = 0;
+    if ( air > 0 )
+      state_type = "jump"; 
+      else
+      state_type = "stand";
+    timer = 0;
+    time = -1;
+    }
+  exit;
+  }
+  
+if ( timer == 8 )
+  sound_play ( swingsnd4 );
+if ( timer == 16 )
+  {
+  image_index = 4;
+  image_speed = 0;
+  }
+if ( timer >= 16 && timer < 50 && timer mod 3 == 0 )
+  {
+  var c;
+  with ( player )
+    {
+    if ( status_cancel || intangible || super_armor == 2 ) continue;
+    if ( !global.gs_team_attack && team == other.team ) continue;
+    if ( id == other.id ) continue;
+    if ( collision_rectangle (
+      other.x + 2 * ( 1 - 2 * other.facing ) ,
+      other.y - 24 ,
+      other.x + 128 * ( 1 - other.facing * 2 ) ,
+      other.y + 8 ,
+      self.id , 0 , 0 ) )
+      {
+      c = 1;
+      for ( i = 0 ; i < other.caught_num ; i += 1 )
+        {
+        if ( other.caught[i] == self.id ) c = 0;
+        }
+      if ( c )
+        {
+        other.caught[other.caught_num] = self.id;
+        other.caught_num += 1;
+        state_type = "air_flinch";
+        if ( air > 0 )
+          sprite_index = air_dodge_sprite;
+          else
+          sprite_index = spot_dodge_sprite;
+        image_index = 0;
+        image_speed = 0;
+        attack_type = "none";
+        di = 0;
+        timer_speed = 0;
+        timer = 0;
+        time = 60;
+        alarm[2] = 630;
+        alarm[1] = 630;
+        }
+      }
+    }
+  }
+if ( timer == 50 )
+  {
+  if ( caught_num > 0 )
+    {
+    sprite_index = final_smash_sprite2;
+    image_speed = 0.5;
+    image_index = 0;
+    sound_play ( fs_voice );
+    temp = 1;
+    timer = 0;
+    time = 600;
+    exit;
+    }
+    else
+    {
+    sound_play ( fs_voice2 );
+    image_index = 8;
+    }
+  }
+if ( timer == 53 )
+  {
+  image_index = 9;
+  }
+if ( timer == 56 )
+  {
+  image_index = 10;
+  }
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

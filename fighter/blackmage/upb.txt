@@ -1,0 +1,218 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "upb"
+        image_speed = 0
+		if air = 0
+        sprite_index = upb_sprite
+		else
+		sprite_index = upb_sprite
+        image_index=0
+        timer = 0
+        time = 51
+		hspeed = 0
+		special = 1
+		
+		if ai{
+		moveup = 0
+		if facing = 0
+		moveright = 0
+		else
+		moveleft = 0
+		}
+		sound_play(staff_sound);
+		leTimer = 0
+		
+		has_hit = 0
+		ai_upb_disabled = 0
+}
+
+if ( timer < time )
+    {
+	
+	
+	switch ( timer )
+    {
+	case 3: image_index = 0; break;
+	case 6: image_index = 0; break;
+	case 9: image_index = 1; break;
+	
+	
+	
+	case 103: image_index = 2; break;
+	case 106: image_index = 3; break;
+	case 109: image_index = 3; break;
+	case 112: image_index = 3; break;
+	case 115: image_index = 3; break;
+	case 118: image_index = 3; break;
+	
+    }
+	
+	if timer < 48 and air = 0
+	sprite_index = upb_sprite
+	
+	
+	if timer >= 8 and timer < 34{
+	    vspeed = -0.1
+		hspeed = 0
+	    air_move = 0
+	}
+	if timer >= 34{
+	    vspeed = 0
+		hspeed = 0
+	    air_move = 0
+	}
+	
+    if timer = 8{
+		red_yy_orb = create_projectile(0,361,0,0,0,0,-1,-1,0,0,abs(place_x(20)),-place_y(22),self.id,180,-1);
+		red_yy_orb.sprite_index = icecircle_sprite;
+		red_yy_orb.image_speed = 0.3
+		red_yy_orb.image_index = 0
+		red_yy_orb.image_xscale = image_xscale
+		red_yy_orb.image_yscale = image_yscale
+		red_yy_orb.image_alpha = 1
+		red_yy_orb.facing = facing
+		red_yy_orb.hspeed = 0
+		red_yy_orb.depth = depth -0.5
+		red_yy_orb.hit = 2
+		red_yy_orb.moving_object = 1
+		red_yy_orb.is_lilina_things = 1
+		red_yy_orb.ungrazable = 1
+		red_yy_orb.priority = 5
+    }
+	
+	if instance_exists(red_yy_orb){with (red_yy_orb){apply_camera();}}
+	
+	if timer = 33 and special = 1 and leTimer <100{
+		timer = 28
+		//image_index = 1
+	}
+	
+	if timer >= 9 and timer <= 33{
+		leTimer +=1
+		
+		if (special = 0 and timer >= 28) or leTimer > 100{
+			timer = 34
+			image_index = 11
+		}
+		
+	}
+	
+	if ai = 1 and ai_upb_disabled = 0{
+		special = 1
+		moveup = 0
+		moveright = 0
+		movedown = 0
+		moveleft = 0
+		if instance_exists(red_yy_orb) and offstage
+		with (red_yy_orb){
+			nearest_edge = instance_nearest(x,y,obj_edge)
+			direction = point_direction(x,y,nearest_edge.x,nearest_edge.y)
+			speed = 3
+			
+			if point_distance(x,y,nearest_edge.x,nearest_edge.y) < 3{
+				speed = 0
+				other.special = 0
+				other.ai_upb_disabled = 1
+			} 
+		}
+		else if instance_exists(red_yy_orb) and !offstage
+		with (red_yy_orb){
+			nearest_enemy = other.enemy
+			direction = point_direction(x,y,nearest_enemy.x,nearest_enemy.y)
+			speed = 3
+			
+			if point_distance(x,y,nearest_enemy.x,nearest_enemy.y) < 3{
+				speed = 0
+				other.special = 0
+				other.ai_upb_disabled = 1
+			} 
+		}
+	}
+	
+	if timer < 34{
+		if moveup and !collision_line(x,y,x,y-3,obj_terrain,true,false)
+		red_yy_orb.y -= 2.5
+		if movedown and !collision_line(x,y,x,y+3,obj_terrain,true,false)
+		red_yy_orb.y += 2.5
+		if moveright and !collision_line(x,y,x+3,y,obj_terrain,true,false)
+		red_yy_orb.x += 2.5
+		if moveleft and !collision_line(x,y,x-3,y,obj_terrain,true,false)
+		red_yy_orb.x -= 2.5
+		
+		if timer < 28 and !movedown and !moveright and !moveup and !moveleft and !ai{
+			if facing = 0{
+				if !collision_line(x,y,x+3,y,obj_terrain,true,false)
+				red_yy_orb.x += 2.5
+			}
+			if facing = 1{
+				if !collision_line(x,y,x-3,y,obj_terrain,true,false)
+				red_yy_orb.x -= 2.5
+			}
+			if !collision_line(x,y,x,y-3,obj_terrain,true,false)
+		        red_yy_orb.y -= 2.5
+		}
+		
+	}
+    
+	if timer = 34{
+		ignore_physics = 1
+		sound_stop(staff_sound);
+		sound_play(teleport_sound);
+		x = red_yy_orb.x
+		y = red_yy_orb.y //+ actual_height * 0.5
+		
+		eff = instance_create( x , y + 5 * size , obj_spark);
+		eff.sprite_index = upb_effect_sprite;
+		eff.image_xscale = 0.6 * size;
+		eff.image_yscale = 0.8 * size;
+		eff.image_alpha = 1;
+		eff.image_index = 1;
+		eff.image_speed = 0.5;
+		eff.image_angle = 90;
+		eff.depth = -7;
+		
+		//create_hitbox(7,90,6.9,0.1,15,7,magic1,seija_y_hs,1+ai,1+ai,00,actual_height * 0.5,self.id,3,4);
+	    //hitbox.execute_on_hit = "attacker.has_hit = 1"
+		
+		with (red_yy_orb){instance_destroy();}
+    }
+	
+	if timer > 34{
+		force_edge_grab = 1
+	}
+	
+	if timer = 48 and has_hit = 1 and air > 0{
+		sprite_index = upb_sprite2
+		image_index = 0
+		timer = 100
+		time = 121
+	}
+	
+	if timer >= 100 and air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=9; }
+	
+  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	timer = 0;
+    time =-1;
+    attack_type = "none";
+    if air > 0 and has_hit = 0
+        state_type = "fall";
+    else if air > 0 and has_hit = 1{
+	    state_type = "jump";
+		timer = 20
+		image_index = 6
+	}
+	else
+        state_type = "stand";
+}

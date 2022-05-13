@@ -1,0 +1,445 @@
+if state_type = "out" {
+digiviceo = 0;
+if evolution = 0 {
+meter = 0;
+greymon = 0;
+}
+else
+{
+meter = 1;
+}
+}
+
+//Meter Start
+if (!instance_exists(DigiviceHud)){   
+    DigiviceHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    DigiviceHud.step_script = digivice_step_script;
+    DigiviceHud.draw_script = digivice_draw_script;
+    DigiviceHud.owner = self.id;
+    DigiviceHud.keepmain = self.keepmain;
+	DigiviceHud.sprite_index = digivice_sprite;
+	DigiviceHud.image_speed = 0;
+}
+if (instance_exists(DigiviceHud))
+{
+DigiviceHud.hudalpha = obj_game_control.hud_cover[number-1];
+if(DigiviceHud.image_index <= 0) {DigiviceHud.image_index = 0}
+if(meter >= maxmeter){DigiviceHud.image_index = 21;} else if (meter <= 0){DigiviceHud.image_index = 0;} else {DigiviceHud.image_index = meter*21/maxmeter;}
+}
+
+if (!instance_exists(Digivice2Hud)){   
+    Digivice2Hud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    Digivice2Hud.step_script = digivice_step_script;
+    Digivice2Hud.draw_script = digivice_draw_script;
+    Digivice2Hud.owner = self.id;
+    Digivice2Hud.keepmain = self.keepmain;
+	Digivice2Hud.sprite_index = digivice2_sprite;
+	Digivice2Hud.image_speed = 0;
+}
+
+if (instance_exists(Digivice2Hud))
+{
+Digivice2Hud.hudalpha = obj_game_control.hud_cover[number-1];
+if digiviceo=2
+{
+Digivice2Hud.image_index = 2;
+}
+if digiviceo=1
+{
+Digivice2Hud.image_index = 1;
+}
+if digiviceo=0
+{
+Digivice2Hud.image_index = 0;
+}
+}
+
+if (!instance_exists(EvolutionHud)){    
+    EvolutionHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    EvolutionHud.step_script = digivice_step_script;
+    EvolutionHud.draw_script = digivice_draw_script;
+    EvolutionHud.owner = self.id;
+    EvolutionHud.hudalpha = 1;
+    EvolutionHud.keepmain = self.keepmain;
+	EvolutionHud.sprite_index = evolution_text_sprite;
+	EvolutionHud.image_speed = 0;
+}
+
+if (instance_exists(EvolutionHud))
+{
+if meter >= maxmeter
+EvolutionHud.image_index = 1;
+else
+EvolutionHud.image_index = 0;
+}
+
+if (hitbox.hit = 1 || hitbox2.hit = 1 || proj.hit = 1) and meter < maxmeter and evolution = 0{
+meter += 1 //0.50
+}
+
+if meter >= maxmeter {
+meter = maxmeter
+//evolution = 1;
+}
+
+if meter >= maxmeter {
+			if ( attack_type != "downb" )
+				{
+				greymon = 1;
+				}        
+            }
+
+if meter < 0
+meter = 0
+
+//Meter End
+
+
+if ( state_type = "crouch" && sprite_index = crouch_sprite )
+{
+image_speed = 0;
+if ( timer >= 3 )
+{
+image_index = 1;
+}
+}
+if(neutralb_timer > 0){ neutralb_timer -=1}
+if(sideb_timer > 0){ sideb_timer -=1}
+if(downb_timer > 0){ downb_timer -=1}
+
+if state_type = "shielding"{
+if image_index >= 2{
+image_speed = 0
+image_index = 2
+}
+
+}
+
+if sprite_index = spot_dodge_sprite {
+if timer = 1 {
+image_index = 0
+}
+}
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+	{
+	case 0: image_index = 0; break;
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 15: image_index = 4; break;
+	case 18: image_index = 5; break;
+	}
+}
+
+//Agumon
+if evolution =0{
+weight = 0.278;
+    grav = 0.27;
+    max_jumps=3;
+    run_start_speed = 2.7
+    run_accel = 0.079
+    run_speed = 3.1; //3.6
+    jumptimer = 1;
+    jump_speed = 6.5; //6.8
+    mid_jump_speed = 6.4; //6.6
+    short_hop_speed = 3.0;
+    air_speed = 2.3; //2.7
+    fall_speed = 3.3;
+    air_accel = 0.27;
+    airdash_speed = 4.5; //8 6
+    fric = 0.86;
+heavy_armor = 0
+hyper_armor = 0
+
+
+if (sprite_index = stand_sprite){
+		image_speed = 0.2;
+	}
+
+if (state_type == "run") {
+	//Walking
+	if (sprite_index != walk_sprite){
+		image_speed = 0;
+	}
+	//Dash
+	if (runtimer >= 0 && runtimer < 50){
+		sprite_index = dash_sprite;
+		switch (runtimer){
+			case 1: image_index = 0; break;
+			case 3: image_index = 1; break;
+			case 5: image_index = 2; break;
+			case 7: image_index = 3; break;
+			case 9: image_index = 4; break;
+			case 12: image_index = 5; break;
+		}
+	//Stop running during the initial dash
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 1) {
+		sprite_index = brake_sprite;
+		if (runtimer < 63){
+			image_index = 0;
+		} else if (runtimer < 67){
+			image_index = 1;
+		} else {
+			image_index = 2;
+		}
+	//Stop running (run brake)
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 0){
+		sprite_index = brake_sprite;
+
+		if (runtimer < 63){
+			image_index = 0;
+		} else if (runtimer < 65){
+			image_index = 1;
+		} else if (runtimer < 67){
+			image_index = 1; 
+		} else {
+			image_index = 2;
+		}
+	//Turn While running
+	} else if (runtimer >= -30 && runtimer <= -10) { 
+		sprite_index = turn_sprite;
+		switch (runtimer){
+			case -30: image_index = 0; break;
+			//case -28: image_index = 1; break;
+			case -25: image_index = 1; break;
+			case -23: image_index = 2; break;
+		}
+		if (runtimer >= -20){
+			sprite_index = run_sprite;
+			image_speed = 0.4;
+		}
+	} 
+	//Run normally
+	else if (runtimer >= 50 && runtimer < 60){
+		sprite_index = run_sprite;
+		image_speed = 0.4;
+	}
+
+}
+}
+//Greymon
+
+if evolution =1{
+
+stand_sprite = stand2_sprite;
+                mask_sprite = mask2_sprite;
+                //mask_index = stand2_sprite;
+                crouch_mask_sprite = crouch_mask2_sprite;
+                walk_sprite = walk2_sprite;
+                run_sprite = run2_sprite;
+                dash_sprite = dash2_sprite;
+                brake_sprite = brake2_sprite;
+                turn_sprite = turn2_sprite;
+                jump_sprite = jump2_sprite;
+                mid_jump_sprite = mid_jump2_sprite;
+                fall_sprite = fall2_sprite;
+                land_sprite = land2_sprite;
+                shield_sprite = shield2_sprite;
+                parry_sprite = parry2_sprite;
+                air_dodge_sprite = air_dodge2_sprite;
+                spot_dodge_sprite = spot_dodge2_sprite;
+                roll_sprite = roll2_sprite;
+                crouch_sprite = crouch2_sprite;
+				crawl_sprite = crouch2_sprite;
+				flinch_sprite = hurt1_sprite;
+                flinch1_sprite = hurt1_sprite;
+                flinch2_sprite = hurt2_sprite;
+                flinch3_sprite = hurt3_sprite;
+                screenko_sprite = screenko2_sprite;
+                tumble_sprite = tumble2_sprite;
+                down_sprite = down2_sprite;
+                broken_sprite = broken2_sprite;
+                item_forward_sprite = item_forward2_sprite;
+                item_up_sprite = item_up2_sprite;
+                item_down_sprite = item_down2_sprite;
+                item_heavy_sprite = item_heavy2_sprite;
+                item_swing_sprite = item_swing2_sprite;
+                item_shoot_sprite = item_shoot2_sprite;
+                edge_sprite = edge2_sprite;
+                ukemi_sprite = ukemi2_sprite;
+                launched_sprite = launched2_sprite;
+                swim_sprite = swim2_sprite;
+                ladder_sprite = ladder2_sprite;
+                vehicle_sprite = vehicle2_sprite;
+                gw_stock_sprite = gw_stock2_sprite;
+                sleep_sprite = sleep2_sprite;
+                fly_voice1 = greymonfly_voice1;
+                fly_voice2 = greymonfly_voice2;
+                hit_voice1 = greymonhit_voice1;
+                hit_voice2 = greymonhit_voice2;
+                starko_voice = greymonstarko_voice;
+                die_voice1 = greymondie_voice1;
+                die_voice2 = greymondie_voice2;
+
+
+
+                weight = 0.4; //0.35 0.37
+                grav = 0.37;
+                max_jumps=3;
+    run_start_speed = 2
+                run_accel = 0.045
+                run_speed = 2.7; //2.6 2.8
+    jumptimer = 1;
+    jump_speed = 7.3;
+    mid_jump_speed = 7.1;
+    short_hop_speed = 3.3;
+    air_speed = 2.4;
+    fall_speed = 3.4;
+    air_accel = 0.27;
+    airdash_speed = 4.5; //8 6
+    fric = 0.84;
+heavy_armor = 5 //9
+hyper_armor = 6 
+
+temp_no_hurtbox = 1
+
+if meter > 0
+meter -= 3/60
+
+if (sprite_index = walk_sprite){
+		image_speed = 0.2;
+	}
+if (sprite_index = run_sprite){
+		image_speed = 0.2;
+	}
+if (sprite_index = stand_sprite){
+		image_speed = 0.2;
+	}
+
+if (state_type == "run") {
+	//Walking
+	if (sprite_index != walk_sprite){
+		image_speed = 0;
+	}
+	//Dash
+	if (runtimer >= 0 && runtimer < 50){
+		sprite_index = dash_sprite;
+		switch (runtimer){
+			case 1: image_index = 0; break;
+			case 3: image_index = 1; break;
+			case 5: image_index = 2; break;
+			case 7: image_index = 3; break;
+			case 9: image_index = 4; break;
+			case 12: image_index = 5; break;
+		}
+	//Stop running during the initial dash
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 1) {
+		sprite_index = brake_sprite;
+		if (runtimer < 63){
+			image_index = 0;
+		} else if (runtimer < 67){
+			image_index = 1;
+		} else {
+			image_index = 2;
+		}
+	//Stop running (run brake)
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 0){
+		sprite_index = brake_sprite;
+
+		if (runtimer < 63){
+			image_index = 0;
+		} else if (runtimer < 65){
+			image_index = 1;
+		} else if (runtimer < 67){
+			image_index = 1; 
+		} else {
+			image_index = 2;
+		}
+	//Turn While running
+	} else if (runtimer >= -30 && runtimer <= -10) { 
+		sprite_index = turn_sprite;
+		switch (runtimer){
+			case -30: image_index = 0; break;
+			//case -28: image_index = 1; break;
+			case -25: image_index = 1; break;
+			case -23: image_index = 2; break;
+		}
+		if (runtimer >= -20){
+			sprite_index = run_sprite;
+			image_speed = 0.2;
+		}
+	} 
+	//Run normally
+	else if (runtimer >= 50 && runtimer < 60){
+		sprite_index = run_sprite;
+		image_speed = 0.2;
+	} 
+	
+}
+
+if meter <= 0 and state_type != "attack" and state_type != "air_attack" and state_type != "edge" and state_type != "out" and state_type != "respawn" and state_type != "flinch" and state_type != "air_flinch" and state_type != "broken" {
+
+evolution = 0
+greymon = 0
+
+stand_sprite = standA_sprite;
+                mask_sprite = maskA_sprite;
+                //mask_index = maskA_sprite;
+                crouch_mask_sprite = crouch_maskA_sprite;       
+                walk_sprite = walkA_sprite;
+                run_sprite = runA_sprite;
+                dash_sprite = dashA_sprite;
+                brake_sprite = brakeA_sprite;
+                turn_sprite = turnA_sprite;
+                jump_sprite = jumpA_sprite;
+                mid_jump_sprite = mid_jumpA_sprite;
+                fall_sprite = fallA_sprite;
+                land_sprite = landA_sprite;
+                shield_sprite = shieldA_sprite;
+                parry_sprite = parryA_sprite;
+                air_dodge_sprite = air_dodgeA_sprite;
+                spot_dodge_sprite = spot_dodgeA_sprite;
+                roll_sprite = rollA_sprite;  
+                crouch_sprite = crouchA_sprite;
+				crawl_sprite = crouchA_sprite;
+				flinch_sprite = flinchA1_sprite;
+                flinch1_sprite = flinchA1_sprite;
+                flinch2_sprite = flinchA2_sprite;
+                flinch3_sprite = flinchA3_sprite;
+                screenko_sprite = screenkoA_sprite;
+                tumble_sprite = tumbleA_sprite;
+                down_sprite = downA_sprite;
+                broken_sprite = brokenA_sprite;
+                item_forward_sprite = item_forwardA_sprite;
+                item_up_sprite = item_upA_sprite;
+                item_down_sprite = item_downA_sprite;
+                item_heavy_sprite = item_heavyA_sprite;
+                item_swing_sprite = item_swingA_sprite;
+                item_shoot_sprite = item_shootA_sprite;
+                edge_sprite = edgeA_sprite;
+                ukemi_sprite = ukemiA_sprite;
+                launched_sprite = launchedA_sprite;
+                swim_sprite = swimA_sprite;
+                ladder_sprite = ladderA_sprite;
+                vehicle_sprite = vehicleA_sprite;
+                gw_stock_sprite = gw_stockA_sprite;
+                sleep_sprite = sleepA_sprite;
+                fly_voice1 = fly_voiceA1;
+                fly_voice2 = fly_voiceA2;
+                hit_voice1 = hit_voiceA1;
+                hit_voice2 = hit_voiceA2;
+                starko_voice = starko_voiceA;
+                die_voice1 = die_voiceA1;
+                die_voice2 = die_voiceA2;
+	
+	
+state_type = "stand";
+attack_type = "none";
+timer = 0;
+time = -1;
+char_custom8();
+
+}
+
+
+}
+
+if state_type = "air_attack" and attack_type = "devolution"{
+char_custom8();
+intangible = 0;
+}

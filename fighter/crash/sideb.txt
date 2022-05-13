@@ -1,0 +1,108 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 1;
+  attack_type = "sideb";
+  time = 48;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = side_b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+if ( air == 0 ) { air_move = 0; hspeed *= 0.9; } else air_move = 1;
+
+switch ( timer )
+  {
+  case 1: image_index = 1; break;
+  case 2: image_index = 2; break;
+  case 3: image_index = 3; break;
+  case 4: image_index = 5; break;
+  case 6: shakex -= size * ( 1 - facing * 2 ); break;
+  case 8: shakex -= size * ( 1 - facing * 2 ); break;
+  case 10: shakex -= size * ( 1 - facing * 2 ); break;
+  case 22: shakex = 0; image_index = 6; break;
+  case 26: image_index = 7; break;
+  case 30: image_index = 8; break;
+  case 34: image_index = 9; shakex += size * ( 1 - facing * 2 ); break;
+  case 36: shakex += size * ( 1 - facing * 2 ); break;
+  case 38: image_index = 10; shakex += size * ( 1 - facing * 2 ); break;
+  case 40: shakex += size * ( 1 - facing * 2 ); break;
+  case 42: shakex += size * ( 1 - facing * 2 ); break;
+  case 45: image_index = 0; shakex *= 0.5; break;
+  }
+
+if ( timer == 4 )
+  {
+  crate_count += 1;
+  if ( crate_count == 3 ) crate_count = 0;
+  if ( crate[crate_count] > 0 )
+  if ( instance_exists ( crate[crate_count] ) ) with ( crate [ crate_count ] )
+    {
+    instance_create ( x , y - 8 , obj_smoke );
+    instance_destroy();
+    }
+  create_projectile ( 0 , 361 , 1 , 1 , 1 , 1 , -1 , -1 , 1 , 1 , 0 , 0 , self.id , 240 , char_custom2 );
+  kind = irandom_range(-1, 51);
+  if kind<=9
+	proj.kind=2 //TNT Crate
+  else if kind <=49
+	proj.kind=0 //Regular Crate
+  else
+	proj.kind=1 //Nitro Crate
+  
+  proj.sprite_index = side_b_crate_sprite;
+  proj.image_index = proj.kind;
+  proj.image_speed = 0;
+  proj.image_xscale = xsize*1;
+  proj.image_yscale = ysize*1.1;
+  proj.depth = -3;
+  proj.hit = 2;
+  proj.launched = 0;
+  proj.hp = 35
+  proj.push = 1;
+  crate [ crate_count ] = proj;
+  }
+if ( timer >= 4 && timer < 22 )
+  {
+  proj.alarm[0] = 2;
+  proj.x = x - 25 * ( 1 - facing * 2 ) * size + shakex * size;
+  proj.y = y - 20 * size;
+  }
+
+if ( timer == 22 )
+  {
+  sound_play ( sideb_sound );
+  proj.alarm[0] = 20 * 60;
+  proj.time = proj.alarm[0];
+  proj.launched = 1;
+  proj.hit = 0;
+  if ( special )
+    {
+    proj.hspeed = 4.5 * ( 1 - facing * 2 ) * size;
+    proj.vspeed = -2.8 * size;
+    }
+    else
+    {
+    proj.hspeed = 2.5 * ( 1 - facing * 2 ) * size;
+    proj.vspeed = -3 * size;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	}
+  timer = 0;
+  time = -1;
+  }

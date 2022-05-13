@@ -1,0 +1,402 @@
+if solo = 0 {
+
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 48;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0.25;
+  timer_speed = 1;
+  temp = 0;
+  if ( moveright ) facing = 0;
+  if ( moveleft ) facing = 1;
+  if ( partner != 0 )
+    {
+    if ( instance_exists ( partner ) )
+    if ( point_distance ( partner.x , partner.y , x , y ) < 240 )
+    if ( partner.state_type == "stand"
+      || partner.state_type == "run"
+      || partner.state_type == "jump"
+      || partner.state_type == "air_flinch"
+      || partner.state_type == "shielding"
+      || partner.state_type == "fall"
+      || partner.state_type == "crouch"
+      || partner.state_type == "dodge"
+      || partner.state_type == "air_dodge" )
+      {
+      temp = 8;
+      partner.x = x;
+      partner.y = y;
+      partner.ignore_physics = 3;
+      partner.facing = facing;
+      partner.state_type = "air_attack";
+      partner.attack_type = "upb";
+      partner.time = 90;
+      partner.timer = 0;
+      partner.timer_speed = 1;
+      partner.ai_action = "sync";
+      partner.ai_partnertimer = 70;
+      sound_play(belay_sound);
+      with ( partner )
+        {
+        fighter_clean_up();
+        sprite_index = upb_sprite;
+        image_index = 0;
+        image_speed = 0.125;
+        }
+      air_move = 0;
+      partner.air_move = 0;
+      partner.temp = 2;
+      image_speed = 0.5;
+      }
+    }
+  }
+if timer > 25
+force_edge_grab = 1
+if ( temp == 0 )
+  {
+  air_move = 1;
+  if ( timer < 8 )
+    {
+    vspeed = 0;
+    intangible = 1;
+    }
+  if ( timer == 8 )
+    {
+    image_index = 2;
+    image_speed = 1/32;
+    vspeed = -3.8 * size;
+    intangible = 0;
+    spark = instance_create ( x , y , obj_spark_shockwave );
+    spark.image_yscale *= 0.1 * size;
+    spark.image_xscale *= 0.2 * size;
+    }
+  }
+
+if ( temp == 8 )
+  {
+  air_move = 0;
+  if ( timer < 8 )
+    {
+    vspeed = 0;
+    gravity_lock = 1;
+    intangible = 1;
+    }
+  if ( timer == 4 )
+    {
+    // DETECT EDGE
+    target = collision_rectangle(x,y,x+160*(1-facing*2),y-128,obj_edge,0,1);
+    partner.target = target;
+    target = 0;
+    }
+  if ( timer == 8 )
+    {
+    gravity_lock = 0;
+    if ( target > 0 && target.taken == 0 )
+      {
+      partner.temp = 4;
+      partner.timer = 0;
+      partner.time = 5;
+      partner.sprite_index = jump_sprite;
+      partner.image_index = 1;
+      partner.image_speed = 0;
+      partner.ai_partnertimer = 25;
+      partner.timer_speed = 1;
+      //partner.force_edge_grab = 1;
+      temp = 5;
+      timer = 0;
+      time = 21;
+      spark = create_gfx ( 0 , 0 , spr_rope , 20 , 1 , 1 , char_custom3 );
+      spark.popo = id;
+      spark.nana = partner;
+      spark.depth = depth + 2;
+      }
+      else
+      {
+      partner.temp = 3;
+      partner.timer = 0;
+      partner.time = 50;
+      partner.sprite_index = jump_sprite;
+      partner.image_index = 1;
+      partner.image_speed = 0;
+      partner.ai_action = "sync";
+      partner.ai_partnertimer = 120;
+      temp = 3;
+      timer = 0;
+      time = 25;
+      spark = create_gfx ( 0 , 0 , spr_rope , 25 , 1 , 1 , char_custom3 );
+      spark.popo = id;
+      spark.nana = partner;
+      spark.depth = depth + 2;
+      }
+    }
+  }
+if ( temp == 2 )
+  {
+  intangible = 1;
+  vspeed = 0;
+  gravity_lock = 1;
+  }
+if ( temp == 3 )
+  {
+  air_move = 0;
+  gravity_lock = 1;
+  vspeed = 0;
+  sprite_index = jump_sprite;
+  image_index = 1;
+  if ( timer < 20 )
+    {
+    intangible = 1;
+    }
+    else
+    {
+    intangible = 0;
+    }
+  if ( boss == 0 )
+    {
+    if ( temp == 5 )
+      {
+      spark = instance_create ( x , y , obj_spark_shockwave );
+      spark.image_xscale *= 0.5;
+      spark.image_yscale *= 0.25;
+      }
+    if ( timer >= 5 )
+      hspeed = 3 * size * ( 1 - facing * 2 );
+    if ( timer >= 5 && timer < 10 )
+      vspeed = -14 * size;
+    if ( timer >= 10 && timer < 15 )
+      vspeed = -10 * size;
+    if ( timer >= 15 && timer < 20 )
+      vspeed = -6 * size;
+    if ( timer >= 20 && timer < 25 )
+      vspeed = -2 * size;
+    }
+    else
+    {
+    if ( timer == 1 )
+      create_hitbox ( 19 , 80+facing*20 , 6.8 , 5.3 , 30 , 10 , punch4 , obj_spark_hit4 , 1.5 , 1.5 , 0 , 12 , self.id , 20 , 5 );
+    hspeed = 2 * size * ( 1 - facing * 2 );
+    if ( timer >= 0 && timer < 5 )
+      vspeed = -8 * size;
+    if ( timer >= 5 && timer < 10 )
+      vspeed = -6 * size;
+    if ( timer >= 10 && timer < 15 )
+      vspeed = -4 * size;
+    if ( timer >= 15 && timer < 20 )
+      vspeed = -2 * size;
+    }
+  if (timer == 2)
+    {
+     sound_play(belay_rope_sound);
+    }
+  if (timer == 13)
+    {
+     sound_play(belay_jump_sound);
+    }
+  if ( timer >= 23 + ( boss != 0 ) )
+    {
+    if ( boss != 0 )
+      {
+      ai_action = "separated";
+      }
+    state_type = "fall";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    exit;
+    }
+  }
+
+if ( temp == 4 )
+  {
+  gravity_lock = 1;
+  vspeed = 0;
+  hspeed = 0;
+  sprite_index = jump_sprite;
+  image_index = 1;
+  image_speed = 0;
+  if ( timer == 1 )
+    create_hitbox ( 9 , 362 , 6.8 , 5.3 , 30 , 10 , punch4 , obj_spark_hit4 , 1.8 , 1.8 , 0 , 12 , self.id , 3 , 5 );
+  x = ( x * 3 + target.x ) * 0.25;
+  y = ( y * 3 + target.y + actual_height - 8 * size ) * 0.25;
+  intangible = 1;
+  if ( timer == 4 )
+    {
+    fighter_clean_up();
+    ai_action = "sync";
+    ai_partnertimer = 20;
+    intangible_frames = 10;
+    image_speed = 0;
+    image_index = 0;
+    //target.taken = 1;
+    //target.alarm[0] = 30;
+    state_type = "fall";
+    attack_type = "none";
+    x = target.x - actual_width + actual_width * 2 * ( target.object_index == obj_edge_right );
+    y = target.y + actual_height - 8 * size;
+    timer = 0;
+    time = -1;
+    enforce_ledge_grab = target;
+    exit;
+    }
+  }
+if ( temp == 5 )
+  {
+  gravity_lock = 1;
+  vspeed = 0;
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 3;
+  image_speed = 0;
+  if ( timer < 17 )
+    {
+    image_index = 1;
+    image_speed = 0;
+    armor_frames = 4;
+    }
+  if ( timer >= 17 && timer < 20 )
+    {
+    sprite_index = jump_sprite;
+    image_index = 2;
+    image_speed = 0;
+    x = ( x * 3 + target.x ) * 0.25;
+    y = ( y * 3 + target.y + actual_height - 8 * size ) * 0.25;
+    }
+  if ( timer == 20 )
+    {
+    state_type = "fall";
+    attack_type = "none";
+    x = target.x - actual_width + actual_width * 2 * ( target.object_index == obj_edge_right );
+    y = target.y + actual_height - 8 * size;
+    timer = 0;
+    time = -1;
+    enforce_ledge_grab = target;
+    exit;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  force_edge_grab = 0;
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
+}
+
+if solo = 1 {
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 68;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0.25;
+  timer_speed = 1;
+  if ( moveright ) facing = 0;
+  if ( moveleft ) facing = 1;
+}
+if timer > 25
+force_edge_grab = 1
+  if ( timer < 8 )
+    {
+    air_move = 1
+    vspeed = 0;
+    intangible = 1;
+    gravity_lock = 1;
+    }
+  if ( timer == 8 )
+    {
+    sound_play(belay_sound);
+    gravity_lock = 0;
+    air_move = 0
+    image_index = 2;
+    image_speed = 1/32;
+    vspeed = -3.8 * size;
+    intangible = 0;
+    spark = instance_create ( x , y , obj_spark_shockwave );
+    spark.image_yscale *= 0.1 * size;
+    spark.image_xscale *= 0.2 * size;
+    }
+    if ( timer > 11 && timer < 32 )
+      hspeed = 5 * size * ( 1 - facing * 2 );
+    if ( timer > 11 && timer < 16 )
+      vspeed = -8 * size;
+    if ( timer >= 16 && timer < 21 )
+      vspeed = -6 * size;
+    if ( timer >= 21 && timer < 26 )
+      vspeed = -4 * size;
+    if ( timer >= 26 && timer < 31 )
+      vspeed = -2 * size;
+    if timer = 9
+	heavy_armor = 12
+    if timer = 32
+	heavy_armor = 0
+    if ( timer == 11 ) {
+      create_hitbox ( 15 , 80+facing*20 , 5.8 , 3.85 , 30 , 10 , punch4 , obj_spark_hit4 , 1.65 , 0.8 , 2 , 32 , self.id , 15 , 5 );
+  spark = instance_create ( x-2*(1-facing*2) , y - 18 , obj_spark );
+  spark.sprite_index = bird_sprite;
+  spark.image_xscale = 1-facing*2;
+  spark.image_yscale = 1;
+  spark.image_index = 0;
+  spark.depth = -9;
+  spark.image_speed = 0;
+  spark.alarm[0] = 60;
+  gravity_lock = 1
+  }
+
+if ( timer >= 11 && timer < 32 )
+  {
+  spark.x = x-2*(1-facing*2);
+  spark.y = y - 18;
+  }
+if ( timer >= 11 && timer < 62 )
+  {
+  spark.image_index = floor ( (timer-11) * 0.25 ) mod 4;
+  }
+if ( timer >= 32 && timer < 62 )
+  {
+  spark.hspeed = 11*(1-facing*2);
+  spark.vspeed = -2
+  y += 1;
+  }
+  if timer = 32 {
+	air_move = 1
+	sprite_index = fall_sprite
+	}
+  if timer = 62
+	gravity_lock = 0
+
+if ( timer >= time - 1 )
+  {
+  force_edge_grab = 0;
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
+}

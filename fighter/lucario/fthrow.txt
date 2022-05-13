@@ -1,0 +1,144 @@
+if global.gs_form[number-1] = 0
+{
+if time = -1 {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "fthrow";
+    image_speed = 0.25;
+    sprite_index = fthrow_sprite;
+    image_index=0;
+    timer = 0;
+    time = 44;
+    timer_speed=1;
+    target.timer_speed = 0;
+    target.alarm[0] = 51
+}
+if timer < time {
+    if timer <= 7 {
+        target.x = x +(16 - facing*32)*size;
+        target.y = y-1;
+    }
+    if timer >= 8 && timer <= 11 {
+        target.x = x +(15 - facing*28)*size;
+        target.y = y-4*size;
+    }
+    if timer >= 12 && timer <= 29 {
+        target.x = x +(14 - facing*28)*size;
+        target.y = y-6*size;
+    }
+    if timer = 28 {
+        sound_play(attack_sound2);
+        sound_play(sideb_voice);
+        create_hitbox(3+round(aura/5),90,2,0,8,7,aura3,obj_spark_aura,0.5,0.4,14,14,self.id,1,5);
+	hitbox.di = 0;
+        hitbox.shake_ampl = 0
+        spark = instance_create(0,0,obj_shakescreen3);
+        spark.ampl = 5
+        spark.xampl = 0
+        spark.time = 10
+        instance_create(x+20-facing*40,y-20,obj_spark_effect);
+        spark = create_spark(18,15,aura_burst_sprite,0.8,0.175+aura/80,0.175+aura/80)
+        spark.image_angle = 310 - facing*180;
+    }
+    if timer = 29 {
+        create_throw_box(5+round(aura/10),50+facing*80,5.9+aura*0.1,6.5+aura*0.1,1,1,-1,obj_spark_effect,0.6,0.5,14,15,self.id,1)
+        hitbox.shake_ampl = 0
+        hitbox.hit_stun = 7
+    }
+}
+
+if (timer >=29){ 
+if (attack_success || target.object_index == obj_enemy) && dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1{	
+				if ((target.weight <= .22 && (aura < 10 && target.percent > 130 || aura > 10 && target.percent > 115)) || (target.weight > .22 && target.weight < .3 && (aura < 10 && target.percent > 125 || aura > 10 && target.percent > 100)) || (target.weight > .3 && (aura < 10 && target.percent > 150 || aura > 10 && target.percent > 125))){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+        
+  }	      
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        
+}        
+if global.gs_form[number-1] = 1
+{
+if time = -1 {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "fthrow";
+    image_speed = 0.25;
+    sprite_index = fthrow_sprite;
+    image_index=0;
+    timer = 0;
+    time = 44;
+    timer_speed=1;
+    target.timer_speed = 0;
+    target.alarm[0] = 51
+}
+if timer < time {
+    if timer <= 7 {
+        target.x = x +(16 - facing*32)*size;
+        target.y = y-1;
+    }
+    if timer >= 8 && timer <= 11 {
+        target.x = x +(15 - facing*28)*size;
+        target.y = y-4*size;
+    }
+    if timer >= 12 && timer <= 29 {
+        target.x = x +(14 - facing*28)*size;
+        target.y = y-6*size;
+    }
+    if timer = 28 {
+        sound_play(attack_sound2);
+        sound_play(sideb_voice);
+        create_hitbox(3,90,2,0,8,7,aura3,obj_spark_aura,0.5,0.4,14,14,self.id,1,5);
+	hitbox.di = 0;
+        hitbox.shake_ampl = 0
+        spark = instance_create(0,0,obj_shakescreen3);
+        spark.ampl = 5
+        spark.xampl = 0
+        spark.time = 10
+        instance_create(x+20-facing*40,y-20,obj_spark_effect);
+        spark = create_spark(18,15,aura_burst_sprite,0.8,0.175+aura/80,0.175+aura/80)
+        spark.image_angle = 310 - facing*180;
+    }
+    if timer = 29 {
+        create_throw_box(5,50+facing*80,5.86,6.95,1,1,-1,obj_spark_effect,0.6,0.5,14,15,self.id,1)
+        hitbox.shake_ampl = 0
+    }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+}

@@ -1,0 +1,80 @@
+shield = instance_create ( x , y - image_yscale * sprite_get_height ( sprite_index ) / 2 , obj_shield )
+if state_type = "stand" && sprite_index = stand_sprite
+{
+image_speed=0.2
+}
+if ( attack_type != "downb" )
+    defense=1;
+
+if (state_type == "run") {
+	//Walking
+	if (sprite_index != walk_sprite){
+		image_speed = 0;
+	}
+	//Dash
+	if (runtimer >= 0 && runtimer < 50){
+		sprite_index = dash_sprite;
+		switch (runtimer){
+			case 1: image_index = 0; break;
+			case 3: image_index = 1; break;
+			case 5: image_index = 2; break;
+			case 7: image_index = 3; break;
+			case 9: image_index = 4; break;
+			case 12: image_index = 5; break;
+		}
+	//Stop running during the initial dash
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 1) {
+		sprite_index = brake_sprite;
+		if (runtimer < 63){
+			image_index = 1;
+		} else if (runtimer < 67){
+			image_index = 2;
+		} else {
+			image_index = 3;
+		}
+	//Stop running (run brake)
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 0){
+		sprite_index = brake_sprite;
+		if (runtimer < 63){
+			image_index = 0;
+		} else if (runtimer < 65){
+			image_index = 1;
+		} else if (runtimer < 67){
+			image_index = 2; 
+		} else {
+			image_index = 3;
+		}
+
+		
+	//Turn While running
+		} else if (runtimer >= -30 && runtimer <= -10) { 
+		sprite_index = turn_sprite;
+		switch (runtimer){
+			case -30: image_index = 0; break;
+			case -28: image_index = 1; break;
+			case -25: image_index = 2; break;
+			case -23: image_index = 3; break;
+			case -21: image_index = 4; break;
+		}
+		if (runtimer >= -20){
+			sprite_index = run_sprite;
+			image_speed = 0.65;
+		}
+	} 
+	//Run normally
+	else if (runtimer >= 50 && runtimer < 60){
+		sprite_index = run_sprite;
+		image_speed = 0.50;
+	} 
+	
+}
+if ( sprite_index = shield_sprite || sprite_index = roll_sprite || sprite_index = spot_dodge_sprite )
+{
+  sackburst = 1;
+  image_blend = merge_color ( make_color_rgb ( 128 , 0 , 0 ) , c_white , shield_hp / 165 );
+}
+if ( sprite_index != shield_sprite && sprite_index != roll_sprite && sprite_index != spot_dodge_sprite && sackburst )
+{
+  image_blend = c_white;
+  sackburst = 0;
+}

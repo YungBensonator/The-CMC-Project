@@ -1,0 +1,86 @@
+if ( ai_timer >= time-2 )
+    ai_state = "idle";
+if ( air = 0 )
+  {
+    if ( collision_rectangle(x-13*size,y-13*size,x+10*size,y,item,0,0) && hold_item = 0 && instance_nearest(x,y-5*size,item).holder = 0 && instance_nearest(x,y-5*size,item).grab > 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 3;
+	sound_play(itemgetsnd);
+	sprite_index = land_sprite;
+	hold_item = 1;
+	held_item = instance_nearest(x,y-5*size,item);
+	held_item.holder = id;
+	held_item.state_type = "held";
+	attacking = 0;
+	exit;
+      }
+    else
+      {
+	if ( distance_to_object(enemy) < 22 )
+	  {
+	    if ( enemy.air = 0 )
+	      {
+		if ( held_item = -1 )
+		  {
+		    if ( smash_power >= global.gs_fs_charge && distance_to_object(enemy) < 20 )
+			attack_type = "final_smash";
+		    else
+			attack_type = choose("jab","stilt","utilt","dtilt","grab","dsmash","b","downb");
+		  }
+		else
+		    attack_type = "itemfthrow";
+	      }
+	    else
+	      {
+		if ( held_item = -1 )
+		    attack_type = choose("jab","stilt","utilt","usmash","downb");
+		else
+		    attack_type = choose("itemfthrow","itemuthrow");
+	      }
+	    exit;
+	  }
+	if ( distance_to_object(enemy) >= 22 && enemy.air = 0 )
+	  {
+	    if ( held_item = -1 )
+		attack_type = choose("stilt","grab","ssmash","b");
+	    else
+		attack_type = "itemfthrow";
+	    exit;
+	  }
+      }
+  }
+else
+if ( offstage && ai_state != "recover" )
+    attack_type = choose("nair","fair","uair","dair","b");
+else
+  {
+    if ( distance_to_object(enemy) < 24 )
+      {
+	if ( held_item = -1 )
+	  {
+	    if ( ( !facing && enemy.x > x ) || ( facing && enemy.x <= x ) )
+		attack_type = choose("nair","fair","uair","dair","zair","b","sideb","downb");
+	    else
+		attack_type = choose("nair","bair","uair","dair","zair","b","sideb","downb");
+	  }
+	else
+	    attack_type = "itemfthrow";
+	exit;
+      }
+    if ( distance_to_object(enemy) >= 24 )
+      {
+	if ( held_item = -1 )
+	  {
+	    if ( ( !facing && enemy.x > x ) || ( facing && enemy.x <= x ) )
+		attack_type = choose("nair","zair","b","sideb");
+	    else
+		attack_type = choose("nair","bair","b","sideb");
+	  }
+	else
+	    attack_type = "itemfthrow";
+	exit;
+      }
+  }

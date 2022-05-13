@@ -1,0 +1,133 @@
+if ai_timer >= time-2
+ai_state="idle"
+if air = 0 {
+if collision_rectangle(x-13,y-13,x+10,y,item,0,0) && hold_item = 0 && instance_nearest(x,y-5,item).holder = 0 && instance_nearest(x,y-5,item).grab > 0{
+        attack_type = "none";
+        state_type = "land";
+        sprite_index=land_sprite;
+        timer = 0;
+        time = 3;
+        hold_item = 1;
+        held_item = instance_nearest(x,y-5,item);
+        held_item.holder = id;
+        held_item.state_type = "held"
+        sound_play(itemgetsnd);
+        attacking = 0;
+        exit
+        }  
+else {
+if distance_to_object(enemy) < 20 {
+    //timer=0
+    if enemy.air=0 {
+    if held_item = -1 {
+    if smash_power >= global.gs_fs_charge && abs(enemy.y-y)<15 && (final_smash_script != char_custom1 || abs(enemy.x-x) < 14*size) {
+    if enemy.x < x
+    facing = 1
+    else
+    facing = 0
+    attack_type = "final_smash" }
+    else {
+    if distance_to_object(obj_edge_left) > 74 && distance_to_object (obj_edge_right) > 70 {
+        if string(enemy.attack_type) != "none"
+            attack_type = choose("jab","jab","dtilt","sideb","upb","utilt","upb","upb","sideb","grab","dsmash","usmash","sideb","dtilt","upb","smashb") 
+        else
+            attack_type = choose("jab","jab","dtilt","dtilt","utilt","stilt","upb","grab","grab","dsmash","usmash","downb","sideb","smashb","ssmash","dtilt")
+    }
+    else { 
+        if string(enemy.attack_type) != "none" {
+            attack_type = choose("jab","jab","dtilt","dtilt","upb","utilt","upb","upb","smashb","grab","dsmash","usmash","upb","dtilt","upb","ubp") 
+        } 
+        else {
+            if evil
+                attack_type = choose("jab","jab","dtilt","dtilt","downb","utilt","stilt","upb","grab","grab","dsmash","usmash","downb","dtilt","upb","downb") 
+            else
+                attack_type = choose("jab","jab","dtilt","dtilt","downb","utilt","stilt","upb","grab","grab","dsmash","usmash","downb","dtilt","smashb","ssmash") }
+        }
+    }}
+    else
+    attack_type = "itemfthrow"
+    }
+    else {
+    if held_item = -1 {
+    if distance_to_object(obj_edge_left) > 74 && distance_to_object (obj_edge_right) > 70 {
+        if string(enemy.attack_type) != "none"
+            attack_type = choose("jab","upb","upb","smashb","upb","utilt","upb","upb","usmash","usmash","usmash","upb","dtilt","upb","utilt") 
+        else
+            attack_type = choose("jab","utilt","utilt","upb","upb","usmash","usmash","usmash","ssmash","downb","sideb","smashb")
+    }
+    else {
+        if string(enemy.attack_type) != "none"
+            attack_type = choose("jab","upb","upb","smashb","upb","utilt","upb","upb","usmash","usmash","usmash","upb","dtilt","upb","utilt") 
+        else {
+            if evil
+                attack_type = choose("jab","utilt","utilt","upb","utilt","usmash","usmash","usmash","ssmash","downb","downb","utilt","downb")
+            else 
+                attack_type = choose("jab","utilt","utilt","upb","usmash","usmash","usmash","usmash","ssmash","downb","downb","smashb","usmash") }
+        }
+    }
+    else
+    attack_type = choose("itemfthrow","itemuthrow") }
+    exit
+    }
+if distance_to_object(enemy) >= 20 && enemy.air=0 {
+    //timer=0
+    if final_smash_script != char_custom1 && smash_power >= global.gs_fs_charge && abs(enemy.y-y)<15 {
+    attack_type = "final_smash" 
+    if enemy.x < x
+    facing = 1
+    else
+    facing = 0 }
+    else 
+    if held_item = -1 {
+    if distance_to_object(obj_edge_left) > 45 && distance_to_object (obj_edge_right) > 65 {
+        if string(enemy.attack_type) != "none"
+            attack_type = choose("sideb","stilt","sideb","utilt","b","b","dsmash","sideb","ssmash","usmash","dtilt","dsmash","ssmash","sideb","utilt")
+        else
+            attack_type = choose("sideb","stilt","stilt","utilt","downb","b","b","sideb","ssmash","usmash","dsmash","dsmash","ssmash","utilt","downb") 
+    }
+    else attack_type = choose("utilt","stilt","stilt","utilt","b","b","dsmash","b","ssmash","usmash","utilt","dsmash","ssmash","downb","downb") }
+    else
+    attack_type = "itemfthrow" 
+    exit
+    }
+}
+}
+else if offstage {
+    if !evil
+        attack_type = choose("dair","dair","nair","nair","fair","dair","nair","dair")
+    else
+        attack_type = choose("nair","fair","nair","fair")
+}
+else {
+if distance_to_object(enemy) < 24 {
+    //timer=0
+    if held_item = -1 {
+    if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x) {
+        if abs(nearest_edge.x-x)>20
+            attack_type = choose("uair","uair","nair","nair","fair","upb","downb","dair","b","sideb")
+        else
+            attack_type = choose("uair","uair","nair","nair","fair","upb","downb","dair","b","nair")
+    }
+    else
+    attack_type = choose("uair","nair","nair","bair","bair","bair","upb","dair")
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+    }
+if distance_to_object(enemy) >= 24 {
+    //timer=0
+    if held_item=-1 {
+    if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x) {
+        if abs(nearest_edge.x-x)>20
+            attack_type = choose("uair","fair","nair","nair","fair","upb","sideb","dair","b","b","b","fair")
+        else
+            attack_type = choose("uair","fair","nair","nair","fair","upb","fair","dair","b","b","b","fair","nair")
+    }
+    else
+    attack_type = choose("uair","nair","nair","bair","bair","bair","bair") }
+    else
+    attack_type = "itemfthrow" 
+    exit
+    }
+}

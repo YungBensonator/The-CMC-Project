@@ -1,0 +1,67 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "ssmash";
+    timer = 0;
+    time = 47;
+    sprite_index = ssmash_sprite;
+    image_speed = 0;
+    image_index = 0;
+    charge_frame = 2;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 11: image_index = 3; break;
+	case 13: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 20: image_index = 6; break;
+	case 27: image_index = 7; break;
+	case 32: image_index = 8; break;
+	
+	
+      }
+
+    if ( timer = 10 )
+	sound_play(ssmash_voice);
+    if ( timer = 15 )
+      {
+	sound_play(attacksnd3);
+	create_hitbox(14,30+facing*120,6.5,7.1,12,8,kick3,obj_spark_hit3,0.74,0.62,10,9,self.id,12,2); 
+	duster = instance_create(x,y,obj_dust_effect);
+	dust.facing = facing;
+      }
+    if ( timer >= 10 && timer <= 15)
+	hspeed = ((size * (3.7-facing*7.4))*(0.006*smash_charge))+((size * (3.7-facing*7.4))*0.4);
+    if ( timer = 20 )
+      {
+	hitbox.dir=50+80*facing;
+	hitbox.damage = 8*size;
+	hitbox.bkb = 6.2*size;
+	hitbox.kbg = 6*size;
+	hitbox.shield_damage = 8*size;
+	hitbox.hitlag_frames = 5*size;
+	hitbox.image_xscale =0.6 * size
+	hitbox.image_yscale =0.5 * size
+	
+      }
+    if ( timer >= 20 && timer <= 24 )
+	hspeed = size * (2.5-facing*5);
+    if ( timer >= 25 && timer <= 26 )
+	hspeed = size * (1-facing*2);
+    if ( timer = 27 )
+	hspeed = 0;
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

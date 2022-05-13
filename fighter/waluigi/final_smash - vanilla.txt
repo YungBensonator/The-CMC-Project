@@ -1,0 +1,179 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch" || state_type = "shielding" {
+        hspeed = 0;
+        target = -98
+        size = csize
+        time = 246;
+        intangible = 1;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        temp = 1
+        final_smashes+=1
+        attack_success = 0
+        image_speed = 0;
+        sprite_index = dthrow_sprite;
+        image_index=0;
+        sound_play(super)
+        sound_play(final_smash_voice)
+        //effect_create_above(ef_ring,x,y-18,0,c_white)
+        timer = 0
+        air_move=0
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.alarm[0] = 39
+}
+if temp = 1
+speed=0
+gravity_lock = 2;
+     if timer = 2 {
+         image_index = 0.25;
+         image_speed = 0.25;
+         }
+    if timer = 4 {
+        create_hitbox_impaler(6,270,10.5,0,-1,15,kick3,obj_spark_hit4,0.9,0.7,17,12,self.id,5,6);
+        hitbox2.shake_kb = 0
+        hitbox2.shake_ampl = 1.3
+        hitbox2.shake_type = 1
+        hitbox2.armor_break = 1
+        if air = 0 {
+            duster = instance_create(x+(1-facing*2)*10,y,obj_dust_effect);
+            duster.facing = facing; 
+            duster.image_yscale*=size*0.5
+            duster.image_xscale*=size*1.2
+            duster = instance_create(x,y,obj_dust_effect);
+            duster.facing = 1-facing; 
+            duster.image_yscale*=size*0.5
+            duster.image_xscale*=size*1.2
+        } 
+    }
+    if timer = 9
+        image_speed = 0
+    if timer = 25 {
+        hspeed = 0
+        attack_type = "none";
+        if air = 0
+        state_type = "stand";
+        else
+        state_type = "fall"
+        timer = 0;
+        time =-1;
+        smash_power = 0
+        intangible = 0
+        background_blend=c_white;
+        if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = self.id
+        FMODSoundPlay(crowd_nocontest)
+     }
+    }
+    if timer > 4 && attack_success = 1 && timer < 25 && instance_exists(target) {
+        speed = 0
+       timer = 100
+       target.x = self.x+19-facing*38
+       target.y = y-1
+       target.speed=0
+       target1 = target
+       temp=1
+        }
+    if timer >= 100 && timer <= 201 {
+    target1.time = 210;
+    target1.timer = 0
+    target1.sprite_index=target1.flinch_sprite
+    target1.state_type = "flinch"
+    target1.speed=0;
+    target1.gravity_lock = 2;
+	target1.ignore_physics = 1;
+    target1.y = self.y;
+    target1.x = x + (20 - facing*40)*size
+    }
+    if timer < 220 && timer > 25 && target!=-98
+    target1.y = self.y;
+    if timer >= 101 && timer <= 180 {
+        image_speed = 0.5
+        target1.x = self.x+(19-facing*38)*size
+        }
+    if timer = 101 {
+        sound_play(ssmash_voice)
+        sprite_index = jab_sprite
+        image_index = 3
+        }
+    if timer = 107 {
+        sound_play(attacksnd2);
+        create_hitbox(4,361,5,0,-1,4,kick3,obj_spark_hit2,1,0.7,19,15,self.id,1,6); 
+        }
+    if timer = 113 {
+        sprite_index = fair_sprite
+        image_index = 0
+        }
+    if timer = 115 || timer = 123 {
+        sound_play(attacksnd1);
+        create_hitbox(2,361,5,0,-1,4,kick2,obj_spark_hit2,1,0.7,19,15,self.id,1,6); 
+        }
+    if timer = 126 {
+        sprite_index = stilt_sprite
+        image_index = 0
+        }
+    if timer = 131 {
+        sound_play(attacksnd3);
+        create_hitbox(4,361,6,0,-1,5,kick3,obj_spark_hit2,0.9,0.7,19,15,self.id,1,6); 
+        }
+    if timer = 135 {
+        sprite_index = usmash_sprite
+        image_index = 0.2
+        }
+    if timer = 143 {
+        sound_play(attacksnd3);
+        create_hitbox(4,361,6,0,-1,5,punch4,obj_spark_hit2,0.9,0.7,19,15,self.id,1,6); 
+        }
+    if timer = 150 {
+        sprite_index = jab_sprite
+        image_index = 0
+        }
+    if timer = 152 {
+        sound_play(attacksnd3);
+        create_hitbox(2,361,6,0,-1,4,punch1,obj_spark_hit1,0.9,0.7,19,15,self.id,1,6); 
+        }
+    if timer = 157 {
+        sprite_index = b_swing_sprite
+        image_index = 0
+        }
+    if timer = 162 {
+        sound_play(attacksnd2);
+        create_hitbox(5,361,6,0,-1,6,punch3,obj_spark_hit3,0.9,0.7,19,15,self.id,1,6); 
+        hitbox.shake_kb = size
+        }
+    if timer = 170 {
+        sprite_index = ssmash_sprite
+        image_index = 0
+        }
+    if timer = 176 {
+        sound_play(attacksnd3);
+        create_hitbox(6,10+facing*160,6.2,0,-1,11,punch4,obj_spark_hit4,0.9,0.7,19,15,self.id,1,6); 
+        hitbox.shake_kb = size
+        hitbox.shake_ampl = 1.2
+        }
+    if timer = 182
+        image_speed = 0
+    if timer = 190 {
+        sprite_index = final_smash_sprite
+        sound_play(dsmash_voice);
+        image_speed = 0.25 
+        image_index = 0 }
+    if timer = 204
+        image_speed = 0
+    if timer = 208 {
+        create_projectile(22,40+facing*100,9.5,8.3,-1,8,explodehit3,obj_spark_fire1,0.95,0.95,16,0,self.id,20,waluigi_bomb2_script); 
+        facing = 1-facing
+        sprite_index = crouch_sprite
+        proj.shake_kb = size
+        proj.shake_ampl = 0
+        proj.hitlag_diff = 10
+    }
+    if timer = 238
+        sound_play(final_smash_end_voice)
+if timer >= 244 {
+    attack_type = "none";
+    state_type = "fall";
+    timer = 0;
+    time =-1;
+    smash_power = 0
+    hspeed = 0
+}

@@ -1,0 +1,266 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = air_dodge_sprite;
+  timer = 0;
+  timer_speed = 1;
+  time = 420;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  }
+
+speed = 0;
+gravity_lock = 2;
+
+if ( timer == 1 )
+  {
+  if ( !on_floor && !on_platform )
+    {
+    timer = 0;
+    y += 8;
+    if ( y > obj_game_control.death_d )
+      {
+      smash_power = 0;
+      attack_type = "none";
+      intangible = 0;
+      state_type = "jump"; 
+      timer = 0;
+      time = -1;
+      }
+    exit;
+    }
+  }
+
+switch ( timer )
+  {
+  case 2:
+    spark = instance_create ( 0 , 0 , obj_camerazoom );
+    spark.camera_l = x - 8;
+    spark.camera_r = x + 8;
+    spark.camera_u = y - 4;
+    spark.camera_d = y + 4;
+    spark.camera_boundary_zoom = 80;
+    spark.alarm[0] = 90;
+    
+    duster = instance_create ( 0 , 0 , obj_freeze );
+    duster.dontpause = self.id;
+    duster.alarm[0] = 320;
+    break;
+  
+  case 4:
+    spark = instance_create ( x , y - 320 , obj_spark );
+    spark.sprite_index = hocotate_sprite;
+    spark.depth = depth + 1;
+    spark.image_speed = 0;
+    spark.image_index = 0;
+    spark.alarm[0] = 170;
+    break;
+  
+  case 14: shakey = -4; break;
+  case 15: shakey = -6; break;
+  case 16: shakey = -7; break;
+  case 17: shakey = -6; break;
+  case 18: shakey = -4; break;
+  case 19: shakey = 0; break;
+  case 49: sprite_index = final_smash_sprite; break;
+  
+  case 50: shakex = -8 * size; shakey = -4 * size; break;
+  case 51: shakex = -12 * size; shakey = -8 * size; break;
+  case 52: shakex = -14 * size; shakey = -12 * size; break;
+  case 53: shakex = -15 * size; shakey = -16 * size; break;
+  case 54: shakex = -15 * size; shakey = -18 * size; break;
+  case 55: shakex = -16 * size; shakey = -19 * size; break;
+  
+  case 57: image_index = 1; break;
+  case 58: shakex = -15 * size; shakey = -20 * size; break;
+  case 59: shakex = -14 * size; shakey = -22 * size; break;
+  case 60: shakex = -12 * size; shakey = -26 * size; break;
+  case 61: shakex = -8 * size; shakey = -30 * size; break;
+  case 62: image_index = 2; shakex = -6 * size; shakey = -32 * size; break;
+  case 63: shakex = -4 * size; shakey = -34 * size; break;
+  case 64: shakey = -36 * size; break;
+  case 65: shakey = -2048; spark.x += 4; sound_play_pitch ( fs_sound1 , 1 ); break;
+  case 66: spark.x -= 6; break;
+  case 67: spark.x += 3; break;
+  case 68: spark.x -= 2; break;
+  case 69: spark.x = x; break;
+  
+  case 80: sound_play ( fs_sound2 ); screen_shake ( 3 , 2 ); case 84: spark.x = x + 3; break;
+  case 81: case 85: spark.x = x; break;
+  case 82: case 86: spark.x = x - 3; break;
+  case 83: case 87: spark.x = x; break;
+  
+  case 156: sound_play ( fs_sound3 ); duster.image_alpha = 0.5; break;
+  case 157: duster.image_alpha = 0.75; break;
+  case 158: duster.image_alpha = 1; break;
+  case 320: duster.image_alpha = 0.75; break;
+  case 321: duster.image_alpha = 0.5; break;
+  case 322: duster.image_alpha = 0.25; break;
+  case 323: with ( duster ) instance_destroy(); break;
+  
+  case 361: shakey = -36 * size; break;
+  case 362: shakey = -40 * size; break;
+  case 363: shakey = -43 * size; break;
+  case 364: shakey = -45 * size; break;
+  case 365: shakey = -46 * size; break;
+  
+  case 380: shakey = -45 * size; break;
+  case 381: shakey = -43 * size; break;
+  case 382: shakey = -40 * size; break;
+  case 383: shakey = -36 * size; break;
+  case 384: shakey = -31 * size; break;
+  case 385: shakey = -26 * size; break;
+  case 386: shakey = -20 * size; break;
+  case 387: shakey = -13 * size; break;
+  case 388: shakey = -5 * size; break;
+  case 389: shakey = 0; break;
+  case 390: sprite_index = jab_sprite; image_index = 0; break;
+  case 392: image_index = 4; break;
+  case 394: image_index = 5; break;
+  case 396: image_index = 6; break;
+  case 398: image_index = 7; break;
+  case 400: image_index = 8; break;
+  case 417: image_index = 9; break;
+  }
+  
+if ( timer > 158 && timer < 320 && timer mod 14 == 0 )
+  {
+  FMODSoundPlay ( choose ( kick1 , kick2 , kick3 ) );
+  with ( player )
+    {
+    if ( invincible || status_cancel ) continue;
+    if ( number != other.number && team != other.team )
+      {
+      if ( random ( 10 ) < 1 )
+        percent += 2;
+        else
+      if ( random ( 10 ) < 9 )
+        percent += 1;
+      }
+    }
+  }
+
+if ( timer >= 4 && timer < 14 )
+  {
+  spark.y = y - 320 + ( timer - 4 ) * 32;
+  }
+if ( timer == 14 )
+  {
+  sound_play_pitch ( fs_sound1 , .7 );
+  spark.y = y;
+  var i;
+  for ( i = -50 ; i <= 50 ; i += 10 )
+    instance_create ( x + i , y - 3 + random(6) , obj_smoke );
+  screen_shake ( 6 , 11 );
+  }
+if ( timer >= 88 && timer < 170 )
+  {
+  repeat ( 4 )
+    {
+    instance_create ( spark.x - 15 + random ( 30 ) , spark.y - 7 + random ( 8 - spark.vspeed ) , obj_smoke );
+    }
+  spark.vspeed -= 0.25;
+  if ( spark.vspeed < -8 )
+    spark.vspeed = -8;
+  }
+
+if ( timer == 155 )
+  {
+  duster = instance_create ( view_xview[0] , view_yview[0] - view_hview[0] * 0.25 , obj_spark );
+  duster.image_blend = c_black;
+  duster.sprite_index = spr_solid;
+  duster.image_xscale = view_wview[0] / 16;
+  duster.image_yscale = view_wview[0] / 16;
+  duster.alarm[0] = 190;
+  duster.image_alpha = 0.25;
+  duster.image_speed = 0;
+  duster.depth = -14;
+  }
+
+if ( timer == 320 )
+  {
+  spark = instance_create ( x , y - 500 , obj_spark );
+  spark.image_angle = 180;
+  spark.sprite_index = hocotate_sprite;
+  spark.depth = depth + 1;
+  spark.image_speed = 0;
+  spark.image_index = 0;
+  spark.alarm[0] = 79;
+  }
+if ( timer >= 320 && timer < 360 )
+  {
+  repeat ( 4 )
+    {
+    instance_create ( spark.x - 15 + random ( 30 ) , spark.y + 7 - random ( 17 ) , obj_smoke );
+    }
+  spark.y += 9;
+  }
+if ( timer == 300 )
+  sound_play ( fs_sound4 );
+if ( timer == 360 )
+  {
+  instance_create ( x , y , obj_flashscreen );
+  sound_play_pitch ( explode_big , 0.75 );
+  screen_shake ( 12 , 4 );
+  screen_shake ( 4 , -32 );
+  duster = instance_create ( x , y , obj_spark_explode1 );
+  duster.image_xscale *= 3;
+  duster.image_yscale *= 3;
+  spark.y = y - 174 * 0.82;
+  spark.image_xscale = 1.1;
+  spark.image_blend = c_black;
+  spark.image_yscale = 0.82;
+  create_hitbox ( 18 , 362 , 7 , 12.5 , -1 , 1 , kick3 , obj_spark_fire1 , 7 , 2 , 0 , 0 , self.id , 100 , no_script );
+  }
+if ( timer == 361 )
+  {
+  spark.y = y - 174 * 0.62 + 44;
+  spark.image_xscale = 1.2;
+  spark.image_blend = c_black;
+  spark.image_yscale = 0.62;
+  sprite_index = jump_sprite;
+  }
+if ( timer == 362 )
+  {
+  spark.y = y - 174 * 0.4 + 56;
+  spark.image_yscale = 0.4;
+  }
+if ( timer == 363 )
+  {
+  spark.y = y - 174 * 0.3 + 57;
+  spark.image_yscale = 0.3;
+  }
+if ( timer == 364 )
+  {
+  spark.y = y - 174 * 0.25 + 58;
+  spark.image_yscale = 0.25;
+  }
+if ( timer == 390 )
+  {
+  spark.image_alpha = 0.5;
+  }
+if ( timer == 391 )
+  {
+  with ( spark )
+    instance_destroy();
+  }
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

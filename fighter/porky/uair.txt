@@ -1,0 +1,48 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0.2;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 38;
+        timer_speed=1;
+        spark = -1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 15 {
+                image_speed = 0.25
+                spark = instance_create(x,y-40*size,obj_spark_shockwave); 
+                spark.image_xscale = size*0.3; spark.image_yscale = spark.image_xscale*0.3;
+                spark.image_alpha = 0.65; spark.image_blend = c_red
+                sound_play(electric_sound);
+                proj = create_projectile(13,75+facing*30,6,5.5,15,4,magic3,obj_spark_shock,0.75,0.75,0,44,self.id,40,porky_uair_proj);
+                proj.sprite_index = uair_proj_sprite;
+                proj.image_speed = 0.35;
+                proj.hitlag_diff = round(5*size);
+                proj.vspeed = -2.5*size;
+            }
+            if timer = 19
+                image_speed = 0.15
+            if image_index >= image_number - image_speed
+                image_speed=0;
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=15; 
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

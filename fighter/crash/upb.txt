@@ -1,0 +1,160 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+state_type = "air_attack";
+air_move = 1;
+attack_type = "upb";
+sprite_index = upb_start_sprite;
+image_index = 0;
+image_speed = 0.3;
+timer = 0;
+time = 200;
+special = 0;
+spinning = 0;
+spun = 0;
+}
+if timer < time {
+if timer > 6 && ( spinning = 0 && moveup == 1)
+{
+sprite_index = upb_flying_sprite;
+image_speed = 0.3;
+}
+if timer > 6 && ( flying = 0 && moveup == 1 )
+{
+sound_play (upb_sound)
+flying = 1;
+}
+if ( timer mod 4 = 2 && flying = 1 && spinning = 0 )
+{
+duster = instance_create (x - 3 * (1-facing*2) * size,y - 2 * size,obj_smoke)
+duster2 = instance_create (x + 6 * (1-facing*2) * size,y - 2 * size,obj_smoke)
+}
+if timer > 6 && ( spinning = 0 && vspeed > 0)
+{
+sprite_index = upb_idle_sprite;
+image_index = 0;
+image_speed = 0;
+flying = 0;
+sound_stop (upb_sound)
+}
+if timer > 25 && vspeed > 0
+force_edge_grab = 1
+if ( ai )
+  {
+  if ( offstage )
+    {
+    var a;
+    a = instance_nearest ( x , y , obj_edge );
+    moveleft = 0;
+    moveright = 0;
+    if ( a . x < x )
+      moveleft = 1;
+      else
+      moveright = 1;
+    moveup = 1;
+    }
+  }
+if fuel <= 0 {
+	timer = time;
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	flying = 0;
+	sound_stop (upb_sound)
+	}
+if ( attacking = 1 || smashright || smashleft || smashup || smashdown ) && spinning = 0 {
+	interrupt = 1;
+	flying = 0;
+	sound_stop (upb_sound)
+	}
+if shieldup = 1 && spinning = 0
+	{
+	state_type = "jump";
+	flying = 0;
+	sound_stop (upb_sound)
+	}
+if timer = 1 {
+	vspeed = 0;
+	}
+if timer = 2 {
+	vspeed -= 4;
+	}
+if moveup = 1 && spun = 0 {
+	vspeed -= 0.4;
+	fuel -= 1;
+	}
+else {
+	vspeed += 0.05;
+	}
+if vspeed < -3.25 {
+	vspeed = -2.55;
+	}
+if vspeed > 3 {
+	vspeed = 2.5;
+	}
+if vspeed > 0 {
+	can_ledgegrab = 1;
+	}
+if moveleft = 1 && moveright = 0 {
+	hspeed -= 0.15;
+	}
+if moveleft = 0 && moveright = 1 {
+	hspeed += 0.15;
+	}
+if hspeed > 2.65 {
+	hspeed = 2.15;
+	}
+if hspeed < -2.65 {
+	hspeed = -2.15;
+	}
+if timer = 6 {
+	sprite_index = upb_idle_sprite;
+	image_speed = 0;
+	image_index = 0;
+	}
+if special = 1 && spinning = 0 {
+	spinning = 16;
+	special = 0;
+	}
+if spinning >= 1 && spun = 0 {
+	sound_play(spin_sound);
+	create_hitbox(8,362,7.2,0,20,8,kick3,obj_spark_hit4,1.0,1.0,0,12,self.id,3,4);
+ 	hitbox.push = 1
+	spun = 1;
+	force_edge_grab = 0;
+	sprite_index = upb_spinning_sprite;
+	image_speed = 0.3;
+	}
+if spun = 1 && spinning >= 1 && special = 1 {
+	special = 0;
+	spinning = 15;
+	if !instance_exists(hitbox) {
+		sound_play(spin_sound);
+		create_hitbox(3,362,4.2,1.4,7,4,kick1,obj_spark_hit2,1.0,1.0,0,12,self.id,2,4);
+ 	hitbox.push = 1
+		}
+	}
+if special = 0
+spinning -= 1
+if spinning = 0 {
+spun = 0
+sprite_index = upb_idle_sprite;
+}
+if spinning < 0
+spinning = 0
+if air = 0 && vspeed > 0.1 {
+	timer = time;
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	flying = 0;
+	sound_stop (upb_sound)
+	attack_type = "none";
+	if ( air > 0 )
+		{
+        state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 4;
+		}
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+	    }

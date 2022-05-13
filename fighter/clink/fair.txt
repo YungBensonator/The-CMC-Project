@@ -1,0 +1,60 @@
+if state_type = "jump" {
+        vspeed -= 0.25;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0.35;
+        sprite_index = fair_sprite;
+        image_index=0.5;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+        lcancel = 1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 10 {
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
+                sound_play(attack_sound1);
+                create_hitbox(3,300-facing*60,3,0,6,3,slash1,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
+                hitbox.di = 0.4
+                hitbox.critical_chance = 0.7
+            }
+            if timer = 14 || timer = 22 {
+                sound_play(attack_sound1);
+                create_hitbox(3,340-facing*140,3,0,6,3,slash1,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
+                hitbox.di = 0.4
+                hitbox.critical_chance = 0.7
+            }
+            if timer = 18 {
+                sound_play(attack_sound1);
+                create_hitbox(3,300-facing*60,2.7,0,6,3,slash1,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
+                hitbox.di = 0.4
+                hitbox.critical_chance = 0.7
+            }
+            if timer = 26 {
+                sound_play(attack_sound1);
+                create_hitbox(3,35+facing*110,4,7.95,6,7,slash2,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
+                hitbox.di = 1.2
+                hitbox.hit_stun = 8
+                hitbox.critical_chance = 0.7
+            }
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=7; 
+            }
+            if timer = 48
+            image_speed=0;
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

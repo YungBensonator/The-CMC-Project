@@ -1,0 +1,45 @@
+var a;
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "stilt";
+  image_speed = 0.3;
+  image_index = 0;
+  sprite_index = stilt_sprite;
+  timer = 0;
+  time = 25;
+  timer_speed = 1;
+  }
+if timer < time {
+	state_type = "attack";
+	if timer = 5 {
+		a = instance_create ( x , y , obj_dust_effect );
+		a.facing = facing;
+		hspeed = 3-facing*6;
+		}
+	if timer > 10 {
+		hspeed *= 0.95;
+		}
+	if timer = 12 {
+		a = size;
+		size *= 2;
+		sound_play(attack_voice1);
+		sound_play ( swingsnd4 );
+		size = a;
+		create_hitbox(8,25+facing*130,5.3,6.9,7,3,punch2,obj_spark_hit2,0.45,0.4,12,13,self.id,7,2);
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(43)+x,place_y(31)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+	}
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,73 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+if ( flash > 0 ) flash -= 0.25;
+
+if ( timer == 4 )
+  {
+  sound_play2 ( sfx[0] );
+  instance_create ( x , y - 12 , obj_spark_effect );
+  repeat ( 3 )
+    gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+  }
+if ( timer == 14 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+  }
+if ( timer == 24 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+  }
+
+if ( timer < 200 )
+  {
+  i = 0;
+  if ( !instance_exists ( target ) )
+    i = 1;
+    else
+  if ( target.team == attacker.team )
+    i = 1;
+  if ( i )
+    {
+    repeat ( 256 )
+      {
+      target = obj_game_control.fighter_slot [ floor ( random ( MAX_FIGHTERS ) ) , 0 ];
+      if ( !instance_exists ( target ) )
+        target = attacker;
+        else
+      if ( target.team != attacker.team )
+        break;
+      }
+    }
+  x = ( x * 39 + target.x - 96 * ( 1 - facing * 2 ) ) / 40;
+  y = ( y * 39 + target.y - target.actual_height * 0.5 ) / 40;
+  image_angle = 90 * ( 1 - facing * 2 );
+  image_speed = 0.5;
+  }
+  else
+  {
+  image_angle *= 0.8;
+  image_speed = 0;
+  image_index = 0;
+  if ( timer mod 8 == 0 && timer < 500 )
+    {
+    sound_play2 ( sfx[1] );
+    create_projectile ( 1.5 , 45 + facing * 90 , 3 , 3 , 5 , 5 , kick1 , obj_spark_hit1 , 1 , 1 , 0 , 0 , attacker , 40 , assist_proj_scr );
+    proj.sprite_index = spr[1];
+    proj.hspeed = 5 - facing * 10;
+    proj.image_xscale = 0.5;
+    proj.image_yscale = 0.5;
+    proj.di *= 2.5;
+    flash = 1;
+    }
+  }
+  
+  
+if ( timer >= 570 )
+  {
+  instance_destroy();
+  }

@@ -1,0 +1,120 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0.19;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 37;
+        timer_speed=1;
+	canceltemp = 0;
+	attacking = 1
+	attacktemp = 1
+}
+        if timer < time {
+	if attack_success || attack_shielded
+	canceltemp = 1
+	if !attacking && sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52
+	attacktemp = 0
+            state_type = "air_attack";
+	    if timer = 8 {
+		shakex = 1*(1-facing*2);
+		shakey = -1;
+		}
+	    if timer = 9 {
+		shakex = 2*(1-facing*2);
+		shakey = -2;
+                sound_play(attack_sound1);
+                create_hitbox(5,65+facing*50,2.25,0,17,4,sf_punch1,obj_spark_special1,0.55,0.75,6,37,self.id,6,1);
+		hitbox.di = -1
+		}
+	    if timer = 10 {
+		shakex = 3*(1-facing*2);
+		shakey = -3;
+		}
+            if timer = 11 {
+		image_xscale *= 1.1;
+		image_yscale *= 1.1;
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3,dsmash_voice));
+                sound_play(attack_sound2);
+                create_hitbox(7,65+facing*50,5.25,6.1,17,5,sf_punch2,obj_spark_special1,0.45,0.75,5,37,self.id,6,1);
+		image_speed = 0.125;
+                }
+	    if timer = 18 {
+		shakex = 2*(1-facing*2);
+		shakey = -2;
+		}
+	    if timer = 22 {
+		shakex = 1*(1-facing*2);
+		shakey = -1;
+		}
+	    if timer = 26 {
+		shakex = 0;
+		shakey = 0;
+		}
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=10; }
+	if timer <= 31 && canceltemp {
+	if sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52 {
+	if special > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		interrupt = 1
+		else
+	    char_b();
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    if (moveleft[1] >0) || (moveright[1] > 0)
+	    char_smashb();
+		else
+	    char_sideb();
+	  }
+}
+}
+else
+sftemp_timer = 0
+	if timer = time-1
+	attacking = 0
+	    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    attacking = 0
+    }
+        

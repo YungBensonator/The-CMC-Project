@@ -1,0 +1,63 @@
+if state_type = "run" || state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0;
+        sprite_index = utilt_sprite;
+        image_index=0;
+        timer = 0;
+		if cleaver_catched >= 1
+		time = 15
+	    else
+        time = 28;
+        timer_speed=1;
+        attacking = 0
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 2; break;
+	case 24: image_index = 1; break;
+	case 26: image_index = 0; break;
+
+      }
+    
+	if timer = 8{
+		vfxthing = create_spark ( abs(place_x(16)),-place_y(6) , utilt_sprite_eff , 0.7 , image_xscale * 0.30 , image_yscale * 0.42 );
+		vfxthing.alarm[0] = 30
+		vfxthing.depth = depth - 1
+		vfxthing.loop = 30
+		vfxthing.alpha_add = -0.0435
+		vfxthing.yscale_add = -0.006
+		vfxthing.snap = self.id
+		vfxthing.hit_stun = 10
+		vfxthing.image_alpha = 1
+		vfxthing.script = char_custom7;
+		vfxthing.owner = self.id;
+		vfxthing.keepmain = self.keepmain;
+	}
+	
+	
+    if ( timer = 8 ) {
+		
+		play_attack_voice()
+		sound_play ( keepmain.downb_sound2 );
+		create_hitbox(9,angle_correct(80),5.45,5.95,12,7,water3 , obj_spark_water,0.9,1.5,abs(place_x(16)),-place_y(-6),self.id,4,2);
+		hitbox.image_angle = 0
+      }
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+
+

@@ -1,0 +1,84 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  sound_play ( downb_voice );
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 107;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0.35;
+  timer_speed = 1;
+  if ( downb_proj > 0 )
+    {
+    if ( instance_exists ( downb_proj ) )
+      with ( downb_proj )
+        instance_destroy();
+    }
+  }
+
+if ( air == 0 )
+  {
+  hspeed = 0;
+  air_move = 0;
+  }
+  else
+  {
+  air_move = 1;
+  }
+
+if ( timer == 20 || timer == 47 ) sound_play ( swingsnd5 );
+
+/*if (timer >= 20 && timer <= 47) {
+	create_wind(2,2,25,0,20,0,27);
+	create_wind(2,2,-25,0,-20,0,27);
+}*/
+
+if ( timer == 83 )
+  {
+  var a;
+  a = size;
+  size *= 0.4;
+  sound_play ( swingsnd5 );
+  size = a;
+  instance_create ( x , y - 15 * size , obj_spark_shockwave );
+  var squad, squad_size;
+  squad_size = 0;
+  with ( player )
+    {
+    if ( team == other.team ) continue;
+    if ( intangible ) continue;
+    if ( point_distance ( x , y - actual_height * 0.5 , other.x , other.y - other.actual_height * 0.5 ) < 250 * other.size)
+      {
+      squad [ squad_size ] = self.id;
+      squad_size += 1;
+      }
+    }
+  if ( squad_size > 0 )
+    {
+    sound_play ( downb_sound );
+    create_projectile ( 0 , 361 , 0 , 0 , 0 , 1 , -1 , -1 , 1 , 1 , 0 , 0, self.id , 120 , char_custom4 );
+    downb_proj = proj;
+    proj.hit = 2;
+    proj.alarm[0] = 60 * ( 25 + floor ( random ( 11 ) ) );
+    proj.time = proj.alarm[0];
+    proj.team_size = squad_size;
+    var i;
+    for ( i = 0 ; i < squad_size ; i += 1 )
+      proj.team_member[i] = squad[i];
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

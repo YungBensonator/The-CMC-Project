@@ -1,0 +1,37 @@
+if ( state_type = "down" )
+  {
+    state_type = "attack";
+    attack_type = "down_attack";
+    image_speed = 0;
+    sprite_index = down_sprite;
+    image_index = 0;
+    timer = 1;
+    time = 42;
+    timer_speed = 1;
+  }
+
+switch ( timer )
+  {
+    case 1: intangible = 1; break;
+    case 5: sprite_index = down_attack_sprite; image_index = 0; break;
+    case 10:
+      play_attack_voice();
+      create_hitbox(7,40+facing*100,5.4,4.9,4,3,kick3,obj_spark_hit4,1.1,0.9,28,9,self.id,4,3);
+      image_index = 1;
+      break;
+    case 20:
+      play_attack_voice();
+      create_hitbox(7,140-facing*100,5.4,4.9,4,3,kick3,obj_spark_hit4,1.1,0.9,-28,9,self.id,4,3);
+      image_index = 2;
+      break;
+    case 23: intangible = 0; break;
+    case 25: sprite_index = land_sprite; image_index = 0; break;
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+  }

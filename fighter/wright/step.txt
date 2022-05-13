@@ -1,0 +1,89 @@
+if (air == 0 || state_type == "respawn" || state_type == "flinch" || state_type == "air_flinch") upb_used = 0;
+if (attack_type != "jab") jab_temp = 0;
+
+if (!instance_exists(hudThing)){    
+    hudThing = instance_create ( hud_x, hud_y, obj_custom_gfx);
+	hudThing.image_speed = 0;
+	hudThing.hudalpha = 1;
+    hudThing.step_script = hudThing_step_script;
+    hudThing.draw_script = hudThing_draw_script;
+    hudThing.owner = self.id;
+	hudThing.image_xscale = 1;
+	hudThing.image_yscale = 1;
+    hudThing.keepmain = self.keepmain;
+}
+hudThing.image_index = charge;
+hudThing.sprite_index = evidencemeter_sprite;
+hudThing.hudalpha = obj_game_control.hud_cover[number-1];
+
+if ( charge > 10 )
+    charge = 10;
+if charge < 0
+    charge = 0
+if ( charge = 10 && !flashing && timer mod 4 = 0 )
+  {
+    flashing = 1;
+    alarm[7] = 2;
+  }
+if ( paper_timer > 0 )
+    paper_timer -= 1;
+if ( absorbed_timer < 100 ) && absorbed_timer > -1
+    absorbed_timer += 0.25;
+else if absorbed_timer >= 100
+    absorbed_timer = 100;
+else
+absorbed_timer = -1
+if state_type = "run" {
+	image_speed = 0.25;
+}
+if crouchtemp < 240
+	crouchtemp += 1
+	if crouchtemp >= 240 && state_type = "crouch" {
+	if charge = 0
+	sound_play(taunt5_voice)
+	else if charge = 1
+	sound_play(taunt6_voice)
+	else if charge = 3
+	sound_play(aha_voice)
+	else if charge = 5
+	sound_play(taunt9_voice)
+	else if charge = 9
+	sound_play(fullmeter_voice)
+	charge += 1
+	flashing = 1
+	alarm[7] = 12
+	crouchtemp = 0
+	}
+	
+if ( sprite_index = jump_sprite )
+{
+if ( timer <= 0 && vspeed <= 0 )
+{
+image_index = 1;
+}
+if ( timer <= 0 && vspeed > 0 && image_index != 4 )
+{
+image_index = 1;
+image_speed = 0.4;
+}
+if ( image_index = 4 )
+{
+image_speed = 0;
+}
+}
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 15: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=2;  break;
+  case 18: shakey=12*size;  break;
+  case 21: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 24: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 27: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 30: sprite_index=land_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}

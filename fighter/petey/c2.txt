@@ -1,0 +1,84 @@
+hit = 2;
+alarm[0] = 12;
+time = 600;
+moving_object = 1;
+if ( sticked )
+  {
+	parry_nodestroy = 1;
+    if ( instance_exists(proj) )
+    with ( proj )
+	instance_destroy();
+    hspeed = 0;
+    vspeed = 0;
+    if ( image_index < 6 )
+	image_index += 0.5;
+    with ( player )
+      {
+	if ( id == other.attacker )
+	    continue;
+	if ( team == other.attacker.team && !team_attack )
+	    continue;
+	if ( air || intangible || status_cancel )
+	    continue;
+	if ( abs(x-other.x) < 50 && abs(y-other.y) < 24 )
+	  {
+	    if ( state_type = "run" )
+		hspeed = sign(hspeed);
+	    if ( other.timer mod 14 = 0 )
+		percent += 1;
+	    if slide != 0
+		slide *= 0.95;
+	    if tempjump = 0 {
+		def_jumptimer = jumptimer
+		def_jump_speed = jump_speed
+		tempjump = 3
+		jumptimer += 2
+		jump_speed *= 0.65
+		}
+	    alarm[6] = 3
+	    if jumptimer = def_jumptimer && jump_speed = def_jump_speed
+		tempjump = 0
+	  }
+      }
+    if ( !is_on_floor(self.id) )
+      {
+	image_index = 1;
+	sticked = 0;
+	exit;
+      }
+  }
+else
+  {
+    if ( !instance_exists(proj) ) {
+	create_projectile(4,362,5,2.2,6,4,punch2,obj_spark_hit4,0.7,0.7,0,10,attacker.id,4,-1);
+	moving_object = 1;
+	}
+    else
+      {
+	proj.timer = 0;
+	if ( proj.hit = 0 )
+	    proj.alarm[0] = 1;
+	proj.x = x;
+	proj.y = y - 10;
+      }
+    if ( vspeed < 4 )
+	vspeed += 0.25;
+    if ( image_index < 2 )
+	image_index += 0.5;
+    if ( next_to_rwall || next_to_lwall )
+      {
+	x = xprevious;
+	hspeed = 0;
+      }
+    if ( on_floor || on_platform )
+      {
+	hspeed = 0;
+	vspeed = 0;
+	sticked = 1;
+      }
+  }
+
+if ( timer >= time - 60 )
+    visible = timer mod 2;
+else
+    visible = 1;

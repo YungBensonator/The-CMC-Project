@@ -1,0 +1,134 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+moving_object = 1;
+
+// gravity
+if ( !on_floor && !on_platform )
+  {
+  if ( vspeed < 4 )
+    vspeed += 0.5;
+  }
+  else
+  {
+  vspeed = 0;
+  }
+  
+// cry
+if ( timer == 4 )
+  {
+  sound_play2 ( sfx[0] );
+  instance_create ( x , y - 12 , obj_spark_effect );
+  repeat ( 3 )
+    gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+  }
+if ( timer == 14 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+  }
+if ( timer == 24 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+  }
+  
+// initial animation
+if ( timer >= 1 && timer <= 6 )
+  {
+  yshake -= 3;
+  }
+if ( timer >= 7 && timer <= 12 )
+  {
+  yshake += 3;
+  }
+if ( timer >= 51 && timer <= 56 )
+  {
+  yshake -= 3;
+  image_index = 1;
+  }
+if ( timer >= 57 && timer <= 62 )
+  {
+  yshake += 3;
+  image_index = 2;
+  }
+if ( timer == 12 || timer == 62 )
+  {
+  screen_shake ( 2 , 6 );
+  }
+if ( timer == 63 )
+  yshake = 0;
+  
+// charge animation
+if ( timer == 252 )
+  {
+  if ( ammo > 0 )
+    {
+    facing = !facing;
+    timer = 120;
+    ammo -= 1;
+    }
+  }
+if ( timer == 120 )
+  {
+  sprite_index = spr[1];
+  yshake = 1;
+  image_index = 2;
+  }
+if ( timer == 121 )
+  yshake = 0;
+if ( timer == 122 || timer == 124 )
+  {
+  image_index -= 1;
+  }
+if ( timer == 124 )
+  {
+  sfx_keep = sound_play2 ( sfx[1] );
+  }
+if ( timer == 250 )
+  {
+  sound_play2 ( sfx[2] );
+  FMODInstanceStop ( sfx_keep );
+  xshake = 4 * ( 1 - facing * 2 );
+  image_index = 1;
+
+  create_projectile ( 16 , 30 + facing * 120 , 8 , 5 , 30 , 12 , fire2 , obj_spark_darkness , 1 , 1 , 0 , 0 , attacker , 230 , assist_proj_scr );
+  proj.sprite_index = spr[2];
+  proj.hspeed = 3 - facing * 6;
+  proj.image_xscale = 1;
+  proj.image_yscale = 1;
+  proj.x = x + 32 * xsize * ( 1 - facing * 2 );
+  proj.y = y - 48 * ysize;
+  proj.di *= 2.5;
+  proj.image_speed = 0.5;
+  }
+if ( timer == 252 )
+  {
+  image_index = 2;
+  }
+if ( xshake < 0 ) xshake += 1;
+if ( xshake > 0 ) xshake -= 1;
+
+// cooldown animation
+if ( timer >= 301 && timer <= 306 )
+  {
+  sprite_index = spr[0];
+  image_index = 0;
+  yshake -= 3;
+  }
+if ( timer >= 307 && timer <= 312 )
+  {
+  image_index = 1;
+  yshake += 3;
+  }
+if ( timer == 313 )
+  {
+  image_index = 2;
+  yshake = 0;
+  screen_shake ( 2 , 6 );
+  }
+  
+if ( timer >= 400 )
+  instance_destroy();

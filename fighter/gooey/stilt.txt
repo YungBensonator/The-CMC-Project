@@ -1,0 +1,56 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "stilt";
+    timer = 0;
+    time = 38;
+    sprite_index = stilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	charge_frame=10
+	create_hurtbox_precise(self.id,40,stilt_mask)
+
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 8: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 15: image_index = 6; break;
+	case 18: image_index = 7; break;
+	case 21: image_index = 8; break;
+	case 27: image_index = 9; break;
+	case 31: image_index = 10; break;
+	case 35: image_index = 11; break;
+      }
+
+    if ( timer = 12 )
+      {
+	sound_play(uair_sound);
+	create_projectile(9,30+facing*120,5.5,3,4,3,punch2,obj_spark_hit1,0.25,0.25,14,8,self.id,20,char_custom2);
+	proj.sprite_index = dustproj_sprite;
+	proj.image_speed = 0.2;
+	proj.speed = 3*size;
+	proj.direction = 15 + facing*150;
+	spark = instance_create(x+size*(13-facing*26),y,obj_dust_effect);
+	spark.facing = 1-facing;
+	spark.image_xscale *= 0.8*size;
+	spark.image_yscale *= 0.5*size;
+	spark.image_alpha = 0.67;
+	
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,80 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed *= 0.3;
+        state_type = "attack";
+        attack_type = "usmash";
+        image_speed = 0.25;
+        sprite_index = usmash_sprite;
+        image_index=0;
+        timer = 0;
+	 
+        time = 89;
+        timer_speed=1;
+        charge_frame = 5;
+        powerup_landed = 0;
+		create_hurtbox_precise(self.id, 90, usmash_mask)
+}
+        if timer < time {
+            state_type = "attack";
+	if timer = 7 {
+		 super_armor = 1;
+                 sound_play(usmashprep_sound);
+		}
+	if timer = 15
+		super_armor = 0;
+            if timer = 17
+                instance_create(x,y-20*size,obj_spark_effect)
+            if timer = 24 {
+                hspeed = 0;
+                sound_play(usmash_sound);
+                sound_play(psi_sound3);
+                if powerup = 1 then{
+                sound_play ( b_sound3 );
+                }
+                create_hitbox(5*max(1,powerup*1.25),90,4,0,9.5*max(1,powerup*1.25),5,magic2,obj_spark_hit2o,1.25,0.75,2,20,self.id,3,5);
+                hitbox.shake_type = 0
+                hitbox.charge_dmg = 0
+                hitbox.charge_kb = 0
+                duster = instance_create(x-(8-facing*16)*size,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.5*size
+                duster.image_yscale *= 0.4*size
+                duster = instance_create(x+(8-facing*16)*size,y,obj_dust_effect)
+                duster.facing = 1-facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.5*size
+                duster.image_yscale *= 0.4*size
+            }
+            if timer = 28 {
+                sound_play(usmash_voice);
+                if ( attack_success ) powerup_landed = 1;
+                create_hitbox(14*max(1,powerup*1.25),75+facing*30,5.65*max(1,powerup*1.15),7.55*max(1,powerup*1.1),10*max(1,powerup*1.25),18,magic3,obj_spark_shock,1.2,1.4,1,33,self.id,18,5);
+                hitbox.charge_dmg = 1.1
+                hitbox.hitshake_type = 2
+            }
+            if timer = 34 {
+                duster = instance_create(x+(6-facing*12)*size,y,obj_dust_effect)
+                hitbox.damage = 14*size;
+                hitbox.kbg = 6.75*size;
+                hitbox.hitlag_frames = round(13*size);
+                hitbox.hitbox_y = 37*size
+            }
+            if image_index >= image_number - image_speed    
+                image_speed = 0
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    if ( attack_success ) powerup_landed = 1;
+    if ( powerup_landed == 0 )
+      {
+      powerup = 0;
+      }
+          powerup_landed = -1
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,203 @@
+//Ult Start
+
+if global.gs_form[number-1] = 0{
+if ( state_type = "jump" || state_type = "stand" )
+  {
+    special = 1;
+    attacking = 0;
+    timer = 0;
+    attack_type = "b";
+    if ( air )
+	state_type = "air_attack";
+    else
+	state_type = "attack";
+    image_speed = 0;
+    sprite_index = b_sprite;
+    image_index = 0;
+    time = 50;
+    timer_speed = 1;
+    if ( air = 0 )
+	hspeed = 0;
+    else
+      {
+	air_move = 0;
+	vspeed *= 0.65;
+      }
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 15: image_index = 1; break;
+	case 20: image_index = 0; break;
+      }
+    if ( timer >= 1 && timer < 3 && temp = 0 )
+      {
+	if moveright = 1 facing = 0;
+	if moveleft = 1 facing = 1;
+      }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+    if ( timer = 15 )
+      {
+	sound_play( attack_voice2 );
+	create_hitbox(5,15+facing*150,5.5,2.75,10,3,fire2,obj_spark_fire1,0.75,0.55,18,13,self.id,5,2);
+      }
+    if ( timer = 16 ) && (!attack_success)
+      {
+	create_projectile(3,30+facing*120,3.5,0,5,1/size,punch2,obj_spark_hit2,0.7,0.7,18,18,self.id,75,char_custom1);
+	proj.use_palette = number;
+	if ( state_type = "attack" )
+	  {
+	    proj.speed = ( 3 + random(0.5) ) * size;
+	    proj.direction = 35 + random(55) + facing*55;
+	  }
+	else
+	  {
+	    proj.speed = ( 2.3 + random(0.5) ) * size;
+	    proj.direction = 20 + random(55) + facing*55;
+	  }
+      }
+    if ( timer = 30 && ai && random(16)>8 && air = 0 )
+	special = 1;
+    if ( timer >= 28 && special = 1 )
+      {
+	timer = 4;
+	special = 0;
+      }
+    if ( vspeed > -0.1 && ( collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1) ) )
+      {
+	air_move = 0;
+	hspeed = 0 ;
+      }
+    /*if ( air = 0 && state_type = "air_attack" )
+      {
+	state_type = "land";
+	attack_type = "none";
+	sprite_index = land_sprite;
+	timer = 0;
+	time = 9;
+      }*/
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+    special = 0;
+  }
+}
+
+//Melee Start
+
+if global.gs_form[number-1] = 1{
+if ( state_type = "jump" || state_type = "stand" )
+  {
+    special = 1;
+    attacking = 0;
+    timer = 0;
+    attack_type = "b";
+    if ( air )
+	state_type = "air_attack";
+    else
+	state_type = "attack";
+    image_speed = 0;
+    sprite_index = b_sprite2;
+    image_index = 0;
+    time = 50;
+    timer_speed = 1;
+    if ( air = 0 )
+	hspeed = 0;
+    else
+      {
+	air_move = 0;
+	vspeed *= 0.65;
+      }
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 15: image_index = 1; break;
+	case 20: image_index = 0; break;
+      }
+    if ( timer >= 1 && timer < 3 && temp = 0 )
+      {
+	if moveright = 1 facing = 0;
+	if moveleft = 1 facing = 1;
+      }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+    if ( timer = 15 )
+      {
+	sound_play( attack_voice2 );
+	create_hitbox(5,15+facing*150,5.5,2.75,10,3,fire2,obj_spark_fire1,0.75,0.55,18,13,self.id,5,2);
+      }
+    if ( timer = 16 ) && (!attack_success)
+      {
+	create_projectile(3,30+facing*120,3.5,0,5,1/size,punch2,obj_spark_hit2,0.7,0.7,18,18,self.id,75,char_custom1);
+	proj.use_palette = number;
+	if ( state_type = "attack" )
+	  {
+	    proj.speed = ( 3 + random(0.5) ) * size;
+	    proj.direction = 35 + random(55) + facing*55;
+	  }
+	else
+	  {
+	    proj.speed = ( 2.3 + random(0.5) ) * size;
+	    proj.direction = 20 + random(55) + facing*55;
+	  }
+      }
+    if ( timer = 30 && ai && random(16)>8 && air = 0 )
+	special = 1;
+    if ( timer >= 28 && special = 1 )
+      {
+	timer = 4;
+	special = 0;
+      }
+    if ( vspeed > -0.1 && ( collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1) ) )
+      {
+	air_move = 0;
+	hspeed = 0 ;
+      }
+    /*if ( air = 0 && state_type = "air_attack" )
+      {
+	state_type = "land";
+	attack_type = "none";
+	sprite_index = land_sprite;
+	timer = 0;
+	time = 9;
+      }*/
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+    special = 0;
+  }
+}

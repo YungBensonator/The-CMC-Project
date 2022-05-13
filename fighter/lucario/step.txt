@@ -1,0 +1,134 @@
+if global.gs_form[number-1] = 0
+{
+aura = max ( 0 , min ( 10 , percent/15 + ((falls+sds-kos)>0)*1.33 ) );
+}
+if ( global.gs_form[number-1] = 1 && auraless_init = 0 )
+{
+aura = 4;
+weight = 0.25;
+grav = 0.26;
+max_jumps = 3;
+run_start_speed = 4.2;
+run_accel = 0.09
+run_speed = 4;
+jumptimer = 1;
+jump_speed = 6.8;
+mid_jump_speed = 6;
+short_hop_speed = 2.85;
+air_speed = 2.25;
+fall_speed = 3.35;
+air_accel = 0.2;
+airdash_speed = 8;
+fric = 0.92;
+fast_fall_multiplier = 1.2;
+auraless_init = 1;
+}
+if ( sprite_index = mid_jump_sprite )
+{
+image_speed = 0.35;
+}
+if ( state_type = "flinch" || state_type = "air_flinch" )
+{
+sound_stop(b_sound1);
+sound_stop(b_sound2);
+sound_stop(b_sound3);
+}
+
+if state_type = "crouch" && facing = 0 && moveright = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = 0.25;
+	hspeed = 1;
+	}
+if state_type = "crouch" && facing = 0 && moveleft = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = -0.25;
+	hspeed = -0.8;
+	}
+if state_type = "crouch" && facing = 1 && moveright = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = 0.25;
+	hspeed = 0.8;
+	}
+if state_type = "crouch" && facing = 1 && moveleft = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = -0.25;
+	hspeed = -1;
+	}
+
+if ( state_type = "crouch" && sprite_index = crouch_sprite )
+{
+image_speed = 0;
+if ( timer >= 2 )
+{
+image_index = 1;
+}
+if ( timer >= 3 )
+{
+image_index = 2;
+}
+}
+
+if state_type = "shielding"{
+if image_index >= 2{
+image_speed = 0
+image_index = 2
+}
+
+}
+
+
+if ( place_meeting ( target.x, target.y, projectile_box ))
+    {
+    obj = instance_nearest ( target.x, target.y , projectile_box);
+    if ( obj.hit <= 2  ){ 
+    if ( aura_ball.image_xscale > 0.15){
+if (dontrepeat = 0 && (instance_exists(aura_ball) && target.kbg > 8.2 ) && !instance_exists(aurab)){
+				if ((target.weight <= .22 && target.percent > 45) || (target.weight > .22 && target.weight < .3 && target.percent > 55) || (target.weight > .3 && target.percent > 60)){
+			killspark = instance_create(target.x-200,target.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(target.x,target.y,obj_freeze)
+				effect_create_above(ef_ellipse,target.x,target.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(target.x+8*(1-facing*2),target.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				target.timer = 0
+				target.state_type = "tumble"
+				target.time = 75
+				target.kbg = aura_ball.kbg + 2
+				target.bkb = aura_ball.bkb + 1
+				target.speed = temp_speed * 2
+				target.gravity = temp_grav * 1.5
+                target.direction += 90
+
+				dontrepeat = 1;
+			
+			with ( obj )
+		{
+			hit = 2;
+			instance_destroy();
+    }  
+				}
+				}
+      }
+    }
+         
+    }
+	

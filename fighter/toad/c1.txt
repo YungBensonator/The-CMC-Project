@@ -1,0 +1,174 @@
+moving_object=1;
+absorb2 = 1
+if type=0
+{
+if !collision_point(x,y+1,obj_floor,1,1) && !collision_point(x,y+1,obj_platform,1,1) && hit = 0 {   
+    if vspeed < 4
+    vspeed += 0.2
+    }
+else    {               
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+    
+if timer <= 1 && hit = 0 {       
+    sprite_index = attacker.id.veggie_sprite
+    hspeed = 4.5 - attacker.id.facing*9
+    image_speed = 0
+    visible=1
+    vspeed=-1.9
+    }
+if abs(vspeed) < 1 && hit = 0     
+    timer += 1
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+if hit = 0 image_angle += -15 + 30*facing
+}
+//Pumpkin
+if type=1
+{
+
+if !collision_point(x,y+1,obj_floor,1,1) && !collision_point(x,y+1,obj_platform,1,1) && hit = 0 {   
+    if vspeed < 4
+    vspeed += 0.3
+    }
+if ( collision_point(x,y+1,obj_floor,1,1) || collision_point(x,y+1,obj_platform,1,1) ) && hit = 0
+{
+vspeed=-4
+bounce+=1
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 3;
+shaker.xampl = 0;
+shaker.time = 10;
+}
+
+if bounce=3 || hit>0 {             
+
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+    
+if timer <= 1 && hit = 0 {       
+    sprite_index = attacker.id.veggie_sprite
+    hspeed = 2.5 - attacker.id.facing*5
+    image_speed = 0
+    visible=1
+    vspeed=-5
+
+    }
+if vspeed>=0
+{
+damage=14*size
+bkb=7*size
+kbg=6*size
+dir=270
+}
+if vspeed<=-0.1
+{
+damage=14*size
+bkb=7*size
+kbg=6*size
+dir=75+30*facing
+}
+if abs(vspeed) < 1 && hit = 0     
+    timer += 1
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 3;
+shaker.xampl = 0;
+shaker.time = 10;
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+if hit = 0 image_angle += -15 + 30*facing
+}
+
+/// Tomato
+
+if type=2
+{
+
+if !collision_point(x,y+1,obj_floor,1,1) && !collision_point(x,y+1,obj_platform,1,1) && hit = 0 {   
+    if vspeed < 4
+    vspeed += 0.2
+    }
+if ( collision_point(x,y+1,obj_floor,1,1) || collision_point(x,y+1,obj_platform,1,1) ) && hit = 0
+{
+hit=2
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 3;
+shaker.xampl = 0;
+shaker.time = 10;
+image_angle=0
+image_xscale = 1.2*size
+image_yscale = 0.4*size
+hspeed=0
+vspeed=0
+}
+if hit=2
+{
+hspeed=0
+}
+if hit=1 {             
+
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+    
+if timer <= 1 && hit = 0 {       
+    sprite_index = attacker.id.veggie_sprite
+    hspeed = 4 - attacker.id.facing*8
+    image_speed = 0
+    visible=1
+    vspeed=-3
+damage=6*size
+bkb=4*size
+kbg=5*size
+dir=362
+
+    }
+if abs(vspeed) < 1 && hit = 0     
+    timer += 1
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+if hit = 0 image_angle += -15 + 30*facing
+}
+
+/////onion
+if type=3
+{
+if !collision_point(x,y+1,obj_floor,1,1) && !collision_point(x,y+1,obj_platform,1,1) && hit = 0 {   
+    if vspeed < 4
+    vspeed += 0.2
+    }
+else    {               
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+    
+    
+if timer <= 1 && hit = 0 {       
+    sprite_index = attacker.id.veggie_sprite
+    hspeed = 3.5 - attacker.id.facing*7
+    image_speed = 0
+    visible=1
+    vspeed=-4
+
+damage=8*size
+bkb=2*size
+kbg=2*size
+hitlag_frames=40
+dir=352+-164*facing
+
+    }
+if abs(vspeed) < 1 && hit = 0     
+    timer += 1
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 3;
+shaker.xampl = 0;
+shaker.time = 10;
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    with (self) instance_destroy() }
+if hit = 0 image_angle += -15 + 30*facing
+}
+
+    

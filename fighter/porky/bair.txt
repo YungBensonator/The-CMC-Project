@@ -1,0 +1,45 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0.25;
+        sprite_index = bair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+        spark = -1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 12 {
+                image_speed = 0.2
+                sound_play(bair_sound);
+                proj = create_projectile(9,130-facing*80,4,7.5,15,1/size,explodehit2,obj_spark_hit4,0.7,0.7,-25,20,self.id,28,porky_uair_proj);
+                proj.sprite_index = bair_proj_sprite;
+                proj.image_speed = 0.2;
+                proj.hitlag_diff = round(4*size);
+                proj.hspeed = -2*size*(1-facing*2);
+            }
+            if timer = 15
+                image_speed = 0.15
+            if image_index >= image_number - image_speed
+                image_speed=0;
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=10; 
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

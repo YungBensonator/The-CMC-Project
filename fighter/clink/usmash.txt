@@ -1,0 +1,57 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "usmash";
+        image_speed = 0.4;
+        sprite_index = usmash_sprite;
+        image_index=0.4;
+        timer = 0;
+        time = 36;
+        timer_speed=1;
+        charge_frame = 5;
+}
+        if timer < time {
+             state_type = "attack";
+            if timer = 9 {
+                sound_play(attack_sound3);
+                sound_play(usmash_voice);
+                create_hitbox(13,105-facing*30,5.2,6.9,18,10,slash3,obj_spark_slash3,0.5,0.8,-17,23,self.id,11,2); 
+                hitbox.hit_stun = 4
+                hitbox.shake_ampl = 0.65
+                hitbox.shake_type = 1
+                create_hitbox2(12,115-facing*50,5.1,6.9,17,10,slash3,obj_spark_slash3,0.6,0.8,-20,13,self.id,11,2); 
+                hitbox2.hit_stun = 4
+                hitbox2.shake_ampl = 0.65
+                hitbox2.shake_type = 1
+                }
+            if timer = 11 {
+                hitbox.hitbox_x = -2+facing*4;
+                hitbox.hitbox_y = 28*size;
+                hitbox2.hitbox_x = 6-facing*12;
+                hitbox2.hitbox_y = 30*size;
+            }
+            if timer = 14 {
+                hitbox.damage = 10*size;
+                hitbox.bkb = 5*size;
+                hitbox.hitbox_x = size*(25 - facing*30);
+                hitbox.hitbox_y = 15*size;
+                hitbox.shield_damage = 14;
+                hitbox.hitlag_frames = round(7*size);
+                hitbox2.damage = 10*size;
+                hitbox2.bkb = 5*size;
+                hitbox2.hitbox_x = size*(15 - facing*30);
+                hitbox2.hitbox_y = 19*size;
+                hitbox2.shield_damage = 14;
+                hitbox2.hitlag_frames = round(7*size);
+                image_speed = 0.3
+            }
+            if image_index >= image_number - image_speed
+                image_speed = 0  
+            }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

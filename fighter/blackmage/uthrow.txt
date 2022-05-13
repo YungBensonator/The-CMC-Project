@@ -1,0 +1,89 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = uthrow_sprite;
+image_index=0;
+timer = 0;
+time = 55;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 35
+}
+if timer < time {
+	if ( timer >= 0 && timer <= 10 )
+	{
+	target.x = x + 20 * size * (1-facing*2);
+	target.y = y;
+	}
+    if timer = 11 {
+        target.x = x +(10 - facing*20)*size;
+        target.y = y-10*size;
+    }
+    switch ( timer )
+      {
+	case 12: image_index = 1; break;
+	case 23: image_index = 2; break;
+	case 35: image_index = 3; break;
+	
+    }
+    
+	if timer = 1{
+	sound_play(fire_sound);
+	firepillar = create_spark(0,0,self.id);
+	firepillar.sprite_index = fire_pillar_sprite;
+    firepillar.image_speed = 0.6;
+	firepillar.image_alpha = 1.0;
+	firepillar.image_xscale = image_xscale;
+    firepillar.image_yscale = image_yscale*0.85;
+    firepillar.depth = depth - 0.1;
+	firepillar.snap = self.id
+	}
+	
+	if timer = 12{
+	  sound_play2(fire1);
+      projdir = angle_correct(330)
+	  create_projectile(5,angle_correct(65),6,0,12,1,-1,obj_spark_fire1,0,0,-10,45,self.id,150,char_custom1);
+	  proj.shootimer = 1
+	  proj.setspeed = 1
+	  proj.chosespeed = 7
+	  proj.hit_stun = 30
+	  proj.multiplier = 1.5
+	}
+	
+	if timer = 24{
+	sound_play(fire_sound);
+	firepillar = create_spark(0,0,self.id);
+	firepillar.sprite_index = fire_pillar_sprite;
+    firepillar.image_speed = 0.6;
+	firepillar.image_alpha = 1.0;
+	firepillar.image_xscale = image_xscale*1.1;
+    firepillar.image_yscale = image_yscale*1.1;
+    firepillar.depth = depth - 0.1;
+	firepillar.snap = self.id
+	}
+	
+	if timer = 35{
+	  sound_play2(fire1);
+      projdir = angle_correct(330)
+	  create_projectile(5,angle_correct(60),7,5,12,1,-1,obj_spark_fire1,0,0,-15,80,self.id,150,char_custom1);
+	  proj.shootimer = 1
+	  proj.setspeed = 1
+	  proj.chosespeed = 7
+	  proj.multiplier = 3
+	}
+	
+	if timer = 17 or timer = 39
+	sound_play(explode1)
+	
+    
+
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

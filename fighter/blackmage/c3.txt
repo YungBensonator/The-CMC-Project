@@ -1,0 +1,132 @@
+var glow_var;
+glow_var = 0.75;
+absorb = 0;
+absorb2 = 0;
+proj_destroy = 0;
+clankWithHitbox = 1;
+moving_object = 1;
+parry_nodestroy = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.droplet_sprite;
+	image_xscale = 0.2 * size//(1-facing*2) * size;
+	image_yscale = 0.2 * size;
+	image_index = 0;
+    image_speed = 0;
+    visible = 1;
+	depth = -8;
+	image_alpha = 0.8;
+	temp = 0;
+	hit = 2;
+	temp2 = 0.006;
+	temp3 = 0.001;
+	gravity = 0.3
+	direction = angle_correct(39)
+	speed = 2.9
+	if smashb = 1{
+		speed = 5.6
+		direction = angle_correct(34)
+	}
+  }
+
+if ( temp = 0 )
+{
+image_angle = direction
+//vspeed = 2.7;
+}
+
+if ( ( on_floor || on_platform ) && temp = 0 )
+	{
+	temp = 1;
+	image_angle = 0
+	direction = 0
+	hspeed = 0
+	vspeed = 0
+	speed = 0
+	gravity = 0
+	sound_play ( keepmain.downb_sound3 );
+	sprite_index = keepmain.downb_ring_sprite;
+	image_xscale = 0.5 * (1-facing*2) * size;
+	image_yscale = 0.07 * size;
+	image_index = 0;
+	image_speed = 0;
+	image_alpha = 0.8;
+	depth = -8;
+	hspeed = 0;
+	vspeed = 0;
+	timer = 2;
+	time = 85;
+	no_reflect = 1;
+	i = 0;
+	gravity = 1;
+	gravity_direction = 270;
+	}
+
+if ( temp = 1 )
+{
+	if ( timer = 3 )
+	{
+	    waterring[i] = instance_create( x , y , obj_spark);
+        waterring[i].sprite_index = keepmain.downb_ring_sprite;
+        waterring[i].image_xscale = 0.6 * (1 - facing * 2) * size;
+        waterring[i].image_yscale = 0.07 * size;
+		waterring[i].image_alpha = 0.8;
+        waterring[i].image_index = 0;
+        waterring[i].image_speed = 0.25;
+		waterring[i].depth = -9;
+		waterring[i].glow = glow_var;
+	}
+	if ( timer > 3 && timer <= 50 )
+	{
+		if ( timer mod 20 = 0 )
+		{
+		i += 1;
+        waterring[i] = instance_create( x , y , obj_spark);
+        waterring[i].sprite_index = keepmain.downb_ring_sprite;
+        waterring[i].image_xscale = 0.6 * (1 - facing * 2) * size;
+        waterring[i].image_yscale = 0.07 * size;
+		waterring[i].image_alpha = 0.8;
+        waterring[i].image_index = 0;
+        waterring[i].image_speed = 0.25;
+		waterring[i].depth = -9;
+		waterring[i].glow = glow_var;
+		}
+	}
+	if ( timer > 3 )
+	{
+		waterring[0].image_xscale += temp2 * (1 - facing * 2) * size;
+		waterring[0].image_yscale += temp3 * size;
+		waterring[1].image_xscale += temp2 * (1 - facing * 2) * size;
+		waterring[1].image_yscale += temp3 * size;
+		waterring[2].image_xscale += temp2 * (1 - facing * 2) * size;
+		waterring[2].image_yscale += temp3 * size;
+		waterring[3].image_xscale += temp2 * (1 - facing * 2) * size;
+		waterring[3].image_yscale += temp3 * size;
+		waterring[4].image_xscale += temp2 * (1 - facing * 2) * size;
+		waterring[4].image_yscale += temp3 * size;
+		waterring[5].image_xscale += temp2 * (1 - facing * 2) * size;
+		waterring[5].image_yscale += temp3 * size;
+		waterring[6].image_xscale += temp2 * (1 - facing * 2) * size;
+		waterring[6].image_yscale += temp3 * size;
+		
+		image_xscale += 0.0017 * (1-facing*2) * size;
+	}
+
+	
+if ( timer = 30 )
+		{
+		sound_play ( keepmain.downb_sound2 );
+		geyser = create_projectile ( 15 , 90 , 6.2 , 4 , 40 , 10 , water3 , obj_spark_water , 1 , 1 , 0 , 0 , attacker.id , 50 , char_custom4 );
+		}
+if ( timer >= 30 )
+		{
+		geyser.x = x;
+		geyser.y = y;
+		}
+
+if ( timer >= 70 && image_alpha > 0 )
+		{
+		image_alpha -= 0.1;
+		}
+}

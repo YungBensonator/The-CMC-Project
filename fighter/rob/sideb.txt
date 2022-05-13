@@ -1,0 +1,40 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+	state_type = "air_attack";
+	attack_type = "sideb";
+	sprite_index = sideb_sprite;
+	image_speed = 0.32;
+	image_index = 0.3;
+	special = 0;
+	timer = 0;
+	time = 30;
+	}
+if timer < time {
+	if air = 0 {
+		hspeed *= 0.9;
+		}
+	state_type = "air_attack";
+	if timer = 13 {
+	 if ( puckred > 0 && instance_exists ( puckred ) ) exit;
+		puckred = instance_create(x-18+facing*36,y-13,puckred_item);
+                var a;
+                a = floor ( random ( 5 ) );
+		puckred.sprite_index = puckred_sprite + a;
+		puckred.sprite_air = puckred_sprite + a;
+                puckred.color = a;
+		puckred.sprite_held = puckred.sprite_air;
+		puckred.rob = id
+		puckred.hspeed = 5.5-facing*11;
+		puckred.vspeed = -3.5;
+                puckred.thrown = self.id;
+                //held_item = puckred;
+		}
+	}
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump"
+    timer = 0;
+    time =-1;
+}

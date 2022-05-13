@@ -1,0 +1,28 @@
+moving_object = 1;
+absorb2 = 1;
+if !collision_point(x,y+1,obj_floor,1,1) && !collision_point(x,y+1,obj_platform,1,1) && !is_on_floor(self) {      // Make arrow fall when not touching ground
+    if vspeed < 2.5  && hit = 0 {
+        vspeed += 0.05
+    }
+}
+else if vspeed > 0 {              // Make arrow destroy upon hitting ground
+    speed = 0;
+    hit = 2;
+}
+if timer <= 2 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.arrow_sprite
+    hspeed = round(damage*1.6-3.1)*(1 -2*facing);
+    image_speed = 0;
+    vspeed = -0.2;
+    visible = 1;
+}
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 0     // Destroy on hitting wall
+    instance_destroy();
+if hit = 0      {        // Rotate image to match trajectory
+    image_angle = direction+facing*180
+    if frac(timer/2) = 0
+        after_image(3,c_white,0.4)
+}
+else
+speed = 0;
+    

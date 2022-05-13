@@ -1,0 +1,180 @@
+var glow_var;
+glow_var = 0.1;
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+    state_type = "air_attack"
+    attack_type = "b"
+    image_speed = 0.2
+    sprite_index = b_sprite
+	
+    image_index=0
+    timer = 0
+    time = 70
+	if !ai
+	special = 1
+	
+	charge_bonus = 1
+	
+	vspeed *= 0.15
+	hspeed = 0
+	temp = 0
+    }
+	
+	
+	switch ( timer )
+      {
+	
+	/*
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	
+	case 10: image_index = 0; break;
+	case 12: image_index = 1; break;
+	case 14: image_index = 0; break;
+	case 16: image_index = 1; break;
+	case 18: image_index = 0; break;
+	case 20: image_index = 1; break;
+	case 22: image_index = 0; break;
+	case 24: image_index = 1; break;
+	case 26: image_index = 0; break;
+	case 28: image_index = 1; break;
+	case 30: image_index = 0; break;
+	*/
+	
+	
+	case 32: image_index = 1; break;
+	case 34: image_index = 2; break;
+	case 36: image_index = 2; break;
+	
+	case 38: image_index = 2; break;
+	case 40: image_index = 2; break;
+	case 42: image_index = 2; break;
+	case 44: image_index = 2; break;
+	case 46: image_index = 2; break;
+	case 48: image_index = 2; break;
+	
+	case 50: image_index = 2; break;
+	case 52: image_index = 1; break;
+	  }
+
+	if timer = 8 and special = 0{
+		timer = 24
+		charge_bonus = 0
+		time = 55
+	}
+	if timer = 30{
+		image_index = 0
+		image_speed = 0
+		sprite_index = b_sprite2
+	}
+	
+	if timer = 9{
+		sound_play(charge_sound);
+		instance_create(x+place_x(25),y+place_y(18),obj_spark_effect2)
+	}
+	
+	if timer = 29 and temp < 10{
+		timer = 28
+		temp += 1
+		if charge_bonus = 1
+		temp -= 0.5
+	}
+	
+	
+	
+	if timer = 32 and charge_bonus = 0{
+		sound_play(laser_sound)
+		vfxthing = create_spark ( abs(place_x(37)), -place_y(20) , beam_sprite0 , 0.75 , image_xscale*0.7 , image_yscale*0.7 );
+		vfxthing.alarm[0] = 69
+		vfxthing.depth = depth - 1
+		vfxthing.image_angle = 0-facing*00
+		vfxthing.snap = self.id
+		vfxthing.glow = glow_var;
+	}
+	
+	if timer = 36 and charge_bonus = 0{
+		create_hitbox(8,angle_correct(30),6.1,3.1,50,4,magic1,obj_spark_hit1,1.5,0.6,abs(place_x(37)),-place_y(20),self.id,4,4)
+		if facing = 0
+		hitbox.sprite_index = extra_hitbox_spriteR
+		else
+		hitbox.sprite_index = extra_hitbox_spriteL
+		hitbox.execute_on_hit = "attacker.vfxthing.image_speed = 0"
+		create_hitbox2(10,angle_correct(30),4.9,4.1,10,9,magic1,obj_spark_hit1,0.5,1.4,abs(place_x(37)),-place_y(20),self.id,2,4)
+		hitbox2.execute_on_hit = "attacker.vfxthing.image_speed = 0"
+	}
+	if timer >= 37 and instance_exists(vfxthing) and charge_bonus = 0{
+		vfxthing.image_speed = 0.7
+	}
+	if timer = 38 and charge_bonus = 0{
+		hitbox.image_xscale = 2.5
+	}
+	
+	
+	
+	if timer = 32 and charge_bonus = 1{
+		sound_play(laser_sound)
+		vfxthing = create_spark ( abs(place_x(37)), -place_y(20) , beam_sprite1 , 0.9 , image_xscale*0.7 , image_yscale*0.7 );
+		vfxthing.alarm[0] = 69
+		vfxthing.depth = depth - 1
+		vfxthing.image_angle = 0-facing*00
+		if air > 0
+		vfxthing.snap = self.id
+		vfxthing.glow = glow_var;
+	}
+	
+	if timer >= 36 and timer <= 46 and timer mod 2 = 0 and charge_bonus = 1{
+		if timer >= 40
+		create_hitbox(1,angle_correct(70),2.9,0,1,3,magic1,obj_spark_hit1,8.5,0.6,abs(place_x(37)),-place_y(20),self.id,4,4)
+		else
+			create_hitbox(1,angle_correct(70),2.9,0,1,3,magic1,obj_spark_hit1,4.5,0.6,abs(place_x(37)),-place_y(20),self.id,4,4)
+		hitbox.weight_kb = 1
+		hitbox.di = 0
+		hitbox.sdi = 0
+		if facing = 0
+		hitbox.sprite_index = extra_hitbox_spriteR
+		else
+		hitbox.sprite_index = extra_hitbox_spriteL
+		hitbox.execute_on_hit = "attacker.vfxthing.image_speed = 0"
+		create_hitbox2(3,angle_correct(90),2.9,0,10,9,magic1,obj_spark_hit1,0.5,1.4,abs(place_x(37)),-place_y(20),self.id,2,4)
+		hitbox2.execute_on_hit = "attacker.vfxthing.image_speed = 0"
+	}
+	
+	if timer = 48 and charge_bonus = 1{
+		create_hitbox(2,angle_correct(49),4.9,5,10,12,magic2,obj_spark_hit1,8.5,0.6,abs(place_x(37)),-place_y(20),self.id,2,4)
+		if facing = 0
+		hitbox.sprite_index = extra_hitbox_spriteR
+		else
+		hitbox.sprite_index = extra_hitbox_spriteL
+		hitbox.execute_on_hit = "attacker.vfxthing.image_speed = 0"
+		create_hitbox2(3,angle_correct(90),4.9,7.5,10,9,fire1,obj_spark_hit1,0.5,1.4,abs(place_x(37)),-place_y(20),self.id,2,4)
+		hitbox2.execute_on_hit = "attacker.vfxthing.image_speed = 0"
+	}
+	
+	if timer >= 37 and instance_exists(vfxthing) and charge_bonus = 1{
+		vfxthing.image_speed = 0.7
+	}
+
+	if (instance_exists ( vfxthing ) )
+	{
+	vfxthing.x = x + abs(place_x(37)) * (1-facing*2);
+	vfxthing.y = y + place_y(20);
+	}
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	timer = 0;
+    time = -1;
+    if movedown and air = 0{
+		state_type = "crouch"; 
+		sprite_index = crouch_sprite; 
+		image_index = 6; 
+		timer = 15
+	}
+	else{
+		if air > 0
+		state_type = "jump";
+		else
+		state_type = "stand";
+	}
+    attack_type = "none";
+  }

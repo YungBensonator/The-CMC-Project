@@ -1,0 +1,205 @@
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i, xp, yp, xx, yy;
+xp = x;
+yp = y;
+
+seganim1 += 0.3;
+if ( seganim1 >= 9 ) seganim1 -= 9;
+seganim2 += 0.2;
+if ( seganim2 >= 6 ) seganim2 -= 6;
+seganim3 += 0.2;
+if ( seganim3 >= 10 ) seganim3 = 5;
+
+// entry
+if ( state == 0 )
+  {
+  camera_mod = 0;
+  
+  if ( timer == 4 )
+    {
+    instance_create ( x , y - 12 , obj_spark_effect );
+    repeat ( 3 )
+      gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+    }
+
+  if ( timer == 4 )
+    {
+    sound_play2 ( sfx[0] );
+    }
+  if ( timer == 14 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+    }
+  if ( timer == 24 )
+    {
+    i = sound_play2 ( sfx[0] );
+    FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+    }
+    
+  x += min ( 6 , ( timer - 20 ) * 0.2 );
+  y -= min ( 9 , ( timer - 20 ) * 0.3 );
+  
+  if ( timer > 150 )
+    {
+    speed = 0;
+    xdir = random ( 360 );
+    ydir = random ( 360 );
+    x = ( obj_game_control.camera_boundary_l + obj_game_control.camera_boundary_r ) * 0.5;
+    y = obj_game_control.camera_boundary_u - 128;
+    timer = 0;
+    state = 1;
+    hit_enough = 0;
+    }
+    
+  }
+// patrol
+if ( state == 1 )
+  {
+  camera_mod = 0;
+  /*xx = ( obj_game_control.camera_boundary_l + obj_game_control.camera_boundary_r ) * 0.5;
+  yy = obj_game_control.camera_boundary_u + 80;
+  with ( obj_game_control )
+    {
+    if ( xx * 0.2 < camera_l ) camera_l = xx * 0.2;
+    if ( xx * 1.8 > camera_r ) camera_r = xx * 1.8;
+    if ( yy < camera_u ) camera_u = yy;
+    if ( yy > camera_d ) camera_d = yy;
+    }*/
+  xdir += 3;
+  if ( xdir >= 360 ) xdir -= 360;
+  ydir += 11 + ( xdir < 20 || xdir > 340 || ( xdir > 160 && xdir < 200 ) )
+       + ( xdir < 10 || xdir > 350 || ( xdir > 170 && xdir < 190 ) )
+       + ( xdir < 30 || xdir > 330 || ( xdir > 150 && xdir < 210 ) );
+  if ( ydir >= 360 ) ydir -= 360;
+  xx += lengthdir_x ( xx * 0.8 , xdir );
+  yy += lengthdir_y ( 40 , ydir );
+  x = ( x * 7 + xx ) * 0.125;
+  y = ( y * 7 + yy ) * 0.125;
+  if ( x < xp )
+    facing = 1;
+    else
+    facing = 0;
+  if ( timer > 0 && timer mod 2 == 0 )
+    {
+    i = instance_find ( player , floor ( random ( instance_number ( player ) ) ) );
+    if ( i.team != team )
+      {
+      if ( collision_line ( i.x , i.y , i.x , i.y + 128 , obj_floor , 1 , 1 )
+        || collision_line ( i.x , i.y , i.x , i.y + 128 , obj_platform , 1 , 1 ) )
+        {
+        targetx = i.x;
+        targety = i.y;
+        repeat ( 128 )
+          {
+          if ( !collision_point ( targetx , targety + 1 , obj_floor , 1 , 1 )
+            && !collision_point ( targetx , targety + 1 , obj_platform , 1 , 1 ) )
+            {
+            targety += 1;
+            }
+            else
+            {
+            break;
+            }
+          }
+        sp = 0;
+        state = 2;
+        }
+      }
+    }
+  if ( timer > 500 )
+    {
+    hit_enough = 8;
+    hs = 0;
+    vs = 0;
+    state = 3;
+    }
+  if ( mouse_check_button_pressed ( mb_left ) )
+    {
+    targetx = mouse_x;
+    targety = mouse_y;
+    sp = 0;
+    state = 2;
+    }
+  }
+// smash
+if ( state == 2 )
+  {
+  camera_mod = 1;
+  direction = point_direction ( x , y , targetx , targety );
+  sp += 0.3;
+  x += lengthdir_x ( sp , direction );
+  y += lengthdir_y ( sp , direction );
+  if ( direction > 90 && direction < 270 )
+    facing = 1;
+    else
+    facing = 0;
+  if ( point_distance ( x , y , targetx , targety ) < sp + 2 )
+    {
+    sound_play2 ( sfx[1] );
+    i = instance_create ( targetx , targety + 20 , obj_down_impacto );
+    i.image_xscale *= 2;
+    i.image_yscale *= 2;
+    i.depth = -10;
+    i = instance_create ( targetx , targety , obj_spark_shockwave );
+    i.image_xscale *= 3;
+    i.image_yscale *= 0.4;
+    i.depth = -10;
+    timer = 0;
+    x = targetx;
+    y = targety;
+    create_projectile_impaler ( 16 , 75 + facing * 30 , 9 , 6 , 60 , 14 ,
+      kick3 , obj_spark_hit4 , 7 , 4 , 0 , 0 , attacker , 7 , no_script );
+    screen_shake ( 12 , 4 );
+    screen_shake ( 4 , -40 );
+    hs = lengthdir_x ( sp , direction );
+    vs = -abs(hs);
+    sp = 0;
+    state = 3;
+    }
+  }
+// return
+if ( state == 3 )
+  {
+  camera_mod = 1;
+  hs *= 0.98;
+  vs -= 0.15;
+  x += hs;
+  y += vs;
+  if ( timer > 150 )
+    {
+    hit_enough += 1;
+    if ( hit_enough >= choose ( 4 , 5 , 5 , 6 , 6 , 6 ) )
+      {
+      instance_destroy();
+      exit;
+      }
+    sp = 0;
+    xdir = random ( 360 );
+    ydir = random ( 360 );
+    x = ( obj_game_control.camera_boundary_l + obj_game_control.camera_boundary_r ) * 0.5;
+    y = obj_game_control.camera_boundary_u - 128;
+    timer = 0;
+    state = 1;
+    }
+  }
+
+// calculate new positions of tail
+var dis, dir;
+dis = round ( point_distance ( xp , yp , x , y ) );
+dir = point_direction ( x , y , xp , yp );
+if ( dis > 0 )
+  {
+  for ( i = buffer_size - 1 ; i >= dis ; i -= 1 )
+    {
+    xc[i] = xc[i-dis];
+    yc[i] = yc[i-dis];
+    }
+  for ( i = 0 ; i < dis ; i += 1 )
+    {
+    xc[i] = x + lengthdir_x ( i , dir );
+    yc[i] = y + lengthdir_y ( i , dir );
+    }
+  }

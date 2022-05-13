@@ -1,0 +1,82 @@
+absorb = -1
+abosrb2 = -1
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    //image_speed = 1;
+	image_index = 1;
+    visible=1;
+    temp = 1
+    proj_hits = 1
+	image_alpha=0.70
+	repeated = 0;
+	hittimer = 8;
+	hittime = 8;
+    }
+time = 9999
+alarm[0] = 9999
+image_yscale += 0.006
+image_xscale += 0.006
+
+if ( timer mod 10 = 0 )
+{
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 1;
+shaker.xampl = 0;
+shaker.time = 9;
+}
+
+if image_index >=3 and repeated < 220 {
+image_speed = 0;
+image_index = 3;
+
+repeated +=1;
+}
+
+depth = attacker.depth + 2
+
+if ( repeated >= 220 )
+{
+image_speed = 0.5;
+image_alpha -= 0.2;
+}
+
+if ( image_index >= 9 )
+{
+image_speed = 0;
+}
+
+if ( image_alpha <= 0 )
+{
+instance_create(0,0,obj_flashscreen);
+sound_stop(keepmain.ultima_sound);
+sound_play (keepmain.ultima_blast_sound);
+instance_destroy();
+}
+
+if attack_success = 1 && timer = time {
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+
+if ( hittimer < 8 )
+{
+hittimer += 1;
+}
+
+if hittimer >= hittime && proj_hits <= 20 && hit = 1 {
+proj_hits += 1;
+if proj_hits = 20 {
+damage *= 1.2
+bkb = 6.5*attacker.size
+kbg = 8.5*attacker.size
+attacker.id.timer = 263;
+repeated = 220;
+//sfx = explodehit3
+//gfx = obj_spark_fire1
+bloom = 5 }
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+hittimer = 0;
+}
+

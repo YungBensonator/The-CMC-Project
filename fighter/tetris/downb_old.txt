@@ -1,0 +1,67 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 91;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = stand_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  special = 1
+  }
+
+if timer < time{
+	
+	if air > 0
+	vspeed = 0.25
+	
+	if timer > 30{
+	air_move = 0
+	hspeed = 0
+	}
+	
+	if timer < 30 and timer mod 5
+	flashing = 1
+	else
+	flashing = 0
+	
+	if timer = 30{
+    	
+	    sound_play(downb_sound);
+	    gaia = create_projectile(6,90+facing*0,6,1,20,30,kick3,obj_spark_hit1,0,0,0,0,self.id,90,char_custom2);
+	    gaia.sprite_index = gaia_summon_sprite
+		gaia.image_index = 0
+		gaia.image_speed = 0.2
+		gaia.image_xscale = image_xscale
+		gaia.image_yscale = image_yscale
+		gaia.state = 0 //moving
+		gaia.image_alpha = 0
+		
+    }
+	
+	if timer > 30 and special = 0
+	timer = time
+	
+	
+	
+	
+}
+
+
+
+
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

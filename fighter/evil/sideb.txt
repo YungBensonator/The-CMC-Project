@@ -133,7 +133,7 @@ if ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && can_
 		image_speed = 0.5
                 sound_play(sideb_sound)
                 create_hitbox(7,25+facing*130,4.5+((temp=2)*5.5)+(special=1),0,17,7,sf_kick3,obj_spark_special2,1.4,0.8,3.5,18,self.id,15,2)
-                hitbox.armor_break = 1
+                super_armor = 2
                 hitbox.shake_ampl = 0.3
                 hitbox.hit_stun = 8
             }
@@ -144,7 +144,7 @@ if ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && can_
            if timer = 16 {
                 sound_play(sideb_sound)
                 create_hitbox(2,25+facing*130,5.5,2,13,9,sf_kick3,obj_spark_special2,1.4,0.8,3.5,18,self.id,12,2)
-                hitbox.armor_break = 1
+                super_armor = 2
                 hitbox.shake_ampl = 0.3
                 hitbox.hit_stun = 16
            }
@@ -155,7 +155,7 @@ if ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && can_
            if timer = 24 {
                 sound_play(sideb_sound)
                 create_hitbox(3,45+facing*90,4.5,2.5,13,9,sf_kick3,obj_spark_special2,1.4,0.8,3.5,18,self.id,12,2)
-                hitbox.armor_break = 1
+                super_armor = 2
                 hitbox.shake_ampl = 0.3
                 hitbox.hit_stun = 12
            }
@@ -171,6 +171,7 @@ if ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && can_
            if vspeed > 0.3 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
                 if ( spark > 0 && instance_exists ( spark ) ) with ( spark ) instance_destroy();
                 state_type="land";
+                
                 attack_type="none";
                 sprite_index = land_sprite;
 		image_index = 0;
@@ -203,7 +204,7 @@ if ( state_type = "run" || state_type = "stand" || state_type = "jump" ) && can_
 }
 }
         }
-if (attack_success & timer >= 15){
+if (attack_success & timer >= 13){
 
             target.direction = point_direction(target.x, target.y, x+ 10 * size * (1-facing*2), y - 10)  
 }
@@ -212,6 +213,7 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     coodown = 40
     attack_type = "none";
     state_type = "jump";
+    super_armor = 0
     timer = 0;
     time =-1;
     intangible = 0

@@ -1,0 +1,44 @@
+proj_destroy = 0
+absorb = 1  // This attack may be absorbed by PSI magnet
+if timer <= 1 && hit = 0 && sprite_index != attacker.b_beam_sprite2 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.bubble_sprite
+    image_index = 0;
+    image_speed = 0.2;
+    visible=0;
+    proj_hits = 1
+    goku = attacker
+}
+if attack_success = 1 && timer = time-1 && proj_hits <= max_hits-1 {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+visible=1
+image_blend =c_white
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.85)
+if timer = time-1 && proj_hits <= max_hits-1 {
+proj_hits+=1
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+if proj_hits = max_hits {
+    //damage = round(attacker.size*(4+attacker.kaioken*1))
+    bkb= attacker.size*(5.3+max_hits*0.3)
+    kbg = attacker.size*0
+    dir = 30+attacker.facing*120
+    //sprite_index = attacker.b_beam_sprite2;
+    image_index = 0
+    image_speed = 0.3
+    damage += attacker.size
+}
+timer = 0
+time = 6
+}
+if image_index >= image_number-image_speed {
+
+        image_speed = 0
+}
+if goku.attack_type != "b" || (goku.state_type!="air_attack" && goku.state_type!="attack")
+instance_destroy()
+

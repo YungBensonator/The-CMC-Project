@@ -1,0 +1,133 @@
+priority = 5;
+proj_destroy = 0
+moving_object=1;
+absorb = -1
+absorb2 = -1
+no_reflect = 1
+no_clash = 1
+parry_nodestroy = 1;
+ignore_physics = 1;
+
+if timer <= 1 && hit = 0 && temp = 0 {         // Initialize sprite and speed during frame 1
+    hspeed = 4 - self.id.facing*8
+    vspeed = 6
+    image_speed = 1;
+    visible =1
+    temp = 0
+    agumon = attacker
+    hits = 0
+}
+if hit = 0 && temp = 0 {
+    //vspeed = air*4
+    if is_on_floor(self) || collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+    hspeed = 0.1 - self.id.facing*0.2
+    vspeed = 0.2
+    speed = 0
+    sfx = fire2
+    temp = 1
+    timer = 0
+    hit=0
+    launch=0
+    target.hitby=0
+    bkb = 2 
+	}
+}
+if is_on_floor(self){
+        hspeed = 0.3 - self.id.facing*0.6
+    vspeed = 0.4
+}
+
+if ( temp == 0 && timer ==200 )
+  {
+  //instance_create(x,y,obj_spark_explode1)
+        sound_play(explode2)
+        hspeed = 0
+        vspeed = 0
+        proj = create_projectile(20,50+facing*80,7,7.4,15,12,fire2,obj_spark_fire1,1.5,1.5,-60,0,attacker.id,50,char_custom3);
+		proj.image_index = 0;
+		proj.x = x - 60 * (1-facing*2) * size;
+		proj.y = y - 30 * size;
+        proj.sprite_index = agumon.finalsmash_explosion_sprite
+		proj.image_xscale = 1.5 * (1-facing*2) * size;
+		proj.image_yscale = 1.5 * size;
+		instance_destroy()
+  }
+if hit!=0 && temp = 0 && instance_exists(agumon) && time < 200 {
+    if string(victim.state_type) != "shielding" {
+    hspeed = 0.3 - self.id.facing*0.6
+    vspeed = 0.4
+    sfx = fire2
+    temp = 1
+    timer = 0
+    hit=0
+    launch=0
+    target.hitby=0
+    bkb = 2 }
+    else {
+     sound_play(explode2)
+        hspeed = 0
+        vspeed = 0
+        proj = create_projectile(20,50+facing*80,7,7.4,15,12,fire2,obj_spark_fire1,1.5,1.5,-60,0,attacker.id,50,char_custom3);
+		proj.image_index = 0;
+		proj.x = x - 60 * (1-facing*2) * size;
+		proj.y = y - 30 * size;
+        proj.sprite_index = agumon.finalsmash_explosion_sprite
+		proj.image_xscale = 1.5 * (1-facing*2) * size;
+		proj.image_yscale = 1.5 * size;
+		instance_destroy()
+    }
+}
+if attack_success = 1 && timer = time {
+    time += 1
+    attack_success=2;
+    agumon.attack_hits-=1;
+}
+if timer >= time+1 && temp = 1 && hits < 10 {
+    hits+=1
+    hit=0
+    //facing = attacker.id.facing
+    hspeed = 0.3 - self.id.facing*0.6
+    vspeed = 0.4
+    launch=0
+    timer=0
+    time=200
+    target.hitby=0
+    image_speed = 1
+    damage = 1
+    bkb = 2 // 6
+    kbg = 0 // 8
+    dir = 80 + agumon.facing*20
+    hit_stun = 13
+    di = 0
+    if hits = 10 && instance_exists(agumon) {
+        sound_play(explode2)
+        hspeed = 0
+        vspeed = 0
+        proj = create_projectile(20,50+facing*80,7,7.4,15,12,fire2,obj_spark_fire1,1.5,1.5,-60,0,attacker.id,50,char_custom3);
+		proj.image_index = 0;
+		proj.x = x - 60 * (1-facing*2) * size;
+		proj.y = y - 30 * size;
+        proj.sprite_index = agumon.finalsmash_explosion_sprite
+		proj.image_xscale = 1.5 * (1-facing*2) * size;
+		proj.image_yscale = 1.5 * size;
+		instance_destroy()     
+     }
+}
+if hit > 0{
+hspeed = 0.3 - self.id.facing*0.6
+    vspeed = 0.4
+}
+
+if timer = 200 {
+    sound_play(explode2)
+        hspeed = 0
+        vspeed = 0
+        proj = create_projectile(20,50+facing*80,7,7.4,15,12/size,fire2,obj_spark_fire1,1.5,1.5,-60,0,attacker.id,50,char_custom3);
+		proj.image_index = 0;
+		proj.x = x - 60 * (1-facing*2) * size;
+		proj.y = y - 30 * size;
+        proj.sprite_index = agumon.finalsmash_explosion_sprite
+		proj.image_xscale = 1.5 * (1-facing*2) * size;
+		proj.image_yscale = 1.5 * size;
+		instance_destroy()
+}

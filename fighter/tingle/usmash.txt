@@ -1,0 +1,59 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "usmash";
+  image_speed = 0.3;
+  image_index = 0;
+  sprite_index = usmash_sprite;
+  timer = 0;
+  time = 37;
+  timer_speed = 1;
+  charge_frame = 3;
+  }
+if timer < time {
+	state_type = "attack";
+	if ( timer == 5 ) {
+		sound_play ( attack_voice5 );
+		sound_play ( swingsnd5 );
+		}
+	if timer > 5 && timer <= 8 {
+		shakey -= 3;
+		}
+	if timer = 9 {
+		create_hitbox(13,90,6.66,7.25,12,3,punch2,obj_spark_hit3,0.9,1.0,0,24,self.id,8,2);
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(27)+x,place_y(14)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+	if timer > 10 && timer <= 19 {
+		shakey += 1;
+		}
+	if ( timer == 20 )
+		sound_play ( swingsnd5 );
+	if timer > 20 && timer <= 22 {
+		shakey -= 4;
+		}
+	if timer = 22 {
+		create_hitbox(13,90,7.25,6.66,14,5,punch3,obj_spark_hit3,0.9,1.0,0,24,self.id,6,3);
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(27)+x,place_y(14)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+	if timer > 24 && timer <= 33 {
+		shakey += 1;
+		}
+	}
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

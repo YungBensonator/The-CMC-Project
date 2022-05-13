@@ -1,0 +1,147 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0;
+        sprite_index = utilt_tap_sprite;
+        image_index=0;
+        timer = 0;
+        time = 4;
+        timer_speed=1;
+		attacking=1
+		holdtemp=0
+		taptemp=0
+	canceltemp = 0;
+	attacktemp = 1
+	frametemp = 0;
+}
+	//hold-tap recognition
+	if timer=3 && attacking
+	{
+		sprite_index =utilt_hold_sprite
+		timer=44
+	}
+	if timer=3 && !attacking
+	{
+		sprite_index= utilt_tap_sprite	
+		timer=24
+	}
+	//framedata & hitbox stuff
+	//adjust if needed, i just made it work like it's supposed to lol
+	
+	//whoever's gonna edit these, don't forget to add sounds to it
+	
+	//9.06.2021 - this aged poorly
+	//8.24.2021 - Hey hello Context here I made it come out earlier so it's not as clunky. Not sure about the input stuff
+	if sprite_index = utilt_tap_sprite
+	{
+		time=36
+		switch(timer)
+		{
+			case 25: image_index=1; break;
+			case 26: image_index=2; break;
+			case 28: image_index=3; break;//hb1
+			case 29: image_index=4; break;
+			case 31: image_index=5; break;
+			case 33: image_index=6; break;
+		}
+		if timer =28
+		{
+			sound_play(attack_sound1);
+			create_hitbox ( 3 , 84+12*facing , 3 , 0 , 8 , 5 , sf_punch2 , obj_spark_special , 0.81 , 0.70 , 14.70 , 32.90 , self.id , 4 , priority );
+		}
+		if timer =29
+		{	
+			hitbox.image_xscale -=0.05*size
+			hitbox.hitbox_x -= ( 2.8*(1-facing*2) )* size
+			hitbox.hitbox_y += 0.7*size
+		}
+		if timer>=28 && timer <=33 
+		{
+			if attacking
+			{
+				holdtemp=1
+				taptemp=-1
+			}
+			else
+			{
+				holdtemp=-1
+				taptemp=1
+			}
+		}
+		if timer>=33 && attack_success && timer<=36
+		{
+			if attacking
+			{
+				
+				if holdtemp && taptemp=-1
+				{
+					sprite_index=utilt_hold_sprite
+					attacking=1
+					timer=44
+				}
+				if taptemp && holdtemp=-1
+				{
+					sprite_index=utilt_tap_sprite
+					attacking=0
+					timer=24
+				}
+			}
+		}
+		
+	}
+	
+	if sprite_index =utilt_hold_sprite
+	{
+		time=62
+		switch(timer)
+		{
+			case 45: image_index=1; break;
+			case 47: image_index=2; break;
+			case 49: image_index=3; break;
+			case 50: image_index=4; break;
+			case 52: image_index=5; break;//hb1
+			case 54: image_index=6; break;
+			case 56: image_index=7; break;
+			case 58: image_index=8; break;
+			case 60: image_index=9; break;
+		}
+		if timer = 52
+		{
+			sound_play(attack_sound1);
+			create_hitbox ( 7 , 80+20*facing , 6.4,4.2,12,7, sf_punch3 , obj_spark_special1 , 0.63 , 0.62 , 14 , 33.60 , self.id , 8 , 2 );
+		}
+		if timer = 54
+		{
+			hitbox.image_angle = ( 1 - facing * 2 ) * 323.13;
+			hitbox.image_xscale +=0.04*size
+			hitbox.hitbox_x -= (4.9*(1-facing*2))*size
+			hitbox.hitbox_y += 2.1*size
+		}
+		if timer = 56
+		{
+			hitbox.image_angle = 0
+			hitbox.image_xscale -=0.04*size
+			hitbox.hitbox_x += (4.9*(1-facing*2))*size
+			hitbox.hitbox_y -= 2.1*size
+		}
+	}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    attacking = 0
+    }
+if (hitbox.hit)
+{
+	frametemp = timer + cancel_frames;
+}
+
+		if ( air >= 0 && timer >= 0 && temp != -1 && (smash || special) && canceltemp && timer <= frametemp)
+      {
+    air_move = 0;
+    interrupt = 1;
+      }

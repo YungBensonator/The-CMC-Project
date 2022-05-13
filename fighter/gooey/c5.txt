@@ -1,0 +1,23 @@
+priority = 2
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+moving_object = 1;
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.usmashproj_sprite
+	   hspeed=4 - attacker.id.facing*8
+	   vspeed=-5
+    image_speed = 0
+    visible =1
+}
+    lebutt=after_image(3,c_white,0.5)
+    lebutt.number = 0
+if timer = time+1 && hit = 1 {
+attack_success=0
+timer = 0
+time = maxtime
+alarm[0] = maxtime
+hspeed=4 - attacker.id.facing*8
+vspeed=-5
+}
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || (is_on_floor(self) && vspeed >= 0)) && hit = 0
+instance_destroy()

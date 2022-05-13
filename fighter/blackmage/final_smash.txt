@@ -1,0 +1,73 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite; 
+        image_index=0;
+        timer = 0;
+        time = 320;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+}
+speed=0
+gravity_lock = 1;
+
+switch ( timer )
+    {
+	case 6: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 18: image_index = 2; break;
+	case 21: image_index = 3; break;
+	case 24: image_index = 2; break;
+	case 27: image_index = 3; break;
+	case 30: image_index = 2; break;
+	case 33: image_index = 3; break;
+	case 36: image_index = 2; break;
+	case 39: image_index = 3; break;
+	case 42: image_index = 2; break;
+	
+	
+	case 45: image_index = 4; break;
+	case 50: image_index = 5; break;
+	
+	case 240: image_index = 6; break;
+	case 264: image_index = 7; break;
+	case 270: image_index = 8; break;
+	case 300: image_index = 9; break;
+	
+    }
+    if timer = 15
+	     sound_play(ultima_sound);
+    
+
+	
+	if timer = 50{
+	create_projectile (3,90,2.4,1,-1,4,magic3,obj_spark_fire1,0.5-facing*1,0.5,0,0,self.id,2000,char_custom6);
+	proj.sprite_index = ultima_sprite;
+	proj.image_speed = 0.8;
+	proj.hitstun = 6
+	proj.di = 0;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.depth = depth-2
+	}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

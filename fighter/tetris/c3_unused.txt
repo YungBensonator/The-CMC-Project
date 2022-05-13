@@ -1,0 +1,179 @@
+// Final smash BG drawer.
+
+// Disable game pausing.
+obj_game_control.no_pause = 2;
+
+// Disable player tags.
+obj_game_control.please_no_tags = 2;
+
+// Destroy when the attacker isn't in a final smash state.
+if ( parent.attack_type != "final_smash" )
+{
+  instance_destroy();
+  exit;
+}
+
+// Bring the variables we'll need from the attacker over here.
+timer = parent.timer;
+timer2 = timer;
+facing = parent.facing;
+target = parent.target1;
+number = parent.number;
+
+// Destroy after a certain amount of time.
+if ( timer >= 500 )
+{
+  instance_destroy();
+  exit;
+}
+
+// Initialize variables we'll be using later.
+var a, b, c, d, xx, yy;
+
+// Set the background projection.
+d3d_set_projection_ortho ( 0 , 0 , 1280 , 720 , 0 );
+
+if ( timer2 >= 110 )
+{
+  // NEEDS BETTER DOCUMENTATION.
+  // Calculate the timer value.
+  // 500 (timer end) - 110 (timer start) = 390
+  // 0.5 (timer speed) * 390 = 195
+  // Timer stuff is fucky and I don't got a clear clue on how it works so deal with it.
+  timer = 110 + round ( ( timer - 110 ) / ( 195 / 390 ) );
+
+  // Initialize zoom variable.
+  if ( timer < 585 )
+    zoom = 10;
+
+  // Decrease zoom variable.
+  if ( timer >= 585 && zoom > 2.5 )
+    zoom -= 0.1;
+
+  // Draw main background for the final smash.
+  draw_set_color ( make_color_rgb ( 145 , 179 , 119 ) );
+  draw_rectangle ( 0 , 0 , 1280 , 720 , 0 );
+
+  // Set x and y positions for the final smash background elements, also slowly increase / decrease them.
+  xx = 640;
+  yy = 360 + ( timer - 110 ) * 0.2;
+
+  // Draw background elements for the final smash.
+  draw_sprite_ext ( parent.final_smash_background_sprite , 0 , xx , yy , 5 + zoom , 5 + zoom , 0 , c_white , 1 );
+
+  // Target stuff start.
+  if ( timer >= 150 )
+  {
+    // Set x and y positions of the target.
+    xx = 640;
+    yy = 960;
+
+    // Slowly raise up the target.
+    yy -= ( timer - 150 ) * 6;
+
+    // If the target's reached the center of the screen, stop them.
+    if ( yy <= 360 + target.actual_height * 4 ) yy = 360 + target.actual_height * 4;
+
+    // Set the target's palette.
+    with ( target )
+      palette_use();
+
+    // Draw the target blasting off.
+    if ( target.launched_sprite > 0 && timer < 315 )
+    {
+      // Change the target's image index within a certain speed.
+      a = floor ( ( timer - 150 ) / 5 ) ;
+      draw_sprite_ext ( target.launched_sprite , a , xx , yy , zoom * ( 1 - target.facing * 2 ) * ( target.xsize / 1.5 ) , zoom * ( target.ysize / 1.5 ) , 0 , c_white , 1 );
+    }
+    else
+      draw_sprite_ext ( target.flinch_sprite , 0 , xx , yy , zoom * ( 1 - target.facing * 2 ) * ( target.xsize / 1.5 ) , zoom * ( target.ysize / 1.5 ) , 0 , c_white , 1 );
+
+    // Reset palettes.
+    palette_reset();
+  }
+  // Target stuff end.
+
+  // Falling blocks start.
+  if ( timer >= 315 && timer < 585 )
+  {
+    // Set x and y positions of the blocks.
+    if ( timer < 345 )
+    {
+      xx = 640;
+      yy = -240 + ( timer - 315 ) * 60;
+    }
+    if ( timer >= 345 && timer < 375 )
+    {
+      xx = 320;
+      yy = -240 + ( timer - 345 ) * 60;
+    }
+    if ( timer >= 375 && timer < 405 )
+    {
+      xx = 960;
+      yy = -240 + ( timer - 375 ) * 60;
+    }
+    if ( timer >= 405 && timer < 435 )
+    {
+      xx = 160;
+      yy = -240 + ( timer - 405 ) * 60;
+    }
+    if ( timer >= 435 && timer < 465 )
+    {
+      xx = 640;
+      yy = -240 + ( timer - 435 ) * 60;
+    }
+    if ( timer >= 465 && timer < 495 )
+    {
+      xx = 1120;
+      yy = -240 + ( timer - 465 ) * 60;
+    }
+    if ( timer >= 495 && timer < 525 )
+    {
+      xx = 960;
+      yy = -240 + ( timer - 495 ) * 60;
+    }
+    if ( timer >= 525 && timer < 555 )
+    {
+      xx = 320;
+      yy = -240 + ( timer - 525 ) * 60;
+    }
+    if ( timer >= 555 )
+    {
+      xx = 640;
+      yy = -240 + ( timer - 555 ) * 60;
+    }
+    // Draw the blocks.
+    draw_sprite_ext ( parent.final_smash_sprite2 , 0 , xx , yy , 5 , 5 , 0 , c_white , 1 );
+  }
+  // Falling blocks end.
+
+  // Set the background projection for the filter.
+  d3d_set_projection_ortho ( 0 , 0 , 320 , 180 , 0 );
+
+  // Draw the filter.
+  draw_sprite_ext ( parent.final_smash_filter_sprite , 0 , 0 , 0 , 1 , 1 , 0 , c_white , 0.5 );
+
+  // Set the background projection.
+  d3d_set_projection_ortho ( 0 , 0 , 1280 , 720 , 0 );
+
+  // Draw black bars at the top and bottom of the screen.
+  if ( timer < 121 )
+  {
+    a = 1 - ( timer - 110 ) * 0.1;
+    draw_set_color ( c_black );
+    draw_set_alpha ( a );
+    draw_rectangle ( 0 , 0 , 1280 , 720 , 0 );
+    draw_set_alpha ( 1 );
+    draw_rectangle ( 0 , 0 , 1280 , 64 + a * 296 , 0 );
+    draw_rectangle ( 0 , 656 - a * 296 , 1280 , 720 , 0 );
+  }
+  else
+  {
+    draw_set_color ( c_black );
+    draw_rectangle ( 0 , 0 , 1280 , 64 , 0 );
+    draw_rectangle ( 0 , 656 , 1280 , 720 , 0 );
+  }
+}
+
+// Put the game back into it's usual rendering groove after d3d_set_projection_ortho.
+d3d_set_projection_ortho ( view_xview[0] , view_yview[0] , view_wview[0] , view_hview[0] , view_angle[0] );

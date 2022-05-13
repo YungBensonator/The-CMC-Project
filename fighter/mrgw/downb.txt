@@ -1,0 +1,274 @@
+if global.gs_form[number-1] = 0{
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "jump" || state_type = "stand" || state_type = "crouch" )
+  {
+    special = 1;
+    attacking = 0;
+    timer = 0;
+    air_move = 0;
+    attack_type = "downb";
+    if ( air > 0 )
+	state_type = "air_attack";
+    else
+	state_type = "attack";
+    sprite_index = downb_start_sprite;
+    image_speed = 0;
+    image_index = 0;
+    time = 38;
+    timer_speed = 1;
+    temp = 0;
+    if ( air = 0 )
+	hspeed = 0;
+    else
+      {
+	vspeed = -0.5;
+	hspeed *= 0.4;
+      }
+    if ( temp3 >=3 )
+      {
+	timer = 100
+	time = 165
+	sprite_index = downb_release_sprite
+	intangible = 1
+      }
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 50: case 60: image_index += 1; break;
+      }
+    if ( timer = 6 )
+      {
+	sound_play( dsmash_voice );
+	sprite_index = downb_hold_sprite;
+      }
+    if ( timer = 12 && ai && random(16) > 9 )
+	special = 0;
+    if ( timer >= 6 && timer <= 24 )
+      {
+	temp = instance_nearest( x + 9 * ( 1 - facing * 2 ) * size , y - 10 * size , projectile_box )
+	if ( sprite_index == downb_hold_sprite )
+	    image_index = temp3;
+	if ( temp.attacker != self.id && temp.absorb == 1 && distance_to_object(temp) < 8 * size && ( ( temp.x > x && facing == 0 ) || ( temp.x < x && facing == 1 ) ) && temp.hit != 2 )
+	  {
+	    temp.hit = 1;
+	    temp.launch = 0;
+	    temp.time = temp.hitlag_frames+2;
+	    temp.attack_success = 1;
+	    temp2 += temp.damage;
+	    temp3 += 1;
+	    if ( percent < 0 )
+		percent = 0;
+	    with (temp) instance_destroy();
+	    sound_play( dsmash_voice );
+	    timer = 7;
+	    time = 40;
+	    flashing = true;
+	    alarm[7] = 6;
+	    sprite_index = downb_absorb_sprite;
+	    image_index = min (6,temp3*2);
+	    intangible = 1;
+	  }
+	if ( temp.attacker != self.id && !temp.absorb && global.gs_form[number-1] = 0 && distance_to_object(temp) < 24 * size && ( ( temp.x > x && facing == 0 ) || ( temp.x < x && facing == 1 ) ) )
+	  {
+		proj = create_projectile(0,361,0,0,0,0,-1,-1,4,4,24,10,self.id,30,char_custom5);
+		proj.reflect = 1;
+		proj.hit = 2;
+	  }
+	if collision_rectangle(x-7,y,x+7,y-14,grab_box,1,1) && air = 0 || collision_rectangle(x-7,y,x+7,y-14,attack_box,1,1)
+	    intangible = 0;
+      }
+    if ( timer = 24 )
+      {
+	if ( special = 0 || temp3 >=3 )
+	    sprite_index = downb_end_sprite;
+	else
+	    timer = 7;
+      } 
+    if ( ( ( timer = time - 12 ) && ( time = 40 ) ) || timer = 141 )
+	intangible = 0;
+    if ( timer = 102 )
+      {
+	sound_play( ssmash_voice );
+	sprite_index = downb_release_sprite;
+	if ( temp2 > 62.5 )
+	    temp2 = 62.5
+	oil = create_projectile(10 + round(temp2*0.8)/size,30+facing*120,5.75 + temp2*0.05,5.75 + temp2*0.075,12 + ceil(temp2*0.9),6 + round((temp2/3)/size),kick3,obj_spark_hit3,0.9,0.9,24,16,self.id,29,char_custom2);
+	oil.use_palette = number;
+	temp3 = 0
+	temp2 = 0
+	intangible = 0
+      }
+    if ( timer = 112 || timer = 122 )
+	sound_play( ssmash_voice );
+    if ( timer > 102 && timer < 135 && instance_exists(oil) )
+      {
+	oil.x += hspeed;
+	oil.y += vspeed;
+      }
+    if ( state_type = "air_attack" && air = 0 )
+      {
+	air_move = 0;
+	hspeed = 0;
+      }
+    if ( timer < 100 )
+      {
+	if moveright = 1 facing = 0;
+	if moveleft = 1 facing = 1;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+    special = 0;
+  }
+}
+if global.gs_form[number-1] = 1{
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "jump" || state_type = "stand" || state_type = "crouch" )
+  {
+    special = 1;
+    attacking = 0;
+    timer = 0;
+    air_move = 0;
+    attack_type = "downb";
+    if ( air > 0 )
+	state_type = "air_attack";
+    else
+	state_type = "attack";
+    sprite_index = downb_start_sprite2;
+    image_speed = 0;
+    image_index = 0;
+    time = 38;
+    timer_speed = 1;
+    temp = 0;
+    if ( air = 0 )
+	hspeed = 0;
+    else
+      {
+	vspeed = -0.5;
+	hspeed *= 0.4;
+      }
+    if ( temp3 >=3 )
+      {
+	timer = 100
+	time = 165
+	sprite_index = downb_release_sprite2
+	intangible = 1
+      }
+    image_angle = 0;
+  }
+
+if ( timer < time )
+  {
+    if ( timer = 6 )
+      {
+	sound_play( dsmash_voice );
+	sprite_index = downb_hold_sprite2;
+      }
+    if ( timer = 12 && ai && random(16) > 9 )
+	special = 0;
+    if ( timer >= 6 && timer <= 24 )
+      {
+	temp = instance_nearest( x + 9 * ( 1 - facing * 2 ) * size , y - 10 * size , projectile_box )
+	if ( sprite_index == downb_hold_sprite2 )
+	    image_index = temp3;
+	if ( temp.attacker != self.id && temp.absorb == 1 && distance_to_object(temp) < 8 * size && ( ( temp.x > x && facing == 0 ) || ( temp.x < x && facing == 1 ) ) && temp.hit != 2 )
+	  {
+	    temp.hit = 1;
+	    temp.launch = 0;
+	    temp.time = temp.hitlag_frames+2;
+	    temp.attack_success = 1;
+	    temp2 += temp.damage;
+	    temp3 += 1;
+	    if ( percent < 0 )
+		percent = 0;
+	    with (temp) instance_destroy();
+	    sound_play( dsmash_voice );
+	    timer = 7;
+	    time = 40;
+	    flashing = true;
+	    alarm[7] = 6;
+	    sprite_index = downb_absorb_sprite2;
+	    image_index = min (9,temp3*3);
+	    intangible = 1;
+	  }
+	if ( temp.attacker != self.id && !temp.absorb && global.gs_form[number-1] = 0 && distance_to_object(temp) < 24 * size && ( ( temp.x > x && facing == 0 ) || ( temp.x < x && facing == 1 ) ) )
+	  {
+		proj = create_projectile(0,361,0,0,0,0,-1,-1,4,4,24,10,self.id,30,char_custom5);
+		proj.reflect = 1;
+		proj.hit = 2;
+	  }
+	if collision_rectangle(x-7,y,x+7,y-14,grab_box,1,1) && air = 0 || collision_rectangle(x-7,y,x+7,y-14,attack_box,1,1)
+	    intangible = 0;
+      }
+    if ( timer = 24 )
+      {
+	if ( special = 0 || temp3 >=3 )
+	    sprite_index = downb_start_sprite2;
+	else
+	    timer = 7;
+      } 
+    if ( ( ( timer = time - 12 ) && ( time = 40 ) ) || timer = 141 )
+	intangible = 0;
+    if ( timer = 102 )
+      {
+	sound_play( ssmash_voice );
+	sprite_index = downb_release_sprite2;
+	if ( temp2 > 62.5 )
+	    temp2 = 62.5
+	oil = create_projectile(10 + round(temp2*0.8)/size,30+facing*120,5.75 + temp2*0.05,5.75 + temp2*0.075,12 + ceil(temp2*0.9),6 + round((temp2/3)/size),kick3,obj_spark_hit3,0.9,0.9,24,16,self.id,29,char_custom2);
+	oil.use_palette = number;
+	temp3 = 0
+	temp2 = 0
+	intangible = 0
+      }
+    if ( timer = 112 || timer = 122 )
+	sound_play( ssmash_voice );
+    if ( timer > 102 && timer < 135 && instance_exists(oil) )
+      {
+	oil.x += hspeed;
+	oil.y += vspeed;
+      }
+    if ( state_type = "air_attack" && air = 0 )
+      {
+	air_move = 0;
+	hspeed = 0;
+      }
+    if ( timer < 100 )
+      {
+	if moveright = 1 facing = 0;
+	if moveleft = 1 facing = 1;
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+    special = 0;
+  }
+}

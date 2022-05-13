@@ -1,0 +1,102 @@
+if state_type = "jump" || state_type = "stand" || state_type = "crouch" {
+    if looped > 0
+      {
+      attack_type = "none";
+      exit;
+      }
+    special = 1
+    attacking = 0
+    intangible = 0
+    timer = 0
+    air_move=0
+    attack_type = "downb"
+    if air > 0
+    state_type = "air_attack"
+    else
+    state_type = "attack"
+    image_speed = 0.2
+    sprite_index = downb_sprite
+    image_index=0
+    time = 38
+    timer_speed=1
+    temp=0
+    hspeed =0
+    looped = 0
+    //if air != 0
+    //vspeed= -0.5 
+}
+    //if timer < 16 && vspeed > 0.5
+    //vspeed = 0.5
+    if timer = 5 {
+        if temp = 0 {
+            image_index = 1
+            sound_play(downb_sound)
+            sound_play(downb_voice)
+            //intangible = 1 
+        }
+        create_hitbox(5,70+facing*40,5.8,1.5,12,6,magic3,obj_spark_shock,1.9,1.3,1,17,self.id,17,5)
+        hitbox.reflect = 1
+        hitbox.hit_stun = 6
+        hitbox.critical_chance = 0.85
+	super_armor = 1;
+	armor_frames = 6;
+        downb_lastvictim = noone;
+        downb_lastpercent = percent;
+        if air = 0 {
+            duster = instance_create(x+(22-facing*44)*size,y,obj_dust_effect)
+            duster.facing = 1-facing
+            duster.image_alpha = 0.75
+            duster = instance_create(x-(22-facing*44)*size,y,obj_dust_effect)
+            duster.facing = facing
+            duster.image_alpha = 0.75
+        }
+    }
+    if timer = 9 {
+        hitbox.hit = 2
+        intangible = 0
+    }
+    if timer = 20 && ( ( !ai && special ) || ( ai && random ( 7 ) < 1 ) ) && looped < 10 {
+        timer -= 10;
+        hitbox . timer -= 10;
+        looped += 1;
+        image_index = 2;
+    }
+    if ( timer == 21 )
+      {
+      armor_frames = 1;
+      }
+    if image_index >= image_number-image_speed {
+        image_speed = 0
+    }
+fast_fall = 0
+fast_fall_temp = 0
+if ( timer >= 5 && timer <= 20 )
+  {
+  super_armor = 1;
+  armor_frames = 6;
+  if ( timer == 8 )
+    {
+    spark = instance_create ( x , y - actual_height * 0.5 , obj_spark_shockwave );
+    spark.image_blend = c_fuchsia;
+    spark.image_yscale *= 0.5;
+    }
+  if ( downb_lastpercent < percent )
+    {
+    last_attacking_enemy.percent += percent - downb_lastpercent;
+    downb_lastpercent = percent;
+    }
+  if ( downb_lastpercent > percent )
+    {
+    downb_lastpercent = percent;
+    }
+  }
+if timer >=time-1 {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type ="jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+}

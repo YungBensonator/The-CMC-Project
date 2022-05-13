@@ -1,0 +1,64 @@
+// THOSE DUCK ARE EVOL
+// EAT BRAINS OUT
+timer = 0;
+time = 800;
+alarm [ 0 ] = -1;
+depth = -5;
+directio = choose(1,0)
+if ( die > 0 )
+  {
+  if ( die > 1 )
+    {
+    sound_play ( attacker . duckfall_sound );
+    sprite_index = attacker . final_ducks3_sprite;
+    image_index = 0;
+    die = 1;
+    }
+  image_index += 0.5;
+  if ( image_index == 6 ) image_alpha = 0.5;
+  if ( image_index == 7 ) instance_destroy();
+  exit;
+  }
+if ( distance < 128 ) distance += 4;
+facing = 0;
+if ( direction > 0 && direction < 180 ) facing = 1;
+if ( direction >= 360 ) direction -= 360;
+image_xscale = 1 - facing - facing;
+target = attacker . target;
+if ( target <= 0 )
+  {
+  sprite_index = attacker . final_ducks_sprite;
+  image_speed = 0.5;
+  x = ( x * 3 + attacker . x + lengthdir_x ( distance , direction ) ) / 4;
+  y = ( y * 3 + attacker . y + lengthdir_y ( distance , direction ) ) / 4;
+  direction += 9;
+  if ( !instance_exists ( proj ) )
+    {
+    create_homing_bubble ( 7 , 7 , 0 , 0 , attacker . id , 2 );
+    }
+  }
+  else
+  {
+  sprite_index = attacker . final_ducks2_sprite;
+  image_speed = 0;
+  if ( quack <= 0 )
+    {
+    with ( attacker )
+    create_hitbox( 6 , 24 + directio * 132 , 2.5 , 0 , 5 , 2 , punch3 , obj_spark_hit3 ,
+      1.5 , 1.5 , last_claydisc . x - x , y - last_claydisc . y , self . id , 2 , 1 );
+    image_index = 1;
+    sound_play ( attacker . duck_sound );
+    quack = 30;
+    directio = 1 - directio
+    }
+  if ( quack == 25 ) image_index = 0;
+  quack -= 1;
+  if ( !instance_exists ( target ) )
+    target = noone;
+    else
+    {
+    x = ( x * 11 + target . x ) / 12;
+    y = ( y * 11 + target . y ) / 12;
+    }
+  }
+attacker . target = target;

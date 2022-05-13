@@ -44,19 +44,19 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
 		image_speed = 0;
                 vspeed = -5.5*size
 		}
-            if timer = 8 || timer = 10 || timer = 12 || timer = 14 || timer = 16 {
+            if timer = 8 || timer = 9 || timer = 10 || timer = 11 || timer = 12 {
                 hspeed = (3 - facing*6)*size;
-                vspeed -= 0.15*size*grav/0.25;
-                create_hitbox(1,65+facing*50,6.8,0,4,4,coin,obj_coin_spark,0.8,0.8,3,23,self.id,1,3);
-                hitbox.di = 0.3
+                vspeed -= 0.25*size*grav/0.25;
+                create_hitbox(1,angle_correct(65),7.2,0,4,4,coin,obj_coin_spark,0.8,0.95,3,23,self.id,1,3);
+                hitbox.di = -1
                 hitbox.weight_kb = 1
             }
             if timer = 6 || timer = 7 {
                 vspeed = size*(-11.25);
                 hspeed = (4 - facing*8)*size
             }
-            if timer = 17 {
-                 create_hitbox(3,50+facing*80,7.5,4.75,5,6,coin,obj_coin_spark,0.8,0.8,4,23,self.id,3,3);
+            if timer = 13 {
+                 create_hitbox(3,angle_correct(52),5.5,6.75,5,6,coin,obj_coin_spark,0.8,0.8,4,23,self.id,3,3);
                  hitbox.shake_ampl = 0.6
                  hitbox.hit_stun = 4
                  hspeed *= 0.8
@@ -66,13 +66,19 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
 		image_index = 5;
 		image_speed = 1/3;
 		}
-            if timer < 15 && frac(timer/2) = 0
+            if timer < 14 && frac(timer/2) = 0
                 after_image(4,c_white,0.5)
 	if timer = 20 {	
 	moveleft = 0;
 	moveright = 0;
 	movejump = 0;
 	}
+
+        if (attack_success && timer < 13 && target.air > 0.5){
+		            target.speed = speed - 0.8
+		            target.direction = point_direction(target.x,target.y,x,y)
+	}
+
 	if timer >= 21 && timer <= 27 && superwalljump = 1 {
         if ( next_to_rwall && ( movejump || moveleft ) && walljump_lock != 0 )
           {
@@ -107,7 +113,7 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
 
 
             if (timer >= 17){
-if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
 				if ((target.weight <= .22 && target.percent > 95) || (target.weight > .22 && target.weight < .3 && target.percent > 105) || (target.weight > .3 && target.percent > 105)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;

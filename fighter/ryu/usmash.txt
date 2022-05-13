@@ -1,0 +1,129 @@
+absorb = 0;
+reflect = 0;
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "usmash";
+        image_speed = 0.45;
+        sprite_index = usmash_sprite;
+        image_index=0.05;
+        timer = 0;
+        time = 49;
+        timer_speed=1;
+        charge_frame = 7
+		cbtemp = 0;
+	canceltemp = 0;
+	attacktemp = 1
+	frametemp = 0;
+}
+     if timer < time {
+	if attack_success || attack_shielded
+	canceltemp = 1
+	if !attacking && timer > 8 && sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52
+	attacktemp = 0
+             state_type = "attack";
+            if timer = 8 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+		shakex = 2*(1-facing*2);
+            }
+	    if timer = 9
+		shakex = 3*(1-facing*2);
+            if timer = 11 {
+		shakex = 5*(1-facing*2);
+		image_xscale *= 1.1;
+		image_yscale *= 1.1;
+		image_speed = 0.225;
+                sound_play(usmash_voice);
+                sound_play(usmash_sound);
+                create_hitbox(8,80+facing*20,4,7.8,5,10,sf_punch3,obj_spark_special2,0.3,1,12,35,self.id,7,3); 
+				 hitbox.charge_dmg = 1
+				 hitbox.charge_kbg = 0.9
+                }
+            if timer = 16 {
+            proj.damage = 3
+            proj.bkb = 3
+			hitbox.damage = 3
+            hitbox.bkb = 3
+            }
+	if timer = 18
+		shakex = 3*(1-facing*2);
+	if timer = 20
+		shakex = 2*(1-facing*2);
+	if timer = 21
+		shakex = 1*(1-facing*2);
+        if timer = 30 {
+            image_speed = 0
+            }
+	if timer = 33
+		shakex = 0;
+	if timer <= 31 && canceltemp {
+	if sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52 {
+	/*if special > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		interrupt = 1
+		else
+	    char_b();
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    if (moveleft[1] >0) || (moveright[1] > 0)
+	    char_smashb();
+		else
+	    char_sideb();
+	  }*/
+}
+}
+else
+sftemp_timer = 0
+	if timer = time-1
+	attacking = 0
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    attacking = 0
+    }
+if (hitbox.hit)
+{
+	frametemp = timer + cancel_frames;
+}
+        
+if ( air >= 0 && timer >= 11 && temp != -1 && (special || taunt ) && canceltemp && timer <= frametemp)
+      {
+    air_move = 1;
+    interrupt = 1;
+      } 
+	  
+if ( proj.hit = 1 )
+      {
+		cbtemp = 1;
+      }

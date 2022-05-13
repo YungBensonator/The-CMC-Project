@@ -1,0 +1,51 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0.3;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 30;
+        timer_speed=1;
+        attacking = 0;
+}
+state_type = "attack";
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer = 10 {
+    sound_play(ssmash_sound)
+    create_hitbox(3,160-facing*140,3,0,5,3,slash1,obj_spark_slash2,1.1,0.6,35,19,self.id,3,2);
+	hitbox.di = 0.5;
+    hitbox.hit_stun = -2;
+    hitbox.critical_chance = 0
+    hitbox.weight_kb = 1;
+    sound_play(attack_voice4)
+}
+if timer = 17 {
+    sound_play(swing_sound1)
+    create_hitbox(3,160-facing*140,3.5,0,5,3,kick2,obj_spark_hit2,1.6,0.55,40,13,self.id,3,2);
+	hitbox.di = 0.5;
+    hitbox.hit_stun = -2;
+    hitbox.critical_chance = 0
+    hitbox.shield_stun = 0.75
+    hitbox.weight_kb = 1;
+}
+if timer = 24 {
+    image_speed = 0.18
+    sound_play(swing_sound1)
+    create_hitbox(3,160-facing*140,2,0,5,3,kick2,obj_spark_hit2,1.2,0.55,34,13,self.id,3,2);
+    hitbox.hit_stun = 4;
+    hitbox.critical_chance = 0
+    hitbox.shield_stun = 0.75
+    hitbox.weight_kb = 1;
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,52 @@
+if ( state_type = "edge" )
+  {
+    state_type = "attack";
+    attack_type = "edge_attack";
+	if percent < 100
+        timer = 0;
+	else {
+	timer = -10 }
+    time = 45;
+    sprite_index = edge_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	intangible = 1;
+  }
+
+switch ( timer )
+  {
+  case 4: image_index = 1; break;
+  case 8: image_index = 2; break;
+  case 12: image_index = 3; break;
+  
+  case 16: sprite_index = edge_attack_sprite; image_index = 0; break;
+  case 20: image_index = 1; break;
+  case 27: image_index = 2; break;
+  case 31: image_index = 3; break;
+  }
+
+    if ( timer = -10 )
+	instance_create(x-size,y+size,obj_spark_effect);
+
+// Intangible MUST end 3 frames before the attack starts
+if ( timer == 17 )
+  intangible = 0;
+
+if ( timer == 20 )
+  {
+  sound_play(attack_sound2);
+  create_hitbox( 8 , 27+facing*126 , 6.5 , 2.5 , 11 , 6 , kick2 , obj_spark_hit2 , 1.04 , 0.73 , 20.80 , 11.20 , self.id , 6 , 3 );
+  }
+
+if ( timer < 10 )
+  please_shadow = -1;
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+	sprite_index = stand_sprite;
+    timer = 0;
+    time = -1;
+  }

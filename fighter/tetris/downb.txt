@@ -1,0 +1,106 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )and !instance_exists(gaia)
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 40;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  //sprite_index = stand_sprite;
+  //image_index = 0;
+  //image_speed = 0;
+  //timer_speed = 1;
+  special = 1
+  
+  if air = 0
+  vspeed = -6.5
+  
+  }
+
+if timer < time{
+	
+	if timer >= 12{
+		air_move = 0
+		hspeed = 0
+	}
+	
+	if air > 0 and timer >= 12 and timer <= 21{
+		vspeed = 0
+		gravity = 0
+		gravity_lock = 1
+	}
+	
+	/*
+	
+	
+	if timer < 30 and timer mod 5
+	flashing = 1
+	else
+	flashing = 0
+    */
+	
+	if timer = 12{
+	    sound_play(downb_sound);
+		temp = -5
+		if facing = 1
+		temp = -6
+	    gaia = create_projectile(3,90+facing*0,00,00,20,21,kick2,obj_spark_hit1,0,0,temp,0,self.id,90,char_custom2);
+	    gaia.sprite_index = gaia_summon_sprite
+		gaia.image_index = 0
+		gaia.image_speed = 0.2
+		gaia.image_xscale = image_xscale
+		gaia.image_yscale = image_yscale
+		gaia.state = 0 //moving
+		gaia.image_alpha = 0
+		gaia.weight_kb = 1
+		gaia.hit = 2
+		gaia.sdi = 0
+		gaia.di = 0
+    }
+	if timer = 21
+		sound_play(attack_sound4);
+	if timer >= 21{
+		image_index = 0
+		image_speed = 0;
+		sprite_index = downb_sprite
+		vspeed = 9.5
+		
+		if timer = 30 and air != 0{
+			timer = 24
+		}
+		
+		if air = 0 and timer <= 30
+		timer = 31
+		
+		
+		if timer = 31{
+			gaia.alpha_add = -0.05
+			create_hitbox(7,angle_correct(65),5.5,5.5,20,15,kick3,obj_spark_hit1,4.1,0.2,-10,05,self.id,3,4);
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+if ( timer >= time - 1 )
+  {
+with (gaia){instance_destroy()}
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

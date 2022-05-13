@@ -1,0 +1,74 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        grab_edge = 0;
+	special = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        air_move=0
+        image_speed = 0.2;
+        sprite_index = crash_start_sprite;
+        image_index=0;
+        timer = 1;
+        time = 194;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        sound_play(crash_sound)
+        //sound_play(crash_sound)
+        //sound_play(crash_sound)
+        background_blend=c_dkgray
+        smash_power = 0
+}
+speed = 0
+gravity_lock = 1;
+intangible = 1
+if timer < time {
+    if timer = 10 {
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 180 }
+    if timer = 36 image_speed = 0;
+    if timer = 60 {
+        instance_create(x,y,obj_shakescreen)
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        spark = instance_create(x,y,obj_spark)
+        spark.sprite_index = crash_explode_sprite
+        spark.image_speed = 0.5
+        }
+    if timer > 60 && timer < 175 && random(30)>20 { 
+        spark = instance_create(x-300+random(601),y+260-random(541),obj_spark)
+        spark.sprite_index = crash_explode_sprite
+        spark.image_speed = 0.5
+        spark.image_xscale = 1
+        spark.image_yscale = 1
+        }
+    if timer > 60 && timer < 175 && random(26)>22 { 
+        spark2 = instance_create(x-200+random(401),y+160-random(361),obj_spark)
+        spark2.sprite_index = crash_fly_sprite
+        spark2.number = number;
+        spark2.image_speed = 0.1
+        spark2.speed = 12
+        spark2.direction = 20*random(18)
+        spark2.image_angle = spark2.direction
+        spark2.image_xscale = 0.9
+        spark2.image_yscale = 0.9
+        instance_create(x,y,obj_shakescreen)
+        }
+    if timer = 191 {
+        create_hitbox(38,60+facing*60,8.6,8.4,-1,10,fire3,obj_spark_fire1,30,30,0,15,self.id,3,6);
+        hitbox.shake_ampl = 0
+        instance_create(0,0,obj_flashscreenred)
+    }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1; }

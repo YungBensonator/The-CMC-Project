@@ -1,0 +1,76 @@
+// Pikmin order update - count out dead Pikmin, update newest available Pikmin.
+
+//debug_message ( "ACTION!! CYCLE!!" );
+
+var i, a, u, m, pikminnum;
+pikminnum = 0;
+
+// Update the number of Pikmin and remove dead Pikmin from the list.
+
+for ( i = 0 ; i < 4 ; i += 1 )
+  {
+  a = 0;
+  if ( pikmin[i] > 0 )
+    {
+    if ( instance_exists ( pikmin[i] ) )
+      {
+      a = 1;
+      pikminnum += 1;
+      }
+    }
+  if ( a == 0 )
+    {
+    for ( u = i + 1 ; u < 4 ; u += 1 )
+      pikmin[u-1] = pikmin[u];
+    pikmin[3] = 0;
+    }
+  }
+
+// Shift unavailable Pikmin to the end of queue.
+
+if ( attack_type != "none" ) exit;
+
+m = pikminnum;
+
+for ( i = 0 ; i < m - 1 ; i += 1 )
+  {
+  if ( pikmin[i].state != 1
+    || point_distance ( pikmin[i].x , pikmin[i].y , pikmin[i].target_recordx , pikmin[i].target_recordy ) > 48 )
+    {
+    a = pikmin[i];
+    for ( u = i ; u < pikminnum-1 ; u += 1 )
+      {
+      pikmin[u] = pikmin[u + 1];
+      }
+    pikmin[pikminnum-1] = a;
+    m -= 1;
+    }
+  }
+
+// Update Pikmin queue positions.
+
+for ( i = 0 ; i < pikminnum ; i += 1 )
+  {
+  pikmin[i].follow_lag = 3 + 5 * i;
+  }
+  
+// Check if Pikmin are available.
+
+pikmin_available = 0;
+
+if ( pikmin[0] > 0 )
+if ( pikmin[0].state == 1 )
+if ( point_distance ( pikmin[0].x , pikmin[0].y , pikmin[0].target_recordx , pikmin[0].target_recordy ) < 48 )
+  {
+  pikmin_available = 1;
+  }
+  else
+  {
+  exit;
+  }
+if ( pikmin[1] > 0 )
+if ( pikmin[1].state == 1 )
+if ( point_distance ( pikmin[1].x , pikmin[1].y , pikmin[1].target_recordx , pikmin[1].target_recordy ) < 48 )
+  {
+  pikmin_available = 2;
+  }

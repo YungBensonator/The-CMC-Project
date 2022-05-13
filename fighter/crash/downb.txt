@@ -1,0 +1,256 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 40;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = down_b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+  aim = 2;
+  }
+if movedowntemp > 0
+movedowntemp -= 1
+if movedowntemp = 0 && movedown = 0
+movedowntemp = -1
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  exit;
+  }
+
+if ( air == 0 ) { hspeed *= 0.9; air_move = 0; } else air_move = 1;
+
+if ( temp == 0 )
+  {
+  switch ( timer )
+    {
+    case 2: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 6: image_index = 3; break;
+    case 8: image_index = 4; break;
+    case 10: image_index = 5; break;
+    case 14: shakey += 1; shakex -= size * ( 1 - facing * 2 ); break;
+    case 18: shakey += 2; shakex -= size * ( 1 - facing * 2 ); break;
+    case 22: case 15: case 16: shakey -= 1; shakex -= size * ( 1 - facing * 2 ); break;
+    }
+  if ( timer >= 15 )
+    {
+    temp = 1;
+    timer = 0;
+    time = 6;
+    spark = instance_create ( x , y , obj_spark );
+    spark.depth = -9;
+    spark.image_speed = 0;
+    spark.alarm[0] = 3;
+    spark.image_xscale = 0.5;
+    spark.image_yscale = 0.5;
+    spark.image_alpha = 0;
+    spark.sprite_index = down_b_aimer;
+    }
+  exit;
+  }
+
+if ( temp == 1 )
+  {
+  timer = 0;
+  time = 6;
+  shakex = 0;
+if !moveup && !movedown && facing = 0 && moveleft && !moveright
+facing = 1
+if !moveup && !movedown && facing = 1 && moveright && !moveleft
+facing = 0
+  if ( moveup )
+    {
+    if ( moveright || moveleft )
+      {
+      if ( aim < 4 ) aim += 0.0625;
+      }
+      else
+      {
+      if ( aim < 4 ) aim += 0.125;
+      }
+    }
+  if ( movedown )
+    {
+if movedowntemp = -1
+movedowntemp = 2
+    if ( moveright || moveleft )
+      {
+      if ( aim > 0 ) aim -= 0.0625;
+      }
+      else
+      {
+      if ( aim > 0 ) aim -= 0.125;
+      }
+    if ( special ) && movedowntemp > 0
+      {
+      temp = 2;
+      sprite_index = down_b_sprite;
+      image_index = 5;
+      image_speed = 0;
+      special = 0;
+      timer = 0;
+      time = 20;
+      exit;
+      }
+    }
+	roundaim=round(aim)
+	switch(roundaim)
+	{
+		case 0: aimdir=275-10*facing; break
+		case 1: aimdir=355-170*facing; break
+		case 2: aimdir=20+140*facing; break
+		case 3: aimdir=45+90*facing; break
+		case 4: aimdir=85+10*facing; break
+	}
+if shieldup
+      {
+      temp = 2;
+      sprite_index = down_b_sprite;
+      image_index = 5;
+      image_speed = 0;
+      special = 0;
+      timer = 0;
+      time = 8;
+      exit;
+      }
+  if ( special || attacking )
+    {
+		
+    sound_play(downb_shoot_sound);
+    attacking = 0;
+    special = 0;
+    temp = 4;
+    timer = 0;
+    time = 63;
+	
+    sprite_index = down_b_shoot_sprite[round(aim)];
+    image_index = 0;
+    image_speed = 0.375;
+    screen_shake ( 2 , 3 );
+    create_projectile ( 4 , aimdir , 6.6 , 1 , 6 , 7 , splat_hit , obj_spark_hit1 , 1 , 1 , 0 , 10 + ( aimer < 2 ) * 7 , self.id , 240 , char_custom1 );
+    proj.sprite_index = fruit_sprite;
+	if roundaim<2
+	{
+		proj.bkb=4.3*size
+		proj.kbg=0.6*size
+	}
+	else
+	{
+		proj.bkb=5.6*size
+		proj.kbg=0.9*size
+	}
+	proj.angletemp=roundaim
+	proj.direction = 270 + aim * 45 * ( 1 - facing * 2 );
+	with (proj)
+	{
+		if dir>360
+			dir-=360
+		if direction>360
+			dir-=360
+	}
+    proj.speed = 6.5;
+    proj.border = 100 / 6.5;
+    proj.push = 1
+    exit;
+    }
+  sprite_index = down_b_aim_sprite[round(aim)];
+  spark.x = x + lengthdir_x ( 100 * size , -90 + aim * 45 ) * ( 1 - facing * 2 );
+  spark.y = y + lengthdir_y ( 100 * size , -90 + aim * 45 ) - actual_height * 0.5;
+  if ( collision_point ( spark.x , spark.y , player , 0 , 1 ) )
+    spark.image_index = 1;
+    else
+    spark.image_index = 0;
+  if ( spark.image_alpha < 1 )
+    spark.image_alpha += 0.1;
+  spark.alarm[0] = 3;
+  exit;
+  }
+
+if ( temp == 2 )
+  {
+  switch ( timer )
+    {
+    case 4: image_index = 4; break;
+    case 8: image_index = 3; break;
+    case 11: image_index = 2; break;
+    case 14: image_index = 1; break;
+    case 17: image_index = 0; break;
+    }
+  exit;
+  }
+
+if ( timer == 8 )
+  sprite_index = down_b_aim_sprite[round(aim)];
+
+spark.x = x + lengthdir_x ( 100 * size , -90 + aim * 45 ) * ( 1 - facing * 2 );
+spark.y = y + lengthdir_y ( 100 * size , -90 + aim * 45 ) - actual_height * 0.5;
+if ( collision_point ( spark.x , spark.y , player , 0 , 1 ) )
+  spark.image_index = 1;
+  else
+  spark.image_index = 0;
+if ( spark.image_alpha < 1 )
+  spark.image_alpha += 0.1;
+spark.alarm[0] = 3;
+
+if ( timer >= 52 )
+  {
+  temp = 1;
+  }
+
+if temp = 4 && timer > 20 && shieldup
+      {
+      temp = 2;
+      sprite_index = down_b_sprite;
+      image_index = 5;
+      image_speed = 0;
+      special = 0;
+      timer = 0;
+      time = 8;
+      exit;
+      }
+    if temp = 4 && movedown && ( special ) && movedowntemp != 0
+      {
+      temp = 2;
+      sprite_index = down_b_sprite;
+      image_index = 5;
+      image_speed = 0;
+      special = 0;
+      timer = 0;
+      time = 8;
+      exit;
+      }
+if ( moveup )
+  {
+  if ( moveright || moveleft )
+    {
+    if ( aim < 4 ) aim += 0.0625;
+    }
+    else
+    {
+    if ( aim < 4 ) aim += 0.0625;
+    }
+  }
+if ( movedown )
+ {
+  if ( moveright || moveleft )
+    {
+    if ( aim > 0 ) aim -= 0.0625;
+    }
+    else
+    {
+    if ( aim > 0 ) aim -= 0.0625;
+    }
+  }

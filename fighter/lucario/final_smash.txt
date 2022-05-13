@@ -1,0 +1,295 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        attack_success = 0
+        image_speed = 0.3;
+        sprite_index = final_smash_start_sprite;
+        image_index=0;
+        sound_play(final_smash_sound1)
+        sound_play(final_smash_voice1)
+        spark = instance_create(x,y-size*(15),obj_spark)
+        spark.sprite_index = aura_sprite
+        spark.image_xscale = 0.75*size
+        spark.image_yscale = 0.75*size
+        spark.image_speed = 0.2
+        spark.depth = 1
+        //effect_create_above(ef_ring,x,y-18,0,c_white)
+        timer = 0
+        time = 482;
+        timer_speed=1;
+        intangible = 1;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        temp = 0
+        final_smashes+=1
+        if air = 0 {
+                duster = instance_create(x+5*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = 1-facing;
+                duster = instance_create(x-5*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; 
+        } 
+        set_aura();
+        smash_power = 0
+}
+air_move=0
+if timer = 1 {
+    freezer = instance_create(x,y,obj_freeze)
+    freezer.alarm[0] = 51
+    freezer.dontpause = self.id
+}
+if timer <= 103 {
+    speed=0
+    gravity_lock = 2;
+}
+if timer = 10 {
+    spark = instance_create(x,y+1,obj_spark_shockwave)
+    spark.image_xscale *= size
+    spark.image_yscale *= size*0.5
+    spark.image_alpha = 1
+    spark.depth = 0
+    spark = instance_create(x,y+1,obj_spark_shockwave)
+    spark.image_xscale *= size*1.3
+    spark.image_yscale *= size*0.6
+    spark.image_alpha = 1
+    spark.depth = 0
+    spark.image_blend = c_aqua
+    spark = instance_create(0,0,obj_shakescreen3);
+    spark.ampl = 5
+    spark.xampl = 0
+    spark.time = 10
+}
+     if timer >= 3 && timer < 22 {
+        air = 0
+        //hspeed = 6.5-facing*13
+        vspeed = 0
+        if frac(timer/5)=0
+        after_image(8,c_blue,0.8)
+     }
+     if (timer >= 50 && timer <= 55) || (timer >= 77 && timer <= 80) {
+        air = 0
+        hspeed = size*(3-facing*6)
+        vspeed = 0
+        if frac(timer/5)=0
+        after_image(6,c_blue,0.75)
+     }
+     if (timer >= 56 && timer <= 63) || (timer > 80 && timer < 83) {
+        air = 0
+        hspeed = (1-facing*2)*size
+        vspeed = 0
+     }
+     if timer >= 64 && timer <= 71 {
+        air = 0
+        hspeed = (1-facing*2)*size
+        vspeed = 0
+     }
+     if timer = 50 {
+        sprite_index = stilt_sprite
+        image_index = 0
+        image_speed = 0.25
+     }
+     if timer = 54 {
+        create_spark(10,3,stilt_aura_sprite,1,(0.35+aura/80)*(1-facing*2),0.35+aura/80)
+     }
+     if timer = 58 {
+        sound_play(attack_sound2);
+        target = -99
+        if random(10) > 1.5
+            play_attack_voice();
+        create_hitbox(6,40+facing*100,4,0,-1,8,aura3,obj_spark_aura,0.4+aura/60,0.8+aura/50,12,15,self.id,7,6);
+        hitbox.hit_stun = 9
+        hitbox.shake_kb = 0.5
+        hitbox.shake_ampl = 2.3
+        hitbox.di=-1
+        hitbox.armor_break = 1
+        hitbox.weight_kb = 1
+        create_hitbox2(6,45+facing*90,0,0,-1,8,aura3,obj_spark_aura,0.9+aura/50,0.8+aura/50,20,15,self.id,7,6);
+        hitbox2.hit_stun = 9
+        hitbox2.shake_kb = 0.5
+        hitbox2.shake_ampl = 2.3
+        hitbox2.di=-1
+        hitbox2.armor_break = 1
+        hitbox2.weight_kb = 1
+     }
+     if timer = 62 {
+        sprite_index = uthrow_sprite
+        image_index = 1
+        image_speed = 0.25
+        target1 = target
+     }
+     if timer = 65 {
+        create_spark(9,20,stilt_aura_sprite,1,(0.3+aura/80)*(1-facing*2),-0.35-aura/80)
+     }
+     if timer = 70 {
+        sound_play(attack_sound3);
+        play_attack_voice();
+        target = -1
+        create_hitbox(5,44+facing*92,4.2,0,-1,8,aura3,obj_spark_aura,0.9+aura/50,0.8+aura/50,22,15,self.id,7,6);
+        hitbox.hit_stun = 9
+        hitbox.shake_kb = 0.5
+        hitbox.shake_ampl = 2.3/size
+        hitbox.di=-1
+        hitbox.armor_break = 1
+        hitbox.weight_kb = 1
+     }
+     if timer = 76 {
+        sprite_index = usmash2_sprite
+        image_index = 0
+        image_speed = 0.3
+        target1 = target
+     }
+     if timer = 80 || timer = 51 {
+        duster = instance_create(x + size*(10*facing-5),y,obj_dust_effect);
+        duster.facing = facing;
+        duster.image_xscale *= size
+        duster.image_yscale *= size*1.4
+        duster.image_speed *= 0.8
+     }
+     if timer = 83 {
+        sound_play(attack_sound4);
+        attack_success = 0
+        sound_play(sideb_voice2)
+        if target1 > -1 && ((abs(target1.x - x + 20*size*(1-facing*2) > 16) || (abs(target1.y - y - 5) > 10))) {
+            target1.x = x + 20*size*(1-facing*2)
+            target1.y = y - size*5
+        }
+        create_hitbox(11+round(aura*0.4),90,5,0,-1,28/size,slash3,obj_spark_slash3,1.2+aura/50,0.8+aura/50,22,15,self.id,7,6);
+        hitbox.hit_stun = 9
+        hitbox.di=-1
+        hitbox.shake_kb = 0.5
+        hitbox.shake_ampl = 1.3/size
+        hitbox.shake_type = 1
+        hitbox.armor_break = 1
+        shaker.b = 0
+        shaker.size = 0.75
+        shaker.size_diff = 0.06
+        spark = instance_create(x,y+1,obj_spark_shockwave)
+        spark.image_xscale *= size*0.8
+        spark.image_yscale *= size*0.3
+        spark.image_alpha = 1
+        spark.depth = 0
+        spark.image_blend = c_aqua
+        spark = instance_create(0,0,obj_shakescreen3);
+        hspeed = 0
+     }
+    if timer = 103 {
+        hspeed = 0
+        attack_type = "none";
+        if air = 0
+        state_type = "stand";
+        else
+        state_type = "fall"
+        timer = 0;
+        time =-1;
+        smash_power = 0
+        intangible = 0
+        background_blend=c_white;
+        if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_nocontest)
+         }
+    }
+    if timer >= 85 && attack_success = 1 && timer < 103 && instance_exists(target) {
+	   sound_play ( final_smash_voice3 )
+       speed = 0
+       timer = 110
+       if instance_exists(target) {
+           target1 = target
+           target1.x = self.x+20-facing*40
+           target1.y = y-1
+           target1.speed=0
+       }
+       temp=1
+    }
+	if timer >= 110 && timer <= 352
+	{
+	gravity_lock = 2;
+	vspeed = 0;
+	speed = 0;
+	}
+    if timer = 111 {
+        sprite_index = final_smash_combat_sprite
+        image_speed = 0.5
+        FMODSoundPlay(crowd_combo2)
+    }
+    if timer >= 110 && timer <= 300 && instance_exists(target1) {
+        target1.time = 210;
+        target1.timer = 0
+        if timer < 213
+            target1.sprite_index=target1.flinch_sprite
+        else
+            target1.sprite_index=target1.broken_sprite
+        target1.state_type = "flinch"
+        target1.speed = 0;
+        target1.gravity_lock = 2;
+		target1.ignore_physics = 1;
+        target1.y = self.y;
+        target1.x = x + (20 - facing*40)*size
+    }
+    if timer >= 111 && timer <= 130 {
+        image_speed = 0.5
+        //target1.x = self.x+19-facing*38
+    }
+    /*if timer = 112 {
+        sound_play(attack_sound2);
+        create_hitbox(0,30+facing*120,6,0,-1,3,kick2,obj_spark_hit1,1,0.6,23,17,self.id,1,6); 
+        instance_create(0,0,obj_flashscreen)
+        if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            
+        }
+     }*/
+    if frac(timer/4) = 0 && timer >= 112 && timer < 242 {
+        sound_play(attack_sound1);
+        create_hitbox(0.5,90,3,0,-1,1/size,punch1,obj_spark_hit1,1,0.6,22,12,self.id,1,6); 
+        hitbox.di=-1
+        hitbox.shake_kb=0
+        hitbox.shake_ampl = 2.5
+        //instance_create(0,0,obj_flashscreen)
+    }
+    if timer >= 242 && timer <= 300  {
+        target1.intangible= 1 }
+    if timer = 243 {
+        sprite_index = final_smash_end_sprite
+        image_speed = 0
+        image_index = 0
+        sound_play(taunt_voice)
+    }
+    if timer = 249 
+        sound_play(final_smash_sound2)
+    if timer = 270 
+        image_speed = 0.2
+    if timer = 300  
+        sound_play(final_smash_voice2)
+    if timer = 301 {
+        sound_play(spiritbomb_voice)
+        sound_stop(final_smash_sound2)
+        sound_play(final_smash_sound3)
+        sound_play(final_smash_sound4)
+        create_projectile(3,90,3,0,-1,5,aura4,obj_spark_hit3,0.8,0.8,21,1,self.id,28,aura_tower_script);
+        proj.di = 0
+        proj.priority = 5
+        proj.image_speed = 0.5
+        proj.shake_ampl = 1.25
+        proj.shake_kb = size*0.5
+        effect_create_above(ef_ellipse,x+20-facing*40,y+16,2,c_white)
+        target1.gethit = 0
+        target1.intangible = 0
+    }
+    if timer >= 352 {
+        sound_play(jump_sound)
+        smash_power = 0
+        intangible = 0
+        attack_type = "none";
+        if air = 0
+            state_type = "stand";
+        else  { 
+            state_type = "jump"; 
+            air=2; 
+        }
+        timer = 0;
+        time =-1;
+    }
+if image_index >= image_number - image_speed && sprite_index != final_smash_combat_sprite
+    image_speed = 0

@@ -1,0 +1,51 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "fthrow";
+image_speed = 0.5;
+sprite_index = fthrow_sprite;
+image_index=0;
+timer = 0;
+time = 32;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+}
+if timer < time {
+	if timer > 1
+	sftemp_timer = 0
+    state_type = "attack";
+    if timer = 9 {
+        sound_play(swingsnd2);
+        sound_play(choose(attack_voice1,attack_voice2));
+        create_throw_box(4,20+facing*140,4.95,0,8,10,sf_punch3,obj_spark_special1,0.5,1,16,20,self.id,1,5);
+	hitbox.di = -1;
+	hitbox.weight_kb = 1
+	hitbox.hit_stun = 24;
+	image_xscale *=1.05;
+	image_yscale *=1.05;
+        instance_create(x+20-facing*40,y-20,obj_spark_effect); }
+    if timer = 19 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                sound_play(fire_sound);
+                sound_play(hadouken_voice);
+                script_execute(create_projectile,7 - (air>0),15+facing*150,4.75,1,13 - (air>0)*2,8,sf_shell,obj_spark_hit1,0.06,0.06,19,22,self.id,60,fireball_script);
+                proj.priority = 2 
+		proj.hit_stun = 4
+                vspeed *= 0.5;
+		alarm[7] = 8;
+		temp = 1;
+		image_xscale *=1.1;
+		image_yscale *=1.1;
+		shakex = 2*(1-facing*2);
+		image_speed = 0.25; }
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	image_blend = c_white;
+    }
+        

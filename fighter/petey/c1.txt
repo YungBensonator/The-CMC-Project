@@ -1,0 +1,111 @@
+moving_object = 1;
+absorb2 = 1
+parry_nodestroy = 1;
+
+if ( mode == 0 )
+  {
+  if ( vspeed < 4 )
+    vspeed += 0.25;
+  if ( on_floor || on_platform )
+    {
+    if ( type != 0 )
+      {
+      sound_play ( choose ( attacker.gooimpact1_sound , attacker.gooimpact2_sound , attacker.gooimpact3_sound ) );
+      speed = 0;
+      timer = 0;
+      time = 180;
+      sprite_index = attacker.goopgen_sprite;
+      image_index = 0;
+      image_speed = 0.25 * type;
+      mode = type;
+      remain = 3;
+      image_xscale = choose ( 1 , -1 );
+      }
+      else
+      {
+      instance_destroy();
+      }
+    }
+  }
+  else
+  only_hit = self.id;
+if ( mode >= 2 )
+  {
+  timer = 0;
+  time = 180;
+  alarm[0] = 30;
+  }
+if ( mode == 1 )
+  {
+  hit = 2;
+  if ( image_index == 3 )
+    {
+    sound_play ( choose ( attacker.goo1_sound , attacker.goo2_sound , attacker.goo3_sound ) );
+    create_projectile ( 4 , 362 , 4 , 1 , 1 , 1 , punch1 , obj_spark_hit1 , 0.6 , 0.6 , 0 , 10 , attacker.id , 180 , char_custom1 );
+    proj . image_xscale = 0.8;
+    proj . image_yscale = 0.8;
+    proj . image_speed = 0.5;
+    proj . vspeed = -6;
+    proj . hspeed = -2+random(5);
+    proj . sprite_index = attacker.goop_sprite;
+    proj . keepmain = keepmain;
+    proj . proj = noone;
+    proj . visible = 1;
+    remain -= 1;
+    if ( remain == 0 )
+      {
+      timer = 0;
+      time = 8;
+      }
+    }
+  if ( timer == 7 && time == 8 ) effect_create_above ( ef_smoke , x , y - 3 , c_brown , 0 );
+  }
+if ( mode == 2 )
+  {
+  sprite_index = keepmain.gooppiranha1_sprite;
+  if ( image_index >= 14 ) 
+    {
+    mode = 3;
+    sprite_index = keepmain.gooppiranha2_sprite;
+    image_speed = 0.25;
+    image_index = 0;
+    been = 0;
+    }
+  }
+if ( mode == 3 )
+  {
+  if ( image_index == 0.25 )
+    {
+    sound_play ( choose ( attacker.goo1_sound , attacker.goo2_sound , attacker.goo3_sound ) );
+    create_projectile ( 4 , 362 , 4 , 1 , 1 , 1 , punch1 , obj_spark_hit1 , 0.6 , 0.6 , 0 , 45 , attacker.id , 600 , char_custom2 );
+    proj . image_xscale = 0.6;
+    proj . image_yscale = 0.6;
+    proj . image_speed = 0;
+    proj . vspeed = -1;
+    proj . hspeed = 4.5*image_xscale;
+    proj . hit = 2;
+    proj . sprite_index = attacker.b_projspr;
+    proj . keepmain = keepmain;
+    proj . proj = noone;
+    proj . visible = 1;
+    proj . alarm[0] = 600;
+    }
+  if ( image_index = 3.75 )
+    {
+    if ( been >= 4 )
+      {
+      sprite_index = attacker.gooppiranha1_sprite;
+      image_index = 15;
+      image_speed = -0.25;
+      mode = 4;
+      exit;
+      }
+    image_index = 0;
+    been += 1;
+    image_xscale *= -1;
+    }
+  }
+if ( mode == 4 )
+  {
+  if ( image_index == 0.25 ) instance_destroy();
+  }

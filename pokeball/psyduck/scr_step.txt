@@ -1,0 +1,223 @@
+force = 0;
+if ( damage > 21 ) force = 1;
+if ( damage > 42 ) force = 2;
+if ( damage > 63 ) force = 3;
+if ( damage > 84 ) force = 4;
+if ( damage > 105 ) force = 5;
+
+flashtimer -= 1;
+if ( flashtimer < 0 )
+  flashtimer = 20;
+if ( timer > 600 && timer < 900 )
+  {
+  image_blend = c_white;
+  if ( flashtimer < 2 )
+    image_blend = c_red;
+  if ( timer > 670 && flashtimer > 12 )
+    flashtimer = 12;
+  if ( timer > 740 && flashtimer > 8 )
+    flashtimer = 8;
+  if ( timer > 800 && flashtimer > 5 )
+    flashtimer = 5;
+  }
+
+if ( hitstun > 0 )
+  {
+  sprite_index = spr[1];
+  xshake = -1 + random ( 2 );
+  yshake = -1 + random ( 1 );
+  xshake *= max ( 7 , 1 + hitstun * 0.25 );
+  yshake *= max ( 7 , 1 + hitstun * 0.25 );
+  if ( kb > 0 )
+    kb -= 1.4;
+  if ( kb < 0 )
+    kb = 0;
+  if ( hc < 1 )
+    hc += 0.2;
+  xshake += lengthdir_x ( hc * kb * 2 , dir );
+  yshake += lengthdir_y ( hc * kb * 2 , dir );
+  hitstun -= 1;
+  if ( hitstun == 0 )
+    {
+    xshake = 0;
+    yshake = 0;
+    sprite_index = spr[0];
+    image_index = 0;
+    }
+  }
+
+timer += timer_speed;
+if ( timer_speed == 0 ) exit;
+
+if ( timer > 30 && timer < 880 )
+  {
+  if ( force == 5 )
+    {
+    xshake = ( timer mod 3 == 0 ) * ( 1 - facing * 2 );
+    }
+    else
+  if ( force > 2 )
+    {
+    xshake = ( timer mod 5 == 0 ) * ( 1 - facing * 2 );
+    }
+  }
+
+var i;
+
+moving_object = 1;
+if ( on_floor )
+  vspeed = 0;
+  else
+  vspeed += 0.25;
+
+if ( timer > 30 && timer < 880 && hitstun == 0 )
+  {
+  i = stage_hitbox ( x - 10 , y - 30 , x + 10 , y );
+  if ( i > 0 )
+    {
+    hc = 0;
+    if ( x < i.x )
+      facing = 1;
+      else
+      facing = 0;
+    hitstun = i.hitlag_frames + 3;
+    kb = i.kbg + i.bkb;
+    dir = i.dir;
+    if ( dir >= 360 )
+      {
+      if ( x < i.x )
+        dir = 150;
+        else
+        dir = 30;
+      }
+    damage += i.damage;
+    }
+  }
+
+if ( timer < 20 )
+  {
+  yshake = lengthdir_y ( 6 , timer * 9 );
+  }
+if ( timer >= 20 && timer < 30 )
+  {
+  yshake = lengthdir_y ( 3 , ( timer - 20 ) * 18 );
+  }
+if ( timer == 30 )
+  yshake = 0;
+
+if ( timer == 4 )
+  {
+  sound_play2 ( sfx[0] );
+  instance_create ( x , y - 12 , obj_spark_effect );
+  repeat ( 3 )
+    gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+  create_projectile ( 12 , 20 + facing * 140 , 11.2 , 3 , 40 , 6 , kick3 , obj_spark_hit3 , 1.5 , 1.5 , 0 , 0 , attacker , 35 , no_script );
+  }
+if ( timer == 14 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.3 );
+  }
+if ( timer == 24 )
+  {
+  i = sound_play2 ( sfx[0] );
+  FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.05 );
+  }
+if ( timer == 860 || timer == 870 || timer == 880 )
+  {
+  instance_create ( x , y - 16 , obj_spark_effect );
+  }
+if ( timer == 900 )
+  {
+  xshake = 0;
+  yshake = 0;
+  image_blend = c_white;
+  sprite_index = spr[2];
+  image_index = 0;
+  image_speed = 0;
+  }
+switch ( timer )
+  {
+  case 902: image_index = 1; break;
+  case 903: image_index = 2; break;
+  case 905: image_index = 3; break;
+  case 908: image_index = 4; break;
+  case 910: image_index = 5; break;
+  case 1000: xshake = 0; image_index = 6; break;
+  case 1001: image_index = 7; break;
+  case 1003: image_index = 8; break;
+  }
+if ( timer >= 910 && timer < 970 )
+  {
+  xshake = timer mod 2;
+  xshake *= 1 - facing * 2;
+  }
+if ( keyboard_check ( vk_space ) )
+  timer = 880;
+switch ( force )
+  {
+  case 0:
+    if ( timer == 912 )
+      {
+      repeat ( 4 )
+        gfx_sweat_gen ( x + 16 * ( 1 - facing * 2 ) , y - 10 , 1 + random ( 1 ) , 5 , 90 - ( 70 + random ( 40 ) ) );
+      }
+    break;
+  
+  case 1:
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+    if ( timer == 914 || timer == 924 || timer == 934 || timer == 944 )
+      image_blend = c_white;
+    if ( timer == 912 )
+      {
+      i = sound_play2 ( sfx[0] );
+      FMODInstanceSetVolume ( i , FMODInstanceGetVolume ( i ) * 0.7 );
+      FMODInstanceSetFrequency ( i , FMODInstanceGetFrequency ( i ) * ( 0.9 - force * 0.12 ) );
+      }
+    if ( timer == 912
+      || ( timer == 922 && force > 1 )
+      || ( timer == 932 && force > 1 )
+      || ( timer == 942 && force > 3 ) )
+      {
+      if ( force > 1 )
+        instance_create ( x + 16 * ( 1 - facing * 2 ) , y - 10 , obj_spark_shockwave );
+      image_blend = c_fuchsia;
+      repeat ( 3 )
+        {
+        create_projectile ( 7 + force , 30 + facing * 120 , 6 + force * 0.3 , 4 + force * 0.7 , 30 , 7 , fire1 , obj_spark_explode1 , 1 , 1 , 0 , 0 , attacker , 60 , assist_proj_scr );
+        proj.sprite_index = spr[3];
+        proj.image_speed = 0;
+        proj.image_index = 1;
+        proj.hspeed = 3 - facing * 6;
+        proj.hspeed *= 0.4 + random ( 0.3 ) + ( force - 1 ) * 0.46;
+        proj.tres = floor ( random ( 4 ) );
+        proj.vspeed = random ( 1 );
+        proj.image_xscale = 0.15 + force * 0.17;
+        proj.image_yscale = proj.image_xscale;
+        proj.x = x + 16 * ( 1 - facing * 2 );
+        proj.y = y - 10;
+        i = instance_create ( proj.x , proj.y , obj_spark );
+        i.sprite_index = spr[3];
+        i.image_angle = random ( 360 );
+        i.image_alpha = 0.8;
+        i.image_xscale = proj.image_xscale;
+        i.image_yscale = proj.image_xscale;
+        i.depth = -4;
+        i.image_speed = 0;
+        i.image_index = 2;
+        i.alarm[0] = 10;
+        i.script = gfx_sweat_scr;
+        i.draw_color_only = 2;
+        }
+      repeat ( 4 + force )
+        gfx_sweat_gen ( x + 16 * ( 1 - facing * 2 ) , y - 10 , 1 + random ( 1 ) , 5 , 90 - ( 70 + random ( 40 ) ) );
+      }
+    break;
+  }
+if ( timer == 1060 )
+  {
+  instance_destroy();
+  }

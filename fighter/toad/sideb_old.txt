@@ -1,0 +1,47 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "sideb";
+        image_speed = 0.25;
+        sprite_index = sideb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 48;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        air_move=0
+}
+if timer < time {
+    state_type = "air_attack";
+    if timer = 8
+        sound_play(swingsnd4)
+    if timer = 10 {
+        create_hitbox(9,20+facing*140,5,6,11,7,kick3,obj_spark_hit3,0.8,0.7,6,9,self.id,18,3)
+        sound_play(jump_sound)
+        sprite_index = sideb_sprite
+        image_speed = 0.35
+        vspeed = -4
+        hspeed = 4.4-facing*8.8
+        }
+    if timer >= 11 && timer <= 40
+        hspeed = 3.75-facing*7.5
+    }  
+if air = 0 && timer > 11 {
+            state_type="land"
+            attack_type="none"
+            sprite_index = dair_land_sprite
+            image_index = 0
+            image_speed = 0.3
+            timer=0
+            time=19 }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "fall";
+    sprite_index = 
+    timer = 0;
+    time =-1;
+    }
+        

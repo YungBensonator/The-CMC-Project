@@ -1,0 +1,101 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 6: image_index = 1; break;
+	case 13: image_index = 2; break;
+	case 21: image_index = 2; break;
+	case 25: image_index = 1; break;
+	case 29: image_index = 0; break;
+    }
+	
+	if timer = 5{
+		sound_play(crystal_sound2);
+		dair_spike = create_spark(10,24,0);
+		dair_spike.sprite_index = dair_sprite_eff;
+		dair_spike.image_speed = 0;
+		dair_spike.image_alpha = 1;
+		dair_spike.image_xscale = image_xscale*0.42;
+		dair_spike.image_yscale = image_yscale*0.42;
+		dair_spike.depth = depth - 2;
+		dair_spike.snap = self.id
+		dair_spike.alarm[0] = 26
+		dair_spike.script = char_custom7;
+		dair_spike.owner = self.id;
+		dair_spike.keepmain = self.keepmain;
+	}
+	
+	if timer < 13{
+		dair_spike.snap_y -= 2
+	}
+	
+	if timer = 15{
+		dair_spike.snap = 0
+		create_projectile(4,angle_correct(30),5,4,18,6,ice1,obj_spark_hit1,0.75,1.2,5,-5,self.id,12,-1);
+		proj.x = dair_spike.x
+		proj.y = dair_spike.y
+		dair_spike.vspeed = 9
+		//dair_spike.hspeed = -1+facing*2
+	}
+	
+	
+	if timer = 20{
+		sound_play(swingsnd2);
+		play_attack_voice()
+		proj.damage=7;
+		proj.dir=270;
+		proj.bkb = 4.5*size;
+		proj.kbg = 4.5*size;
+		//proj.dont_trigger_kc = 1
+	}
+
+	if timer = 23{
+		proj.damage=6;
+		proj.dir=275;
+		proj.bkb = 4*size;
+		proj.kbg = 4*size;
+	}
+	
+	if timer >= 15 and timer <= 26 and instance_exists(proj){
+		proj.x = dair_spike.x
+		proj.y = dair_spike.y
+	}
+	
+	if timer = 26{
+		dair_spike.vspeed = 0
+		dair_spike.alpha_add = -0.1
+	}
+	
+	if air = 0 {
+		dair_spike.alpha_add = -0.1
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=21; }
+	
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+

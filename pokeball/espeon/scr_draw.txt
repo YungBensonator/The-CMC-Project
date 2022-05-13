@@ -1,0 +1,77 @@
+var i;
+draw_sprite_ext ( sprite_index, image_index, x, y, xsize, ysize, 0, image_blend, 1);
+
+if ( timer < 35 )
+    fade = 0;
+if ( timer >= 35 && timer <= 85 )
+    fade = 1 - ( 85 - timer ) / 50;
+if ( timer > 85 && timer < 170 )
+    fade = 1;
+if ( timer >= 170 && timer <= 220 )
+    fade = ( 220 - timer ) / 50;
+
+if ( timer >= 35 && timer <= 220 )
+  {
+    draw_set_blend_mode(bm_add);
+
+    //Hue
+    draw_primitive_begin(pr_trianglelist);
+    draw_vertex_color(x,-300,c_white,0.2);
+    draw_vertex_color(x-room_width*fade,room_height,c_white,0);
+    draw_vertex_color(x+room_width*fade,room_height,c_white,0);
+    draw_primitive_end();
+
+    //Light
+    draw_primitive_begin(pr_trianglefan);
+    draw_vertex_color(x,-100,c_white,0.5);
+    for ( i = light_left; i >= 0; i -= 1 )
+	draw_vertex_color(x-i*fade,y,c_white,1-i/130);
+    draw_vertex_color(x,y,c_white,0.5);
+    for ( i = 0; i <= light_right; i += 1 )
+	draw_vertex_color(x+i*fade,y,c_white,1-i/130);
+    draw_primitive_end();
+
+    draw_set_blend_mode(bm_normal);
+
+    //Rays
+    if ( timer >= 65 && timer <= 190 )
+      {
+	draw_set_color(c_navy);
+	for ( i = 0; i < line_number; i += 1 )
+	  {
+	    draw_set_alpha(line_alpha[i]);
+	    if ( timer >= line_timer[i] && timer <= line_timer[i] + line_time[i] )
+		draw_line(x+line_x[i],line_speed[i] * ( timer - line_timer[i] ) - 165,x+line_x[i],line_speed[i] * ( timer - line_timer[i] ) - 165 + line_length[i]);
+	  }
+      }
+
+    //Sparkles
+    if ( timer >= 80 && timer <= 175 )
+      {
+	for ( i = 0; i < spark_number; i += 1 )
+	  {
+	    if ( timer = spark_timer[i] )
+	      {
+		spark[i] = instance_create(0,0,obj_spark);
+		spark[i].sprite_index = global.spark_sprite;
+		spark[i].image_blend = c_ltgreen;
+		spark[i].image_alpha = 0.5;
+		spark[i].x = x + spark_x[i];
+		spark[i].y = y - spark_y[i];
+		spark[i].image_xscale = spark_size[i];
+		spark[i].image_yscale = spark_size[i];
+		spark[i].image_speed = spark_speed[i];
+	      }
+	  }
+      }
+
+    //Sun
+    draw_set_color(c_white);
+    for ( i = 1; i < 10; i += 1 )
+      {
+	draw_set_alpha(fade*i/9);
+	draw_circle(x,-100,160-8*i,0);
+      }
+    
+    draw_set_alpha ( 1 );
+  }

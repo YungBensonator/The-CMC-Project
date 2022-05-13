@@ -1,0 +1,57 @@
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0.2;
+        sprite_index = (choose(taunt_sprite,taunt2_sprite,taunt3_sprite,taunt4_sprite));
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+}
+state_type = "attack";
+if ( timer = 0 && sprite_index = taunt3_sprite) {
+    time = 50;
+}
+if ( timer = 0 && sprite_index = taunt4_sprite) {
+    time = 98;
+    image_speed = 0.25;
+}
+if ( timer = 1 && sprite_index = taunt2_sprite) {
+    sound_play(win2_voice);
+}
+if ( timer = 11 && sprite_index = taunt3_sprite) {
+    sound_play(usmash_voice);
+}
+if ( timer = 11 && sprite_index = taunt_sprite) {
+    sound_play(taunt_voice);
+}
+if ( timer = 17 && sprite_index = taunt3_sprite) {
+    create_spark(-37+facing*74,80,taunt3effect_sprite,1,1,1)
+    sound_play(b_sound1);
+}
+if ( timer = 20 && sprite_index = taunt4_sprite) {
+    sound_play(attack_sound3);
+}
+if ( timer = 20 && sprite_index = taunt_sprite) {
+    create_spark(19,19,aura_flame_sprite,1,0.18+aura/80,0.2+aura/80)
+    create_spark(-17,19,aura_flame_sprite,1,0.18+aura/80,0.2+aura/80)
+}
+if ( timer = 30 && sprite_index = taunt4_sprite) {
+    sound_play(attack_sound3);
+}
+if ( timer = 40 && sprite_index = taunt4_sprite) {
+    sound_play(attack_sound3);
+}
+if ( timer = 50 && sprite_index = taunt4_sprite) {
+    sound_play(attack_sound3);
+}
+if ( timer >= time-2 && sprite_index = taunt_sprite)
+    interrupt = 1;    
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

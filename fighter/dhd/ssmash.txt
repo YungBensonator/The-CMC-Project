@@ -1,0 +1,66 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "ssmash";
+  image_speed = 0.5;
+  sprite_index = ssmash_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 52;
+  timer_speed = 1;
+  charge_frame = 8;
+  }
+
+if ( timer == 7 )
+  instance_create(x+10-facing*20,y-20,obj_spark_effect);
+
+if ( timer == 9 )
+  {
+  image_speed = 0.25;
+  image_index = 4;
+  duster = instance_create(x-3+facing*6,y,obj_dust_effect);
+  duster.facing = facing;
+  duster.image_alpha = 0.8;
+  duster.image_xscale *= size;
+  duster.image_yscale *= size;
+  }
+
+if ( timer == 11 ) 
+  {
+  sound_play ( attack_sound2 );
+  sound_play (choose(duck_attack_sound1,duck_attack_sound2));
+  }
+
+if ( timer == 14 )
+  {
+  image_index = 7;
+  image_speed = 0;
+  create_hitbox ( 15 , 24 + facing * 132 , 6 , 5.85 , 25 , 10 , punch4 , obj_spark_hit3 , 1 , 0.7 , 20 , 14 , self.id , 5 , 4 );
+  }
+if ( timer == 20 )
+  {
+  create_projectile ( 3 , 65 + facing*50 , 6 , 1 , 1 , 1 , punch2 , obj_spark_hit2 , 0 , 0 , 14 , 21 , self.id ,    
+ 120 , dhd_duckaway );
+  proj . sprite_index = redduck_sprite;
+  proj . image_xscale = 0.688 * ( 1 - facing * 2 );
+  proj . image_yscale = 0.688;
+  proj . image_speed = 0.25;
+    if attack_success
+    proj.hit = 2
+    else
+    proj . hit = 0;
+  proj . destroy = 0;
+  image_index = 8;
+  image_speed = 0.125;
+  }
+if timer = 32
+image_speed = 0
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

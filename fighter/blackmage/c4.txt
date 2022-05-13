@@ -1,0 +1,95 @@
+absorb = 0;
+absorb2 = 0;
+proj_destroy = 0;
+clankWithHitbox = 1;
+no_reflect = 1;
+parry_nodestroy = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.downb_geyser_sprite;
+	image_xscale = 0.6 * (1-facing*2) * size;
+	image_yscale = 0.1 * size;
+	image_index = 0;
+    image_speed = 0.9;
+    visible = 1;
+	depth = -9;
+	image_alpha = 0.9;
+	temp = 0;
+	
+	watergeyser2 = instance_create( x , y , obj_spark);
+	watergeyser2.sprite_index = keepmain.downb_geyser_sprite2;
+	watergeyser2.image_xscale = 0.6 * (1 - facing * 2) * size;
+	watergeyser2.image_yscale = 0.4 * size;
+	watergeyser2.image_alpha = 0.8;
+	watergeyser2.image_index = 0;
+	watergeyser2.image_speed = 0;
+	watergeyser2.depth = -10;
+	watergeyser2.alarm[0] = 10;
+	
+	splasheffect1 = instance_create( x , y - 10 * size , obj_spark);
+	splasheffect1.sprite_index = keepmain.splash_effect_sprite;
+	splasheffect1.image_xscale = 0.4 * (1 - facing * 2) * size;
+	splasheffect1.image_yscale = 0.4 * size;
+	splasheffect1.direction = 30;
+	splasheffect1.speed = 3;
+	splasheffect1.gravity = 0.2;
+	splasheffect1.gravity_direction = 270;
+	splasheffect1.image_alpha = 0.9;
+	splasheffect1.image_index = 0;
+	splasheffect1.image_angle = random(360);
+	splasheffect1.image_speed = 0.5;
+	splasheffect1.depth = -7;
+
+	splasheffect2 = instance_create( x , y - 10 * size , obj_spark);
+	splasheffect2.sprite_index = keepmain.splash_effect_sprite ;
+	splasheffect2.image_xscale = 0.4 * (1 - facing * 2) * size;
+	splasheffect2.image_yscale = 0.4 * size;
+	splasheffect2.direction = 150;
+	splasheffect2.speed = 3;
+	splasheffect2.gravity = 0.2;
+	splasheffect2.gravity_direction = 270;
+	splasheffect2.image_alpha = 0.9;
+	splasheffect2.image_index = 0;
+	splasheffect2.image_angle = random(360);
+	splasheffect2.image_speed = 0.5;
+	splasheffect2.depth = -7;
+  }
+
+watergeyser2.x = x;
+watergeyser2.y = y;
+watergeyser2.alarm[0] = 10;
+time = 50;
+
+if ( image_yscale < 0.45 * size )
+{
+image_yscale += 0.03 * size;
+}
+
+if ( timer < time-11 )
+{
+	if ( timer mod 10 < 1 )
+	{
+	watergeyser2.image_xscale = 0.6 * (1 - facing * 2) * size;
+	watergeyser2.image_yscale = 0.4 * size;
+	}
+	else
+	{
+	watergeyser2.image_xscale += 0.01 * (1 - facing * 2) * size;
+	watergeyser2.image_yscale += 0.015 * size;
+	}
+}
+if ( timer = time-11 )
+{
+	watergeyser2.image_xscale = 0.6 * (1 - facing * 2) * size;
+	watergeyser2.image_yscale = 0.4 * size;
+}
+
+if ( timer >= time-10 )
+{
+image_xscale -= 0.025 * (1-facing*2) * size;
+image_alpha -= 0.1;
+watergeyser2.image_xscale += 0.025 * (1 - facing * 2) * size;
+watergeyser2.image_yscale -= 0.02 * size;
+watergeyser2.image_alpha -= 0.1;
+}

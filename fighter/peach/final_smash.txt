@@ -1,0 +1,77 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding"  {
+        size = csize
+        //FMODSoundSetMaxVolume(global.bgm,0.1)
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.3;
+        sprite_index = final_smash_sprite1;
+        image_index=0;
+        timer = 1;
+        time = 250;
+        timer_speed=1;
+        intangible = 1;
+        pblossom = instance_create(x,y,obj_elaborate_help)
+        pblossom.destroy_script = char_custom3;
+        pblossom.draw_script = char_custom4;
+        pblossom.step_script = char_custom5;
+        pblossom.peach = self.id
+        pblossom.keepmain = keepmain;
+        with ( pblossom ) char_custom2();
+        final_smashes+=1
+        //background_blend=make_color_rgb(190,4,64)
+        smash_power = 0
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 35
+        instance_create(x,y-20,obj_spark_effect2);
+        air_move=0
+        tempmus_play2 ( final_smash_sound , 300 , 1 );
+        //sound_play(final_smash_sound)     
+        //if global.play_music = 1
+        //    FMODInstanceSetVolume(global.bgm,0.2)  
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+    intangible = 1
+    if timer = 50 {
+        //sound_play(final_smash_voice);
+        create_projectile(25,361,0,0,-1,5,kick1,obj_spark_hit1,0.2,0.2,0,20,id,150,char_custom1);
+        proj.peach = self.id;
+        effect_create_below(ef_ellipse,x,y,0,c_purple)
+        if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = self.id
+        FMODSoundPlay(crowd_combo2)
+     }
+    }
+}
+if timer = 50 || timer = 70 || timer = 90 {
+    repeat(5) {
+        new_item = instance_create(0,0,global.itm_kind[1]);
+        with new_item {
+            x = obj_game_control.camera_boundary_l + 128 + random ( obj_game_control.camera_boundary_r -obj_game_control.camera_boundary_l - 256 );
+            y = obj_game_control.camera_boundary_u - 64;
+            sprite_air = other.peach_sprite;
+        }
+    }
+}
+if timer = 120 {
+	sprite_index = final_smash_sprite2;
+	image_index= 0;
+	image_speed = 0.3;
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    //background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    //if global.play_music = 1
+   //     FMODInstanceSetVolume(global.bgm,1)
+}

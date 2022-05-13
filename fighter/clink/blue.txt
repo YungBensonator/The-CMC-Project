@@ -1,0 +1,82 @@
+hit = 2
+priority = 4
+absorb = 0
+if timer = 1 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.blue_jab_sprite
+    image_speed = 0;
+    speed = 0;
+    visible = 1;
+    size = attacker.size
+    facing = attacker.facing
+    if facing
+        image_xscale = -0.68*size
+    else
+        image_xscale = 0.68*size
+    image_yscale = 0.68*size
+    spark = instance_create(x,y-12*size,obj_spark_shockwave)
+    spark.image_blend = c_blue
+}
+if timer >= 4 {
+    if enemy > 0 {
+        x = enemy.x - (21-facing*42)*size
+        y = enemy.y
+    }
+}
+if timer_speed {
+    if timer = 5 || ((image_index >= image_number - image_speed) && attacker.timer < 225) {
+        sprite_index = choose(attacker.blue_jab_sprite,attacker.blue_smash_sprite,attacker.blue_tilt_sprite)
+        image_index = 0
+        image_speed = 0.25
+    }
+    if sprite_index = attacker.blue_jab_sprite {
+        if image_index = 1 {
+            create_projectile(1,random(10)*36,3,0,-1,15,punch2,obj_spark_slash5,1,0.8,1-facing*2*(enemy.x - attacker.x),y-attacker.y+14,attacker.id,3,no_script)
+            proj.can_combo=1
+        }
+        if image_index = 5 {
+            create_projectile(1,random(10)*36,3,0,-1,21,kick2,obj_spark_slash5,1,0.8,1-facing*2*(enemy.x - attacker.x),y-attacker.y+14,attacker.id,3,no_script)
+            proj.can_combo=1
+        }
+        if image_index = 10 {
+            create_projectile(1,random(10)*36,3,0,-1,23,kick3,obj_spark_slash5,1,0.8,1-facing*2*(enemy.x - attacker.x),y-attacker.y+14,attacker.id,3,no_script)
+            sound_play(attacker.blue_voice)
+            proj.can_combo=1
+        }
+    }
+    if sprite_index = attacker.blue_smash_sprite {
+        if image_index = 1 {
+            create_projectile(1,random(10)*36,3,0,-1,22,punch4,obj_spark_slash5,1,0.8,1-facing*2*(enemy.x - attacker.x),y-attacker.y+14,attacker.id,3,no_script)
+            proj.can_combo=1
+        }
+        if image_index = 6 {
+            sound_play(attacker.blue_voice)
+            create_projectile(2,random(10)*36,3,0,-1,26,slash2,obj_spark_slash5,1,0.8,1-facing*2*(enemy.x - attacker.x),y-attacker.y+14,attacker.id,3,no_script)
+            proj.can_combo=1
+        }
+    }
+    if sprite_index = attacker.blue_tilt_sprite {
+        if image_index = 2 {
+            create_projectile(2,random(10)*36,3,0,-1,25,punch2,obj_spark_slash5,1,0.8,1-facing*2*(enemy.x - attacker.x),y-attacker.y+14,attacker.id,3,no_script)
+            proj.can_combo=1
+        }
+    }
+}
+if attacker.timer >= 220 && attacker.timer <= 224
+    x += 1.5*size*(1-facing*2)
+if attacker.timer = 225 {
+    sprite_index = attacker.blue_smash_sprite
+    image_index = 3
+}
+if attacker.timer = 232 && enemy != attacker.target1 {
+    attacker.target2.gethit = 0
+    create_projectile(7,80+facing*20,7,6.9,-1,9,punch3,obj_spark_slash2,1,0.8,1-facing*2*(enemy.x - attacker.x),y-attacker.y+14,attacker.id,3,no_script)
+    proj.hit_stun = 10
+    proj.can_combo=1
+}
+if attacker.timer = 235 || timer = 205 {
+    spark = instance_create(x,y-12*size,obj_spark_shockwave)
+    spark.image_blend = c_blue
+    instance_destroy()
+}
+timer_speed = attacker.timer_speed
+    

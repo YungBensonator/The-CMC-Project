@@ -1,0 +1,51 @@
+if state_type = "edge" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "edge_attack";
+        image_index = 0;
+        sprite_index = edge_attack_sprite;
+        image_index=0;
+	if percent < 100
+        timer = 0;
+	else {
+	timer = -10 }
+        time = 48;
+        timer_speed=1;
+	intangible = 1;
+}
+if timer < time {
+    attacking = 0;
+    state_type = "attack";
+    if ( timer = -10 )
+	instance_create(x-size,y+size,obj_spark_effect);
+    if timer = 0 {
+	image_speed = 0.35;
+	}
+    if timer = 27 {
+        sound_play(attacksnd3);
+        create_hitbox(7,20+facing*140,6.2,2.6,11,7,kick2,obj_spark_hit2,0.9,0.5,26,14,self.id,4,3);
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(75)+x,place_y(19)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+    	}
+    if timer = 42
+        intangible = 0
+}
+
+if ( image_index < 4 )
+  please_shadow = -1;
+
+if image_index >= image_number-image_speed
+image_speed = 0
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    intangible = 0
+    x += size * (28-facing*56);
+    attack_type = "none";
+    state_type = "stand";
+    sprite_index = stand_sprite;
+    timer = 0;
+    time =-1;
+    }

@@ -1,0 +1,126 @@
+
+if global.gs_form[number-1] = 0{
+if ( time = -1 )
+  {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "bthrow";
+    image_speed = 0;
+    sprite_index = bthrow_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 36;
+    timer_speed = 1;
+    target.timer_speed = 0;
+    target.alarm[0] = 30;
+  }
+
+if ( timer <= 15 )
+  {
+    target.x = x - 20 * ( 1 - facing * 2 ) * size;
+    target.y = y;
+  }
+if ( timer = 15 )
+  {
+    sound_play( attack_voice4 )
+    create_throw_box(9,150-facing*120,5.8,4,1,1,kick2,obj_spark_hit2,0.75,0.75,-16,13,self.id,1);
+    hitbox.shake_kb = 2;
+    image_index = 1 + 1 * facing;
+  }
+if ( timer = 25 )
+    image_index = 0;
+        
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    facing = 1-facing;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+  }
+}
+
+if global.gs_form[number-1] = 1{
+if ( time = -1 )
+  {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "bthrow";
+    image_speed = 0;
+    sprite_index = throw2_sprite;
+    image_index = 3;
+    timer = 0;
+    time = 50;
+    timer_speed = 1;
+    target.timer_speed = 0;
+    target.alarm[0] = 50;
+  }
+
+if ( timer >= 0 && timer <= 15 )
+  {
+    target.x = x + 27 * ( 1 - facing * 2 ) * size;
+    target.y = y - size * 30;
+  }
+if ( timer >= 16 && timer <= 31 )
+  {
+    target.x = x;
+    target.y = y - size * 40;
+    image_index = 2;
+  }
+if ( timer >= 32 && timer <= 39 )
+  {
+    target.x = x - 27 * ( 1 - facing * 2 ) * size;
+    target.y = y - size * 30;
+    image_index = 1;
+  }
+if ( timer = 1 || timer = 16 || timer = 32 )
+    sound_play( attack_voice2 );
+if ( timer >= 0 && timer <= 39 )
+  {
+    if ( target.gw_stock_sprite > 0 )
+	target.sprite_index = target.gw_stock_sprite;
+    else
+      {
+        target.sprite_index = -1;
+	target.image_xscale = 0.7 * ( 1 - target.facing * 2 ) * target.size;
+	target.image_yscale = 0.7 * target.size;
+	if ( timer = 0 )
+	  {
+	    ball = instance_create ( target.x , target.y , obj_spark );
+	    ball.sprite_index = ball_sprite;
+	    ball.image_speed = 0;
+	    ball.number = -number;
+	    ball.depth = target.depth;
+	    ball.snap = target;
+	  }
+	ball.image_xscale = target.image_xscale;
+	ball.image_yscale = target.image_yscale;
+	ball.x = target.x;
+	ball.y = target.y;
+      }
+  }
+if ( timer = 40 )
+  {
+    if ( instance_exists(ball) ) { with (ball) instance_destroy(); }
+    target.x = x;
+    target.y = y - 7;
+    target.sprite_index = target.flinch_sprite;
+    target.image_xscale = target.xsize * ( 1 - target.facing * 2 ) * target.size;
+    target.image_yscale = target.ysize * target.size;
+    sound_play( attack_voice4 )
+    create_throw_box(9,150-facing*120,5.8,4,1,1,kick2,obj_spark_hit2,0.75,0.75,-16,13,self.id,1);
+    hitbox.hit_stun = 2;
+    image_index = 0;
+  }
+if ( timer = 45 )
+    image_index = 0;
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+  }
+}
+

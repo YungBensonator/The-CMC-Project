@@ -1,0 +1,108 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "fthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fthrow_sprite;
+  timer = 0;
+  time = 74;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4:
+    image_index = 2;
+    create_hitbox ( 3 , 361 , 2.3 , 1 , 7 , 3 , kick1 , obj_spark_hit1 , 0.7 , 0.7 , 20 , 5 , self.id , 3 , 0 );
+    hitbox.di = 0;
+    break;
+  case 6: image_index = 3; break;
+  case 8: image_index = 4; break;
+  case 10:
+    sprite_index = fthrowjump_sprite;
+    break;
+  case 18: visible = 1; break;
+  }
+if ( timer <= 9 )
+	{
+	target.x = x + 14 * size * (1-facing*2);
+	target.y = y;
+	}
+if ( timer >= 10 && timer <= 18 )
+  {
+  x = ( target.x + 3 * x ) * 0.25;
+  y = target.y + lengthdir_y ( 2 , ( timer - 10 ) * 2.5 );
+  }
+  
+if ( timer > 18 && timer < 72 )
+  {
+  if ( timer mod 3 == 0 )
+    {
+    //if ( random ( 10 ) < 4 )
+    //  {
+      image_angle = random ( 360 );
+      depth = -7;
+      sprite_index = choose ( fthrow1_sprite , fthrow2_sprite , choose ( fthrow3_sprite , fthrow4_sprite , fthrow5_sprite ) );
+      visible = 1;
+    //  }
+    //  else
+    //  visible = 0;
+    }
+  if ( timer mod 6 == 0 )
+    {
+    FMODSoundPlay ( choose ( punch1 , punch2 , punch3 , kick1 , kick2 , kick3 ) );
+    }
+  hspeed = 0;
+  state_type = "air_attack";
+  if ( moveright ) hspeed = 2 * size;
+  if ( moveleft ) hspeed = -2 * size;
+  if ( vspeed > 3 * size ) vspeed = 3 * size;
+  target.visible = 0;
+  instance_create ( x , y - 8 , obj_smoke_front );
+  repeat ( 3 )
+    instance_create ( x - target.actual_width + random ( target.actual_width * 2 ) , y - target.actual_height + random ( target.actual_height ) , obj_smoke_front );
+  target.x = x;
+  target.y = y - 2 * size;
+  }
+if ( timer == 72 )
+  {
+  depth = -1;
+  sprite_index = fthrowjump_sprite;
+  image_angle = 0;
+  target.visible = 1;
+  visible = 1;
+  var c;
+  c = 45 + facing * 90;
+  if ( moveup )
+    {
+    c = 90;
+    if ( moveright )
+      c = 65;
+    if ( moveleft )
+      c = 115;
+    }
+  if ( movedown )
+    {
+    if ( moveright ) 
+      facing = 0;
+    if ( moveleft )
+      facing = 1;
+    c = 20 + facing * 140;
+    }
+  target.x = x;
+  target.y = y - 2 * size;
+  create_throw_box ( 8 , c , 6.2 , 3.9 , 14 , 8 , punch4 , obj_spark_hit4 , 0.7 , 0.7 , 0 , 10 , self.id , 2 );
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

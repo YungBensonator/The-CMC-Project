@@ -1,0 +1,83 @@
+time = 600
+
+
+
+
+if activated = 1{
+	
+	if image_index >= 13{
+		image_speed = 0
+	}
+	
+	if !instance_exists(area_spark){
+		area_spark = create_spark(0,0,kyoko.crystal_sprite_area);
+		area_spark.sprite_index = kyoko.crystal_sprite_area;
+		area_spark.image_speed = 0;
+		area_spark.image_alpha = 0.7;
+		area_spark.image_xscale = image_xscale * 1.2
+		area_spark.image_yscale = image_yscale * 1.2
+		area_spark.depth = depth - 0.1;
+		area_spark.snap = self.id
+		area_spark.alarm[0] = time-timer
+		area_spark.angle_add = 2
+	}
+	
+	with (player) {
+	if (state_type != "air_flinch") 
+	and (state_type != "flinch") 
+	//and (self.id != other.kyoko.id)
+	if collision_circle(x,y-25,50*other.image_yscale,other.id,false,false) and ( other.timer < other.time-2 ) {
+		
+		if black_mage_slow = 0{
+			run_speed = 0.8
+			walk_speed = 0.8
+			black_mage_slow = 1
+		}
+		
+		if hspeed > 0.8
+		hspeed = 0.8
+		if hspeed < -0.8
+		hspeed = -0.8
+		if vspeed > 0.8
+		vspeed = 0.8
+		/*if vspeed < -0.8
+		vspeed = -0.8*/
+		image_blend = c_purple
+		//timer_speed = 0.5
+		//percent += 1/30
+		
+	}
+	else{
+		if image_blend = c_purple
+		image_blend = c_white
+		
+		if black_mage_slow = 1{
+			run_speed = base_run_speed
+			walk_speed = base_walk_speed
+			black_mage_slow = 0
+		}
+		
+	}
+}
+	
+	
+}
+
+if timer > time-30{
+	image_alpha -= 0.03
+	if instance_exists(area_spark){
+		if area_spark.image_alpha > image_alpha
+		area_spark.image_alpha = image_alpha
+	}
+}
+
+timer += 1
+
+if timer > time{
+	with (player){
+		if image_blend = c_purple
+		image_blend = c_white
+	}
+with (area_spark){instance_destroy()}
+instance_destroy();
+}

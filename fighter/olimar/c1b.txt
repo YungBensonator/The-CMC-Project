@@ -1,0 +1,159 @@
+xsize = 0.8;
+ysize = 0.8;
+moving_object = 0;
+image_speed = 0.25;
+
+if sprite_index = parent.stand_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	xsize = 0.8;
+	}
+if sprite_index = parent.run_sprite || sprite_index = parent.walk_sprite {
+	sprite_index = parent.pikmin_run_sprite[type];
+	}
+if sprite_index = parent.jump_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	if ( image_index >= image_number - 1 ) {
+		image_index = image_number - 1;
+		}
+	}
+if sprite_index = parent.pikmin_run_sprite[type] {
+	image_speed = 0.3;
+	}
+if sprite_index = parent.mid_jump_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	if ( image_index >= image_number - 1 ) {
+		image_index = image_number - 1;
+		}
+	}
+if sprite_index = parent.land_sprite {
+	sprite_index = parent.pikmin_land_sprite[type];
+	}
+if sprite_index = parent.crouch_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if sprite_index = parent.jab_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if sprite_index = parent.stilt_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	}
+if sprite_index = parent.dtilt_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	}
+if sprite_index = parent.utilt_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if sprite_index = parent.dash_attack_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	}
+if sprite_index = parent.air_dodge_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if sprite_index = parent.fall_sprite {
+	sprite_index = parent.pikmin_jump_sprite[ type ];
+	if ( image_index >= image_number - 1 ) {
+		image_index = image_number - 1;
+		}
+	}
+if sprite_index = parent.spot_dodge_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if sprite_index = parent.shield_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	xsize = 0.8;
+	}
+if sprite_index = parent.roll_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	if xsize > 0 {
+		xsize *= -1
+		}
+	}
+if sprite_index = parent.nair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[ type ];
+	}
+if sprite_index = parent.usmash_sprite {
+	sprite_index = parent.pikmin_stand_sprite[type];
+	}
+if attack = "usmash" {
+	sprite_index = parent.pikmin_usmash_sprite[type];
+	depth -= 2;
+	x += (12-facing*24)*size;
+	image_speed = 0;
+	}
+if sprite_index = parent.ssmash_sprite {
+	sprite_index = parent.pikmin_stand_sprite[type];
+	}
+if attack = "ssmash" {
+	sprite_index = parent.pikmin_ssmash_sprite[type];
+	depth -= 2;
+	moving_object = 1;
+	}
+if attack = "ssmash2" {
+	vspeed = 1;
+	moving_object = 1;
+	hspeed *= 0.9;
+	if ( on_floor || on_platform ) {
+		sprite_index = parent.pikmin_getup_sprite[type];
+		if ( sprite_index != parent.pikmin_getup_sprite[type] ) {
+			image_index = 0;
+			}
+		hspeed = 0;
+		image_speed = 0.15;
+		}
+	}
+if sprite_index = parent.pikmin_getup_sprite[type] && ( image_index >= 4 ) {
+			attack = "none";
+			state = 1;
+			}
+if sprite_index = parent.dsmash_sprite {
+		sprite_index = parent.pikmin_stand_sprite[type];
+		}
+if attack = "dsmash" {
+	sprite_index = parent.pikmin_dsmash_sprite[type];
+	depth -= 2;
+	if image_index >= 4 {
+		image_speed = 0;
+		}
+	}
+if attack = "dsmash2" {
+	sprite_index = parent.pikmin_dsmash_sprite[type];
+	if xsize > 0 {
+		xsize *= -1
+		}
+	depth -= 2;
+	if image_index >= 4 {
+		image_speed = 0;
+		}
+	}
+if ( ( attack = "usmash" || attack == "ssmash" || attack == "ssmash2" || attack = "dsmash" || attack = "uair" ) && ( proj > 0 && instance_exists ( proj ) ) ) { proj.x = x; proj.y = y; }
+
+if ( ( attack = "dsmash2" ) && ( proj2 > 0 && instance_exists ( proj2 ) ) ) { proj2.x = x; proj2.y = y; }
+
+if ( ( sprite_index = parent.flinch_sprite ) || ( sprite_index = parent.flinch2_sprite ) || ( sprite_index = parent.flinch3_sprite ) || ( sprite_index = parent.tumble_sprite ) ) {
+	sprite_index = parent.pikmin_stand_sprite[type];
+	}
+if sprite_index = parent.uair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "uair" {
+	sprite_index = parent.pikmin_uair_sprite[type];
+	depth -= 2;
+	}
+if sprite_index = parent.fair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "fair" {
+	sprite_index = parent.pikmin_fair_sprite[type];
+	}
+if sprite_index = parent.dair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "dair" {
+	sprite_index = parent.pikmin_uair_sprite[type];
+	}
+if sprite_index = parent.bair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "bair" {
+	sprite_index = parent.pikmin_bair_sprite[type];
+	}

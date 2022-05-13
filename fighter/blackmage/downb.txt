@@ -1,0 +1,72 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+		if ( air = 0 )
+		{
+		hspeed = 0;
+        sprite_index = downb_sprite;
+		}
+		if ( air > 0 )
+		{
+		sprite_index = downb_sprite2;
+		}
+        image_index=0
+        timer = 0
+        time = 30
+    }
+
+	switch ( timer )
+      {
+	case 10: image_index = 1; break;
+	case 15: image_index = 2; break;
+	case 20: image_index = 3; break;
+	case 25: image_index = 0; break;
+    }
+	
+		if ( air = 0 )
+		{
+        sprite_index = downb_sprite;
+		}
+		if ( air > 0 )
+		{
+		sprite_index = downb_sprite2;
+		}
+	
+	if timer = 15 and !instance_exists(bouncy){
+		//sound_play(nair_sound)
+		//sound_play(crystal_voice)
+		//bouncy = create_projectile(1,90,4,1,5,3,ice1,obj_spark_ice,1,1,-20+random(40),15+random(30),self.id,900,char_custom6);
+		bouncy = create_spark(00,25,seal_sprite)
+		bouncy.image_yscale = image_yscale * 0.45
+		bouncy.image_xscale = image_xscale * 0.45
+		bouncy.image_speed = 0
+		bouncy.hit = 2
+		bouncy.kyoko = self.id
+		bouncy.alarm[0] = 600
+		bouncy.kyoko_crystal = 1
+		bouncy.script = char_custom5
+		bouncy.timer = 0
+		bouncy.time = 600
+		bouncy.loop = 99999999
+		bouncy.angle_add = 1.5
+		bouncy.glow = 0.65;
+	}else
+	if timer = 15 and instance_exists(bouncy) and bouncy.activated = 0{
+		bouncy.activated = 1
+		bouncy.timer = 300
+		bouncy.image_speed = 0.3
+		bouncy.angle_add = 0
+		bouncy.image_angle = 0
+	}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

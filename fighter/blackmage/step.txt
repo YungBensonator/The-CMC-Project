@@ -1,0 +1,150 @@
+if ( grab_cooldown > 0 && attack_type != "hold" && attack_type != "fthrow" && attack_type != "bthrow" && attack_type != "dthrow" && attack_type != "uthrow" )
+grab_cooldown -= 1
+
+//--------------------------------------------------------------------------------STAND-----------------------------------------------------------
+if ( sprite_index = stand_sprite )
+{
+image_speed = 0.15;
+}
+
+
+///////////////////////////////////Crouch shit I stole from mp3
+if ( state_type = "crouch" ){
+	
+	sprite_index = crouch_sprite;
+	image_speed = 0;
+	crouchgetuptimer = min(6,timer)
+	switch (timer){
+		case 0: image_index = 0; break;
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+	}
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+	image_speed = 0;
+	crouchgetuptimer -= 1;
+	sprite_index = crouch_sprite;
+	crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+	sprite_index = stand_sprite;
+	image_index = 0;
+	crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+	image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+	image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+	image_index = 2;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+	crouchgetuptimer = 0;
+	crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch shit stolen from mp3
+
+
+//-----------------------------------------------------------------------------------------JUMP----------------------------------------------------------------------------------
+if ( state_type == "jump" && timer == 0 )
+  image_index = 0;
+if ( state_type == "land" && jumping )
+{
+  sprite_index = jump_squat_sprite;
+  image_speed = 0;
+  switch ( timer )
+  {
+    case 0: image_index = 0; break;
+    case 2: image_index = 1; break;
+  }
+}
+
+
+//-----------------------------------------------------------------------------------------RUN----------------------------------------------------------------------------------
+if (state_type == "run") {
+	//Walking
+	if (sprite_index != walk_sprite){
+		image_speed = 0;
+	}
+	//Dash
+	if (runtimer >= 0 && runtimer < 50){
+		sprite_index = dash_sprite;
+		switch (runtimer){
+			case 1: image_index = 0; break;
+			case 9: image_index = 1; break;
+		}
+	//Stop running during the initial dash
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 1) {
+		sprite_index = dash_sprite;
+		if (runtimer < 63){
+			image_index = 2;
+		} else if (runtimer < 67){
+			image_index = 0;
+		}
+	//Stop running (run brake)
+	} else if (runtimer >= 60 && runtimer < 90 && dash_end == 0){
+		sprite_index = brake_sprite;
+
+		if (runtimer < 63){
+			image_index = 0;
+		} else {
+			image_index = 1;
+		}
+		
+	//Turn While running
+	} else if (runtimer >= -30 && runtimer <= -10) { 
+		sprite_index = turn_sprite;
+		switch (runtimer){
+			case -30: image_index = 0; break;
+			case -27: image_index = 1; break;
+			case -24: image_index = 2; break;
+		}
+		if (runtimer >= -20){
+			sprite_index = run_sprite;
+			image_speed = 0.2;
+		}
+	} 
+	//Run normally
+	else if (runtimer >= 50 && runtimer < 60){
+		sprite_index = run_sprite;
+		image_speed = 0.2;
+	} 
+	
+}
+
+if ( sprite_index = walk_sprite )
+{
+image_speed = 0.15;
+}
+
+
+//-----------------------------------------------------------------------------------------EDGE----------------------------------------------------------------------------------
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+	{
+	case 0: image_index = 0; break;
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 16: image_index = 3; break;
+	}
+}
+if !instance_exists(bouncy) && run_speed!=base_run_speed 
+{
+	run_speed=base_run_speed
+}
+if !instance_exists(bouncy) && walk_speed!=base_walk_speed 
+{
+	walk_speed=base_walk_speed
+}

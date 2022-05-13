@@ -1,0 +1,73 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "jump")
+{
+    state_type = "air_attack";
+    attack_type = "dair";
+    sprite_index = dair_sprite;
+    image_index = 0;
+    image_speed = 0.3;
+    timer = 0;
+    time = 100;
+}
+if (timer < time)
+{
+    gravity = 0
+    if (timer > 1 && timer < 8)
+    {
+        vspeed = 0;
+    }
+    if (timer > 10)
+    {
+        temp_fall_speed = 5;
+        vspeed = 5 * size;
+    }
+    if (timer = 10)
+    {
+	sound_play(dair_fall_sound);
+        create_hitbox(13, 270, 3.6, 7.8, 14, 7, kick3, obj_spark_hit4, 1.2, 0.6, 5, 16, self.id, 90, 4);
+    }
+    if (timer = 25)
+    {
+        hitbox.damage = 8
+        hitbox.dir = 50+facing*80
+        hitbox.bkb = 2.7
+        hitbox.kbg = 4.5
+    }
+    if (image_index > 5.5)
+    {
+        image_index = 4;
+    }
+    if (air = 0)
+    {
+        sound_play(dair_sound);
+        sprite_index = dairland_sprite;
+        image_index = 0;
+        image_speed = 0.4;
+        timer = 0;
+        time = 17;
+        attack_type = "none";
+        state_type = "land";
+    }
+}
+
+//CAN_jump = 0;
+if (timer >= 37)
+{
+	CAN_jump = 2;
+}
+
+if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch")
+{
+    attack_type = "none";
+    if ( air > 0 )
+		{
+   		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 4;
+		}
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+}

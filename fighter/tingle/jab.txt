@@ -1,0 +1,72 @@
+var a;
+if ( state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "jab";
+  image_speed = 0.4;
+  image_index = 0;
+  sprite_index = jab_sprite;
+  timer = 0;
+  time = 46;
+  timer_speed = 1;
+  }
+if timer < time {
+	state_type = "attack";
+	if timer = 6 {
+		hspeed += 1.7-facing*3.4;
+		}
+	if timer = 7 {
+		a = size;
+		size *= 0.5;
+		sound_play ( swingsnd4 );
+		size = a;
+		create_hitbox(3,140-facing*100,3.3,0,4,3,punch1,obj_spark_hit1,0.6,0.45,12,10,self.id,6,1);
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(46)+x,place_y(32)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		hitbox.di = 0.3;
+		image_speed = 0.2;
+		attacking = 0;
+		}
+	if timer = 12 {
+		image_speed = 0.1;
+		}
+	if timer > 9 && timer < 19 && attacking = 1 {
+		timer = 24;
+		image_speed = 0.3;
+		}
+	if timer = 19 {
+		timer = 45;
+		}
+	if timer = 28 {
+		a = size;
+		size *= 0.4;
+		sound_play ( swingsnd4 );
+		size = a;
+		create_hitbox(7,35+facing*110,5.2,3.6,5,3,punch1,obj_spark_hit1,0.65,0.45,10,13,self.id,5,1);
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(46)+x,place_y(28)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+	if timer = 29 {
+		hspeed -= 2.1-facing*4.2;
+		}
+	if timer = 40 {
+		image_speed = 0;
+		}
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

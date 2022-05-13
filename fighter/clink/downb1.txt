@@ -1,0 +1,44 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" {
+    attacking = 0
+    attack_type = "downb"
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0; 
+    }
+    else
+        state_type = "air_attack";
+ 
+    image_speed = 0.23;
+    sprite_index = downb_sprite;
+    image_index=0;
+    timer = 0;
+    time = 56;
+    timer_speed=1;
+}
+        if timer < time {
+ if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+            if timer = 21 {
+                sound_play(downb_sound);
+                create_projectile(12,35+facing*110,5.65,6,20,7,explodehit3,obj_spark_fire1,0.95,0.95,11,1,self.id,180,clink_bombchu);
+                proj.shake_ampl = 0.5
+            }
+        }  
+        if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+        air_move = 0
+        state_type = "attack"
+        hspeed=0 }
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+}
+        

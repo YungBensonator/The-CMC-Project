@@ -1,0 +1,55 @@
+// SUPER SMASH BROS. CRUSADE
+// POKEBALL PKMN - 196 - ESPEON
+// 30.07.2014 Dry
+
+var a,i;
+
+sprite_set_offset ( spr[0] , 36 , 49 );
+sprite_index = spr[0];
+
+image_speed = 0.25;
+image_index = 0;
+
+xsize = 0.7;
+ysize = 0.7;
+
+fade = 0;
+
+if ( collision_point(x,y+1,obj_floor,0,1) )
+    a = instance_nearest(x,y+1,obj_floor);
+if ( collision_point(x,y+1,obj_platform,0,1) )
+    a = instance_nearest(x,y+1,obj_platform);
+
+if ( instance_exists(a) )
+  {
+    light_left = min ( 64, abs ( round ( a.x - x ) ) );
+    light_right = min ( 64, abs ( round ( a.x + a.image_xscale * 16 - x ) ) );
+  }
+
+//Ray randomisation
+line_number = 20 + round(random(10));
+line_distance = 100 + y;
+for ( i = 0; i < line_number; i += 1 )
+  {
+    line_alpha[i] = 0.5 + random(0.5);
+    line_length[i] = 4 + round(random(28));
+    line_speed[i] = 1 + round(random(4));
+    line_timer[i] = 65 + round(random(125));
+    line_time[i] = ( line_distance - line_length[i] ) / line_speed[i];
+    line_x[i] = -48 + round(random(96));
+  }
+
+//Sparkle randomisation
+spark_number = 5 + round(random(5));
+c_ltgreen = make_color_rgb(190,255,190);
+for ( i = 0; i < spark_number; i += 1 )
+  {
+    spark_size[i] = 0.1 + round(random(0.1));
+    spark_speed[i] = 0.1 + round(random(0.2));
+    spark_timer[i] = 80 + round(random(95));
+    spark_x[i] = -48 + round(random(96));
+    spark_y[i] = round(random(64));
+  }
+
+disappear_fx = 1;
+height = 30;

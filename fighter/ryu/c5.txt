@@ -1,0 +1,61 @@
+absorb = -1
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.shinkuu_sprite
+    image_speed = 0.75;
+	image_xscale = 0.5*(1-facing*2) * attacker.size;
+    image_yscale = 0.5 * attacker.size
+    visible=1;
+    temp = 1
+    proj_hits = 1
+    ryu = attacker
+    xspeed = 5-ryu.facing*10
+    }
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+if hit = 0
+hspeed = xspeed
+else
+speed = 0
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.85)
+if timer = time+1 && proj_hits <= 7 {
+    proj_hits+=1
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+    shake_ampl = 0.3
+    if proj_hits = 8 {
+        bkb= attacker.size*7.5
+        kbg = attacker.size*8.2
+        dir = 20+facing*140
+        hitlag_frames = 5
+        hitlag_diff = 2
+        shake_type = 1
+        shake_ampl = 0
+        hit_stun = 3
+        //sfx = kick3
+        spark = instance_create(x,y,obj_spark_shockwave);
+        spark.image_xscale *= 3
+        spark.image_yscale *= 3
+        spark.image_blend = c_black
+        spark.depth = 1
+        spark.image_alpha = 0.7
+        spark = instance_create(x,y,obj_spark_shockwave);
+        spark.image_xscale *= 3.5
+        spark.image_yscale *= 3.5
+        spark.image_blend = c_white
+        spark.depth = 0
+        spark.image_alpha = 0.4
+    }
+    timer = 0
+    time = 19
+}
+if timer = 179 && proj_hits<6
+proj_hits=6
+
+
+

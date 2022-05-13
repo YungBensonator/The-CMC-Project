@@ -1,0 +1,195 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fs1_sprite;
+  timer = 0;
+  time = 410;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  temp = 0;
+  }
+
+if ( timer < 410 )
+{
+gravity_lock = 1;
+vspeed = 0;
+}
+if ( temp == 1 )
+  {
+  switch ( timer )
+    {
+    case 180: image_index = 6; break;
+    case 220: image_index = 1; break;
+    case 230: image_index = 0; break;
+    case 270: image_index = 11; break;
+    case 273: image_index = 12; break;
+    case 386: image_index = 12; break;
+    case 389: image_index = 13; break;
+    case 392: image_index = 14; break;
+    case 395: sprite_index = objection_sprite; image_index = 3; break;
+    case 397: image_index = 4; break;
+    }
+  if ( timer > 72 && timer < 380 && timer mod 10 == 0 ) create_hitbox ( 11 , 362 , 6 , 0 , 20 , 2 , punch2 , obj_spark_hit1 , 1.5 , 1.2 , 0 , 16 , self.id , 10 , 4 );
+  if ( timer == 72 )
+    {
+    sprite_index = fs2_sprite;
+    image_speed = 0;
+    image_index = 4;
+    sound_play ( fs1_voice );
+    }
+  if ( timer >= 73 && timer < 180 )
+    {
+    if ( timer mod 10 < 5 )
+      image_index = 7;
+      else
+      image_index = 6;
+    }
+  if ( timer == 220 )
+    {
+    sound_play ( fs2_voice );
+    }
+  if ( timer == 270 )
+    {
+    sound_play ( fs4_voice );
+    }
+  if ( timer == 390 )
+    {
+    sound_play ( fs5_voice );
+    }
+  if ( timer == 395 )
+    {
+    spark = instance_create ( x , y , obj_spark );
+    spark.sprite_index = fs_desk2_sprite;
+    spark.image_xscale = 1;
+    spark.image_yscale = 1;
+    spark.image_speed = 0;
+    spark.keepmain = keepmain;
+    spark.script = char_custom3;
+    spark.hspeed = -3 + facing * 6;
+    spark.vspeed = -7;
+    char_custom8();
+    spark.image_xscale = 3;
+    spark.image_yscale = 3;
+    proj.image_xscale *= 2.2;
+    proj.image_yscale *= 2.7;
+    spark.x += 60 - facing * 120;
+    proj.x += 60 - facing * 120;
+    proj.hitbox_x += 60 - facing * 120;
+    proj.visible = 1;
+    }
+  if ( timer >= time - 1 )
+    {
+    state_type = "stand";
+    attack_type = "none";
+	intangible = 0;
+    timer = 0;
+    time = -1;
+    }
+  exit;
+  }
+if ( temp == 2 )
+  {
+  if ( timer == 72 )
+    {
+    sprite_index = fs2_sprite;
+    var i;
+    for ( i = 0 ; i < ds_list_size ( trapped ) ; i += 1 )
+      {
+      target = ds_list_find_value ( desks , i );
+      target.image_speed = 1;
+      target = ds_list_find_value ( trapped , i );
+	  target.intangible = 0;
+      create_projectile ( 40 , point_direction ( x , y + 64 , target.x , target.y ) , 7.8 , 8 , 30 , 10 , smash_up , obj_spark_slash4 , 1 , 1 , 0 , 0 , self.id , 2 , 0 ); 
+      proj.x = target.x;
+      proj.y = target.y;
+      proj.only_hit = target;
+      }
+    image_index = 19;
+    }
+  if ( timer == 100 )
+    {
+    ds_list_destroy ( trapped );
+    ds_list_destroy ( desks );
+    state_type = "stand";
+	intangible = 0;
+    timer = 0;
+    time = -1;
+    exit;
+    }
+  exit;
+  }
+
+if ( timer <= 70 )
+  {
+  if ( timer == 2 ) image_index = 1;
+  if ( timer == 6 ) image_index = 2;
+  if ( timer == 8 )
+    {
+    screen_shake ( 7 , 7 );
+    sound_play ( deskslam_sound );
+    instance_create ( x , y , obj_down_impact );
+    image_index = 3;
+    }
+  if ( timer == 10 )
+    {
+    image_index = 4;
+    trapped = ds_list_create();
+    desks = ds_list_create();
+    with ( player )
+      {
+      if ( id == other.id ) continue;
+      if ( team == other.team && !team_attack ) continue;
+      if ( intangible ) continue;
+      if ( collision_ellipse ( other.x - 96 , other.y - 32 , other.x + 96 , other.y + 32 , self.id , 1 , 0 ) )
+        {
+        ds_list_add ( other.trapped , id );
+        state_type = "air_flinch";
+        sprite_index = flinch_sprite;
+        hspeed = 0;
+        vspeed = 0;
+        timer = 0;
+        time = 71;
+        timer_speed = 0;
+		intangible = 1;
+        alarm[0] = 70;
+        spark = instance_create ( x , y , obj_spark );
+        ds_list_add ( other.desks , spark );
+        spark . sprite_index = other.fs_desk2_sprite;
+        spark . snap = id;
+        spark . image_speed = 0;
+        spark . depth = depth - 1;
+        spark . image_xscale = sprite_get_height ( sprite_index ) / 62;
+        spark . image_yscale = spark . image_xscale;
+        instance_create ( x , y - 16 , obj_spark );
+        }
+      }
+    }
+  if ( timer == 70 )
+    {
+    if ( ds_list_empty ( trapped ) )
+      {
+      ds_list_destroy ( trapped );
+      ds_list_destroy ( desks );
+      temp = 1;
+      }
+      else
+      {
+      spark = instance_create ( 0 , 0 , obj_custom_gfx );
+      spark.draw_script = char_custom7;
+      spark.keepmain = keepmain;
+      spark.depth = -15;
+      spark.wright = self.id;
+      temp = 2;
+      spark = instance_create ( 0 , 0 , obj_freeze );
+      spark.alarm[0] = 520;
+      }
+    }
+  }

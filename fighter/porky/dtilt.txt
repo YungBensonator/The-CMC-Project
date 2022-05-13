@@ -1,0 +1,48 @@
+if state_type = "run" || state_type = "stand" || state_type = "crouch" {
+    attacking = 0
+    timer = 0
+    attack_type = "dtilt"
+    state_type = "attack"
+    image_speed = 0.3
+    sprite_index = dtilt_sprite
+    image_index=0.33
+    time = 36
+    timer_speed=1
+    if air = 0
+        hspeed = 0
+}
+    if timer >= 1 && timer < 3 && temp = 0 {
+        if moveright = 1 facing = 0;
+        if moveleft = 1 facing = 1;
+    }
+    if timer = 9 {
+        create_hitbox(2,20+facing*140,3.5,0,4,3,punch2,obj_spark_hit1,0.4,0.4,20,18,self.id,4,2);
+        hitbox.hit_stun = 2.5;
+        }
+    if timer = 12 {
+        image_speed = 0.25
+        sound_play(dtilt_voice)
+        create_projectile(2,20+facing*140,2.5,0,4,3/size,punch2,obj_spark_hit1,0.8,0.8,20,18,self.id,40,porky_vomit)
+        proj.sprite_index = dtilt_proj_sprite
+        proj.image_speed = 0.2
+        proj.speed = 2.5*size
+        proj.direction = 35 + facing*110
+        proj.hitlag_diff = 3
+        spark = instance_create(x+(13-facing*26)*size,y,obj_dust_effect)
+        spark.image_xscale *= 0.8*size
+        spark.image_yscale *= 0.5*size
+        spark.image_alpha = 0.67
+        spark.facing = 1-facing
+    }
+    if image_index >= image_number - image_speed
+        image_speed=0;
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air=0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+}

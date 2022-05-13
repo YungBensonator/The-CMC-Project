@@ -1,0 +1,75 @@
+if ( state_type = "out" || state_type = "respawn" )
+    copy = "none";
+if ( attack_type != "downb" )
+    defense=1;
+
+if air=0
+sidebtemp=0
+if ( copy_percent > 0 && percent >= copy_percent + 75 && copy != "none" )
+  {
+    sound_play(lose_sound);
+    spark = create_spark(0,10*size,star_sprite,0.3,0.6*size,0.6*size);
+    spark.hspeed = size * (1-facing*2);
+    spark.vspeed = -7.5*size;
+    spark.gravity = 0.3*size;
+    spark.visible = 1;
+    copy = "none";
+    copy_lose = 60;
+  }
+if ( copy_lose > 0 )
+  copy_lose -= 1;
+if state_type = "land" || state_type = "out" || state_type = "respawn" || state_type = "edge" || state_type = "stand"
+hammerstall = 1;
+
+if state_type = "down" && image_speed > 0 {
+sprite_index = ukemi_sprite; }
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 12: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=1;  break;
+  case 14: shakey=12*size;  break;
+  case 16: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 18: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 20: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 22: sprite_index=stand_sprite; shakex=0*size*(1-facing*2); shakey=0*size; image_index=0;  break;
+  case 24: sprite_index=crouch_sprite;  break;
+  }
+}
+if ( state_type = "flinch" || state_type = "air_flinch" || attack_type = "none" )
+{
+sound_stop(wheel_loop_sound);
+}
+if (!instance_exists(hudThing)){ 
+    hudThing = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    hudThing.step_script = hudThing_step_script;
+    hudThing.draw_script = hudThing_draw_script;
+    hudThing.owner = self.id;
+    hudThing.keepmain = self.keepmain;
+    hudThing.sprite_index = meter_sprite;
+    hudThing.image_speed = 0;
+}
+if (instance_exists(hudThing))
+{
+hudThing.hudalpha = obj_game_control.hud_cover[number-1];
+if ( state_type != "out" && copy_lose = 0 )
+{
+if copy = "none"{hudThing.image_index = 0;}
+if copy = "fire"{hudThing.image_index = 1;}
+if copy = "beam"{hudThing.image_index = 2;}
+if copy = "fighter"{hudThing.image_index = 3;}
+if copy = "wheel"{hudThing.image_index = 4;}
+if copy = "sword"{hudThing.image_index = 5;}
+if copy = "laser"{hudThing.image_index = 6;}
+if copy = "bomb"{hudThing.image_index = 7;}
+if copy = "spark"{hudThing.image_index = 8;}
+if copy = "parasol"{hudThing.image_index = 9;}
+if copy = "falcon"{hudThing.image_index = 10;}
+}
+else
+hudThing.image_index = 11;
+}

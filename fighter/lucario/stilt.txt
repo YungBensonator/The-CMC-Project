@@ -1,0 +1,105 @@
+if global.gs_form[number-1] = 0
+{
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0.4;
+        sprite_index = stilt_sprite;
+        image_index=0.2;
+        timer = 0;
+        time = 38;
+        timer_speed=1;
+}
+
+        if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+            if timer >= 1 && timer <= 5 {
+                hspeed = (0.75-facing*1.5)*size
+            }
+            if timer = 5 {
+                create_spark(9,3,stilt_aura_sprite,1,(0.35+aura/80)*(1-facing*2),0.35+aura/80)
+            }
+            if timer = 8 {
+                sound_play(attack_sound2);
+                if random(10) > 1.5
+                    play_attack_voice();
+                create_hitbox(7+round(aura/4),20+facing*140,5.25+aura/6,5.25+aura/25,10+round(aura/2),6+round(aura/3),aura2,obj_spark_aura,0.85+aura/50,0.75+aura/50,23,15,self.id,5,3);
+                hitbox.hit_stun = 4.5;
+                image_speed = 0.25;
+            }
+            if timer = 6
+                hspeed = 0
+	if timer = 13
+	image_speed = 0
+	if timer = 26
+	image_speed = 0.25
+        }  
+if image_index >= image_number - image_speed
+        image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        
+}        
+if global.gs_form[number-1] = 1
+{
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0.4;
+        sprite_index = stilt_sprite;
+        image_index=0.2;
+        timer = 0;
+        time = 38;
+        timer_speed=1;
+}
+
+        if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+            if timer >= 1 && timer <= 5 {
+                hspeed = (0.75-facing*1.5)*size
+            }
+            if timer = 5 {
+                create_spark(9,3,stilt_aura_sprite,1,(0.35+aura/80)*(1-facing*2),0.35+aura/80)
+            }
+            if timer = 8 {
+                sound_play(attack_sound2);
+                if random(10) > 1.5
+                    play_attack_voice();
+                create_hitbox(7,20+facing*140,3.6,5.96,10,3,aura2,obj_spark_aura,0.85,0.75,23,15,self.id,5,3);
+                hitbox.hit_stun = 4;
+                image_speed = 0.25;
+            }
+            if timer = 6
+                hspeed = 0
+	if timer = 13
+	image_speed = 0
+	if timer = 26
+	image_speed = 0.25
+        }  
+if image_index >= image_number - image_speed
+        image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+} 
+
+if special > 0 && hitbox.hit > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if (moveleft[1] >0) || (moveright[1] > 0)
+		interrupt = 1
+		else
+	    char_sideb();
+	  }

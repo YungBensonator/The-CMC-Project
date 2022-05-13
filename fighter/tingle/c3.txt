@@ -1,0 +1,42 @@
+moving_object = 1;
+proj_destroy = 1;
+absorb2 = 1
+var a;
+a = 0;
+vspeed += 0.25;
+/*if ( on_floor || on_platform )
+  a = 1;
+if ( next_to_rwall && hspeed > 0 )
+  a = 1;
+if ( next_to_lwall && hspeed < 0 )
+  a = 1;
+if ( under_ceiling && vspeed < 0 )
+  a = 1;*/
+vspeed += 0.2;
+if ( on_floor || on_platform )
+  {
+  if ( vspeed > 0 )
+    {
+    hspeed *= 0.4;
+    vspeed *= -0.5;
+    }
+  }
+if ( next_to_rwall && hspeed > 0 )
+  hspeed *= -0.5;
+if ( next_to_lwall && hspeed < 0 )
+  hspeed *= -0.5;
+if ( under_ceiling && vspeed < 0 ) vspeed = 0;
+if ( hit > 0 && timer < time - 1 )
+  a = 1;
+if ( timer == time - 4 )
+  a = 1;
+if ( timer >= time )
+  a = 0;
+
+if ( a )
+  {
+  timer = time;
+  sound_play ( explode_small );
+  instance_create ( x , y , obj_spark_explode1 );
+  hit = 2;
+  }

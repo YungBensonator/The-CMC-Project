@@ -1,0 +1,71 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "sideb";
+  time = 75;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  
+  sprite_index = sideb_sprite;
+  temp = 0;
+  
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+
+	switch ( timer )
+	  {
+	case 3: image_index = 0; break;
+	case 6: image_index = 0; break;
+	case 9: image_index = 0; break;
+	case 13: image_index = 0; break;
+	case 15: image_index = 1; break;
+	case 17: image_index = 1; break;
+	case 20: image_index = 2; break;
+	case 22: image_index = 2; break;
+	case 62: image_index = 1; break;
+	case 65: image_index = 0; break;
+	case 68: image_index = 0; break;
+	  }
+
+
+if ( timer = 15 )
+{
+sound_play ( downb_voice );
+sound_play ( downb_sound );
+effect_create_above( ef_ring , x + 11 * (1-facing*2) * size , y - 12 * size , 0.05 , c_blue )
+sideb_droplet = create_projectile( 0 , 90 , 0 , 0 , 0 , 1 , -1 , -1 , 1 , 1 , abs(place_x(46)),-place_y(13) , self.id , 125 , char_custom3 );
+
+if came_from_smashb = 1
+sideb_droplet.smashb = 1
+
+came_from_smashb = 0
+}
+
+if ( timer > 15 && air = 0 && temp = 1 )
+{
+state_type = "land";
+attack_type = "none";
+sprite_index = land_sprite;
+time = 60 - timer;
+timer = 0;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 11;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

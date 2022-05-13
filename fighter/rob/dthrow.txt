@@ -1,0 +1,75 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0.3;
+sprite_index = dthrow_sprite;
+image_index=0.5;
+timer = 0;
+time = 70;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 60
+target.time = 90;
+}
+if timer < time {
+    if timer >= 0 && timer <= 51 {
+	target.x = x + (12 -facing*24)*size;
+	target.y = y+4;
+		}
+    if timer > 4 && timer < 48 {
+	target.state_type = "air_flinch";
+	target.sprite_index = target.flinch_sprite;
+	target.sprite_angle = 180;
+	target.depth = depth - 1;
+	target.hard_hit = -1;
+	//target.image_xscale *= -1;
+        //target.image_yscale *= -1;
+	}
+    if timer = 3 || timer = 7 || timer = 11 || timer = 15 || timer = 19 || timer = 23 || timer = 27 || timer = 31 || timer = 35 || timer = 39 || timer = 43 || timer = 47 {
+	shakey -=2;
+	target.shakey -=2;
+	}
+    if timer = 5 || timer = 9 || timer = 13 || timer = 17 || timer = 21 || timer = 25 || timer = 29 || timer = 33 || timer = 37 || timer = 41 || timer = 45 || timer = 49 {
+	shakey +=2;
+	target.shakey +=2;
+	}
+    if timer = 3 || timer = 7 || timer = 11 || timer = 15 || timer = 19 || timer = 23 || timer = 27 || timer = 31 || timer = 35 || timer = 39 || timer = 43 || timer = 47 {
+	shakex -=4;
+	target.shakex -=4;
+	}
+    if timer = 5 || timer = 9 || timer = 13 || timer = 17 || timer = 21 || timer = 25 || timer = 29 || timer = 33 || timer = 37 || timer = 41 || timer = 45 || timer = 49 {
+	shakex +=4;
+	target.shakex +=4;
+	}
+    if timer = 8 {
+	sound_play(dthrow_sound);
+	}
+    if timer = 24 {
+	sound_play(dthrow_sound);
+	}
+    if timer = 6 || timer = 18 || timer = 30 || timer = 40 || timer = 48 {
+	target.sprite_angle = 180;
+        create_hitbox2(1,90,0.1,0.1,8,3,punch2,obj_spark_hit2,0.6,0.5,13,16,self.id,2,2);
+	hitbox.di = -1;
+        instance_create(x+20-facing*40,y-20,obj_spark_effect);
+	target.alarm[0] = 20
+	}
+    if timer = 51 {
+        create_throw_box(4,60+facing*60,6.4,1.7,1,1,punch3,obj_spark_effect,0.6,0.5,13,15,self.id,1)
+        hitbox.shake_ampl = 0.4
+	hitbox.hit_stun = 18
+	}
+    if timer > 49 {
+	target.image_angle = 0;
+	}
+if image_index >= image_number - image_speed
+image_speed = 0
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,152 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    special = 1;
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 100;
+    sprite_index = sideb_start_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    air_move = 0;
+chargetemp=0
+loop=1
+flap=0
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 7: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 12: sprite_index = sideb_charge_sprite;
+
+	case 400: image_index = 0; break;
+	case 403: image_index = 1; break;
+	case 406: image_index = 2; break;
+	case 409: image_index = 3; break;
+	case 412: image_index = 4; break;
+
+
+	case 450: image_index = 16; break;
+	case 453: image_index = 17; break;
+	case 464: image_index = 18; break;
+	case 466: image_index = 29; break;
+
+
+
+
+      }
+///charge sprite speed
+if timer = 12
+{
+sound_play(sideb_sound2);
+image_speed=0.4
+}
+
+if timer <= 400
+	vspeed *= 0.2;
+
+if timer = 40 && special=1
+{
+chargetemp+=0.75
+timer=13
+sound_play(sideb_sound3);
+spark=instance_create(x,y+5,obj_down_impact);
+spark.image_index = 5;
+spark.image_xscale = 0.8 * (1-facing*2) * size
+spark.image_yscale = 0.8 * size
+}
+if chargetemp>=2 {
+chargetemp=2
+sound_stop(sideb_sound3);
+}
+
+if timer = 399
+speed=0
+
+if special=0 && timer >= 15 && timer <= 60
+{
+image_speed=0
+timer=400
+time=466
+}
+
+if timer = 400
+{
+///da move
+sprite_index = sideb_sprite;
+}
+
+if timer = 405
+speed=0
+
+if timer = 412
+{
+sound_play(sideb_sound1);
+sound_stop(sideb_sound2);
+hspeed = 6-facing*12
+spark=instance_create(x,y-5,obj_down_impact);
+spark.image_index = 5;
+spark.image_xscale = 0.1 * (1-facing*2) * size
+spark.image_yscale = 0.1 * size
+
+if flap=chargetemp{
+create_hitbox3( 6 , 25+130*facing ,6,5 , 10 , 8 , water1 , obj_spark_hit3 ,0.84 , 0.67 , 0 , 10 , self.id , 20 , 3);
+hitbox3.weight_kb=0
+hitbox3.hit_stun=15
+}
+if flap < chargetemp{
+create_hitbox3( 4 , 30+120*facing ,7,0 , 10 , 4 , water1 , obj_spark_hit3 ,0.84 , 0.67 , 0 , 10 , self.id , 12 , 3);
+hitbox3.weight_kb=0
+hitbox3.hit_stun=15
+}
+}
+////Without the hspeed
+if timer >= 406 && timer <= 420
+{
+gravity=0
+vspeed=0
+after_image(5,c_purple,0.45)
+air_move=0
+}
+if timer >= 421 && timer <= 430
+{
+gravity=0
+vspeed=0
+after_image(5,c_purple,0.45)
+air_move=0
+hspeed = 3-facing*6
+}
+if timer = 430 && chargetemp >= loop
+{
+timer=405
+loop+=1
+flap+=1
+}
+///Stop moving
+if timer = 431
+{
+hspeed = 0.5-facing*1
+}
+if air = 0 && timer > 437
+hspeed=0
+  }
+if timer = 454 {
+sound_play(sideb_sound4);
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "jump";
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+    timer = 0;
+    time = -1;
+  }

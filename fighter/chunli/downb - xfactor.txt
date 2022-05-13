@@ -1,0 +1,159 @@
+
+ fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" ) {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 55;
+        timer_speed=1;
+        target = -1;
+      
+}
+if ( timer < time )
+  {
+  switch ( timer )
+      {
+	case 0: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 4: image_index = 3; break;
+	case 7: image_index = 4; break;
+	case 8: image_index = 5; break;
+	case 9: image_index = 6; break;
+	case 43: image_index = 5; break;
+	case 46: image_index = 4; break;
+	case 49: image_index = 3; break;
+	case 52: image_index = 2; break;
+	case 54: image_index = 1; break;
+      }
+if timer = 1 {
+        sound_play(xfactor_sound);
+	sound_play(xannouncer_sound);
+        create_hitbox(0,90,5,0,20,5,sf_punchs,obj_spark_impact,0.625,0.625,0,25,self.id,10,1);
+	hitbox.hit_stun=50;
+//XFactor effect.
+spark = instance_create(x+0*(1-facing*2)*size,y-20*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.5*size
+        spark.image_yscale *= 0.5*size
+        spark.image_blend = c_red
+        spark.image_alpha = 0.8
+}
+
+if timer = 1 || timer = 5 || timer = 10 {
+        image_blend=c_red;
+	after_image(5,c_red,10);
+	} 
+if timer = 3 || timer = 8 {
+	image_blend=c_dkgray;
+	after_image(5,c_dkgray,10);
+	}
+
+//Jump Cancel
+if timer >= 1 && timer <= 5 && attack_success {
+CAN_jump = 2;
+CAN_dtilt = 2;
+CAN_utilt = 2;
+CAN_stilt = 2;
+image_blend=c_white
+}
+
+//Attack Cancel
+if timer >= 2 && timer <= 4 && attack_success {
+     	if special > 0 && moveup !=1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		char_final_smash();
+		else
+	    char_b();
+	    image_blend=c_white;
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	    image_blend=c_white;
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    if (moveleft[1] >0) || (moveright[1] > 0)
+	    char_smashb();
+		else
+	    char_sideb();
+	    image_blend=c_white;
+	  }
+	if attacking > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_jab();
+	    kickcancel = 1;
+	  }
+	if ( attacking > 0 && movedown[1] = 1 ) || smashdown
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_dsmash();
+	    image_blend=c_white;
+	  }	
+	if ( attacking > 0 && moveup[1] = 1 ) || smashup
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_usmash();
+	    image_blend=c_white;
+//LOG: This is a pretty good temporary hit thing, but needs to confirm into other moves.
+	  }
+}
+   
+if air = 0 {
+    air_move = 0
+    if abs(hspeed) < 0.25*size
+        hspeed = 0
+    else if hspeed < 0
+        hspeed += size*0.2
+    else
+        hspeed -= size*0.2
+}
+
+	if timer = 15 {
+	image_blend = c_white
+	temp3 = 0
+	timer_speed = 1
+	}
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+}
+        

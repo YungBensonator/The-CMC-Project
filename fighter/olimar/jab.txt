@@ -1,0 +1,72 @@
+if ( state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "jab";
+  image_speed = 0.7;
+  image_index = 0;
+  sprite_index = jab_sprite;
+  timer = 0;
+  time = 30;
+  timer_speed = 1;
+  jab2 = 0;
+  }
+if timer < time {
+	state_type = "attack";
+	if timer = 6 {
+		sound_play(jab_sound);
+		create_hitbox ( 3 , 85+facing*10 , 2 , 0.3 , 4 , 2 , kick1 , obj_spark_hit1 , 0.66 , 0.76 , 9.30 , 16.28 , self.id , 3 , 1 );
+		attacking = 0;
+		}
+	if timer = 8 {
+    		hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 6.20
+    		hitbox.hitbox_y = size * 10.08
+    		hitbox.image_xscale = size * 0.68
+    		hitbox.image_yscale = size * 0.78
+		}
+	if timer = 8 {
+		create_hitbox2 ( 2 , 361 , 0 , 0 , 3 , 1 , sfx , obj_spark_hit1 , 0.24 , 0.25 , 25.58 , 22.48 , self.id , 3 , 1 );
+		}
+	if timer = 9 {
+		hitbox2.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 27.13
+    		hitbox2.hitbox_y = size * 13.95
+    		hitbox2.image_xscale = size * 0.25
+    		hitbox2.image_yscale = size * 0.25
+		}
+	if timer = 10 {
+		hitbox2.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 13.18
+    		hitbox2.hitbox_y = size * 1.55
+    		hitbox2.image_xscale = size * 0.22
+    		hitbox2.image_yscale = size * 0.22
+		}
+	if timer = 12 {
+		image_speed = 0;
+		}
+	if timer > 8 && timer < 16 && attacking = 1 {
+		jab2 = 1
+		}
+	if timer = 16 && jab2 = 1 {
+		timer = 17;
+		image_speed = 0.6;
+		}
+	if timer = 16 && jab2 = 0 {
+		timer = 45;
+		time = 55;
+		image_speed = -0.5;
+		}
+	if timer = 19 {
+		sound_play(jab_sound);
+		create_hitbox ( 5 , 25+facing*130 , 6 , 2.5 , 6 , 4 , kick1 , obj_spark_hit1 , 0.67 , 0.74 , 13.95 , 11.63 , self.id , 2 , 1 );
+		}
+	if timer = 26 {
+		image_speed = 0.1;
+		}
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

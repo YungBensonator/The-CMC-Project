@@ -24,9 +24,9 @@ if ( temp == 0 && timer mod 6 == 0 )
 
 if !instance_exists(ness)
     instance_destroy();
-if ( ness.attack_type != "upb" )
+if ( ness.attack_type != "sideb" )
   instance_destroy();
-if attacker = ness && string(ness.attack_type) = "upb" {
+if attacker = ness && string(ness.attack_type) = "sideb" {
     moveup = ness.moveup
     moveright = ness.moveright
     movedown = ness.movedown
@@ -90,21 +90,17 @@ if temp = 0
 speed = 3
 
 if ( temp == 1 ) exit;
-
-if ( timer > 5 )
-{
-	if (under_ceiling || ((on_floor || on_platform) && vspeed > 0) || collision_point(x+sign(hspeed),y,obj_wall,1,1)) {  
-		temp = 1
-		ness.timer = 119;
-		speed = 0;
-		sound_play ( ness.upb3_voice );
-		ness.temp = 0;
-	}
-	if ( ness.special || ness.shieldup ) {
-		temp = 1
-		ness.timer = 119;
-		speed = 0;
-		sound_play ( ness.upb3_voice );
-		ness.temp = 0;
-	}
+if (under_ceiling || ((on_floor || on_platform) && vspeed > 0) || collision_point(x+sign(hspeed),y,obj_wall,1,1)) {  
+    temp = 1
+    ness.timer = 119;
+    speed = 0;
+    sound_play ( ness.upb3_voice );
+    ness.temp = 0;
+}
+if ( ness.special || ness.shieldup ) {
+    temp = 1
+    ness.timer = 119;
+    speed = 0;
+    sound_play ( ness.upb3_voice );
+    ness.temp = 0;
 }

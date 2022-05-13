@@ -1,0 +1,119 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  target = noone;
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = final_smash_sprite;
+  image_index = 0;
+  timer = 1;
+  time = 390;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  effect_create_below ( ef_ellipse , x , y , 1 , c_red );
+  }
+var _i;
+speed = 0;
+gravity_lock = 1;
+intangible = 1;
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 8:
+    target =-1;
+    create_homing_bubble(1.5,1,20,10,self.id,3); break; 
+  case 12:
+    sound_play ( pounce_sound );
+    create_projectile ( 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
+      1 , 1 , 0 , 12 , self.id , 680 , dhd_evilducks );
+    last_claydisc = proj;
+    proj . hit = 2;
+    proj . sprite_index = final_ducks_sprite;
+    proj . target = noone;
+    proj . distance = 0;
+    proj . direction = 0;
+    proj . die = 0;
+    proj . quack = 0;
+    proj . image_xscale = 1;
+    proj . image_yscale = 1;
+    proj . proj = noone;
+    proj . parry_nodestroy = 1;
+    image_index = 3;
+    break;
+  case 18: image_index = 4; break;
+  case 20: image_index = 5; break;
+  case 60: image_index = 1; break;
+  case 62: image_index = 0; break;
+  case 64:
+    sprite_index = sideb_sprite;
+    image_index = 0;
+    image_speed = 1;
+    break;
+  case 304:
+    sprite_index = final_smash2_sprite;
+    image_index = 0;
+    image_speed = 0;
+    break;
+  case 330: image_index = 2; break;
+  case 332: image_index = 3; break;
+  case 334: image_index = 4; break;
+  case 350:
+    image_index = 5;
+    sound_play ( zapper_sound );
+    last_claydisc . die = 2;
+    for ( _i = -40 ; _i <= 40 ; _i += 20 )
+      {
+      create_projectile ( 12 , 30 + facing * 120 , 5 , 6.5 , 6.5 , 5 , kick2 , obj_spark_hit4 ,
+       0.86 , 0.86 , 24 , 24 , self.id , 180 , dhd_zapper );
+      proj . sprite_index = bullet_sprite;
+      proj . visible = 1;
+      proj . hspeed = lengthdir_x ( 8 , _i + facing * 180 );
+      proj . vspeed = lengthdir_y ( 8 , _i + facing * 180 );
+      proj . image_xscale = 1.5;
+      proj . image_yscale = 1.25;
+      proj . hitlag_diff = 11
+      }
+    break;
+  case 354: image_index = 6; break;
+  case 370: image_index = 7; break;
+  case 372: image_index = 8; break;
+  case 374: image_index = 0; break;
+  }
+if ( timer > 64 && timer < 304 )
+  {
+  if ( timer mod 9 == 8 )
+    {
+    image_index = 9;
+    sound_play ( attacksnd1 );
+    create_projectile ( 2 , 30 + facing * 120 , 4 , 3.2 , 8 , 6 , kick1 , obj_spark_hit4 ,
+      0.7 , 0.6 , 23 + random ( 3 ) , 14 + random ( 3 ) , self.id , 40 , dhd_claydisc );
+    proj . sprite_index = clay_sprite;
+    proj . visible = 1;
+    proj . hspeed = ( 6 + random ( 5 ) ) * ( 1 - facing - facing );
+    proj . image_xscale = image_xscale;
+    proj . image_yscale = image_yscale;
+    proj . vspeed = 1 - random ( 7 );
+    }
+  }
+if timer = 10 && (target = -1 || target.intangible || string(target.attack_type) = "final_smash") {
+        timer = time-20
+    } 
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  smash_power = 0;
+  background_blend = c_white;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

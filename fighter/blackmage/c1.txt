@@ -1,0 +1,50 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    //if sprite_index = 0
+	if set_sprite = 0
+    sprite_index = attacker.id.asteru_sprite
+    image_speed = 0.5
+    visible =1
+	moving_object = 0;
+	facing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale * multiplier
+	else
+	image_xscale=attacker.image_xscale *(-1) * multiplier
+	image_yscale=attacker.image_yscale * multiplier
+	
+	image_angle=attacker.projdir
+	direction=attacker.projdir
+	
+	if shootimer = 0
+	shootimer = 1
+	
+	powerup = 0
+	
+}if timer = shootimer && hit = 0 {
+if setspeed = 1{
+chosen = chosespeed
+}else {
+chosen = 6
+}
+speed= chosen // - facing   *(chosen*2)
+moving_object = 1;
+}
+if doconverge = 1{
+if timer = convergetimer{
+image_angle=convergeangle
+direction=convergeangle
+dir = convergeangle
+}
+}
+
+
+
+
+if timer >shootimer{
+absorb2 = 1
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()
+}

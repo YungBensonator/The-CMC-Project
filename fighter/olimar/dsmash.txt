@@ -1,0 +1,144 @@
+if ( state_type == "crouch" || state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dsmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dsmash_sprite;
+  timer = 0;
+  time = 38;
+  timer_speed = 1;
+  charge_frame = 3;
+  }
+if timer < time {
+		switch ( timer )
+		{
+		case 8: image_index = 1; break;
+		case 11: image_index = 2; break;
+		case 32: image_index = 6; break;
+		case 35: image_index = 7; break;
+		}
+	if timer > 0 && timer < 35 {
+		pikmin[0].depth = depth-1;
+		pikmin[0].attack = "dsmash";
+		pikmin[0].state = 6;
+		pikmin[0].image_xscale = 0.8 * (1-facing*2);
+		pikmin[1].depth = depth-1;
+		pikmin[1].attack = "dsmash2";
+		pikmin[1].state = 6;
+		pikmin[1].image_xscale = -0.8 * (1-facing*2);
+		pikmin[0].image_speed = 0;
+		pikmin[1].image_speed = 0;
+		}
+	if timer >= 0 && timer <= 11
+	{
+	pikmin[0].image_index = 2;
+	pikmin[1].image_index = 2;
+	}
+	if timer >= 1 && timer < 11 {
+		pikmin[0].x = x+(8-facing*16)*size;
+		pikmin[1].x = x-(8-facing*16)*size;
+		}
+	if timer >= 11 && timer < 21 {
+		if pikmin[0].type != 3  {
+			pikmin[0].x += 3-facing*6;
+			}
+		if pikmin[0].type = 3 {
+			pikmin[0].x += 2-facing*4;
+			}
+		if pikmin[1].type != 3 {
+			pikmin[1].x -= 3-facing*6;
+			}
+		if pikmin[1].type = 3 {
+			pikmin[1].x -= 2-facing*4;
+			}
+		}
+	if timer = 10 {
+		sound_play(swingsnd2);
+		}
+	if timer = 11 {
+		pikmin[0].image_index = 2;
+		pikmin[1].image_index = 2;
+		if pikmin[0] != 0 {
+		if pikmin[0].type = 0 { //first pikmin in line is red
+			proj = 	create_projectile( 15+smash_charge/15 , 25+facing*130 , 5.9+smash_charge/90 , 6.6+smash_charge/120 , 14 , 6 , fire2 , obj_spark_fire1 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[0].proj = proj;
+			} //end of red dsmash
+		if pikmin[0].type = 1 { //first pikmin in line is blue
+			proj = 	create_projectile( 14+smash_charge/15 , 25+facing*130 , 5.8+smash_charge/90 , 6.4+smash_charge/120 , 12 , 5 , punch3 , obj_spark_hit2 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[0].proj = proj;
+			} //end of blue dsmash
+		if pikmin[0].type = 2 { //first pikmin in line is yellow
+			proj = 	create_projectile( 12+smash_charge/16 , 25+facing*130 , 5.4+smash_charge/100 , 6.1+smash_charge/130 , 10 , 10 , shock2 , obj_spark_shock , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[0].proj = proj;
+			} //end of yellow dsmash
+		if pikmin[0].type = 3 { //first pikmin in line is purple
+			proj = 	create_projectile( 18+smash_charge/12 , 25+facing*130 , 5.9+smash_charge/70 , 7.1+smash_charge/90 , 18 , 4 , kick3 , obj_spark_hit3 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[0].proj = proj;
+			} //end of purple dsmash
+		if pikmin[0].type = 4 { //first pikmin in line is white
+			proj = 	create_projectile( 9+smash_charge/25 , 25+facing*130 , 4.9+smash_charge/120 , 5.4+smash_charge/150 , 6 , 4 , punch1 , obj_spark_hit1 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[0].proj = proj;
+			} //end of white dsmash
+			}
+		if pikmin[1] != 0 {
+		if pikmin[1].type = 0 { //second pikmin in line is red
+			proj2 = create_projectile( 15+smash_charge/15 , 155-facing*130 , 5.9+smash_charge/90 , 6.6+smash_charge/120 , 14 , 6 , fire2 , obj_spark_fire1 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[1].proj2 = proj2;
+			} //end of red dsmash
+		if pikmin[1].type = 1 { //second pikmin in line is blue
+			proj2 = create_projectile( 14+smash_charge/15 , 155-facing*130 , 5.8+smash_charge/90 , 6.4+smash_charge/120 , 12 , 5 , punch3 , obj_spark_hit2 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[1].proj2 = proj2;
+			} //end of blue dsmash
+		if pikmin[1].type = 2 { //second pikmin in line is yellow
+			proj2 = create_projectile( 12+smash_charge/16 , 155-facing*130 , 5.4+smash_charge/100 , 6.1+smash_charge/130 , 10 , 10 , shock2 , obj_spark_shock , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[1].proj2 = proj2;
+			} //end of yellow dsmash
+		if pikmin[1].type = 3 { //second pikmin in line is purple
+			proj2 = create_projectile( 18+smash_charge/12 , 155-facing*130 , 5.9+smash_charge/70 , 7.1+smash_charge/90 , 18 , 4 , kick3 , obj_spark_hit3 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[1].proj2 = proj2;
+			} //end of purple dsmash
+		if pikmin[1].type = 4 { //second pikmin in line is white
+			proj2 = create_projectile( 9+smash_charge/25 , 155-facing*130 , 4.9+smash_charge/120 , 5.4+smash_charge/150 , 6 , 4 , punch1 , obj_spark_hit1 , 0.56 , 0.83 , 11.63 , 12.40 , self.id , 9 , -1 );
+			pikmin[1].proj2 = proj2;
+			} //end of white dsmash
+			}
+		} //end timer = 11
+	if ( timer = 13 )
+	{
+	pikmin[0].image_index = 1;
+	pikmin[1].image_index = 1;
+	}
+	if ( timer = 29 )
+	{
+	pikmin[0].image_index = 2;
+	pikmin[1].image_index = 2;
+	}
+	if ( timer = 32 )
+	{
+	pikmin[0].image_index = 3;
+	pikmin[1].image_index = 3;
+	}
+	if timer = 35
+		{
+		pikmin[0].attack = "none";
+		pikmin[0].state = 1;
+		pikmin[1].attack = "none";
+		pikmin[1].state = 1;
+		}
+	if timer = 36 {
+		script_execute(char_custom2)
+		}
+	if timer = 37 {
+		script_execute(char_custom2)
+		}
+	} //end of timer < time
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

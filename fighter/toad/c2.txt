@@ -1,0 +1,55 @@
+moving_object=1;
+absorb = -1
+if !is_on_floor(self) && hit = 0 {   
+    if vspeed < 4
+    vspeed += 0.2
+    }
+else  {               
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    player.toad = toad
+    sound_play(toad.pow_sound)
+    shaker = instance_create(x,y,obj_shakescreen3)
+    shaker.xampl=0
+    shaker.yampl=7
+    shaker.time = 19
+    spark = instance_create ( x , y , obj_spark_explode1 );
+    spark.image_xscale *= 3;
+    spark.image_yscale *= 3;
+    spark = instance_create ( x , y , obj_spark_explode2 );
+    spark.image_xscale *= 5;
+    spark.image_yscale *= 5;
+    with player {
+        if air = 0 && id != toad && timer_speed != 0 {
+            create_projectile(45,90,8.5,7.2,-1,20,kick3,obj_spark_hit4,1,1,x-toad.x,toad.y-y,toad,3,no_script);
+            proj.x = x
+            proj.y = y
+            proj.shake_type = 1
+            proj.shake_ampl = 0.3 
+            proj.absorb = -1
+        }
+    } 
+    instance_destroy()
+}  
+if timer <= 1 && hit = 0 {       
+    sprite_index = toad.powblock_sprite
+    hspeed = 4 - toad.facing*8
+    image_speed = 0
+    visible=1
+    vspeed=-0.5
+    }
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+    effect_create_above(ef_smoke,x,y+2,0,c_white)
+    player.toad = toad
+    sound_play(toad.pow_sound)
+    shaker = instance_create(x,y,obj_shakescreen3)
+    shaker.xampl=0
+    shaker.yampl=5
+    shaker.time = 15
+    with player {
+        if air = 0 && id != toad {
+            create_projectile(44,90,8.5,7.2,-1,20,kick3,obj_spark_hit4,1,1,x-toad.x,toad.y-y,toad,3,no_script);
+            proj.x = x
+            proj.y = y  }
+            }
+    instance_destroy() }
+

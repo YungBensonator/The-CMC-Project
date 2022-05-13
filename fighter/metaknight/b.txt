@@ -1,0 +1,230 @@
+if ( air >= max_jumps )
+    exit;
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    special = 0;
+    state_type = "air_attack";
+    attack_type = "b";
+    timer = 0;
+    time = 65;
+    sprite_index = b_sprite;
+    image_speed = 1;
+    image_index = 0;
+    if ( air = 0 )
+	hspeed *= 1.2;
+    else
+	hspeed *= 1.2;
+    air_move = 2;
+    temp = 2; //used for mashing
+  }
+
+if ( timer < time )
+  {
+
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    if ( temp > 0 )
+	temp -= 1;
+
+    if ( ai )
+      {
+	if ( ai_state = "recover" || offstage )
+	  {
+	    if ( temp <= 0 )
+		special = 1;
+	    if ( x < nearest_edge.x )
+	      {
+		moveright = 1;
+		moveleft = 0;
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		moveleft = 1;
+		moveright = 0;
+	      }
+	  }
+	else
+	  {
+	    if ( enemy.y < y - 10 && temp <= 0 )
+		special = 1;
+	    if ( enemy.x > x + 5 )
+	      {
+		moveright = 1;
+		moveleft = 0;
+	      }
+	    if ( enemy.x < x - 5 )
+	      {
+		moveleft = 1;
+		moveright = 0;
+	      }
+	    if ( x < nearest_edge.x + 5 && nearest_edge.object_index = obj_edge_left )
+	      {
+		moveright = 1;
+		moveleft = 0;
+	      }
+	    if ( x > nearest_edge.x - 5 && nearest_edge.object_index = obj_edge_right )
+	      {
+		moveleft = 1;
+		moveright = 0;
+	      }
+	  }
+      }
+
+    if ( air = 0 )
+	vspeed = 00;
+    if timer >= 10 && timer <= 80 && ( (special || (ai && (offstage || ai_state = "recover"))))
+      {
+	vspeed -= 0.8*size;
+	special = 0;
+  if(temp < 13)
+	temp = 13;
+	if ( air > 0 && vspeed > 0 )
+	    vspeed = -1.5*size;
+	if ( air > 0 && vspeed < -2.5 )
+	    vspeed = -2.5*size;
+      }
+  if( timer >= 10 && timer <= 80)
+      {
+      gravity = 0.02;
+      if( vspeed > 4.5)
+        vspeed = 4.5;
+      }
+    if ( timer = 10 )
+      {
+	sound_play(tornado_sound);
+	vspeed = -2*size;
+  temp = 40;
+	instance_create(x,y,obj_down_impact);
+      }
+    if timer >= 10 && timer <= 76 {
+	if ( !instance_exists(spark) )
+	  {
+	    spark = instance_create(x,y,obj_spark);
+	    spark.sprite_index = tornado_sprite;
+	    spark.image_speed = 0.8;
+	    spark.image_xscale = 1*size;
+	    spark.image_yscale = 1*size;
+            spark.image_alpha = 0.75;
+	  }
+	spark.x = x-3;
+	spark.y = y + 12*size;
+	if spark.image_index >= 4.75
+	spark.image_index = 1
+	}
+    if ( timer = 14 )
+      {
+	create_hitbox(1,90,3.8,0,4,1,slash1,obj_spark_slash1,0.9,0.9,0,12,self.id,3,-1);
+	hitbox.shield_stun = -4;
+  hitbox.weight_kb = 1;
+  create_hitbox2(1,90,2.6,0,4,1,slash1,obj_spark_slash1,0.8,0.8,-6,18,self.id,3,-1);
+  hitbox2.shield_stun = -4;
+  hitbox2.weight_kb = 1;
+  create_hitbox3(1,90,2.6,0,4,1,slash1,obj_spark_slash1,0.8,0.8,6,18,self.id,3,-1);
+  hitbox3.shield_stun = -4;
+  hitbox3.weight_kb = 1;
+      }
+    if ( timer = 18 || timer = 22 || timer = 26 || timer = 30 )
+      {
+	if ( air = 0 )
+	  {
+	    duster = instance_create(x+size*(9-facing*18),y,obj_dust_effect);
+	    duster.facing = 1-facing;
+	    duster.image_xscale *= 0.5*size;
+	    duster.image_yscale *= 0.4*size;
+	    duster.image_alpha = 0.75;
+	    duster = instance_create(x+size*(9-facing*18),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_xscale *= 0.5*size;
+	    duster.image_yscale *= 0.4*size;
+	    duster.image_alpha = 0.75;
+	  }
+	create_hitbox(1,90,3.6,0,4,1,slash1,obj_spark_slash1,0.9,0.9,0,12,self.id,3,-1);
+	hitbox.shield_stun = -4;
+  hitbox.weight_kb = 1;
+  create_hitbox2(1,90,2.6,0,4,1,slash1,obj_spark_slash1,0.8,0.8,-6,18,self.id,3,-1);
+  hitbox2.shield_stun = -4;
+  hitbox2.weight_kb = 1;
+  create_hitbox3(1,90,2.6,0,4,1,slash1,obj_spark_slash1,0.8,0.8,6,18,self.id,3,-1);
+  hitbox3.shield_stun = -4;
+  hitbox3.weight_kb = 1;
+	hspeed += 0.6 * (moveright-moveleft);
+	if ( hspeed > 2.5*size )
+	    hspeed = 2.5*size;
+	if ( hspeed < -2.5*size )
+	    hspeed = -2.5*size;
+      }
+    if ( timer = 12 || timer = 18 || timer = 24 || timer = 30 || timer = 36 || timer = 42 || timer = 48 || timer = 62 || timer = 66 || timer = 70 || timer = 74 )
+      {
+	if ( temp > 0 )
+	  {
+	    if ( air = 0 )
+	      {
+		duster = instance_create(x+size*(9-facing*18),y,obj_dust_effect);
+		duster.facing = 1-facing;
+		duster.image_xscale *= 0.5*size;
+		duster.image_yscale *= 0.4*size;
+		duster.image_alpha = 0.75;
+		duster = instance_create(x+size*(9-facing*18),y,obj_dust_effect);
+		duster.facing = facing;
+		duster.image_xscale *= 0.5*size;
+		duster.image_yscale *= 0.4*size;
+		duster.image_alpha = 0.75;
+	      }
+	create_hitbox(1.5,90,3,1.5,4,1,slash1,obj_spark_slash1,0.9,0.9,0,12,self.id,3,1);
+	hitbox.shield_stun = -4;
+  hitbox.weight_kb = 1;
+  create_hitbox2(1.5,90,3,1.5,4,1,slash1,obj_spark_slash1,0.8,0.8,-6,18,self.id,3,1);
+  hitbox2.shield_stun = -4;
+  hitbox2.weight_kb = 1;
+  create_hitbox3(1.5,90,3,1.5,4,1,slash1,obj_spark_slash1,0.8,0.8,6,18,self.id,3,1);
+  hitbox3.shield_stun = -4;
+  hitbox3.weight_kb = 1;
+	hspeed += 3.2 * (moveright-moveleft);
+	if ( hspeed > 2.5*size )
+	    hspeed = 2.5*size;
+	if ( hspeed < -2.5*size )
+	    hspeed = -2.5*size;
+          }
+	else
+	  {
+	    timer = 77;
+	    image_index = 12;
+	  }
+      }
+    if ( timer = 78 )
+      {
+  create_hitbox(5,30+facing*120,7,4.2,16,2,slash2,obj_spark_slash1,0.9,0.9,0,12,self.id,3,1);
+	hitbox.hit_stun = 12;
+	hitbox.shield_stun = -8;
+  create_hitbox2(5,30+facing*120,7,4.2,16,2,slash2,obj_spark_slash1,0.8,0.8,-6,18,self.id,3,1);
+  hitbox2.hit_stun = 12;
+  hitbox2.shield_stun = -8;
+  create_hitbox3(5,30+facing*120,7,4.2,16,2,slash2,obj_spark_slash1,0.8,0.8,6,18,self.id,3,1);
+  hitbox3.hit_stun = 12;
+  hitbox3.shield_stun = -8;
+	instance_create(x,y,obj_down_impact);
+	spark.image_index = 5;
+      }
+    if ( timer >= 80 && state_type != "flinch" && state_type != "air_flinch" ) 
+      {
+      state_type = "fall";
+      if( air = 0 )
+      {
+        hspeed = 0;
+        slide = 0;
+	      state_type = "land";
+        attack_type = "none";
+        sprite_index = b_sprite;
+        image_index = 0;
+      }
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "fall";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

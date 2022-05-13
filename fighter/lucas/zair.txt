@@ -1,0 +1,109 @@
+if state_type = "jump" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "zair";
+        image_speed = 0.25;
+        sprite_index = zair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 45;
+        timer_speed=1;
+	create_hurtbox_precise(self.id,45,zair_mask)
+}
+if timer < time {
+    if timer = 11 {
+        target =-99
+        sound_play(grab_sound);
+        create_homing_bubble(0.6,0.5,21,9,self.id,7); 
+    }
+    if timer >= 12 && timer < 22 && time = 45 && target > -1 { 
+    if target.intangible = 0 && target.attack_type != "final_smash" {
+        sprite_index = zthrow_sprite
+        target.state_type = "air_flinch"
+        target.attack_type = "none"
+        target.timer = 0
+        target.time = 50
+        target.timer_speed = 0
+        target.alarm[0] = 30
+        time = 86
+        timer = 50
+        x = target.x
+        y = target.y
+        image_speed = 0.25
+        image_index = 0
+        sound_play(catchsnd)
+        instance_create(target.x,target.y-9,obj_grab_spark)}
+    }
+    if timer >= 13 && timer <= 26 {
+        if collision_rectangle(x+(5-facing*10)*size,y-4*size,x+(35-facing*70)*size,y-20*size,obj_edge_left,1,1) {
+            facing = 0
+            edge = instance_nearest(x+20,y-5,obj_edge_left)
+            y = edge.y+15
+            x = edge.x-8
+            temp = 1
+            state_type = "jump"
+            attack_type = "none"
+        }
+        if collision_rectangle(x+(5-facing*10)*size,y-4*size,x+(35-facing*70)*size,y-20*size,obj_edge_right,1,1) {
+            facing = 1
+            edge = instance_nearest(x+20,y-5,obj_edge_right)
+            y = edge.y+15
+            x = edge.x+8
+            state_type = "jump"
+            attack_type = "none"
+            temp = 1
+        }
+    }
+}
+if timer >= 50 && timer <= 74 && instance_exists(target) {
+    target.state_type = "air_flinch"
+    target.attack_type = "none"
+    target.timer = 0
+    target.time = 50
+    target.timer_speed = 0
+    target.alarm[0] = 25
+    speed = 0
+    gravity = 0
+    if timer = 56 {
+        target.x = x; 
+        target.y = y-size*10}
+    if timer = 62  {
+        target.x = x - (4 - facing*8)*size
+        target.y = y-16*size
+        }
+    if timer = 66 {
+        target.x = x- (2-facing*4)*size 
+        target.y = y-17*size
+        }
+    if timer = 70  {
+        target.x = x
+        target.y = y-18*size
+        }
+    if timer = 74 {
+        target.x = x + (3 - facing*6)*size
+        target.y = y-16*size
+    }
+}  
+if timer = 74 {
+    play_attack_voice()
+    sound_play(grabreel_sound)
+    create_throw_box(10,30+facing*120,6.75,5.35,0,1,-1,obj_spark_effect,0.6,0.6,0,10,self.id,3)
+}
+if timer = 75 {
+    state_type = "air_attack"
+    y-= 1
+    hspeed = (-2+facing*4)*size
+    vspeed = -4*size
+}
+if air = 0
+hspeed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    }
+        

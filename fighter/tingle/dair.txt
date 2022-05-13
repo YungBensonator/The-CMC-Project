@@ -1,0 +1,101 @@
+var a;
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "dair";
+  image_speed = 0.4;
+  image_index = 0;
+  sprite_index = dair_sprite;
+  timer = 0;
+  time = 43;
+  timer_speed = 1;
+  target = 0;
+  }
+if timer < time {
+	if (target.weight <=.20)
+    {
+        multiangle = point_direction(x,y,x+hspeed,y+vspeed)
+        if (multiangle > 70 && multiangle < 100)
+        {
+            multispd = clamp(point_distance(x,y,x+hspeed+(1-facing*2),y+vspeed),1,4)
+        }
+        else
+        {
+            multispd = clamp(point_distance(x,y,x+hspeed+(.5-facing*1),y+vspeed-2),0,5)
+        }
+    }
+    else
+    {
+        multiangle = point_direction(x,y,x+hspeed,y+vspeed)
+        if (multiangle > 70 && multiangle < 100)
+        {
+            multispd = clamp(point_distance(x,y,hitbox.x+hspeed+(1.5-facing*3),hitbox.y+vspeed),1,4)
+        }
+        else
+        {
+            multispd = clamp(point_distance(x,y,x+hspeed+(1.5-facing*3),y+vspeed-1),0,5)
+        }
+    }
+	state_type = "air_attack";
+	if ( timer == 7 || timer == 14 || timer == 21 )
+		{
+		a = size;
+		size *= 0.5;
+		sound_play ( swingsnd4 );
+		size = a;
+		}
+	if timer = 3 || timer = 17 {
+		create_hitbox(3,multiangle, multispd * 1.1,0,4,3,kick1,obj_spark_hit1,0.5,0.6,4,7,self.id,4,1);
+		hitbox.di = 0.3;
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(30)+x,place_y(50)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+	if timer = 11 {
+		create_hitbox(3,multiangle, multispd * 1.1,0,4,3,kick1,obj_spark_hit1,0.5,0.6,-2,7,self.id,4,1);
+		hitbox.di = 0.3;
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(19)+x,place_y(50)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+	if timer = 26 {
+		create_hitbox(4,95-facing*10,5.6,2.3,6,3,kick3,obj_spark_hit2,0.5,0.6,-2,7,self.id,4,1);
+		hitbox.hit_stun = 5;
+		var burst;
+    //78, 36
+	burst = instance_create(place_x(30)+x,place_y(50)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+		}
+	if timer = 27 && hitbox.hit > 0 {
+		vspeed -= 8;
+		sound_play(attack_voice3);
+		movejump = 0;
+		}
+	if air = 0 {
+		state_type = "land";
+		sprite_index = land_sprite;
+		attack_type = "none";
+		timer = 0;
+		time = 11;
+		}
+	}
+		
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,70 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" )
+  {
+  if instance_exists(last_claydisc) && last_claydisc > 0
+    {
+    attack_type = "none";
+    exit;
+    }
+  attacking = 0;
+  attack_type = "sideb";
+  special = 0;
+  if ( air == 0 )
+    {
+    state_type = "attack";
+    hspeed = 0;
+    }
+    else
+    {
+    state_type = "air_attack";
+    }
+  image_speed = 0.5;
+  sprite_index = sideb_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 46;
+  timer_speed = 1;
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if ( timer == 16 )
+  {
+  sound_play ( sideb_sound );
+  create_projectile( 8 , 30 + facing * 120 , 4 , 5.8 , 8 , 4 , kick1 , obj_spark_hit4 , 0.7 , 0.6 , 24 , 15 , self.id , 30 , dhd_claydisc );
+  proj . sprite_index = clay_sprite;
+  proj . shield_stun = 0.2;
+  proj . priority = 0;
+  proj . visible = 1;
+  proj . hspeed = 8 * ( 1 - facing - facing );
+  proj . vspeed = -0.5;
+  proj . image_xscale = image_xscale;
+  proj . image_yscale = image_yscale;
+  if ( instance_exists ( last_claydisc ) ) last_claydisc . samplestop = 0;
+  proj . samplestop = 1;
+  last_claydisc = proj;
+  sound_stop ( clay_sound );
+  sound_play ( clay_sound );
+  if ( moveup )
+    proj . vspeed = -3;
+  if ( movedown )
+    proj . vspeed = 1.5;
+  }
+    if timer = 20 {
+        image_speed = 0
+    }
+if ( air == 0 )
+  {
+  air_move = 0;
+  state_type = "attack";
+  hspeed = 0;
+  }
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "jump";
+  if ( air == 0 )
+    state_type = "stand";
+  timer = 0;
+  time =-1;
+  }

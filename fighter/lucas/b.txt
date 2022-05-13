@@ -1,0 +1,67 @@
+if state_type = "jump" || state_type = "stand" {
+    if ( powerup == 1 )
+      {
+      exit;
+      }
+    special = 1;
+    attacking = 0;
+    timer = 0;
+    attack_type = "b"
+    state_type = "air_attack";
+    image_speed = 0.5;
+    sprite_index = b_sprite;
+    image_index=0;
+    time = 116;
+    timer_speed=1;
+}
+if timer < 1 then {
+    sound_play ( b_voice2 );
+    }
+if ( air == 0 ) hspeed = 0;
+if ( timer < 101 )
+  {
+if timer mod 20 = 0
+    sound_play ( b_sound4 );
+  powerup_charge += 1;
+    a = after_image ( 2 , c_white , .5 );
+    a.image_xscale *= 1.15;
+    a.image_yscale *= 1.15;
+    a.flashing = 1
+    a.x += -1 + floor ( random ( 3 ) );
+    a.y += -1 + floor ( random ( 3 ) );
+  if ( image_index >= 7 ) image_index -= 2;
+  if ( powerup_charge >= 100 )
+    {
+    sound_stop ( b_sound4 );
+    sound_play ( b_sound3 );
+    timer = 101;
+    powerup_charge = 0;
+    powerup = 1;
+    }
+  if ( !special )
+    {
+    timer = 101;
+    }
+  }
+
+if ( timer == 102 )
+  {
+  sound_stop ( b_sound4 );
+  sound_play ( b_sound3 );
+  image_speed = 0;
+  image_index = 6;
+  }
+if ( timer > 102 )
+  {
+  if ( image_index > 0 ) image_index -= 0.5;
+  }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if !air
+        state_type = "stand";
+    else
+        state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+    }

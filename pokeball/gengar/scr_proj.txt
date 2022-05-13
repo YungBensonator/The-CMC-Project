@@ -1,0 +1,45 @@
+after_image ( 5 , c_white , .3 );
+after.x += -1 + random ( 3 );
+after.y += -1 + random ( 3 );
+after.palettedo = 0;
+
+moving_object = 1;
+if ( on_floor || on_platform || next_to_rwall || next_to_lwall || under_ceiling ) { speed = 0; hit = 2; timer = time - 3; }
+
+if timer > 1 && timer < time-10 && (target <= 0 || target = attacker) && frac(timer/6)=0
+    create_homing_bubble(4.2,4.2,0,0,self.id,5);
+if target > 0 && target!= attacker && ((target.x > x && hspeed > 0) || (target.x < x && hspeed < 0)) {
+    var prev_hspeed;
+    var prev_vspeed;
+    prev_hspeed = hspeed;
+    prev_vspeed = vspeed;
+    var dir_to_target;
+    dir_to_target = point_direction(x,y,target.x,target.y-7*target.size);
+    if dir_to_target < 0
+        dir_to_target += 360
+    if dir_to_target >= 360
+        dir_to_target -= 360
+    if direction >= 360
+        direction -= 360;
+    if direction < 0
+        direction += 360;
+    speed = 3
+    /*
+    if dir_to_target <= direction + 180 || (dir_to_target < 90 && direction >= 270)
+        direction += 2.5
+    else if abs(dir_to_target - direction) > 3 || (dir_to_target > 270 && direction <= 90)
+        direction -= 2.5
+    */
+    if direction >= 270 || direction < 90 {
+        if direction-(direction>270)*360 < dir_to_target-(dir_to_target>270)*360
+            direction+=3   
+        else if direction != dir_to_target
+            direction-=3        
+    }
+    else {
+        if direction < dir_to_target
+            direction+=3
+        else if direction != dir_to_target
+            direction-=3       
+    }
+}

@@ -1,0 +1,59 @@
+if ( boss > 0 )
+  {
+  shakex = boss.shakex - 7 * ( 1 - boss.facing ) * boss.size;
+  shakey = boss.shakey + 2 * boss.size;
+  sprite_index = jump_sprite;
+  image_index = 1;
+  exit;
+  }
+
+if ( timer == 0 )
+  {
+  visible = 1;
+  spark = instance_create ( x - 300 * ( 1 - facing * 2 ) , y - 96 , obj_spark );
+  spark.sprite_index = bird_sprite;
+  spark.image_xscale = 1;
+  spark.image_yscale = 1;
+  spark.vspeed = 1;
+  spark.hspeed = 10 * ( 1 - facing * 2 );
+  spark.image_index = 0;
+  spark.depth = -9;
+  spark.image_speed = 0;
+  spark.alarm[0] = 60;
+  shakex = spark.x - x;
+  shakey = spark.y - y + actual_height;
+  sprite_index = jump_sprite;
+  image_index = 1;
+  }
+if ( timer >= 0 && timer < 30 )
+  {
+  shakex = spark.x - x;
+  shakey = spark.y - y + actual_height;
+  }
+if ( timer >= 0 && timer < 60 )
+  {
+  spark.image_index = floor ( timer * 0.25 ) mod 4;
+  spark.vspeed -= 0.03;
+  }
+if ( timer >= 30 && timer < 60 )
+  {
+  spark.hspeed *= 1.1;
+  shakey += 4;
+  if ( shakey > 0 )
+    {
+    state_type = "land";
+    sprite_index = land_sprite;
+    timer = 0;
+    attack_type = "none";
+    time = 20;
+    partner.state_type = state_type;
+    partner.sprite_index = partner.land_sprite;
+    partner.shakey = 0;
+    partner.attack_type = attack_type;
+    partner.x = x - 3 * size * ( 1 - facing * 2 );
+    partner.y = y;
+    partner.timer = 0;
+    partner.time = 20;
+    shakey = 0;
+    }
+  }

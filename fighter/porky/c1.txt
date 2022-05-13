@@ -1,0 +1,141 @@
+moving_object = 1;
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+
+if ( stunned > 0 )
+  {
+  stunned -= 1;
+  if ( stunned == 0 )
+    {
+    hspeed = hs;
+    vspeed = vs;
+    }
+  exit;
+  }
+
+if ( collision_point ( x , y - 4 , player , 0 , 1 ) || collision_point ( x , y - 4 , projectile_box , 0 , 1 ) ) && hit == 5
+  {
+  hit = 0;
+  } 
+if collision_point ( x , y - 4 , attack_box , 0 , 1 )
+  {
+  a = instance_position ( x , y - 4 , attack_box );
+  if ( instance_exists ( a ) )
+  {
+  hp -= a.damage;
+  stunned = a . hitlag_frames;
+  hs = hspeed;
+  vs = vspeed;
+  hspeed = 0;
+  vspeed = 0;
+  a . hit = 2;
+    if a.sfx > 0
+        FMODSoundPlay(a.sfx)
+    if a.gfx > 0 {
+            gfx = instance_create(a.x,a.y,a.gfx)
+            gfx.image_xscale += 0.03*a.damage
+            gfx.image_yscale += 0.03*a.damage
+            gfx.number = a.attacker.number
+            gfx.kb = a.bkb + a.kbg
+            gfx.dir = dir
+            gfx.target = self.id
+    }
+  if ( hp <= 0 )
+    {
+    hit=2
+    exploded = 100
+    timer = time
+    instance_create(x,y,obj_spark_explode2)
+    sound_play(explode_big)
+    shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 1.33;
+    shaker.yampl = 0;
+    shaker.time = 9;
+    exit;
+    }
+  exit;
+  }
+  } 
+  
+if !is_on_floor(self) && hit = 0 {      // Make fall when not touching ground
+    if vspeed < 3.025
+    vspeed += 0.275
+    if image_index >= image_number - image_speed 
+        image_speed = 0
+    }
+else {
+	parry_nodestroy = 1;
+    vspeed = 0
+    temp = 1
+    if timer < time-32
+        sprite_index = pika.sideb_bot_walk_sprite
+    image_speed = 0.25
+    image_angle = 0
+    if ( target != -1 && target != noone && target != -99 && target != attacker.id )
+      {
+      sprite_index = pika.sideb_bot_jump_sprite;
+      image_speed = 0.25;
+      image_index = 0;
+      vspeed = -3;
+      while ( is_on_floor ( self ) ) y -= 1;
+      }
+    if ( !instance_exists ( proj ) )
+      {
+      target = noone;
+      create_homing_bubble ( 1 , 1 , 0 , 48 , self.id , 3 );
+      create_homing_bubble ( 1 , 1 , 32, 72 , self.id , 3 );
+      }
+    if hspeed < 0
+        image_xscale = -abs(image_xscale)
+    /*var slope01;
+    slope01 = collision_rectangle(x-hspeed,y-1,x+hspeed,y+2,obj_slope_right2,0,1)
+    var slope02;
+    slope02 = collision_rectangle(x-hspeed,y-1,x+hspeed,y+2,obj_slope_left2,0,1)
+    if slope01 {
+        y-=(0.5 + (slope01.object_index = obj_slope_right)*0.5)*hspeed
+        image_angle = 22 + (slope01.object_index = obj_slope_right)*23
+    }
+    else if slope02 {
+        y+=(0.5 + (slope02.object_index = obj_slope_left)*0.5)*hspeed
+        image_angle = -22 - (slope01.object_index = obj_slope_left)*23
+    }*/
+    if timer = time -32 && hit = 0 {
+        sprite_index = pika.sideb_bot_explode_sprite
+    }
+    if timer = time - 24
+        hspeed *= 0.5
+    if timer = time - 19
+        hspeed = 0
+    if timer >= time - 3
+        hit = 1
+}
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    //sprite_index = attacker.id.b_spark_sprite
+    hspeed = 2 - attacker.id.facing*4
+    vspeed = -3.3
+    //image_speed = 0.25-attacker.facing*0.5;
+    visible=1
+    temp = 0
+    pika = attacker
+    facing = pika.facing
+    image_xscale = abs(image_xscale)
+}
+/*if collision_point(x+hspeed,y,obj_wall,0,1) {
+    hspeed = 0
+    if vspeed = 0
+        vspeed = -3
+    image_angle = 90 + facing*180
+}*/
+if exploded=0 && ((hit = 0 && (timer = time-2 || collision_point(x+sign(hspeed),y,obj_wall,1,1)) || (hit > 0 && timer < time-1))) {
+    hit=2
+    exploded = 100
+    timer = time
+    instance_create(x,y,obj_spark_explode2)
+    sound_play(explode_big)
+    shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 1.33;
+    shaker.yampl = 0;
+    shaker.time = 9;
+}
+    
+

@@ -1,0 +1,55 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "nair";
+  image_speed = 0.3;
+  image_index = 0;
+  sprite_index = nair_sprite;
+  timer = 0;
+  time = 35;
+  timer_speed = 1;
+  }
+if timer < time {
+	state_type = "air_attack";
+	if timer = 7 || timer = 10 || timer = 13 || timer = 16 || timer = 19 {
+    		create_hitbox ( 2 , 175-facing*170 , 1 , 0 , 2 , 2 , punch2 , obj_spark_hit1 , 0.40 , 0.37 , 6.98 , 15.50 , self.id , 2 , 1 );
+    		create_hitbox2 ( 2 , 5+facing*170 , 1 , 0 , 2 , 2 , punch2 , obj_spark_hit1 , 0.40 , 0.37 , -5.43 , 15.50 , self.id , 2 , 1 );
+    		create_hitbox3 ( 2 , 120-facing*60 , 2 , 0 , 2 , 2 , punch2 , obj_spark_hit1 , 0.40 , 0.37 , 6.98 , 4.65 , self.id , 2 , 1 );
+    		create_hitbox4 ( 2 , 60+facing*60 , 2 , 0 , 2 , 2 , punch2 , obj_spark_hit1 , 0.40 , 0.37 , -5.43 , 4.65 , self.id , 2 , 1 );
+		hitbox.di = -1
+		hitbox2.di = -1
+		hitbox3.di = -1
+		hitbox4.di = -1
+		}
+	if timer = 6 || timer = 12 || timer = 18 {
+		sound_play(attacksnd1);
+		}
+	if timer = 21 {
+		sound_play(attacksnd1);
+		create_hitbox ( 2 , 362 , 4.6 , 5.3 , 3 , 3 , punch2 , obj_spark_hit2 , 0.74 , 0.90 , 0.78 , 9.30 , self.id , 2 , 1 );
+  		hitbox.hit_stun = 12
+    		}
+	if air = 0 {
+		state_type = "land";
+		attack_type = "none";
+		sprite_index = land_sprite;
+		time = 7;
+		timer = 0;
+		}
+	}
+
+
+if ( timer >= time - 1 )
+  {
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+  }

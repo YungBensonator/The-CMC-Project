@@ -43,27 +43,40 @@ if state_type = "jump" {
             if timer = 5 {
                 if ( random ( 2 ) < 1 )
                     play_attack_voice()
-                create_hitbox(8,362,5,7,14,7,kick3,obj_spark_hit3,0.4 , 0.75 , 4 , 6.40,self.id,14,1);
-                create_hitbox2(8,362,5,7,14,7,kick3,obj_spark_hit3,0.4 , 0.75 , -6 , 6.40,self.id,14,1);
-				gfx_ef_whirl2 ( x - 2 * (1-facing*2) * size , y - 3 * size, 0.8*size, -20 * (1-facing*2) );
+                    gfx_ef_whirl2 ( x - 2 * (1-facing*2) * size , y - 3 * size, 0.8*size, -20 * (1-facing*2) );
+                    instance_create(x + 14 - facing * 28, y - 16, obj_spark_effect2)
+                    spark = create_spark(-4.4 * (1 - facing * 2) * size, 8, global.electricity_spark, 0.5, 0.3, 0.3)
+                    spark.xscale = 1 * size;
+                    spark.yscale = 1.5 * size;
+                    spark.image_speed = 0.5;
+                    spark.image_alpha = 0.8;
+                    spark.snap = self.id;
+                    
+                    spark2 = create_spark(-4.4 * (1 - facing * 2) * size, 0, global.electricity_spark, 0.5, 0.3, 0.3)
+                    spark2.xscale = 1 * size;
+                    spark2.yscale = 1 * size;
+                    spark2.image_speed = 0.5;
+                    spark2.image_alpha = 0.8;
+                    spark2.snap = self.id;
+
+                    spark3 = create_spark(-4.4 * (1 - facing * 2) * size, -8, global.electricity_spark, 0.5, 0.3, 0.3)
+                    spark3.xscale = 1 * size;
+                    spark3.yscale = 1.5 * size;
+                    spark3.image_speed = 0.5;
+                    spark3.image_alpha = 0.8;
+                    spark3.snap = self.id;
+
+
             }
-            if timer = 11 {
-                hitbox.damage = 6*size;
-                hitbox.bkb = 5*size;
-                hitbox.kbg = 4*size;
-                hitbox.shield_damage = 8;
-                hitbox.hitlag_frames = 6;
-                hitbox.sfx = kick1;
-                hitbox.gfx = obj_spark_hit2;
-                hitbox2.damage = 6*size;
-                hitbox2.bkb = 5*size;
-                hitbox2.kbg = 4*size;
-                hitbox2.shield_damage = 8;
-                hitbox2.hitlag_frames = 6;
-                hitbox2.sfx = kick1;
-                hitbox2.gfx = obj_spark_hit2;
-                image_speed = 0.35
-            }
+
+                if (timer = 5 || timer = 7 || timer = 9 || timer = 11 || timer = 13) {
+                        create_hitbox(1,angle_correct(90), multispd, 0, 4, 3, shock2, obj_spark_shock, 1.25, 1.25, 0, 4.80, self.id, 3, 3);
+                        hitbox.di = 0.2
+                        hitbox.hit_stun = 8;
+                        if ( random ( 4 ) < 1 )
+                        sound_play(electric_sound);
+        }
+
             if air = 0 {
                 state_type="land";
                 attack_type="none";

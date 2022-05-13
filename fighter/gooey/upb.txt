@@ -1,0 +1,157 @@
+// Space Jump
+if state_type = "jump" && air < max_jumps {
+    attacking = 0;
+    special = 1;
+    timer = 0;
+    air_move=0
+    attack_type = "upb"
+    state_type = "air_attack";
+    hspeed *= 0.5;
+    image_speed = 0.11;
+    sprite_index = upb_sprite;
+    image_index=0;
+    temp=0
+    temp2=0
+    time = 55;
+    timer_speed=1;
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+}
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" {
+    attacking = 0;
+    timer = 0;
+    attack_type = "upb"
+        state_type = "air_attack";
+        hspeed = 0;
+        image_speed = 0.11;
+        sprite_index = upb_sprite;
+        image_index=0;
+        time = 55;
+        temp=1
+        timer_speed=1;
+        if moveright = 1 facing = 0;
+        if moveleft = 1 facing = 1;
+        special=1
+}
+    if timer = 1 && air!=0 
+        vspeed = -0.9
+    if timer = 10 { 
+            intangible=1
+            sound_play(upb_sound) }
+    if timer = 15 {
+        if ai = 1 && ai_state = "recover" {
+            movedown = 0
+            moveup = 1
+            if !(abs(obj_edge_right.x-x)<10) && !(abs(obj_edge_left.x-x)<10) {
+                if x < nearest_edge.x {
+                    moveright = 1
+                    moveleft = 0 
+                }
+                else if x > nearest_edge.x {
+                    moveright = 0
+                    moveleft = 1 
+                } 
+            }
+            else {
+                moveright = 0 
+                moveleft = 0
+            }
+        }
+        if moveright {
+            facing = 0
+            if moveup
+                temp = 45
+            else if movedown
+                temp = 315
+            else
+                temp = 0
+        }
+        else if moveleft {
+            facing = 1
+            if moveup
+                temp = 135
+            else if movedown
+                temp = 225
+            else
+                temp = 180
+        }
+        else {
+            if movedown
+                temp = 270
+            else
+                temp = 90
+        }
+        sprite_index = upb_jump_sprite
+        image_speed = 0.3
+        image_index = 0
+        temp_fall_speed = 3
+    }
+    if timer = 14 || timer = 40 {
+        for (i=0;i<5;i+=1) {
+            var sparkc;
+            sparkc = instance_create(x,y-size*8,obj_spark)
+            sparkc.sprite_index=upb_star_sprite
+            sparkc.image_xscale=xsize*size
+            sparkc.image_yscale=sparkc.image_xscale
+            sparkc.image_speed=0.3
+            sparkc.speed=2.75*size
+            sparkc.direction=90+i*72
+        }
+
+	if timer > 25
+	force_edge_grab = 1
+        if timer = 40
+            sound_play(upb_sound2)
+    }
+    if timer >= 15 && timer < 40 {
+        force_edge_grab = 1
+        speed = size*6.65
+        vspeed -= size*grav*GRAV_MUL
+        direction=temp
+
+	if temp = 225 || temp = 270 || temp = 315
+{
+    sprite_index = upb_fall_sprite;
+}
+
+	if temp = 0 || temp = 180 
+{
+    sprite_index = dash_attack_sprite;
+}
+        if frac(timer/5)=0 {
+            var sparkd;
+            sparkd = instance_create(x,y-size*8,obj_spark)
+            sparkd.sprite_index=upb_effect_sprite
+            sparkd.image_xscale=xsize*size
+            sparkd.image_yscale=sparkd.image_xscale
+            sparkd.image_speed=0.4
+            flashing=true
+            alarm[7]=6
+        }
+
+    }
+    if timer = 40||timer=41 {
+        intangible = 0
+        sprite_index = fall_sprite
+        speed = 0
+    }
+    if timer > 40 && timer < 53 {
+        vspeed-=size*grav*GRAV_MUL*1.25 
+        air_move = 1
+    }
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0 {
+        state_type = "fall";
+        sprite_index = fall_sprite;
+        air = max_jumps
+    }
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    can_die = 1
+    temp_fall_speed = 0
+}

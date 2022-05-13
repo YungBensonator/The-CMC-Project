@@ -1,0 +1,286 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" )
+  {
+    special = 1;
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 23;
+    sprite_index = downb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    if ( absorbed_timer = -1 )
+	temp = 0; //catching
+    else
+	temp = 1; //launching
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 18: image_index = 2; break;
+	case 21: image_index = 1; break;
+      }
+
+    if ( air = 0 )
+      {
+	hspeed = 0;
+	sprite_index = downb_sprite;
+      }
+    else
+	sprite_index = downb2_sprite;
+
+    if ( temp = 0 )
+      {
+	shakex = 0;
+	if ( timer = 6 ) {
+	    sound_play(downb_voice);
+	    sound_play(evidence_sound);
+	    instance_create(x-size*(5-facing*10),y-16*size,obj_spark_effect);
+	if charge > 0 && !instance_exists(evidence) {
+	temp4 = choose( 3, 4, 5, 8 );
+	switch (temp4) {
+	case 1: evidence = instance_create(x+16*(1-facing*2),y-20*size,poisonx_item);
+		evidence.sprite_index = evidence_poisonx_sprite;
+		evidence.sprite_air = evidence_poisonx_sprite;
+		evidence.sprite_held = evidence_poisonx_sprite;
+		evidence.mask_index = evidence_poisonx_sprite;
+		break;
+	case 2: evidence = instance_create(x+16*(1-facing*2),y-20*size,poisonz_item);
+		evidence.sprite_index = evidence_poisonz_sprite;
+		evidence.sprite_air = evidence_poisonz_sprite;
+		evidence.sprite_held = evidence_poisonz_sprite;
+		evidence.mask_index = evidence_poisonz_sprite;
+		break;
+	case 3: evidence = instance_create(x+16*(1-facing*2),y-20*size,pistol_item);
+		evidence.sprite_index = evidence_pistol_sprite;
+		evidence.sprite_air = evidence_pistol_sprite;
+		evidence.sprite_held = evidence_pistol_sprite;
+		evidence.mask_index = evidence_pistol_sprite;
+		break;
+	case 4: evidence = instance_create(x+16*(1-facing*2),y-20*size,spear_item);
+		evidence.sprite_index = evidence_spear_sprite;
+		evidence.sprite_air = evidence_spear_sprite;
+		evidence.sprite_held = evidence_spear_sprite;
+		evidence.mask_index = evidence_spear_sprite;
+		break;
+	case 5: evidence = instance_create(x+16*(1-facing*2),y-10*size,phone_item);
+		evidence.sprite_index = evidence_phone_sprite;
+		evidence.sprite_air = evidence_phone_sprite;
+		evidence.sprite_held = evidence_phone_sprite;
+		evidence.mask_index = evidence_phone_sprite;
+		break;
+	case 6: evidence = instance_create(x+16*(1-facing*2),y-10*size,knife_item);
+		evidence.sprite_index = evidence_knife_sprite;
+		evidence.sprite_air = evidence_knife_sprite;
+		evidence.sprite_held = evidence_knife_sprite;
+		evidence.mask_index = evidence_knife_sprite;
+		break;
+	case 7: evidence = instance_create(x+16*(1-facing*2),y-10*size,jar_item);
+		evidence.sprite_index = evidence_jar_sprite;
+		evidence.sprite_air = evidence_jar_sprite;
+		evidence.sprite_held = evidence_jar_sprite;
+		evidence.mask_index = evidence_jar_sprite;
+		break;
+	case 8: evidence = instance_create(x+20*(1-facing*2),y-15*size,statue_item);
+		evidence.sprite_index = evidence_statue_sprite;
+		evidence.sprite_air = evidence_statue_sprite;
+		evidence.sprite_held = evidence_statue_sprite;
+		evidence.mask_index = evidence_statue_sprite;
+		break;
+	}
+	charge -= 1 }
+	}
+	if ( timer >= 4 && timer <= 26 && absorbed_obj == noone )
+	  {
+	    obj = collision_rectangle(x-size*(16-facing*32),y-40*size,x+size*(30-facing*60),y,projectile_box,0,1);
+	    if ( obj > 0 && obj.absorb2 = 1 )
+	      {
+		intangible = 1;
+		intangible_frames = 8;
+		if ( obj.attacker != self.id )
+		  {
+	if charge = 0
+	sound_play(taunt5_voice)
+	else if charge = 1
+	sound_play(taunt6_voice)
+	else if charge = 3
+	sound_play(aha_voice)
+	else if charge = 5
+	sound_play(taunt9_voice)
+	else if charge = 9
+	sound_play(utilt_voice)
+		    flashing = 1;
+		    alarm[7] = 2;
+		    charge += 1;
+		    shakex = 1 - facing * 2;
+		    sound_play(catchsnd);
+		    instance_create(x-size*(5-facing*10),y-16*size,obj_spark_effect);
+		    spark = instance_create ( obj.x , obj.y , obj_grab_spark );
+		    spark.image_blend = merge_color ( c_white , c_red , .88 );
+		    save_damage = obj.damage;
+		    save_dir = arcsin(sin(degtorad(obj.dir)));
+		    save_bkb = obj.bkb;
+		    save_kbg = obj.kbg;
+		    save_shield_damage = obj.shield_damage;
+		    save_hitlag_frames = obj.hitlag_frames;
+		    save_sfx = obj.sfx;
+		    save_gfx = obj.gfx;
+		    save_hitbox_x = obj.hitbox_x;
+		    save_hitbox_y = obj.hitbox_y;
+		    save_x = abs(obj.x-x);
+		    save_y = y-obj.y;
+		    save_hspeed = abs(obj.hspeed);
+		    save_vspeed = obj.vspeed;
+		    save_time = obj.time;
+		    save_size = obj.size;
+		    save_priority = obj.priority;
+		    save_hit_stun = obj.hit_stun;
+		    save_shield_stun = obj.shield_stun;
+		    save_armor_break = obj.armor_break;
+		    save_di = obj.di;
+		    save_shake_type = obj.shake_type;
+		    save_shake_kb = obj.shake_kb;
+		    save_shake_ampl = obj.shake_ampl;
+		    save_proj_destroy = obj.proj_destroy;
+		    save_shake_x = obj.shake_x;
+		    save_shake_y = obj.shake_y;
+		    save_reflect = obj.reflect;
+		    save_sprite_index = obj.sprite_index;
+		    save_image_speed = obj.image_speed;
+		    save_image_xscale = abs(obj.image_xscale);
+		    save_image_yscale = obj.image_yscale;
+		    save_image_angle = obj.image_angle;
+		    save_image_blend = obj.image_blend;
+		    save_flag = obj.flag;
+		    save_keepmain = obj.keepmain;
+		    save_script = obj.proj_script;
+		    save_carry = obj.carry;
+		    save_charge = obj.charge;
+		    save_use_palette = obj.use_palette;
+		    save_moving_object = obj.moving_object
+		    save_actual_height = obj.actual_height
+		    save_temp = obj.temp
+		    save_temp2 = obj.temp2
+		    save_size = obj.size
+		    save_timer_speed = obj.timer_speed
+		    save_alarm = obj.alarm[0]
+		    save_stun_scalar = obj.stun_scalar
+		    save_absorb = obj.absorb
+		    save_absorb2 = obj.absorb2
+		    save_air = obj.air
+		    save_speed = obj.speed
+		    save_visible = obj.visible
+		    save_color = obj.color
+		    save_hit = obj.hit
+		    save_timer = obj.timer
+		  }
+		with ( obj )
+		    instance_destroy();
+		absorbed_timer = 0;
+	      }
+	  }
+	if ( !ai && timer >= 7 && timer <= 17 && special && absorbed_obj = noone )
+	    timer = 7;
+      }
+    if ( temp = 1 )
+      {
+	switch ( timer )
+	  {
+	    case 7: case 8: case 9: case 10: case 11: shakex *= -0.85; break;
+	    case 12: shakex = 0;
+	  }
+	if ( timer = 0 )
+	  {
+	    intangible = 1;
+	    intangible_frames = 8;
+	  }
+	if ( timer = 6 )
+	  {
+	    sound_play(aha_voice);
+	    sound_play(evidence_sound);
+	    shakex = 3 - facing * 6;
+	    shakex *= size;
+	    save_damage += absorbed_timer * 0.033;
+	    save_bkb += absorbed_timer * 0.02;
+	    save_kbg += absorbed_timer * 0.02;
+	    save_shield_damage += absorbed_timer * 0.2;
+	    save_hitlag_frames += absorbed_timer * 0.1;
+	    save_dir = radtodeg(save_dir);
+	    if ( save_flag )
+		create_projectile_impaler(save_damage,save_dir+facing*(180-save_dir*2),save_bkb,save_kbg,save_shield_damage,save_hitlag_frames,save_sfx,save_gfx,save_hitbox_x,save_hitbox_y,save_x,save_y,self.id,save_time,save_script);
+	    else
+		create_projectile(save_damage,save_dir+facing*(180-save_dir*2),save_bkb,save_kbg,save_shield_damage,save_hitlag_frames,save_sfx,save_gfx,save_hitbox_x,save_hitbox_y,save_x,save_y,self.id,save_time,save_script);
+	    proj.keepmain = save_keepmain;
+	    proj.timer = save_timer
+	    proj.hit = obj.hit
+	    proj.hspeed = save_hspeed*(1-facing*2);
+	    if save_vspeed < 0
+	    proj.vspeed = save_vspeed
+	    else
+	    proj.vspeed = save_vspeed*-1;
+	    proj.size = save_size*size;
+	    proj.priority = save_priority;
+	    proj.hit_stun = save_hit_stun;
+	    proj.shield_stun = save_shield_stun;
+	    proj.armor_break = save_armor_break;
+	    proj.di = save_di;
+	    proj.shake_type = save_shake_type;
+	    proj.shake_kb = save_shake_kb;
+	    proj.shake_ampl = save_shake_ampl;
+	    proj.proj_destroy = save_proj_destroy;
+	    proj.shake_x = save_shake_x;
+	    proj.shake_y = save_shake_y;
+	    proj.reflect = save_reflect;
+	    proj.sprite_index = save_sprite_index;
+	    proj.image_speed = save_image_speed;
+	    proj.image_xscale = save_image_xscale*(1-facing*2);
+	    proj.image_yscale = save_image_yscale;
+	    proj.image_angle = save_image_angle;
+	    proj.image_blend = save_image_blend;
+	    proj.carry = save_carry;
+	    proj.charge = save_charge;
+	    proj.use_palette = save_use_palette;
+	    proj.moving_object = save_moving_object
+	    proj.actual_height = save_actual_height
+	    proj.temp = save_temp
+	    proj.temp2 = save_temp2
+	    proj.size = save_size
+	    proj.timer_speed = save_timer_speed
+	    proj.alarm[0] = save_alarm
+	    proj.stun_scalar = save_stun_scalar
+	    proj.absorb = save_absorb
+	    proj.absorb2 = save_absorb2
+	    proj.air = save_air
+	    proj.speed = save_speed
+	    proj.visible = save_visible
+	    proj.color = save_color
+	    absorbed_timer = -1;
+	    duster = instance_create ( x , y + 1 , obj_dust_effect );
+	    duster.facing = facing;
+	    duster.image_alpha = 0.77;
+	    duster.hspeed = -1 + facing * 2;
+	    duster.image_yscale *= size * 0.7;
+	    duster.image_xscale *= size * 0.8;
+	  }
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+  }

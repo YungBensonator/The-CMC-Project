@@ -1,0 +1,178 @@
+if state_type = "jump" {
+	state_type = "air_attack";
+	attack_type = "nair";
+	sprite_index = nair_sprite;
+	image_speed = 0.25;
+	image_index = 0.3;
+	timer = 0;
+	time = 45;
+	}
+if timer < time {
+	state_type = "air_attack";
+	if timer = 6 {
+		image_speed = 0;
+		}
+	if timer = 15 {
+		image_speed = 0.25;
+		}
+	if timer = 16 {
+		image_speed = 0;
+		sound_play(thrust_sound);
+		create_hitbox(11,65+facing*50,6.9,4.3,14,8,fire2,obj_spark_fire1,0.9,0.9,15,22,self.id,18,1);
+		spark = instance_create(x + 8*size*(1-facing*2),y - 4*size, obj_fireburst);
+                spark.image_xscale*=((0.7-facing*1.4)*size);
+                spark.image_yscale*=(0.9*size);
+		spark.dir = 0;
+		}
+	if timer = 19 {
+		hitbox.hitbox_x = 6-facing*12*size;
+		hitbox.hitbox_y = 4;
+		spark = instance_create(x + 2*size*(1-facing*2),y - 1*size, obj_fireburst);
+                spark.image_xscale*=((0.7-facing*1.4)*size);
+                spark.image_yscale*=(0.9*size);
+		spark.dir = -40+facing*100;
+		}
+	if timer = 21 {
+		hitbox.hitbox_x = -3+facing*6*size;
+		hitbox.hitbox_y = 6;
+		spark = instance_create(x - 2*size*(1-facing*2),y - 4*size, obj_fireburst);
+                spark.image_xscale*=((0.7-facing*1.4)*size);
+                spark.image_yscale*=(0.9*size);
+		spark.dir = 270+facing*180;
+		}
+	if timer = 23 {
+		hitbox.hitbox_x = -8+facing*16*size;
+		hitbox.hitbox_y = 10;
+		spark = instance_create(x - 6*size*(1-facing*2),y - 6*size, obj_fireburst);
+                spark.image_xscale*=((0.7-facing*1.4)*size);
+                spark.image_yscale*=(0.9*size);
+		spark.dir = -130-facing*80;
+		}
+	if timer = 25 {
+		hitbox.hitbox_x = -14+facing*28*size;
+		hitbox.hitbox_y = 16;
+		spark = instance_create(x - 10*size*(1-facing*2),y - 10*size, obj_fireburst);
+                spark.image_xscale*=((0.7-facing*1.4)*size);
+                spark.image_yscale*=(0.9*size);
+		spark.dir = -170+facing*20;
+		}
+	if timer = 27 {
+		hitbox.hitbox_x = -8+facing*16*size;
+		hitbox.hitbox_y = 26;
+		spark = instance_create(x - 6*size*(1-facing*2),y - 15*size, obj_fireburst);
+                spark.image_xscale*=((0.7-facing*1.4)*size);
+                spark.image_yscale*=(0.9*size);
+		spark.dir = -210-facing*60;
+		}
+	if timer = 29 {
+		hitbox.hitbox_x = -4+facing*8*size;
+		hitbox.hitbox_y = 32;
+		spark = instance_create(x - 2*size*(1-facing*2),y - 19*size, obj_fireburst);
+                spark.image_xscale*=((0.7-facing*1.4)*size);
+                spark.image_yscale*=(0.9*size);
+		spark.dir = -250-facing*210;
+		}
+	if timer = 31 {
+		hitbox.hitbox_x = 5-facing*10*size;
+		hitbox.hitbox_y = 30;
+		}
+	if timer > 18 {
+		if facing = 0 {
+			image_angle = 270;
+			}
+		if facing = 1 {
+			image_angle = 90;
+			}
+		}
+	if timer = 20 {
+		hitbox.dir = 110-facing*40;
+		}
+	if timer > 20 {
+		if facing = 0 {
+			image_angle = 230;
+			}
+		if facing = 1 {
+			image_angle = 130;
+			}
+		}
+	if timer > 22 {
+		if facing = 0 {
+			image_angle = 190;
+			}
+		if facing = 1 {
+			image_angle = 170;
+			}
+		}
+	if timer = 24 {
+		hitbox.dir = 85+facing*10;
+		}
+	if timer > 24 {
+		if facing = 0 {
+			image_angle = 150;
+			}
+		if facing = 1 {
+			image_angle = 210;
+			}
+		}
+	if timer > 26 {
+		if facing = 0 {
+			image_angle = 110;
+			}
+		if facing = 1 {
+			image_angle = 250;
+			}
+		}
+	if timer > 28 {
+		if facing = 0 {
+			image_angle = 70;
+			}
+		if facing = 1 {
+			image_angle = 290;
+			}
+		}
+	if timer > 30 {
+		if facing = 0 {
+			image_angle = 40;
+			}
+		if facing = 1 {
+			image_angle = 320;
+			}
+		}
+	if timer > 33 {
+		if facing = 0 {
+			image_angle = 10;
+			}
+		if facing = 1 {
+			image_angle = 350;
+			}
+		}
+	if timer = 31 {
+		image_speed = 0.2;
+		}
+	if air = 0 {
+
+		image_angle = 0;
+                state_type="land";
+
+                attack_type="none";
+
+                sprite_index = land_sprite;
+
+                timer=0;
+
+                time=8;
+		}
+
+	}
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 3;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

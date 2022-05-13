@@ -1,0 +1,46 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "sideb";
+  time = 26;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = sideb_sprite;
+  image_index = 0;
+  image_speed = 0.2;
+  timer_speed = 1;
+  }
+
+if ( timer == 12 )
+  {
+  char_custom5();
+  if ( temp == 1 )
+    {
+    pikmin[0].attack = "sideb";
+    pikmin[0].sprite_index = pikmin_ssmash_sprite[pikmin[0].type];
+    pikmin[0].hspeed = 6 * ( 1 - facing * 2 ) * size;
+    pikmin[0].vspeed = -2;
+    pikmin[0].state = 6;
+    pikmin[0].x = x;
+    pikmin[0].y = y - 7;
+    char_custom2();
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+  state_type = "stand";
+  if air > 0
+  {
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 2;
+  image_speed = 0;
+  }
+  timer = 0;
+  time = -1;
+  }

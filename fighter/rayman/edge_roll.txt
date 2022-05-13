@@ -1,0 +1,58 @@
+if ( state_type == "edge" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "edge_roll";
+  sprite_index = edge_climb_sprite;
+  image_index = 0;
+  if percent < 100
+        timer = 0;
+        else {
+        timer = -15; }
+  time = 46;
+  timer_speed = 1;
+	intangible = 1;
+  }
+if ( timer < time )
+{
+    switch ( timer )
+	{
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 10: image_index = 3; break;
+	case 14: image_index = 4; break;
+	case 18: sprite_index = roll_sprite; image_index = 0; break;
+	case 20: shakex=17*size*(1-facing*2); shakey=1*size; image_index=1; image_angle=225*(1-facing*2); break;
+	case 22: shakex=18*size*(1-facing*2); shakey=5*size; image_angle=180*(1-facing*2); break;
+	case 24: shakex=12*size*(1-facing*2); shakey=12*size; image_angle=135*(1-facing*2); break;
+	case 26: shakex=4*size*(1-facing*2); shakey=14*size; image_index=1; image_angle=90*(1-facing*2); break;
+	case 28: shakex=-2*size*(1-facing*2); shakey=9*size; image_angle=45*(1-facing*2); break;
+	case 30: shakex=-4*size*(1-facing*2); shakey=1*size; image_angle=360*(1-facing*2); break;
+	case 32: shakex=0*size*(1-facing*2); shakey=0*size; image_index=4; break;
+	case 36: image_index=5; break;
+	case 41: image_index=6; break;
+	}
+    if ( timer == -15 )
+	instance_create(x-size,y+size,obj_spark_effect);
+    if ( timer == 18 )
+		{
+        sound_play(roll_dodge_snd);
+        hspeed = (7.5-facing*15) * size;
+        }
+    if timer >= 30 && timer <= 36
+	{
+    hspeed*= 0.75
+	}
+	if ( timer == 37 )
+	{
+    hspeed = 0
+    intangible = 0 
+	}
+}
+if ( timer >= time && state_type != "flinch" && state_type != "air_flinch" )
+	{
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+    }

@@ -1,0 +1,109 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    special = 1
+    attacking = 0
+    attack_type = "b"
+    temp = 0
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0;
+        sprite_index = b_sprite; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.5;
+        sprite_index = b_air_sprite;
+        }
+        image_speed = 0.55;
+        image_index=0;
+        timer = 0;
+        time = 46;
+        timer_speed=1;
+        air_move = 0
+	if sftemp4 = 1
+	facing = 0
+	if sftemp4 = 2
+	facing = 1
+	sftemp4 = 0
+	temp3 = 0
+}
+        if timer < time {
+		if timer > 1 {
+		attacktemp = 0
+		sftemp_timer = 0
+		}
+            if (timer = 5 && sftemp3 = 0 && sftemp2 = 0 && ((!ai && ((moveright && !facing) || (moveleft && facing))) || (ai && random(10)>7.75)))  {
+                temp = 1
+                time = 55
+                sound_play(ex_sound)
+                ex = 1
+            }
+            if (temp = 1 || sftemp2 = 1) && frac(timer/2) == 0 && timer < 40 {
+                image_blend=c_yellow
+		alarm[7]=4 }
+            else 
+                image_blend=c_white
+            if timer = 11 {
+                image_speed = 0.25
+                if !air {
+                    duster = instance_create(x,y,obj_dust_effect);
+                    duster.facing = facing; }
+		firevfx = instance_create(x+25*size*(1-facing*2),y-22*size,obj_spark);
+		firevfx.sprite_index = fireball_fire_sprite
+		firevfx.image_index = 0
+		firevfx.image_speed = 0.25
+		firevfx.image_xscale = 0.4*(1-facing*2)
+		firevfx.image_yscale = 0.4
+		firevfx.alarm[0] = 28
+               if temp = 0 && sftemp2 = 0 {
+		    if special
+			temp3 = 1
+                    sound_play(b_sound);
+                    sound_play(kikoken_voice);
+                    create_projectile(2,25+facing*130,1.8,0.5,10,5,sf_shell,obj_spark_special2,0.1,0.08,30,15,self.id,90,chunli_kikoken);
+                    hspeed=0;
+               }
+               else {
+                    sound_play(b_sound);
+                    sound_play(kikoken_ex_voice);
+                    create_projectile(3,45+facing*90,2.8,0.2,8,10,sf_shell,obj_spark_special2,0.12,0.095,30,16,self.id,85,chunli_kikoken_ex);
+                    proj.hitlag_diff = 3
+                    hspeed=0;
+               }
+            }
+	    if timer > 11 {
+	    firevfx.x = x+25*size*(1-facing*2)
+	    firevfx.y = y-22*size
+	    }
+            if timer = 31 {
+                image_speed = 0.175
+                image_blend = c_white
+            } 
+            if air = 0 && state_type = "air_attack" {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=16; 
+            }
+            if image_index >= image_number - image_speed
+                image_speed = 0
+            if timer >= 14 && timer <= 30 && vspeed > 0.5
+                vspeed = 0.5
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    ex = 0
+    temp = 0
+    sftemp2 = 0
+    sftemp3 = 0
+    sftemp4 = 0
+    special = 0
+}
+        

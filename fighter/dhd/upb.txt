@@ -1,0 +1,87 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  timer = 0;
+  attack_type = "upb";
+  intangible = 1;
+  hspeed /= 2;
+  gravity = 0;
+  if ( vspeed > 0 )
+    vspeed /= 3;
+  if ( air == 0 )
+    {
+    state_type = "air_attack";
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster . facing = facing;
+    }
+    else
+    {
+    state_type = "air_attack";
+    }
+  image_speed = 0.25;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  time = 88;
+  timer = 0;
+  timer_speed = 1;
+  }
+if timer > 25
+force_edge_grab = 1
+if ( timer == 7 )
+  intangible = 0; 
+if timer < 16
+vspeed /= 2
+if ( timer == 16 )
+  {
+  sound_play ( upb_sound1 );
+  sound_play ( attack_voice3 );
+  create_hitbox ( 4 , 100 - facing * 20 , 2.4 , 3.3 , 5 , 3 , punch1 , obj_spark_hit1 ,
+    1.376 , 0.774 , 4 , 43 , self.id , 52 , 4 );
+    heavy_armor = 9;
+  }
+if ( timer >= 16 && timer < 73 )
+  {
+  vspeed -= 20;
+  vspeed /= 10;
+  hspeed = ( abs ( hspeed ) - 1 ) * sign ( hspeed );
+  if ( abs ( hspeed ) < 0.5 )
+    {
+    hspeed = 0;
+    }
+  if ( moveright && hspeed < 2.5 ) hspeed += 1;
+  if ( moveleft && hspeed > -2.5 ) hspeed -= 1;
+  }
+if ( timer == 72 )
+  {
+  sound_play ( upb_sound2 );
+  create_projectile ( 4 , 90 , 0 , 0 , 0 , 4 , punch2 , obj_spark_hit2 , 0.7 , 0.7 , -9 , 41 , self.id , 
+   120 , dhd_duckaway );
+  proj . sprite_index = blackduck_sprite;
+  proj . image_xscale = 0.688 * size * ( 1 - facing * 2 );
+  proj . image_yscale = 0.688 * size;
+  proj . image_speed = 0.25;
+  create_projectile ( 4 , 90 , 0 , 0 , 0 , 4 , punch2 , obj_spark_hit2 , 0.7 , 0.7 , 17 , 41 , self.id ,
+   120 , dhd_duckaway );
+  proj . sprite_index = blackduck_sprite;
+  proj . image_xscale = 0.688 * size * ( 1 - facing * 2 );
+  proj . image_yscale = 0.688 * size;
+  proj . image_speed = 0.25;
+  super_armor = 0;
+  }
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    {
+    state_type = "fall";
+    vspeed += -2;
+    }
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

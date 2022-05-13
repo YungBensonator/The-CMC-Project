@@ -1,0 +1,84 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    attacking = 0;
+    state_type = "attack";
+    attack_type = "jab";
+    timer = 0;
+    time = 20;
+    sprite_index = stilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 8: image_index = 1; break;
+	case 11: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 103: image_index = 4; break;
+	case 106: image_index = 5; break;
+	case 109: image_index = 6; break;
+	case 113: image_index = 7; break;
+	case 116: image_index = 12; break;
+	case 122: image_index = 13; break;
+	case 200: image_index = 8; break;
+	case 203: image_index = 9; break;
+	case 206: image_index = 10; break;
+	case 210: image_index = 11; break;
+	case 215: image_index = 12; break;
+	case 220: image_index = 13; break;
+	case 223: image_index = 14; break;
+	case 226: image_index = 15; break;
+	case 229: image_index = 16; break;
+      }
+
+    if ( ( timer >= 100 && timer < 108 ) || ( timer >= 200 && timer < 208 ) )
+	hspeed = size * (1-facing*2);
+    else
+	hspeed = 0;
+    if ( timer = 8 )
+      {
+	sound_play(attack_sound1);
+	create_hitbox(4,70+facing*40,1.9,0,15,4,punch1,obj_spark_hit1,0.7,0.6,18,14,self.id,3,1);
+	hitbox.hit_stun = 6;
+	hitbox.di = 0.25;
+      }
+    if ( timer >= 12 && timer <= 22 && attacking )
+      {
+	timer = 100;
+	time = 127;
+      }
+
+    if ( timer = 106 )
+      {
+	sound_play(attack_sound2);
+	create_hitbox(4,90,2.5,0,17,5,kick1,obj_spark_hit1,0.7,0.7,20,22,self.id,3,2);
+	hitbox.hit_stun = 6;
+	hitbox.di = 0.3;
+      }
+    if ( timer >= 112 && timer <= 126 && attacking )
+      {
+	timer = 200;
+	time = 230;
+      }
+
+    if ( timer = 206 )
+      {
+	play_attack_voice();
+	sound_play(attack_sound2);
+	create_hitbox(7,22+facing*136,5,2,20,5,kick2,obj_spark_hit1,0.6,0.6,23,16,self.id,8,1);
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+  
+  

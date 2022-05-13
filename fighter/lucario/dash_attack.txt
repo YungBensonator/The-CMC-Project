@@ -1,0 +1,101 @@
+if global.gs_form[number-1] = 0
+{
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0.25;
+        sprite_index = dash_attack_sprite;
+        image_index=0.25;
+        timer = 0;
+        time = 26;
+        timer_speed=1;
+        hspeed*=0.35
+}
+if timer < time {
+     state_type = "attack";
+    if timer = 11 {
+        duster = instance_create(x,y,obj_dust_effect)
+        duster.facing = facing;
+        sound_play(attack_sound3)
+        play_attack_voice()
+        create_hitbox(9+aura/4,65+facing*50,5.35+aura/10,4.6+aura/7,10+round(aura/2),6+round(aura/5),aura2,obj_spark_aura,0.7,0.8,10,20,self.id,5,2);
+        hitbox.shake_kb = 3
+        hitbox.shake_ampl = 0.6
+        hitbox.hit_stun = 12
+        }
+    if timer = 13 {
+        hitbox.damage = 6*size
+        hitbox.bkb=5*size
+        hitbox.kbg=3*size
+    }
+    if timer < 14 && timer >= 6 
+    hspeed = (3.6 - facing*7.2)*size
+    if timer>=14 && timer < 22
+    hspeed = (2-facing*4)*size
+    if timer=22
+    hspeed = (1-facing*2)*size
+    if timer = 24 {
+    hspeed = 0;
+    image_speed = 0
+    }
+    if timer = 25
+        interrupt = 1
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        
+}        
+if global.gs_form[number-1] = 1
+{
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0.25;
+        sprite_index = dash_attack_sprite;
+        image_index=0.25;
+        timer = 0;
+        time = 26;
+        timer_speed=1;
+        hspeed*=0.35
+}
+if timer < time {
+     state_type = "attack";
+    if timer = 11 {
+        duster = instance_create(x,y,obj_dust_effect)
+        duster.facing = facing;
+        sound_play(attack_sound3)
+        play_attack_voice()
+        create_hitbox(10,65+facing*50,5,4.5,10,6,aura2,obj_spark_aura,0.7,0.8,10,20,self.id,5,2);
+        hitbox.shake_kb = 3
+        hitbox.shake_ampl = 0.6
+        hitbox.hit_stun = 8
+        }
+    if timer = 13 {
+        hitbox.damage = 6*size
+        hitbox.bkb=5*size
+        hitbox.kbg=3*size
+    }
+    if timer < 14 && timer >= 6 
+    hspeed = (3.6 - facing*7.2)*size
+    if timer>=14 && timer < 22
+    hspeed = (2-facing*4)*size
+    if timer=22
+    hspeed = (1-facing*2)*size
+    if timer = 24 {
+    hspeed = 0;
+    image_speed = 0
+    }
+
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+}
+      

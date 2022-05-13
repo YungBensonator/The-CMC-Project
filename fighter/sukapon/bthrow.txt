@@ -1,0 +1,93 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "bthrow";
+image_speed = 0;
+sprite_index = bthrow_sprite;
+image_index=0;
+timer = 0;
+time = 26;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 47
+}
+if timer < time {
+	if ( timer >= 0 && timer <= 1 ){
+		target.x = x + 20 * size * (1-facing*2);
+		target.y = y;
+	}
+	
+	if timer >= 2 and timer <= 20{
+		target.depth = depth - 1
+	}
+	
+	if  timer = 1{
+		target.x = x+place_x(80);
+		target.y = y+place_y(47)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 2{
+		target.x = x+place_x(76);
+		target.y = y+place_y(42)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 3{
+		target.x = x+place_x(71);
+		target.y = y+place_y(37)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 4{
+		target.x = x+place_x(65);
+		target.y = y+place_y(31)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 5{
+		target.x = x+place_x(58);
+		target.y = y+place_y(25)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 6{
+		target.x = x+place_x(50);
+		target.y = y+place_y(20)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 7{
+		target.x = x+place_x(31);
+		target.y = y+place_y(21)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 8{
+		target.x = x+place_x(19);
+		target.y = y+place_y(23)+(target.actual_height*0.5);
+	}
+	
+	if  timer = 9{
+		target.x = x+place_x(12);
+		target.y = y+place_y(25)+(target.actual_height*0.5);
+	}
+	
+	if timer <= 10
+	image_index = timer
+	else
+	image_index += 0.5
+	
+	if timer = 7{
+		sound_play(bthrow_sound);
+	}
+	
+	if timer = 10{
+		
+		create_throw_box(5,angle_correct(150),7,4,5,0,-1,-1,1,1,-abs(place_x(12))/size,-place_y(25)/size,self.id,4,3);
+	//hitbox.image_angle = angle_correct(angle_here)
+	}
+	
+	
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none"
+    state_type = "stand"
+    timer = 0
+    time =-1
+    }
+        

@@ -1,0 +1,601 @@
+//Agumon
+if evolution = 0 {
+    fast_fall = 0
+    fast_fall_temp = 0
+    if state_type = "run" || state_type = "stand" || state_type = "jump" && air < max_jumps {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "upb";
+        image_speed = 0;
+        sprite_index = upb_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 42;
+        timer_speed = 1;
+    }
+    if timer < time {
+		// VFX
+		switch (timer) {
+			case 12: 
+				blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_texture2, /*Start frame*/ 2, /*Apex Frame*/ 6, /*End frame*/ 7, /*CCW*/ 1, /*girth*/ 9, 15);
+				blur.depth = depth + 1;
+				blur.image_index = 0;
+				blur.index = 1;
+				blur.h_squish = 3;// *blur.push_x = -2 * (1-facing*2);
+				blur.v_squish = -6;
+				break;
+			case 13: case 14: case 15: case 16:
+				blur.image_index = 1;
+				blur.index += 0.16;
+				break;
+			case 17:
+				blur.image_index = 2;
+				blur.index = 2;
+				break;
+			case 18: case 19: case 20: case 21:
+				blur.index += 0.16;
+				break;
+			case 22:
+				blur.image_index = 3;
+				blur.index = 3;
+				break;
+			case 23: case 24: case 25: case 26:
+				blur.index += 0.16;
+				break;
+			case 27:
+				blur.image_index = 4;
+				blur.index = 4;
+				break;
+			case 28:
+				blur.image_index = 5;
+				break;
+			case 31:
+				with (blur) instance_destroy();
+				break;
+			
+		}
+		
+        switch (timer) {
+            case 6:
+                image_index = 1;
+                break;
+            case 9:
+                image_index = 2;
+                break; //hitbox start 
+            case 12:
+                image_index = 3;
+                break;
+            case 17:
+                image_index = 4;
+                break;
+            case 22:
+                image_index = 5;
+                break;
+            case 27:
+                image_index = 6;
+                break;
+            case 32:
+                image_index = 7;
+                break;
+        }
+        state_type = "air_attack";
+        if timer <= 12 {
+            gravity = 0;
+            gravity_lock = 1;
+        }
+        if timer = 1 {
+            vspeed = 0;
+        }
+        if timer = 6 {
+            force_edge_grab = 1
+            //sound_play(upb_voice);
+            sound_play(ssmash_voice);
+            sound_play(attack_sound3);
+        }
+        if timer = 9 {
+            create_hitbox(12, 90, 6.1, 4.5, 14, 7, slash3, obj_spark_slash1, 0.8, 0.7, 15, 12, self.id, 13, 3);
+            //6.7,5.5
+            hitbox.hit_stun = 11
+            hitbox.di = 0.3
+        }
+        if timer = 12 {
+            hitbox.hitbox_x = 8 - facing * 16
+            hitbox.hitbox_y = 30
+            hitbox.image_xscale = 0.6
+            hitbox.image_yscale = 0.8
+            vspeed = -7; //-9
+        }
+        if timer = 17 {
+            hitbox.hitbox_x = 2 - facing * 4
+            hitbox.hitbox_y = 28
+            hitbox.image_xscale = 0.6
+            hitbox.image_yscale = 0.8
+        }
+        if timer = 22 {
+            hitbox.hitbox_x = -8 + facing * 16
+            hitbox.hitbox_y = 27
+            hitbox.image_xscale = 0.6
+            hitbox.image_yscale = 0.8
+        }
+    }
+    if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" || (timer > 49 && (is_on_floor(self.id) || vspeed = 0)) {
+        if air > 0
+        state_type = "fall";
+        else
+            state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        air = max_jumps
+        time = -1;
+    }
+    if timer > 30 && ((movedown || special) || (ai && (!offstage || y > nearest_edge.y))) && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+            state_type = "stand";
+        sprite_index = upb_sprite;
+        timer = 0;
+        time = -1;
+    }
+}
+
+//Greymon
+if evolution = 1 {
+    fast_fall = 0
+    fast_fall_temp = 0
+    if state_type = "run" || state_type = "stand" || state_type = "jump" && air < max_jumps {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "upb";
+        image_speed = 0;
+        sprite_index = upb2_sprite;
+        image_index = 0;
+        temp = air > 0
+        timer = 0;
+        time = 48;
+        timer_speed = 1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        air_move = 0;
+        moveleft = 0
+        moveright = 0
+        if temp = 1 {
+            sprite_index = upb2_air_sprite;
+            state_type = "air_attack";
+            time = 48;
+            image_speed = 0;
+        }
+    }
+    if temp = 0 {
+        if timer < time {
+            switch (timer) {
+                case 2:
+                    eff = create_blur(x, y, self.id);
+                    eff.sprite_index = fire_horn_flame1_effect;
+                    eff.image_xscale = size * 0.1 * (1 - facing * 2);
+                    eff.image_yscale = size * 0.1;
+                    eff.x = x - 53 * size * (1 - facing * 2);
+                    eff.y = y - 48 * size;
+                    eff.image_speed = 0;
+                    eff.image_index = 0;
+                    eff.alarm[0] = 40;
+                    eff.snap = self.id;
+                    eff.image_angle = 15 + facing * 330;
+                    eff.depth = depth - 0.1;
+                    eff.visible = 0;
+                    eff.image_alpha = 0.50;
+                    break;
+                case 4:
+                    image_index = 1;
+                    break;
+                case 8:
+                    image_index = 2;
+                    eff.visible = 1;
+                    break;
+                case 9:
+                    eff.image_index = 1;
+                    break;
+                case 10:
+                    eff.image_index = 2;
+                    eff.image_alpha = 0.80;
+                    break;
+                case 11:
+                    eff.image_index = 3;
+                    eff.image_alpha = 1;
+                    break;
+                case 12:
+                    eff.image_index = 4;
+                    break;
+                case 13:
+                    eff.image_index = 5;
+                    break;
+                case 14:
+                    eff.image_index = 0;
+                    break;
+                case 15:
+                    eff.image_index = 1;
+                    break;
+                case 16:
+                    eff.image_index = 2;
+                    break;
+                case 17:
+                    eff.image_index = 3;
+                    break;
+                case 18:
+                    image_index = 3;
+                    with(eff) instance_destroy();
+                    eff2 = create_blur(x, y, self.id);
+                    eff2.sprite_index = fire_horn_flame1_effect;
+                    eff2.image_xscale = size * 0.1 * (1 - facing * 2);
+                    eff2.image_yscale = size * 0.1;
+                    eff2.x = x - 19 * size * (1 - facing * 2);
+                    eff2.y = y - 48 * size;
+                    eff2.image_speed = 0;
+                    eff2.image_index = 4;
+                    eff2.alarm[0] = 40;
+                    eff2.snap = self.id;
+                    eff2.sprite_angle = 0;
+                    eff2.depth = depth - 0.1;
+                    eff2.visible = 1;
+                    break;
+                case 19:
+                    eff2.image_index = 5;
+                    break;
+                case 20:
+                    image_index = 4;
+                    with(eff2) instance_destroy();
+                    eff = create_blur(x, y, self.id);
+                    eff.sprite_index = fire_horn_flame1_effect;
+                    eff.image_xscale = size * 0.1 * (1 - facing * 2);
+                    eff.image_yscale = size * 0.1;
+                    eff.x = x + 13 * size * (1 - facing * 2);
+                    eff.y = y - 48 * size;
+                    eff.image_speed = 0;
+                    eff.image_index = 0;
+                    eff.alarm[0] = 40;
+                    eff.snap = self.id;
+                    eff.image_angle = 345 - facing * 330;
+                    eff.depth = depth - 0.1;
+                    eff.visible = 1;
+                    break;
+                case 20:
+                    eff.image_index = 5;
+                    break;
+                case 21:
+                    eff.image_index = 0;
+                    break;
+                case 22:
+                    eff.image_index = 1;
+                    break;
+                case 23:
+                    image_index = 5;
+                    with(eff) instance_destroy();
+                    eff2 = create_blur(x, y, self.id);
+                    eff2.sprite_index = fire_horn_flame2_effect;
+                    eff2.image_xscale = size * 0.2 * (1 - facing * 2);
+                    eff2.image_yscale = size * 0.2;
+                    eff2.x = x - 17 * size * (1 - facing * 2);
+                    eff2.y = y + 7 * size;
+                    eff2.image_speed = 0;
+                    eff2.image_index = 0;
+                    eff2.alarm[0] = 40;
+                    eff2.snap = self.id;
+                    eff2.image_angle = 65 - facing * 130;
+                    eff2.depth = depth - 0.1;
+                    eff2.visible = 1;
+                    break; //hitbox start 
+                case 25:
+                    image_index = 6;
+                    with(eff2) instance_destroy();
+                    eff = create_blur(x, y, self.id);
+                    eff.sprite_index = fire_horn_flame2_effect;
+                    eff.image_xscale = size * 0.2 * (1 - facing * 2);
+                    eff.image_yscale = size * 0.2;
+                    eff.x = x - 15 * size * (1 - facing * 2);
+                    eff.y = y - 5 * size;
+                    eff.image_speed = 0;
+                    eff.image_index = 1;
+                    eff.alarm[0] = 40;
+                    eff.snap = self.id;
+                    eff.image_angle = 65 - facing * 130;
+                    eff.depth = depth - 0.1;
+                    eff.visible = 1;
+                    break;
+                case 28:
+                    eff.image_index = 2;
+                    break;
+                case 31:
+                    eff.image_index = 3;
+                    break;
+                case 34:
+                    eff.image_index = 4;
+                    break;
+                case 36:
+                    eff.image_index = 5;
+                    break;
+                case 38:
+                    eff.image_index = 6;
+                    break;
+                case 40:
+                    image_index = 7;
+                    with(eff) instance_destroy();
+                    break;
+            }
+            state_type = "air_attack";
+            if timer <= 15 {
+                gravity = 0;
+                gravity_lock = 1;
+            }
+            if timer = 1 {
+                vspeed = 0;
+                sound_play(greymon_upbg_voice);
+            }
+            if timer = 8 {
+                super_armor = 1
+            }
+            if timer = 23 {
+                force_edge_grab = 1
+                super_armor = 0
+                //sound_play(attack_sound3);
+                sound_play(upb2_sound);
+                create_hitbox(16, 70 + facing * 40, 7.5, 6, 17, 8, fire1, obj_spark_fire1, 1.2, 1.2, 36, 33, self.id, 13, 4);
+                hitbox.hit_stun = 11
+                hitbox.di = 0.3
+                duster = instance_create(x - 6 + facing * 12, y, obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+            }
+            if timer = 25 {
+                hitbox.hitbox_x = 36 - facing * 72
+                hitbox.hitbox_y = 40
+                hitbox.image_xscale = 1.2
+                hitbox.image_yscale = 1.5
+                vspeed = -13;
+                hspeed = 4 - facing * 8
+            }
+            if timer = 30 {
+                hspeed = 4 - facing * 8
+            }
+            if timer = 35 {
+                hspeed = 4 - facing * 8
+            }
+            if timer = 40 {
+                hspeed = 2 - facing * 4
+                vspeed = -6;
+            }
+            if timer = 42 {
+                hspeed = 0
+                vspeed = 0;
+            }
+        }
+    }
+    //Aerial
+    else {
+        if timer < time {
+            switch (timer) {
+                case 2:
+                    eff = create_blur(x, y, self.id);
+                    eff.sprite_index = fire_horn_flame1_effect;
+                    eff.image_xscale = size * 0.1 * (1 - facing * 2);
+                    eff.image_yscale = size * 0.1;
+                    eff.x = x - 53 * size * (1 - facing * 2);
+                    eff.y = y - 48 * size;
+                    eff.image_speed = 0;
+                    eff.image_index = 0;
+                    eff.alarm[0] = 40;
+                    eff.snap = self.id;
+                    eff.image_angle = 15 + facing * 330;
+                    eff.depth = depth - 0.1;
+                    eff.visible = 0;
+                    eff.image_alpha = 0.50;
+                    break;
+                case 4:
+                    image_index = 1;
+                    break;
+                case 8:
+                    image_index = 2;
+                    eff.visible = 1;
+                    break;
+                case 9:
+                    eff.image_index = 1;
+                    break;
+                case 10:
+                    eff.image_index = 2;
+                    eff.image_alpha = 0.80;
+                    break;
+                case 11:
+                    eff.image_index = 3;
+                    eff.image_alpha = 1;
+                    break;
+                case 12:
+                    eff.image_index = 4;
+                    break;
+                case 13:
+                    eff.image_index = 5;
+                    break;
+                case 14:
+                    eff.image_index = 0;
+                    break;
+                case 15:
+                    eff.image_index = 1;
+                    break;
+                case 16:
+                    eff.image_index = 2;
+                    break;
+                case 17:
+                    eff.image_index = 3;
+                    break;
+                case 18:
+                    image_index = 3;
+                    with(eff) instance_destroy();
+                    eff2 = create_blur(x, y, self.id);
+                    eff2.sprite_index = fire_horn_flame1_effect;
+                    eff2.image_xscale = size * 0.1 * (1 - facing * 2);
+                    eff2.image_yscale = size * 0.1;
+                    eff2.x = x - 19 * size * (1 - facing * 2);
+                    eff2.y = y - 48 * size;
+                    eff2.image_speed = 0;
+                    eff2.image_index = 4;
+                    eff2.alarm[0] = 40;
+                    eff2.snap = self.id;
+                    eff2.sprite_angle = 0;
+                    eff2.depth = depth - 0.1;
+                    eff2.visible = 1;
+                    break;
+                case 19:
+                    eff2.image_index = 5;
+                    break;
+                case 20:
+                    image_index = 4;
+                    with(eff2) instance_destroy();
+                    eff = create_blur(x, y, self.id);
+                    eff.sprite_index = fire_horn_flame1_effect;
+                    eff.image_xscale = size * 0.1 * (1 - facing * 2);
+                    eff.image_yscale = size * 0.1;
+                    eff.x = x + 13 * size * (1 - facing * 2);
+                    eff.y = y - 48 * size;
+                    eff.image_speed = 0;
+                    eff.image_index = 0;
+                    eff.alarm[0] = 40;
+                    eff.snap = self.id;
+                    eff.image_angle = 345 - facing * 330;
+                    eff.depth = depth - 0.1;
+                    eff.visible = 1;
+                    break;
+                case 20:
+                    eff.image_index = 5;
+                    break;
+                case 21:
+                    eff.image_index = 0;
+                    break;
+                case 22:
+                    eff.image_index = 1;
+                    break;
+                case 23:
+                    image_index = 5;
+                    with(eff) instance_destroy();
+                    eff2 = create_blur(x, y, self.id);
+                    eff2.sprite_index = fire_horn_flame2_effect;
+                    eff2.image_xscale = size * 0.2 * (1 - facing * 2);
+                    eff2.image_yscale = size * 0.2;
+                    eff2.x = x - 17 * size * (1 - facing * 2);
+                    eff2.y = y + 7 * size;
+                    eff2.image_speed = 0;
+                    eff2.image_index = 0;
+                    eff2.alarm[0] = 40;
+                    eff2.snap = self.id;
+                    eff2.image_angle = 65 - facing * 130;
+                    eff2.depth = depth - 0.1;
+                    eff2.visible = 1;
+                    break; //hitbox start 
+                case 25:
+                    image_index = 6;
+                    with(eff2) instance_destroy();
+                    eff = create_blur(x, y, self.id);
+                    eff.sprite_index = fire_horn_flame2_effect;
+                    eff.image_xscale = size * 0.2 * (1 - facing * 2);
+                    eff.image_yscale = size * 0.2;
+                    eff.x = x - 15 * size * (1 - facing * 2);
+                    eff.y = y - 5 * size;
+                    eff.image_speed = 0;
+                    eff.image_index = 1;
+                    eff.alarm[0] = 40;
+                    eff.snap = self.id;
+                    eff.image_angle = 65 - facing * 130;
+                    eff.depth = depth - 0.1;
+                    eff.visible = 1;
+                    break;
+                case 28:
+                    eff.image_index = 2;
+                    break;
+                case 31:
+                    eff.image_index = 3;
+                    break;
+                case 34:
+                    eff.image_index = 4;
+                    break;
+                case 36:
+                    eff.image_index = 5;
+                    break;
+                case 38:
+                    eff.image_index = 6;
+                    break;
+                case 40:
+                    image_index = 7;
+                    with(eff) instance_destroy();
+                    break;
+            }
+            state_type = "air_attack";
+            if timer <= 15 {
+                gravity = 0;
+                gravity_lock = 1;
+            }
+            if timer = 1 {
+                vspeed = 0;
+                sound_play(greymon_upbg_voice);
+            }
+            if timer = 8 {
+                super_armor = 1
+            }
+            if timer = 23 {
+                force_edge_grab = 1
+                super_armor = 0
+                //sound_play(attack_sound3);
+                sound_play(upb2_sound);
+                create_hitbox(16, 70 + facing * 40, 7.5, 6, 17, 8, fire1, obj_spark_fire1, 1.2, 1.2, 36, 33, self.id, 13, 4);
+                hitbox.hit_stun = 11
+                hitbox.di = 0.3
+            }
+            if timer = 25 {
+                hitbox.hitbox_x = 36 - facing * 72
+                hitbox.hitbox_y = 40
+                hitbox.image_xscale = 1.2
+                hitbox.image_yscale = 1.5
+                vspeed = -13;
+                hspeed = 4 - facing * 8
+            }
+            if timer = 30 {
+                hspeed = 4 - facing * 8
+            }
+            if timer = 35 {
+                hspeed = 4 - facing * 8
+            }
+            if timer = 40 {
+                hspeed = 2 - facing * 4
+                vspeed = -6;
+            }
+            if timer = 42 {
+                hspeed = 0
+                vspeed = 0;
+            }
+        }
+    }
+    //
+    if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" || (timer > 49 && (is_on_floor(self.id) || vspeed = 0)) {
+        if air > 0
+        state_type = "fall";
+        else
+            state_type = "stand";
+        attack_type = "none";
+        timer = 0;
+        air = max_jumps
+        time = -1;
+        super_armor = 0
+    }
+    if timer > 40 && ((movedown || special) || (ai && (!offstage || y > nearest_edge.y))) && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+            state_type = "stand";
+        sprite_index = upb2_sprite;
+        timer = 0;
+        time = -1;
+        super_armor = 0
+    }
+}
+
+if (instance_exists(blur)){
+	blur.depth = depth + 0.1;
+}

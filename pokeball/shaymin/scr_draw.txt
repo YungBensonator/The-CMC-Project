@@ -1,0 +1,38 @@
+if ( on_floor || on_platform )
+  draw_shadow ( x , y , 6 );
+draw_sprite_ext ( sprite_index , -1 , x + shakex , y + shakey , xsize * ( 1 - facing * 2 ) , ysize , 0 , c_white , 1 );
+
+if ( mode == 3 )
+  {
+  if ( timer mod 4 == 0 && timer < 60 )
+    {
+    draw_set_blend_mode ( bm_add );
+    draw_sprite_ext ( sprite_index , -1 , x + shakex , y + shakey , xsize * ( 1 - facing * 2 ) , ysize , 0 , c_white , 1 );
+    draw_set_blend_mode ( bm_normal );
+    }
+  var i, d, b, alpha;
+  for ( i = 0 ; i < 16 ; i += 1 )
+    {
+    d = i * 90 + timer * 5;
+    b = floor ( i * 0.25 ) * -10 + timer;
+    if ( b < 0 || b > 20 ) continue;
+    alpha = min ( 1 , b * 0.2 );
+    draw_set_alpha ( alpha * 0.3 );
+    draw_circle_color (
+      x - 6 * ( 1 - facing * 2 ) + lengthdir_x ( 80 - b * 4 + 8 , d - 10 ) ,
+      y - 12 + lengthdir_y ( 80 - b * 4 + 8 , d - 10 ) ,
+      4 , c_black , c_purple , 0 );
+    draw_set_alpha ( alpha );
+    draw_set_alpha ( alpha * 0.7 );
+    draw_circle_color (
+      x - 6 * ( 1 - facing * 2 ) + lengthdir_x ( 80 - b * 4 + 4 , d - 5 ) ,
+      y - 12 + lengthdir_y ( 80 - b * 4 + 4 , d - 5 ) ,
+      4 , c_black , c_purple , 0 );
+    draw_set_alpha ( alpha );
+    draw_circle_color (
+      x - 6 * ( 1 - facing * 2 ) + lengthdir_x ( 80 - b * 4 , d ) ,
+      y - 12 + lengthdir_y ( 80 - b * 4 , d ) ,
+      5 , c_black , c_purple , 0 );
+    draw_set_alpha ( 1 );
+    }
+  }

@@ -1,0 +1,97 @@
+if nblock > 0
+nblock -= 1
+
+if ( state_type = "entry" || state_type = "respawn" || state_type = "out" || state_type = "dead" )
+{
+fuel = 90;
+}
+
+if ( fs_music > -1 )
+if ( attack_type != "final_smash" )
+  {
+  tempmus_stop ( fs_music );
+  fs_music = -1;
+  }
+
+if ( fuel < 90 ) {
+	if air = 0
+	fuel += 0.4;
+	}
+
+if ( aku == 0  || ( aku > 0 && !instance_exists ( aku ) ) )
+  {
+  aku = instance_create ( x , y - 6 , obj_spark );
+  aku.depth = depth + 1;
+  aku.image_xscale = xsize;
+  aku.image_yscale = ysize;
+  aku.sprite_index = aku_idle_sprite;
+  aku.image_speed = 0;
+  aku.image_index = 0;
+  aku.keepmain = keepmain;
+  aku.script = char_custom3;
+  aku.crash = self.id;
+  }
+
+aku_timer += 1;
+if ( aku_timer >= 20 )
+  {
+  aku_xo = -6 + random ( 12 );
+  aku_yo = -6 + random ( 12 );
+  aku_timer = 0;
+  }
+
+if ( !final_smashing )
+with ( aku )
+  {
+  visible = 1;
+  x = ( x * 23 + other.x - 40 * ( 1 - other.facing * 2 ) + other.aku_xo ) / 24;
+  y = ( y * 23 + other.y - 40 + other.aku_yo ) / 24;
+  image_xscale = 0.8 * ( 1 - other.facing * 2 );
+  image_yscale = 0.8;
+  if ( abs ( other.hspeed ) > 1.2 )
+    sprite_index = other.aku_move_sprite;
+    else
+    sprite_index = other.aku_idle_sprite;
+  depth = other.depth + 1;
+  
+  image_angle = point_direction ( 0 , 0 , 24 , ( y - yprevious ) * ( 1 - facing * 2 ) );
+  }
+if ( state_type = "edge" )
+{
+sound_stop (upb_sound);
+}
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 15: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=3;  break;
+  case 18: shakey=12*size;  break;
+  case 21: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 24: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 27: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 30: sprite_index=land_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}
+if state_type = "crouch" && facing = 0 && moveright = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = 0.15;
+	hspeed = 1.0;
+	}
+if state_type = "crouch" && facing = 0 && moveleft = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = image_number - 0.15;
+	hspeed = -0.8;
+	}
+if state_type = "crouch" && facing = 1 && moveright = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = image_number - 0.15;
+	hspeed = 0.8;
+	}
+if state_type = "crouch" && facing = 1 && moveleft = 1 {
+	sprite_index = crawl_sprite;
+	image_speed = 0.15;
+	hspeed = -1.0;
+	}

@@ -1,0 +1,126 @@
+if cantupb = 1
+exit;
+
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if (state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps) {
+    attacking = 0;
+    special = 0;
+    attack_type = "upb";
+    time = 55;
+    timer = 0;
+    state_type = "air_attack";
+    hspeed = 0;
+    sprite_index = stand_sprite;
+    image_index = 0;
+    image_speed = 0;
+    timer_speed = 1;
+    temp1 = 0;
+}
+switch (timer){
+    case 1: image_index = 0; break;
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 12: image_index = 4; break;
+    case 15: image_index = 0; break;
+    case 30: image_index = 5; sprite_index=jump_sprite; break;
+}
+if timer < time {
+    tracker.depth = depth + 2;
+    minitetri.depth = depth + 1;
+    hspeed = 0;
+    if timer = 0 {
+        tracker = instance_create ( x , y - 100 * size , obj_spark)
+        tracker.sprite_index = entry_sprite;
+        tracker.image_xscale = size * 0.6;
+        tracker.image_yscale = size * 0.6;
+        tracker.image_speed = 0;
+        tracker.image_index = 1;
+        minitetri = create_projectile(6, 270, 5, 3, 20, 5, -1, -1, 0.02, 0.02, 1, 105, self.id, 70, no_script);
+        minitetri.hit = 2;
+        minitetri.sprite_index = mini_tetri_sprite;
+        minitetri.hspeed = 0;
+        minitetri.vspeed = 0;
+        minitetri.image_alpha = 1;
+        minitetri.image_index = 0;
+        minitetri.image_xscale = 0.6 * size * ( 1 - facing * 2 );
+        minitetri.image_yscale = 0.6 * size;
+        minitetri.alarm[0] = 70;
+    }
+
+    if timer < 30 {
+        air_move = 0;
+
+        if instance_exists(tracker) {
+            if moveleft {
+                tracker.x -= 3
+                minitetri.x -= 3
+            } else if moveright {
+                tracker.x += 3
+                minitetri.x += 3
+            }
+
+        }
+    }
+
+    if timer < 50 {
+        vspeed = 0; //Holds Tetromino in place midair
+    }
+    if timer >= 19 && timer < 30 {
+        image_alpha -= 0.1;
+        minitetri.image_alpha -= 0.1;
+        if timer = 29 {
+            temp1 = y;
+        }
+    }
+    if timer >= 35 {
+        force_edge_grab = 1;
+
+        if timer = 35 { //Teleport position after the "switch"
+	sound_play(upb_sound);
+            y = tracker.y - 5 * size;
+            minitetri.y = temp1;
+            x = tracker.x;
+            image_alpha = 1;
+            minitetri.image_alpha = 1;
+            minitetri.hit = 0;
+            minitetri.image_xscale = 0.9 * size * ( 1 - facing * 2 );
+            minitetri.image_yscale = 0.9 * size;
+   	    create_hitbox(8,30+facing*120,5.75,4.2,18,9,punch4,obj_spark_hit4,0.95,0.95,0,10,self.id,15,2);
+		hitbox.hit_stun = 25;
+        }
+
+if timer = 40 { 
+	    hitbox.damage=6;
+              }
+    }
+    if timer >= 30 && timer < 50 {
+        image_xscale = 0.4 * size * ( 1 - facing * 2 );
+        image_yscale = 0.4 * size;
+    }
+    if timer >= 40 && timer < 55 {
+        minitetri.image_alpha -= 0.05;
+    }
+}
+
+if (state_type = "flinch" || state_type = "air_flinch") {
+    image_xscale = 0.6 * size * ( 1 - facing * 2 );
+    image_yscale = 0.6 * size;
+}
+if (timer >= time - 1) {
+    image_xscale = 0.4 * size * ( 1 - facing * 2 );
+    image_yscale = 0.4 * size;
+    with(tracker) {
+        instance_destroy();
+    }
+    attack_type = "none";
+    if (air > 0)
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+    cantupb = 1
+}

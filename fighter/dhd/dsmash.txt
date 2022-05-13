@@ -1,0 +1,90 @@
+if ( state_type == "stand" || state_type == "crouch" )
+  {
+  state_type = "attack";
+  attack_type = "dsmash";
+  image_speed = 0.5;
+  sprite_index = dsmash_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 60;
+  timer_speed = 1;
+  charge_frame = 10;
+  }
+
+if ( timer == 2 )
+  sound_play ( tailchasestart_sound );
+if ( timer == 6 )
+  image_speed = 0.25
+if ( timer == 9 )
+  {
+  hspeed = 0;
+  instance_create(x+10-facing*20,y-20,obj_spark_effect);
+  }
+
+if ( timer == 11 )
+  {
+  sound_stop ( tailchasestart_sound );
+  sound_play ( tailchase_sound );
+  image_index = 4;
+  image_speed = 0.5;
+  }
+
+if ( timer == 15 || timer == 21 || timer == 27 )
+  {
+  sound_play ( attacksnd1 );
+  image_speed = 0.5;
+  image_index = 4;
+  duster = instance_create(x+3-facing*6,y,obj_dust_effect);
+  duster.facing = facing;
+  duster.image_alpha = 0.8;
+  duster.image_xscale *= size;
+  duster.image_yscale *= size;
+  duster = instance_create(x-3+facing*6,y,obj_dust_effect);
+  duster.facing = !facing;
+  duster.image_alpha = 0.8;
+  duster.image_xscale *= size;
+  duster.image_yscale *= size;
+  create_hitbox2 ( 3 , 160 - facing * 140 , 3.1 , 0 , 4 , 3 , kick1 , obj_spark_hit1 , 0.5 , 0.5 , 11 , 9 , self.id , 5 , 2 );
+  create_hitbox ( 3 , 20 + facing * 140 , 3.1 , 0 , 4 , 3 , kick1 , obj_spark_hit1 , 0.5 , 0.5 , -11 , 9 , self.id , 5 , 2 );
+  hitbox2 . di = 0.7;
+  hitbox  . di = 0.7;
+  hitbox2 . charge_dmg = 0.1;
+  hitbox  . charge_dmg = 0.1;
+  hitbox2 . charge_kb = 0;
+  hitbox  . charge_kb = 0;
+  hitbox2 . charge_hitlag = 0;
+  hitbox  . charge_hitlag = 0;
+  }
+
+if ( timer == 33 )
+  {
+  sound_play ( attacksnd3 );
+  duster = instance_create(x+3-facing*6,y,obj_dust_effect);
+  duster.facing = facing;
+  duster.image_alpha = 0.8;
+  duster.image_xscale *= 1.2 * size;
+  duster.image_yscale *= 1.2 * size;
+  duster = instance_create(x-3+facing*6,y,obj_dust_effect);
+  duster.facing = !facing;
+  duster.image_alpha = 0.8;
+  duster.image_xscale *= 1.2 * size;
+  duster.image_yscale *= 1.2 * size;
+  create_hitbox2 ( 7 , 160 - facing * 140 , 5 , 6.5 , 4 , 3 , kick3 , obj_spark_hit3 , 0.75 , 0.75 , 13 , 10 , self.id , 5 , 2 );
+  hitbox2.shield_stun = 0.75 
+  create_hitbox ( 7 , 20 + facing * 140 , 5 , 6.5 , 4 , 3 , kick3 , obj_spark_hit3 , 0.75 , 0.75 , -13 , 10 , self.id , 5 , 2 );
+  hitbox2.shield_stun = 0.75  
+  }
+
+if ( timer == 35 )
+  {
+  image_index = 16;
+  image_speed = 0;
+  }
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

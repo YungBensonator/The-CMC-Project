@@ -1,0 +1,95 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" 
+{
+	if(instance_exists(bomb1) && instance_exists(bomb2) && instance_exists(bomb3) && held_item = bomb.id)
+	{
+		if (air = 0)
+		{
+			state_type = "crouch";
+			sprite_index = crouch_sprite;
+		}
+		exit;
+	}
+    attacking = 0
+    attack_type = "downb"
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0; 
+    }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.5;
+    }
+    image_speed = 0.23;
+    sprite_index = downb_sprite;
+    image_index=0;
+    timer = 0;
+	if(held_item != bomb.id) {time = 16;} else {time = 46;}
+    timer_speed=1;
+
+}
+        if timer < time {
+			
+			
+		if( timer = 11 && held_item != bomb.id)
+		{
+				bomb = instance_create(x,y-10*size,bomb_item);
+				bomb.sprite_index = bombchu_sprite;
+				bomb.sprite_air = bombchu_sprite;
+				bomb.sprite_held = bombchu_sprite;
+				held_item = bomb.id;
+				bomb.held = self.id;
+		}
+		else if (timer = 21 )
+		{
+			if(!instance_exists(bomb1))
+			{
+                sound_play(downb_sound);
+                bomb1 = create_projectile(9,90,5.3,3,20,17,explodehit3,obj_spark_fire1,0.95,0.95,11,1,self.id,600,clink_bombchu);
+				bomb1.alarm[0] = 201;
+                bomb1.shake_ampl = 0.5
+			}
+			else if(!instance_exists(bomb2))
+			{
+                sound_play(downb_sound);
+                bomb2 = create_projectile(9,90,5.3,3,20,17,explodehit3,obj_spark_fire1,0.95,0.95,11,1,self.id,600,clink_bombchu);
+				bomb2.alarm[0] = 201;
+                bomb2.shake_ampl = 0.5
+			}
+			else if(!instance_exists(bomb3))
+			{
+                sound_play(downb_sound);
+                bomb3 = create_projectile(9,90,5.3,3,20,17,explodehit3,obj_spark_fire1,0.95,0.95,11,1,self.id,600,clink_bombchu);
+				bomb3.alarm[0] = 201;
+                bomb3.shake_ampl = 0.5
+			}
+			else
+			{
+				exit;
+			}
+			 if ( instance_exists ( bomb))
+			 {
+				 with ( bomb ){instance_destroy();}
+			 }
+			 //bomb.held = 0;
+		}
+			
+			
+        }  
+        if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) 
+		{
+        air_move = 0
+        //state_type = "attack"
+        hspeed=0 
+		}
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "crouch";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+}
+        

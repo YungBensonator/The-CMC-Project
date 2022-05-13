@@ -1,0 +1,33 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+	state_type = "attack";
+	attack_type = "taunt";
+	image_speed = 0.25;
+	sprite_index = taunt_sprite;
+	timer = 0;
+	time = 80;
+	image_index = 0.3;
+	}
+state_type = "attack";
+if timer = 1 && shieldup = 1 {
+	partner.facing = !facing;
+	partner.x = x-(12-facing*24)
+	}
+if timer > 2 {
+	hspeed *= 0.93;
+	}
+if timer = 23 {
+	sound_play(taunt_voice);
+	}
+if timer = 21 {
+	image_speed = 0;
+	}
+if timer = 62 {
+	image_speed = -0.2;
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,48 @@
+if ( state_type == "run" || state_type == "stand" )
+  {
+  hspeed *= 0.75;
+  state_type = "attack";
+  attack_type = "dash";
+  image_speed = 0.4;
+  image_index = 0;
+  sprite_index = dash_attack_sprite;
+  timer = 0;
+  time = 32;
+  timer_speed = 1;
+  }
+if timer < time {
+	state_type = "attack";
+	if timer > 2 && timer < 14 {
+		hspeed = 3.5-facing*7;
+		}
+	if timer = 8 {
+		image_index = 2;
+		create_hitbox ( 7 , 55+facing*70 , 4.2 , 4.6 , 8 , 3 , punch1 , obj_spark_hit1 , 0.84 , 0.81 , 6.20 , 13.95 , self.id , 6 , 1 );
+    		create_hitbox2 ( 7 , 55+facing*70 , 4.2 , 4.6 , 8 , 3 , punch1 , obj_spark_hit1 , 0.53 , 0.57 , -7.75 , 12.40 , self.id , 6 , 1 );
+		hitbox.hit_stun = 15
+		hitbox2.hit_stun = 15
+		hitbox.di = -1
+		hitbox2.di = -1
+		}
+	if timer = 10 {
+		create_hitbox3 ( 4 , 55+facing*70 , 5.9 , 4.2 , 6 , 3 , punch1 , obj_spark_hit1 , 0.84 , 0.81 , 6.20 , 13.95 , self.id , 4 , 1 );
+    		create_hitbox4 ( 4 , 55+facing*70 , 5.9 , 4.2 , 6 , 3 , punch1 , obj_spark_hit1 , 0.53 , 0.57 , -7.75 , 12.40 , self.id , 4 , 1 );
+		hitbox3.hit_stun = 15
+		hitbox4.hit_stun = 15
+		}
+	if timer = 6 {
+		sound_play(attacksnd1);
+		play_attack_voice();
+		}
+	if timer > 21 {
+		image_speed = 0;
+		}
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

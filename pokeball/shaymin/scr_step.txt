@@ -1,0 +1,368 @@
+timer += timer_speed;
+bomb_timer -= timer_speed;
+if ( timer_speed == 0 ) exit;
+
+var i;
+
+if ( mode < 3 )
+  moving_object = 1;
+  else
+  moving_object = 0;
+
+switch ( mode )
+  {
+  // spawn
+  case 0:
+    if ( timer == 4 )
+      {
+      sound_play2 ( sfx[0] );
+      image_index = 1;
+      }
+    if ( timer == 22 )
+      {
+      image_index = 0;
+      }
+    if ( timer == 28 )
+      {
+      image_index = 1;
+      }
+    if ( timer == 56 )
+      {
+      image_index = 0;
+      }
+    if ( image_index )
+      shakey = timer mod 2 * -1;
+      else
+      shakey = 0;
+    if ( timer == 68 )
+      {
+      bomb_timer = 60 * ( 7 + floor ( random ( 6 ) ) );
+      timer = 60;
+      mode = 1;
+      }
+    break;
+  // land
+  case 1:
+    if ( sprite_index == spr[1] )
+      {
+      if ( image_index < 17 )
+        image_index += 0.25;
+      }
+      else
+      {
+      sprite_index = spr[0];
+      image_speed = 0;
+      image_index = 0;
+      }
+    hspeed *= 0.8;
+    if ( ( !on_floor && !on_platform ) || timer > 70 )
+      {
+      var duster;
+      duster = instance_create(x-4,y,obj_dust_effect);
+      duster.image_alpha *= 0.8;
+      duster.image_xscale *= 0.6;
+      duster.image_yscale *= 0.5;
+      duster.facing = facing;
+      duster = instance_create(x+4,y,obj_dust_effect);
+      duster.image_alpha *= 0.8;
+      duster.image_xscale *= 0.6;
+      duster.image_yscale *= 0.5;
+      duster.facing = 1-facing;
+      i = 0;
+      if ( !instance_exists ( target ) )
+        i = 1;
+        else
+      if ( target.team == attacker.team )
+        i = 1;
+      if ( i )
+        {
+        repeat ( 256 )
+          {
+          target = obj_game_control.fighter_slot [ floor ( random ( MAX_FIGHTERS ) ) , 0 ];
+          if ( !instance_exists ( target ) )
+            target = attacker;
+            else
+          if ( target.team != attacker.team )
+            break;
+          }
+        }
+      if ( target.x < x )
+        facing = 1;
+        else
+        facing = 0;
+      hspeed = 4 - facing * 8;
+      if ( target.y - 64 < y )
+        vspeed = -7;
+        else
+        vspeed = -4;
+      y -= 2;
+      mode = 2;
+      image_index = 0;
+      sprite_index = spr[1];
+      }
+    break;
+  // leap
+  case 2:
+    sprite_index = spr[1];
+    vspeed += 0.125;
+    if ( vspeed < 0 )
+      {
+      if ( image_index < 8 )
+        image_index += 0.25;
+      }
+      else
+      {
+      if ( image_index < 11 )
+        image_index += 0.25;
+      }
+    if ( timer mod 4 == 0 )
+      {
+      gfx_sweat_gen ( x , y - 10 , 4.6 , 0.5 , 260 + random ( 20 ) );
+      }
+    if ( !collision_line ( x , y , x + hspeed * 32 , y + 256 , obj_floor , 1 , 1 )
+      && !collision_line ( x + hspeed * 32 , y , x , y + 256 , obj_platform , 1 , 1 ) )
+      {
+      if ( facing == 0 )
+        {
+        if ( collision_line ( x , y , x + 480 , y + 256 , obj_floor , 1 , 1 )
+          || collision_line ( x , y , x + 480 , y + 256 , obj_platform , 1 , 1 ) )
+          facing = 0;
+          else
+        if ( collision_line ( x , y , x - 480 , y + 256 , obj_floor , 1 , 1 )
+          || collision_line ( x , y , x - 480 , y + 256 , obj_platform , 1 , 1 ) )
+          facing = 1;
+          else
+          {
+          if ( x < ( obj_game_control.camera_boundary_r + obj_game_control.camera_boundary_l ) * 0.5 )
+            facing = 0;
+            else
+            facing = 1;
+          }
+        }
+        else
+        {
+        if ( collision_line ( x , y , x - 480 , y + 256 , obj_floor , 1 , 1 )
+          || collision_line ( x , y , x - 480 , y + 256 , obj_platform , 1 , 1 ) )
+          facing = 1;
+          else
+        if ( collision_line ( x , y , x + 480 , y + 256 , obj_floor , 1 , 1 )
+          || collision_line ( x , y , x + 480 , y + 256 , obj_platform , 1 , 1 ) )
+          facing = 0;
+          else
+          {
+          if ( x < ( obj_game_control.camera_boundary_r + obj_game_control.camera_boundary_l ) * 0.5 )
+            facing = 0;
+            else
+            facing = 1;
+          }
+        }
+      }
+    if ( facing == 0 )
+      {
+      if ( hspeed < 4 ) hspeed += 1;
+      }
+    if ( facing == 1 )
+      {
+      if ( hspeed > -4 ) hspeed -= 1;
+      }
+    var d;
+    d = point_direction ( x , y , target.x , target.y );
+    if ( y > obj_game_control.death_d )
+      {
+      instance_destroy();
+      exit;
+      }
+    if ( !target.offstage && target.y < obj_game_control.camera_boundary_d )
+      {
+      x += lengthdir_x ( min ( 4 , timer * 0.2 ) , d );
+      y += lengthdir_y ( min ( 4 , timer * 0.2 ) , d );
+      }
+    if ( bomb_timer <= 0 && timer > 20 || point_distance ( x , y , target.x , target.y ) < 64 )
+      {
+      mode = 3;
+      timer = 0;
+      sprite_index = spr[3];
+      image_index = 0;
+      image_speed = 0;
+      speed = 0;
+      exit;
+      }
+    if ( vspeed >= 0 && ( on_floor || on_platform ) )
+      {
+      var duster;
+      duster = instance_create(x-4,y,obj_dust_effect);
+      duster.image_alpha *= 0.8;
+      duster.image_xscale *= 0.6;
+      duster.image_yscale *= 0.5;
+      duster.facing = facing;
+      duster = instance_create(x+4,y,obj_dust_effect);
+      duster.image_alpha *= 0.8;
+      duster.image_xscale *= 0.6;
+      duster.image_yscale *= 0.5;
+      duster.facing = 1-facing;
+      mode = 1;
+      timer = 20;
+      sprite_index = spr[1];
+      image_index = 11;
+      image_speed = 0;
+      }
+    break;
+  // seed flare
+  case 3:
+    if ( timer < 60 )
+      {
+      if ( timer mod 3 == 0 )
+        {
+        i = sound_play2 ( sfx[2] );
+        FMODInstanceSetFrequency ( i , FMODInstanceGetFrequency ( i ) * ( 0.3 + timer * 0.02 ) );
+        }
+      }
+    if ( timer < 40 )
+      {
+      if ( timer mod 4 < 2 )
+        image_index = 2;
+        else
+        image_index = 0;
+      }
+      else
+    if ( timer < 60 )
+      {
+      if ( timer mod 4 < 2 )
+        image_index = 1;
+        else
+        image_index = 0;
+      }
+    if ( timer == 60 )
+      {
+      sound_play2 ( sfx[1] );
+      i = instance_create ( x , y - 8 , obj_spark_shockwave );
+      i.image_xscale *= 3;
+      i.depth = -8;
+      repeat ( 64 )
+        {
+        i = instance_create ( x , y - 8 , obj_spark );
+        i.depth = -8;
+        i.sprite_index = spr[2];
+        i.image_xscale = 0.45 + random ( 0.3 );
+        i.image_yscale = choose ( -i.image_xscale , i.image_xscale );
+        i.image_angle = random ( 360 );
+        i.image_speed = 0;
+        i.direction = i.image_angle;
+        i.speed = 1 + random ( 8 );
+        i.image_alpha = 0.9;
+        i.alpha_add = -1/120;
+        i.alarm[0] = 90;
+        }
+      repeat ( 6 )
+        {
+        i = gfx_sweat_gen ( x , y - 10 , 8 + random ( 2 ) , 0.5 , random ( 360 ) );
+        i.script = -1;
+        i.alpha_add = -1/70;
+        i.alarm[0] = 68;
+        }
+      ring1 = instance_create ( x , y - 8 , obj_spark );
+      ring1.sprite_index = spr_ring;
+      ring1.image_blend = c_aqua;
+      ring1.image_xscale = 1.5;
+      ring1.image_yscale = 0.375;
+      ring1.image_angle = 30;
+      ring1.image_speed = 0;
+      ring1.alarm[0] = 120;
+      ring1.depth = -8;
+      ring2 = instance_create ( x , y - 8 , obj_spark );
+      ring2.sprite_index = spr_ring;
+      ring2.image_blend = c_aqua;
+      ring2.image_xscale = 1.5;
+      ring2.image_yscale = 0.375;
+      ring2.image_angle = -30;
+      ring2.image_speed = 0;
+      ring2.alarm[0] = 120;
+      ring2.depth = -8;
+      box1 = create_projectile ( 3 , 362 , 1 , 0.2 , -1 , 3 , sf_punch2 ,
+        obj_spark_hit2 , ring1.image_xscale * 2 , ring1.image_yscale * 2 ,
+        0 , 0 , attacker , 90 , no_script );
+      box1.x = ring1.x;
+      box1.y = ring1.y;
+      box1.image_angle = ring1.image_angle;
+      box2 = create_projectile ( 3 , 362 , 1 , 0.2 , -1 , 3 , sf_punch2 ,
+        obj_spark_hit2 , ring1.image_xscale * 2 , ring1.image_yscale * 2 ,
+        0 , 0 , attacker , 90 , no_script );
+      box2.x = ring2.x;
+      box2.y = ring2.y;
+      box2.image_angle = ring2.image_angle;
+      flash = instance_create ( 0 , 0 , obj_flashscreen );
+      flash.timer = 2.9;
+      image_index = 0;
+      screen_shake ( 17 , -12 );
+      screen_shake ( 0.5 , -40 );
+      screen_shake ( 0.5 , -70 );
+      screen_shake ( 0.5 , -120 );
+      }
+    if ( timer > 60 )
+      {
+      if ( instance_exists ( flash ) ) flash.timer -= 0.95;
+      if ( instance_exists ( ring1 ) )
+        {
+        i = 0.16 + ( timer - 60 ) * 0.0013;
+        ring1.image_xscale += i;
+        ring1.image_yscale += i * 0.25;
+        ring2.image_xscale += i;
+        ring2.image_yscale += i * 0.25;
+        if ( instance_exists ( box1 ) )
+          {
+          box1.image_xscale = ring1.image_xscale * 2;
+          box1.image_yscale = ring1.image_yscale * 2;
+          box2.image_xscale = ring2.image_xscale * 2;
+          box2.image_yscale = ring2.image_yscale * 2;
+          if ( timer == 112 )
+            {
+            box1.damage = 24;
+            box1.bkb = 12;
+            box1.kbg = 14;
+            box1.hitlag_frames = round(hitlag_constant*15);
+            box1.sfx = epic_punch;
+            
+            box2.damage = box1.damage;
+            box2.bkb = box1.bkb;
+            box2.kbg = box1.kbg;
+            box2.hitlag_frames = box1.hitlag_frames;
+            box2.sfx = box1.sfx;
+            }
+          if ( timer mod 6 == 0 )
+            {
+            box1.hit = 0;
+            box2.hit = 0;
+            }
+          box1.time = box1.timer + 30;
+          box2.time = box2.timer + 30;
+          if ( timer == 120 )
+            {
+            with ( box1 ) instance_destroy();
+            with ( box2 ) instance_destroy();
+            }
+          }
+        if ( timer > 100 )
+          {
+          ring1.image_alpha -= 0.05;
+          ring2.image_alpha -= 0.05;
+          }
+        if ( ring1.image_alpha < 0 )
+          {
+          with ( ring1 ) instance_destroy();
+          with ( ring2 ) instance_destroy();
+          }
+        }
+      }
+    if ( timer > 200 )
+      {
+      camera_mod = 0;
+      depth = -7;
+      if ( facing == 0 && hspeed < 12 ) hspeed += 0.5;
+      if ( facing == 1 && hspeed > -12 ) hspeed -= 0.5;
+      if ( vspeed < 2 )
+        vspeed += 0.125;
+      if ( x < obj_game_control.death_l || x > obj_game_control.death_r )
+        instance_destroy();
+      }
+    break;
+  }

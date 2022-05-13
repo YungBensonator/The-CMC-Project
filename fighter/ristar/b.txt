@@ -1,0 +1,210 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+{
+	if(facing = 0 && moveleft){facing = 1}
+	if(facing = 1 && moveright){facing = 0}
+			
+	state_type = "air_attack";
+	attack_type = "b";
+	timer = 3;
+	time = 57;
+	sprite_index = b_charge_sprite;
+	image_speed = 0;
+	image_index = 0;
+	target = -1;
+}
+
+if ( timer < time )
+{
+    switch ( timer )
+    {
+		case 10: image_index = 0; break;
+		case 14: image_index = 1; break;
+		case 18: image_index = 2; break;
+		case 22: image_index = 3; break;
+		case 38: image_index = 4; break;
+		case 42: image_index = 5; break;
+		case 46: image_index = 6; break;
+		case 50: image_index = 7; break;
+		case 100: image_index = 3; break;
+		case 107: image_index = 4; break;
+		case 109: image_index = 5; break;
+		case 111: image_index = 6; break;
+    }
+	
+	
+	
+	if ( timer = 9 )
+    {
+		if(facing = 0 && moveleft){facing = 1}
+		if(facing = 1 && moveright){facing = 0}
+		
+		if((moveup) && !moveright && !moveleft) {sprite_index = b_grab_nn8_sprite;}
+		else if((moveup) && (moveright || moveleft)) {sprite_index = b_grab_nn9_sprite;}
+		else if((moveright || moveleft) && !moveup && !movedown) {sprite_index = b_grab_nn6_sprite;}
+		else if((moveright || moveleft) && movedown && air > 0) {sprite_index = b_grab_nn3_sprite;}
+		else if((movedown) && !moveright && !moveleft && air > 0) {sprite_index = b_grab_nn2_sprite;}
+		else {sprite_index = b_grab_nn6_sprite;}
+	}
+	
+    if ( timer = 11 ) {sound_play(ristar_grab_sound);}
+	  
+	if ( timer = 14 )
+	{
+		create_homing_bubble(0.90,0.25,35.5,10,self.id,12);
+		//homing_bubble.visible = 1;
+    }
+	
+	if(sprite_index = b_grab_nn8_sprite)
+	{
+		if(image_index = 1){homing_bubble.x = x ; homing_bubble.y = y - 20;}
+		if(image_index = 2){homing_bubble.x = x ; homing_bubble.y = y - 30}
+		if(image_index = 3){homing_bubble.x = x ; homing_bubble.y = y - 50}
+		homing_bubble.image_xscale = 0.6*size; 
+		homing_bubble.image_yscale = 1.15*size;
+	}
+	
+	if(sprite_index = b_grab_nn9_sprite)
+	{
+		if(image_index = 1){homing_bubble.x = x + (15-facing*30); homing_bubble.y = y - 30;}
+		if(image_index = 2){homing_bubble.x = x + (25-facing*50); homing_bubble.y = y - 40}
+		if(image_index = 3){homing_bubble.x = x + (40-facing*80); homing_bubble.y = y - 55}
+		homing_bubble.image_xscale = 0.55*size; 
+		homing_bubble.image_yscale = 0.55*size;
+	}
+	
+	if(sprite_index = b_grab_nn6_sprite)
+	{
+		if(image_index = 1){homing_bubble.x = x + (10-facing*20); homing_bubble.y = y - 10;}
+		if(image_index = 2){homing_bubble.x = x + (20-facing*40); homing_bubble.y = y - 10}
+		if(image_index = 3){homing_bubble.x = x + (55-facing*110); homing_bubble.y = y - 10}
+		homing_bubble.image_xscale = 0.90*size; 
+		homing_bubble.image_yscale = .25*size;
+	}
+	
+	if(sprite_index = b_grab_nn3_sprite)
+	{
+		if(image_index = 1){homing_bubble.x = x + (15-facing*20); homing_bubble.y = y + 5;}
+		if(image_index = 2){homing_bubble.x = x + (25-facing*50); homing_bubble.y = y + 15}
+		if(image_index = 3){homing_bubble.x = x + (45-facing*90); homing_bubble.y = y + 25}
+		homing_bubble.image_xscale = 0.55*size; 
+		homing_bubble.image_yscale = 0.55*size;
+	}
+	
+	if(sprite_index = b_grab_nn2_sprite)
+	{
+		if(image_index = 1){homing_bubble.x = x ; homing_bubble.y = y + 0;}
+		if(image_index = 2){homing_bubble.x = x ; homing_bubble.y = y + 10}
+		if(image_index = 3){homing_bubble.x = x ; homing_bubble.y = y + 30}
+		homing_bubble.image_xscale = 0.6*size; 
+		homing_bubble.image_yscale = 1.15*size;
+	}
+	  
+    if ( timer >= 14 && timer <= 26  && target > -1 && !target.intangible ) //go to slam
+    {
+
+		
+		if(image_index = 1){image_index = 5;timer = 109;}
+		if(image_index = 2){image_index = 4;timer = 107;}
+		if(image_index = 3){image_index = 3;timer = 100;}
+		time = 125;
+		
+		sound_play(catchsnd);
+		
+		if(sprite_index = b_grab_nn8_sprite){target.x = x; y = target.y;}
+		if(sprite_index = b_grab_nn9_sprite){x = target.x; y = target.y;}
+		if(sprite_index = b_grab_nn6_sprite){x = target.x; target.y = y;}
+		if(sprite_index = b_grab_nn3_sprite){x = target.x; y = target.y;}
+		if(sprite_index = b_grab_nn2_sprite){target.x = x; y = target.y;}
+		
+		if(sprite_index = b_grab_nn8_sprite){sprite_index = b_slam_nn8_sprite;}
+		if(sprite_index = b_grab_nn9_sprite){sprite_index = b_slam_nn9_sprite;}
+		if(sprite_index = b_grab_nn6_sprite){sprite_index = b_slam_nn6_sprite;}
+		if(sprite_index = b_grab_nn3_sprite){sprite_index = b_slam_nn3_sprite;}
+		if(sprite_index = b_grab_nn2_sprite){sprite_index = b_slam_nn2_sprite;}
+	
+		instance_create(target.x,target.y-9*target.size,obj_grab_spark);
+		target.state_type = "air_flinch";
+		target.attack_type = "none";
+		target.sprite_index = target.flinch_sprite;
+		target.timer = 0;
+		target.time = 50;
+		target.timer_speed = 0;
+		target.alarm[0] = 2;
+    }
+	
+    if air > 0 && ( timer >= 13 && timer <= 17 )
+    {
+		if ( collision_rectangle(x+size*(7.5-facing*15),y-6.7*size,x+size*(54-facing*108),y-13.5*size,obj_edge_left,1,1) )
+		{
+			hspeed = 0;
+			vspeed = 0;
+			sprite_index = jump_sprite;
+			state_type = "jump";
+			attack_type = "none";
+			timer = 0;
+			time = -1;
+			edge = instance_nearest(x+5*size,y-5*size,obj_edge_left);
+			x = edge.x;
+			y = edge.y + 10;
+			exit;
+		}
+		
+		if ( collision_rectangle(x+size*(7.5-facing*15),y-6.7*size,x+size*(54-facing*108),y-13.5*size,obj_edge_right,1,1) )
+		{
+			hspeed = 0;
+			vspeed = 0;
+			sprite_index = jump_sprite;
+			state_type = "jump";
+			attack_type = "none";
+			timer = 0;
+			time = -1;
+			edge = instance_nearest(x+5*size,y-5*size,obj_edge_right);
+			x = edge.x;
+			y = edge.y + 10;
+			exit;
+	    }
+    }
+	
+    if ( timer >= 100 && timer <= 110 )
+    {
+		speed = 0;
+		gravity = 0;
+		target.alarm[0] = 2;
+	}
+	  
+    if ( timer = 111 )
+    {
+		sound_play(attack_voice1);
+		sound_play(b_hit2_sound);
+		
+		if (sprite_index = b_slam_nn8_sprite){create_hitbox(9,90,4.4,4.4,12,8,none,obj_spark_special1,0.6,0.6,0,10,self.id,4,5);}
+		else if (sprite_index = b_slam_nn9_sprite){create_hitbox(9,60+facing*60,4.4,4.4,12,8,none,obj_spark_special1,0.6,0.6,0,10,self.id,4,5);}
+		else if (sprite_index = b_slam_nn6_sprite){create_hitbox(9,30+facing*120,4.4,4.4,12,8,none,obj_spark_special1,0.6,0.6,0,10,self.id,4,5);}
+		else if (sprite_index = b_slam_nn3_sprite){create_hitbox(9,320-facing*100,2.4,3.4,12,8,none,obj_spark_special1,0.6,0.6,0,10,self.id,4,5);}
+		else if (sprite_index = b_slam_nn2_sprite){create_hitbox(9,270,2.4,3.4,12,8,none,obj_spark_special1,0.6,0.6,0,10,self.id,4,5);}
+		hitbox.di = 0;
+		air = 1;
+    }
+	
+    if ( timer = 112 )
+    {
+		state_type = "air_attack";
+		sprite_index = jump_sprite;
+		hspeed = size * (-4+facing*8);
+		vspeed = -6*size;
+		y -= 1*size;
+    }
+	
+    if ( air = 0 ) {hspeed = 0;}
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+	if ( air = 0 )
+	state_type = "stand";
+	else
+	state_type = "jump";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

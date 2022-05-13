@@ -1,0 +1,135 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  if ( boss != 0 )
+    exit;
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = taunt_sprite;
+  timer = 0;
+  time = 360;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  temp = 0;
+  if ( partner != 0 )
+    {
+    if ( instance_exists ( partner ) )
+    if ( partner.ai_action == "none" )
+      {
+      partner.x = x - 10 * size * ( 1 - facing * 2 );
+      partner.y = y;
+      partner.ignore_physics = 2;
+      partner.facing = !facing;
+      partner.state_type = "air_attack";
+      partner.attack_type = "final_smash";
+      partner.time = 360;
+      partner.timer = 0;
+      partner.ai_action = "sync";
+      partner.ai_partnertimer = 360;
+      partner.sprite_index = partner.taunt_sprite;
+      partner.image_index = 0;
+      partner.image_speed = 0;
+      }
+    }
+  }
+  
+intangible = 1;
+air_move = 0;
+speed = 0;
+gravity_lock = 1;
+  
+switch ( timer )
+  {
+  case 4: image_index = 1; break;
+  case 8: image_index = 2; break;
+  case 12: image_index = 3; break;
+  case 16: image_index = 4; break;
+  case 20: image_index = 5; break;
+  case 352: image_index = 6; break;
+  }
+
+if ( timer == 20 )
+  {
+  screen_shake ( 4 , 4 );
+  sound_play(taunt_voice);
+  if ( partner != 0 || solo )
+    create_hitbox ( 16 , 45 + facing * 90 , 7 , 12 , kick3 , obj_spark_hit3 , 3 , 3 , 0 , 16 , self.id , 300 , 5 );
+  }
+  
+  if ( partner != 0 || solo ) {
+  if ( timer == 30 )
+    {
+    sound_play_pitch ( finale_sound , .5 );
+    spark = instance_create ( 0 , 0 , obj_custom_gfx );
+    spark.depth = -15;
+    spark.draw_script = char_custom4;
+    spark.keepmain = keepmain;
+    spark.image_alpha = 0;
+    spark.alarm[0] = 310;
+    spark.sprite_index = finale_sprite;
+    }
+  if ( timer >= 30 && timer < 340 )
+    {
+    if ( temp > 1 )
+      spark.x += 64 * ( 1 - facing * 2 );
+      else
+      spark.x += 32 * ( 1 - facing * 2 );
+    if ( spark.x >= 0 ) spark.x -= 720;
+    if ( spark.x < -720 ) spark.x += 720;
+    }
+  if ( timer >= 30 && timer <= 50 )
+    {
+    if ( spark.image_alpha < 1 )
+      spark.image_alpha += 0.05;
+    }
+  if ( timer >= 320 && timer <= 340 )
+    {
+    if ( spark.image_alpha > 0 )
+      spark.image_alpha -= 0.05;
+    }
+  if ( timer >= 30 && timer < 340 )
+    {
+    if ( special && temp == 0 )
+      {
+      instance_create ( x , y - actual_height * 0.5 , obj_spark_shockwave );
+      temp = 4;
+      special = 0;
+      }
+    if ( temp > 0 ) temp -= 1;
+    with ( player )
+      {
+      if ( number != other.number )
+      if ( !(global.gs_team_attack == 0 && team == other.team) )
+      if ( status_cancel == 0 && intangible == 0 && super_armor < 2 && gravity_lock == 0 )
+      if ( state_type != "edge" )
+        {
+        if ( other.temp > 2 )
+          x += 4 * ( 1 - other.facing * 2 );
+          else
+          x += 2.5 * ( 1 - other.facing * 2 );
+        }
+      }
+    }
+   }
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    {
+    air = 1;
+    state_type = "jump"; 
+    }
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,101 @@
+if state_type = "jump" || state_type = "stand" {
+    special = 1;
+    attacking = 0;
+    timer = 0;
+    attack_type = "b"
+    state_type = "air_attack";
+    image_speed = 0.25;
+    sprite_index = b_sprite;
+    image_index=0;
+    time = 100;
+    timer_speed=1;
+    temp = 0
+}
+    if air = 0
+        hspeed = 0
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+    if (ai_state = "recover" || distance_to_object(enemy)<25*size || random(10)>9.65 || (collision_line(x,y,enemy.x,enemy.y,projectile_box,0,1)>0 && random(10)>5)) && ai = 1 && timer >= 6
+        special = 0
+    else if ai && timer < 81
+        special=1
+    if timer >= 2 && timer < 7 && temp = 0 {
+        if moveright = 1 facing = 0;
+        if moveleft = 1 facing = 1;
+    }
+
+    if timer = 9
+	sound_play(b_sound1)
+	if timer < 37 && image_index >= 7
+	image_speed = 0
+    if timer = 37 && special = 1 {
+        image_index = 7;
+        image_speed = 0;
+        sound_play(b_sound2)
+    }
+    if special = 0 && timer > 26 && timer < 81 && time = 100 && temp = 0 {
+    if timer <= 37 {
+            sound_play(arrow_sound);
+            create_projectile(6,35+facing*110,3,2,4,4,slash2,obj_spark_slash1,0.8,0.8,1,15,self.id,70,clink_arrow);
+            sprite_index = b_sprite;
+            time = 220;
+            timer = 200;
+            image_speed = 0.3;
+            image_index = 8;
+            temp = 1
+            exit
+            }
+    if timer <= 58 && timer > 37 {
+            sound_play(arrow_sound);
+            create_projectile(8,35+facing*110,3,3,12,5,slash2,obj_spark_slash1,0.8,0.8,1,15,self.id,75,clink_arrow);
+            sprite_index = b_sprite;
+            time = 220;
+            timer = 200;
+            image_speed = 0.3;
+            image_index = 8;
+            temp = 1
+            exit
+            }
+    if timer < 81 && timer > 58 {
+            sound_play(arrow_sound);
+            create_projectile(10,35+facing*110,3,3.5,17,6,slash1,obj_spark_slash1,0.8,0.8,1,15,self.id,75,clink_arrow);
+            sprite_index = b_sprite;
+            time = 220;
+            timer = 200;
+            image_speed = 0.3;
+            image_index = 8;
+            temp = 1
+            exit
+            }
+    }
+    else if timer = 81 && temp = 0 {
+            sound_play(arrow_sound);
+            create_projectile(12,35+facing*110,3,3.7,19,7,slash3,obj_spark_slash1,0.8,0.8,1,15,self.id,80,clink_arrow);
+            sprite_index = b_sprite;
+            time = 220;
+            timer = 200;
+            image_speed = 0.3;
+            image_index = 8;
+            temp = 1                
+            exit
+            } 
+if timer = 201
+sound_stop(b_sound1)
+if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+        air_move = 0
+        //state_type = "attack"
+        hspeed=0
+        vspeed = 0 }
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    hspeed = 1 - facing*2;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    temp = 1;
+    special = 0;
+    }

@@ -1,0 +1,111 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 35;
+  timer = 0;
+  state_type = "air_attack";
+  if air = 0
+  hspeed = 0;
+  else
+  hspeed *= 0.6
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+if ( air == 0 )
+  {
+  hspeed = 0;
+  air_move = 0;
+  }
+  else
+  {
+  air_move = 1;
+  }
+if hspeed > 4
+hspeed = 4
+if hspeed < -4
+hspeed = -4
+
+switch ( timer )
+  {
+  case 5:
+    instance_create ( x - 9 * size * ( 1 - facing * 2 ) , y - 10 * size , obj_spark_effect );
+    image_index = 1;
+    break;
+  case 10: image_index = 2; break;
+  case 15:
+    sound_play ( rupee_sound );
+    sound_play ( choose ( attack_voice1 , attack_voice4 ) );
+    var a, b;
+    a = random ( 100 );
+    b = 0;
+    if ( a > 20 )
+      b = 1;
+    if ( a > 55 )
+      b = 2;
+    if ( a > 75 )
+      b = 3;
+    if ( a > 85 )
+      b = 4;
+    if ( a > 94 )
+      b = 5;
+    if ( a > 98 )
+      b = 6;
+    switch ( b )
+      {
+      case 0:
+        create_projectile ( 2 , 361 , 0 , 0 , 4 , 7 , punch1 , obj_spark_hit1 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom2 ); //green
+        break;
+      case 1:
+        create_projectile ( 5 , 40 + facing * 100 , 5.5 , 0 , 4 , 7 , kick1 , obj_spark_hit1 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom2 ); //blue
+        break;
+      case 2:
+        create_projectile ( 8 , 30 + facing * 120 , 5.5 , 3.3 , 7 , 9 , kick2 , obj_spark_hit2 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom2 ); //yellow
+        break;
+      case 3:
+        create_projectile ( 12 , 30 + facing * 120 , 5.5 , 4.6 , 7 , 9 , kick2 , obj_spark_hit2 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom2 ); //red
+        break;
+      case 4:
+        create_projectile ( 15 , 40 + facing * 100 , 7 , 5.5 , 10 , 12 , kick3 , obj_spark_hit3 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom2 ); //gray
+        break;
+      case 5:
+        create_projectile ( 21 , 30 + facing * 120 , 8 , 7 , 45 , 14 , kick3 , obj_spark_fire1 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom2 ); //purple
+        break;
+      case 6:
+        create_projectile ( 25 , 45 + facing * 90 , 10 , 8 , 20 , 8 , punch4 , obj_spark_fire1 , 1 , 1 , 10 , 15 , self.id , 80 , char_custom2 ); //orange
+        break;
+      }
+    proj.hspeed = 5 * size * ( 1 - facing * 2 );
+    proj.vspeed = -1.5;
+    proj.image_angle = random ( 360 );
+    proj.sprite_index = rupee_sprite[b];
+    image_index = 3;
+    break;
+  case 20: image_index = 4; break;
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+if timer >= 15 && timer < 20
+	if air = 0
+    hspeed -= 1 *(1-facing*2)
+	else
+	hspeed -= 0.25 *(1-facing*2)
+if timer >= 13 && timer < 26
+	air_move = 0
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

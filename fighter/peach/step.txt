@@ -1,0 +1,61 @@
+if ( sprite_index = run_sprite )
+    image_speed = 0.15;
+hoverlock = 0
+if state_type = "jump" {
+    force_edge_grab = 0;
+    if sprite_index != mid_jump_sprite  {
+        sprite_index = jump_sprite;
+        image_speed = 0;
+        image_index = 0;
+    }
+    else {
+    if ( timer == 0 )
+      {
+      vspeed = 2.8*size;
+      boosting_frames = 7 + mid_jump_speed / 0.75;
+      }
+    if ( timer < 30 )
+      {
+	image_index = ( timer / 6 );
+	image_speed = 0
+	sprite_index = mid_jump_sprite;
+      }
+      else
+      {
+	image_index = 5
+	image_speed = 0
+	sprite_index = mid_jump_sprite;
+      }
+    }
+    climbing = 0;
+}
+
+if ( gravity_lock == 0 )
+  {
+  if ( boosting_frames > 0 )
+    {
+    if ( air == 0 )
+      {
+      boosting_frames = 0;
+      }
+      else
+    if ( attack_type != "none" && !holdjump )
+      {
+      boosting_frames = 0;
+      vspeed = 0;
+      }
+      else if state_type != "flinch" && state_type != "air_flinch"
+      {
+      if vspeed > -mid_jump_speed*size
+        vspeed -= size * 0.7;
+      boosting_frames -= 1;
+      hoverlock = 1;
+      force_edge_grab = 1;
+      }
+     else {
+      boosting_frames = 0;
+    }
+    }
+  }
+  else
+  boosting_frames = 0;

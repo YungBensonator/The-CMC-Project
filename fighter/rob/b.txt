@@ -1,0 +1,135 @@
+if (( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" ) && ( final_smashing != 1 ))
+  {
+  attacking = 0;
+  special = 1;
+  attack_type = "b";
+  time = 9;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+  if ( air == 0 )
+    {
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.facing = facing;
+    }
+  }
+
+if ( air == 0 ) hspeed *= 0.9;
+if timer > 5 && timer < 9 && shieldup = 1 {
+	special = 0;
+	if air = 0 {
+		state_type = "stand";
+		timer = -1;
+		time = 0;
+		}
+	if air > 0 {
+		state_type = "jump";
+		shieldup = 0;
+		timer = -1;
+		time = 0;
+		}
+	}
+if ( time == 9 )
+  {
+  if ( timer > 4 ) 
+    {
+    //if ( moveup ) temp -= 0.125;
+    //if ( movedown ) temp += 0.125;
+   // if ( temp < -2 ) temp = -2;
+    //if ( temp > 2 ) temp = 2;
+    temp = 0;
+    if ( moveup ) temp = -2;
+    if ( movedown ) temp = 2;
+    if ( moveup && ( moveright || moveleft ) ) temp = -1;
+    if ( movedown && ( moveright || moveleft ) ) temp = 1;
+    if ( !special )
+      {
+      timer = 0;
+      time = 40;
+      }
+    image_index = 2;
+    if ( timer == 8 )
+      {
+      instance_create ( x - 4 * size * ( 1 - facing * 2 ) , y - 24 * size , obj_spark_effect );
+      timer = 5;
+      }
+    if ai && timer = 6 {
+	if random (10) <= 2
+	shieldup = 1
+	else if random (10) >= 8
+	special = 0
+	} 
+    }
+  }
+  else
+  {
+  switch ( timer )
+    {
+    case 7:
+      temp = round ( temp );
+      switch ( temp )
+        {
+        case -2: sprite_index = b2uu_sprite; break;
+        case -1: sprite_index = b2u_sprite; break;
+        case 0: sprite_index = b2_sprite; break;
+        case 1: sprite_index = b2d_sprite; break;
+        case 2: sprite_index = b2dd_sprite; break;
+        }
+      image_index = 0;
+      break;
+    case 10:
+	create_hitbox(5,0+facing*180,8,1.1,8,6,fire1,obj_spark_fire1,0.7,0.5,20,20,self.id,3,0);
+      if ( chargeb > 60 )
+        {
+        if ( chargeb > 590 )
+          {
+		  sound_play(laser_strong);	  
+          create_projectile ( 12 , 45 + facing * 90 , 9 , 7 , 20 , 10 , shock3 , obj_spark_shock , 1 , 1 , 22 , 22 , self.id , 60 , char_custom1 );
+          proj . level = 2;
+          }
+          else
+          {
+		  sound_play(laser_weak);		  
+          create_projectile ( 6 , 45 + facing * 90 , 2 , 2 , 10 , 5 , shock2 , obj_spark_shock , 1 , 1 , 22 , 22 , self.id , 60 , char_custom1 );
+          proj . level = 1;
+          }
+        proj . xx = proj . x;
+        proj . yy = proj . y;
+        proj . priority = 5;
+	proj . absorb = 1;
+	proj . absorb2 = 1;
+        proj . hs = lengthdir_x ( 33 - proj . level * 11 , - temp * 10 );
+        proj . vs = lengthdir_y ( 33 - proj . level * 11 , - temp * 10 );
+        if ( facing == 1 ) proj . hs *= -1;
+        with ( proj )
+          {
+          drawcompanion = instance_create ( x , y , obj_custom_gfx );
+          drawcompanion.alarm[0] = 6;
+          drawcompanion.draw_script = char_custom2;
+          drawcompanion.keepmain = keepmain;
+          drawcompanion.depth = -4;
+          drawcompanion.level = level;
+          }
+        proj . drawcompanion . sprite_index = laser_sprite;
+        }
+      chargeb = 0;
+      image_index = 1;
+      break;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

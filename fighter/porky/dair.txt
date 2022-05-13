@@ -1,0 +1,46 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0.1;
+        sprite_index = dair_sprite;
+        image_index=0.1;
+        timer = 0;
+        time = 42;
+        timer_speed=1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 19 {
+                play_attack_voice();
+                sound_play(attack_sound4);
+                create_hitbox2(15,362,4.5,7.5,20,8,kick3,obj_spark_hit2,1.25,0.75,0,7,self.id,5,2);
+                create_hitbox ( 18 , 270 , 4.8 , 2 , 20 , 9 , slash3 , obj_spark_slash3 , 0.7 , 1.2 , 0 , -15 , self.id , 4 , 2 );
+                hitbox.shake_kb = 8;
+                hitbox.shake_ampl = 1.5;
+                hitbox.shake_type = 1;
+                hitbox.hit_stun = 2;
+                hitbox2.hit_stun = 12;
+                image_speed = 0.25
+            }
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=18; 
+                screen_shake(0.8,8)
+            }
+            if image_index>= image_number - image_speed
+                image_speed = 0
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

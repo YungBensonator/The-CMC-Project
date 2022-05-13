@@ -1,0 +1,118 @@
+if state_type = "flinch" || state_type = "air_flinch" || state_type = "tumble" {
+var i;
+for (i = 0; i < 1000; i += 1;)
+if (instance_exists(trail[i])) {
+with trail[i] hit_attacker = 1;
+}
+}
+
+if voicetimer > 0
+voicetimer -= 1
+if state_type = "jump" {
+    force_edge_grab = 0;
+    if sprite_index != mid_jump_sprite  {
+        sprite_index = jump_sprite;
+        image_speed = 0.25;
+    }
+    else {
+        if timer = 0 {
+            vspeed = 2.5*size
+      	    boosting_frames = 6 + mid_jump_speed / 0.75;
+            }
+	if timer < 30 {
+      image_index = 1;
+      image_speed = 0;
+      if ( timer == 1 )
+        create_spark(8,14,pk_sprite,0.6,0.27,0.27)
+      if ( attack_type == "none" )
+        {
+        sprite_angle = ( 1 - facing * 2 ) * ( 180 - lengthdir_x ( 180 , timer * 6 ) );
+        }
+      }
+      else
+      {
+      image_index = 0;
+      image_speed = 0;
+      }
+    }
+    climbing = 0;
+}
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 17: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=2;  break;
+  case 20: shakey=12*size;  break;
+  case 22: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 24: shakex=-5*size*(1-facing*2); shakey=6*size;  break;
+  case 26: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 28: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 30: sprite_index=stand_sprite; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}
+
+if ( gravity_lock == 0 )
+  {
+  if ( boosting_frames > 0 )
+    {
+    if ( air == 0 )
+      {
+      boosting_frames = 0;
+      }
+      else
+    if ( attack_type != "none" && !holdjump )
+      {
+      boosting_frames = 0;
+      vspeed = 0;
+      }
+      else if state_type != "flinch" && state_type != " air_flinch"
+      {
+      if vspeed > -mid_jump_speed*size
+        vspeed -= size * 0.8;
+      boosting_frames -= 1;
+      }
+    }
+  }
+  else
+  boosting_frames = 0;
+
+if powerup = 1 then {
+    offense = 1.3;
+    repeat ( 2 )
+    {
+    a = after_image ( 2 , c_yellow , .25 );
+    a.image_xscale *= 1.15;
+    a.image_yscale *= 1.15;
+    a.x += -1 + floor ( random ( 3 ) );
+    a.y += -1 + floor ( random ( 3 ) );
+    }
+}
+if ( state_type == "dead" || state_type == "respawn" ) powerup = 0;
+if ( ( state_type == "air_flinch" || state_type == "flinch" ) && powerup_landed != -1 ) { powerup = 0; powerup_landed = -1; }
+
+if ( sprite_index = roll_sprite && state_type = "dodge" )
+{
+image_speed = 0;
+if ( timer >= 22 && timer <=30 )
+{
+sprite_index = crouch_sprite; image_index = 0;
+}
+switch ( timer )
+  {
+  case 0: image_index = 1; break;
+  case 2: shakex=-5*size*(1-facing*2); sprite_angle=45*(1-facing*2);  break;
+  case 4: shakex=-6*size*(1-facing*2); shakey=2*size; sprite_angle=90*(1-facing*2);  break;
+  case 6: shakex=-4*size*(1-facing*2); shakey=4*size; sprite_angle=135*(1-facing*2);  break;
+  case 8: shakex=-1*size*(1-facing*2); shakey=2*size; sprite_angle=180*(1-facing*2);  break;
+  case 11: shakex=4*size*(1-facing*2); shakey=0*size; sprite_angle=225*(1-facing*2);  break;
+  case 14: shakex=4*size*(1-facing*2); shakey=-1*size; sprite_angle=270*(1-facing*2);  break;
+  case 17: shakex=4*size*(1-facing*2); shakey=2*size; sprite_angle=315*(1-facing*2);  break;
+  case 20: shakex=0; shakey=0; sprite_angle=0;  break;
+  }
+}
+if air = 0
+downbtemp = 1

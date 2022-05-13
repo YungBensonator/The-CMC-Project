@@ -1,0 +1,146 @@
+if global.gs_form[number-1] = 0
+{
+if time = -1 {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "uthrow";
+    image_speed = 0;
+    sprite_index = usmash_claw_sprite;
+    image_index=0;
+    timer = 0;
+    time = 42;
+    timer_speed=1;
+    target.timer_speed = 0;
+    target.alarm[0] = 51
+}
+if timer < time && attack_type = "uthrow" {
+		
+		switch ( timer )
+		{
+		case 3: image_index = 1; break;
+		case 7: shakey = -0.5 - facing; break;
+		case 8: image_index = 2; image_yscale *= 1.1; shakey = -1; break;
+		case 9: image_yscale *= 1.05; shakey = -0.5; break;
+		case 10: image_index = 3; shakey = 0; break;
+		case 11: shakey = 0; break;
+		case 12: image_index = 4; break;
+		case 13: shakey = 0; break;
+		case 14: image_index = 5; break;
+		case 32: image_index = 0; break;
+		}
+            if timer = 8 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing;
+                sound_play(attack_sound4);
+                sound_play(usmash_voice);
+                create_hitbox(14+round(aura/4),70+facing*40,5.6+aura/7,5.45+aura/10,14+round(aura),8+round(aura/3),slash3,obj_spark_aura,.6+aura/70,0.8+aura/50,14,21,self.id,5,4);
+		create_hitbox2(14+round(aura/5),80+facing*20,5.25+aura/7,5.3+aura/10,12+round(aura),6+round(aura/3),slash2,obj_spark_aura,.6+aura/70,0.8+aura/50,3,36,self.id,5,4);
+                hitbox.hit_stun = 5;
+                hitbox.shake_type = 1;
+                hitbox.shake_ampl = 0.65;
+                //spark = create_spark(14,21,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+                //spark.image_angle = 50;
+				//spark.image_speed = 2.5;
+            }
+            if timer = 10 {
+                hitbox.damage = size*(8+round(aura/2));
+                hitbox.bkb *= 0.75;
+                hitbox.kbg *= 0.8;
+                hitbox.sfx = slash2;
+                set_hitlag(hitbox,round(6+aura/4))
+		hitbox2.bkb *= 0.8
+		hitbox2.kbg *= 0.8
+		hitbox2.damage = size*(7+round(aura/2))
+                //spark = create_spark(11,28,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+            }
+            //if timer = 11
+                //spark = create_spark(7,34,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+            //if timer = 12
+                //spark = create_spark(3,38,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+            //if timer = 13
+                //spark = create_spark(-1,41,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        
+}        
+if global.gs_form[number-1] = 1
+{
+if time = -1 {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "uthrow";
+    image_speed = 0;
+    sprite_index = usmash_claw_sprite;
+    image_index=0;
+    timer = 0;
+    time = 42;
+    timer_speed=1;
+    target.timer_speed = 0;
+    target.alarm[0] = 51
+}
+if timer < time && attack_type = "uthrow" {
+		
+		switch ( timer )
+		{
+		case 3: image_index = 1; break;
+		case 7: shakey = -0.5 - facing; break;
+		case 8: image_index = 2; image_yscale *= 1.1; shakey = -1; break;
+		case 9: image_yscale *= 1.05; shakey = -0.5; break;
+		case 10: image_index = 3; shakey = 0; break;
+		case 11: shakey = 0; break;
+		case 12: image_index = 4; break;
+		case 13: shakey = 0; break;
+		case 14: image_index = 5; break;
+		case 32: image_index = 0; break;
+		}
+            if timer = 8 {
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing;
+                sound_play(attack_sound4);
+                sound_play(usmash_voice);
+                create_hitbox(14,70+facing*40,5.6,7.15,15,8,slash3,obj_spark_aura,0.6,0.8,14,21,self.id,5,4);
+		        create_hitbox2(14,80+facing*20,5.25,6.95,12,6,slash2,obj_spark_aura,0.6,0.8,3,36,self.id,5,4);
+                hitbox.shake_type = 1;
+                hitbox.shake_ampl = 0.65;
+                //spark = create_spark(14,21,aura_flame_sprite,1.25,0.2,0.25)
+                //spark.image_angle = 50;
+				//spark.image_speed = 2.5;
+            }
+            if timer = 10 {
+                hitbox.damage = 8*size
+                hitbox.bkb *= 0.75;
+                hitbox.kbg *= 0.8;
+                hitbox.sfx = slash2;
+                set_hitlag(hitbox,round(6+aura/4))
+		hitbox2.bkb *= 0.8
+		hitbox2.kbg *= 0.8
+		hitbox2.damage = 7*size
+                //spark = create_spark(11,28,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+            }
+            //if timer = 11
+                //spark = create_spark(7,34,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+            //if timer = 12
+                //spark = create_spark(3,38,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+            //if timer = 13
+                //spark = create_spark(-1,41,aura_flame_sprite,1.25,0.2+aura/90,0.25+aura/90)
+				//spark.image_speed = 2.5;
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+}

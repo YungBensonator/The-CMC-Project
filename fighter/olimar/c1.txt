@@ -1,0 +1,393 @@
+// Pikmin step.
+
+xsize = 0.8;
+ysize = 0.8;
+moving_object = 0;
+
+hit_script = 0;
+
+if ( x < obj_game_control.death_l
+  || x > obj_game_control.death_r
+  || y < obj_game_control.death_u
+  || y > obj_game_control.death_d )
+  {
+  hp = 0;
+  }
+if ( !instance_exists ( parent ) )
+  hp = 0;
+if ( hp <= 0 )
+  {
+  repeat ( 2 )
+    {
+    sound_play(pikmin_death_sound);
+    spark = instance_create ( x - 0.5 + random ( 1 ) , y - 0.5 + random ( 1 ) , obj_spark );
+    spark.vspeed = -5;
+    spark.gravity = 0.25;
+    spark.gravity_direction = 270;
+    spark.alarm[0] = 60;
+    spark.image_xscale = abs ( image_xscale );
+    spark.image_yscale = image_yscale;
+    spark.sprite_index = parent.pikmin_death_sprite[type];
+    spark.image_index = 0;
+    spark.image_speed = 4 / 120;
+    spark.depth = -9;
+    spark.script = gfx_sweat_scr;
+    }
+  instance_destroy();
+  with ( parent ) char_custom4();
+  exit;
+  }
+
+if ( hitlag > 0 )
+  {
+  image_speed = 0;
+  hitlag -= 1;
+  if ( hitlag == 0 )
+    {
+    if ( kb > 0 )
+      {
+      facinglock = facing;
+      sprite_index = parent.pikmin_jump_sprite[type];
+      image_index = 1;
+      image_speed = 0;
+      attack = "knockback";
+      speed = kb * 0.7;
+      direction = kbdir;
+      if ( kbdir >= 360 )
+        direction = 135 - facing * 90;
+      exit;
+      }
+    }
+  exit;
+  }
+
+if ( attack == "knockback" )
+  {
+  facing = facinglock;
+  sprite_index = parent.pikmin_jump_sprite[type];
+  image_index = 1;
+  image_speed = 0;
+  moving_object = 1;
+  vspeed += 0.3;
+  if ( on_floor || on_platform )
+  if ( vspeed > 0 )
+    {
+    hspeed = 0;
+    attack = "knockback2";
+    image_index = 0;
+    image_speed = 0.25;
+    sprite_index = parent.pikmin_getup_sprite[type];
+    }
+  exit;
+  }
+if ( attack == "knockback2" )
+  {
+  sprite_index = parent.pikmin_getup_sprite[type];
+  if ( image_index >= 4 )
+    {
+    attack = "none";
+    state = 1;
+    }
+  exit;
+  }
+image_speed = 0.25;
+
+if ( attack == "latch" )
+  {
+  hit_script = char_custom3;
+  x = latch_target.x + latch_x + latch_target.hspeed;
+  y = latch_target.y - latch_target.actual_height * 0.5;
+  depth = latch_target.depth - 1;
+  latch_timer -= 1;
+  sprite_index = parent.pikmin_pummel_sprite[type];
+  image_speed = 0;
+  switch ( latch_timer mod 40 )
+    {
+    case 10: image_index = 0; break;
+    case 15: image_index = 3; break;
+    case 20: image_index = 2;
+      switch ( type )
+        {
+        case 0: case 1: case 2: case 3: create_projectile ( 2 , 361 , 1 , 1 , 2 , 1 , kick1 , obj_spark_hit1 , .5 , .5 , 0 , 0 , parent.id , 2 , no_script ); break;
+	case 4: create_projectile ( 6 , 361 , 1 , 1 , 2 , 1 , kick1 , obj_spark_hit1 , .5 , .5 , 0 , 0 , parent.id , 2 , no_script ); break;
+        }
+      break;
+    case 25: image_index = 1; break;
+    case 30: image_index = 0; break;
+    }
+  if ( latch_timer <= 0 )
+    {
+    attack = "none";
+    state = 1;
+    }
+  exit;
+  }
+if ( attack == "sideb" )
+  {
+  hit_script = char_custom3;
+  if ( sprite_index = parent.pikmin_getup_sprite[type] )
+    {
+    image_index += 0.025;
+    if ( image_index >= 3 )
+      {
+      attack = "none";
+      state = 1;
+      }
+    exit;
+    }
+  var a;
+  a = collision_point ( x , y - 1 , player , 1 , 1 );
+  if ( a > 0 )
+    {
+    if ( a.team != parent.team )
+    if ( a.super_armor < 2 && a.status_cancel == 0 && a.intangible == 0 )
+      {
+      speed = 0;
+      latch_target = a;
+      attack = "latch";
+      latch_timer = 240 + floor ( a.percent * 0.3 );
+      latch_x = -5 + random ( 10 );
+      exit;
+      }
+    }
+  image_speed = 0;
+  if ( image_index < 2 ) image_index += 0.25;
+  moving_object = 1;
+  vspeed += 0.25;
+  if ( vspeed >= 0 )
+  if ( on_floor || on_platform )
+    {
+    //instance_create ( x , y , obj_spark_effect );
+    vspeed = 0;
+    hspeed *= 0.8;
+    if ( abs ( hspeed ) < 1 )
+      {
+      hspeed = 0;
+      sprite_index = parent.pikmin_getup_sprite[type];
+      image_index = 0;
+      }
+    }
+  exit;
+  }
+
+hit_script = char_custom3;
+if ( state == 1 )
+if ( point_distance ( x , y , target_recordx , target_recordy ) < 38 )
+  hit_script = 0;
+
+if ( attack == "chain" )
+  {
+  hit_script = 0;
+  if ( parent.attack_type != "upb" )
+    {
+    attack = "none";
+    state = 1;
+    image_angle = 0;
+    }
+  exit;
+  }
+
+if spr_ = parent.stand_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	xsize = 0.8;
+	}
+if spr_ = parent.run_sprite || sprite_index = parent.walk_sprite {
+	sprite_index = parent.pikmin_run_sprite[type];
+	}
+if spr_ = parent.jump_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if spr_ = parent.pikmin_run_sprite[type] {
+	image_speed = 0.3;
+	}
+if spr_ = parent.mid_jump_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if spr_ = parent.land_sprite {
+	sprite_index = parent.pikmin_land_sprite[type];
+	}
+if spr_ = parent.crouch_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if spr_ = parent.jab_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if spr_ = parent.stilt_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	}
+if spr_ = parent.dtilt_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	}
+if spr_ = parent.utilt_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if spr_ = parent.dash_attack_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	}
+if spr_ = parent.air_dodge_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if spr_ = parent.fall_sprite {
+	sprite_index = parent.pikmin_jump_sprite[ type ];
+	if ( image_index >= image_number - 1 ) {
+		image_index = image_number - 1;
+		}
+	}
+if spr_ = parent.spot_dodge_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	}
+if spr_ = parent.shield_sprite {
+	sprite_index = parent.pikmin_stand_sprite[ type ];
+	xsize = 0.8;
+	}
+if spr_ = parent.roll_sprite {
+	sprite_index = parent.pikmin_run_sprite[ type ];
+	if xsize > 0 {
+		xsize *= -1
+		}
+	}
+if spr_ = parent.nair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[ type ];
+	}
+if spr_ = parent.usmash_sprite {
+	sprite_index = parent.pikmin_stand_sprite[type];
+	}
+if attack = "usmash" {
+	sprite_index = parent.pikmin_usmash_sprite[type];
+	depth -= 2;
+	x += (12-facing*24)*size;
+	image_speed = 0;
+	}
+if spr_ = parent.ssmash_sprite {
+	sprite_index = parent.pikmin_stand_sprite[type];
+	}
+if attack = "ssmash" {
+	sprite_index = parent.pikmin_ssmash_sprite[type];
+	depth -= 2;
+	moving_object = 1;
+	}
+if attack = "ssmash2" {
+        if ( vspeed < 4 )
+	vspeed += 0.125;
+	moving_object = 1;
+	hspeed *= 0.9;
+	if ( on_floor || on_platform ) {
+		sprite_index = parent.pikmin_getup_sprite[type];
+		if ( sprite_index != parent.pikmin_getup_sprite[type] ) {
+			image_index = 0;
+			}
+		hspeed = 0;
+		image_speed = 0.15;
+		}
+	}
+if sprite_index = parent.pikmin_getup_sprite[type] && ( image_index >= 3 ) {
+			attack = "none";
+			state = 1;
+			}
+if spr_ = parent.dsmash_sprite {
+		sprite_index = parent.pikmin_stand_sprite[type];
+		}
+if attack = "dsmash" {
+	sprite_index = parent.pikmin_dsmash_sprite[type];
+	depth -= 2;
+	if image_index >= 4 {
+		image_speed = 0;
+		}
+	}
+if attack = "dsmash2" {
+	sprite_index = parent.pikmin_dsmash_sprite[type];
+	if xsize > 0 {
+		xsize *= -1
+		}
+	depth -= 2;
+	if image_index >= 4 {
+		image_speed = 0;
+		}
+	}
+if ( ( attack = "usmash" || attack == "ssmash" || attack == "ssmash2" || attack = "dsmash" || attack = "uair" ) && ( proj > 0 && instance_exists ( proj ) ) ) { proj.x = x; proj.y = y; }
+
+if ( ( attack = "dsmash2" ) && ( proj2 > 0 && instance_exists ( proj2 ) ) ) { proj2.x = x; proj2.y = y; }
+
+if ( ( sprite_index = parent.flinch_sprite ) || ( sprite_index = parent.flinch2_sprite ) || ( sprite_index = parent.flinch3_sprite ) || ( sprite_index = parent.tumble_sprite ) ) {
+	sprite_index = parent.pikmin_stand_sprite[type];
+	}
+if spr_ = parent.uair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "uair" {
+	sprite_index = parent.pikmin_uair_sprite[type];
+	depth -= 2;
+	}
+if spr_ = parent.fair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "fair" {
+	sprite_index = parent.pikmin_fair_sprite[type];
+	}
+if spr_ = parent.dair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "dair" {
+	sprite_index = parent.pikmin_uair_sprite[type];
+	}
+if spr_ = parent.bair_sprite {
+	sprite_index = parent.pikmin_jump_sprite[type];
+	}
+if attack = "bair" {
+	sprite_index = parent.pikmin_bair_sprite[type];
+	}
+if attack = "b" {
+	sprite_index = parent.pikmin_pluck_sprite[type];
+	}
+if attack = "hold" {
+	sprite_index = parent.pikmin_pummel_sprite[type];
+	image_speed = 0;
+	}
+if attack = "fthrow" {
+	sprite_index = parent.pikmin_fthrow_sprite[type];
+	image_speed = 0.3;
+	if image_index > 5 {
+		image_index = 5;
+		image_speed = 0;
+		}
+	}
+if attack = "pummel" {
+	sprite_index = parent.pikmin_pummel_sprite[type];
+	if image_index > 3 {
+		image_index = 3;
+		image_speed = 0;
+		}
+	}
+if attack = "bthrow" {
+	sprite_index = parent.pikmin_getup_sprite[type];
+	image_speed = -0.2;
+	if image_index == -3 {
+		image_speed = 0.15;
+		}
+	if image_index == 0 {
+		image_speed = 0;
+		} 
+	}
+if attack = "uthrow" {
+	sprite_index = parent.pikmin_uthrow_sprite[type];
+	image_speed = 0.1;
+	}
+if attack = "dthrow" {
+	sprite_index = parent.pikmin_dthrow_sprite[type];
+	image_speed = 0.1;
+	}
+if ( sprite_index == parent.pikmin_jump_sprite[type] )
+  {
+	if ( image_index >= image_number - 1 ) {
+		image_index = image_number - 1;
+		}
+  }
+stuck_timer += 1;
+if ( x != xprevious || y != yprevious )
+  stuck_timer = 0;
+if ( stuck_timer > 7 )
+  {
+  attack = "none";
+  state = 1;
+  stuck_timer = 0;
+  }

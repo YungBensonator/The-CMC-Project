@@ -1,0 +1,146 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0.25;
+        sprite_index = nair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+	temp4 = 0;
+	temp3 = 0;
+}
+        if timer < time {
+	if kickcancel = 1 {
+	sound_play(jab_voice)
+    timer = 4
+    kickcancel = 0
+    temp3 = 1
+	timer_speed = 2
+	image_index = 2.46
+	}
+	if temp3 {
+            if frac(timer/2) = 0
+                image_blend=c_yellow
+            else image_blend=c_white 
+	}
+	
+	if (image_blend = c_yellow && air = 0)
+	{
+	image_blend = c_white;
+	}
+	
+	if timer = 4
+	sound_play(jab_voice)
+		if attack_success && !temp3
+		temp4 = 1
+	if sprite_index = fair_sprite && image_index > 5
+	image_index = 0
+            state_type = "air_attack";
+		if timer = 24 && temp3
+		timer = 26
+            if timer = 8 {
+                sprite_index = fair_sprite
+                image_index = 0
+                image_speed = 0.6
+                sound_play(swingsnd1)
+                create_hitbox(1,65+facing*50,2.5,0,1,2,sf_kick3,obj_spark_special1,1.35,1,18,28,self.id,3,1);
+                hitbox.hit_stun = 1
+                hitbox.di = 0.6
+            }
+            if timer = 12 || timer = 20 {
+                sound_play(swingsnd1)
+                create_hitbox(1,65+facing*50,2.5,0,1,2,sf_kick3,obj_spark_special1,1.35,1,18,18,self.id,3,1);
+                hitbox.hit_stun = -3;
+                hitbox.di = 0.6
+                hitbox.hit_stun = 1
+                //attacking = 0
+            }
+            if timer = 16 || timer = 24 {
+                sound_play(swingsnd1)
+                create_hitbox(1,65+facing*50,2.25,0,1,2,sf_kick3,obj_spark_special1,1.35,1,18,28,self.id,3,1);
+                hitbox.hit_stun = 1
+                hitbox.di = 0.6
+            }
+            if timer = 28 && !temp3 {
+                sound_play(swingsnd1)
+                create_hitbox(2,35+facing*110,7,0,5,3,sf_kick3,obj_spark_special1,1.35,1,18,18,self.id,3,1);
+                hitbox.hit_stun = 2
+            }
+	    if timer = 28 && temp3 {
+                sound_play(swingsnd1)
+                create_hitbox(2,70+facing*40,5.5,2.5,5,4,sf_punchs,obj_spark_special1,1.35,1,18,18,self.id,3,1);
+                hitbox.hit_stun = 4
+				hitbox.di = -1
+            }
+            if timer = 35 {
+                sprite_index = nair_sprite;
+                image_index = 2;
+                image_speed = -0.2;
+            }
+	if timer = 40 && temp3 {
+	image_blend = c_white
+	temp3 = 0
+	timer_speed = 1
+	}
+            if air = 0 {
+        	if timer < 28 {
+                with hitbox instance_destroy();
+                create_hitbox2(3,45+facing*90,5.5,1.5,5,3,sf_kick3,obj_spark_special1,1.35,1,18,16,self.id,3,1);
+                hitbox2.remain = 1
+		hitbox2.hit_stun = 4;
+		sound_play(swingsnd1);
+                }
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=12; 
+            }
+	if timer <= 39 && temp4 {
+	if special > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1 && ( smash_power >= global.gs_fs_charge )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_final_smash();
+	image_blend = c_white
+	temp3 = 0
+	timer_speed = 1
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	image_blend = c_white
+	temp3 = 0
+	timer_speed = 1
+	  }
+}
+        }  
+if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    image_blend = c_white;
+}
+	if (  hitbox.hit > 0 )
+      {
+	gravity = 0;
+	vspeed = -0.1;
+	  }
+	  
+	if (  hitbox2.hit > 0 )
+      {
+	gravity = 0;
+	vspeed = 0;
+      }	         	                 

@@ -1,0 +1,197 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" && air < max_jumps {
+    attacking = 0;
+    special = 1-ai;
+    timer = 0;
+    attack_type = "upb"
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0;
+         }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.5
+        }
+        image_speed = 0;
+        sprite_index = crouch_sprite;
+        image_index=0;
+        time = 185;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        air_move = 0
+	firsthitbox = 1
+}
+        if timer < time {
+	if timer > 25
+	    force_edge_grab = 1
+            if vspeed >= 0
+                vspeed -= grav*size*GRAV_MUL
+            if timer = 5 {
+                //intangible = 1
+                sprite_index = upb_sprite
+                image_index = 0
+                image_speed = 0.2
+                //vspeed = -7*size;
+                duster = instance_create(x,y+2*size,obj_dust_effect);
+                duster.facing = facing;
+                super_armor = 1
+            }
+            if timer < 10 {
+                vspeed = 0
+                gravity = 0 }
+            if timer = 10 {
+                air = max_jumps;
+                sound_play(ssmash_voice)
+                sound_play(hi_jump_sound)
+                create_hitbox(5,67.5+facing*45,6.4,0.1,16,1/size,kick3,obj_spark_hit4,1.5,1.3,0,21,self.id,14,2);
+                hitbox.di = 0.1
+                hitbox.hit_stun = 8
+                hspeed = size*(1.5 - facing*3);
+                vspeed = -size*6.75;
+                hover = 0
+                intangible = 0;
+                super_armor = 0;
+            }
+            if timer = 12 || timer = 15 || timer = 18 || timer = 21 {
+                hspeed = size*(1.5 - facing*3);
+                vspeed = size*(-5.25+timer/12);
+                super_armor = 0;
+            }
+            if timer < 30 && image_index > 4
+                image_index = 4
+            if timer = 30 {
+                sound_play(upb_sound2)
+                image_index = 5
+                image_speed = 0.25
+                if ai
+                    movedown = 0
+                air_move = 1
+                force_edge_grab = 1
+            }
+            if (image_index >= image_number - image_speed) {
+                if sprite_index = upb_sprite2
+                    sprite_index = upb_sprite3
+                else
+                    image_speed = 0
+            }
+            if timer >= 30 && timer < 150 {
+                vspeed=-grav*size*GRAV_MUL
+                air = max_jumps
+                air_move = 1
+                image_blend = c_white
+                image_angle = (2-facing*4)*hspeed/size;
+                if image_index > 10.5
+                    image_index = 5.5
+		if variable_local_exists(firsthitbox)
+                if frac(timer/15)=0 && firsthitbox {
+                    create_hitbox(2,270,0.5,0,15,2,shock1,obj_spark_shock,.9,1.1,1,15,self.id,10,2);
+		    hitbox.hit_stun = 10
+		    hitbox.di = 0.1
+                    hitbox.hitlag_diff = 3
+		    firsthitbox = 0
+		}
+		else if frac(timer/15)=0 {
+		    create_hitbox(2,270,0.5,0,15,2,shock1,obj_spark_shock,.9,1.1,1,15,self.id,10,2);
+		    hitbox.di = 2
+		    hitbox.hit_stun = -5
+                    hitbox.hitlag_diff = 3
+		}
+		if moveright
+		    hspeed += 0.2*size;
+		if moveleft
+		    hspeed -= 0.2*size;
+		if !moveright && !moveleft
+		  {
+		    if hspeed > 0
+			hspeed -= 0.1*size;
+		    if hspeed < 0
+			hspeed += 0.1*size;
+		  }
+		if moveup
+		    y -= 0.75*size
+		if movedown
+		    y += 0.75*size
+		if hspeed > 3.7*size
+		    hspeed = 3.7*size;
+		if hspeed < -3.7*size
+		    hspeed = -3.7*size;
+		if hspeed < 0.1*size && hspeed > -0.1*size && !moveright && !moveleft
+		    hspeed = 0;
+                if timer >= 45 && ((!special && !ai) || (ai && random(10)>9.5-enemy_dist/40) && !(ai_state="recover")) {
+                    timer = 150
+                    if instance_exists(hitbox)
+                        hitbox.hit = 2
+                }
+                //interrupt = 1;
+                air = max_jumps;
+                if ( attacking || smash )
+                  {
+                  interrupt = 1;
+		  state_type = "jump";
+		  attack_type = "nair";
+		  if (moveright && !facing) || (moveleft && facing)
+		    attack_type = "fair";
+		  if (moveleft && !facing) || (moveright && facing)
+		    attack_type = "bair";
+		  if moveup
+		    attack_type = "uair";
+		  if movedown
+		    attack_type = "dair";
+		  timer = 0;
+                  special = 0;
+                  }
+	    }
+            if timer = 150 {
+                image_index = 11
+                interrupt = 0;
+            }
+            if timer > 150
+                hspeed = 0
+            if timer = 151 {
+                sound_play(explode1)
+                create_hitbox(25,70+facing*40,6,8.25,50,15,shock3,obj_spark_shock,.9,1,0,0,self.id,10,4);
+                hitbox.hitlag_diff = 1
+                create_hitbox2(25,110-facing*40,6,8.25,50,15,shock3,obj_spark_shock,.9,2.8,0,-20,self.id,10,4);
+                hitbox2.hitlag_diff = 1
+		screen_shake ( 3 , 2 );
+		screen_shake ( 1 , 5 );
+                spark = instance_create ( x , y - 14 * size , obj_spark );
+		spark.sprite_index = upb_thunder_sprite;
+		spark.image_speed = 0.85;
+		var yy;
+		for ( yy = 0 ; yy < 56 ; yy += 1 )
+		  {
+		  if ( collision_point ( x , y+yy , obj_floor , 1 , 1 ) || collision_point ( x , y+yy , obj_platform , 1 , 1 ) )
+                    {
+                    //show_message ( "bbb" );
+                    spark.image_yscale *= yy / 56;
+		    hitbox2.y -= 20 * yy / 56;
+		    hitbox2.image_yscale *= yy / 56;
+		    break;
+                    }
+		  }
+            }
+        if image_index >= image_number - image_speed
+        image_speed=0;
+    }
+if (air = 0 || is_on_floor(self.id)) && timer >= 30  {
+    state_type="land";
+    sprite_index = land_sprite;
+    attack_type="none";
+    hspeed = 0;
+    timer=0;
+    time=14; 
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+    state_type = "fall";
+    else
+    state_type = "stand";
+    sprite_index = fall_sprite;
+    timer = 0;
+    time =-1;
+    firsthitbox = 1;
+}

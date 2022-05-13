@@ -1,0 +1,59 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 56;
+        timer_speed=1;
+        charge_frame = 10
+        powerup_landed = 0;
+		create_hurtbox_precise(self.id,58,dsmash_mask)
+}
+        if timer < time {
+            state_type = "attack";
+            if timer = 5 {
+                instance_create(x+10-facing*20,y-20,obj_spark_effect)
+                image_speed = 0
+            }
+            if timer = 9
+                image_speed = 0.35
+            if timer = 17 
+                sound_play(dsmash_voice) 
+            if timer = 18 {
+                sound_play(dsmash_sound);
+		sound_play(psi_sound3);
+                if ( attack_success ) powerup_landed = 1;
+                create_hitbox(14*max(1,powerup*0.95),40+facing*100,5.5*max(1,powerup*1.15),6.95*max(1,powerup*1.15),20*max(1,powerup*1.25),11,magic3,obj_spark_shock,0.6+(timer=29)*0.25+(timer=41)*0.5,0.65+(timer=29)*0.25+(timer=41)*0.5,18,7,self.id,4,5);
+            } 
+            if timer = 29    {
+               sound_play(dsmash_sound);
+               create_hitbox(10*max(1,powerup*1.15),20+facing*140,5.5*max(1,powerup*1.15),6.95*max(1,powerup*1.15),20*max(1,powerup*1.25),11,magic3,obj_spark_shock,0.6+(timer=29)*0.25+(timer=41)*0.5,0.65+(timer=29)*0.25+(timer=41)*0.5,18,7,self.id,4,5); 
+            }
+if timer = 41{
+               sound_play(dsmash_sound);
+               create_hitbox(6*max(1,powerup*1.15),20+facing*140,5.5*max(1,powerup*1.15),6.95*max(1,powerup*1.15),20*max(1,powerup*1.25),11,magic3,obj_spark_shock,0.6+(timer=29)*0.25+(timer=41)*0.5,0.65+(timer=29)*0.25+(timer=41)*0.5,18,7,self.id,4,5); 
+            }
+            if image_index >= image_number - image_speed  {
+                image_speed = 0
+                interrupt = 1
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    if ( attack_success ) powerup_landed = 1;
+    if ( powerup_landed == 0 )
+      {
+      powerup = 0;
+      }
+          powerup_landed = -1
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

@@ -1,0 +1,101 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "run" || state_type = "stand" || state_type = "jump") && air < max_jumps {
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb"
+    if air = 0 {
+        temp =0
+        state_type = "air_attack";
+        hspeed = 0;
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing; }
+    else {
+        state_type = "air_attack";
+        temp = 1
+        }
+    if time = -2 || (ai && temp = 0 && random(5)>3.8) {
+        temp = 2
+        sound_play(ex_sound)
+    }
+    image_speed = 0.25;
+    sprite_index = upb_sprite;
+    image_index=0.5;
+    time = 40;
+    timer_speed=1;
+    intangible = 0
+    if moveright = 1 facing = 0
+    if moveleft = 1 facing = 1
+    air_move=0
+}
+if timer < time {
+    if timer > 25
+	force_edge_grab = 1
+    if timer = 2
+        intangible = 1
+    if timer < 5 {
+        vspeed = 0
+        gravity = 0 }
+    if timer = 5 {
+        spark = create_spark(0,20,spiral_back_sprite,0.5,0.5,0.5)
+        spark.depth = depth+1
+        spark2 = create_spark(0,16,spiral_front_sprite,0.5,0.5,0.5)
+        spark2.depth = depth-2
+        play_attack_voice();
+    }
+    if timer >=6 && timer <=30 {
+        spark.x = x
+        spark2.x = x
+        spark.y = y - 20*size
+        spark2.y = y - 16*size
+    }
+    if timer = 6 {
+        sound_play(upb_sound1)
+        sound_play(attack_sound4)
+        create_hitbox(5+aura/4,75+facing*30,6,0,7+round(aura/4),10,aura3,obj_spark_hit2,0.9,0.9,7,20,self.id,3,5)
+        hitbox.shake_ampl = 0 
+        hitbox.di = 0.5
+    }
+    if timer = 7 || timer = 8 {
+        intangible = 0;
+        if smash_power >= global.gs_fs_charge && special && temp!=1 {
+            interrupt = 1
+            }
+        else {
+        hspeed = 3 - facing*6
+        vspeed = -6.5 }
+    }
+    if timer = 9 {
+        create_hitbox(6+aura/4,65+facing*50,5.3+aura/4,6+aura*0.1,6+round(aura/5),9+round(aura/5),aura3,obj_spark_aura,1,1.2,4,23,self.id,12,5)
+        hitbox.shake_ampl = 0
+        sound_play(upb_sound2)
+    }
+    if (timer = 10 || timer = 11 || timer = 12 || timer = 13) {
+        if instance_exists(hitbox) && timer > 11 {
+            hitbox.damage = (4+aura/5)*size
+            hitbox.image_xscale = 0.9*size
+            hitbox.bkb = (4.5+aura/7.5)*size
+            hitbox.kbg = (4.5+aura/5)*size
+            hitbox.hitlag_frames = round(size*8)
+            hitbox.shield_damage = round(size*16)
+            hitbox.dir=75+facing*30
+        }
+        hspeed = 2 - facing*4
+        vspeed -= 0.4*size
+    }
+    if timer = 21 {
+         hspeed -= 1-facing*2
+         air = max_jumps }
+    if image_index >= image_number-image_speed
+        image_speed = 0
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    air=max_jumps
+    hspeed = 1 - facing*2;
+    attack_type = "none";
+    state_type = "fall";
+    timer = 0;
+    time =-1;
+}
+        

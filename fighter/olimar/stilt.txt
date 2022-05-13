@@ -1,0 +1,47 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "stilt";
+  image_speed = 0.5;
+  image_index = 0;
+  sprite_index = stilt_sprite;
+  timer = 0;
+  time = 35;
+  timer_speed = 1;
+  }
+if timer < time {
+	state_type = "attack";
+	if timer = 9 {
+		play_attack_voice();
+		sound_play(jab_sound)
+    		create_hitbox ( 7 , 30+facing*120 , 6 , 4.3 , 7 , 4 , kick2 , obj_spark_hit2 , 0.80 , 0.62 , 11.63 , 13.95 , self.id , 9 , 1 );
+		hitbox.hit_stun = 4
+		}
+	if timer = 14 {
+		hitbox.damage = 6;
+		hitbox.bkb = 5.1;
+		hitbox.kbg = 3.5;
+		}
+	if timer > 8 && timer < 11 {
+		hspeed = 2.5-facing*5;
+		}
+	if timer >= 15 {
+		hspeed = 0;
+		}
+	if timer = 20 {
+		image_speed = 0;
+		sound_play(stilt_sound);
+		}
+	if timer = 28 {
+		image_speed = 0.3;
+		}
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

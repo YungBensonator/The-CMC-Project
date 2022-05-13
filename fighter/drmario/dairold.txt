@@ -1,0 +1,85 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" {
+	hspeed = 0
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 90;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 7: image_index = 3; break;
+  case 10: image_index = 4; break;
+  case 13: image_index = 5; break;
+  case 16: image_index = 6; break;
+  case 20: image_xscale *= 1.1; image_yscale *= 1.1; image_speed = 0.3 break;
+  case 21: image_xscale *= 1.05; image_yscale *= 1.05; break;
+  }
+        if timer < time {
+            state_type = "air_attack";
+	        if timer < 20 {
+                vspeed = -0.1 }
+            if timer = 10
+                play_attack_voice()
+	    if timer = 19
+        	temp_fall_speed = 5.45
+            if timer = 20 {
+                sound_play(attack_sound4);
+                create_hitbox_impaler( 16 , 285-facing*30 , 5.15 , 1.5 , 23 , 12 , kick3 , obj_spark_hit4 , 0.5 , 0.45 , -1 , 2 , self.id , 65 , 3 );
+                hitbox.shield_stun = 1.5
+                hspeed = 0
+                vspeed=5.45
+                }
+            if timer > 20 && timer < 45 && timer_speed > 0 {
+                vspeed = 5.45
+                hspeed = 0
+            }
+    /*if ( hitbox.hit && timer < 90 )
+      {
+	shaker = instance_create(x,y,obj_shakescreen2);
+	shaker.yampl = 0.25;
+	spark = create_spark(9,14,global.hit_spark,0.75,0.6,0.6);
+	spark.depth = -1;
+	instance_create(x+size*(9-facing*18),y-14*size,obj_spark_shockwave);
+      }*/
+		if timer >= 45 && movejump && timer < 90
+		interrupt = 1
+            if timer < 90 && air = 0 {
+                state_type="land";
+                air = 0;
+                instance_create(x,y,obj_down_impact)
+                hspeed = 0;
+                vspeed = 0;
+                attack_type="none";
+                sprite_index = land_sprite;
+		image_index = 0
+                image_speed = 0.25;
+                sound_play(pound_sound);
+                temp_fall_speed = 0;
+                timer=0;
+                time=30; 
+                shaker = instance_create(x,y,obj_shakescreen3);
+                shaker.ampl = 5;
+                shaker.xampl = 0;
+                shaker.time = 15;
+            }
+if image_index >= image_number - image_speed
+    image_index = 8.6
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

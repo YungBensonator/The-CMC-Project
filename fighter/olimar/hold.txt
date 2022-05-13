@@ -1,0 +1,101 @@
+if (time != -1) {
+	if instance_exists(target)
+    {
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "hold";
+	image_speed = 0;
+	sprite_index = hold_sprite;
+	pikmin[0].attack = "hold";
+	pikmin[0].x = x + 20-facing*40;
+	image_index=2;
+	pummel = -1;
+	timer = 0;
+	time = -1;
+	timer_speed=1;
+	target.attack_type = "none"
+	}
+	else
+	exit;
+}
+if timer >= 0 && attack_type = "hold"
+	{
+	pikmin[0].x = x + 20 - facing*40;
+	target.x = x + 30 * (1-facing*2);
+	target.y = y;
+	}
+if (attacking && pummel == -1) {
+    attacking = 0;
+    pummel = 0;
+    pikmin[0].attack = "pummel";
+}
+if ( pummel == -1 )
+ {
+if ( ( !facing && moveright ) || ( facing && moveleft ) )
+    attack_type = "fthrow";
+if ( ( !facing && moveleft ) || ( facing && moveright ) )
+    attack_type = "bthrow";
+if ( moveup )
+    attack_type = "uthrow";
+if ( movedown )
+  {
+    attack_type = "dthrow";
+  }
+ }
+else {
+    pummel += 1;
+    pikmin[0].x = x + 20-facing*40;
+    if ( pummel == 5 ) // replace 5 with the frame in which we pummel
+    {
+       temp_timer = target.timer;
+       temp_time = target.time;
+	if pikmin[0].type = 0 {
+		sound_play2 ( fire1 )
+		create_projectile ( 3 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_fire1 , 0.8 , 0.8 , 15 , 10 , self.id , 2 , 0 );
+		}
+	if pikmin[0].type = 1 {
+		sound_play2 ( punch1 )
+		create_projectile ( 3 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_hit1 , 0.8 , 0.8 , 15 , 10 , self.id , 2 , 0 );
+		}
+	if pikmin[0].type = 2 {
+		sound_play2 ( shock1 )
+		create_projectile ( 2 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_shock , 0.8 , 0.8 , 15 , 10 , self.id , 2 , 0 );
+		}
+	if pikmin[0].type = 3 {
+		sound_play2 ( punch2 )
+		create_projectile ( 3 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_hit2 , 0.8 , 0.8 , 15 , 10 , self.id , 2 , 0 );
+		}
+	if pikmin[0].type = 4 {
+		sound_play2 ( kick3 )
+		create_projectile ( 5 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_darkness , 0.8 , 0.8 , 15 , 10 , self.id , 2 , 0 );
+		}
+       
+    }
+    if ( pummel == 6 ) // replace 6 with the frame after the one in which we pummel
+    {
+       target.state_type = "grabbed";
+       target.sprite_index = target.flinch_sprite;
+       target.timer = temp_timer;
+       target.time = temp_time;
+       target.timer_speed = 1;
+     }
+    if ( pummel = 15 )
+    {
+       sprite_index = hold_sprite;
+       image_speed = 0;
+       image_index = 1;
+    }
+    if ( pummel >= 30 ) // replace 15 with the frame in which pummel ends and we get back to hold
+    {
+       pummel = -1;
+       pikmin[0].attack = "hold";
+    }
+}
+if string(target.state_type) != "grabbed" {
+    state_type = "flinch";
+    attack_type = "none";
+    time = 15;
+    timer = 0;
+    pikmin[0].attack = "none";
+    script_execute(char_custom2); }
+        

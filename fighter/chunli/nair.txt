@@ -1,0 +1,108 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "nair";
+        image_speed = 0.45;
+        sprite_index = nair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+	attacking = 0;
+	temp4 = 0;
+}
+        if timer < time {
+		if attack_success
+		temp4 = 1
+            state_type = "air_attack";
+            if timer = 7 {
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+                sound_play(attack_sound2);
+                create_hitbox(6,25+facing*130,5.2,3.8,16,8,sf_kick3,obj_spark_special1,1.75,0.45,3,18,self.id,15,2);
+                image_speed = 0
+		hitbox.di = 0.5;
+		image_speed = 0.2;
+            }
+            if timer = 10 {
+                hitbox.damage = 5*size;
+                hitbox.shield_damage = round(10*size);
+                hitbox.hitlag_frames = round(6*size);
+                hitbox.sfx = sf_kick2; 
+            }
+        if timer = 31
+            image_speed = 0
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=7; 
+            }
+	if timer <= 29 && temp4 {
+	if special > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		char_final_smash();
+		else
+	    char_b();
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    if (moveleft[1] >0) || (moveright[1] > 0)
+	    char_smashb();
+		else
+	    char_sideb();
+	  }
+	if facing && ( (moveleft = 1 && attacking = 1) || smashleft = 1 )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_fair();
+	    kickcancel = 1;
+	  }
+	if !facing && ( (moveright = 1 && attacking = 1) || smashright = 1 )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_fair();
+	    kickcancel = 1;
+	  }
+}
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}        

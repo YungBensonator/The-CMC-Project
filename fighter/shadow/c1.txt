@@ -1,0 +1,92 @@
+moving_object = 1;
+absorb = 1;
+absorb2 = 1;
+if ( timer <= 1 && hit = 0 )
+  {
+    if ( damage >= 15*attacker.size )
+	sprite_index = keepmain.b_charged_projectile;
+    else
+	sprite_index = keepmain.b_projectile;
+    if attacker.btemp = 3
+	sprite_index = keepmain.lance_sprite;
+    image_speed = 0.35;
+    visible = 1;
+    hspeed = attacker.size * (4-attacker.facing*8) + ( 0.275 * ( damage >= 15*attacker.size ) ) + ( 0.275 * ( attacker.btemp = 3 ) );
+    if attacker.btemp = 3
+	temp = 1
+    if attacker.temp = 1 {
+	image_angle = 315-attacker.facing*270
+	direction = 315-facing*90 }
+  }
+if ( timer = 55 && damage > 3 )
+  {
+    if temp = 1 {
+    damage -= 1*attacker.size;
+    kbg -= 0.5*attacker.size;
+    }
+    else {
+    damage -= 2*attacker.size;
+    kbg -= 1*attacker.size;
+    }
+  }
+
+////bounce
+if ( vspeed > 0 )
+if ( on_floor || on_platform )
+  {
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  vspeed = -abs(hspeed);
+  }
+if ( hspeed > 0 )
+if ( next_to_rwall )
+  {
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  hspeed = -abs(hspeed);
+  if ( vspeed = 0 )
+	{
+		image_angle = 180
+	}
+  }
+if ( hspeed < 0 )
+if ( next_to_lwall )
+  {
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  hspeed = abs(hspeed);
+    if ( vspeed = 0 )
+	{
+		image_angle = -180
+	}
+  }
+if ( vspeed < 0 )
+if ( under_ceiling)
+  {
+  bounce += 1;
+  instance_create ( x , y , obj_spark_effect );
+  vspeed = abs(hspeed);
+  }
+////image angle
+if ( vspeed < 0 )
+{
+	if ( hspeed > 0 )
+	{
+		image_angle = -315;
+	}
+	if ( hspeed < 0 )
+	{
+		image_angle = 315;
+	}
+}
+if ( vspeed > 0 )
+{
+	if ( hspeed > 0 )
+	{
+		image_angle = 315;
+	}
+	if ( hspeed < 0 )
+	{
+		image_angle = -315;
+	}
+}

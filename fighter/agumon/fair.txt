@@ -1,0 +1,265 @@
+//Agumon
+if evolution = 0{
+    if state_type = "jump" {
+            vspeed -= 0.1;
+            state_type = "air_attack";
+            attack_type = "fair";
+            image_speed = 0;
+            sprite_index = fair_sprite;
+            image_index = 0;
+            timer = 0;
+            time = 42;
+            timer_speed=1;
+    }
+    if timer < time {
+    switch ( timer )
+    {
+                    case 3: image_index = 1; break;
+                    case 5: image_index = 2; break;
+                    case 8: image_index = 3; break;
+            case 12: image_index = 4; break;
+            case 15: image_index = 5; break; 
+            case 18: image_index = 6; break;
+                    case 21: image_index = 7; break;
+                    case 24: image_index = 8; break;
+                    case 27: image_index = 9; break;
+                    case 30: image_index = 10; break;
+                    case 33: image_index = 11; break;
+                    case 36: image_index = 12; break;
+    }
+
+    // Animate blur
+    switch ( timer ) 
+    {
+        case 12:
+            blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_texture, /*Start frame*/ 3, /*Apex Frame*/ 6, /*End frame*/ 8, /*CCW*/ 0, /*girth*/ 6, 15);
+            blur.image_index = 0;
+            blur.h_squish = 4  ;
+            blur.v_squish = -1;
+            blur.push_y = 4;
+            blur.push_x = -2 * (1-facing*2);
+            blur.index = 1;
+            break;
+        case 13:
+        case 14:
+            blur.index += 0.33;
+        case 15:
+            blur.index = 2;
+            blur.image_index = 1;
+            break;
+        case 16:
+        case 17:
+            blur.index += 0.33;
+        case 18:
+            blur.index = 3;
+            blur.image_index = 2;
+            break;
+        case 19:
+        case 20:
+            blur.index += 0.33;
+        case 21:
+            blur.index = 4;
+
+            break;
+
+        case 22:
+        case 23:
+            blur.index += 0.33;
+            
+        case 24:
+            blur.index = 5;
+            blur.image_index = 3;
+            break;
+
+        case 25:
+            blur.index = 6;
+            blur.image_index = 4;
+            break;
+        
+        case 26:
+            blur.index += 0.5;
+            break;
+
+        case 27:
+            blur.index = 7;
+            blur.image_index = 5;
+            break;
+
+        case 28: case 29: case 30: case 31:
+            blur.index += 0.16;
+            break;
+        case 32:
+            with (blur)
+            {
+                instance_destroy();
+            }   
+            break;
+
+    } 
+    
+
+                state_type = "air_attack";
+    if timer = 15 {
+                sound_play(attack_sound2);
+                    sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+                    create_hitbox(14,310-facing*80,5,1.2,18,10,slash3,obj_spark_slash3,0.9,0.6,15,22,self.id,5,3);
+                    hitbox.hit_stun = 10 //knockback 6.3, growth 4.2, knockback 5.3, growth 1.8
+                    hitbox.shake_ampl = 1.3
+                    }
+                if timer = 18 {
+                    hitbox.damage = 9;
+                    hitbox.dir = 20 + facing*140;
+                    hitbox.hit_stun = 4
+                    hitbox.kbg = 5.8*size; //original sweetspot: 7.3 sour: 6.8
+                    hitbox.bkb = 3.5*size;
+                    hitbox.hitbox_x = 15-facing*30
+                    hitbox.hitbox_y = 11 
+                    hitbox.image_xscale = 0.8
+                    hitbox.image_yscale = 0.6
+                    }
+                if air = 0 {
+                    state_type="land";
+                    attack_type="none";
+                    sprite_index = land_sprite;
+                    timer=0;
+                    time=10; 
+                    hspeed = 0; }
+            }  
+    if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+		if air > 0
+			{
+			state_type = "jump";
+			sprite_index = jump_sprite;
+			image_index = 4;
+			}
+        else
+            state_type = "stand";
+        timer = 0;
+        time =-1;
+        }
+}        
+
+//Agumon
+if evolution = 1{
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0;
+        sprite_index = fair2_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 32;
+        timer_speed=1;
+}
+if timer < time {
+	switch (timer){
+
+		case 9:
+			image_angle = 0;
+			blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_texture, /*Start frame*/ 0, /*Apex Frame*/ 4, /*End frame*/ 8, /*CCW*/ 0, /*girth*/ 12, 15);
+			blur.image_index = 1;
+			blur.index = 4;
+			blur.start_index = 2;
+			blur.h_squish = -6.5;// *blur.push_x = -2 * (1-facing*2);
+			blur.push_x = 6 * (1-facing*2);
+			blur.push_y = 6;
+			break;
+		case 11:
+		case 12:
+			blur.index += 0.33;
+			break;
+		case 13: 
+			blur.image_index = 3;
+			blur.index = 5;
+			break;
+		case 14: case 15:
+			blur.index += 0.33;
+			break;
+		case 16:
+			blur.image_index = 3;
+			blur.index = 6;
+			blur.start_index += 1;
+			break;
+		case 17: case 18: case 19:
+			blur.index += 0.25;
+			break;
+		case 20:
+			blur.image_index = 4;
+			blur.index = 7;
+			blur.start_index += 1;
+			break;
+		case 21:
+			blur.image_index = 4;
+			blur.index = 8;
+			break;
+		case 23:
+			blur.image_index = 5;
+			break;
+		case 24:
+			with (blur) instance_destroy(); 
+			break;
+	}
+switch ( timer )
+{
+                case 4: image_index = 1; break;
+                //case 6: image_angle = -10+facing*20; break;
+                case 7: 
+					image_index = 2; image_angle = 0; 
+				
+					break;
+                case 9: image_angle = -10+facing*20; break;
+                case 10: image_index = 3; image_angle = 0; break;
+                case 12: image_angle = -10+facing*20;  break;
+		case 13: image_index = 4; image_angle = 0; break;
+		case 16: image_index = 5; break; //hitbox start 
+		case 20: image_index = 6; break;
+                case 24: image_index = 7; break;
+}
+             state_type = "air_attack";
+if timer = 16 {
+               sound_play(attack_sound2);
+                sound_play(choose(attack_voice4,attack_voice5,attack_voice6));
+                create_hitbox(15,20 + facing*140,6.5,4.5,35,12,kick3,obj_spark_hit3,1.4,1.3,33,35,self.id,8,4);
+                hitbox.hit_stun = 7
+                hitbox.shake_ampl = 1.3
+                }
+            if timer = 20 {
+                hitbox.dir = 310-facing*80;
+                hitbox.hit_stun = 12
+                hitbox.kbg = 7.8*size;
+                hitbox.bkb = 4.7*size;
+                hitbox.hitbox_x = 33-facing*66
+                hitbox.hitbox_y = 17 
+                hitbox.image_xscale = 1.4
+                hitbox.image_yscale = 1.3
+                }
+            if timer < 20 && attack_success = 1 {
+            attack_success = 0
+            }
+            if timer > 20 && attack_success = 1 {
+            vspeed = -2;
+            }
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=10; 
+                hspeed = 0; }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if ( air > 0 )
+		{
+        state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 3;
+		}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+} 

@@ -1,0 +1,255 @@
+push = 1;
+no_clash = 1
+proj_destroy = -1;
+absorb = 0;
+absorb2 = 0;
+crash = attacker
+priority = 5
+  if hp <= 0 {
+  hit = 1
+  hp = 35
+  }
+  if hp < 15
+  hp += 1
+
+if ( launched )
+  {
+  with spark1 instance_destroy()
+  with spark2 instance_destroy()
+  if pushed > 2
+	pushed += 1
+  if pushed >= 25
+  pushed = 0
+  moving_object = 1;
+  vspeed += 0.25;
+  image_index = kind;
+  if ( vspeed >= 0 )
+  if ( on_floor || on_platform )
+    {
+		if ( kind > 0 )
+		{
+		hit_attacker = 1;
+		}
+    vspeed = 0;
+    hspeed *= 0.9;
+var o;
+var c;
+var c_n;
+c[0] = noone;
+c_n = 0;
+for ( i = 0 ; i < 64 ; i += 1 )
+  {
+  o = instance_place ( x , y , projectile_box );
+  if ( !instance_exists ( o ) )
+    break;
+  
+  if ( o.no_clash == 0 && o.hit < 2 && o.priority < 5 && o.push = 0 && (o.dir != 361))
+    {
+    with ( o )
+	{
+	hitbox_hitspark_stun ( self.id , x , y );
+	hit = 2
+	}
+	hit = 1
+    }
+  else if o.push = 0
+  hp -= 13
+  if o.push = 1 && pushed = 0 {
+	if o.x < x
+	pushed = 1
+	if o.x > x
+	pushed = 2
+	hit = 0
+	}  
+  c[c_n] = o;
+  c_n += 1;
+  }
+    if place_meeting (x,y,attack_box)
+	a = instance_nearest(x,y,attack_box)
+    if instance_exists(a) {
+	if a.whirl = 1 && a.attacker = crash {
+	whirl = 1
+	xtemp = 0
+	xswitch = 0
+	ytemp = 0
+	x = crash.x
+	y = crash.y
+	launched = 0
+	}
+    else if a.push = 1 && pushed = 0 {
+	if a.x < x
+	pushed = 1
+	if a.x > x
+	pushed = 2
+	}
+    else if instance_exists(a) && a.push = 0 && a.priority < 5 && a.no_clash = 0 && a.dir != 361 && a.hit < 2
+	hit = 1
+    else if a.push = 0
+    hp -= 10
+}
+    if pushed = 1 {
+    hspeed += 11
+    pushed = 3
+	hit = 0;
+    }
+    if pushed = 2 {
+    hspeed -= 11
+    pushed = 3
+	hit = 0;
+    }
+    }
+if ( kind = 0 && speed > -0.2 && speed < 0.2 && pushed = 0 && ( on_floor || on_platform ) )
+{
+	if ( place_meeting (x,y,attack_box) || place_meeting (x,y,projectile_box) )
+	{
+	hit = 1;
+	}
+	else
+	{
+	hit = 2;
+	}
+}
+
+}
+  if ( whirl )
+  {
+  if !instance_exists(spark1) {
+                spark1 = instance_create(x,y-10,obj_spark)
+                spark1.sprite_index = crash.wind_sprite
+                spark1.image_xscale = size*0.3
+                spark1.image_yscale = size*0.3
+                spark1.depth = depth - 1
+                spark1.image_speed = 0.5
+                spark1.alarm[0] = 30
+	}
+  if !instance_exists(spark2) {
+                spark2 = instance_create(x,y-10,obj_spark)
+                spark2.sprite_index = crash.wind_sprite
+                spark2.image_xscale = size*0.3
+                spark2.image_yscale = size*0.3
+                spark2.depth = depth + 1
+                spark2.image_speed = 0.5
+                spark2.alarm[0] = 10
+		spark2.image_angle = 90
+	}
+  hit = 0;
+  on_floor = 0;
+  on_platform = 0;
+  moving_object = 0;
+  hit_attacker = 0;
+  if xswitch = 0 || xswitch = 2
+  depth = 3
+  else
+  depth = -3
+  if xswitch = 0 && ((attacker.facing = 0 && x < (attacker.x + 10)) || (attacker.facing = 1 && x > (attacker.x - 10))) {
+  xtemp += 3-attacker.facing*6
+  x = attacker.x + xtemp*size
+  }
+  else if xswitch = 0 && ((attacker.facing = 0 && x < (attacker.x + 15)) || (attacker.facing = 1 && x > (attacker.x - 15))) {
+  xtemp += 1-attacker.facing*2
+  x = attacker.x + xtemp*size
+  }
+  else if xswitch = 0 && ((attacker.facing = 0 && x >= (attacker.x + 15)) || (attacker.facing = 1 && x <= (attacker.x - 15))) {
+  xswitch = 1
+  xtemp = 0
+  }
+  else if xswitch = 1 && ((attacker.facing = 0 && x > (attacker.x - 10)) || (attacker.facing = 1 && x < (attacker.x + 10))) {
+  xtemp -= 3-attacker.facing*6
+  x = attacker.x + xtemp*size
+  }
+  else if xswitch = 1 && ((attacker.facing = 0 && x > (attacker.x - 15)) || (attacker.facing = 1 && x < (attacker.x + 15))) {
+  xtemp -= 1-attacker.facing*2
+  x = attacker.x + xtemp*size
+  }
+  else if xswitch = 1 && ((attacker.facing = 0 && x <= (attacker.x - 15)) || (attacker.facing = 1 && x >= (attacker.x + 15))) {
+  xswitch = 2
+  xtemp = 0
+  }
+  else if xswitch = 2 && ((attacker.facing = 0 && x < (attacker.x + 10)) || (attacker.facing = 1 && x > (attacker.x - 10))) {
+  xtemp += 3-attacker.facing*6
+  x = attacker.x + xtemp*size
+  }
+  else if xswitch = 2 && ((attacker.facing = 0 && x < (attacker.x + 15)) || (attacker.facing = 1 && x > (attacker.x - 15))) {
+  xtemp += 1-attacker.facing*2
+  x = attacker.x + xtemp*size
+  }
+  else if xswitch = 2 && ((attacker.facing = 0 && x >= (attacker.x + 15)) || (attacker.facing = 1 && x <= (attacker.x - 15))) {
+  hspeed = 6-attacker.facing*12
+  vspeed = -2
+  launched = 1
+  whirl = 0
+  }
+  if ytemp < 25 {
+  y -= 1
+  ytemp += 1
+  }
+  spark1.x = x
+  spark1.y = y-10
+  spark2.x = x
+  spark2.y = y-10
+  }
+  if launched || whirl || pushed {
+  if ( kind > 2 )
+    {
+    if timer < 20
+	hit = 2
+    if ( timer == 20 ) hit = 0;
+    if ( timer mod 10 < 2 )
+      image_blend = c_red;
+      else
+      image_blend = c_white;
+    if ( timer == 67 ) kind = 4;
+    if ( timer == 144 ) kind = 3;
+    if ( timer == 195 || hit == 1 )
+      {
+      if ( hit == 1 )
+        {
+        FMODInstanceStop ( handle );
+        sound_play ( attacker.tnt_boom_sound );
+        }
+      screen_shake ( 4 , -10 );
+      spark = instance_create ( x , y - 10 , obj_spark_explode2 );
+      spark.image_xscale *= 2;
+      spark.image_yscale *= 2;
+      spark.image_blend = merge_color ( merge_color ( c_red , c_ltgray , .5 ) , c_white , .5 );
+      create_projectile ( 12 , 362 , 7.8 , 6 , 70 , 10 , -1 , obj_spark_fire1 , 2 , 2 , 0 , 10 , attacker.id , 2 , no_script );
+      proj.hit_attacker = 1;
+      instance_destroy();
+      }
+    exit;
+    }
+  if ( hit == 1 )
+    {
+    if ( kind == 0 )
+      {
+      spark = instance_create ( x , y - 10 , obj_spark_hit1 );
+      spark.image_xscale *= 1.5;
+      spark.image_yscale *= 1.5;
+      sound_play ( attacker.crate_break_sound );
+      create_projectile ( 6 , 362 , 7.7 , 0 , 25 , 7 , kick1 , obj_spark_hit1 , 1.3 , 1.3 , 0 , 10 , attacker.id , 2 , no_script );
+      }
+    if ( kind == 1 )
+      {
+      sound_play ( attacker.nitro_explode_sound );
+      screen_shake ( 16 , -10 );
+      spark = instance_create ( x , y - 10 , obj_spark_explode2 );
+      spark.image_xscale *= 2.4;
+      spark.image_yscale *= 2.4;
+      spark.image_blend = merge_color ( merge_color ( c_lime , c_ltgray , .5 ) , c_white , .5 );
+      create_projectile ( 16 , 362 , 9 , 6.7 , 80 , 12 , -1 , obj_spark_fire1 , 2 , 2 , 0 , 10 , attacker.id , 2 , no_script );
+      proj.hit_attacker = 1;
+      }
+    if ( kind == 2 )
+      {
+      kind = 5;
+      handle = sound_play ( attacker.tnt_explode_sound );
+      timer = 0;
+      time = 200;
+      hit = 2;
+      create_projectile ( 0 , 362 , 6 , 0 , 0 , 1 , -1 , -1 , 1.3 , 1.3 , 0 , 10 , attacker.id , 2 , no_script );
+      proj.hit_attacker = 1;
+      exit;
+      }
+    instance_destroy();
+    }
+  }

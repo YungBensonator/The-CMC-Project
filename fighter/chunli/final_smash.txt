@@ -1,0 +1,119 @@
+if state_type = "stand" || state_type = "run" || state_type = "shielding" || state_type = "crouch" || (attack_type = "b" && air = 0) {
+        hspeed = 0;
+        size = csize
+        ex = 1
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        smash_power = 0
+        smash = 0
+        image_speed = 0.3; 
+        sprite_index = b_sprite;
+        image_index=0;
+        timer = 0;
+        time = 121;
+        intangible = 1;
+        final_smashes+=1
+        sound_play(ultra_sound)
+        attack_success = 0
+        /*
+        bg = instance_create(camera.x,camera.y,obj_spark) 
+        bg.sprite_index = superbg_sprite
+        bg.image_speed = .75
+        bg.snap = -1
+        bg.depth = 1
+        bg.image_xscale = view_wview[0]/240
+        bg.image_yscale = view_hview[0]/180
+        */
+        spark = instance_create(x-9+facing*18,y-20,obj_spark)
+        spark.sprite_index = spark_sprite;
+        spark.image_xscale *= size*0.7
+        spark.image_yscale *= size*0.7
+        air_move=0
+        camera.following_state = number
+        background_blend = c_gray
+        sound_play(super1_voice)
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 26
+}
+if timer < time {
+	if timer > 1
+	sftemp_timer = 0
+    if timer<40
+        speed = 0
+    if timer = 5
+        image_speed = 0
+    if timer = 12
+        image_speed = 0.35
+    if timer = 26 {
+        sound_play(super1_voice2)
+        camera.following_state = 0
+	spark3 = instance_create(x,y,obj_spark);
+	spark3.sprite_index = fs_effect_sprite;
+	spark3.image_index = 0
+	spark3.image_speed = 1
+	spark3.depth = -2
+	spark3.x = x+34*(1-facing*2);
+	spark3.y = y-28;
+	spark3.image_xscale = 0.8;
+	spark3.image_yscale = 0.8;
+	spark3.image_alpha = 0.8;
+	image_speed = 0;
+    }
+    if timer = 30 {
+        //shaker = instance_create(0,0,obj_bloomer)
+        //shaker.b = 3
+        camera.following_state = 0
+        background_blend = c_white
+        duster = instance_create(x-9+facing*18,y,obj_dust_effect);
+        duster.facing = facing; 
+        sound_play(super1_sound)
+        spark = instance_create(x,y-1*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.8*size
+        spark.image_yscale *= 0.26*size
+        spark.image_blend = c_aqua
+        spark2 = instance_create(x,y,obj_spark_shockwave)
+        spark2.image_xscale *= 0.9*size
+        spark2.image_yscale *= 0.3*size
+        spark2.image_blend = c_aqua
+        //create_hitbox(2,80+facing*20,2,0,4,2,sf_shell,obj_spark_special2,3,2.35,23,20,self.id,1,5); 
+        //hitbox.di = 0.05
+        //hitbox.hit_stun = 3
+        //hitbox.hitlag_diff = round(4/size)
+        image_speed = 0.1
+    }
+    if (timer >= 30 && frac((timer+1)/2)=0) && timer < 76 {
+        create_hitbox(2,85+facing*10,1.25,0,1,2,sf_shell,obj_spark_special2,3.2,2.5,34,22,self.id,1,6); 
+        hitbox.di = 0
+        hitbox.hit_stun = 3
+        //hitbox.hitlag_diff = 2
+	if spark3.image_index >= 9
+	spark3.image_index = 5
+    }
+	if timer = 64
+	image_speed = 0
+    if timer = 76 {
+        create_hitbox(6,25+facing*130,7.2,7.9,-1,4,sf_shell,obj_spark_special2,3.2,2.5,34,22,self.id,1,6); 
+        hitbox.di = 0.5
+        hitbox.hit_stun = 4
+        hitbox.bloom = 5
+	image_speed = 0.1
+	spark3.image_speed = 0.4
+	spark3.image_index = 9.3
+    }
+    if image_index >= image_number - image_speed 
+        image_speed = 0
+    }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "fall";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    background_blend =c_white
+    ex = 0
+	intangible = 0
+}
+        

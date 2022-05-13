@@ -1,0 +1,248 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )and !instance_exists(gaia)
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "final_smash";
+  time = 40;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  //sprite_index = stand_sprite;
+  //image_index = 0;
+  //image_speed = 0;
+  //timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  effect_create_below ( ef_ellipse , x , y , 1 , c_yellow );
+  target1 = -99;
+  special = 1
+  
+  if air = 0
+  vspeed = -6.5
+  
+  }
+
+if timer < time{
+	
+	if timer >= 12{
+		air_move = 0
+		hspeed = 0
+	}
+	
+	if air > 0 and timer >= 12 and timer <= 21{
+		vspeed = 0
+		gravity = 0
+		gravity_lock = 1
+	}
+	
+	/*
+	
+	
+	if timer < 30 and timer mod 5
+	flashing = 1
+	else
+	flashing = 0
+    */
+	
+	if timer = 12{
+	    sound_play(downb_sound);
+		temp = -5
+		if facing = 1
+		temp = -6
+	    gaia = create_projectile(3,90+facing*0,00,00,20,21,kick2,obj_spark_hit1,0,0,temp,0,self.id,90,char_custom2);
+	    gaia.sprite_index = gaia_summon_sprite
+		gaia.image_index = 0
+		gaia.image_speed = 0.2
+		gaia.image_xscale = image_xscale
+		gaia.image_yscale = image_yscale
+		gaia.state = 0 //moving
+		gaia.image_alpha = 0
+		gaia.weight_kb = 1
+		gaia.hit = 2
+		gaia.sdi = 0
+		gaia.di = 0
+    }
+	if timer = 21
+		sound_play(attack_sound4);
+	if timer >= 21{
+		image_index = 0
+		image_speed = 0;
+		sprite_index = downb_sprite
+		vspeed = 9.5
+		
+		if timer = 30 and air != 0{
+			timer = 24
+		}
+		
+		if air = 0 and timer <= 30
+		timer = 31
+		
+		
+		if timer = 31{
+			gaia.alpha_add = -0.05
+			create_hitbox(69,angle_correct(69),9.5,5.5,20,15,kick3,obj_spark_hit1,4.1,0.2,-10,05,self.id,3,4);
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+if ( timer >= time - 1 )
+  {
+with (gaia){instance_destroy()}
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }
+
+exit;
+if ( !debugging ) exit;
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding"
+{
+  hspeed = 0;
+  size = csize;
+  air_move = 0;
+  grab_edge = 0;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  sprite_index = grab_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 30;
+  temp = 0;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  speed = 0;
+  background_blend = c_gray;
+  smash_power = 0;
+  effect_create_below ( ef_ellipse , x , y , 1 , c_yellow );
+  image_blend = c_white;
+  target1 = -99;
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 13: image_index = 4; break;
+  }
+  intangible = 1;
+  if ( timer = 9 )
+  {
+    sound_play ( swingsnd5 );
+    sound_play ( move_sound );
+    create_hitbox ( 10 , 80 + facing * 20 , 6.5 , 0 , -1 , 5 , kick2 , obj_spark_special2 , 1.2 , 1.1 , 12 , 18 , self.id , 4 , 6 )
+    hitbox.armor_break = 1;
+    hitbox.hitonce = 1;
+    hitbox.shake_kb = size * 2
+  }
+  if ( timer > 9 && timer <= 13 && attack_success && instance_exists ( target ) )
+  {
+    y -= 5;
+    temp = 1;
+    time = 530;
+    timer = 100;
+    image_index = 4;
+    camera.following_state = number;
+    instance_create ( target.x , target.y - 10 , obj_grab_spark );
+    target.state_type = "air_flinch";
+    target.hard_hit = 0;
+    target.attack_type = "none";
+    target.timer = 0;
+    target.time = 555;
+    target.timer_speed = 0;
+    target.alarm[0] = 555;
+    target1 = target;
+    target1.facing = 1 - facing;
+  }
+  if ( timer < 30 )
+    speed = 0;
+  gravity_lock = 1;
+  vspeed = 0;
+  if ( timer >= 110 && timer <= 499 && instance_exists ( target1 ) )
+  {
+    target1.x = x + 22 * ( 1 - facing * 2 ) * size;
+    target1.y = y;
+    target1.alarm[0] = 400;
+    target1.state_type = "air_flinch";
+    if ( timer < 190 || timer > 495 )
+      background_blend = c_dkgray
+    target = target1;
+  }
+  if ( timer = 110 )
+  {
+    spark = instance_create ( 0 , 0 , obj_freeze );
+    spark.alarm[0] = 390;
+    spark.dontpause = self.id;
+    cinematic = instance_create ( x , y , obj_custom_gfx );
+    cinematic.keepmain = keepmain;
+    cinematic.draw_script = char_custom3;
+    cinematic.parent = self.id;
+    cinematic.depth = -15;
+  }
+  if ( ( timer >= 210 && timer < 340 ) && timer mod 15 == 0 )
+    FMODSoundPlay ( choose ( punch1 , punch2 , punch3 , kick1 , kick2 , kick3 ) );
+  if ( timer = 500 )
+  {
+    shaker= instance_create ( x , y , obj_shakescreen3 )
+    shaker.ampl = 7;
+    shaker.xampl = 0;
+    shaker.time = 26;
+    shaker = instance_create ( x , y , obj_epicflash );
+    shaker.front[number-1] = 1;
+    shaker.front[target1.number-1] = 1;
+    spark = instance_create ( target.x , target.y - 15 * size , obj_spark_shockwave );
+    spark.image_xscale *= 1.8 * size;
+    spark.image_yscale *= 1.8 * size;
+    spark.image_alpha = 0.75;
+    spark.depth = depth - 1;
+    spark = instance_create ( target.x , target.y - 15 * size , obj_spark_shockwave );
+    spark.image_xscale *= 2.1 * size;
+    spark.image_yscale *= 2.1 * size;
+    spark.image_blend = c_red;
+    spark.image_alpha = 0.75;
+    spark.depth = depth - 1;
+    target1.alarm[0] = -1;
+    target1.timer_speed = 1;
+    target = target1;
+    create_hitbox ( 30 , 30 + facing * 120 , 8.5 , 12.8 , -1 , round ( ( 32 / size ) / hitlag_constant ) , heavy_spike , obj_spark_special2 , 2 , 2 , 0 , 20 , self.id , 1 );
+    hitbox.shake_ampl = 0;
+    if instance_exists ( target1 )
+      target1.gethit = 0;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  smash_power = 0
+  background_blend = c_white
+  intangible = 0;
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  grab_edge = 1;
+  can_die = 1;
+  camera.following_state = 0;
+}

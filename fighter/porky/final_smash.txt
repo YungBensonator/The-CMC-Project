@@ -1,0 +1,263 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" || state_type = "crouch" {
+        size = csize
+        hspeed = 0;
+        air_move=0
+        grab_edge = 0
+        image_angle = 0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.3
+        sprite_index = final_smash_start_sprite
+        image_index=0
+        timer = 0
+        time = 760
+        temp = 0
+        timer_speed=1
+        intangible = 1
+        final_smashes+=1
+        speed = 0
+        sound_play(final_smash_voice1)
+        sound_play(super)
+        smash_power = 0
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        image_blend = c_white
+        tank_state = "fall"
+        temp_fall_speed = 4.5
+        smash_power = 0
+        //camera.following_state = number
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 25
+        attack_time = 25
+        last_crush = 0;
+}
+hover = 0
+    if temp = 0 {
+    speed = 0
+    gravity_lock = 1;
+    }
+     if timer = 40 {
+     //camera.following_state = 0
+     temp=0
+     image_speed = 0
+     vspeed = -1
+     if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = self.id
+        FMODSoundPlay(crowd_launch2)
+     }
+     temp = 1
+        sprite_index = final_smash_jump_sprite
+        vspeed = 0
+        can_die = 1 
+        timer = 41
+        camera.following_state = 0
+     //create_hitbox(7,75+facing*30,7.45,4,-1,7,punch3,obj_spark_hit3,1.4,0.9,2,20,self.id,30,6)
+     }
+     if temp = 1 {
+            if y < 0
+                can_die = 0
+            else can_die = 1
+            if ai = 1  {
+                if offstage = 0 {
+                    if enemy.x >= x {
+                        moveright=1
+                        moveleft = 0 }
+                    else { moveleft = 1
+                        moveright = 0 }
+                    if enemy.y > y+2 {
+                        movedown = 1
+                        moveup = 0 }
+                    if enemy.y < y-38 {
+                        moveup = 1
+                        movedown = 0 }
+                    if abs(y-50-enemy.y)<30 && abs(enemy.x-x) > 50 && random(100) > 78
+                        attacking = 1
+                    }
+            if offstage = 1 {
+                //movedown = 0
+                    moveup = 1
+                if x < room_width/2 {
+                    moveright = 1
+                    moveleft = 0  }
+                else {
+                    moveleft = 1
+                    moveright =0 }
+                }
+        }
+        if timer = 75
+            sound_play(final_smash_voice2)
+        if attack_success = 1 && random(30)>24 && distance_to_object(target) > 29
+            attack_success=0
+        if attack_success=0 && speed >= 0.8 && vspeed > -1 {
+                attacks-=1
+                if instance_exists(hitbox)
+                with hitbox instance_destroy()
+                create_hitbox(12 + (air>0)*3,25+facing*130,6.85+(air>0)*0.65,6.2,-1,7 + (air>0)*2,kick3,obj_spark_hit2,2,2.5,3,26,self.id,3,6);
+        }
+        if movedown = 1 && vspeed < temp_fall_speed
+            vspeed+=0.3
+         if (movejump=1 || moveup = 1) && (tank_state = "ground")  {
+            vspeed-=0.5
+            sub_timer = 0
+            tank_state = "jump"
+            sound_play(jump_sound)  }
+         if tank_state = "jump" || tank_state = "fall" {
+          if moveright = 1 && hspeed < 1
+            hspeed+=0.175
+          if moveleft = 1 && hspeed > -1
+            hspeed -=0.175
+          if hspeed > 0.4 facing = 0
+          else if hspeed < -0.4 facing = 1
+          }
+          if tank_state = "ground" {
+          sprite_index = final_smash_walk_sprite
+          if moveright = 1 && hspeed < 1.2
+            hspeed+=0.4
+          if moveleft = 1 && hspeed > -1.2
+            hspeed -=0.4
+          if hspeed > 0.15 facing = 0
+          else if hspeed < -0.15 facing = 1
+          else sprite_index = final_smash_stand_sprite
+          }
+          
+          
+         if ( tank_state == "attack" )
+           {
+           //sub_timer = 0;
+           hspeed = 0;
+           sprite_index = final_smash_attack_sprite;
+           gravity = 0.3
+           sub_timer+=1;
+           if ( sub_timer == 32 )
+             {
+             sound_play ( swingsnd3 );
+             create_hitbox(20,42 + facing * 96,6,7.9,12,15,punch3,obj_spark_hit3,2,1,30,32,self.id,20,6);
+             hand = hitbox;
+             }
+           if ( sub_timer == 36 )
+             {
+             hand . hitbox_x += 15 * ( 1 - facing - facing );
+             hand . image_xscale = 3.1;
+             }
+           if ( sub_timer == 40 )
+             {
+             hand . hitbox_x += 15 * ( 1 - facing - facing );
+             hand . image_xscale = 3.7;
+             }
+           if ( sub_timer == 44 )
+             {
+             hand . hitbox_x -= 15 * ( 1 - facing - facing );
+             hand . image_xscale = 3.1;
+             }
+           if ( sub_timer == 48 )
+             {
+             hand . hitbox_x -= 15 * ( 1 - facing - facing );
+             hand . image_xscale = 2;
+             }
+           if ( sub_timer == 58 )
+             {
+             tank_state = "ground";
+             }
+           }
+           
+           
+          //if speed > 0.3 speed -= 0.2
+          if tank_state = "ground" {
+                image_speed = 0.125
+                sprite_index = final_smash_walk_sprite
+                gravity_lock = 1;
+                if hspeed = 0
+                image_index = 0
+                if image_index = 4 || image_index = 11
+                sound_play(step_sound)
+                vspeed = 0
+                if ( attacking )
+                  {
+                  tank_state = "attack";
+                  sub_timer = 0;
+                  sprite_index = final_smash_attack_sprite;
+                  image_speed = 0.25;
+                  image_index = 0;
+                  attacking = 0;
+                  }
+                if air = 1 || !collision_rectangle(x-35,y-1,x+35,y+1,obj_slope_left2,1,1) && !collision_rectangle(x-35,y-1,x+35,y+1,obj_slope_right2,1,1) && !collision_rectangle(x-35,y-1,x+35,y+1,obj_floor,1,1) && (!collision_rectangle(x-35,y-1,x+35,y+1,obj_platform,1,1) || movedown)
+                    tank_state = "fall"
+            }     
+         if tank_state = "fall" {
+            sub_timer = 0
+            gravity = 0.3
+            image_speed = 0
+            image_index = 4
+            sprite_index = final_smash_jump_sprite
+            if vspeed > 4.5
+            vspeed = 4.5
+            last_crush += 1;
+            if (air = 0 || collision_rectangle(x-35,y-1,x+35,y+1,obj_slope_left2,1,1) || collision_rectangle(x-35,y-1,x+35,y+1,obj_slope_right2,1,1) || collision_rectangle(x-35,y-1,x+35,y+1,obj_floor,1,1) || (collision_rectangle(x-35,y-1,x+35,y+1,obj_platform,1,1) && dropthrough=0)) {
+                    if ( last_crush > 3 )
+                      {
+                      sound_play(step_sound)
+                      effect_create_above(ef_smokeup,x-20,y,1,c_ltgray)
+                      effect_create_above(ef_smokeup,x+20,y,1,c_ltgray)
+                      instance_create(0,0,obj_shakescreen3)
+                      create_hitbox(10,170 - facing * 160,3,3.2,6,2,kick2,obj_spark_hit2,3,1,-48,0,self.id,5,5);
+                      create_hitbox2(10,10 + facing * 160,3,3.2,6,2,kick2,obj_spark_hit2,3,1,48,0,self.id,5,5);
+                      last_crush = 0;
+                      }
+                    tank_state = "ground"
+                    /*if vspeed > 1 {
+                        sound_play(step_sound)
+                        show_message ( " a " );
+                        effect_create_above(ef_smokeup,x-20,y,1,c_ltgray)
+                        effect_create_above(ef_smokeup,x+20,y,1,c_ltgray)
+                        instance_create(0,0,obj_shakescreen3)
+                        create_hitbox(10,170 - facing * 160,3,3.2,6,2,kick2,obj_spark_hit2,3,1,-48,0,self.id,5,5);
+                        create_hitbox2(10,10 + facing * 160,3,3.2,6,2,kick2,obj_spark_hit2,3,1,48,0,self.id,5,5);
+                    }*/
+                    vspeed = 0 }   
+         }
+         if tank_state = "jump" {
+            if sub_timer <= 2
+            vspeed = -7
+            else
+            vspeed += 0.3
+            sub_timer+=1
+            sprite_index = final_smash_jump_sprite
+            image_speed = 0.25
+            if image_index >= 2.8 {
+                tank_state = "fall"
+            }
+            if moveup = 0 && movejump = 0 && vspeed > -3
+            tank_state = "fall"
+         }
+    }
+    if movedown
+        dropthrough = 6
+    if timer = 720 {
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        temp = 0
+        speed = 0
+        sprite_index = final_smash_start_sprite;
+        speed = 0
+        image_index = image_number
+        image_speed = -0.3   
+        y-=30
+        image_index = 0
+        image_speed =-0.25
+        air = 1 
+        tank_state = "none"
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    grab_edge=1
+    can_die=1
+    }

@@ -1,0 +1,103 @@
+if state_type = "stand" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "jab";
+        image_speed = 0.4;
+        sprite_index = jab_sprite;
+        image_index=0.8;
+        timer = 0;
+        time = 22;
+        timer_speed=1;
+}
+state_type = "attack";
+if timer = 3 {
+    sound_play(attack_sound1);
+    create_hitbox(2,90,2,0,4,5,punch1,obj_spark_hit1,0.6,0.4,9,14,self.id,3,1); 
+    hitbox.di = 0.3
+    hitbox.hit_stun = 2
+	var burst;
+    //78, 36
+	burst = instance_create(place_x(46)+x,place_y(27)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+}
+if timer = 11
+    image_speed = 0
+if (timer = 9 || timer = 59 || timer = 90) && ai = 1 && (random(10)>1 || timer = 90)
+    attacking = 1
+if timer >= 8 && timer < 21 && attacking = 1 {
+    time = 75
+    timer = 50
+    image_index = 5.8
+    image_speed = 0.3
+    sprite_index = jab_sprite;
+}
+if timer = 53  {
+    sound_play(attack_sound1);
+    create_hitbox(2,90,1.45,0,3,5,punch1,obj_spark_hit1,0.6,0.4,10,15,self.id,4,1);
+    hitbox.di = 0.3
+    hitbox.hit_stun = 2
+	var burst;
+    //78, 36
+	burst = instance_create(place_x(46)+x,place_y(27)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+}
+if timer = 59
+    image_speed = 0
+if timer >= 58 && timer < 67 && attacking = 1 {
+    time = 105
+    timer = 80
+    image_index = 10.8
+    image_speed = 0.4
+    sprite_index = jab_sprite;
+    if !collision_point(x+4-facing*8,y-1,obj_wall,0,1)
+        x+= 3-facing*6
+}
+if timer = 86 {
+    sound_play(attack_sound2);
+    create_hitbox(3,70+facing*40,3,0,6,6,kick2,obj_spark_hit2,0.7,0.4,13,12,self.id,4,2);
+    hitbox.hit_stun = 1;
+	var burst;
+    //78, 36
+	burst = instance_create(place_x(33)+x,place_y(28)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+}
+if timer >= 89 && timer < 93 && attacking = 1 {
+    time = 133
+    timer = 110
+    image_index = 15.4
+    image_speed = 0.4
+    sprite_index = jab_sprite;
+    if !collision_point(x+4-facing*8,y-1,obj_wall,0,1)
+        x+= 3-facing*6
+}
+if timer = 117 {
+    attacking = 0
+    play_attack_voice();
+    sound_play(attack_sound3);
+    create_hitbox(3,20+facing*140,5.5,3.5,6,6,kick2,obj_spark_hit2,0.7,0.4,14,14,self.id,4,2);
+    image_speed = 0.35
+	var burst;
+    //78, 36
+	burst = instance_create(place_x(33)+x,place_y(25)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+}
+if timer = 91 {
+    sprite_index = crouch_sprite;
+}
+if image_index >= image_number - image_speed
+image_speed = 0 
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

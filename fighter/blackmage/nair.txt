@@ -1,0 +1,89 @@
+if state_type = "jump"
+  {
+    state_type = "air_attack";
+    attack_type = "nair";
+    sprite_index = nair_sprite;
+    image_index = 0;
+    image_speed = 0;
+    timer = 0;
+    time = 50;
+    timer_speed=1;
+	vspeed *= 0.2
+  }
+
+if ( timer < time )
+  {
+state_type = "air_attack";
+    switch ( timer )
+      {
+	case 8: image_index = 1; break;
+	case 16: image_index = 1; break;
+	case 24: image_index = 1; break;
+	case 32: image_index = 0; break;
+	case 40: image_index = 0; break;
+      }
+    
+	if timer < 28{
+		gravity = 0
+		gravity_lock = 1
+	}
+	
+	if timer = 8{
+		play_attack_voice()
+	    sound_play(tornado_sound)
+		for (i=0; i<=2; i+=1){
+		crystal_nair = create_projectile(4,40+facing*100,5,3,4,1,magic1,obj_spark_hit1,0,0,0,20,self.id,45,char_custom2);
+		crystal_nair.sprite_index = nair_sprite_eff;
+		crystal_nair.image_speed = 0.2
+		crystal_nair.image_index = choose(0,1,2)
+		crystal_nair.image_yscale = image_yscale* 0.05;
+		crystal_nair.image_xscale = crystal_nair.image_yscale;
+		crystal_nair.image_alpha = 0.9
+		crystal_nair.hit = 0
+		crystal_nair.depth = depth - 1
+		crystal_nair.facing = facing
+		crystal_nair.basedir = crystal_nair.direction
+		crystal_nair.basespeed = crystal_nair.speed
+		crystal_nair.state = "circling"
+		crystal_nair.up = 1
+		crystal_nair.alarm[0] = 45
+		if i = 0
+		crystal_nair.orbit_dir = 330
+		if i = 1
+		crystal_nair.orbit_dir = 90
+		if i = 2
+		crystal_nair.orbit_dir = 210
+		crystal_nair.distance_value = 0
+		crystal_nair.hit = 2
+		crystal_nair.kyoko = self.id
+		crystal_nair.keep_alive = 1
+		}
+	}
+
+    
+		
+    if air = 0 {
+		sound_stop(tornado_sound)
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=14; 
+	}  
+	 
+
+  }
+  
+  
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+	sound_stop(tornado_sound)
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+
+  image_index = 0;
+  timer = 0;
+  time = -1;
+}

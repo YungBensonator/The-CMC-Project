@@ -1,0 +1,42 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "uair";
+  image_speed = 0.5;
+  sprite_index = uair_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 36;
+  timer_speed = 1;
+  }
+
+if ( timer == 12 )
+  {
+  sound_play ( attack_sound1 );
+  sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+  create_hitbox( 10 , 100 - facing * 20 , 5.5 , 6 , 14 , 5 , punch3 , obj_spark_hit2 , 0.73 , 0.98 , 6 , 33 , self.id , 7 , 2 );
+  }
+  if timer = 16
+    image_speed = 0.25
+if timer = 26
+image_speed = 0
+if ( air == 0 )
+  {
+  state_type = "land";
+  attack_type = "none";
+  sprite_index = land_sprite;
+  time = 14;
+  timer = 0;
+  hspeed = 0;
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  if ( air > 0 )
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

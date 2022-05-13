@@ -1,0 +1,63 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding"  {
+    size = csize
+    sound_play(final_smash_sound1)
+    state_type = "air_attack";
+    attack_type = "final_smash";
+    image_speed = 0.2;
+    sprite_index = final_smash_sprite;
+    image_index=0;
+    timer = 1;
+    time = 222;
+    timer_speed=1;
+    intangible = 1;
+    final_smashes+=1
+    background_blend=c_ltgray
+    smash_power = 0
+    freezer  = instance_create(x,y,obj_freeze)
+    freezer.dontpause = self.id
+    freezer.alarm[0] = 55
+    instance_create(x,y-20,obj_spark_effect2);
+    air_move=0
+    //effect_create_above(ef_ring,x,y-15*size,1,c_white)
+}
+speed=0
+gravity_lock = 1;
+intangible = 1
+if timer = 3 {
+    sound_play(final_smash_voice);
+    //effect_create_above(ef_ring,x,y-15*size,0,c_white)
+}
+if timer = 9
+    image_speed = 0
+if timer = 59 {
+    image_speed = 0.175
+    if global.crowdcheering <= 0 {
+        global.crowdcheering = 45
+        global.crowdtarget = self.id
+        FMODSoundPlay(crowd_launch1)
+     }
+}
+if timer = 60 || timer = 88 || timer = 75 || timer = 96 || timer = 107 || timer = 118 ||  timer = 130 ||  timer = 145 || timer = 160 || timer = 170 || timer = 180 || timer = 186 || timer = 192 || timer = 197 || timer = 202  {
+    sound_play(psi_sound3);
+    create_projectile(13,362,7.1,7.5,-1,6/size,magic4,obj_spark_shock,1.3,1.3,-60+random(120),1.2*(room_height-y),id,190,lucas_pkstarstorm);
+    proj.ness = self.id;
+    proj.sprite_index = star_sprite;
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer = 210 {
+    if air = 0
+    sprite_index = crouch_sprite
+}
+    
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}

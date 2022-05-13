@@ -1,0 +1,192 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  sound_play ( fs_sound1 );
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = jump_sprite;
+  image_index = 0;
+  timer = 1;
+  time = 62;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  fs_sticky = y;
+  fs_object = noone;
+  fs_alpha = 0;
+  fs_sting = 0;
+  fs_shoot = 0;
+  }
+
+// jumping on moskito
+
+gravity_lock = 1;
+
+if ( timer < 30 )
+  {
+  fs_alpha = min ( 1 , fs_alpha + 0.05 );
+  image_index = floor ( timer / 3 );
+  if ( image_index > 5 ) image_index = 5;
+  y = fs_sticky + lengthdir_y ( 64 , timer * 5 );
+  if ( instance_exists ( fs_object ) ) with ( fs_object ) instance_destroy();
+  fs_object = instance_create ( x + lengthdir_x ( 96 , 90 + timer * 6 ) * ( 1 - facing * 2 ) ,
+    fs_sticky - 160 + lengthdir_y ( 136 , 90 + timer * 6 ) , obj_spark );
+  fs_object . sprite_index = moskito_sprite;
+  fs_object . number = number;
+  fs_object . image_index = timer;
+  fs_object . image_speed = 0;
+  fs_object . image_alpha = fs_alpha;
+  fs_object . image_xscale = size * ( 1 - facing * 2 );
+  fs_object . image_yscale = size;
+  fs_object . depth = depth + 1;
+  exit;
+  }
+if ( timer == 30 )
+  {
+  fs_alpha = 600;
+  attacking = 0;
+  special = 0;
+  }
+if ( timer >= 30 && timer < 60 )
+  {
+  fs_alpha -= 1;
+
+  if ( ai )
+    {
+    instance_deactivate_object ( self.id );
+    target = instance_nearest ( x , y , player );
+    instance_activate_object ( self.id );
+    
+    attacking = 1;
+    special = 0;
+    if ( distance_to_object ( target ) < 70 ) special = 1;
+    
+    moveright = 0; moveleft = 0; moveup = 0; movedown = 0;
+    if ( x < target.x ) moveright = 1;
+    if ( x > target.x ) moveleft = 1;
+    if ( y < target.y + 48 ) movedown = 1;
+    if ( y > target.y + 48 ) moveup = 1;
+    }
+
+  if ( fs_sting <= 0 && !fs_shoot )
+    sprite_index = fs_idle_sprite;
+  if ( fs_sting != 0 )
+    {
+    fs_sting += 1;
+    if ( fs_sting > 0 )
+      sprite_index = fs_sting_sprite;
+      image_index = floor ( fs_sting * 0.25 );
+    }
+  if ( fs_shoot )
+    {
+    fs_shoot += 1;
+    if ( fs_shoot < 12 )
+      {
+      sprite_index = fs_shoot_sprite;
+      image_index = floor ( fs_shoot * 0.25 );
+      }
+      else
+      {
+      sprite_index = fs_idle_sprite;
+      }
+    }
+  image_speed = 0.5;
+  if ( abs ( hspeed ) > 0.25 )
+    hspeed = sign ( hspeed ) * ( abs ( hspeed ) - 0.25 );
+    else
+    hspeed = 0;
+  if ( abs ( vspeed ) > 0.25 )
+    vspeed = sign ( vspeed ) * ( abs ( vspeed ) - 0.25 );
+    else
+    vspeed = 0;
+  if ( moveright && !fs_sting )
+    {
+    facing = 0;
+    hspeed = min ( 7 , hspeed + 0.5 );
+    }
+  if ( moveleft && !fs_sting )
+    {
+    facing = 1;
+    hspeed = max ( -7 , hspeed - 0.5 );
+    }
+  if ( moveup && !fs_sting )
+    {
+    vspeed = max ( -7 , vspeed - 0.5 );
+    }
+  if ( movedown && !fs_sting )
+    {
+    vspeed = min ( 7 , vspeed + 0.5 );
+    }
+  if ( fs_sting >= 28 ) fs_sting = -37;
+  if ( fs_shoot >= 16 ) fs_shoot = 0;
+  if ( fs_sting == 8 )
+    {
+    create_hitbox2( 7 , 45 + facing * 90 , 5 , 8 , 22 , 7 , punch2 , obj_spark_hit2 , 1.1 , 1.1 , 28 , 0 , self.id , 8 , 5 );
+    create_hitbox( 10 , 315 - facing * 90 , 5 , 8 , 22 , 7 , punch4 , obj_spark_hit4 , 0.85 , 0.85 , 48 , -20 , self.id , 8 , 5 );
+    }
+  if ( special && fs_sting == 0 && !fs_shoot ) 
+    {
+    sound_play ( fs_sound2 );
+    special = 0;
+    instance_deactivate_object ( self.id );
+    target = instance_nearest ( x , y , player );
+    instance_activate_object ( self.id );
+    direction = point_direction ( x , y , target.x , target.y );
+    facing = 0;
+    if ( direction > 90 && direction <= 270 ) facing = 1;
+    speed = 7;
+    fs_sting = 1;
+    }
+  if ( attacking && fs_sting <= 0 && fs_shoot == 0 )
+    {
+    sound_play ( fs_sound3 );
+    instance_create ( x + 36 * size - facing * 72 * size , y + 8 * size , obj_spark_effect );
+    create_projectile ( 3 , 361 , 0 , 0 , 6 , 3 , punch1 , obj_spark_hit1 , 0.3 , 0.3 , 36 , -8 , self.id , 120 , fsbullet_script );
+    proj . sprite_index = fs_bullet_sprite;
+	proj . use_palette = number;
+    proj . image_xscale = size * ( 1 - facing * 2 );
+    proj . image_yscale = size;
+    proj . hspeed = 6 - facing * 12;
+    proj . vspeed = 6;
+    proj . keepmain = keepmain;
+    fs_shoot = 1;
+    }
+  
+  timer = 32;
+  if ( fs_alpha <= 0 && fs_sting == 0 ) timer = 61;
+  }
+
+if ( timer >= time - 1 )
+  {
+  sound_play ( fs_sound2 );
+  if ( instance_exists ( fs_object ) ) with ( fs_object ) instance_destroy();
+  create_projectile ( 1 , 65 + facing*50 , 4 , 4 , 1 , 1 , punch2 , obj_spark_hit2 , 0 , 0 , 18 , -14 , self.id , 120 , dhd_duckaway );
+  proj . visible = 1;
+  proj . use_palette = number;
+  proj . sprite_index = moskito_sprite;
+  proj . image_xscale = size * ( 1 - facing * 2 );
+  proj . image_yscale = size;
+  proj . hit = 2;
+  proj . hspeed = 2 * ( 1 - facing * 2 );
+  proj . vspeed = 3;
+  hspeed = 0;
+  air = sign ( air );
+  vspeed = -5;
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 5;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,90 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0.2;
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 52;
+        timer_speed=1;
+        temp = 0
+        time_change = 0
+        tempmovedown = 0
+}
+        if timer < time {
+            fast_fall_temp = 0
+            fast_fall = 0
+            state_type = "air_attack";
+            if timer < 12 || vspeed < 0
+                vspeed = 0
+            hspeed = 0
+            if timer = 12 {
+                if movedown
+                    tempmovedown = 1
+                sound_play(choose(attack_voice1,attack_voice3,attack_voice4,attack_voice2));
+                sound_play(attack_sound4);
+                create_hitbox(14,270,5.45,2,20,8,slash3,obj_spark_slash3,0.4,0.8,5,3,self.id,37,3);
+                temp_fall_speed = 5.5
+            }
+            if timer = 13
+                vspeed = (fall_speed + temp_fall_speed*0.9)*size
+            if timer = 28 && !temp {
+                hitbox.damage = 11*size;
+                hitbox.shield_damage = 15;
+            }
+            if attack_success && timer <= 39 && air != 0 {
+                temp_fall_speed = 0
+                vspeed = (-3.8 + temp*0.2)*size
+                attack_success=0
+                temp += 1
+                time_change = 4 + (timer >= 23)*6
+                with hitbox { 
+                    hit = 2
+                    time += attacker.time_change
+                }
+                if timer > 16 {
+                    timer-=time_change
+                    image_index -= time_change*image_speed
+                }
+            }
+            if timer = 20 && !temp {
+                tempmovedown = movedown
+                hitbox.damage = 12*size;
+                hitbox.dir = 270
+                hitbox.bkb = 7*size;
+                hitbox.kbg = 2.5*size;
+                hitbox.shield_damage = 20;
+                hitbox.hitlag_frames = round(7*size);
+            }
+            if timer = 27
+                image_speed = 0
+            if timer >= 12 && (air = 0 || is_on_floor(self.id)) {
+                if timer < 34 { 
+                    instance_create(x,y,obj_down_impact)
+                    sound_play(dair_land_sound)
+                }
+                if timer < 41 && instance_exists(hitbox)
+                    with hitbox instance_destroy();
+                create_wind(0.8,0.6,10,10,5,0,6)
+                create_wind(0.8,0.6,-10,10,-5,0,6)
+                hspeed = 0;
+                vspeed = 0;
+                state_type="land";
+                attack_type="none";
+                sprite_index = dair_land_sprite;
+                image_index = 0;
+                image_speed = 0.11;
+                timer=0;
+                time=20 + (timer < 34)*5; }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    temp_fall_speed = 0
+}
+        

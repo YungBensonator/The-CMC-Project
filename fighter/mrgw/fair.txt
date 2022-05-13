@@ -1,0 +1,155 @@
+//Ult Start
+
+if global.gs_form[number-1] = 0
+{
+if ( state_type = "jump" )
+  {
+    vspeed -= 0.1;
+    state_type = "air_attack";
+    attack_type = "fair";
+    image_speed = 0;
+    sprite_index = fair_sprite;
+    image_index = 0;
+    timer = 0;
+    time = 35;
+    timer_speed = 1;
+    image_angle = 0;
+    play_attack_voice();
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 10: image_index = 1; break;
+      }
+    state_type = "air_attack";
+    if ( timer = 0 )
+      {
+	bomb = instance_create(x,y,obj_spark);
+	bomb.sprite_index = bomb_sprite;
+	bomb.image_xscale = 0.9 * ( 1 - facing * 2) * size;
+	bomb.image_yscale = 0.9 * size;
+	bomb.x = x - 16 * ( 1 - facing * 2) * size;
+	bomb.y = y - 17 * size;
+	bomb.image_speed = 0;
+	bomb.number = -number;
+	bomb.alarm[0] = 10;
+	bomb.depth = depth + 0.1;
+	bomb.snap = self.id;
+      }
+    if ( timer = 9 )
+      {
+	create_projectile(12,angle_correct(45),5.8,6.1,17,9,explodehit3,obj_spark_fire1,0.9,0.9,21,22,self.id,30,char_custom3)
+	proj.depth = depth + 0.1;
+	proj.use_palette = number;
+      }
+    if ( air = 0 )
+      {
+	if ( instance_exists(bomb) )
+	    with (bomb) instance_destroy();
+	if ( timer < 9 )
+	  {
+	    bomb = instance_create(x,y,obj_spark);
+	    bomb.sprite_index = bomb_sprite;
+	    bomb.image_xscale = 0.9 * ( 1 - facing * 2) * size;
+	    bomb.image_yscale = 0.9 * size;
+	    bomb.x = x + 18 * ( 1 - facing * 2) * size;
+	    bomb.y = y - 9 * size;
+	    bomb.image_speed = 0;
+	    bomb.number = -number;
+	    bomb.alarm[0] = 14;
+	    bomb.depth = depth + 0.1;
+	    bomb.snap = self.id;
+	  }
+	state_type = "land";
+	attack_type = "none";
+	sprite_index = fair_land_sprite;
+	timer = 0;
+	time = 15; 
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+      {
+	state_type = "stand";
+	sprite_index = stand_sprite;
+	image_index = 0;
+      }
+    timer = 0;
+    time = -1;
+  }
+}
+//Classic Start
+
+if global.gs_form[number-1] = 1
+{
+if ( state_type = "jump" )
+  {
+    vspeed -= 0.1;
+    state_type = "air_attack";
+    attack_type = "fair";
+    image_speed = 0;
+    sprite_index = fair_sprite2;
+    image_index = 0;
+    timer = 0;
+    time = 45;
+    timer_speed = 1;
+    image_angle = 0;
+    play_attack_voice();
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 10: image_index = 1; break;
+	case 12: image_index = 2; break;
+      }
+    state_type = "air_attack";
+    if ( timer = 10 )
+      {
+	create_hitbox(14,23+facing*134,4.4,8,17,9,punch4,obj_spark_hit3,0.85,0.6,27,17,self.id,18,2);
+	hitbox.hit_stun = 1;
+      }
+    if ( timer = 12 )
+      {
+	hitbox.damage *= 8/13;
+	hitbox.bkb *= 0.8;
+	hitbox.kbg *= 0.67;
+	hitbox.shield_damage = 15;
+	hitbox.sfx = punch3;
+	set_hitlag( hitbox , 6 );
+      }
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	sprite_index = fair_land_sprite2;
+	timer = 0;
+	time = 15; 
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if ( air > 0 )
+      {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+      }
+    else
+	state_type = "stand";
+    timer = 0;
+    time = -1;
+  }
+}

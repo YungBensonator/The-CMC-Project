@@ -1,0 +1,72 @@
+if state_type = "run" {
+	state_type = "attack";
+	attack_type = "dash_attack";
+	sprite_index = dash_attack_sprite
+	image_speed = 0.55;
+	image_index = 0.3;
+	timer = 0;
+	time = 75;
+	}
+if timer < time {
+	state_type = "attack";
+	if timer > 1 && timer < 19 {
+		hspeed = 2.5-facing*5;
+		}
+	if timer = 5 {
+		sound_play(attack_sound3);
+		}
+	if timer = 8 {
+		create_hitbox(9,85+facing*10,4.5,3.8,7,4,punch1,obj_spark_hit1,1.4,0.7,26,14,self.id,8,0);
+		hitbox.hit_stun = 6;
+		}
+	if timer = 10 {
+		hitbox.dir = 95-facing*10;
+		hitbox.bkb = 3.8;
+		hitbox.kbg = 3.7;
+		image_speed = 0.25;
+		}
+	if timer = 29 {
+		interrupt = 1;
+		}
+	if timer = 38 {
+		timer = 74;
+		}
+	if (timer > 3 && timer < 7) && attacking = 1 && moveup = 1 {
+		state_type = "attack";
+		timer = 39;
+		time = 84;
+		sprite_index = usmash_sprite;
+		image_speed = 0.3;
+		image_index = 0.3;
+		if facing = 0 {
+			hspeed += 2;
+			}
+		else {
+			hspeed -= 2;
+			}
+		can_move = 0;
+		}
+	if timer = 43 {
+		create_hitbox(1,135-facing*90,3,1,2,4,punch1,obj_spark_hit1,0.6,0.6,10,14,self.id,2,2);
+		create_hitbox2(1,45+facing*90,3,1,2,4,punch1,obj_spark_hit1,0.6,0.6,-12,14,self.id,2,2);
+		hitbox.hitstun = 5;
+		hitbox2.hitstun = 5; 
+		}
+	if timer = 46 {
+		sound_play(mid_jump_sound);
+		create_hitbox(10,85+facing*10,6.7,7.6,12,7,fire2,obj_spark_fire2,1.2,1.4,-2,42,self.id,6,0);
+		spark = instance_create(x,y - 42*size, obj_fireburst);
+                spark.image_xscale*=((-1.1+facing*2.2)*size);
+                spark.image_yscale*=(0.7*size);
+		spark.dir = 270-facing*180;
+		}
+	if timer > 57 {
+		hspeed *= 0.95;
+		}
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}

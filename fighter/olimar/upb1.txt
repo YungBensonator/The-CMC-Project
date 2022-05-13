@@ -1,0 +1,201 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+var i, u, p, tx, ty;
+
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" )
+  {
+  if ( air == max_jumps )
+    exit;
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 56;
+  timer = -20;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0.2;
+  timer_speed = 1;
+  chain_len = 0;
+  chain[0] = 0;
+  chain_p[0] = 0;
+  if moveright = 1 facing = 0
+  if moveleft = 1 facing = 1
+  }
+if ( state_type != "air_attack" )
+  exit;
+if air = 0
+hspeed = 0
+if timer < 10
+vspeed = 0
+
+if ( timer == -15 )
+  {
+  gfx_ef_duster2 ( x , y , size , size , facing );
+  sound_play ( swingsnd5 );
+  }
+if ( timer == -2 )
+  {
+  gfx_ef_duster2 ( x , y , size , size , facing );
+  sound_play_pitch ( swingsnd5 , 1.2 );
+  }
+
+if timer > 5
+force_edge_grab = 1
+  
+// pikmin chain script - feel free to alter
+// chain initialization
+if ( timer == 10 )
+  {
+  sound_play ( swingsnd2 );
+  // take available pikmin and attach hitboxes to them
+  for ( i = 0 ; i < 4 ; i += 1 )
+    {
+    if ( pikmin[i] == 0 ) continue;
+    if ( point_distance ( pikmin[i].x , pikmin[i].y , pikmin[i].target_recordx , pikmin[i].target_recordy ) < 18 )
+      {
+      chain[chain_len] = pikmin[i];
+      pikmin[i].state = 6;
+      switch ( pikmin[i].type )
+        {
+        // red
+        case 0:
+          chain_p[chain_len] = create_projectile ( 7 , 45 + facing * 90 , 6 , 5 , 7 , 6 , fire1 , obj_spark_fire1 , 0.6 , 0.6 , 0 , 0 , self.id , 60 , no_script );
+          break;
+        // blue
+        case 1:
+          chain_p[chain_len] = create_projectile ( 6 , 45 + facing * 90 , 5 , 5 , 7 , 6 , water1 , obj_spark_water , 0.6 , 0.6 , 0 , 0 , self.id , 60 , no_script );
+          break;
+        // yellow
+        case 2:
+          chain_p[chain_len] = create_projectile ( 6 , 45 + facing * 90 , 5 , 5 , 7 , 6 , shock1 , obj_spark_shock , 0.6 , 0.6 , 0 , 0 , self.id , 60 , no_script );
+          break;
+        // purple
+        case 3:
+          chain_p[chain_len] = create_projectile ( 8 , 45 + facing * 90 , 5 , 5 , 7 , 6 , kick1 , obj_spark_hit1 , 0.6 , 0.6 , 0 , 0 , self.id , 60 , no_script );
+          break;
+        // white
+        case 4:
+          chain_p[chain_len] = create_projectile ( 6 , 45 + facing * 90 , 5 , 5 , 7 , 6 , punch1 , obj_spark_hit2 , 0.6 , 0.6 , 0 , 0 , self.id , 60 , no_script );
+          break;
+        }
+      chain_p[chain_len].inited = 0;
+      //chain_p[chain_len].hit = 2;
+	chain_p[chain_len].no_clash = 1;
+      chain_len += 1;
+      }
+    }
+  }
+// chain refresh
+if ( timer >= 10 && timer < 47 )
+  {
+  var maxx;
+  for ( i = 0 ; i < MAX_FIGHTERS * SLOTS_PER_FIGHTER ; i += 1 )
+    maxx[i] = 0;
+  for ( i = 0 ; i < chain_len ; i += 1 )
+    {
+    p = chain[i];
+    p.attack = "chain";
+    tx = x + ( 14 + i * 16 ) * size * ( 1 - facing * 2 );
+    ty = y + ( -12 - i * 16 ) * size;
+    p.image_angle = -45 + facing * 90;
+    p.x = ( p.x + tx ) * 0.5;
+    p.y = ( p.y + ty ) * 0.5;
+    p.sprite_index = pikmin_chain_sprite[p.type];
+    
+    if ( abs ( p.x - tx ) < 2 + speed && abs ( p.y - ty ) < 2 + speed )
+      {
+      if ( chain_p[chain_len].inited == 0 )
+        {
+        chain_p[i].hit = 1;
+        chain_p[chain_len].inited = 1;
+        }
+      }
+    
+    chain_p[i].x = p.x + 8 * ( 1 - facing * 2 );
+    chain_p[i].y = p.y - 8;
+    chain_p[i].timer = 0;
+    chain_p[i].time = 3;
+    
+    // make sure players' hit statuses are grabbed from hitboxes
+    for ( u = 0 ; u < MAX_FIGHTERS * SLOTS_PER_FIGHTER ; u += 1 )
+      {
+      if ( chain_p[i].hit_player[u] > maxx[u] )
+        maxx[u] = chain_p[i].hit_player[u];
+      }
+      
+    // grab ledges
+	if timer > 5 {
+    var a;
+    a = collision_circle ( p.x + 8 * ( 1 - facing * 2 ) , p.y - 8 , 12 , obj_edge , 0 , 1 );
+    if ( a > 0 )
+    if ( a.taken == 0 )
+      {
+      if ( a.object_index == obj_edge_left )
+        {
+        x = a.x - actual_width * 0.5;
+        }
+        else
+        {
+        x = a.x + actual_width * 0.5;
+        }
+      y = a.y + actual_height;
+      for ( i = 0 ; i < chain_len ; i += 1 )
+        {
+        p = chain[i];
+        p.attack = "none";
+        p.state = 1;
+        p.image_angle = 0;
+        }
+      attack_type = "none";
+      state_type = "jump";
+      timer = 0;
+      time = -1;
+      exit;
+	}
+      }
+    }
+  // make sure hitboxes inherit the player hit status so you don't get combo'd by 6 pikmin
+  for ( i = 0 ; i < chain_len ; i += 1 )
+    {
+    for ( u = 0 ; u < MAX_FIGHTERS * SLOTS_PER_FIGHTER ; u += 1 )
+      {
+      chain_p[i].hit_player[u] = maxx[u];
+      }
+    }
+  }
+// end chain - hide pikmin into me
+if ( timer >= 47 && timer < 54 )
+  {
+  for ( i = 0 ; i < chain_len ; i += 1 )
+    {
+    p = chain[i];
+    p.x = ( x + p.x ) * 0.5;
+    p.y = ( y + p.y ) * 0.5;
+    p.image_angle *= 0.5;
+    }
+  }
+// definite end of pikmin usage
+if ( timer == 54 )
+  {
+  for ( i = 0 ; i < chain_len ; i += 1 )
+    {
+    p = chain[i];
+    p.attack = "none";
+    p.state = 1;
+    p.image_angle = 0;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

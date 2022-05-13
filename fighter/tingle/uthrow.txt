@@ -1,0 +1,71 @@
+if time = -1 {
+	
+hspeed = 0;
+	
+state_type = "attack";
+	
+attack_type = "uthrow";
+
+	image_speed = 0.45;
+	
+sprite_index = uthrow_sprite;
+
+	image_index=0;
+	
+timer = 0;
+
+	time = 27;
+
+	timer_speed=1;
+	
+target.timer_speed = 0;
+	
+target.alarm[0] = 50
+	
+}
+
+if timer < time {
+	if ( timer <= 3 )
+		{
+		target.x = x + 10 * size * (1-facing*2);
+		target.y = y;
+		}
+	if ( timer >= 4 && timer <= 6 )
+		{
+	    target.x = x +10 - facing*20 * size;
+        target.y = y-10 * size;
+        }
+
+	if ( timer >= 7 && timer <= 13 )
+		{
+	    target.x = x +1 - facing*2 * size;
+        target.y = y-16 * size;
+        }
+
+	if timer = 13 {
+
+	        sound_play(swingsnd2);
+	
+        create_throw_box(9,75+facing*30,6.1,2.1,0,9,kick2,obj_spark_hit1,0.53,0.84,0,20,self.id,1,5);
+
+	        hitbox.hit_stun = 14;
+		hitbox.di = 1.4;
+		}
+
+	if timer = 22 {
+		image_speed = 0;
+		}
+	}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+
+    attack_type = "none";
+
+    state_type = "stand";
+
+    timer = 0;
+
+    time =-1;
+
+    }
+        

@@ -1,0 +1,110 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        image_index = 0;
+        sprite_index = dtilt_sprite;
+        timer = 0;
+        time = 10;
+        timer_speed=1;
+	canceltemp = 0;
+	attacking = 1
+	attacktemp = 1
+	frametemp = 0;
+}
+     if timer < time {
+	switch (timer) {
+	case 2: shakex = 1*(1-facing*2); break;
+	case 4: image_index = 1; break;
+	case 5: shakex = 1.5*(1-facing*2); break;
+	case 6: image_index = 2; image_xscale *= 1.05; image_yscale *= 1.05; break;
+	case 12: shakex = 1*(1-facing*2); break;
+	case 15: image_index = 4; break;
+	case 18: shakex = 0.5*(1-facing*2); break;
+	case 21: shakex = 0; break;
+	case 25: image_index = 5; break;
+	}
+	if attack_success || attack_shielded
+	canceltemp = 1
+	if !attacking && sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52
+	attacktemp = 0
+             state_type = "attack";
+            if timer = 6 {
+                if random(2)>1
+                    //sound_play(choose(attack_voice1,attack_voice2,attack_voice3))
+                sound_play(attack_sound2);
+                create_hitbox(2,25+facing*130,3.5,2.5,12,5,sf_kick2,obj_spark_special1,0.8,0.45,21,6,self.id,6,1); 
+                hitbox.hit_stun = 10;
+                hitbox.fx_y = -5
+		duster = instance_create(x+27*(1-facing*2),y,obj_dust_effect);
+		duster.facing = !facing;
+		duster.image_xscale *= 0.25;
+		duster.image_yscale *= 0.25;
+            }
+	if timer <= 26 && canceltemp {
+	if sftemp != -1 && sftemp != 5 && sftemp != 10 && sftemp != 43 && sftemp != 57 && sftemp != 5 && sftemp != 13 && sftemp != 18 && sftemp != 22 && sftemp != 27 && sftemp != 47 && sftemp != 52 {
+	/*if special > 0 && movedown != 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		interrupt = 1
+		else
+	    char_b();
+	  }
+	if special > 0 && moveup = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_upb();
+	  }
+	if special > 0 && movedown = 1
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_downb();
+	  }
+	if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "stand";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    if (moveleft[1] >0) || (moveright[1] > 0)
+	    char_smashb();
+		else
+	    char_sideb();
+	  }*/
+	}
+}
+else
+sftemp_timer = 0
+	if timer = time-1
+	attacking = 0
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    canceltemp = 0
+    attack_type = "none";
+    state_type = "crouch";
+    timer = 0;
+    time =-1;
+    attacking = 0
+}
+if (hitbox.hit)
+{
+	frametemp = timer + cancel_frames;
+}
+        
+	if ( air >= 0 && timer >= 0 && temp != -1 && (smash || special || grabbing || movejump) && canceltemp && timer <= frametemp )
+      {
+    air_move = 1;
+    interrupt = 1;
+      } 
+

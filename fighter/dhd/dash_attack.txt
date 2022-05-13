@@ -1,0 +1,66 @@
+if ( state_type == "run" || state_type == "stand" )
+  {
+  hspeed = 1.5 * ( 1 - facing - facing );
+  state_type = "attack";
+  attack_type = "dash";
+  image_speed = 0;
+  sprite_index = dash_attack_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 48;
+  timer_speed = 1;
+  }
+
+if ( timer == 6 )
+  {
+  sound_play ( dashattack_sound );
+  create_hitbox ( 2 , 30 + facing * 120 , 3 , 0 , 3 , 4 , kick1 , obj_spark_hit1 ,
+    0.95 , 0.85 , 2 , 11 , self.id , 5 , 1 );
+  hspeed = 4.5 * ( 1 - facing - facing );
+	hitbox.di = 0.5;
+  }
+if ( timer == 8 ) image_index = 1;
+if ( timer == 11 )
+  {
+  image_index = 2;
+  image_speed = 0.5;
+  }
+if ( timer == 11 || timer == 15 || timer == 19 )
+  {
+  sound_play ( swingsnd4 );
+  create_hitbox ( 2 , 30 + facing * 120 , 3.7 , 0 , 3 , 4 , kick1 , obj_spark_hit1 ,
+    1 , 0.85 , 0 , 8 , self.id , 2 , 1 );
+	hitbox.di = 0.9;
+        hspeed = (3.5-facing*6.5)*size
+  }
+if ( timer == 23 )
+  {
+  sound_play ( swingsnd3 );
+  create_hitbox ( 5 , 50 + facing * 80 , 5.85 , 2.2 , 5, 5 , kick2 , obj_spark_hit2 ,
+    1 , 0.85 , 1 , 8 , self.id , 2 , 3 );
+  hitbox.hit_stun = 6;
+  }
+if ( timer == 25 && attack_success )
+  {
+  interrupt = 1;
+  image_speed = 0;
+  }
+if timer = 26 {
+sprite_index = down_sprite;
+image_speed = 0;
+image_index = 0;
+hspeed = 0;
+}
+if timer = 32
+{
+image_speed = 0.25;
+}
+
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
