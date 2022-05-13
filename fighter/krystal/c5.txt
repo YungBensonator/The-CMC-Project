@@ -1,0 +1,60 @@
+absorb = 0  // This attack may not be absorbed by PSI magnet
+proj_destroy = -1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.final_smash_sword_sprite
+    image_speed = 0.25
+    visible =1
+    hit = 2
+    ready = 0
+    facing = 0//attacker.facing
+}
+image_angle = direction + 45// + 180*facing
+if timer >= 2 && ready = 0 {
+    if timer = 14
+        hit = 0
+    switch num {
+        case 0:
+            if timer = 2 {
+                speed = 8;
+                direction = 45;
+            }
+            hspeed -= 0.8;
+            vspeed += 0.8;
+            break;
+        case 1:
+            if timer = 2 {
+                speed = 8;
+                direction = 135;
+            }
+            hspeed += 0.8;
+            vspeed += 0.8;
+            break;
+        case 2:
+            if timer = 2 {
+                speed = 8;
+                direction = 315;
+            }
+            hspeed -= 0.8;
+            vspeed -= 0.8;
+            break;
+        case 3:
+            if timer = 2 {
+                speed = 8;
+                direction = 225;
+            }
+            hspeed += 0.8;
+            vspeed -= 0.8;
+            break;
+    }
+}
+
+if attacker.timer = 199 {
+    x = cos(degtorad(direction))*135 + attacker.x
+    y = sin(degtorad(direction))*135 + attacker.y
+    move_towards_point(attacker.x,attacker.y+3*size,10)
+    ready = 1
+}
+
+if ready = 1 && (x < obj_game_control.death_l || x > obj_game_control.death_r || y < obj_game_control.death_u || y > obj_game_control.death_d) {
+    instance_destroy()
+}

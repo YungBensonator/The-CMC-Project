@@ -1,0 +1,43 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0.3;
+        sprite_index = dsmash_sprite;
+        image_index=0.75;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+        charge_frame = 6;
+}
+        if timer < time {
+             state_type = "attack";
+            if timer = 2 {
+                instance_create(x+8-facing*16,y-14,obj_spark_effect)
+                sound_play(attack_voice3)
+            }
+            if timer = 11 || timer = 18 {
+                sound_play(b_sound);
+                create_hitbox2(12,16+facing*148,5.8,6.3,20,3,shock3,obj_spark_shock,0.7,0.5,19,9,self.id,3,5); 
+                hitbox2.shake_ampl = 0.8
+                hitbox2.charge_dmg = 0.8
+                hitbox2.charge_kb = 0.8
+                create_hitbox(12,164-facing*148,5.8,6.3,20,3,shock3,obj_spark_shock,0.7,0.5,-18,9,self.id,3,5); 
+                hitbox.shake_ampl = 0.8;
+                hitbox.charge_dmg = 0.8
+                hitbox.charge_kb = 0.8
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = 1-facing; 
+            }
+            if timer = 34
+                image_speed = 0
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

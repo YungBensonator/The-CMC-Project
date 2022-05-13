@@ -1,0 +1,42 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    attacking = 0
+    attack_type = "sideb"
+    state_type = "air_attack";
+    image_index = 0
+    if air = 0 {
+        hspeed = 0;
+        sprite_index = sideb_sprite;
+    }
+    else {
+        hspeed *= 0.4;
+        sprite_index = sideb_sprite;
+    }
+        image_speed = 0.2;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+	temp = 0
+}
+        if timer = 15 && (staff = 0 || !instance_exists(staff)) && temp = 0 {
+            sound_play(sideb_sound);
+            create_projectile(6,362,4.55,1.25,15,3,kick2,obj_spark_slash2,0.75,0.75,20,17,self.id,240,krystal_staff);
+            staff = proj
+	    temp = 1
+            staff.kryst = self.id
+            staff.dir = 362
+        }
+    if air = 0 {
+        hspeed=0 
+    }
+    if image_index >= image_number - 1
+        image_speed = 0;
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+}
+        
