@@ -69,6 +69,7 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
             if timer < 14 && frac(timer/2) = 0
                 after_image(4,c_white,0.5)
 	if timer = 20 {	
+    air = max_jumps
 	moveleft = 0;
 	moveright = 0;
 	movejump = 0;
@@ -78,37 +79,6 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
 		            target.speed = speed - 0.8
 		            target.direction = point_direction(target.x,target.y,x,y)
 	}
-
-	if timer >= 21 && timer <= 27 && superwalljump = 1 {
-        if ( next_to_rwall && ( movejump || moveleft ) && walljump_lock != 0 )
-          {
-	  vspeed = -size * mid_jump_speed;
-          moveright = 0;
-          intangible = 0;
-          attack_type = "wall_jump";
-		sprite_index = wall_jump_sprite;
-        image_index= 0;
-          walljump_lock = 0;
-          facing = 1;
-	  superwalljump = 0;
-	  air = max_jumps-1;
-          exit;
-          }
-        if ( next_to_lwall && ( movejump || moveright ) && walljump_lock != 1 )
-          {
-	  vspeed = -size * mid_jump_speed;
-          moveleft = 0;
-          intangible = 0;
-          attack_type = "wall_jump";
-		  sprite_index = wall_jump_sprite;
-        image_index= 0;
-          walljump_lock = 1;
-          facing = 0;
-	  superwalljump = 0;
-	  air = max_jumps-1;
-          exit;
-          }
-        }
         }  
 
 
@@ -149,7 +119,7 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     hspeed = 1 - facing*2;
 	doublecheck = 1;
         attack_type = "none";
-	air = max_jumps;
+	  air = max_jumps
         if air > 0
         state_type = "fall";
         else

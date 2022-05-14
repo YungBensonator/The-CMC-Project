@@ -1,0 +1,159 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+	state_type = "air_attack";
+	attack_type = "upb";
+	sprite_index = stand_sprite;
+	image_speed = 0.25;
+	timer = 0;
+	time = 150;
+	special = 0;
+	chargeb = 0;
+	temp = 0;
+	temp2 = 0;
+	}
+if ( ai )
+  {
+  if ( offstage )
+    {
+    var a;
+    a = instance_nearest ( x , y , obj_edge );
+    moveleft = 0;
+    moveright = 0;
+    if ( a . x < x )
+      moveleft = 1;
+      else
+      moveright = 1;
+    moveup = 1;
+    }
+  }
+if timer < time {
+	state_type = "air_attack";
+	if timer = 0 {
+	spark = instance_create(x,y,obj_spark);
+	spark.sprite_index = rushjet_sprite;
+	spark.image_speed = 0.5;
+	spark.image_xscale = .75*size*(1-facing*2);
+	spark.image_yscale = .75*size;
+	spark.x = x+1*(1-facing*2);
+	spark.y = y+3;
+	spark.number = -number;
+        spark.alarm[0] = 20;
+	sound_play(final_smash_sound_2,0,1);
+	}
+	if timer <= 18 {
+	vspeed = 0;
+	hspeed = 0;
+	}
+	if timer > 19 && moveup = 1 && movedown = 0 {
+		chargeb += 2; //Spends flight timer
+		vspeed -= 0.45; //Acceleration when moving up.
+		}
+	if timer > 19 && movedown = 1 && moveup = 0 {
+		chargeb += 0.1; //Spends flight timer
+		vspeed += 0.5; //acceleration when moving down.
+		}
+	if vspeed < -3.1 {
+		vspeed = -3.1; //Max speed holding up. 0=No movement
+		}
+	if vspeed > 2.5 {
+		vspeed = 2.5; //Max speed holding down. 0=No movement
+		}
+	if timer > 19 && moveright = 1 && moveleft = 0 {
+		hspeed += 0.45;
+		vspeed -= 0.245;
+		chargeb += 1; //Spends flight timer
+		}
+	if timer > 19 && moveleft = 1 && moveright = 0 {
+		hspeed -= 0.45;
+		vspeed -= 0.245;
+		chargeb += 1; //Spends flight timer
+		}
+	if hspeed > 2.85 {
+		hspeed = 2.85; //max distance holding right. 0=No movement
+		}
+	if hspeed < -2.85 {
+		hspeed = -2.85;//Max distance holding left. 0=No movement
+		}
+	if timer > 19 && moveup = 0 && movedown = 0 && moveright = 0 && moveleft = 0 {
+		hspeed *= 0.66; //horizontal distance after no longer pressing Left/Right
+		vspeed *= 0.05; //Fall speed when not pressing anything
+		chargeb += 0.3;
+		}
+	if hspeed > 0 {
+		facing = 0;
+		}
+	if hspeed < 0 {
+		facing = 1;
+		}
+	if facing = 0 && hspeed < 0.1 {
+		facing = 0
+		}
+	if hspeed = 99.5 && ( !instance_exists ( hitbox ) ) {
+		create_hitbox(7,60+facing*60,6+((abs(hspeed))*0.5),2+((abs(hspeed*1.1))*0.5),8,4,kick2,obj_spark_hit2,1.05,0.7,2,0,self.id,10,2);
+		}
+	if hspeed = -99.5 && ( !instance_exists ( hitbox ) ) {
+		create_hitbox(7,60+facing*60,6+((abs(hspeed))*0.5),2+((abs(hspeed*1.1))*0.5),8,4,kick2,obj_spark_hit2,1.05,0.7,2,0,self.id,10,2);
+		}
+	if chargeb > 160 {
+		timer = 199;
+		}
+	if timer > 23 && air = 0 {
+		state_type = "land";
+		attack_type = "none";
+		sprite_index = land_sprite;
+		timer = 0;
+		time = 12;
+		spark.image_index += 1;
+		vspeed *= 0.5;
+		hspeed *= 0.5;
+		}
+	if timer > 25 && vspeed > 0
+	force_edge_grab = 1
+	if timer > 28 && special = 1 && temp = 0 {
+	chargeb += 12; //Spends flight timer per pellet shot
+	sound_play(b_sound)
+        pellet = create_projectile(2,(((temp2>0)*361)+((temp2=0)*90)),0,0,4,4,kick1,obj_spark_hit1,1,1,19,19,self.id,60,buster_script)
+        pellet.sprite_index = buster_sprite
+        pellet.shield_stun = .75
+	tempfacing = facing
+	image_index = 1;
+	sprite_index = b_sprite;
+	image_speed = 0.2;
+	temp = 18;
+	if temp2 < 3
+	temp2 += 1
+	if temp2 = 3
+	temp2 = 0
+		}
+	if temp > 0
+	temp -= 1
+	if temp = 8 {
+	sprite_index = stand_sprite;
+	image_index = 0;
+	image_speed = 0.25;
+	}
+	if timer >= 19 {
+	spark.image_speed = 0;
+	spark.x = x+1*(1-facing*2) - hspeed;
+	spark.y = self.y+3 - vspeed;
+	spark.image_xscale = .75*size*(1-facing*2);
+        spark.alarm[0] = 25;
+	spark.script = gfx_atkattach
+	spark.snap = self.id;
+	}
+	}
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "fall"
+	hspeed *= 0.6; //Slows down Megaman upon running out of Up B
+	vspeed *= 0.6; //Slows down Megaman upon running out of Up B
+    timer = 0;
+    time =-1;
+    spark.image_index += 1;
+}
+if state_type = "flinch" || state_type = "air_flinch"
+    spark.image_index += 1;

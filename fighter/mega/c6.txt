@@ -1,0 +1,84 @@
+//Crash Bomber (Fsmash)
+absorb = 0
+absorb2 = 1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sound_play ( attacker.ssmash_sound );
+    snd1 = attacker.ssmash_sound2;
+    snd2 = attacker.ssmash_sound3;
+    hspeed = (6 - attacker.facing*12)*attacker.size;
+    visible = 1
+    sprite_index = attacker.crashbomber_sprite;
+    facing = attacker.facing;
+    dirr = 1 - facing * 2;
+    hit = 2;
+    sticky = 0;
+    exploded = 0;
+    temp = 0; //target
+}
+moving_object = 1;
+if ( sticky = 0 && ( next_to_rwall || next_to_lwall || on_floor || on_platform || under_ceiling ) )
+    timer = time - 1;
+if sticky > 0 {
+if ( facing )
+    image_xscale = 1;
+if ( !facing )
+    image_xscale = -1;
+}
+
+if ( sticky = 0 )
+  {
+    if ( timer mod 2 == 0 )
+      {
+	after_image ( 2 , c_white , .5 );
+	create_homing_bubble(0.5,0.35,0,0,attacker.id,2);
+	proj.destroy = 0;
+	proj.target = 0;
+      }
+    if ( proj.target > 0 && proj.target.state_type == "shielding" )
+      {
+  sound_play(snd2);
+  exploded = 1;
+  create_projectile(8+(smash_charge/20),90-55*dirr,7+(smash_charge/120),4.6+(smash_charge/100),30,10,fire3,obj_spark_explode1,1,1,0,5,attacker.id,4,no_script);
+  instance_create(x,y,obj_spark_explode2);
+  screen_shake(1,8);
+  sticky = 0
+  instance_destroy();
+      }
+    if ( proj.target > 0 && !proj.target.intangible )
+      {
+	temp = proj.target;
+	sticky = 1;
+	instance_create ( x , y , obj_spark_shockwave );
+	if attacker.attack_success = 0
+	create_projectile ( 4+(smash_charge/20) , 90-20*dirr , 3+(smash_charge/80) , 4+(smash_charge/120) , 7 , 5 , fire2 , obj_spark_hit2 , 0.6 , 0.6 , 0 , 0 , attacker.id , 4 , no_script );
+	else
+	target.percent += 4
+      }
+  }
+if ( sticky = 1 )
+  {
+    sticky = 2;
+    sound_play(snd1);
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+    time = 80;
+    parry_nodestroy = 1;
+  }
+if ( sticky = 2 )
+  {
+    x = temp.x+10*(1-facing*2)*temp.size;
+    y = temp.y-temp.actual_height * 0.5;
+    facing = temp.facing;
+  }
+
+if ( timer = time - 1 && !exploded )
+  {
+    sound_play(snd2);
+    exploded = 1;
+    create_projectile(8+(smash_charge/20),90-55*dirr,7+(smash_charge/120),4.6+(smash_charge/100),30,10,fire3,obj_spark_explode1,1,1,0,5,attacker.id,4,no_script);
+    instance_create(x,y,obj_spark_explode2);
+    screen_shake(1,8);
+    sticky = 0
+    instance_destroy();
+  }

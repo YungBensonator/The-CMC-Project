@@ -1,0 +1,191 @@
+//zero upb
+if (upb_used) exit;
+
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" && upbtemp = 0 {
+    can_sideb = 0;
+    attacking = 0;
+    special = 0;
+    timer = 0;
+    attack_type = "upb"
+    hspeed = 0
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0;
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing; }
+    else {
+        state_type = "air_attack";
+        }
+        image_speed = 1;
+        sprite_index = upb_sprite;
+        image_index= 0;
+        time = 24;
+        timer_speed=1;
+        intangible = 1
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+		
+}
+upbtemp = 1;
+
+//hitbox position
+xshift = 7;
+yshift = 15;
+xadjust = 5;
+yadjust = 10;
+
+sizescale = 0.5; //for lordcradle
+
+        if timer < time {
+		
+			if timer > 25
+				force_edge_grab = 1
+			//hitboxes
+
+			if (hitbox.hit = 1 && timer > 1 && timer < 13) 
+				{
+					target.hspeed = hspeed
+					target.vspeed = vspeed
+				}	
+			
+            if timer = 3 {
+				lordcradle = instance_create(x,y-20,obj_spark);
+				lordcradle.sprite_index = lordcradle_sprite;
+				lordcradle.image_speed = 0.5;
+				//lordcradle.image_blend = c_red;
+				lordcradle.image_alpha = 1;
+				lordcradle.image_xscale = sizescale * (1 - facing*2);
+				lordcradle.image_yscale = sizescale;
+				lordcradle.x = x - 40 * (1-facing*2);
+				lordcradle.y = y-25;
+				lordcradle.snap = self.id
+				
+				flashing = true
+				alarm[7] = 12
+                image_speed = 0.5
+				after_image(3,c_white,0.5)
+                sound_play(upb_sound);
+                sound_play(upb_sound2);
+                sound_play(upb_sound2);
+                sound_play(upb_voice);
+				
+				create_hitbox(1 + scarlet,75+facing*30,5,0,6.75,3,kick1,obj_spark_hit1,1.9,1.9,xshift,yshift,self.id,1,3)
+                hitbox.di = 0.3
+                hitbox.shake_ampl = 0
+                hitbox.hitshake_type = 1
+				
+                hspeed = 4 * (1- facing*2);
+				vspeed = -7.5;
+                instance_create(x+10*(1-facing*2)*size,y-18*size,obj_spark_effect)
+            }
+            if timer = 4 || timer = 6 || timer = 8 || timer = 10 || timer = 12 {
+                intangible = 0
+                create_hitbox(1+ (scarlet/2),55+facing*70,6.15,0,5,3,kick2,obj_spark_hit2,1.6,1.6,xshift,yshift,self.id,1,3);
+                hitbox.hitshake_type = 1
+                hitbox.di = 0.2
+                hitbox.hitshake_type = 1
+				after_image(4,c_white,0.9)
+                hspeed = 4.5 * (1- facing*2);
+                vspeed -= 0.235;
+            }
+            if  timer = 13 {
+                intangible = 0
+                 create_hitbox(3+ scarlet,35+facing*110,5.7,7.15,5,8,kick3,obj_spark_hit3,1.7,1.7,xshift,yshift,self.id,3,3);
+                 hitbox.hitshake_type = 1
+                 hitbox.shake_type = 0
+                 hitbox.shake_kb = 3
+                 hitbox.shake_ampl = 1.2 }
+				 
+            if image_index = 14 || image_index = 16 {
+                //vspeed = -2.25*size
+                if image_index = 16
+                hspeed *= 0.6
+            }
+            if image_index = 16
+                image_speed = 0;
+				
+			if timer = 20 {	
+				moveleft = 0;
+				moveright = 0;
+				movejump = 0;
+				}	
+				
+			//closing	
+			if timer >= 21 && timer <= 27 && superwalljump = 1 {
+        if ( next_to_rwall && ( movejump || moveleft ) && walljump_lock != 0 )
+          {
+	  vspeed = -size * mid_jump_speed;
+          moveright = 0;
+          intangible = 0;
+          attack_type = "wall_jump";
+		sprite_index = wall_jump_sprite;
+        image_index= 0;
+          walljump_lock = 0;
+          facing = 1;
+	  superwalljump = 0;
+	  air = max_jumps+1;
+          exit;
+          }
+        if ( next_to_lwall && ( movejump || moveright ) && walljump_lock != 1 )
+          {
+	  vspeed = -size * mid_jump_speed;
+          moveleft = 0;
+          intangible = 0;
+          attack_type = "wall_jump";
+		  sprite_index = wall_jump_sprite;
+        image_index= 0;
+          walljump_lock = 1;
+          facing = 0;
+	  superwalljump = 0;
+	  air = max_jumps+1;
+          exit;
+          }
+        }
+		
+        }
+            if (timer >= 13){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 95) || (target.weight > .22 && target.weight < .3 && target.percent > 105) || (target.weight > .3 && target.percent > 125)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+        
+  }	     
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0;
+    hspeed = 1 - facing*2;
+	doublecheck = 1;
+        attack_type = "none";
+        if air > 0
+        state_type = "jump";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }
+        

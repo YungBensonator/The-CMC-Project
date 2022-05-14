@@ -62,14 +62,14 @@ if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
             sound_play(b_sound2)
         else
             sound_play(b_sound1)
-        chargeshot = create_projectile(2+round(charge/4),25+facing*130,2+charge/45,1.4+charge/16,3+round(charge/4),4+ceil(charge/5),kick1*(charge<23) + kick2*((charge>=23) && (charge<73)) + kick3*(charge>=73),obj_spark_shock,(1-facing*2)*(0.3+charge/133),0.3+charge/133,20,24,self.id,160,char_custom5);
+        create_projectile(2+round(charge/4),25+facing*130,2+charge/45,1.4+charge/16,3+round(charge/4),4+ceil(charge/5),kick1*(charge<23) + kick2*((charge>=23) && (charge<73)) + kick3*(charge>=73),obj_spark_shock,(1-facing*2)*(0.3+charge/133),0.3+charge/133,20,24,self.id,160,char_custom5);
         spark = instance_create(x+(18-facing*36)*size,y-23*size,obj_spark_shockwave)
         spark.image_xscale *= (0.1 + charge/640)*size
         spark.image_yscale *= (0.35 + charge/320)*size
         spark.image_blend = c_white
-        chargeshot.shake_ampl = 0.8
+        proj.shake_ampl = 0.8
         if fully_charged
-            chargeshot.priority += 4
+            proj.priority += 4
         fully_charged = 0
         charge  = 0
         }
@@ -183,7 +183,6 @@ if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
         timer = 11
         time = 42
         special = 0
-        dontrepeat = 0
         }
     if charge >= 105 {
 if ( instance_exists ( spark2 ) ) with ( spark2 ) instance_destroy();
@@ -199,7 +198,6 @@ spark2.alarm[0]=1
     }
 if timer = time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
-    dontrepeat = 0;
     if air = 0
     state_type = "stand";
     else

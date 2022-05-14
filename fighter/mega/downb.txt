@@ -1,0 +1,64 @@
+if (state_type = "stand" || state_type = "crouch" || state_type = "jump" || state_type = "run") {
+    if !instance_exists(leaf_proj) || leaf_proj.attacker!=id {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0.2;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 45;
+        timer_speed=1;
+        leaf = 1
+        temp = 0
+    }
+    else {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0.2;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 50;
+        timer_speed=1;
+        temp = 1
+    }
+}
+if air = 0 {
+    air_move = 0
+    hspeed = 0
+}    
+if temp = 0 {
+     if timer = 10 {
+         play_attack_voice();
+         effect_create_below(ef_ring,x,y-16,0,c_lime)
+         create_projectile(7,40+100*facing,6,3,4,3,kick2,obj_spark_hit1,0.7,0.7,0,16,self.id,220,mega_leafshield); 
+         leaf_proj = proj
+         }
+     }  
+ 
+ else {
+     if timer = 10 {
+         sound_play(attack_voice2)
+         sound_play(b_sound)
+         leaf = 0
+         if instance_exists(leaf_proj)
+             leaf_proj.shoot = 1
+     }
+    }
+	if timer = 25 {
+	image_speed = 0 }
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 7;
+	}
+    timer = 0;
+    time =-1;
+}

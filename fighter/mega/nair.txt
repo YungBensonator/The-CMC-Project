@@ -1,0 +1,63 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "nair";
+  image_speed = 0.75;
+  image_index = 0;
+  sprite_index = nair_sprite;
+  timer = 0;
+  time = 30;
+  timer_speed = 1;
+  }
+if timer = 5 || timer = 11 || timer = 17 {
+	tornado = instance_create(x,y,obj_spark)
+	tornado.sprite_index = tornado_sprite
+	tornado.image_index = 24
+	tornado.image_speed = 0.4
+	tornado.image_xscale = 0.3
+	tornado.image_yscale = 0.2
+	tornado.image_alpha = 0.8
+	tornado.alarm[0] = 18
+	create_hitbox(2,160-facing*140,4,0,3,3,kick1,obj_spark_hit1o,0.58,1.25,8,18,self.id,2,1);
+	sound_play(swingsnd5);
+	}
+if timer = 8 || timer = 14 || timer = 20 {
+	create_hitbox(2,20+facing*140,4,0,3,3,kick1,obj_spark_hit1o,0.58,1.25,-4,18,self.id,2,1);
+	sound_play(swingsnd5);
+	}
+if timer >= 5 && instance_exists(tornado){
+	tornado.x = x
+	tornado.y = y+5
+	if tornado.image_index >= tornado.image_number - tornado.image_speed
+	tornado.image_index = 24
+	}
+if timer = 23 {
+	create_hitbox(4,30+facing*120,7.5,3.5,3,4,kick2,obj_spark_hit2o,0.7,1.25,4,18,self.id,3,1);
+	}
+if air = 0 {
+	if timer < 23 {
+		with hitbox instance_destroy();
+		create_hitbox2(4,30+facing*120,7.5,3.5,3,4,kick2,obj_spark_hit2o,0.7,1.25,4,18,self.id,3,1);
+		hitbox2.remain = 1;
+		}
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 9;
+	sprite_index = land_sprite;
+	}
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+  {
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 7;
+  }
+  else
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

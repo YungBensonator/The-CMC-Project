@@ -1,0 +1,190 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" {
+    special = 1
+    attacking = 0
+    timer = 0
+    attack_type = "b"
+    state_type = "air_attack"
+    image_speed = 0
+	if air = 0
+	{
+    sprite_index = b_sprite
+	image_index = 0
+	hspeed = 0
+	}
+	if air > 0
+	{
+	sprite_index = b_jump_sprite
+	image_index = 2
+	}
+    time = 85
+    timer_speed=1
+    temp = 0
+    temp2 = 0
+    temp3 = 0
+    temp4 = 0
+}    
+	if timer >= 2 && timer < 14 && air = 0 {
+        	if moveright = 1 facing = 0;
+        	if moveleft = 1 facing = 1;
+    		}
+	if timer < 70 && special = 0 {
+	temp = 1
+	}
+	if timer = 14 && temp = 1 {
+	timer = 100;
+	time = 131;
+	}
+	if timer > 14 && timer < 85 && air = 0
+	hspeed = 0
+	if timer = 16
+	{
+	sound_play(chargeshot_sound);
+	sound_play(chargeshot_sound);
+	}
+	if ( timer = 15 || timer = 25 || timer = 35 || timer = 45 || timer = 55 || timer = 65 ) && temp3 = 0 {
+            effect_create_below(ef_ellipse,x,y,0,c_white)
+	    spark = instance_create(x,y,obj_spark);
+	    spark.sprite_index = b_charge_sprite;
+	    spark.image_speed = 0.6;
+	    spark.image_xscale = size*0.75;
+	    spark.image_yscale = size*0.75;
+	    spark.x = x+15*(1-facing*2);
+	    spark.y = y-18;
+	    }
+	if timer = 54 && temp = 1 {
+                sound_play(b_charged_sound);
+                sound_play(b_charged_sound);
+                create_projectile(10,25+facing*130,7.7,2,10,8,shock2,obj_spark_shock,0.5,0.5,3,18,self.id,80,buster_script)
+                proj.sprite_index = laser_sprite
+		tempfacing = facing
+                instance_create(x+8-facing*16,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster.image_xscale *= size*0.8
+                duster.image_yscale *= size*0.8
+		image_index = 1;
+		temp3 = 1
+		}
+	if timer = 75 && temp3 = 0 {
+                sound_play(b_charged_sound);
+                sound_play(b_charged_sound);
+                create_projectile(5,80+facing*20,1.7,0,10,3,shock2,obj_spark_hit2,0.4,0.4,28,18,self.id,80,buster_script2)
+                proj.shield_stun = -10
+                proj.sprite_index = med_laser_sprite
+                proj.hitlag_diff = 4
+		tempfacing = facing
+                instance_create(x+8-facing*16,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster.image_xscale *= size*1.1
+                duster.image_yscale *= size*1.1
+		image_index = 1;
+		}
+		if ( timer = 80 && sprite_index != b_jump_sprite && sprite_index != b_run_sprite )
+		{
+		image_index = 2;
+		}
+		if timer = 50 && sprite_index != b_jump_sprite && sprite_index != b_run_sprite
+		image_index = 2
+		if timer = 80 && temp3 = 0 {
+		timer = 300
+		time = 340
+		}
+    if timer = 102 {
+        sound_play(b_sound)
+        pellet = create_projectile(2,(((temp2>0)*361)+((temp2=0)*90)),0,0,4,4,kick1,obj_spark_hit1,1,1,19,19,self.id,60,buster_script)
+        proj.sprite_index = buster_sprite
+        proj.shield_stun = .75
+	tempfacing = facing
+	if sprite_index != b_jump_sprite && sprite_index != b_run_sprite {
+	image_index = 1;
+	sprite_index = b_sprite;
+	image_speed = 0;
+	}
+    }
+	if timer = 108 && sprite_index != b_jump_sprite && sprite_index != b_run_sprite
+		image_index = 2
+	if timer >= 103 && timer <= 130 && special = 0
+	temp = 2
+	if timer >= 118 && timer <= 130 && ( temp = 2 ) && special = 1{
+	timer = 100
+	temp = 0
+	if temp2 < 3
+	temp2 += 1
+	if temp2 = 3
+	temp2 = 0
+	}
+	if timer >= 118 && timer <= 130 && ( temp < 2 ) && special = 1 {
+	timer = 15
+	time = 85
+	temp = 0
+	}
+	if timer >= 100 && timer <= 130 {
+		if moveright {
+		hspeed = 2.5;
+		if air = 0 {
+		sprite_index = b_run_sprite;
+		facing = 0;
+		image_speed = 0.25; }
+		}
+		if moveleft {
+		hspeed = -2.5;
+		if air = 0 {
+		sprite_index = b_run_sprite;
+		facing = 1;
+		image_speed = 0.25; }
+		}
+		if movejump && temp4 = 0 && air < max_jumps-1 {
+		air += 1
+		temp4 = 10
+		vspeed = 0.1
+		vspeed -= 6
+		sprite_index = b_jump_sprite
+		image_index = 0;
+		image_speed = 0.2;
+		movejump = 0
+		}
+	if ( image_index > 2 && sprite_index = b_jump_sprite )
+	image_speed = 0;
+	if temp4 > 0 {
+	temp4 -= 1
+	}
+	if !moveleft && !moveright
+	hspeed = 0
+	if air > 0
+	air_move = 1
+	}
+        if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+                vspeed = 0 }
+if air = 0 {
+        air_move = 0
+	}
+if ( sprite_index = b_jump_sprite && air = 0 ) {
+	sprite_index = b_sprite
+	image_index = 0
+    image_speed = 0
+}
+if ( sprite_index = b_run_sprite && moveright = 0 && moveleft = 0 && air = 0 ) {
+	sprite_index = b_sprite
+	image_index = 0
+    image_speed = 0
+}
+if ( sprite_index = b_run_sprite && air > 0 ) {
+	sprite_index = b_jump_sprite
+	image_index = 2
+    image_speed = 0
+}
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    {
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 7;
+	}
+    timer = 0;
+    time =-1;
+    special = 0;
+    }

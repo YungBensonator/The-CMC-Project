@@ -1,0 +1,188 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "stilt";
+    timer = 0;
+    time = 19;
+    sprite_index = ftiltcombo_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	clawsize = 0.35;
+	clawsize2 = 0.4;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+		case 1: image_index = 0; break;
+		case 2: image_index = 1; break;
+		case 3: image_index = 2; break;
+		case 4: image_index = 3; break;
+		case 5: image_index = 4; break;
+		case 6: image_index = 5; break;
+		case 7: image_index = 6; break;
+		
+		case 101: image_index = 7; break;
+		case 102: image_index = 8; break;
+		case 104: image_index = 9; break;
+		case 106: image_index = 10; break;
+		case 108: image_index = 11; break;
+		
+		case 201: image_index = 12; break;
+		case 202: image_index = 13; break;
+		case 203: image_index = 14; break;
+		case 204: image_index = 15; break;
+		case 205: image_index = 16; break;
+		case 206: image_index = 17; break;
+		case 207: image_index = 18; break;
+		case 208: image_index = 19; break;
+		case 209: image_index = 20; break;
+		case 210: image_index = 21; break;
+		case 211: image_index = 22; break;
+		case 212: image_index = 23; break;
+		case 213: image_index = 24; break;
+		case 214: image_index = 25; break;
+		case 215: image_index = 26; break;
+      }
+	  
+	if((hitbox.hit = 1 || hitbox2.hit = 1 || hitbox3.hit = 1 || proj.hit = 1) && time = 29)
+  {
+	time = 19;
+  }
+  if((hitbox.hit = 1 || hitbox2.hit = 1 || hitbox3.hit = 1 || proj.hit = 1) && time = 128 )
+  {
+	time = 118;
+  }
+  if((hitbox.hit = 1 || hitbox2.hit = 1 || hitbox3.hit = 1 || proj.hit = 1) && time = 229)
+  {
+	time = 219;
+  }
+	
+///Ftilt 1
+///----------------------------------------------------------------------------------------------------------------------------		
+    if ( timer = 3 )
+      {
+		sound_play(attack_sound3);
+		create_hitbox(2,120-facing*60,2.7,0,6,2,slash2,obj_spark_slash1,0.99,0.7,13,8,self.id,1,3);
+		create_hitbox2(2,130-facing*80,2.8,0,5,2,slash1,obj_spark_slash1,1.3,0.99,20,8,self.id,1,3);
+		hitbox.di = 0.5; hitbox.hit_stun = 8;
+		hitbox2.di = 0.2; hitbox2.hit_stun = 8;
+		x += size * (4-facing*8);
+		
+		ftiltclaw = instance_create(x,y-50,obj_spark);
+		ftiltclaw.sprite_index = ftiltclaw1_sprite;
+		ftiltclaw.image_index = 0;
+		ftiltclaw.image_speed = 0;
+		ftiltclaw.image_xscale = clawsize * (1-facing*2);
+		ftiltclaw.image_yscale = clawsize;
+		ftiltclaw.image_alpha = 1;
+		//ftiltclaw.image_blend = c_red;
+		ftiltclaw.x = x - 3 * (1-facing*2);
+		ftiltclaw.y = y-25;
+		ftiltclaw.snap = self.id
+      }
+    
+	if ( ai && timer = 10 )
+		attacking = 1;
+
+	//FX Image Speed
+	if timer = 4 || timer = 103 
+		{
+		ftiltclaw.image_speed = 3.5;
+		ftiltclaw1.image_speed = 3.5;
+		}
+	if timer = 207 
+		{ftiltclaw2.image_speed = 1.25}
+	
+	//FX Image Alpha
+	if timer >= 8
+		{ftiltclaw.image_alpha -= 0.1;}
+	if timer >= 107
+		{ftiltclaw1.image_alpha -= 0.1;}
+	if timer >= 211 
+		{ftiltclaw2.image_alpha -= 0.1;}
+
+    if ( timer >= 8 && timer <= 18 && attacking )
+	{
+		attacking = 0;
+		timer = 100;
+		time = 118;
+	}
+
+///Ftilt 2
+///----------------------------------------------------------------------------------------------------------------------------		  	  
+    if ( timer = 102 )
+      {
+	sound_play(attack_sound3);
+	create_hitbox(2,65+facing*50,2.15,0.05,6,3,slash2,obj_spark_slash1,1,0.7,21,11,self.id,1,3);
+	hitbox.hit_stun = 5;
+	hitbox.di = 0.3;
+	hitbox.shake_ampl = 0.2;
+	hitbox.shake_kb = 1;
+	x += size * (4-facing*8);
+	
+	ftiltclaw1 = instance_create(x,y-50,obj_spark);
+	ftiltclaw1.sprite_index = ftiltclaw2_sprite;
+	ftiltclaw1.image_index = 0;
+	ftiltclaw1.image_speed = 0;
+	ftiltclaw1.image_xscale = clawsize * (1-facing*2);
+	ftiltclaw1.image_yscale = clawsize;
+	ftiltclaw1.image_alpha = 1;
+	//ftiltclaw1.image_blend = c_red;
+	ftiltclaw1.x = x + 1 * (1-facing*2);
+	ftiltclaw1.y = y-30;
+	ftiltclaw1.snap = self.id
+      }
+   
+   if ( ai && timer = 108 )
+	attacking = 1;
+
+    if ( timer >= 106 && timer <= 125 && (attacking = 1 && !moveup && !movedown))
+      {
+	attacking = 0;
+	timer = 200;
+	time = 219;
+      }
+  if ( timer >= 106 && timer <= 125 && attack_success && (attacking = 1 && (moveup || movedown)))
+      {
+	interrupt = 1;
+      }
+///Ftilt 3
+///----------------------------------------------------------------------------------------------------------------------------	 	    
+    if (timer = 206)
+	{
+	ftiltclaw2 = instance_create(x,y-50,obj_spark);
+	ftiltclaw2.sprite_index = ftiltclaw3_sprite;
+	ftiltclaw2.image_index = 0;
+	ftiltclaw2.image_speed = 0;
+	ftiltclaw2.image_xscale = clawsize2 * (1-facing*2);
+	ftiltclaw2.image_yscale = clawsize2;
+	ftiltclaw2.image_alpha = 1;
+	//ftiltclaw2.image_blend = c_red;
+	ftiltclaw2.x = x + 1 * (1-facing*2);
+	ftiltclaw2.y = y-45;
+	ftiltclaw2.snap = self.id
+	}
+	
+	
+	if ( timer = 207 )
+      {
+	play_attack_voice();
+	sound_play(attack_sound3);
+	create_hitbox2(4,24+facing*132,5.75,4.15,5,6,slash3,obj_spark_hit2,0.8,1.3,30,15,self.id,4,2);
+	create_hitbox(4,24+facing*132,5.75,4.15,5,6,slash3,obj_spark_hit2,0.8,1.3,10,15,self.id,4,2); 
+	hitbox.shake_ampl = 0.4;
+	hitbox.shake_kb = 1;	
+      }
+  }
+
+  
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

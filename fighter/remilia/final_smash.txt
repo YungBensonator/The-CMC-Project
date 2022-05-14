@@ -1,0 +1,226 @@
+/*
+Final Smash Notes:
+Remilia's Final Smash is determined based on whether or not she's in Spell Card Mode.
+If Spell Card Mode is not active, her Final Smash is Spear of Gungnir.
+If Spell Card Mode is active, her Final Smash is Scarlet Devil.
+*/
+
+//-------------------------------------------------------------------------------------------------------------------------------
+///Spear of Gungnir
+if scarlet <= 0  
+{
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite1;
+        image_index=0;
+        timer = 1;
+        time = 107;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		
+		cinematic = instance_create ( 0 , 0 , obj_camerazoom );
+		cinematic.camera_l = x - 8;
+		cinematic.camera_r = x + 8;
+		cinematic.camera_u = y - 26 - actual_height;;
+		cinematic.camera_d = y + 4;
+		cinematic.camera_boundary_zoom = 10;
+		cinematic.alarm[0] = 72;
+				
+		spotlight = instance_create ( 0 , 0 , obj_freeze );
+		spotlight.dontpause = self.id;
+		spotlight.alarm[0] = 72;
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+	
+  switch ( timer )
+	  {
+		case 1: image_index = 0; break;
+		case 4: image_index = 1; break;
+		case 7: image_index = 2; break;
+		case 10: image_index = 3; break;
+		case 13: image_index = 4; break;
+		case 16: image_index = 5; break; //0-5 cinematic pose
+		case 55: image_index = 6; break; 
+		case 58: image_index = 7; break;
+		case 61: image_index = 8; break;
+		case 64: image_index = 9; break; //6-9 windup
+		case 67: image_index = 10; break;
+		case 70: image_index = 11; break;
+		case 73: image_index = 12; break;
+		case 76: image_index = 13; break;
+		case 79: image_index = 14; break;
+		case 82: image_index = 14; break; //10-15 throw dat bitch
+	  }
+
+
+	 if timer = 16
+		{ 
+		sound_play(final_smash_sound1);
+		//sound_play(beamu_voice);
+		image_blend = merge_color ( c_white , c_red , .4 ); alarm[7] = 3; 
+		}
+
+    if timer = 73 {
+        //sound_play(beamu_sound1);
+        //sound_play(beamu_sound2);
+        //sound_play(beamu_sound2);
+        instance_create(x,y,obj_shakescreen)
+        spear = create_projectile(50,25+facing*130,9,9,100,4,magic3,obj_spark_hit3,0.8,0.8,0,20,self.id,9999,char_custom7); 
+		spear.sprite_index = spearfinal_sprite;
+		spear.image_xscale = 0.5*(1-facing*2)*size;
+		spear.image_yscale = 0.5*size;
+		spear.facing = facing;
+        spear.di = 0;
+		spear.hspeed = 20*(1-facing*2);
+		spear.image_index = 0;
+		spear.image_speed = 1;
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+        }
+		
+    }
+if timer >= 105 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+}
+
+
+//-------------------------------------------------------------------------------------------------------------------------------
+///Scarlet Devil
+if scarlet > 0  
+{
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite2;
+        image_index=0;
+        timer = 1;
+        time = 207;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		
+		cinematic = instance_create ( 0 , 0 , obj_camerazoom );
+		cinematic.camera_l = x - 8;
+		cinematic.camera_r = x + 8;
+		cinematic.camera_u = y - 26 - actual_height;;
+		cinematic.camera_d = y + 4;
+		cinematic.camera_boundary_zoom = 10;
+		cinematic.alarm[0] = 72;
+				
+		spotlight = instance_create ( 0 , 0 , obj_freeze );
+		spotlight.dontpause = self.id;
+		spotlight.alarm[0] = 72;
+}
+speed=0
+gravity_lock = 1;
+if timer < time 
+	{
+	
+  switch ( timer )
+	  {
+		case 1: image_index = 0; break;
+		case 9: image_index = 1; break;
+		case 16: image_index = 2; break; //pose
+		case 70: image_index = 3; break;
+		case 72: image_index = 4; break; //loop 5-7
+		case 74: image_index = 5; break; 
+		case 76: image_index = 6; break; 
+		case 78: image_index = 7; break;
+	  }
+
+
+	 if timer = 16
+		{ 
+		sound_play(final_smash_sound2);
+		//sound_play(beamu_voice);
+		image_blend = merge_color ( c_white , c_red , .4 ); alarm[7] = 3; 
+		}
+
+
+	if timer = 73 {
+		scarletspark = instance_create(x,y-20,obj_spark);
+		scarletspark.sprite_index = scarletspark_sprite;
+		scarletspark.image_speed = 0.5;
+		//scarletspark.image_blend = c_red;
+		scarletspark.image_alpha = 1;
+		scarletspark.image_xscale = 1 * (1 - facing*2);
+		scarletspark.image_yscale = 1;
+		scarletspark.x = x - 380 * (1-facing*2);
+		scarletspark.y = y - 500;
+		scarletspark.snap = self.id
+		}
+		
+	if timer < 195 && scarletspark.image_index > 29
+		{
+		scarletspark.image_index = 6;
+		}
+		
+    if (timer >= 73 && timer < 195 && timer mod 2 = 0) {
+        //sound_play(beamu_sound1);
+        //sound_play(beamu_sound2);
+        //sound_play(beamu_sound2);
+        instance_create(x,y,obj_shakescreen)
+		create_projectile(1,90,4,4,50,6,slash3,obj_spark_hit4,12,13,0,110,self.id,1,no_script);
+		proj.absorb = -1;
+		proj.absorb2 = -1;
+		proj.reflect = -1;
+		proj.priority = 6;
+		proj.di = 0;
+		proj.hit_stun = 30;
+		proj.shield_stun = 30;
+        }
+		
+	if (timer = 195) {
+        //sound_play(beamu_sound1);
+        //sound_play(beamu_sound2);
+        //sound_play(beamu_sound2);
+        instance_create(x,y,obj_shakescreen)
+		create_projectile(10,90,7,9,50,12,specialhit,obj_spark_hit4,12,13,0,110,self.id,1,no_script);
+		proj.absorb = -1;
+		proj.absorb2 = -1;
+		proj.reflect = -1;
+		proj.priority = 6;
+		proj.di = 0;
+		proj.hit_stun = 30;
+		proj.shield_stun = 30;
+		scarletspark.image_index = 31;
+        }
+		
+		
+		
+    }
+	
+if timer >= 205 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+}

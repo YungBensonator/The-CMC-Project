@@ -1,0 +1,108 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "bair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dtilt_sprite;
+  timer = 0;
+  time = 41;
+  timer_speed = 1;
+garf=0
+facing = !facing;
+  }
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 2: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 6: image_index = 3; break;
+    case 8: image_index = 4; break;
+  
+
+  }
+if timer = 1 {
+	sound_play(attack_voice1)
+	}
+if timer=8
+sound_play(swingsnd2);
+
+if timer = 7 || timer = 10 || timer = 13
+{
+		aicon = instance_create(x+30-facing*60,y-20,obj_spark)
+		aicon.sprite_index = slash_claw_sprite;
+		aicon.image_index = 0;
+		aicon.image_speed = 0.8
+		aicon.alarm[0] = 10
+		aicon.image_xscale = 0.8 * (1-facing*2) * size
+		aicon.image_yscale = 0.8 * size
+		aicon.image_angle=garf*(1*facing-2)
+		aicon.x = x + 20-facing*40 * size
+		aicon.y = y - 10*size
+		aicon.snap=self.id;
+}
+
+if timer=6
+if facing=0
+garf=10
+if timer=9
+garf=-10
+if timer=12
+garf=0
+
+if timer=7
+aicon.image_blend=make_color_rgb(120,120,255)
+if timer=10
+aicon.image_blend=make_color_rgb(255,120,120)
+if timer=13
+aicon.image_blend=make_color_rgb(120,255,120)
+
+if timer = 8  {
+	create_hitbox(2,90,2,0,5,5,choose(slash1,slash2,slash3),obj_spark_hit1,0.95,0.95,33,15,self.id,2,2);
+hitbox.di=0.4
+hitbox.sdi=0.1
+create_hitbox2(2,370,2,2,5,5,choose(slash1,slash2,slash3),obj_spark_hit1,0.75,0.75,15,15,self.id,2,2);
+
+	}
+if timer = 11  {
+	create_hitbox(2,270,2,0,5,5,choose(slash1,slash2,slash3),obj_spark_hit1,1.10,1.10,33,15,self.id,2,2);
+hitbox.sdi=0.4
+create_hitbox2(2,370,2,2,5,5,choose(slash1,slash2,slash3),obj_spark_hit1,0.75,0.75,15,15,self.id,2,2);
+
+	}
+if timer = 14
+{
+create_hitbox(6,30+facing*120,6,3,6,7,slash3,obj_spark_hit1,1.2,1.2,33,15,self.id,4,2);
+create_hitbox2(6,30+facing*120,6,3,6,7,slash3,obj_spark_hit1,0.75,0.75,15,15,self.id,4,2);
+
+}
+
+if image_index >= image_number - image_speed
+image_speed = 0
+
+if air = 0 {
+facing = !facing;
+	state_type = "land"
+	attack_type = "none"
+	sprite_index = land_sprite
+	timer = 0
+	time = 10
+	}
+}
+if ( timer >= time - 1 )
+  {
+facing = !facing;
+  attack_type = "none";
+  if ( air > 0 )
+  {
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 7;
+  }
+  else {
+  state_type = "stand"; }
+  timer = 0;
+  time = -1;
+  }

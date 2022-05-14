@@ -1,0 +1,46 @@
+// hyper beam copypasta
+absorb = -1
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    image_speed = 0.4;
+    visible=1;
+    facing = attacker.facing
+    if ready = 0 {
+        megaman = attacker
+        ready = 1
+        proj_hits = 1
+    }
+}
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+visible=1
+sprite_index = attacker.id.hyperbeam_sprite
+draw_sprite_ext(attacker.id.hyperbeam_sprite,-1,x,y,image_xscale,image_yscale,0,c_white,0.85)
+if timer = time+1 && proj_hits <= 11 {
+proj_hits+=1
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+if proj_hits = 12 {
+    damage = 4*megaman.size
+    bkb = megaman.size*7
+    kbg = megaman.size*6.2
+    sfx = kick3
+    hitlag_frames = round(3*megaman.size)
+    hitlag_diff = 10
+    gfx = obj_spark_hit2
+}
+timer = 0
+time = 6
+}
+if megaman.id.timer > 120 && proj_hits <= 11 {
+    proj_hits=12
+    damage = 4*megaman.size
+    bkb = megaman.size*7.5
+    kbg = megaman.size*5.5
+    sfx = kick3
+    hitlag_frames = round(15*megaman.size)
+}

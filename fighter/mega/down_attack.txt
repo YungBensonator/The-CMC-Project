@@ -1,0 +1,45 @@
+if ( state_type = "down" )
+  {
+  state_type = "attack";
+  attack_type = "down_attack";
+  image_speed = 0.32;
+  sprite_index = down_attack_sprite;
+  image_index = 0;
+  timer = 1;
+  time = 43;
+  timer_speed = 1;
+  }
+
+if ( timer == 1 )
+  intangible = 1
+if timer = 7
+	sound_play(attack_voice1)
+if timer = 14 {
+	spark = instance_create(x,y,obj_spark);
+	spark.sprite_index = sparkshock_sprite;
+	spark.image_speed = 0.5;
+	spark.image_xscale = size*0.85;
+	spark.image_yscale = size*0.85;
+	spark.x = x+16*(1-facing*2);
+	spark.y = y-25;
+	spark.depth = 0;
+	}
+if ( timer == 15 ) {
+	sound_play(electric_sound1);
+	create_hitbox(8,40+facing*100,6.8,2.9,9,8,shock3,obj_spark_shock,0.85,0.85,16,25,self.id,7,1);
+	}
+if timer > 15 && instance_exists(spark) && timer mod 1 = 0 {
+spark.y -= 3
+hitbox.hitbox_y += 3
+}
+
+if ( timer == 18 )
+  intangible = 0
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

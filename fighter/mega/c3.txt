@@ -1,0 +1,67 @@
+// This script controls Mega Man's Leaf Shield projectile. 
+// The Leaf Shield will cancel out incoming projectiles for a limited time.
+proj_destroy = 0 
+priority = 2
+if timer = 1 && hit = 2
+    sprite_index = mega.leafshield_sprite
+if timer <= 1 && !shoot {
+    hit=2
+    image_speed = 0.5;
+    visible = 1;
+    reflect = 3   // Destroy projectiles
+    mega = attacker.id
+    hitlag_diff = 3
+    sprite_index = mega.leafshield_sprite
+}
+if timer > 1 && shoot = 0 {
+    x = mega.x;        // Update position relative to Mega Man
+    y = mega.y-15*mega.size;
+}
+if shoot = 0
+    hit = 2         // Cannot hit while orbiting Mega Man
+else if shoot = 1 {
+    proj_destroy = 1
+    shoot = 2
+    hit = 0
+    hspeed = (1-mega.facing*2)*4.25*mega.size
+    mega.leaf = 0
+    timer = 2
+    time = 76
+reflect=4
+}
+
+if shoot > 0 && timer = time+1 && proj_hits <= 3 {
+    proj_hits+=1
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+if facing=0
+hspeed=4.25*mega.size
+if facing=1
+hspeed=-4.25*mega.size
+    if proj_hits = 4 {
+        damage = round(attacker.size*2)
+        bkb= attacker.size*6
+        kbg = attacker.size*4.75
+        dir = 25+attacker.facing*130
+        hitlag_frames = 5
+        shake_ampl = 0.4
+        sfx = kick3
+        hitlag_diff = 0
+        hit_stun = 4
+    }
+    timer = 0
+    time = 5
+}
+
+if shoot=1 && timer mod 4 = 0
+{
+if visible=1
+visible=0
+if visible=0
+visible=1
+}
+if timer >= time-4 && shoot = 0
+    mega.leaf = 0
+    

@@ -1,0 +1,67 @@
+
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "fthrow";
+image_speed = 0.5;
+sprite_index = ftiltcombo_sprite;
+image_index=0;
+timer = 0;
+time = 50;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 60;
+reset = 0;
+}
+if timer < time {
+	if ( image_index < 18 )
+	{
+	target.x = x + 20 * size * (1-facing*2);
+	target.y = y;
+	}
+if image_index = 2 || image_index = 8 {
+    sound_play(attack_sound);
+    //sound_play(attack_sound2);
+    //sound_play(attack_sound2);
+    create_hitbox(1,50+facing*80,1.85,0,5,2,slash2,obj_spark_slash2,1.5,1.5,28,20,self.id,3,2); 
+    hitbox.di = 0
+    hitbox.hit_stun = 2;
+    hitbox.hitshake_type = 1
+	image_index += 1
+}
+
+if image_index = 11 && reset < 1 
+	{
+		image_index = 1;
+		reset += 1;
+	}
+	
+if image_index = 11 && reset >= 1 
+	{
+		image_index = 16;
+		//image_speed = 0.75;
+	}
+
+if image_index = 18 {
+    sound_play(attack_sound);
+    sound_play(attack_sound3);
+    sound_play(attack_sound3);
+    sound_play(attack_voice3);
+    create_hitbox(5,25+facing*135,6,4.3,6,8,slash3,obj_spark_slash3,1.75,1.75,28,13,self.id,5,3);
+    hitbox.hitshake_type = 1
+    hitbox.shake_ampl = 0.35
+	hitbox.di = 0;
+        hitbox.shake_type = 1
+        hitbox.shake_ampl = 1.3
+}
+    
+if image_index >= image_number - image_speed
+    image_speed = 0
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

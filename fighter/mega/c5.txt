@@ -1,0 +1,121 @@
+//Wheelcutter (Dtilt) windstorm now sry
+
+if temp4 = 0 {
+absorb = 0
+absorb2 = 1
+proj_destroy = 1
+if ( hspeed != 0 )
+if ( timer mod 3 == 0 && ( on_floor || on_platform ) )
+  {
+  duster = instance_create ( x , y , obj_dust_effect );
+  duster.image_xscale *= 0.2;
+  duster.image_yscale *= 0.2;
+  duster.facing = ( hspeed < 0 );
+  }
+if timer <= 1 && hit = 0 && !temp2 {         // Initialize sprite and speed during frame 1
+    hspeed = (3.5 - attacker.facing*7)*attacker.size;
+    current_speed = hspeed;
+    image_speed = 0.7;
+    visible = 1
+    sprite_index = attacker.windstorm_sprite;
+    temp = 0; //timer for multi-hits
+    temp2 = 1; //glitch fix
+    timer2 = 0;
+    temp3 = 0;
+    temp8=0;
+}
+if ( timer <= 1 && hit = 0 && temp2 )
+    hspeed = current_speed;
+timer2 += 1;
+moving_object = 1;
+if ( next_to_rwall || next_to_lwall ) {
+    instance_destroy()
+    instance_create ( x , y-5 , obj_smoke );
+}
+
+if ( vspeed < 6 )
+    vspeed += 0.25;
+if ( on_floor || on_platform )
+  {
+    y = yprevious;
+    vspeed = 0;
+  }
+
+if ( hit > 0 ) && temp4 < 1
+  {
+    timer = 0;
+    temp += 1;
+  }
+if ( temp >= 3 )
+  {
+    hit = 0;
+    temp = 0;
+    temp3 += 1;
+  }
+if temp3 = 4  {
+damage = 4
+bkb = 6.7
+dir=90
+hit_stun=8
+sfx = slash2
+gfx = obj_spark_slash2
+temp8+=1
+}
+
+if temp8>1
+{
+timer2=10
+hit=2;
+vspeed=-6;
+hspeed=0;
+}
+
+if timer2 > 60 {
+instance_create ( x , y-5 , obj_smoke );
+instance_destroy() }
+if ( timer2 = time )
+    timer = time;
+if timer = time
+    instance_create ( x , y-5 , obj_smoke );
+}
+
+if temp4 = 1 {
+// Dair
+moving_object = 1;
+	absorb = 0;
+	absorb2 = 1;
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    visible=1;
+    facing = attacker.id.facing
+	use_palette = number;
+	sprite_index = attacker.id.hardknuckle_sprite;
+	image_index = 0
+	image_speed = 0
+	vspeed = 9*size;
+}
+visible=1
+
+if ( on_floor || on_platform ) {
+screen_shake ( 3 , 6);
+instance_create ( x , y , obj_smoke );
+instance_destroy() }
+if timer = time
+    instance_create ( x , y , obj_smoke );
+}
+if temp4 = 2 {
+// Bair
+moving_object = 1;
+	absorb = 0;
+	absorb2 = 1;
+if timer <= 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    visible=1;
+    facing = attacker.id.facing
+}
+visible=1
+
+if ( next_to_rwall || next_to_lwall ) {
+instance_create ( x , y , obj_smoke );
+instance_destroy() }
+if timer = time
+    instance_create ( x-10*(1-facing*2) , y-4 , obj_smoke );
+}

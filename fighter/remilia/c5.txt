@@ -1,0 +1,38 @@
+//usmash rocket upper kick
+
+absorb = 1;
+absorb2 = 1;
+moving_object = 1;
+priority = 4;
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = attacker.id.bat_sprite;
+	//image_xscale = 0.15 * (1-facing*2) * size;
+	//image_yscale = 0.075 * size;
+    image_speed = 1;
+    visible = 1;
+	//depth = -3;
+  }
+
+shield_damage = (15 + (attacker.smash_charge/100)) * attacker.size;
+shield_stun = (15 + (attacker.smash_charge/120)) * attacker.size;
+
+if ( ( hit = 0 && ( next_to_rwall || next_to_lwall || on_floor || on_platform || under_ceiling ) ) || hit = 1 || attack_success || attack_shielded || timer = time)
+	{
+    instance_destroy();
+	instance_create(x+(1-facing*2)*15*size,y-3*size,obj_spark_explode2);
+	sound_play(explode1);
+	screen_shake(2,2);
+	
+	kaboom = create_projectile(10,70+facing*40,6,6.5,5,10,fire2,obj_spark_fire1,1.8,1.8,13,0,attacker.id,10,1)
+	kaboom.absorb = 0;
+	kaboom.absorb2 = 0;
+	kaboom.reflect = 0;
+	kaboom.moving_object = 0;
+	kaboom.hit_stun = 4;
+	kaboom.di = 0.4;
+	kaboom.hit = 0;	
+	kaboom.damage = ( 10 + (attacker.smash_charge/10)) * attacker.size;
+	kaboom.bkb = ( 6 + (attacker.smash_charge/120)) * attacker.size;
+	kaboom.kbg = ( 6.5 + (attacker.smash_charge/120)) * attacker.size;
+	}

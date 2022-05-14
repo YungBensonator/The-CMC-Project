@@ -1,0 +1,65 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "bthrow";
+  image_speed = 0.25;
+  image_index = 0;
+  sprite_index = bthrow_sprite;
+  timer = 0;
+  time = 75;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 80;
+  }
+if ( timer <= 12 )
+{
+target.x = x + 11 * size * (1-facing*2);
+target.y = y - 20 * size;
+}
+if ( timer == 12 )
+  {
+  create_throw_box ( 2 , 145-facing*110 , 6.5 , 0 , 8 , 4 , punch3 , obj_spark_hit3 , 0.7 , 0.7 , 10 , 25 , self.id , 2 , 1);
+  hitbox.hit_stun = 35;
+  hitbox.weight_kb = 1
+  hitbox.di = -1
+  }
+
+if ( timer >= 40 && timer <= 60 && timer mod 2 = 0 )
+  {
+      {
+	temp = choose(-2,-1,0,1,2);
+	temp2 = choose(-2,-1,0,1,2);
+	create_projectile(1,90,1,0,1,1,choose(slash1,slash2),obj_spark_hit,0.9,0.4,-11+temp,18+temp2,self.id,7,no_script);
+	proj.sprite_index = needlecannon_sprite;
+	proj.hspeed = -10*size*(1-facing*2);
+	proj.di = -1
+	
+      }
+	if proj.hit > 0
+	instance_destroy()
+
+
+  }
+if ( timer = 61 )
+  {
+      {
+	create_projectile(2,140-facing*100,7.5,3,4,4,slash3,obj_spark_hit2,0.9,0.4,-11,18,self.id,7,no_script);
+	proj.sprite_index = needlecannon_sprite;
+	proj.hspeed = -10*size*(1-facing*2);
+	proj.hit_stun = 12
+      }
+	if proj.hit > 0
+	instance_destroy()
+  }
+if timer = 69
+image_speed = 0
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  facing = 1-facing;
+  timer = 0;
+  time = -1;
+  }

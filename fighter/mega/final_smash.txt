@@ -1,0 +1,74 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" || state_type = "crouch" {
+        hspeed = 0;
+        size = csize
+        air_move=0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.5;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 160;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        sound_play(final_smash_voice_1)
+        sound_play(super)
+        smash_power = 0
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+    if timer = 1 {
+        create_hitbox_impaler(12,270,10,1,92,8,kick3,obj_spark_stun,1.65,1.35,0,18,self.id,5,6)
+        if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_combo3)
+         }
+    }
+    if timer = 50 sound_play(final_smash_voice_2);
+    if timer = 56 {
+        sound_play(final_smash_sound_1);
+        instance_create(x,y,obj_shakescreen)
+        create_projectile(3,5+facing*170,6.5,0,-1,3/size,shock2,obj_spark_shock,1.7,0.8,28,18,self.id,6,char_custom11); 
+        proj.facing = facing;
+        proj.di = 0;
+        effect_create_below(ef_ellipse,x,y,1,c_white)
+    }
+    if timer = 60
+	image_speed =  0
+    if timer = 115
+        image_index = 29
+    if timer = 130
+	image_index = 30
+    if timer = 140
+	image_index = 31
+    if timer = 56 || timer = 80 || timer = 104 {
+        create_projectile(3,35+facing*110,4,6.1,-1,2/size,explodehit2,obj_spark_fire1,0.65-facing,0.65,12,20,self.id,80,hypermissile_script); 
+        }
+    if timer = 66 || timer = 90 || timer = 111 {
+        create_projectile(3,35+facing*110,4.1,5.9,-1,2/size,explodehit2,obj_spark_fire1,0.65-facing,0.65,5,20,self.id,80,hypermissile_script); 
+        }
+    if timer = 62 || timer = 94 {
+        create_projectile(4,35+facing*110,6.5,5.5,-1,6/size,punch4,obj_spark_hit2,0.65-facing,0.65,13,10,self.id,80,hypermissile_script); 
+        }
+    if timer = 70 || timer = 99 {
+        create_projectile(5,5+facing*170,5.9,5.8,-1,7/size,slash3,obj_spark_slash2,0.65-facing,0.65,0,8,self.id,90,hypermissile_script); 
+        }
+     if timer = 74 || timer = 105 {
+        create_projectile(6,25+facing*130,6.75,6.75,-1,7/size,kick3,obj_spark_hit3,0.65-facing,0.65,18,9,self.id,90,hypermissile_script); 
+        }
+    }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "fall";
+	}
+	smash_power = 0
+	intangible = 0;
+    timer = 0;
+    time =-1;
+}

@@ -1,0 +1,34 @@
+if speed < 7 && hit_time <= 0 {
+    hitbox = vermin
+    if hitbox <= 0
+        exit;
+    if hitbox.hit < 2 {
+        hasbeenhit = 1
+        if hitbox.dir <= 10
+            dir = 0
+        else if (hitbox.dir >= 170 && hitbox.dir <= 180)
+            dir = 180
+        else if hitbox.dir = 361 || hitbox.dir = 362
+            dir = 0 + (hitbox.x<x)*180
+        else
+            dir = hitbox.dir
+        FMODSoundPlay(hitbox.sfx)
+        if hitbox.gfx > 0 {
+            gfx = instance_create(x,y,hitbox.gfx)
+            gfx.image_xscale += 0.03*hitbox.damage
+            gfx.image_yscale += 0.03*hitbox.damage
+            gfx.number = hitbox.attacker.number
+            gfx.kb = hitbox.bkb + hitbox.kbg
+            gfx.dir = dir
+            gfx.target = self.id
+        }
+        next_speed = (vermin.bkb + vermin.kbg)/1.25
+        next_direction = dir
+        image_speed = 0.25
+        hit_time = hitbox.hitlag_frames
+        predator = hitbox.attacker.id
+hitbox_hitspark ( vermin , ( vermin.x + x ) * 0.5 , ( vermin.y + y - 8 ) * 0.5 );
+object_stun ( vermin , vermin.hitlag_frames );
+        speed = 0
+    }
+}

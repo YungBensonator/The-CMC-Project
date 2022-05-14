@@ -1,0 +1,228 @@
+/*
+Remilia's 8-Way Airdash. Functions & executes similarly to Crusade Dodge, but has the following additional effects:
++ Airdash can be cancelled into attack, special, jump, or airdash.
++ Attacks on hit can be cancelled into airdash if in the air. Ground moves must be jump cancelled first (if possible).
+- Airdash costs Meter.
+*/
+
+
+//if i press zair & no direction, i dash forward
+//if i press zair and a direction, i go in that direction
+//i can go in 8 directions
+//i can cancel the dash with any move
+//dash costs meter
+
+
+fast_fall = 0
+fast_fall_temp = 0
+
+if (state_type = "jump" && floattime >= airdashcost){
+	hspeed = 0;
+	vspeed = 0;
+	state_type = "air_attack";
+	attack_type = "zair";
+	image_speed = 0;
+	sprite_index = jump_sprite;
+	image_index=0;
+	timer = 0;
+	time = 18;
+	timer_speed=1;
+	if moveright = 1 facing = 0
+	if moveleft = 1 facing = 1
+	air_move=0
+	movetemp = 0 //???
+	movetemp2 = attack_sound1 //???
+	hover = 0
+	//tempdirection = 0-facing*180// 0R or -180L
+}
+
+dashspeed = 10 //Main variable that affects the speed of the airdash. 
+
+slowdown = 0.2 //Affects slowdon of end of airdash
+
+maxfloattime = 150;
+
+airdashcost = maxfloattime/8.5; //Cost for using an airdash. Equivalent of 2 Meter Orbs.
+
+
+
+
+
+if timer < time 
+{
+	if timer > 1
+	force_edge_grab = 1
+	state_type = "air_attack";
+
+	if movetemp
+	gravity = 0;
+	gravity_lock = 1;
+
+	if timer = 1 
+		{
+		timer+=1
+		image_index+=image_speed
+		/*duster = instance_create(x,y,obj_dust_effect);
+		duster.facing = facing;
+		sound_play(sideb_dash_sound)
+		sound_play(sideb_dash_sound2)
+		sound_play(sideb_dash_sound3)
+		sound_play(sideb_dash_voice)
+		image_speed = 0.3
+		instance_create(x,y,obj_down_impact)*/
+		speed = dashspeed
+		//direction = facing*180// 0R or 180L
+		sound_play(mid_jump_sound)
+		tempup = 0
+		tempdown = 0
+		tempright = 0
+		templeft = 0
+		if moveup
+			tempup = 1
+		if movedown
+			tempdown = 1
+		if moveright
+			tempright = 1
+		if moveleft
+			templeft = 1
+		
+		floattime -= airdashcost
+		}
+
+	if timer >= 2 && timer <= 17
+		{
+		speed = (dashspeed/1.4) * size //((dashspeed/1.4) - (timer > 13))*size
+		movetemp = 1
+		}
+}
+
+if movetemp = 1 
+{
+	if timer >=1 && air > 0{
+	//after_image(6,c_blue,0.9);
+	after_image(1,c_blue,0.5)
+	after_image(2,c_blue,0.45)
+	after_image(3,c_blue,0.4)
+	after_image(4,c_blue,0.35)
+	after_image(5,c_blue,0.3)
+	after_image(6,c_blue,0.25)
+	after_image(7,c_blue,0.2)
+	after_image(8,c_blue,0.15)
+	after_image(9,c_blue,0.1)
+	after_image(10,c_blue,0.05)
+	after_image(11,c_blue,0.01)
+	}
+	/*else 
+		{direction = tempdirection}
+
+	if facing 
+		{image_angle = direction-180}
+	else 
+		{image_angle = direction}*/
+	
+	
+	
+	///up airdash
+	if ((tempup) && ((!tempdown) && (!templeft) && (!tempright)))
+		{direction = 90}
+	///down airdash
+	else if ((tempdown) && ((!tempup) && (!templeft) && (!tempright)))
+		{direction = 270}
+	///right airdash
+	else if ((tempright) && ((!tempup) && (!tempdown) && (!templeft))) || ((facing = 0) && ((!tempup) && (!tempdown) && (!templeft)))
+		{direction = 0}
+	///left airdash
+	else if ((templeft) && ((!tempup) && (!tempdown) && (!tempright))) || ((facing = 1) && ((!tempup) && (!tempdown) && (!tempright)))
+		{direction = 180}
+	///up-right airdash
+	else if ((tempup) && (tempright) && (!templeft) && (!tempdown))
+		{direction = 45}
+	///up-left airdash
+	else if ((tempup) && (!tempright) && (templeft) && (!tempdown))
+		{direction = 135}
+	///down-right airdash
+	else if ((!tempup) && (tempright) && (!templeft) && (tempdown))
+		{direction = 315}
+	///down-left airdash
+	else if ((!tempup) && (!tempright) && (templeft) && (tempdown))
+		{direction = 225}
+}
+
+/*if timer = 1 || timer = 4 || timer = 5 || timer = 10 || timer = 13 
+{
+	movetemp2+=1
+	image_index+=image_speed
+}*/
+
+///cancel window
+if timer >= 3 
+{
+	if attacking || special || smash || movejump || grab || taunt
+	{
+		movetemp = 0
+		if air != 0 {air_move = 1;}
+		interrupt = 1;
+		chaincombotimer = 8;
+		
+	if ((attacking && movedown) || (smashdown))	
+		{divekicktemp = 1;}
+	}
+}
+
+if timer = 17
+{
+	movetemp = 0
+	//image_angle = 0
+	if air != 0 
+		{
+			if hspeed > 0
+				hspeed -= slowdown; 
+			if hspeed < 0
+				hspeed += slowdown;
+			
+			if vspeed > 0
+				vspeed -= slowdown;
+			if vspeed < 0
+				vspeed += slowdown;
+		} //{hspeed = dashspeed/1.5 * (1-facing*2)*size}
+	else
+		{hspeed = (dashspeed/5) * (1-facing*2) *size}
+}
+
+if vspeed > 0 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) && timer >= 3 
+{
+	attack_type="none"
+	attacking = 0
+	movetemp = 0
+	image_angle = 0
+	
+	if air != 0
+		state_type = "jump";
+	else
+		state_type= "stand"
+		instance_create(x,y,obj_down_impact)
+		//sprite_index = land_sprite
+		//image_index = 0
+		//image_speed = 0
+		timer=0
+		time=-1
+}
+
+if air = 0 
+{
+	canzair = 1 + kaioken;
+	if(floattime < maxfloattime ){floattime += 1;} 
+	//floattemp = 1;
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+	attack_type = "none";
+	if air != 0
+	state_type = "jump";
+	else
+	state_type = "stand";
+	timer = 0;
+	time =-1;
+}
+

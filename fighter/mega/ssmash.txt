@@ -1,0 +1,71 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "ssmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = ssmash_sprite;
+  timer = 0;
+  time = 72;
+  timer_speed = 1;
+  charge_frame = 13;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 16: image_index = 5; break;
+	case 18: image_index = 6; shakex = -3 * size * ( 1 - facing * 2 ); break;
+	case 21: shakex = 0; break;
+	case 22: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 26:
+	  image_index = 9;
+	  duster = instance_create ( x - 5 * size * ( 1 - facing * 2 ) , y , obj_dust_effect );
+	  duster.image_xscale *= 0.2;
+	  duster.image_yscale *= 0.2;
+	  duster.facing = facing;
+	  break;
+	case 28: image_index = 10; break;
+	case 30: image_index = 11; break;
+	case 55: image_index = 12; break;
+	case 57: image_index = 13; break;
+      }
+
+    if ( timer = 18 )
+      {
+        sound_play(explodehit4);
+	sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
+	duster = instance_create ( x , y , obj_dust_effect );
+	duster.facing = facing;
+	duster.hspeed = -2 * ( 1 - facing * 2 ) * size;
+	duster.image_xscale *= 0.9 * size;
+	duster.image_yscale *= 0.8 * size;
+	spark = instance_create ( x + 10*size*(1-facing*2) , y - 20 * size , obj_spark_shockwave );
+	spark.image_xscale *= 0.2 * size;
+	spark.image_yscale *= 0.4 * size;
+        explosion = instance_create( x + 10*size*(1-facing*2) , y - 20 * size , obj_spark_explode2 );
+	create_projectile(0,0,0,0,0,0,0,0,0.8,0.8,14,17.5,self.id,14,char_custom6);
+	proj.facing = facing;
+	create_hitbox(8,60+facing*60,6.75,4.5,25,12,fire3,obj_spark_fire1,0.85,0.85,13,19,self.id,8,3);
+      }
+    if ( timer >= 18 && timer < 25 )
+      {
+	hspeed = -2 * size * ( 1 - facing * 2 );
+      }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

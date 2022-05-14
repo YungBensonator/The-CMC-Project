@@ -1,0 +1,54 @@
+absorb = 1
+absorb2 = 1
+proj_destroy = 0
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    image_speed = 0.5;
+    visible=1;
+    temp = 1
+    proj_hits = 0
+    mega = attacker
+    xspeed = 4.5
+    facing = mega.facing
+    hspeed = xspeed*(1-attacker.facing*2)
+    facing = attacker.facing
+    image_xscale = (1-attacker.id.facing*2)*attacker.size*0.4
+}
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+if hit!=0
+    speed = 0
+else
+    hspeed = xspeed*(1-facing*2)
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.9)
+if timer = time+1 && proj_hits <= 1 {
+    proj_hits+=1
+    timer = 0
+    time = 15
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+    if proj_hits = 2 {
+        damage = round(attacker.size*8)
+        bkb= attacker.size*6.45
+        kbg = attacker.size*6.45
+        dir = 25+facing*130
+        hitlag_frames = round(14*attacker.size)
+        shake_ampl = 0.75
+        shake_kb = 7
+        sfx = shock3
+        gfx = obj_spark_shock
+    }
+}
+if timer = 75 && proj_hits<1
+proj_hits=1
+moving_object = 1;
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self.id)   
+    instance_destroy()
+
+
+

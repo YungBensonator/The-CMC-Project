@@ -1,0 +1,149 @@
+//old remi sideb
+if (cansideb != 1)
+		{exit;}	
+
+if ( (state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch") && (cansideb = 1) )
+	{		
+    attack_type = "sideb";
+	sprite_index = land_sprite;
+	image_index = 1;
+	image_speed = 0;
+    timer = 0;
+    time = 50;
+    hspeed = 0;
+	movedown = 0;
+	movetemp = 0;
+	
+	if ( air = 0 )
+		{
+		state_type = "attack";
+		}
+	if ( air > 0 )
+		{
+		state_type = "air_attack";
+		}
+    }
+	
+	if (timer >= 1 && timer <= 9 && movedown && air > 0)
+		{movetemp = 1;}
+	
+	if (timer >= 10 && timer <= 47)
+		{after_image(4,c_red,0.65);}
+	
+	if (timer > 47 && air > 0)
+		{cansideb = 0;}
+
+	if movetemp = 0 //straight forward
+	{
+		if ( timer = 10 )
+			{
+			sprite_index = sideb_sprite;
+			sound_play(attacksnd2);
+			sound_play(slash3);
+			create_hitbox(5,50+facing*80,8,4.15,5,5,fire1,obj_spark_fire1,0.95,0.7,6,9,self.id,27,2);
+			hitbox.hit_stun = 10;
+			}
+
+		if ( timer >= 11 && timer <= 37 )
+			{hspeed = 5.5*(1-facing*2) * size;}
+		
+		if ( timer >= 38 && timer <= 44 )
+			{hspeed = 3.5*(1-facing*2)* size;}
+		
+		if ( timer = 45 )
+			{hspeed = 1.5*(1-facing*2) * size;}
+		
+		if ( timer = 46 )
+			{hspeed = 1*(1-facing*2) * size;}
+		
+		if ( timer = 47 )
+			{hspeed = 0;}
+	}	
+
+	if movetemp = 1 //diving heatbutt
+	{
+		if ( timer = 10 )
+			{
+			sprite_index = sideb_air_sprite;
+			sound_play(attacksnd2);
+			sound_play(slash3);
+			create_hitbox(5,70+facing*40,8,4.15,5,5,fire1,obj_spark_fire1,0.55,0.8,9,6,self.id,27,1);
+			hitbox.hit_stun = 10;
+			}
+
+		if ( timer >= 11 && timer <= 46 )
+			{
+			hspeed = 5 *(1-facing*2) * size;
+			vspeed = 5 * size;
+			}
+		
+		if ( timer = 47 )
+			{hspeed = 0;}
+	}	
+
+if ( timer <= 47 && movetemp = 0)
+{
+vspeed = 0;
+gravity_lock = 1;
+}
+
+if timer > 25
+force_edge_grab = 1
+
+if (movetemp = 1 && air = 0)
+{
+	dontrepeat = 0;
+	state_type="land";
+	sprite_index = land_sprite;
+	attack_type="none";
+	time = 9;
+	timer=0;
+}
+
+if ( timer >= time - 1 )
+  {
+    dontrepeat = 0;
+	attack_type = "none";
+    state_type = "stand";
+	sprite_index = stand_sprite;
+	image_index = 0;
+    timer = 0;
+    time =-1;
+  }
+      if (timer >= 10){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1) && (target.air > 0 && air > 0){
+				if ((target.weight <= .22 && target.percent > 95) || (target.weight > .22 && target.weight < .3 && target.percent > 105) || (target.weight > .3 && target.percent > 105)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
+  
+if ( air >= 0 && timer >= 1 && temp != -1 && (movejump) && hitbox.hit > 0 )
+      {
+    air_move = 1;
+    interrupt = 1;
+      }

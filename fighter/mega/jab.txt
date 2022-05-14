@@ -1,0 +1,55 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "jab";
+  image_speed = 0;
+  image_index = 6;
+  sprite_index = edge_attack_sprite;
+  timer = 0;
+  time = 30;
+  timer_speed = 1;
+create_hurtbox_precise(self.id, 30, edge_attack_mask)
+  }
+if timer < time {
+	switch timer {
+		case 2: image_index = 7; break;
+		case 5: image_index = 8; break;
+		case 8: image_index = 9; break;
+		case 10: image_index = 10; break;
+		case 12: image_index = 11; break;
+		case 15: image_index = 12; break;
+		case 18: image_index = 13; break;
+		case 21: image_index = 14; break;
+		case 25: image_index = 15; break;
+		}
+	if timer == 2 {
+                duster = instance_create ( x , y , obj_dust_effect );
+                duster.image_xscale *= size * 0.8;
+                duster.image_yscale *= size * 0.7;
+                duster.facing = facing;
+                duster.hspeed = -2 * size * ( 1 - facing * 2 );
+		instance_create ( x - 4 * size * ( 1-facing*2) , y - 14 * size , obj_spark_effect );
+		sound_play(final_smash_sound_2)
+		sound_play(b_charged_sound)
+		}
+	if timer = 8 {
+		create_hitbox(3,10+facing*160,4,0,6,4,magic2,obj_spark_darkness,0.7,0.6,20,18,self.id,14,2)
+		}
+	if timer = 10 {
+		create_hitbox2(3,10+facing*160,4,0,6,4,magic2,obj_spark_darkness,0.7,0.6,32,18,self.id,12,2)
+		}
+	if timer = 12 {
+		create_projectile(4,40+facing*100,6,4.5,10,9,magic3,obj_spark_darkness,0.7,0.6,39,18,self.id,10,2)
+		proj.absorb = 0
+		proj.absorb2 = 0
+		proj.no_reflect = 1
+		}
+}
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
