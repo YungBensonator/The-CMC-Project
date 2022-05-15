@@ -1,3 +1,6 @@
+if bairtimer > 0 {
+  exit;
+}
 if ( state_type = "jump" )
   {
     state_type = "air_attack";
@@ -17,8 +20,8 @@ if ( state_type = "jump" )
 			{
 				if ( random ( 2 ) < 1 )
 				play_attack_voice()
-				spin = create_projectile(.5,361,5.5,6,0,0,-1,obj_spark_shock,xsize,ysize,0,5,self.id,60,bonespin)
-				spin.hspeed = -6+facing*12;
+				spin = create_projectile(.5,361,5.5,6,0,0,-1,obj_spark_shock,xsize,ysize,0,5,self.id,30,bonespin)
+				spin.hspeed = -6+facing*10;
 				spin.hspeed += hspeed;
 				spin.atktype = 2;
 				spin.facing = facing;
@@ -27,8 +30,20 @@ if ( state_type = "jump" )
         if timer = 27
             interrupt = 1
 
+
+if ( air = 0 )
+      {
+  bairtimer = 200
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 20;
+	sprite_index = land_sprite;
+      }
+
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
 {
+    bairtimer = 200
     attack_type = "none";
     state_type = "jump";
     timer = 0;
@@ -36,11 +51,3 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch"
     interrupt = 0;
 }
 
-if ( air = 0 )
-      {
-	state_type = "land";
-	attack_type = "none";
-	timer = 0;
-	time = 11;
-	sprite_index = land_sprite;
-      }
