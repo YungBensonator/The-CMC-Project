@@ -3,291 +3,93 @@ fast_fall_temp = 0;
 
 if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
   {
+  sound_play ( swingsnd1 );
   attacking = 0;
-  special = 0;
+  special = 1;
   attack_type = "b";
+  time = 91;
+  timer = 6;
   state_type = "air_attack";
-  
-  if charge < 160 {
-    downbtemp = 0;
-    sound_play(charge_sound);
-    timer = 0;
-    time = 160;
-	sprite_index = b1_sprite;
-    image_index = 0;
-    image_speed = 0.3;
-
-  } else {
-    downbtemp = 1;
-    timer = 200;
-    time = 220;
-	sprite_index = jab_sprite
-	image_index = 0;
-    image_speed = 0;
-  }
-  hspeed *= 0.4;
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0.334;
   timer_speed = 1;
+  air_move = 0;
+  force_edge_grab = 1;
+  }
+
+gravity_lock = 1;
+
+if ( timer < 24 )
+  {
+  hspeed = 0;
+  vspeed *= 0.95;
+  }
+if ( timer > 12 && timer < 72 )
+  {
+  armor_frames = 2;
+  }
+if ( timer >= 24 && timer < 72 )
+  {
+  hspeed = 2.7 * size * ( 1 - facing * 2 );
+  if ( movedown )
+    vspeed = 0.5 * size;
+    else
+  if ( moveup )
+    vspeed = -0.5 * size;
+    else
+    vspeed = 0;
+  if ( moveright ) hspeed += 0.5 * size;
+  if ( moveleft ) hspeed -= 0.5 * size;
+  if ( attack_success )
+    {
+    sound_play ( b_sound );
+    attack_success = 0;
+    }
   }
 
 switch ( timer )
   {
-  case 204: image_index=1; break;
-  case 208: image_index=2; break;
-  case 212: image_index=3; break;
-  
+  case 12:
+    sound_play ( b_voice );
+    heavy_armor = 12;
+    armor_frames = 2;
+    break;
+  case 24:
+  case 36:
+  case 48:
+  case 60:
+    if ( special == 0 || ( ai && random ( 10 ) < 5 ) )
+      timer = 71;
+      else
+      {
+      create_hitbox ( 6 , 50 + facing * 80 , 6.7 , 1.4 , 50 , 8 , slash2 , obj_spark_slash2 , 0.53 , 0.54 , 10.08 , 8.53 , self.id , 12 , 5 );
+      }
+    sprite_index = b2_sprite;
+    image_speed = 0.25;
+    break;
+  case 72:
+    special = 0;
+    hspeed = 0;
+    sprite_index = b_sprite;
+    image_index = 5;
+    image_speed = 0;
+    break;
+  case 75: image_index = 4; break;
+  case 78: image_index = 3; break;
+  case 81: image_index = 2; break;
+  case 84: image_index = 1; break;
+  case 87: image_index = 0; break;
   }
 
-//////PART 1//////
-if ( downbtemp = 0 )
-{
-charge += 1
-
-
-if charge >= 140{
-sprite_index = b8_sprite
-fruit = 8
-} else if charge >= 120{
-sprite_index = b7_sprite
-fruit = 7
-} else if charge >= 100{
-sprite_index = b6_sprite
-fruit = 6
-} else if charge >= 80{
-sprite_index = b5_sprite
-fruit = 5
-} else if charge >= 60{
-sprite_index = b4_sprite
-fruit = 4
-} else if charge >= 40{
-sprite_index = b3_sprite
-fruit = 3
-} else if charge >= 20{
-sprite_index = b2_sprite
-fruit = 2
-}
-
-if charge >=0 and charge <=19
-fruit = 1
-
-    if ( timer mod 16 = 4 && timer < 150 )
-      {
-	sound_play(fruits_sound[ceil(charge/30)]);
-	flashing = 1;
-	alarm[7] = 2;
-      }
-
-if ( timer >= 4 && timer < 160 )
-	{
-		if  air = 0  
-		hspeed = 0; 
-		if ( timer = 4 || frac(timer/20) = 0 )
-		{
-		    duster = instance_create(x-2*(1-facing*2)*size,y-1*size,obj_dust_effect);
-		    duster.snap = self.id;
-		    duster.facing = facing;
-		    //duster.image_blend = c_red;
-		    duster.image_xscale = 0.25*size;
-		    duster.image_yscale = 0.25*size;
-		    duster.depth = 0;
-		    duster = instance_create(x-2*(1-facing*2)*size,y-1*size,obj_dust_effect);
-		    duster.snap = self.id;
-		    duster.facing = facing;
-		    //duster.image_blend = c_orange;
-		    duster.image_xscale = 0.15*size;
-		    duster.image_yscale = 0.15*size;
-		    duster.depth = 0;
-		}
-	}
-
-if ( air = 0 && ai && timer >= 30 && distance_to_object(enemy) < 29 && random(20)>17 )
-	{
-		runtimer = 0;
-		sound_stop(charge_sound);
-		sprite_index = roll_sprite;
-		image_index = 0;
-		attack_type = "none";
-		state_type = "dodge";
-		if instance_exists(downbspark)
-		    with downbspark instance_destroy()
-		timer = 0;
-		time = 29;
-		facing = moveright;
-	}
-
-if ( shieldup = 1 && air = 0 )
-	{
-		sound_stop(charge_sound);
-		flashing = true;
-		alarm[7] = 3;
-		state_type = "shielding";
-		timer = 0;
-		time = -1;
-		attack_type = "none";
-		shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
-		shield.p1 = self.id;
-	}
-
-if ( air = 0 && ( moveleft = 1 || moveright = 1 ) )
-	{
-		runtimer = 0;
-		sound_stop(charge_sound);
-		attack_type = "none";
-		state_type = "dodge";
-		sprite_index = roll_sprite;
-		image_index = 0;
-		sound_play(roll_dodge_snd);
-		shieldup = 0;
-		timer = 0;
-		time = 29;
-		facing = moveright;
-	}
-
-if ( air > 0 && shieldup = 1 )
-{
-state_type="stand";
-for (i=1; i<5; i+=1){
-sound_stop(fruits_sound[i])	}
-}
-
-if ( special = 1 )
-{
-downbtemp = 1;
-timer = 200;
-time = 220;
-special = 0;
-sprite_index = jab_sprite
-image_index = 0;
-image_speed = 0;
-for (i=1; i<5; i+=1){
-sound_stop(fruits_sound[i])	}
-}
-
-if ( charge >= 160 )
-{
-for (i=1; i<5; i+=1){
-sound_stop(fruits_sound[i])	}
-speed = 0;
-attack_type = "none";
-state_type = "stand";
-timer = 0;
-time = -1;
-fully_charged = 1;
-}
-}
-//////PART 2//////
-if ( downbtemp = 1 )
-{
-
-if timer = 208{
-sound_play(fruits_sound[6])
-if fruit = 6{
-sound_stop(galaga_sound)
-sound_play(galaga_sound)
-}
-play_attack_voice()
-if fruit != 0 and !instance_exists(fruititem[1]) and !instance_exists(fruititem[2]) and !instance_exists(fruititem[3]) and !instance_exists(fruititem[4]) and !instance_exists(fruititem[5]) and !instance_exists(fruititem[6]) and !instance_exists(fruititem[7]) and !instance_exists(fruititem[8]){
-        fruititem[fruit] = instance_create(x+9-facing*18,y-13,fruits_item);
-		fruititem[fruit].sprite_index = fruits_sprite[fruit];
-		fruititem[fruit].sprite_air = fruits_sprite[fruit];
-		fruititem[fruit].image_speed = 0
-		fruititem[fruit].image_index = 0
-        fruititem[fruit].color = a;
-		fruititem[fruit].sprite_held = fruititem[fruit].sprite_air;
-		fruititem[fruit].pacman = id
-		fruititem[fruit].rob = id
-		fruititem[fruit].hspeed = 5.5-facing*11;
-		fruititem[fruit].vspeed = -3.5;
-        fruititem[fruit].thrown = self.id;
-		fruititem[fruit].fruit = fruit
-		fruititem[fruit].holder = self.id
-		fruititem[fruit].alarm[0] = 180;
-		
-		with(fruititem[fruit]){
-if fruit = 1{
-weight = 0.3;
-max_fall_speed = 4.5;
-hspeed = 4-other.facing*8
-}
-if fruit = 2{
-weight = 0.3;
-max_fall_speed = 4.5;
-hspeed = 5-other.facing*10
-}
-
-if fruit = 3{
-weight = 0.00;
-max_fall_speed = 0.0;
-vspeed = 0
-hspeed = 6-other.facing*12
-}
-
-if fruit = 4{
-weight = 0.2;
-max_fall_speed = 2.5;
-hspeed = 6-other.facing*12
-vspeed = -1
-}
-
-if fruit = 5{
-weight = 0.00;
-max_fall_speed = 0.0;
-vspeed = 0
-hspeed = 3-other.facing*6
-fruititem[fruit].alarm[0] = 240;
-}
-
-if fruit = 6{
-weight = 0.00;
-max_fall_speed = 0.0;
-vspeed = 0
-hspeed = 0
-speed = 3
-direction = 0+other.facing*180
-startdir = direction
-liltima = 0
-bigtima = 60
-
-secondhit = 0
-alarm[0] = 900
-}
-
-if fruit = 7{
-weight = 0.8;
-max_fall_speed = 5.5;
-vspeed = -11.5
-hspeed = 2.4-other.facing*4.8
-alarm[0] = 900
-}
-
-if fruit = 8{
-weight = 0.00;
-max_fall_speed = 0.0;
-vspeed = 0
-hspeed = 10-other.facing*20
-
-secondhit = 0
-alarm[0] = 1050
-}
-		}
-		
-        //held_item = puckred;
-
-}
-
-charge = 0
-}
-
-
-}
-
-if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
-    attack_type = "none";
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
     state_type = "stand";
-    if air > 0 {
-	state_type = "jump";
-	sprite_index = jump_sprite;
-	image_index = 4;
-    }
-    timer = 0;
-    time =-1;
-}
+    else
+    state_type = "fall";
+  timer = 0;
+  time = -1;
+  }

@@ -1,69 +1,109 @@
-if(  state_type = "stand" || state_type = "run" || state_type = "jump"  )
-{
-	if(upbtemp = 0)
-	{
-		if ( moveright )
-		facing = 0;
-		if ( moveleft )
-		facing = 1;
-		state_type = "air_attack";
-		attack_type = "upb";
-		timer = 0;
-		time = 50;
-		sound_play(upb_sound2);
-		sprite_index = dair_sprite;
-		image_speed = 0;
-		image_index = 3;
-		if ( air = 0 )
-		{
-		temp = 0;
-		hspeed = 0;
-		}
-		else
-		{
-		temp = 1;
-		hspeed *= 0.8;
-		}
-		upbtemp = 1;
-	}
-	else
-	exit;
-}
-
-if ( timer < time )
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" )
   {
-    fast_fall = 0;
-    fast_fall_temp = 0;
-
-    if ( timer = 1 )
-	vspeed = -5.65;
-    if ( vspeed > 0.5 && timer <= 43 )
-	vspeed *= 0.9;
-    if ( moveright && hspeed < air_speed * 0.75 )
-	hspeed += 0.075;
-    if ( moveleft && hspeed > -air_speed * 0.75 )
-	hspeed -= 0.075;
-    if ( timer = 2 )
-	{
-		if(instance_exists (spring)) with (spring) {instance_destroy();}
-		spring = create_projectile(0,361,4,0,4,3,-1,-1,0.8,0.8,-12,-10,self.id,60*5,char_custom4);
-		spring.hit_attacker = 1;
-		spring.sprite_index = keepmain.spring1_sprite;
-		//proj.alarm[0] = 60*10;
+  if ( air < max_jumps )
+    {
+    attacking = 0;
+    special = 0;
+    attack_type = "upb";
+    time = 240;
+    timer = 0;
+    state_type = "air_attack";
+    sprite_index = upb_sprite;
+    image_index = 0;
+    image_speed = 0.25;
+    timer_speed = 1;
+    air_move = 0;
+    temp = 1;
     }
-    if timer > 25
-	force_edge_grab = 1;
-    if ( timer >= 31 )
-      {
-	interrupt = 1;
-	can_die = 1;
-      }
+    else
+    exit;
   }
 
-if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( ai )
   {
-    state_type = "jump";
-    attack_type = "none";
-    timer = 0;
-    time = -1;
+  if ( offstage )
+    {
+    var a;
+    a = instance_nearest ( x , y , obj_edge );
+    if ( a . x < x )
+      moveleft = 1;
+      else
+      moveright = 1;
+    moveup = 1;
+    }
+  }
+
+if ( timer == 60 ) timer = 120;
+
+if ( timer >= 2 && timer <= 120 )
+  {
+  speed = 0;
+  gravity_lock = 1;
+  }
+
+switch ( timer )
+  {
+  case 2:
+    instance_create ( x , y - actual_height * 0.5 , obj_spark_shockwave );
+    sound_play ( upb_sound );
+    sound_play ( upb1_voice );
+    create_projectile ( 0 , 90 , 0 , 0 , 1 , 1 , -1 , -1 , 1 , 1 , 0 , 25 , self.id , 240 , char_custom2 );
+    proj.alarm[0] = 250;
+    proj.ness = self.id;
+    proj.direction = 90;
+    proj.spr = pellet_sprite;
+    break;
+  case 120:
+    sprite_index = b2_sprite;
+    proj.temp = 1;
+    heavy_armor = 14;
+    armor_frames = 100;
+    break;
+  }
+if timer > 25
+force_edge_grab = 1
+if ( timer > 120 )
+  {
+  speed = 3;
+  gravity_lock = 1;
+  direction = point_direction ( x , y - actual_height * 0.5 , proj.dot_x[proj.eaten] , proj.dot_y[proj.eaten] );
+  if ( timer mod 6 == 0 )
+    {
+    create_hitbox ( 4 , 362 , 6 , 2.2 , 8 , 3 , slash1 , obj_spark_slash1 , 0.98 , 0.75 , 7.60 , 11.40 , self.id , 4 , 0 );
+    if ( timer mod 12 == 6 )
+      sound_play ( wakka_sound );
+    x = ( x * 3 + proj.dot_x [ proj.eaten ] ) * 0.25;
+    y = ( y * 3 + proj.dot_y [ proj.eaten ] + actual_height * 0.5 ) * 0.25;
+    proj.eaten += 1;
+    }
+  if ( proj.eaten == proj.dot_number )
+    {
+    timer = time;
+    }
+    else
+    {
+    if ( proj.dot_x[proj.eaten] < x - 6 )
+      facing = 1;
+    if ( proj.dot_x[proj.eaten] > x + 6 )
+      facing = 0;
+    }
+  }
+
+if ( timer >= time - 1 )
+  {
+  armor_frames = 1;
+  attack_type = "none";
+  if ( air > 0 )
+    {
+    //if ( temp == 1 )
+    //  sound_play ( upb2_voice );
+    state_type = "fall";
+    air = 3;
+    }
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
   }

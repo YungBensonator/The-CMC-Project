@@ -48,6 +48,8 @@ if timer = 18
 	duster.image_yscale = 0.25*size;
 }
 
+
+
 if timer = 24
 {
 hspeed = 0;
@@ -59,8 +61,16 @@ target.x = x + 21 * (1-facing*2)
 target.y = y;
 }
 
-if timer >= 18 and timer <= 26 and attack_success = 1
+if timer >= 18 and timer <= 26 and (attack_success = 1 or distance_to_object(target)<size*10)
 {
+target.state_type = "air_flinch";
+target.attack_type = "none";
+target.timer = 0;
+target.time = 50;
+target.timer_speed = 0;
+target.sprite_index = target.flinch_sprite;
+target.alarm[0] = 2;
+target.facing = 1-facing;
 timer = 100
 time = 136
 sprite_index = sideb_sprite2;
@@ -108,7 +118,7 @@ case 131: image_index = 00; break;
 
 if timer = 101 or timer = 104 or timer = 107 or timer = 110 or timer = 113 or timer = 116 or timer = 119 or timer = 122 or timer = 125 or timer = 128
 {
-proj = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,25,self.id,2,char_custom5); 
+proj = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,25,self.id,4,char_custom5); 
 proj.direction = 0+facing*180
 proj.speed = 9
 proj.hit = 2;
@@ -119,7 +129,7 @@ proj.depth = depth - 0.1;
 proj.use_palette = number;
 proj.sprite_index = arm_spriteR;
 
-proj2 = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,27,self.id,4,char_custom5); 
+proj2 = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,27,self.id,8,char_custom5); 
 proj2.direction = 0+facing*180
 proj2.speed = 9
 proj2.hit = 2;
@@ -133,7 +143,7 @@ proj2.sprite_index = arm_spriteL;
 
 if timer = 102 or timer = 105 or timer = 108 or timer = 111 or timer = 114 or timer = 117 or timer = 120 or timer = 123 or timer = 126 or timer = 129
 {
-proj3 = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,15,self.id,4,char_custom5); 
+proj3 = create_projectile(1,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,15,self.id,8,char_custom5); 
 proj3.direction = 0+facing*180
 proj3.speed = 9
 proj3.hit = 2;
@@ -144,7 +154,7 @@ proj3.depth = depth - 0.1;
 proj3.use_palette = number;
 proj3.sprite_index = arm_spriteR;
 
-proj4 = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,17,self.id,2,char_custom5); 
+proj4 = create_projectile(1,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,17,self.id,4,char_custom5); 
 proj4.direction = 0+facing*180
 proj4.speed = 9
 proj4.hit = 2;
@@ -158,7 +168,7 @@ proj4.sprite_index = arm_spriteL;
 
 if timer = 103 or timer = 106 or timer = 109 or timer = 112 or timer = 115 or timer = 118 or timer = 121 or timer = 124 or timer = 127 or timer = 130
 {
-proj5 = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,5,self.id,2,char_custom5); 
+proj5 = create_projectile(4,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,5,self.id,4,char_custom5); 
 proj5.direction = 0+facing*180
 proj5.speed = 9
 proj5.hit = 2;
@@ -169,7 +179,7 @@ proj5.depth = depth - 0.1;
 proj5.use_palette = number;
 proj5.sprite_index = arm_spriteR;
 
-proj6 = create_projectile(0.5,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,7,self.id,4,char_custom5); 
+proj6 = create_projectile(4,75+facing*30,3,0.1,1,3,punch2,obj_spark_hit2,0.7,0.7,12,7,self.id,8,char_custom5); 
 proj6.direction = 0+facing*180
 proj6.speed = 9
 proj6.hit = 2;
@@ -183,7 +193,7 @@ proj6.sprite_index = arm_spriteL;
 
 if timer >= 101 and timer < 131 and !instance_exists(hitbox)
 {
-    create_hitbox ( 1 , 90 , 2 , 0 , 10 , 1 , punch2 , obj_spark_hit3 , 1.38 , 0.97 , 27.30 , 14.70 , self.id , 4 , 3 );
+    create_hitbox ( 4 , 90 , 2 , 0 , 10 , 1 , punch2 , obj_spark_hit3 , 1.38 , 0.97 , 27.30 , 14.70 , self.id , 8 , 3 );
     hitbox.image_angle = ( 1 - facing * 2 ) * 0;
 	hitbox.hit_stun = 6;
 	hitbox.execute_on_hit = "attacker.vspeed = 0"
@@ -214,7 +224,7 @@ case 220: image_index = 05; break;
 
 if timer = 206
 {
-    create_hitbox ( 5 , 15 + facing * 150 , 6.4 , 7.2 , 15 , 15 , punch3 , obj_spark_hit4 , 1.22 , 0.72 , 20.30 , 14 , self.id , 2 , 3 );
+    create_hitbox ( 5 , 15 + facing * 150 , 4 , 4.15 , 15 , 15 , punch3 , obj_spark_hit4 , 1.22 , 0.72 , 20.30 , 14 , self.id , 4 , 3 );
     hitbox.image_angle = ( 1 - facing * 2 ) * 0;
 	duster = instance_create(x,y,obj_dust_effect);
     duster.facing = facing;
@@ -241,7 +251,7 @@ case 320: image_index = 05; break;
 
 if timer = 304
 {
-    create_hitbox ( 5 , 85 + facing * 10 , 6.4 , 7.2 , 15 , 15 , punch3 , obj_spark_hit4 , 0.63 , 0.81 , 14 , 14 , self.id , 2 , 3 );
+    create_hitbox ( 5 , 85 + facing * 10 , 4 , 4.5 , 15 , 15 , punch3 , obj_spark_hit4 , 0.63 , 0.81 , 14 , 14 , self.id , 4 , 3 );
     hitbox.image_angle = ( 1 - facing * 2 ) * 0;
 	duster = instance_create(x,y,obj_dust_effect);
     duster.facing = facing;
