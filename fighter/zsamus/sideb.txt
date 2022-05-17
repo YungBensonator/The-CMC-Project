@@ -85,8 +85,38 @@ if ( timer < time )
 	hitbox2.di = 0.3;
 	hitbox2.weight_kb = 1;
       }
-    if ( timer = 24 )
-      {
+
+    if ( air = 0 )
+	hspeed = 0;
+	
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }	
+	//special  \\\ moveright
+
+// coded so it just like ultimates side b
+if ( timer = 24 and special)
+{
+
+	instance_create(x+size*(93-facing*186),y-33*size,obj_spark_effect);
+	whip = create_projectile(12,145+facing*-110,6.1,0,18,13,explodehit3,obj_spark_fire1,0.7,0.75,85,24,self.id,6,no_script);
+	whip.shake_type = 1;
+	whip.shake_ampl = 0;
+	whip.absorb = 0
+	whip.absorb2 = 0
+	whip.no_reflect = 1
+	whip.no_clash = 1
+	whip.priority = 5
+	spark = instance_create(x+size*(85-facing*170),y-24*size,obj_spark);
+	spark.sprite_index = global.shock_spark;
+	spark.image_xscale = 0.5;
+	spark.image_yscale = 0.5;
+}
+
+else
+{
+if timer =24{
 	instance_create(x+size*(93-facing*186),y-33*size,obj_spark_effect);
 	whip = create_projectile(12,20+facing*140,6.1,4.2,18,13,explodehit3,obj_spark_fire1,0.7,0.75,85,24,self.id,6,no_script);
 	whip.shake_type = 1;
@@ -99,11 +129,19 @@ if ( timer < time )
 	spark = instance_create(x+size*(85-facing*170),y-24*size,obj_spark);
 	spark.sprite_index = global.shock_spark;
 	spark.image_xscale = 0.5;
-	spark.image_yscale = 0.5;
-      }
-    if ( air = 0 )
-	hspeed = 0;
+	spark.image_yscale = 0.5;}
+}
+
+
+
+
+	
+	
   }
+  
+  
+  
+
 
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
   {
