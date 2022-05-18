@@ -1,0 +1,20 @@
+priority = 10
+absorb = 0  // This attack may be absorbed by PSI magnet
+absorb2 = 0
+moving_object = 1;
+if timer = 1{         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.final_smash_slash_sprite
+    if speed = 0  hspeed=10 - attacker.id.facing*20
+    image_speed = 0.5
+    image_xscale = 1*size*(1-attacker.id.facing*2)
+    visible =1
+}
+if hit{
+hspeed=10 - attacker.id.facing*20
+timer = 2
+}
+//image_angle = facing*180
+if timer >= 2
+    after_image(10,c_white,0.75)
+if (timer = 45 || attacker.id.timer >= 130)
+instance_destroy()

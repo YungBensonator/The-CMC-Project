@@ -1,0 +1,152 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    if air = 0
+    state_type = "attack";
+    else
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 60;
+    sprite_index = downb_sprite;
+    image_speed = 0.25;
+    image_index = 0;
+    dbtemp = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+
+    if air = 0
+    state_type = "attack";
+    else
+    state_type = "air_attack";
+
+  {
+
+    if ( image_index >= 2 && sprite_index = downb_sprite)
+      {
+	image_index = 2
+	image_speed = 0
+	if timer = 9 {
+    		sound_play(downb_sound);
+    		sound_play(downb_sound2);
+    		sound_play(downb_sound);
+    		sound_play(downb_sound2);
+	}
+	if timer >= 20 {
+	if ( moveleft)
+	  {
+		facing = 1;
+	  }
+	if ( moveright)
+	  {
+		facing = 0;
+	  }
+	if ( (moveleft || moveright) && !moveup && !movedown )
+	  {
+		timer = 0
+		time = 42
+		image_speed = 0.5
+		image_index = 0
+		sprite_index = downb_sprites
+	  }
+	if ( moveup && !movedown )
+	  {
+		timer = 0
+		time = 28
+		image_speed = 0.5
+		image_index = 0
+		sprite_index = downb_spriteu
+
+	  }
+	if ( !moveup && movedown )
+	  {
+		timer = 0
+		time = 60
+		image_speed = 0.5
+		image_index = 0
+		sprite_index = downb_sprited
+
+	  }
+	}
+      }
+    if ( sprite_index = downb_sprites){
+ 	if (image_index = 3){
+    	sound_play(downbs_sound);
+    	sound_play(downbs_voice);
+	sound_play(attack_sound);
+    	sound_play(attack_sound2);
+	hspeed = 4-8*(facing)}
+	if (timer = 6 || timer = 10 || timer = 14 || timer = 18){
+	if(!hit)
+	create_hitbox(2,90,0.25,0,2,2,slash2,obj_spark_slash2,3,1,38,16,self.id,15,2);
+	else
+	create_hitbox(2,90,0.25,0,2,2,slash2,obj_spark_slash2,3,1.5,38,16,self.id,15,2);
+	hspeed -= (0.2)-0.4*(facing)
+	}
+	if (timer = 20){
+	if(!hit)
+	create_hitbox(3,20+facing*140,5,4.2,12,8,slash3,obj_spark_slash3,3,1,38,16,self.id,3,2);
+	else
+	create_hitbox(3,20+facing*140,5,4.2,12,8,slash3,obj_spark_slash3,3.5,2.5,42,16,self.id,3,2);
+	}
+	if (image_index > 3 && special && !movedown){
+	interrupt = 1
+	hspeed = 3-6*(facing)
+	}
+      }
+
+    if ( sprite_index = downb_sprited){
+	if image_index <= 1
+	image_speed = 0.2
+	if image_index = 3{
+    	sound_play(downbd_sound);
+    	sound_play(downbd_voice);
+	sound_play(attack_sound);
+    	sound_play(attack_sound3);
+	image_speed = 0.5}
+	if ( timer = 18 )
+     	{
+	create_hitbox(20,18+facing*144,5,2.8,150,12,slash3,obj_spark_slash3,1.5,1.5,21,23,self.id,6,3);
+	create_hitbox2(20,18+facing*144,5,2.8,150,12,slash3,obj_spark_slash3,1.5,1.5,40,23,self.id,6,3);
+	create_hitbox3(20,18+facing*144,5,2.8,150,12,slash3,obj_spark_slash3,1.5,1.5,5,40,self.id,6,3);
+      	}
+	if image_index = 12
+	image_speed = 0.2
+	if image_index = 15
+	image_speed = 0.5
+	if image_index = 21
+	image_speed = 0
+      }
+
+    if ( sprite_index = downb_spriteu){
+	if image_index <= 1
+	image_speed = 0.5
+	if ( timer = 2 )
+     	{
+	instance_create(x+35*(1-facing*2)*size,y-18*size,obj_spark_effect)
+    	sound_play(downbu_sound);
+    	sound_play(downbu_voice);
+	sound_play(attack_sound);
+    	sound_play(attack_sound2);
+	create_hitbox(8,50+facing*80,6,2,19,5,slash3,obj_spark_slash2,1.4,1.6,40,15,self.id,4,3); 
+        create_hitbox2(8,90,5,1.7,19,5,slash3,obj_spark_slash3,1.2,1.2,9,20,self.id,4,3);
+	hitbox.reflect = 1
+	hitbox2.reflect = 1
+	}
+	if image_index = 4
+	image_speed = 0.25
+	if image_index = 13
+	image_speed = 0
+      }
+  }
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air = 0
+    state_type = "stand"
+    else
+    state_type = "jump"
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

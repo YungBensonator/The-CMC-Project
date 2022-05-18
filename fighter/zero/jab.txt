@@ -1,0 +1,120 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "jab";
+        image_speed = 0;
+        sprite_index = jab_sprite;
+        image_index=0;
+        timer = 0;
+        time = 29;
+        timer_speed=1;
+}
+
+switch ( timer )
+{
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 8: image_index = 4; break;
+  case 10: image_index = 5; break;
+  case 12: image_index = 6; break;
+  case 14: image_index = 7; break;
+  case 16: image_index = 8; break;
+  case 18: image_index = 9; break;
+  case 20: image_index = 10; break;
+  case 22: image_index = 11; break;
+
+
+  case 51: image_index = 12; break;
+  case 52: image_index = 13; break;
+  case 53: image_index = 14; break;
+  case 55: image_index = 15; break;
+  case 57: image_index = 16; break;
+  case 59: image_index = 17; break;
+  case 61: image_index = 18; break;
+  case 63: image_index = 19; break;
+  case 65: image_index = 20; break;
+  case 67: image_index = 21; break;
+  case 69: image_index = 22; break;
+
+
+  case 82: image_index = 23; break;
+  case 84: image_index = 24; break;
+  case 86: image_index = 25; break;
+  case 88: image_index = 26; break;
+  case 90: image_index = 27; break;
+  case 92: image_index = 28; break;
+  case 94: image_index = 29; break;
+  case 96: image_index = 30; break;
+  case 98: image_index = 31; break;
+  case 100: image_index = 32; break;
+  case 102: image_index = 33; break;
+  case 104: image_index = 34; break;
+  case 106: image_index = 35; break;
+  case 108: image_index = 36; break;
+}
+
+hspeed = 0
+if timer = 4 {
+    sound_play(attack_sound);
+    sound_play(attack_sound1);
+    sound_play(attack_sound1);
+    sound_play(attack_voice1);
+}
+if timer = 8 {
+    create_hitbox(2,50+facing*80,1.85,0,5,2,slash1,obj_spark_slash2,1.5,1.5,28,20,self.id,3,2); 
+    hitbox.di = 0.25
+    hitbox.hit_stun = 2;
+    hitbox.hitshake_type = 1
+}
+if (timer = 14 || timer = 61 || timer = 66) && ai = 1 && random(10)>1.5
+    attacking = 1
+if timer >= 14 && timer < 28 && attacking  = 1 {
+    time = 77
+    timer = 50
+    sprite_index = jab_sprite;
+}
+
+if timer = 53 {
+    sound_play(attack_sound);
+    sound_play(attack_sound2);
+    sound_play(attack_sound2);
+    sound_play(attack_voice2);
+}
+if timer = 57 {
+    attacking = 0
+    create_hitbox(2,120-facing*60,1,0,4,2,slash2,obj_spark_slash2,1.5,1.15,28,10,self.id,3,2); 
+    hitbox.di = 0.25
+    hitbox.hit_stun = 6;
+    hitbox.hitshake_type = 1
+}
+if timer >= 62 && timer < 77 && attacking  = 1 {
+    timer = 80
+    time = 110
+    sprite_index = jab_sprite;
+}
+if timer = 86 {
+    sound_play(attack_sound);
+    sound_play(attack_sound3);
+    sound_play(attack_sound3);
+    sound_play(attack_voice3);
+}
+if timer = 90 || timer = 92 {
+    create_hitbox(2,40+facing*100,1.25,0,3,2,slash2,obj_spark_slash2,1.75,1.75,35,10,self.id,12,2); 
+    hitbox.di = 0.2
+    hitbox.hit_stun = 2;
+    hitbox.hitshake_type = 1
+}
+if timer = 94 {
+    attacking = 0
+    create_hitbox(2,25+facing*130,7,1,6,2,slash3,obj_spark_slash2,1.75,1.75,35,10,self.id,3,3);
+    hitbox.hitshake_type = 1
+    hitbox.shake_ampl = 0.35
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

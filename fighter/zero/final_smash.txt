@@ -1,0 +1,136 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        attack_success = 0
+        image_speed = 0.2;
+        sprite_index = final_smash_start_sprite;
+        image_index=0;
+        sound_play(super)
+        sound_play(b_voice)
+        spark = instance_create(x,y-size*(15),obj_spark)
+        spark.sprite_index = global.spark_sprite
+        spark.image_xscale = 0.75*size
+        spark.image_yscale = 0.75*size
+        spark.image_speed = 0.25
+        spark.depth = 1
+        effect_create_above(ef_ring,x,y-27,0,c_black)
+        timer = 0
+        time = 140;
+        timer_speed=1;
+        intangible = 1;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        temp = 0
+        final_smashes+=1
+        if air = 0 {
+                duster = instance_create(x+5*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = 1-facing;
+                duster = instance_create(x-5*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; 
+        } 
+        smash_power = 0
+}
+air_move=0
+if image_index = 2 && sprite_index = final_smash_start_sprite{
+    freezer = instance_create(x,y,obj_freeze)
+    freezer.alarm[0] = 100
+    freezer.dontpause = self.id
+	sound_play(final_smash_sound1);
+	sound_play(final_smash_sound1);
+	sound_play(final_smash_sound2);
+	sound_play(final_smash_sound3);
+	sound_play(final_smash_voice1);
+	screen_shake(6,8);
+}
+
+//if time = 100
+//background_blend=c_white;
+
+if image_index >= 2 && image_index < 5 && sprite_index = final_smash_start_sprite{
+	spark = instance_create(x,y-27*size,obj_spark_shockwave)
+        spark.image_xscale *= (image_index)*size
+        spark.image_yscale *= (image_index)*size
+        spark.image_blend = c_black
+        spark.image_alpha = 0.7
+	screen_shake(4,5);
+	background_blend=c_black;
+        //instance_create(0,0,obj_flashscreen);
+}
+
+if (image_index = 2 || image_index = 2.5 || image_index = 3|| image_index = 3.5 || image_index = 4 || image_index = 4.5) && sprite_index = final_smash_start_sprite{
+effect_create_above(ef_ring,x,y-27,(image_index)*size*1.5,c_white)
+}
+
+if image_index <= 14 {
+    speed=0
+    gravity_lock = 2;
+	vspeed = 0;
+}
+     if sprite_index = final_smash_start_sprite {
+        if image_index = 4
+		image_speed = 0.05
+        if image_index = 5
+		image_speed = 0.25
+	if image_index = 6.75{
+		if air = 0
+			sprite_index = final_smash_ground_sprite
+		else
+			sprite_index = final_smash_air_sprite
+		image_index = 0
+	}
+     }
+        else {
+	image_speed = 0.25
+	if image_index = 1
+	sound_play(final_smash_sound4);
+	if image_index = 2{
+	sound_play(final_smash_sound5);
+	}
+	if image_index = 2 || image_index = 4 || image_index = 6{
+        if air = 0 {
+                duster = instance_create(x+5*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = 1-facing;
+                duster = instance_create(x-5*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; 
+        } 
+	}
+	if image_index = 8{
+		sound_play(final_smash_sound6);
+		sound_play(final_smash_voice2);
+		screen_shake(8,10);
+                duster = instance_create(x-5*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; 
+        	duster.image_xscale = 1.35*size
+        	duster.image_yscale = 1.35*size
+        	create_projectile(45,15+facing*150,8,5.5,60,0,slash3,obj_spark_slash4,1,3,40,30,self.id,120,genmu_zero);
+		proj.di = 0
+                proj.hitshake_type = 1
+                proj.shake_ampl = 0.4
+        	proj.hitlag_diff = 2
+        	proj.priority = 10
+        	proj.image_speed = 0
+        	proj.image_yscale = 0.8*size
+		proj.use_palette = number;
+		}
+    if air = 0 && image_index >= 12{
+	image_speed = 0
+	}
+    if air && image_index >= 12
+	image_speed = 0
+}
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+        smash_power = 0
+        intangible = 0
+        attack_type = "none";
+        if air = 0
+            state_type = "stand";
+        else  { 
+            state_type = "jump"; 
+            air=2; 
+        }
+        timer = 0;
+        time =-1;
+    }

@@ -1,0 +1,154 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" 
+{
+    attacking = 0
+    attack_type = "b"
+    special = 0;
+    if (air = 0 )
+	{
+		btemp = 0;
+    		image_speed = 0.5;
+        state_type = "attack";
+		sprite_index = b_sprite;
+        hspeed = 0;
+		time = 41
+		sprite_index = b_sprite; 
+	}
+    else 
+	{
+		btemp = 1;
+		sprite_index = b_sprite2;
+        state_type = "air_attack";
+        hspeed *= 0.8;
+		time = 60
+		sprite_index = b_sprite2;
+    }
+    image_index=0;
+    timer = 0;
+    timer_speed=1;
+}
+
+if ( air = 0 && sprite_index = b_sprite2 && timer < 40)
+{
+	state_type = "land";
+	attack_type = "none";
+    create_hitbox(5,35+facing*110,6.85,4,15,4,slash3,obj_spark_slash3,2.5,2.5,0,10,self.id,5,2);	
+	timer = 0;
+	if (attack_success) time = 16;
+	else time = 28;
+	sprite_index = land_sprite;
+	duster = instance_create(x-size*(1-facing*2),y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_alpha = 0.7;
+	duster = instance_create(x+size*(1-facing*2),y,obj_dust_effect);
+	duster.facing = 1-facing;
+	duster.image_alpha = 0.7;
+}
+
+if timer < time 
+{
+	if btemp = 0 
+	{
+	    if image_index >= 9
+		image_speed = 0;
+	    if image_index = 2 
+		{ 
+			sound_play(b_sound2);
+			image_blend = merge_color ( c_white , c_blue , .4 ); alarm[7] = 3; 
+		}
+            if image_index = 5 
+			{
+                duster = instance_create(x-6+facing*12,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_yscale *= 0.6*size
+                duster.image_xscale *= 0.8*size
+                spark = instance_create(x+(20-facing*40)*size,y-27*size,obj_spark_shockwave)
+                spark.image_xscale *= 0.1*size
+                spark.image_yscale *= 1*size
+                spark.image_blend = c_blue
+                spark.image_alpha = 0.9
+				sound_play(attack_voice1);
+				sound_play(b_sound1);
+				sound_play(b_sound3);
+				sound_play(b_sound3);
+				spark2 = instance_create(x+(25-facing*50)*size,y-27*size,obj_spark)
+                spark2.image_xscale *= 1.25*size - (facing*1.25*size*2)
+                spark2.image_yscale *= 1.75*size
+                spark2.image_alpha = 0.75
+				spark2.sprite_index = laser_sprite2;
+				spark2.image_speed = 0.5;
+                create_projectile(8,15+facing*150,5.6,1,4,4,shock3,obj_spark_shock,1,1,25,27,self.id,120,buster_laser);
+				proj.hit_stun = 3;
+                sound_play(fire_sound);
+            }
+	}
+	else
+	{	
+
+
+switch ( timer )
+{
+  case 5: image_index = 1; break;
+  case 10: image_index = 2; break;
+  case 15: image_index = 3; break;
+  case 20: image_index = 4; break;
+  case 22: image_index = 5; break;
+  case 24: image_index = 6; break;
+  case 27: image_index = 7; break;
+  case 30: image_index = 8; break;
+  case 33: image_index = 10; break;
+  case 37: image_index = 11; break;
+  case 41: image_index = 12; break;
+  case 45: image_index = 13; break;
+  case 50: image_index = 14; break;
+  case 55: image_index = 15; break;
+}
+
+		if (attack_success) time = 45;
+		if image_index = 0.5
+		{
+			sound_play(bjump_voice);
+			image_speed = 0.2
+			image_index = 0.4
+		}
+		if image_index = 3.6
+		{
+			sound_play(bjump_sound);
+			sound_play(bjump_sound);
+			sound_play(attack_sound);
+			sound_play(attack_sound3);
+			image_speed = 0.5
+			image_index = 3.5
+		}
+		if ( timer = 20 || timer = 22 || timer = 24 || timer = 27 || timer = 30)
+		{
+			create_hitbox(1,270,5,0,4,3,slash2,obj_spark_slash2,2.5,2.5,0,13.5,self.id,16,2);
+		}
+		if ( timer = 33)
+		{
+			create_hitbox(3,367,6,2.5,15,4,slash3,obj_spark_slash3,2.5,2.5,0,10,self.id,5,2);
+			sound_play(attack_sound1);
+		}
+		if air = 0 
+		{
+			if (timer < 33)
+				create_hitbox(3,367,6,2.5,15,4,slash3,obj_spark_slash3,2.5,2.5,0,10,self.id,5,2);
+        		hspeed = 0;
+	                vspeed = 0;
+        	        state_type="land";
+                	attack_type="none";
+			image_index = 0;
+			sprite_index = land_sprite;
+			timer=0;
+ 	                time=16;
+		}
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+	image_blend = c_white;
+    timer = 0;
+    time =-1;
+    }
+        
