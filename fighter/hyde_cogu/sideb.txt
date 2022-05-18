@@ -1,5 +1,6 @@
 fast_fall = 0
 fast_fall_temp = 0
+if nosideb > 0 {break}
 if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
         if ( cantsideb ) exit;
         state_type = "air_attack"
@@ -141,6 +142,7 @@ if timer = 152 {
 
 if air = 0 and timer > 139 {
 	dontrepeat = 0;
+	cantsideb = 300
         state_type="land";
         attack_type="none";
         sprite_index = land_sprite;
@@ -151,7 +153,7 @@ if air = 0 and timer > 139 {
 	  
 	  
   }
-   if (timer >= 152){
+   if (timer >= 153){
 if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0 && target.offstage){
 				if ((target.weight <= .22 && target.percent > 100) || (target.weight > .22 && target.weight < .3 && target.percent > 120) || (target.weight > .3 && target.percent > 130)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
@@ -185,6 +187,7 @@ if (attack_success || target.object_index == obj_enemy) && (obj_score_control.st
 
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     dontrepeat = 0;
+	cantsideb = 50
 	attack_type = "none";
     if air > 0
         state_type = "jump";

@@ -1,0 +1,91 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+        time = 80
+		hspeed = -5+facing*10;
+		sound_play(choose(autumnedgevoice2,autumnedgevoice,downbvoice))
+		air_move = 0;
+}
+if ( timer < time )
+    {vspeed = .5; gravity_lock=1;
+	
+    switch ( timer )
+    {
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; image_alpha = .75; break;
+	case 3: image_index = 3; image_alpha = .5; break;
+	case 4: image_index = 4; image_alpha = .25; break;
+	case 5: image_index = 5; image_alpha = 0; break;
+	case 22: image_index = 6; image_alpha = .2; break;
+	case 23: image_index = 7; image_alpha = .4; break;
+	case 24: image_index = 8; image_alpha = .6; break;
+	case 25: image_index = 9; image_alpha = .8; break;
+	case 29: image_index = 10; image_alpha = 1; break;
+	case 31: image_index = 11; break;
+	case 32: image_index = 12; break;
+	case 37: image_index = 13; break;
+	case 40: image_index = 14; break;
+	case 43: image_index = 15; break;
+	case 47: image_index = 16; break;
+	case 52: image_index = 17; break;
+	case 55: image_index = 18; break;
+	case 58: image_index = 19; break;
+	case 61: image_index = 20; break;
+	case 65: image_index = 21; break;
+	case 69: image_index = 22; break;
+    }
+	
+	if timer = 2 {intangible = 1
+		sound_play(dair_use);}
+	
+	if timer = 29 {intangible = 0;}
+	
+	if timer < 32 && ((facing = 0 && hspeed < 0) || (facing = 1 && hspeed > 0))
+	{if facing = 0 {hspeed+=.2;}
+	if facing = 1 {hspeed-=.2;}
+	}
+	
+	if timer = 32 {hspeed = 5.5-facing*11;}
+	
+	if timer >= 32 && timer < time && ((facing = 1 && hspeed < 0) || (facing = 0 && hspeed > 0))
+	{if facing = 0 {hspeed-=.2;}
+	if facing = 1 {hspeed+=.2;}}
+	
+	if timer = 40 {sound_play(choose(bairvoice2,dairvoice2,dashattackvoice2,dsmashvoice2,sidebvoice,usmashvoice));}
+	  
+	if timer = 43 { sound_play(downbdash);
+				create_hitbox(14,40+facing*100,9.55,5,28,20,koavoileswordhit2,obj_spark_slash3,1.7,1,24,16,self.id,9,4);
+				
+			downbeffect = create_spark(16,16,obj_spark);
+			downbeffect.sprite_index = downb_effect_sprite;
+			downbeffect.image_speed = 1;
+			downbeffect.image_xscale = (.35*size)-facing*(.7*size);
+			downbeffect.image_yscale = .35*size;
+			downbeffect.depth = depth-1;
+			downbeffect.alarm[0] = 25;}
+			
+    if instance_exists(downbeffect) {downbeffect.x = x+(16*size)-facing*(32*size);
+									downbeffect.y = y-(16*size);
+									downbeffect.image_xscale = (.35*size)-facing*(.7*size);
+									downbeffect.image_yscale = .35*size;
+									downbeffect.depth = depth-1;
+									}
+
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        {state_type = "jump"; sprite_index = jump_sprite; image_index = 6}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantusedownb = 30
+}
+        

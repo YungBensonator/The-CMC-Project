@@ -1,0 +1,148 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "run" || state_type = "stand" || state_type = "jump") && upbtemp = 0 {
+
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+	
+	if air = 0 {
+    timer = 0;
+    image_index=0;
+	air_move = 1;}
+	
+	if air > 0 {
+	timer = 6;
+    image_index=2;}
+	
+    time = 76;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+				sound_play(upbvoice);
+}
+
+if timer < time {
+	state_type = "air_attack"
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+	case 21: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 27: image_index = 9; break;
+	case 30: image_index = 10; break;
+	case 33: image_index = 11; break;
+	case 36: image_index = 12; break;
+	case 39: image_index = 13; break;
+	case 42: image_index = 18; break;
+	case 45: image_index = 19; break;
+	case 48: image_index = 20; break;
+	case 52: image_index = 21; break;
+	case 56: image_index = 22; break;
+	case 60: image_index = 23; break;
+	case 64: image_index = 24; break;
+	case 68: image_index = 25; break;
+	case 72: image_index = 26; break;
+	
+	case 104: image_index = 1; break;	
+	case 108: image_index = 2; break;	
+	case 112: image_index = 3; break;	
+	case 116: image_index = 4; break;	
+	case 120: image_index = 5; break;	
+      }
+									
+	if timer >= 45 && timer < 76 && air = 0
+	{time = 124; timer = 100; air_move = 1;
+		sprite_index = upbland_sprite; image_index = 0; 
+			sound_play(dair_land);
+				if instance_exists(hitbox)
+				{with (hitbox) {instance_destroy();}
+				}
+	}
+	  
+	if timer >= 18 {
+		force_edge_grab = 1
+        }  
+	  
+	if timer < 45 && air = 0 {hspeed = 2-facing*4;}
+	
+	if timer >= 18 && timer < 45 {vspeed=-4; hspeed = 3-facing*6;}
+	
+	if timer >= 18 && timer < 42 && timer mod 4 = 0
+	{
+	create_hitbox(1,53+facing*74,5.5,0,5,2,koaslashhit1,obj_spark_slash2,1.4,1,3,20,self.id,4,4);
+	hitbox.image_angle = 45+facing*90;
+	hitbox.weight_kb = 1;}
+	
+	if timer = 42 {
+	create_hitbox(6,55+facing*70,6,7.7,12,6,koavoileswordhit2,obj_spark_slash3,1.4,1,3,20,self.id,3,4);
+	hitbox.image_angle = 45+facing*90;}
+	
+	if timer = 18 {air_move = 0; sound_play(upb_launch);}
+	
+	if timer = 45 {air_move = 1;}
+	
+	if timer = 17 && air = 0 {
+			upb_ground_effect = create_spark(0,0,obj_spark);
+			upb_ground_effect.sprite_index = upb_ground_effect_sprite;
+			upb_ground_effect.image_speed = .6;
+			upb_ground_effect.image_xscale = (.35*size)-facing*(.7*size);
+			upb_ground_effect.image_yscale = .35*size;
+			upb_ground_effect.depth = depth-1;
+			upb_ground_effect.alarm[0] = 88;}
+			
+	if instance_exists(upb_ground_effect)
+	{
+	if upb_ground_effect.image_index >= 19 {upb_ground_effect.image_alpha-=.1;}
+	}
+	
+	if timer >= 18 && timer < 45 {
+	
+	if !instance_exists(upb_spin_effect){
+			upb_spin_effect = create_spark(4,30,obj_spark);
+			upb_spin_effect.sprite_index = upb_spin_effect_sprite;
+			upb_spin_effect.image_speed = .4;
+			upb_spin_effect.image_xscale = (.35*size)-facing*(.7*size);
+			upb_spin_effect.image_yscale = .35*size;
+			upb_spin_effect.depth = depth-1;
+			upb_spin_effect.alarm[0] = 88;
+			
+			if timer = 18 {upb_spin_effect.image_alpha=.2;}
+			if timer > 22 && timer < 45 {upb_spin_effect.image_alpha=1;}
+			}
+			
+		}
+			
+    if instance_exists(upb_spin_effect) {upb_spin_effect.x = x+(5*size)-facing*(10*size);
+									upb_spin_effect.y = y-(30*size);
+									upb_spin_effect.image_xscale = (.35*size)-facing*(.7*size);
+									upb_spin_effect.image_yscale = .35*size;
+									upb_spin_effect.depth = depth-1;
+									
+									if timer = 19 {upb_spin_effect.image_alpha=.4;}
+									if timer = 20 {upb_spin_effect.image_alpha=.6;}
+									if timer = 21 {upb_spin_effect.image_alpha=.8;}
+									if timer = 22 {upb_spin_effect.image_alpha=1;}
+									if timer > 44 {upb_spin_effect.image_alpha-=.2;}}
+									
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+		upbtemp = 1;
+        if air > 0
+        {state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 6;}
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

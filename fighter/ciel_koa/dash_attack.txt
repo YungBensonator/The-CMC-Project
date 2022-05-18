@@ -1,0 +1,73 @@
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0;
+        sprite_index = dash_attack_sprite;
+        image_index=0;
+        timer = 0;
+        time = 30;
+        timer_speed=1;
+}
+if timer < time {
+     state_type = "attack";
+	 switch (timer) 
+	 {
+	 case 2: image_index = 1; break;
+	 case 3: image_index = 2; break;
+	 case 4: image_index = 3; break;
+	 case 6: image_index = 4; break;
+	 case 8: image_index = 5; break;
+	 case 12: image_index = 6; break;
+	 case 16: image_index = 7; break;
+	 case 20: image_index = 8; break;
+	 case 24: image_index = 9; break;
+	 case 28: image_index = 10; break;
+	 }
+	if timer < 9 {hspeed=4-facing*8;}
+			
+	if timer = 8 {
+			sound_play(voileswingsound);
+			sound_play(choose(dashattackvoice,dashattackvoice2))
+			create_hitbox(9.2,10+facing*160,6,2.25,18,9,koavoileswordhit1,obj_spark_slash2,1.7,1,29,15,self.id,8,4);}
+	 
+	if timer = 5 {			
+			dashattackeffect = create_spark(25,20,obj_spark);
+			dashattackeffect.sprite_index = dashattack_effect1_sprite;
+			dashattackeffect.image_speed = 1.33;
+			dashattackeffect.image_xscale = (.35*size)-facing*(.7*size);
+			dashattackeffect.image_yscale = .35*size;
+			dashattackeffect.depth = depth-1;
+			dashattackeffect.alarm[0] = 32;}
+			
+    if instance_exists(dashattackeffect) {dashattackeffect.x = x+(25*size)-facing*(50*size);
+									dashattackeffect.y = y-(20*size);
+									dashattackeffect.image_xscale = (.35*size)-facing*(.7*size);
+									dashattackeffect.image_yscale = .35*size;
+									dashattackeffect.depth = depth-1;
+									}
+			
+	if timer = 5 {			
+			dashattackeffecttwo = create_spark(40,18,obj_spark);
+			dashattackeffecttwo.sprite_index = dashattack_effect2_sprite;
+			dashattackeffecttwo.image_speed = 1.33;
+			dashattackeffecttwo.image_alpha = .75;
+			dashattackeffecttwo.image_xscale = (.35*size)-facing*(.7*size);
+			dashattackeffecttwo.image_yscale = .35*size;
+			dashattackeffecttwo.depth = depth+1;
+			dashattackeffecttwo.alarm[0] = 32;}
+									
+    if instance_exists(dashattackeffecttwo) {dashattackeffecttwo.x = x+(40*size)-facing*(80*size);
+									dashattackeffecttwo.y = y-(18*size);
+									dashattackeffecttwo.image_xscale = (.35*size)-facing*(.7*size);
+									dashattackeffecttwo.image_yscale = .35*size;
+									dashattackeffecttwo.depth = depth+1;
+									}
+	 
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

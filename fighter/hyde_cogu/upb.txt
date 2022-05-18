@@ -58,22 +58,21 @@ if state_type = "run" || state_type = "stand" || state_type = "jump"{
 	  
 	  if timer = 30 {
 		   create_hitbox ( 2 , 85+facing*10 , 4.25 , 4.8 , 15 , 7 , unibslash3 , obj_spark_slash3 , 1.32 , 1.91 , 24.25 , 20.25 , self.id , 6 , 2 );
+
+
 	  }
+	  if timer = 31
+		{	
+			attack_type = "none"
+			air = max_jumps
+			movejump = 0;
+			state_type = "fall";
+			}
 	  
 	  if attack_success and timer < 30 {
 	  	target.x = x + 17 * (1-facing*2)
 	    target.y = y
 		}
-	  
-	  
-	
-	
-	  
-	  
-	  
-	  
-	  
-	  
 	
         }
 
@@ -109,12 +108,14 @@ if (attack_success || target.object_index == obj_enemy) && (obj_score_control.st
         
   }	 
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
-        dontrepeat = 0;
-		attack_type = "none";
-        if air > 0
+	
+		dontrepeat = 0;
+		attack_type = "none"
+		if air > 0
         state_type = "fall";
         else
         state_type = "stand";
         timer = 0;
         time =-1;
     }
+	

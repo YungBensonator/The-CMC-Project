@@ -1,0 +1,61 @@
+if state_type = "stand" || state_type ="run"{
+	hspeed = 0;
+        state_type = "attack";
+        attack_type = "usmash";
+        image_speed = 0;
+        sprite_index = usmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 32;
+        timer_speed=1;
+        charge_frame=1;
+}
+
+if timer < time {
+  state_type = "attack";		 
+ switch ( timer )
+      {
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 4: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 16: image_index = 6; break;
+	case 20: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 28: image_index = 9; break;
+      }
+				
+	if timer = 2{
+				
+			usmasheffect = create_spark(18,36,obj_spark);
+			usmasheffect.sprite_index = usmash_effect_sprite;
+			usmasheffect.image_speed = 1;
+			usmasheffect.image_xscale = (.35*size)-facing*(.7*size);
+			usmasheffect.image_yscale = .35*size;
+			usmasheffect.depth = depth-1;
+			usmasheffect.alarm[0] = 25;}
+	  
+	if timer = 4 {sound_play(voileswingsound);
+				sound_play(choose(usmashvoice,usmashvoice2))
+				create_hitbox(12,60+facing*60,7,8.5,24,12,koavoileswordhit2,obj_spark_slash3,1.2,2,17,26,self.id,6,4);
+				hitbox.image_angle = 60+facing*60;
+				
+				hspeed = 3-facing*6;}
+			
+    if instance_exists(usmasheffect) {usmasheffect.x = x+(18*size)-facing*(36*size);
+									usmasheffect.y = y-(34*size);
+									usmasheffect.image_xscale = (.35*size)-facing*(.7*size);
+									usmasheffect.image_yscale = .35*size;
+									usmasheffect.depth = depth-1;
+									}
+
+}  
+			
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,60 @@
+if timer = 1 { // Initialize sprite and speed during frame 1
+	moving_object = 1;
+    visible =1
+	priority = 3;
+    }
+
+image_angle = direction+facing*180
+
+if timer = 3 && autumnactivate = 0 {timer = 1; hit = 2;}
+
+if timer = 3 && autumnactivate = 1 {speed = 7; time = 90; hit = 0;
+				
+				if effectcreate = 1 {b3auraeffect2 = instance_create( x , y+3 , obj_spark );
+				b3auraeffect2.sprite_index = attacker.id.b3_auraeffect_sprite;
+				b3auraeffect2.image_speed = 0;
+				b3auraeffect2.image_xscale = (.3*size)-facing*(.6*size);
+				b3auraeffect2.image_yscale = .3*size
+				b3auraeffect2.depth = depth+1;
+				b3auraeffect2.image_alpha=1;
+				b3auraeffect2.alarm[0] = 50;}
+				}
+
+if timer > 3 autumnactivate = 1 {
+
+    after_image(5,c_teal,0.25)
+		
+	if instance_exists(b3auraeffect2) {b3auraeffect2.image_alpha-=.1;
+									b3auraeffect2.image_angle+=3;
+									b3auraeffect2.image_xscale = (.3*size)-facing*(.6*size);
+									b3auraeffect2.image_yscale = .3*size}	
+}
+
+if timer = 3
+    {
+    create_homing_bubble(50,50,5,5.5,self.id,6);}
+
+if target > -1 { 
+	storedx = target.x
+	storedy = target.y
+}
+
+if (target != -1 && target != noone && target != -99 && target != attacker.id) && timer == 4 && target > -1 {
+		move_towards_point(storedx,storedy- ( target.actual_height / 2 ),7);
+	}
+	
+if (hit = 0 && (timer = time-2 || collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self))) {
+    hit=2
+    sound_play(explode_small)
+    timer = time
+		boomgfx = instance_create(x,y,obj_spark_shock2);
+		boomgfx.image_blend = c_teal;
+	image_alpha=0;
+}
+
+if (hit = 1 && timer < time) {	
+	if instance_exists(b3auraeffect2) {
+		with(b3auraeffect2) {instance_destroy();}
+		}
+
+	}

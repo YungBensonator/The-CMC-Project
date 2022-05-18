@@ -1,0 +1,274 @@
+if (ai = 1) and (state_type != "attack" and state_type != "air_attack" and sprite_index != entry_sprite) and !instance_exists(obj_training){
+	
+	if distance_to_object(enemy) < 50 and (enemy.state_type = "attack" or enemy.state_type = "air_attack") and shield_hp > 30 and air = 0 and enemy.facing != facing{
+	shieldup = 1
+	//state_type = "shielding"
+	//attack_type = "none"
+    }
+	
+	if shield_hp <= 30 and state_type = "shielding"
+	state_type = "stand"
+	
+	if enemy <= -1{
+		if target <= -1
+		create_homing_bubble ( 300 ,300, 0 , 0 , self.id , 1 );
+		else
+		enemy = target
+	}
+	//char_ai();
+	
+}
+
+if ai = 1 and (!instance_exists(obj_training) or (instance_exists(obj_training) and obj_training.ai_type = 5)){
+	if state_type = "tumble"
+	{
+    if held_item = -1 {
+    if smash_power >= global.gs_fs_charge {
+    attack_type = "final_smash"
+	}
+    else {
+    if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x){
+    if enemy.y > y -2
+    attack_type = choose("nair","fair","nair","nair","fair","nair","fair")
+    else if enemy.y < y - 14
+    attack_type = choose("uair","fair","uair","uair","uair","uair","uair")
+    else
+    attack_type = choose("uair","fair","nair","nair","fair","uair","fair","nair","uair","downb","uair","uair")
+    }
+    else
+    attack_type = choose("uair","uair","bair","bair","bair","uair","bair","bair","bair","bair")
+    }
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+	}
+}
+
+
+
+
+/////////////////Meter stuff starts here/////////////////////////////////////
+if (!instance_exists(BookUIBG)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);  
+    BookUIBG = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    BookUIBG.step_script = hudThing_step_script;
+    BookUIBG.draw_script = hudThing_draw_script;
+    BookUIBG.owner = self.id;
+    BookUIBG.keepmain = self.keepmain;
+}
+
+if (instance_exists(BookUIBG)) {
+BookUIBG.sprite_index = bookuibg_sprite;
+BookUIBG.image_speed = 0;}
+
+if (!instance_exists(ChosenBook)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);  
+    ChosenBook = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    ChosenBook.step_script = hudThing_step_script;
+    ChosenBook.draw_script = hudThing_draw_script;
+    ChosenBook.owner = self.id;
+    ChosenBook.keepmain = self.keepmain;
+}
+
+if (instance_exists(ChosenBook)) {
+switch (booktype)
+{case 0: ChosenBook.sprite_index = bookui_bat; break;
+case 1: ChosenBook.sprite_index = bookui_thunder; break;
+case 2: ChosenBook.sprite_index = bookui_blade; break;
+case 3: ChosenBook.sprite_index = bookui_laser; break;}
+ChosenBook.image_speed = 0;}
+
+////////////////Meter Stuff ends here/////////////////////////////////////
+
+if sprite_index = stand_sprite
+{
+image_speed = 0.2;
+}
+
+///////////////////////////////////Crouch shit I stole from mp3
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(12,timer)
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+        case 9: image_index = 3; break;
+        case 12: image_index = 4; break;
+		
+		case 17: image_index = 5; break;
+		case 22: image_index = 6; break;
+		case 27: image_index = 7; break;
+		case 32: image_index = 8; break;
+		case 37: image_index = 9; break;
+		case 42: image_index = 10; break;
+		case 47: image_index = 11; break;
+		case 52: image_index = 12; break;
+		case 57: image_index = 13; break;
+		case 62: image_index = 14; break;
+		case 67: image_index = 15; break;
+		case 72: image_index = 16; break;
+		case 77: timer = 12; image_index = 4; break;
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+    image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+    image_index = 2;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 9 ){
+    image_index = 3;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 12 ){
+    image_index = 4;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch shit stolen from mp3
+
+if sprite_index = walk_sprite
+{
+image_speed = 0.2;
+}
+						
+if sprite_index = run_sprite
+{
+image_speed = 0.33;
+if image_index >= 5 {image_index = 3}
+}
+							
+if ( state_type = "jump" && sprite_index == jump_sprite )
+{
+  if ( timer = 0 )
+    image_index = 0;
+  if ( vspeed < 0 && image_index >= 0 )
+    image_index = 0;
+  if ( vspeed >= 0 && image_index < 1 )
+    image_index = 1;
+  if ( image_index >= 8 )
+    image_index = 6;
+}
+							
+if ( state_type = "jump" && sprite_index == mid_jump_sprite )
+{
+  if ( timer = 0 )
+    image_index = 0;
+  if ( vspeed < 0 && image_index >= 0 )
+    image_index = 0;
+  if ( vspeed >= 0 && image_index < 1 )
+    image_index = 1;
+  if ( image_index >= 8 )
+    image_index = 6;
+}
+							
+if sprite_index = fall_sprite
+{
+image_speed = 0.25;
+if image_index >= 2 {image_index = 0}
+}
+							
+if sprite_index = broken_sprite
+{
+image_speed = 0.25;
+if image_index >= 3 {image_index = 1}
+}
+
+if cancelcooldown > 0 {cancelcooldown-=1;}
+
+if lightningballcooldown > 0 {lightningballcooldown-=1;}
+
+
+if(instance_exists(autumnblade4) && autumnblade4.autumnactivate = 1){
+    cantb = 100
+}
+
+if (cantb > 0){
+    cantb -= 1
+} 
+
+if (attack_type != "dair" && attack_type != "downb" && attack_type != "final_smash") || (sprite_index = flinch_sprite || sprite_index = flinch2_sprite || sprite_index = flinch3_sprite) {image_alpha = 1;}
+
+if instance_exists(book) {book.image_alpha-=.05;}
+
+if ( taunt = 1 && air > 0 && attack_type = "none" && state_type = "jump" )
+{
+state_type = "jump";
+attack_type = "none";
+timer = 0;
+time = -1;
+char_taunt();
+}
+
+if(attack_type = "none" )
+{
+    if (instance_exists(utilteffect)) {with (utilteffect) {instance_destroy();}}
+	
+	if (instance_exists(usmasheffect)) {with(usmasheffect) {instance_destroy();}}
+	
+    if (instance_exists(dashattackeffect)) {with (dashattackeffect) {instance_destroy();}}
+	
+	if (instance_exists(baireffect)) {with(baireffect) {instance_destroy();}}
+	
+	
+	
+	if (instance_exists(downbeffect)) {with(downbeffect) {instance_destroy();}}
+	
+	if (instance_exists(upb_spin_effect)) {with(upb_spin_effect) {instance_destroy();}}
+	
+	if (instance_exists(b1auraeffect)) {with(b1auraeffect) {instance_destroy();}}
+	if (instance_exists(b1auraeffect2)) {with(b1auraeffect2) {instance_destroy();}}
+	
+	if (instance_exists(b2auraeffect)) {with(b2auraeffect) {instance_destroy();}}
+	
+	if (instance_exists(b3auraeffect)) {with(b3auraeffect) {instance_destroy();}}
+	if (instance_exists(b3auraeffect2)) {with(b3auraeffect2) {instance_destroy();}}
+	if (instance_exists(autumnblade.b3auraeffect2)) {with(autumnblade.b3auraeffect2) {instance_destroy();}}
+	
+	if (instance_exists(lasershot)) {with(lasershot) {instance_destroy();}}
+	if (instance_exists(b4projectilecircle2)) {with(b4projectilecircle2) {instance_destroy();}}
+	if (instance_exists(b4projectilecircle)) {with(b4projectilecircle) {instance_destroy();}}
+	
+	if (instance_exists(book)) {with(book) {instance_destroy();}}
+	
+	if (instance_exists(uthrowpillar)) {with(uthrowpillar) {instance_destroy();}}
+	
+	if (instance_exists(bthrowspawner)) {with(bthrowspawner) {instance_destroy();}}
+	if (instance_exists(bthrowspawner2)) {with(bthrowspawner2) {instance_destroy();}}
+	if (instance_exists(bthrowspawner3)) {with(bthrowspawner3) {instance_destroy();}}
+	
+}
+
+
+
+if ((state_type = "stand") || (state_type = "land") || (state_type = "edge") || (state_type = "down") || air < 1 || (state_type = "crouch") || (state_type = "grabbed") || (state_type = "out") || (state_type = "respawn")) && attack_type != "final_smash" {upbtemp = 0; directionskew=0;}
