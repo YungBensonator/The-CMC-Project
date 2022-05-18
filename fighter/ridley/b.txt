@@ -1,0 +1,183 @@
+if state_type = "run" || state_type = "stand" || state_type = "jump" || state_type = "crouch" {
+    attacking = 0
+    special = 0
+    attack_type = "b"
+    spark2 = -99
+    spark = -100
+    if air = 0 && charge < 160 {
+        state_type = "attack";
+        hspeed = 0;
+        sprite_index = downb_sprite;
+        temp = 0
+        sound_play(charge_sound)
+        time = 165; }
+    else {
+        state_type = "air_attack";
+        hspeed *= 0.4;
+        if air = 0
+            sprite_index = b_sprite;
+        else
+            sprite_index = b_air_sprite;
+        temp = 1
+        time = 33
+        air_move = 0
+        }
+        image_speed = 0.15;
+        image_index=0;
+        timer = 0;
+        timer_speed=1;
+        attack_success = 0
+}
+if temp=1 { 
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    if timer = 16 {
+        time = 33
+        if instance_exists(spark2)
+            with spark2 instance_destroy()
+        sound_stop(charge_sound)
+        if charge > 159 {
+        spark = instance_create(x,y,obj_down_impact)
+        spark.image_xscale = 0.8 }
+        if air > 0
+        hspeed = (-1+facing*2)*charge/36
+        if charge >= 65
+            sound_play(downb_sound)
+        else
+            sound_play(b_sound)
+        sound_play(dthrow_sound)
+        create_projectile(1+round(charge/8),30+facing*120,1.5+charge/26,1+charge/30,3+round(charge/6),4+ceil(charge/16),explodehit2*(charge<35) + explodehit3*((charge>=35) && (charge<110)) + explodehit4*(charge>=110),obj_spark_fire1,(1-facing*2)*(0.3+charge/450),(0.3+charge/450),27,38,self.id,160,ridley_downb_fireball);
+        spark = instance_create((x+27*(1-facing*2))*size,y-38*size,obj_spark_shockwave)
+        spark.image_xscale *= (0.1 + charge/960)*size
+        spark.image_yscale *= (0.35 + charge/480)*size
+        spark.image_blend = c_orange
+        proj.sprite_index = downb_fireball_sprite
+        proj.image_speed = 0.4
+        proj.shake_ampl = 0.8
+        proj.speed = 3.1*size
+        if air = 0
+            proj.direction = 350 - 160*facing
+        else
+            proj.direction = 310 - facing*80
+        proj.image_angle = proj.direction
+        if fully_charged
+            proj.priority += 1
+        fully_charged = 0
+        charge  = 0
+    }
+    if timer = 18
+        hspeed = 0
+    if image_index >= image_number - image_speed
+            image_speed = 0
+}
+else {
+    if timer = 1 || timer=20 || timer = 40 || timer = 60 || timer = 80 || timer = 100 || timer = 120 || timer = 140 {
+        sprite_index = downb_sprite;
+        image_speed = 0.25;
+        spark1 = instance_create(x,y,obj_down_impact)
+        spark1.image_xscale *= size
+        spark1.image_yscale *= size
+        spark = instance_create(x,y,obj_spark)
+        spark.snap = 0
+        spark.sprite_index = spr_dust2
+        spark.image_xscale = 0.6-facing*1.2
+        spark.image_yscale = 0.5
+        spark.image_speed = 0.4
+        spark.image_alpha = 0.75
+        spark.depth = 0
+        spark2 = instance_create(x+(23-facing*46)*size,y-40*size,obj_spark)
+        spark2.snap = self.id
+        spark2.sprite_index = downb_charging_sprite
+        spark2.image_xscale = size*(1-facing*2)*(charge/600 + 0.1)
+        spark2.image_yscale = size*(charge/600 + 0.1)
+        spark2.image_speed = 0.25
+        spark2.image_alpha = 0.85
+        spark2.depth = -3
+        hspeed = 0
+        if timer = 1 || frac(timer/40)=0
+            sound_play(downb_flame_sound)
+    }
+    if image_index > 27
+        image_index = 15;
+    if timer > 2 && timer < 130 && instance_exists(spark) {
+        spark.x = x 
+        spark.y = y 
+    }
+    if instance_exists(spark2) && timer > 2 {
+        spark2.image_xscale = size*(charge/600 + 0.1)
+        spark2.image_yscale = size*(charge/600 + 0.1)
+	if spark2.image_index > 3
+	spark2.image_index = 0
+    }
+    if air = 0 && ai && timer >= 30 && distance_to_object(enemy) < 29 && random(20)>17 {
+			runtimer = 0
+            sound_stop(charge_sound)
+            sprite_index = roll_sprite
+			image_index = 0
+            attack_type = "none"
+            state_type = "dodge"
+            if instance_exists(spark2)
+            with spark2 instance_destroy()
+            timer = 0
+            time = 29
+			facing = moveright
+    }
+    if shieldup = 1 && air = 0 {
+        sound_stop(charge_sound)
+        flashing = true
+        alarm[7] = 3
+        state_type = "shielding"
+        timer = 0
+        time = -1
+        attack_type = "none"
+        shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+        shield.p1 = self.id;
+    }
+    if air = 0 && (moveleft = 1 || moveright = 1) {
+			runtimer = 0
+            sound_stop(charge_sound)
+            attack_type = "none"
+            state_type = "dodge"
+            sprite_index = roll_sprite
+			image_index = 0
+            sound_play(roll_dodge_snd)
+            if instance_exists(spark2)
+            with spark2 instance_destroy()
+            shieldup = 0
+            timer = 0 
+            time = 29
+            facing = moveright
+    }
+    charge+=1
+    if special = 1 {
+        temp = 1
+        timer = 1
+        time = 33
+        special = 0
+	sprite_index = b_sprite
+	image_index = 0
+	image_speed = 0.15
+    }
+    if charge >= 160 {
+        sound_stop(charge_sound)
+        speed = 0    
+        attack_type = "none"
+        state_type = "stand"
+        timer = 0
+        time = -1
+        fully_charged = 1
+    }
+}
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+	{
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 5;
+	}
+    timer = 0;
+    time =-1;
+    }

@@ -1,0 +1,110 @@
+if ( timer < 40 )
+  visible = 0;
+if ( timer == 2 )
+  {
+  spark = instance_create ( x , y , obj_spark );
+  spark.sprite_index = entry_sprite;
+  spark.image_index = 0;
+  spark.image_blend = c_black;
+  spark.image_speed = 0;
+  spark.image_xscale = image_xscale * 0.25;
+  spark.image_yscale = image_yscale * 0.25;
+  spark.image_alpha = 0;
+  spark.depth = 16;
+  }
+if ( timer >= 2 && timer <= 32 )
+  {
+  if ( timer < 28 )
+    {
+    if ( spark.image_alpha < 1 )
+      spark.image_alpha += 0.25;
+    }
+    else
+    {
+    if ( spark.image_alpha > 0 )
+      spark.image_alpha -= 0.25;
+    }
+  var dir;
+  dir = 180 + ( timer - 2 ) * 6;
+  spark.x = x + lengthdir_x ( 80 , dir ) * ( 1 - facing * 2 );
+  spark.y = y - 340 + lengthdir_y ( 240 , dir );
+  if ( facing == 0 )
+    spark.image_angle = dir + 90;
+    else
+    spark.image_angle = - ( dir + 90 );
+  }
+if ( timer == 32 )
+  {
+  with ( spark ) instance_destroy();
+  }
+if ( timer >= 40 && timer < 60 )
+  {
+  sprite_index = entry_sprite;
+  image_index = 0;
+  image_speed = 0;
+  image_angle = -5 * ( 1 - facing * 2 );
+  visible = 1;
+  shakey = -80 + ( timer - 40 ) * 4;
+  shakex = ( -64 - 320 + ( timer - 40 ) * 16 ) * ( 1 - facing * 2 );
+  }
+if ( timer == 60 )
+  {
+  sound_play ( dash_attack_sound1 );
+  duster = instance_create(x-64*(1-facing*2) + 5,y+1,obj_dust_effect);
+  duster.facing = 0;
+  duster.image_xscale *= 1.5;
+  duster.image_yscale *= 1.5;
+  duster = instance_create(x-64*(1-facing*2) - 5,y+1,obj_dust_effect);
+  duster.facing = 1;
+  duster.image_xscale *= 1.5;
+  duster.image_yscale *= 1.5;
+  image_angle = 0;
+  shakey = 0;
+  screen_shake ( 6 , 12 );
+  instance_create ( x - 64 * ( 1 - facing * 2 ) , y , obj_down_impact );
+  image_index = 1;
+  image_speed = 0.25;
+  }
+if ( timer >= 60 && timer < 80 )
+  {
+  shakex = ( - 64 + ( timer - 60 ) * 3.2 ) * ( 1 - facing * 2 );
+  if ( timer mod 3 == 0 )
+    {
+    screen_shake ( 2 , 2 );
+    duster = instance_create(x+shakex + 5,y+1,obj_dust_effect);
+    duster.facing = facing;
+    duster.image_xscale *= .5;
+    duster.image_yscale *= .5;
+    }
+  }
+if ( timer == 80 )
+  {
+  shakex = 0;
+  image_index = 6;
+  image_speed = 1;
+  }
+if ( timer == 82 )
+  {
+  sound_play ( taunt_voice );
+  image_index = 8;
+  image_speed = 0;
+  }
+if ( timer == 84 )
+  {
+  screen_shake ( 2 , 12 );
+  }
+if ( timer == 90 )
+  image_index = 9;
+if ( timer == 110 )
+  image_index = 10;
+if ( timer == 115 )
+  image_index = 11;
+if ( timer >= 120 )
+  {
+  visible = 1;
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+  }

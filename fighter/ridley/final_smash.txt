@@ -1,0 +1,160 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" || state_type = "crouch" {
+        hspeed = 0;
+        size = csize
+        air_move=0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.25;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 303;
+        timer_speed=1;
+        intangible = 1;
+		vspeed = 0;
+        final_smashes+=1
+        sound_play(attack_voice1)
+        sound_play(super)
+        smash_power = 0
+        //camera.following_state = number
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 28
+        temp = y
+}
+//speed=0
+gravity_lock = 1;
+if timer < time {
+    if timer = 28 {
+        sprite_index = final_smash_start_sprite;
+        image_index = 0;
+        image_speed = 0.33;
+    }
+    if timer = 30 {
+        create_hitbox_impaler(10,270,10,1,180,3,kick3,obj_spark_hit3,2.5,1.35,1,16,self.id,5,6)
+        hitbox2.hit_stun = 180
+        hitbox2.hitlag_diff = 4
+        if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_combo3)
+         }
+    }
+    if timer = 45 {
+        sound_play(final_smash_sound1);
+        //camera.following_state = 0
+    }
+    if timer = 55 {
+        image_index = 8
+        image_speed = 0
+        vspeed = 0//-13
+    }
+    if timer >= 60 && timer < 100 {
+        if y + shakey > -1 {
+            timer = 60
+            shakey -= 13
+        }
+        else {
+            y = temp
+            speed = 0
+            timer = 148
+            xsize = 0.0188
+            ysize = 0.0188
+            shakey = -80
+            sprite_index = final_smash_sprite1
+			visible = 0;
+        }
+    }
+    if timer > 148 && timer <= 200 {
+		visible = 1;
+        xsize += 0.015
+        ysize += 0.015
+        shakey += 1.53
+        intangible = 1
+        if image_alpha < 1
+            image_alpha += 0.05
+        if frac(timer/7)=0 {
+            spark = instance_create(x,y-10,obj_spark_shockwave)
+            spark.image_alpha = 0.8
+            spark.image_blend = c_aqua
+            spark.image_xscale *= 0.15 + xsize*2.75
+            spark.image_yscale *= 0.15 + xsize*2.75
+            spark.depth = depth + 1
+        }
+        depth = 1
+    }
+    if timer < 148 {
+        //vspeed = 0
+        hspeed = 0
+        gravity = 0 
+    }
+    if timer = 175 {
+        sound_play(final_smash_sound3)
+        sprite_index = final_smash_sprite2
+    }
+    if timer = 200 {
+        depth = 0
+        create_hitbox(40,23+facing*134,7.3,8.6,-1,12,specialhit,obj_spark_slash3,3.35,3.2,-6,16,self.id,5,6)
+        hitbox.shake_ampl = 0.67
+        hitbox.armor_break = 1
+    }
+    if timer = 201 {
+        vspeed = 0
+        depth = 0
+        hspeed = 0
+    }
+    if timer > 201 && timer <= 218 {
+        shakey = 0
+        xsize += 0.0175
+        ysize += 0.0175
+        y += -1.35 - (timer-201)*0.225
+        intangible = 1
+    }
+    if timer > 218 && timer <= 300 {
+        if y > -5 && timer < 300 {
+            vspeed = -4.75 - (timer-118)*0.525
+            xsize += 0.01
+            ysize += 0.01
+        }
+        else {
+            y = obj_game_control.death_u + 4
+            vspeed = 0
+            xsize = 1.2
+            ysize = 1.2
+            timer = 300
+        }
+        intangible = 1
+    }
+    if timer >= 301 {
+        speed = 0
+        sprite_index = jump_sprite
+        image_speed = 0.25
+        temp_fall_speed = 0
+        gravity = 0
+        xsize = 0.8
+        ysize = 0.8
+    }
+    if timer = 201 {
+        duster = instance_create(x + (1-facing*2)*(-64),y+16,obj_dust_effect);
+        duster.facing = facing; 
+        duster.image_xscale *= 1.75
+        duster.image_yscale *= 1.75
+        duster = instance_create(x + (1-facing*2)*64,y+16,obj_dust_effect);
+        duster.facing = 1-facing; 
+        duster.image_xscale *= 1.75
+        duster.image_yscale *= 1.75
+        shaker = instance_create(x,y,obj_shakescreen2)
+        shaker.xampl = 2.5
+        shaker.yampl = 3.5
+        shaker.time = 16
+    }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    background_blend = c_white
+    attack_type = "none";
+    intangible = 0;
+    state_type = "fall";
+    timer = 0;
+    time =-1;
+}
