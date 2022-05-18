@@ -1,3 +1,4 @@
+if sbcool1> 0 {break;}
 if ( state_type = "jump" )
   {
     state_type = "air_attack";
@@ -7,6 +8,7 @@ if ( state_type = "jump" )
     sprite_index = nair_sprite;
     image_speed = 0;
     image_index = 8;
+	kirbtemp = 0;
   }
 
 if ( timer < time )
@@ -33,17 +35,54 @@ if ( timer < time )
 
       }
 
-    if ( timer = 8 )
+	if attack_success || attack_shielded
+	kirbtemp = 1	
+
+    if ( attack_success = 1 and  timer < 8 )
+    {
+    kirbtemp = 1;
+    }	
+
+
+    if ( kirbtemp = 1 ) //cancels 
+    {
+     if ( movedown  && ( attacking || (attacking && movejump) ) )
+     {
+         state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         //();
+     } 
+     if ((moveup && !movedown && attacking) || (moveleft && !movedown && attacking) || (moveright && !movedown && attacking) || ( movejump && !attacking && ( !attacking && !movedown ) ) || smash || special || grab )
+     {
+         interrupt = 1;
+     }
+    }
+
+
+
+
+
+
+
+
+	
+	if timer <= 8 and hitbox.hit >0 {
+	interrupt = 1;
+	}
+	if ( timer = 8)
       {
 	play_attack_voice();
 	sound_play(nair_sound);
-	create_hitbox(10,30+120*facing,5.2,5.5,13,7,punch2,obj_spark_hit2,1.20,1.20,0,10,self.id,30,2);
+	create_hitbox(6,120,4,4,15,6,punch2,obj_spark_hit2,1.20,1.20,0,10,self.id,30,2);
       }
     if ( timer = 16 )
       {
 	hitbox.damage = 8*size;
 	hitbox.bkb = 4*size;
 	hitbox.kbg = 2*size;
+	hitbox.hit_stun = 15;
 	hitbox.shield_damage = 7*size;
 	hitbox.hitlag_frames = 5*size;
 	hitbox.gfx = obj_spark_hit1;
@@ -55,6 +94,7 @@ if ( timer < time )
       {
 	hitbox.damage = 6*size;
 	hitbox.bkb = 3*size;
+	hitbox.hit_stun = 15;
 	hitbox.shield_damage = 6*size;
 	hitbox.hitlag_frames = 3*size;
 	hitbox.sfx = punch1;
@@ -68,7 +108,7 @@ if ( timer < time )
 	state_type = "land";
 	attack_type = "none";
 	timer = 0;
-	time = 7;
+	time = 11;
 	sprite_index = land_sprite;
       }
   }
@@ -81,4 +121,5 @@ if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
 	image_index = 1;
     timer = 0;
     time = -1;
+		  	sbcool1 = 30
   }

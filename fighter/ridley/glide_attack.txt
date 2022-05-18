@@ -1,0 +1,70 @@
+var th,a,b;
+if state_type = "jump"  {
+        glide = 1
+	attacking = 0;
+        state_type = "air_attack";
+        attack_type = "glide_attack";
+        image_speed = 0;
+        sprite_index = glide_sprite;
+        image_index=0;
+        timer = 0;
+        time = 24;
+        attacking = 1;
+        timer_speed=1;
+}
+if ( timer >= 3 && timer < 11 )
+  sprite_index = glide_attack_sprite;
+  else
+  sprite_index = glide_sprite;
+
+if ( timer == 3 )
+  {
+  image_index = 1;
+  th = degtorad( direction + (10-facing*20) );
+  a = abs( 30 * cos(th) );
+  b = 24 + 30 * sin(th);
+  create_projectile(1.5,30+facing*120,2.5,0,3,3,fire1,obj_spark_fire1,0.46,0.46,a,b,self.id,22,ridley_fireball)
+  proj.depth = depth + 1;
+  proj.speed = 6.5
+  proj.direction = direction
+  proj.hit_stun = -2
+  }
+if ( timer == 5 )
+  {
+  image_index = 0;
+  }
+if ( timer == 10 && attacking )
+  {
+  timer = 2;
+  }
+if !glide
+  {
+    attack_type = "none";
+    state_type = "jump";
+    sprite_index = jump_sprite;
+    time = -1;
+    timer = 0;
+	image_angle = 0;
+    movejump = 0;
+    holdjump = 0;
+    attacking = 0;
+  }
+if ( air == 0 )
+  {
+  state_type="land";
+  attack_type="none";
+  sprite_index = land_sprite;
+  time=11;
+  timer=0;
+  }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch"{
+    attack_type = "none"
+    state_type = "jump"
+	sprite_index = jump_sprite;
+	image_index = 6;
+    //direction = 350 - facing*160;
+    timer = 0
+    time = -1
+    holdjump = 0
+    glide = 0
+  }

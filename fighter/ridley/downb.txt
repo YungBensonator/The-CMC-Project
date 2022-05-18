@@ -1,0 +1,159 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 79;
+        timer_speed = 1;
+}
+        if timer < time {
+        switch ( timer )
+		{
+		case 4: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 21: image_index = 3; break;
+		case 24: image_index = 4; break;
+		case 27: image_index = 5; break;
+		case 30: image_index = 6; break;
+		case 33: sprite_index = jab_sprite; image_index = 3; break;
+
+		case 66: image_index = 2; break;
+		case 71: image_index = 1; break;
+		case 75: image_index = 0; break;
+////On hit Stuff
+		case 210: image_index = 4; break;
+		case 216: image_index = 5; break;
+		case 222: image_index = 6; break;
+		case 225: image_index = 7; break;
+		case 228: image_index = 8; break;
+////Endlag
+		case 357: sprite_index = land_sprite; image_index = 0; shakey = 0; break;
+		case 361: sprite_index = upb_sprite; image_index = 0; break;
+
+///On hit thing
+		case 363: sprite_index = taunt_sprite; image_index = 0; break;
+		case 365: image_index = 1; break;
+		case 370: image_index = 2; break;
+		case 375: image_index = 3; break;
+		case 380: image_index = 2; break;
+		case 385: image_index = 3; break;
+		case 390: image_index = 2; break;
+		case 395: image_index = 3; break;
+		case 400: image_index = 4; break;
+		case 405: image_index = 5; break;
+		case 410: image_index = 6; break;
+		}
+             if timer = 18 {
+                instance_create(x+15-facing*30,y-35,obj_spark_effect)
+		sound_play(skewer_sound1);
+             }
+if timer = 25
+{
+  spark = instance_create(x-10-facing*-20,y,obj_spark)
+  spark.sprite_index = spr_dust2
+  spark.image_xscale = 0.5-facing
+}
+             if timer >= 30 && timer <= 32
+                hspeed = (3.5-facing*6.5)*size
+
+            if timer = 30 {
+//will add proper sounds later
+                sound_play(skewer_sound2);
+//sweetspot
+                create_hitbox(28,90,0,0,30,6,skewer_hit,obj_spark_slash1,0.8,0.8,37,34,self.id,2,2); 
+//sourspot
+                create_hitbox2(12,362,2,2,10,7,slash1,obj_spark_slash1,0.8,0.8,18,18,self.id,2,2); 
+            }
+if timer > 30 && timer < 33 && hitbox.hit=1 && target.shieldup != 1
+{
+sprite_index = jab_sprite; 
+image_index = 3;
+time=288
+timer=190
+hspeed=0
+}
+////target dont fuck around
+if timer = 190
+{
+target.depth=-4
+target.timer_speed = 0;
+target.alarm[0] = 1000
+
+ if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_launch1)
+         }
+
+}
+if timer > 190 && timer < 231
+target.ignore_physics = 1;
+
+//Hold in Place
+if timer > 190 && timer < 210
+{
+target.x = x+10 * (1-facing*2) * size;
+target.y = y-25 * size;
+}
+//////Slam
+if timer = 216
+{
+target.x = x+13 * (1-facing*2) * size;
+target.y = y-22 * size;
+}
+////Slam 2
+//Keep same
+
+/////Slam 3
+if timer = 225
+{
+target.x = x+19 * (1-facing*2) * size;
+target.y = y-13 * size;
+}
+
+/////Slam 3
+if timer = 228
+{
+target.x = x+19 * (1-facing*2) * size;
+target.y = y-13 * size;
+//target.sprite_index=target.down_sprite;
+
+}
+if timer = 230
+{
+create_hitbox(8,270,5,2,-1,-1,slash1,obj_spark_slash1,0.7,0.7,19,13,self.id,1,2); 
+hitbox.hit_stun=10
+target.ignore_physics = 0;
+}
+if timer = 232
+{
+create_hitbox(4,35+facing*110,7,2,20,-1,slash3,obj_spark_slash1,0.7,0.7,19,6,self.id,2,2); 
+hitbox.hit_stun=18
+hitbox.di=0.8
+}
+if timer = 250
+{
+timer=355
+time=420
+}
+            if timer >= 33 && timer <= 35
+            hspeed = size*(1-facing*2);
+            }
+            if timer = 36
+			{
+            hspeed = 0
+			}
+
+if timer = 370 {
+sound_play(taunt_voice);
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
