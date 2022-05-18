@@ -1,0 +1,676 @@
+fast_fall = 0
+fast_fall_temp = 0
+
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+		
+		if (booktype = 0 && instance_exists(bat)) || (booktype = 1 && instance_exists(electrobubble)) || (booktype = 1 && lightningballcooldown != 0) {exit;}
+		
+		if (booktype !=1 && booktype !=0) || (booktype = 0 && !instance_exists(bat)) || (booktype = 1 && !instance_exists(electrobubble) && lightningballcooldown = 0) {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0}
+		
+		//SETUP FOR SCARLET BATS
+		if booktype = 0 {
+		
+        if air = 0 {sprite_index = b1_sprite
+        image_index=0
+        timer = 0
+        time = 40
+		aircheck = 0;}
+		
+		else {sprite_index = b1_air_sprite
+        image_index=0
+        timer = 0
+        time = 56
+		aircheck = 1;}
+		
+		}
+		
+		//SETUP FOR LIGHTNING BALL
+		if booktype = 1 {
+		
+        if air = 0 {sprite_index = b2_sprite
+        image_index=0
+        timer = 0
+        time = 38
+		aircheck = 0;;}
+		
+		else {sprite_index = b2_air_sprite
+        image_index=0
+        timer = 0
+        time = 57
+		aircheck = 1}
+		}
+		
+		//SETUP FOR AUTUMN EDGE
+		if booktype = 2 {
+		
+			if !instance_exists(autumnblade) && !instance_exists(autumnblade2) && !instance_exists(autumnblade3) && !instance_exists(autumnblade4)
+			{image_index=0
+			timer = 0
+			sprite_index = b3_set_sprite
+			time = 23
+			autumnactivate = 0; autumncheck = 0;}
+			
+			else {autumncheck = 1;
+				if autumnblade.autumnactivate != 1 && autumnblade2.autumnactivate != 1 && autumnblade3.autumnactivate != 1 && autumnblade4.autumnactivate != 1 
+					{if air = 0 {image_index=0
+					timer = 0
+					sprite_index = b3_use_sprite
+					time = 31
+					aircheck = 0;}
+					
+					else {
+					image_index=0
+					timer = 0
+					sprite_index = b3_use_air_sprite
+					time = 47
+					aircheck = 1;
+					animationcheck = 0;	}
+					}
+				else {animationcheck = 1; exit;}
+				}
+			}
+			
+		//SETUP FOR CRIMSON LASER
+		
+		if booktype = 3 {
+		
+		chargedlaser = 0;
+		chargecounter = 0;
+		fullchargecheck = 0
+		special = 1
+		
+        if air = 0 {sprite_index = b4_sprite
+        image_index=0
+        timer = 0
+        time = 119
+		aircheck = 0;}
+		
+		else {sprite_index = b4_air_sprite
+        image_index=0
+        timer = 0
+        time = 134
+		aircheck = 1}
+		
+		
+			}
+			
+}
+
+if ( timer < time)
+    {
+	
+	//SCARLET BATS
+	if booktype = 0 {
+		hspeed*=.5;
+		if air = 0
+		{
+		switch ( timer )
+		{
+		case 2: image_index = 1; break;
+		case 4: image_index = 2; break;
+		case 6: image_index = 3; break;
+		case 8: image_index = 4; break;
+		case 12: image_index = 5; break;
+		case 28: image_index = 6; break;
+		case 32: image_index = 7; break;
+		case 36: image_index = 8; break;
+		}
+		}
+		
+		else
+		{
+		switch ( timer )
+		{
+		case 2: image_index = 1; break;
+		case 4: image_index = 2; break;
+		case 6: image_index = 3; break;
+		case 8: image_index = 4; break;
+		case 12: image_index = 5; break;
+		case 28: image_index = 6; break;
+		case 32: image_index = 7; break;
+		case 36: image_index = 8; break;
+		case 40: image_index = 9; break;
+		case 44: image_index = 10; break;
+		case 48: image_index = 11; break;
+		case 52: image_index = 12; break;
+		}
+		
+		if timer <= 28
+		{hspeed=0; vspeed = 0; gravity_lock=1;}
+		
+		}
+		
+		if timer = 2 {sound_play(lightningballvoice);}
+		
+		if timer = 8 {
+		bat = create_projectile(7,40+facing*100,3,6.8,14,7,koaelectrichit,obj_spark_shock2,.25,.25,22,24,self.id,180,char_custom2)
+		bat.sprite_index = b1_projectile_sprite;
+		bat.image_speed = 0.33;
+		sound_play(b1use_sound);
+
+		
+			b1auraeffect = create_spark(22,24,obj_spark);
+			b1auraeffect.sprite_index = b1_auraeffect_sprite;
+			b1auraeffect.image_speed = 0;
+			b1auraeffect.image_xscale = (.3*size)-facing*(.6*size);
+			b1auraeffect.image_yscale = .3*size;
+			b1auraeffect.depth = depth-1;
+			b1auraeffect.image_alpha=.9;
+			b1auraeffect.alarm[0] = 40;
+			
+			b1auraeffect2 = create_spark(22,24,obj_spark);
+			b1auraeffect2.sprite_index = b1_auraeffect_sprite;
+			b1auraeffect2.image_speed = 0;
+			b1auraeffect2.image_xscale = (.15*size)-facing*(.3*size);
+			b1auraeffect2.image_yscale = .15*size;
+			b1auraeffect2.depth = depth-1;
+			b1auraeffect2.image_alpha=.9;
+			b1auraeffect2.alarm[0] = 40;
+		
+		}
+		
+	if instance_exists(b1auraeffect) {b1auraeffect.image_alpha-=.035;
+										b1auraeffect.image_angle+=3;
+										b1auraeffect.image_xscale = (.3*size)-facing*(.6*size);
+										b1auraeffect.image_yscale = .3*size;}		
+											
+	if instance_exists(b1auraeffect2) {b1auraeffect2.image_alpha-=.035;
+										b1auraeffect2.image_angle-=3;
+										b1auraeffect2.image_xscale = (.15*size)-facing*(.3*size);
+										b1auraeffect2.image_yscale = .15*size;}		
+	
+		if air = 0 && aircheck = 1 && timer > 40  {
+                state_type="land";
+				
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14;}
+		
+	}
+	//END OF SCARLET BATS
+	
+	//LIGHTNING BALL
+	if booktype = 1 {
+		hspeed*=.5;
+		if air = 0
+			{
+				switch ( timer )
+				{
+				case 3: image_index = 1; break;
+				case 6: image_index = 2; break;
+				case 8: image_index = 3; break;
+				case 11: image_index = 4; break;
+				case 14: image_index = 5; break;
+				case 17: image_index = 6; break;
+				case 20: image_index = 7; break;
+				case 24: image_index = 8; break;
+				case 28: image_index = 9; break;
+				case 33: image_index = 10; break;
+				}
+			}
+		
+		else
+			{
+				switch ( timer )
+				{
+				case 5: image_index = 1; break;
+				case 8: image_index = 2; break;
+				case 11: image_index = 3; break;
+				case 14: image_index = 4; break;
+				case 17: image_index = 5; break;
+				case 20: image_index = 6; break;
+				case 23: image_index = 7; break;
+				case 27: image_index = 8; break;
+				case 31: image_index = 9; break;
+				case 36: image_index = 10; break;
+				case 41: image_index = 11; break;
+				case 45: image_index = 12; break;
+				case 49: image_index = 13; break;
+				case 53: image_index = 14; break;
+				}
+			
+				if timer <= 41
+				{hspeed=0; vspeed = 0; gravity_lock=1;}
+			}
+			
+		if timer = 3 {sound_play(bookchangevoice,bookchangevoice2);}
+		
+		if timer = 5
+		{
+		sound_play(b2use_sound);}
+		
+		if timer = 11 {
+		electrobubble = create_projectile(5,45+facing*90,4,5,10,5,koaelectrichit2,obj_spark_stun,.25,.25,25,12,self.id,240,no_script)
+		electrobubble.sprite_index = b2_projectile_sprite;
+		electrobubble.image_speed = 0;
+		electrobubble.image_index = 0;
+		electrobubble.speed = 2.5;
+		electrobubble.direction = 180*facing;
+		electrobubble.stun_base = 60;
+		electrobubble.stun_scalar = 2
+	
+				b2auraeffect = create_spark(25,12,obj_spark);
+				b2auraeffect.sprite_index = b2_auraeffect_sprite;
+				b2auraeffect.image_speed = 0;
+				b2auraeffect.image_xscale = (.2*size)-facing*(.4*size);
+				b2auraeffect.image_yscale = .2*size;
+				b2auraeffect.depth = depth+1;
+				b2auraeffect.image_alpha=.9;
+				b2auraeffect.alarm[0] = 56;}
+			
+		if air = 0 && aircheck = 1 && timer > 40 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14;}
+		
+	if instance_exists(b2auraeffect) {b2auraeffect.image_alpha-=.04;
+									b2auraeffect.image_angle-=3;
+									b2auraeffect.image_xscale = (.2*size)-facing*(.4*size);
+									b2auraeffect.image_yscale = .2*size;}	
+		}
+	//END OF LIGHTNING BALL
+	
+	
+	//AUTUMN EDGE
+	if booktype = 2 && cantb <= 0 {
+		hspeed*=.5;
+		if sprite_index = b3_set_sprite
+			{
+				switch ( timer )
+				{
+				case 1: image_index = 1; break;
+				case 2: image_index = 2; break;
+				case 4: image_index = 3; break;
+				case 6: image_index = 4; break;
+				case 8: image_index = 5; break;
+				case 11: image_index = 6; break;
+				case 14: image_index = 7; break;
+				case 17: image_index = 8; break;
+				case 20: image_index = 9; break;
+				}
+				
+				if timer = 2 {sound_play(dsmashvoice)}
+				
+				if timer = 5
+				{
+				sound_play(b3set_sound)
+				autumnblade = create_projectile(2,90,1,0.2,6,3,koaslashhit2,obj_spark_slash3,.25,.25,20,20,self.id,90,char_custom3)
+				autumnblade.sprite_index = b3_projectile_sprite
+				autumnblade.image_speed = 0;
+				autumnblade.image_index = 0;
+				autumnblade.direction = 180*facing;
+				autumnblade.hit = 2;
+				autumnblade.alarm[0] = 9999;
+				autumnblade.autumnactivate = 0
+	
+				b3auraeffect = create_spark(20,17,obj_spark);
+				b3auraeffect.sprite_index = b3_auraeffect_sprite;
+				b3auraeffect.image_speed = 0;
+				b3auraeffect.image_xscale = (.3*size)-facing*(.6*size);
+				b3auraeffect.image_yscale = .3*size
+				b3auraeffect.depth = depth+1;
+				b3auraeffect.image_alpha=1;
+				b3auraeffect.alarm[0] = 50;
+				
+
+				}
+				
+				if timer = 10
+				{
+				sound_play(b3set_sound)
+				autumnblade2 = create_projectile(2,90,1,0.2,6,3,koaslashhit2,obj_spark_slash3,.25,.25,20,18,self.id,90,char_custom3)
+				autumnblade2.sprite_index = b3_projectile_sprite
+				autumnblade2.image_speed = 0;
+				autumnblade2.image_index = 0;
+				autumnblade2.direction = 180*facing;
+				autumnblade2.hit = 2;
+				autumnblade2.alarm[0] = 9999;
+				autumnblade2.autumnactivate = 0}
+				
+				if timer = 15
+				{
+				sound_play(b3set_sound)
+				autumnblade3 = create_projectile(2,90,1,0.2,6,3,koaslashhit2,obj_spark_slash3,.25,.25,20,16,self.id,90,char_custom3)
+				autumnblade3.sprite_index = b3_projectile_sprite
+				autumnblade3.image_speed = 0;
+				autumnblade3.image_index = 0;
+				autumnblade3.direction = 180*facing;
+				autumnblade3.hit = 2;
+				autumnblade3.alarm[0] = 9999;
+				autumnblade3.autumnactivate = 0}
+				
+				if timer = 20
+				{
+				sound_play(b3set_sound)
+				autumnblade4 = create_projectile(6,angle_correct(30),5,2,12,6,koavoileswordhit2,obj_spark_slash3,.25,.25,20,14,self.id,90,char_custom3)
+				autumnblade4.sprite_index = b3_projectile_sprite
+				autumnblade4.image_speed = 0;
+				autumnblade4.image_index = 0;
+				autumnblade4.direction = 180*facing;
+				autumnblade4.hit = 2;
+				autumnblade4.alarm[0] = 9999;
+				autumnblade4.autumnactivate = 0}
+			}
+			
+		if sprite_index = b3_use_sprite
+				{
+					switch ( timer )
+					{
+					case 1: image_index = 1; break;
+					case 2: image_index = 2; break;
+					case 3: image_index = 3; break;
+					case 4: image_index = 4; break;
+					case 5: image_index = 5; break;
+					case 7: image_index = 6; break;
+					case 11: image_index = 7; break;
+					case 15: image_index = 8; break;
+					case 19: image_index = 9; break;
+					case 23: image_index = 10; break;
+					case 27: image_index = 11; break;
+					}
+				}
+			
+		else
+			{
+					switch ( timer )
+					{
+					case 1: image_index = 1; break;
+					case 2: image_index = 2; break;
+					case 3: image_index = 3; break;
+					case 4: image_index = 4; break;
+					case 5: image_index = 5; break;
+					case 7: image_index = 6; break;
+					case 11: image_index = 7; break;
+					case 15: image_index = 8; break;
+					case 19: image_index = 9; break;
+					case 23: image_index = 10; break;
+					case 27: image_index = 11; break;
+					case 31: image_index = 12; break;
+					case 35: image_index = 13; break;
+					case 39: image_index = 14; break;
+					case 43: image_index = 15; break;
+					}
+				
+					if timer <= 23
+					{hspeed=0; vspeed = 0; gravity_lock=1;}
+			}
+			
+			if autumncheck = 1
+			{
+				if timer = 5
+				{sound_play(b3use_sound);
+				sound_play(choose(autumnedgevoice,autumnedgevoice2))
+				autumnblade.autumnactivate = 1
+				autumnblade.effectcreate = 1}
+				
+				if timer = 10
+				{
+				autumnblade2.autumnactivate = 1
+				autumnblade.effectcreate = 0	}
+				
+				if timer = 15
+				{
+				autumnblade3.autumnactivate = 1
+				autumnblade.effectcreate = 0	}
+				
+				if timer = 20
+				{
+				autumnblade4.autumnactivate = 1
+				autumnblade.effectcreate = 0	}
+			}
+				
+			if air = 0 && aircheck = 1 && timer > 23 {
+					state_type="land";
+					attack_type="none";
+					sprite_index = land_sprite;
+					timer=0;
+					time=14;}
+		
+	if instance_exists(b3auraeffect) {b3auraeffect.image_alpha-=.05;
+									b3auraeffect.image_angle+=3;
+									b3auraeffect.image_xscale = (.3*size)-facing*(.6*size);
+									b3auraeffect.image_yscale = .3*size}	
+			
+		}
+	
+	//END OF AUTUMN EDGE
+	
+	//CRIMSON LASER
+	if booktype = 3 {
+		hspeed*=.5;
+		if air = 0
+		{
+		switch ( timer )
+		{
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break;
+		case 12: image_index = 4; break;
+		case 15: image_index = 5; break;
+		case 18: image_index = 6; break;
+		case 21: image_index = 7; break;
+		case 24: image_index = 8; break;
+		case 27: image_index = 9; break;
+		case 30: image_index = 10; break;
+		case 33: image_index = 11; break;
+		case 36: image_index = 12; break;
+		case 39: image_index = 13; break;
+		case 42: image_index = 14; break;
+		case 45: image_index = 15; break;
+		case 48: image_index = 16; break;
+		case 51: image_index = 17; break;
+		case 54: image_index = 18; break;
+		case 57: image_index = 19; break;
+		case 60: image_index = 20; break;
+		case 63: image_index = 21; break;
+		case 66: image_index = 22; break;
+		case 69: image_index = 23; break;
+		case 72: image_index = 24; break;
+		case 75: image_index = 25; break;
+		case 78: image_index = 26; break;
+		case 81: image_index = 27; break;
+		case 84: image_index = 28; break;
+		case 87: image_index = 29; break;
+		case 90: image_index = 30; break;
+		case 93: image_index = 31; break;
+		case 96: image_index = 32; break;
+		case 99: image_index = 33; break;
+		
+		case 102: image_index = 34; break;
+		case 106: image_index = 35; break;
+		case 110: image_index = 36; break;
+		case 114: image_index = 37; break;
+		}
+		}
+		
+		else
+		{
+		switch ( timer )
+		{
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break;
+		case 12: image_index = 4; break;
+		case 15: image_index = 5; break;
+		case 18: image_index = 6; break;
+		case 21: image_index = 7; break;
+		case 24: image_index = 8; break;
+		case 27: image_index = 9; break;
+		case 30: image_index = 10; break;
+		case 33: image_index = 11; break;
+		case 36: image_index = 12; break;
+		case 39: image_index = 13; break;
+		case 42: image_index = 14; break;
+		case 45: image_index = 15; break;
+		case 48: image_index = 16; break;
+		case 51: image_index = 17; break;
+		case 54: image_index = 18; break;
+		case 57: image_index = 19; break;
+		case 60: image_index = 20; break;
+		case 63: image_index = 21; break;
+		case 66: image_index = 22; break;
+		case 69: image_index = 23; break;
+		case 72: image_index = 24; break;
+		case 75: image_index = 25; break;
+		case 78: image_index = 26; break;
+		case 81: image_index = 27; break;
+		case 84: image_index = 28; break;
+		case 87: image_index = 29; break;
+		case 90: image_index = 30; break;
+		case 93: image_index = 31; break;
+		case 96: image_index = 32; break;
+		case 99: image_index = 33; break;
+		
+		case 102: image_index = 34; break;
+		case 106: image_index = 35; break;
+		case 110: image_index = 36; break;
+		case 114: image_index = 37; break;
+		case 118: image_index = 38; break;
+		case 122: image_index = 39; break;
+		case 126: image_index = 40; break;
+		case 130: image_index = 41; break;
+		}
+		
+		if timer <= 29
+		{hspeed=0; vspeed = 0; gravity_lock=1;}
+		
+		if timer > 30 && timer <= 118
+		{hspeed=0; vspeed = -.0001; gravity_lock=1;}
+		
+		}
+		
+		if timer = 3 {sound_play(lasershotvoicestart);}
+		
+		if timer = 10 {
+			b4projectilecircle2 = create_spark(0,16,obj_spark);
+			b4projectilecircle2.sprite_index = b4_projectile_circle2_sprite;
+			b4projectilecircle2.image_speed = 0;
+			b4projectilecircle2.image_xscale = .5*size;
+			b4projectilecircle2.image_yscale = .5*size;
+			b4projectilecircle2.depth = depth+1;
+			b4projectilecircle2.image_alpha=.01;
+			
+			sound_play(b4load_sound); }
+			
+		if instance_exists(b4projectilecircle2)
+		{b4projectilecircle2.image_angle-=2;
+		b4projectilecircle2.x = x;
+		b4projectilecircle2.y = y-16;		
+		
+		if timer < 24 && b5jprojectilecircle2.image_alpha < 1
+		{b4projectilecircle2.image_alpha+=.0065;}
+		
+		if timer >= 24 && fullchargecheck = 0
+		{b4projectilecircle2.image_alpha-=.02;}
+		
+		if fullchargecheck = 1 {
+		b4projectilecircle2.image_xscale+= .2;
+		b4projectilecircle2.image_yscale+= .2;
+		b4projectilecircle2.image_alpha-=.05;}
+		
+		}
+		
+		if special = 1 && timer = 23 && chargecounter < 3 {timer = 11; image_index = 4; chargecounter+=.5;}
+		
+		if chargecounter = 3 {chargedlaser = 1}
+		
+		if timer = 24 && chargecounter = 3 && fullchargecheck = 0 {
+		sound_play(b4fullcharge_sound); 
+		timer = 11; 
+		image_index = 4; 
+		fullchargecheck = 1;		
+		}
+		
+		if timer = 54 && chargedlaser = 0 {timer = 102; image_index = 34;}
+
+		if timer = 30 { 	
+				sound_play(b4shoot_sound);
+				if chargedlaser = 0 {sound_play(choose(lasershotvoice,lasershotvoice2))}
+				lasershot = create_projectile(4+chargecounter,25+facing*140,5,4,12,6,magic2,obj_spark_shockwave,.05,.32,11,21,self.id,70,char_custom4)
+				lasershot.sprite_index = b4_projectile_sprite;
+				lasershot.image_speed = 0;
+				lasershot.image_index = 0;
+				lasershot.hitcount = 0;
+				
+					if chargedlaser = 1
+					{
+					sound_play(lasershotvoicefullcharge);
+					lasershot.damage = 2;
+					lasershot.bkb = 2.5;
+					lasershot.kbg = 0.1;
+					lasershot.dir = 3+facing*174;
+					lasershot.shield_damage = -1;
+					lasershot.parry_nodestroy = 1;
+					lasershot.image_yscale = .55;
+					lasershot.sdi = 0
+					lasershot.di = 0
+					
+				
+					b4projectilecircle = create_spark(11,20,obj_spark);
+					b4projectilecircle.sprite_index = b4_projectile_circle_sprite;
+					b4projectilecircle.image_speed = 0;	
+					b4projectilecircle.image_xscale = .15*size;
+					b4projectilecircle.image_yscale = .6*size;
+					b4projectilecircle.depth = depth+1;
+					b4projectilecircle.image_alpha=.6;
+					}
+				}
+				
+		if timer > 30 {if chargedlaser = 0
+						{lasershot.image_xscale+=.045-facing*.09;
+						lasershot.image_yscale-=.04-(chargecounter/192)}
+						else
+						{lasershot.image_xscale+=.05-(facing*(.1*2));}
+						}
+						
+		if instance_exists(lasershot) {
+		lasershot.x = x+11-facing*22;
+		lasershot.y = y-21;
+			if lasershot.image_yscale <= 0
+				{with (lasershot)
+					{instance_destroy();}
+				}
+		}
+		
+		if instance_exists(b4projectilecircle)
+		{if timer < time
+		{
+		b4projectilecircle.image_alpha-=.05;
+		b4projectilecircle.image_xscale+= .025;
+		b4projectilecircle.image_yscale+= .1;
+		b4projectilecircle.x = x+11-facing*22;
+		b4projectilecircle.y = y-20;	}
+		}
+	
+		if air = 0 && aircheck = 1 && timer > 117  {
+				state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14;}
+		
+	}
+	//END OF CRIMSON LASER
+	
+	
+	
+ }
+  
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        {state_type = "jump"; sprite_index = jump_sprite; if animationcheck = 0 {image_index = 6} else {exit;}}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

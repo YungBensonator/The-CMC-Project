@@ -1,5 +1,8 @@
 fast_fall = 0;
 fast_fall_temp = 0;
+if sidebtimer > 0{
+    exit;
+}
 
 if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
   {
@@ -193,7 +196,7 @@ proj6.sprite_index = arm_spriteL;
 
 if timer >= 101 and timer < 131 and !instance_exists(hitbox)
 {
-    create_hitbox ( 4 , 90 , 2 , 0 , 10 , 1 , punch2 , obj_spark_hit3 , 1.38 , 0.97 , 27.30 , 14.70 , self.id , 8 , 3 );
+    create_hitbox ( 3 , 90 , 2 , 0 , 10 , 1 , punch2 , obj_spark_hit3 , 1.38 , 0.97 , 27.30 , 14.70 , self.id , 8 , 3 );
     hitbox.image_angle = ( 1 - facing * 2 ) * 0;
 	hitbox.hit_stun = 6;
 	hitbox.execute_on_hit = "attacker.vspeed = 0"
@@ -224,7 +227,7 @@ case 220: image_index = 05; break;
 
 if timer = 206
 {
-    create_hitbox ( 5 , 15 + facing * 150 , 4 , 4.15 , 15 , 15 , punch3 , obj_spark_hit4 , 1.22 , 0.72 , 20.30 , 14 , self.id , 4 , 3 );
+    create_hitbox ( 3 , 15 + facing * 150 , 7 , 2.5 , 15 , 15 , punch3 , obj_spark_hit4 , 1.22 , 0.72 , 20.30 , 14 , self.id , 4 , 3 );
     hitbox.image_angle = ( 1 - facing * 2 ) * 0;
 	duster = instance_create(x,y,obj_dust_effect);
     duster.facing = facing;
@@ -251,7 +254,7 @@ case 320: image_index = 05; break;
 
 if timer = 304
 {
-    create_hitbox ( 5 , 85 + facing * 10 , 4 , 4.5 , 15 , 15 , punch3 , obj_spark_hit4 , 0.63 , 0.81 , 14 , 14 , self.id , 4 , 3 );
+    create_hitbox ( 5 ,angle_correct(65), 7 , 2.5 , 15 , 15 , punch3 , obj_spark_hit4 , 0.63 , 0.81 , 14 , 14 , self.id , 4 , 3 );
     hitbox.image_angle = ( 1 - facing * 2 ) * 0;
 	duster = instance_create(x,y,obj_dust_effect);
     duster.facing = facing;
@@ -261,6 +264,7 @@ if timer = 304
 
 if ( timer >= time - 1 )
   {
+sidebtimer  = 40
   attack_type = "none";
   if ( air == 0 )
     state_type = "stand";

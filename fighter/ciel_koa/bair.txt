@@ -1,0 +1,73 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0;
+        sprite_index = bair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+}
+if timer < time {
+			
+	switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 7: image_index = 3; break;
+	case 9: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 16: image_index = 6; break;
+	case 20: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 28: image_index = 9; break;
+	case 32: image_index = 10; break;
+	case 36: image_index = 11; break;
+      }
+	  
+	if timer = 5 {
+			sound_play(choose(bairvoice,bairvoice2))}
+	  
+	if timer = 8 {
+			
+			baireffect = create_spark(-4,25,obj_spark);
+			baireffect.sprite_index = bair_effect_sprite;
+			baireffect.image_speed = 1;
+			baireffect.image_xscale = (.35*size)-facing*(.7*size);
+			baireffect.image_yscale = .35*size;
+			baireffect.depth = depth-1;
+			baireffect.alarm[0] = 40;}
+			
+	if timer = 9 {
+			sound_play(voileswingsound);
+			create_hitbox(9,160-facing*140,4.85,6,10,7,koavoileswordhit1,obj_spark_slash2,1.1,1.9,-1,17,self.id,7,4);
+			hitbox.image_angle = 339-facing*138;}
+			
+    if instance_exists(baireffect) {baireffect.x = x-(4*size)+facing*(8*size);
+									baireffect.y = y-(25*size);
+									baireffect.image_xscale = (.35*size)-facing*(.7*size);
+									baireffect.image_yscale = .35*size;
+									baireffect.depth = depth-1;
+									}
+	  
+	  
+        if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=14; }
+        }  
+		
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+	facing=1-facing;
+	image_xscale *= -1;
+    attack_type = "none";
+    if air > 0
+        {state_type = "jump"; sprite_index = jump_sprite; image_index = 6}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

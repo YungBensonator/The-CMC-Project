@@ -1,0 +1,32 @@
+if timer = 1{
+resetvalue = 10
+originaltime = time
+}
+
+gfx = obj_spark_shockwave;
+gfx.image_blend = c_red;
+
+if hit = 1 && hitcount < 5 {
+		hit = 2
+		time = originaltime
+		resetrigger = resetvalue
+		hitcount +=1;
+		}
+		
+if resetrigger > 0
+resetrigger -= 1
+
+if resetrigger = 1
+hit = 0
+
+if hitcount = 4 {damage = 4+attacker.id.chargecounter;
+				dir = 25+facing*140;
+				bkb = 2+attacker.id.chargecounter;
+				kbg = 3.5+attacker.id.chargecounter;
+				sdi = 1
+				di = 1 
+}
+
+if hitcount = 5 || (hitcount < 5 && (timer > 40)) {if timer < time {image_yscale-=.06}}
+
+if hit {timer -= 5}

@@ -1,0 +1,86 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "jab"
+    timer = 0;
+    time = 16;
+    sprite_index = jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 7: image_index = 3; break;
+	case 10: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 14: image_index = 6; break;
+	
+	case 22: image_index = 1; break;
+	case 24: image_index = 2; break;
+	case 25: image_index = 3; break;
+	case 28: image_index = 4; break;
+	case 33: image_index = 5; break;
+	case 37: image_index = 6; break;
+	case 41: image_index = 7; break;
+	
+	case 52: image_index = 1; break;
+	case 54: image_index = 2; break;
+	case 56: image_index = 3; break;
+	case 57: image_index = 4; break;
+	case 58: image_index = 5; break;
+	case 61: image_index = 6; break;
+	case 65: image_index = 7; break;
+	case 69: image_index = 8; break;
+	case 73: image_index = 9; break;
+	case 78: image_index = 10; break;
+      }
+	  
+	if timer = 4 {
+			sound_play(swinging_sound1);
+			sound_play(choose(jab1voiceuair,jab1voice2))
+			create_hitbox(3,270,2,0,6,3,koaattackhit1,obj_spark_hit1,.6,.5,15,17,self.id,3,2);}
+	  
+	if timer = 25 {
+			sound_play(swinging_sound2);
+			sound_play(jab2voice2)
+			create_hitbox(4,0+facing*180,4,0,8,4,koaattackhit2,obj_spark_hit2,.75,.4,15,16,self.id,3,2);}
+			
+	if timer = 58 {
+			sound_play(swinging_sound3);
+			sound_play(jab3voice)
+			create_hitbox(5,10+facing*160,5,7,10,5,koaslashhit2,obj_spark_hit3,1,.5,20,15,self.id,3,3);}
+				
+if ((timer >= 8 && timer <= 16) || (timer >= 29 && timer <= 44)) && ai && attack_success
+{attacking = 1; attack_success = 0;}
+			
+	if timer >= 8 && timer < 16 && attacking
+	{attacking = 0; sprite_index = jab2_sprite; image_index = 0; timer = 20; time = 44;}
+			
+	if timer >= 29 && timer < 44 && (!moveleft && !moveright && !moveup && !movedown) && attacking
+	{attacking = 0; sprite_index = jab3_sprite; image_index = 0; timer = 50; time = 83;}
+	
+	if timer >= 29 && timer < 44 && ((facing = 0 && moveright) || (facing = 1 && moveleft)) && attacking {interrupt = 1}
+	
+	if timer >= 29 && timer < 44 && moveup && attacking {interrupt = 1}
+    
+	if timer >= 2 && timer < 5 {hspeed=1-facing*2;}
+	
+	if timer >= 20 && timer < 26 {hspeed=2-facing*4;}
+	
+	if timer >= 54 && timer < 59 {hspeed=3-facing*6;}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

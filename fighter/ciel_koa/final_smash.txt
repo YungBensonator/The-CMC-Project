@@ -1,0 +1,224 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+		
+		directionskew=0;
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 620;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+        spark = instance_create ( 0 , 0 , obj_camerazoom );
+        spark.camera_l = x - 5;
+        spark.camera_r = x + 5;
+        spark.camera_u = y - 5 - actual_height;
+        spark.camera_d = y + 5;
+        spark.camera_boundary_zoom = 80;
+        spark.alarm[0] = 620;
+
+        duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 176;
+		
+		sound_play(finalsmashuse);
+		sound_play(finalsmashvoice);
+		
+		directionskew=1;
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+grav=0;
+ignore_physics = 1;
+if ai {moveleft = 0; moveright = 0;}
+
+switch ( timer )
+    {
+	case 170: image_index = 1; break;
+	case 173: image_index = 2; break;
+	case 176: image_index = 3; break;
+	case 179: image_index = 4; break;
+	case 182: image_index = 5; break;
+	case 611: image_index = 4; break;
+	case 614: image_index = 3; break;
+	case 617: image_index = 2; break;
+    }
+	
+if timer < 60 && image_alpha > 0 {image_alpha-=.05; }
+	
+if timer = 1 {finalsmashpreludecircle = create_spark(0,17,obj_spark);
+			finalsmashpreludecircle.sprite_index = final_smash_preludecircle_sprite;
+			finalsmashpreludecircle.image_speed = 0;
+			finalsmashpreludecircle.image_index = 0;
+			finalsmashpreludecircle.image_xscale = .5*size;
+			finalsmashpreludecircle.image_yscale = .5*size;
+			finalsmashpreludecircle.depth = depth-1;
+			finalsmashpreludecircle.image_alpha = 0.05;
+			}
+			
+if instance_exists(finalsmashpreludecircle) 
+{finalsmashpreludecircle.x = x;
+finalsmashpreludecircle.y = y-(17*size);
+finalsmashpreludecircle.image_angle+=3;
+finalsmashpreludecircle.image_xscale = (.5*size)-facing*(1*size);
+finalsmashpreludecircle.image_yscale = .5*size;
+
+if timer < 11 && finalsmashpreludecircle.image_alpha < 1 {finalsmashpreludecircle.image_alpha += 0.1;}
+
+if timer > 35
+{finalsmashpreludecircle.image_alpha-=0.1;}
+
+if timer = 50
+{with (finalsmashpreludecircle) {instance_destroy();}}
+}
+	
+if timer = 60 {x = obj_game_control.respawn_x;
+			y = obj_game_control.death_u+(obj_game_control.death_d*.5);
+			sound_play(finalsmashcharge);
+			facing = 0;}
+	
+if timer = 68 {finalsmashauraeffect = create_spark(0,17,obj_spark);
+			finalsmashauraeffect.sprite_index = final_smash_auraeffect_sprite;
+			finalsmashauraeffect.image_speed = 0;
+			finalsmashauraeffect.image_xscale = .5*size;
+			finalsmashauraeffect.image_yscale = .5*size;
+			finalsmashauraeffect.depth = depth+1;
+			finalsmashauraeffect.image_alpha = 0.01;
+			}
+			
+    if instance_exists(finalsmashauraeffect) {finalsmashauraeffect.x = x;
+									finalsmashauraeffect.y = y-(17*size);
+									finalsmashauraeffect.image_angle+=3;
+									finalsmashauraeffect.image_xscale = (.5*size)-facing*(1*size);
+									finalsmashauraeffect.image_yscale = .5*size;
+									
+									if timer < 560 && finalsmashauraeffect.image_alpha < 1
+									{finalsmashauraeffect.image_alpha+=0.01;}
+									
+									if timer > 599
+									{finalsmashauraeffect.image_alpha-=0.05;}
+									
+									if timer = 619
+									{with (finalsmashauraeffect) {instance_destroy();}}
+									}
+
+if timer > 182 && timer < 611 && timer mod 3 = 0 {if image_index = 5
+	{image_index = 4}
+	else
+	{image_index = 5}}
+	
+if timer > 60 && timer < 160 {gravity_lock = 1;
+				vspeed=-1;
+				spark.camera_l = x - 5;
+				spark.camera_r = x + 5;
+				spark.camera_u = y - 30 - actual_height;
+				spark.camera_d = y + 30;
+				spark.camera_boundary_zoom = 70;
+				if image_alpha < 1 {image_alpha+=.025;}}
+				
+if timer = 160 {sound_play(b4fullcharge_sound);
+				vspeed=0;
+				spark.camera_l = x - 5;
+				spark.camera_r = x + 5;
+				spark.camera_u = y - 30 - actual_height;
+				spark.camera_d = y + 30;
+				spark.camera_boundary_zoom = 70;
+				
+				finalsmashfullchargeeffect = create_spark(0,17,obj_spark);
+				finalsmashfullchargeeffect.sprite_index = final_smash_fullchargeeffect_sprite;
+				finalsmashfullchargeeffect.image_speed = 0;
+				finalsmashfullchargeeffect.image_xscale = .2*size;
+				finalsmashfullchargeeffect.image_yscale = .2*size;
+				finalsmashfullchargeeffect.depth = depth-1;
+				finalsmashfullchargeeffect.image_alpha = 1;
+				}
+
+if instance_exists(finalsmashfullchargeeffect) {
+		finalsmashfullchargeeffect.image_alpha-=.05;
+		finalsmashfullchargeeffect.image_xscale+= .2;
+		finalsmashfullchargeeffect.image_yscale+= .2;
+		if timer = 619
+		{with (finalsmashfullchargeeffect) {instance_destroy();}}}
+				
+if timer = 182 {sound_play(finalsmashshot);
+				spark.camera_l = x - 400;
+				spark.camera_r = x + 400;
+				spark.camera_u = y - 400 - actual_height;
+				spark.camera_d = y + 400;
+				spark.camera_boundary_zoom = 70;}
+				
+if timer > 182 {
+				spark.camera_l = x - 400;
+				spark.camera_r = x + 400;
+				spark.camera_u = y - 400 - actual_height;
+				spark.camera_d = y + 400;}
+				
+if (timer >= 190 && timer < 600 && timer mod 25 = 0) {sound_play(danmakushoot);
+			
+			//RIGHT
+			
+			danmakuprojectile = create_projectile(10,364,6,7.5,-1,10,koaelectrichit,obj_spark_special2,.45,.45,27,7,self.id,200,char_custom5);
+			danmakuprojectile.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectile.direction = 335
+			
+			danmakuprojectiletwo = create_projectile(10,364,6,7.5,-1,10,koaelectrichit,obj_spark_special2,.45,.45,27,27,self.id,200,char_custom5);
+			danmakuprojectiletwo.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectiletwo.direction = 25
+			
+			//UP
+			
+			danmakuprojectilethree = create_projectile(10,364,6,7.5,-1,10,koaelectrichit,obj_spark_special2,.45,.45,10,44,self.id,200,char_custom5);
+			danmakuprojectilethree.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectilethree.direction = 65
+			
+			danmakuprojectilefour = create_projectile(10,364,6,7.5,-1,10,koaelectrichit,obj_spark_special2,.45,.45,-10,44,self.id,200,char_custom5);
+			danmakuprojectilefour.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectilefour.direction = 115
+			
+			//LEFT
+			
+			danmakuprojectilefive = create_projectile(10,364,6,7.5,-1,10,koaelectrichit,obj_spark_special2,.45,.45,-27,27,self.id,200,char_custom5);
+			danmakuprojectilefive.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectilefive.direction = 155
+			
+			danmakuprojectilesix = create_projectile(10,364,6,7,-1,10,koaelectrichit,obj_spark_special2,.45,.45,-27,7,self.id,200,char_custom5);
+			danmakuprojectilesix.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectilesix.direction = 205
+			
+			//DOWN
+			
+			danmakuprojectileseven = create_projectile(10,364,6,7.5,-1,10,koaelectrichit,obj_spark_special2,.45,.45,-10,-10,self.id,200,char_custom5);
+			danmakuprojectileseven.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectileseven.direction = 245
+			
+			danmakuprojectileeight = create_projectile(10,364,6,7.5,-1,10,koaelectrichit,obj_spark_special2,.45,.45,10,-10,self.id,200,char_custom5);
+			danmakuprojectileeight.sprite_index = final_smash_danmaku_sprite;
+			danmakuprojectileeight.direction = 295
+			
+			directionskew+=9;
+}
+				
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	directionskew = 0;
+    grav = 0.30;
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
