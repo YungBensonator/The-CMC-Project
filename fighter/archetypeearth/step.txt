@@ -1,0 +1,189 @@
+//--------------------------------------------------------------------------------STAND-----------------------------------------------------------
+if ( sprite_index = stand_sprite )
+{
+image_speed = 0.2;
+}
+
+//--------------------------------------------------------------------------------CROUCH-----------------------------------------------------------
+if ( state_type = "crouch" )
+{
+    
+	sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(13,timer)
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 2: image_index = 1; break;
+		case 4: image_index = 2; break;
+		case 6: image_index = 3; break;
+		case 8: image_index = 4; break;
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+	sprite_index = crouch_getup_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+    image_index = 3;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 6 ){
+    image_index = 2;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 9 ){
+    image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 12 ){
+    image_index = 0;
+}
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+
+//-----------------------------------------------------------------------------WALK & RUN-----------------------------------------------------------
+if ( sprite_index = walk_sprite )
+{
+if ( timer < 2 )
+	{
+	image_index = 0;
+	image_speed = 0;
+	}
+if ( timer >= 2 )
+	{
+	image_speed = 0.2;
+
+		if ( image_index >= 6 )
+		{
+		image_index -= 5;
+		}
+	}
+}
+
+if ( sprite_index = run_sprite )
+{
+image_speed = 0.3;
+}
+
+if ( step_sound != foot_step_soft_sound && metal_transformation = 0 )
+{
+step_sound = foot_step_soft_sound;
+}
+
+//--------------------------------------------------------------------------------JUMP-----------------------------------------------------------
+if ( sprite_index = jump_sprite && state_type = "jump" )
+{
+image_speed = 0.25;
+
+if ( timer = 0 && image_index < 19 )
+{
+image_index = 0;
+}
+
+	if ( image_index >= 19 )
+	{
+	image_index -= 7;
+	}
+}
+
+if ( sprite_index = mid_jump_sprite && state_type = "jump" )
+{
+image_speed = 0.25;
+
+	if ( image_index >= 19 )
+	{
+	image_index -= 7;
+	}
+}
+
+if ( sprite_index = fall_sprite )
+{
+image_speed = 0.25;
+}
+
+//--------------------------------------------------------------------------------EDGE-----------------------------------------------------------
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+
+switch ( timer )
+  {
+  case 0: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=0;  break;
+  case 4: image_index=1; break;
+  case 6: shakey=12*size; break;
+  case 8: image_index=2; break;
+  case 9: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 12: shakex=-4*size*(1-facing*2); image_index=3; shakey=4*size;  break;
+  case 16: image_index=4; break;
+  case 18: shakex=0*size*(1-facing*2); image_index=4; shakey=0*size;  break;
+  case 20: image_index=5; break;
+  case 22: sprite_index=crouch_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}
+
+
+//--------------------------------------------------------------------------------MISC-----------------------------------------------------------
+
+if ( cantsideb = 1 && ( air = 0 || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" || state_type = "out" ) )
+{
+cantsideb = 0;
+}
+if ( cantb = 1 && ( air = 0 || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" || state_type = "out" ) )
+{
+cantb = 0;
+}
+if ( cant_zair = 1 && ( air = 0 || state_type = "edge" || state_type = "flinch" || state_type = "air_flinch" || state_type = "out" ) )
+{
+cant_zair = 0;
+}
+
+if ( state_type = "out" && abandonearth = 0 )
+{
+abandonearth = 1;
+transform = 1;
+}
+
+if ( dead = 1 && abandonearthtemp = 0 )
+{
+abandonearth = 1;
+transform = 1;
+abandonearthtemp = 1;
+
+sound_play(starko_arcueid_voice);
+
+death_glitter = instance_create( x , y - actual_height*0.5 , obj_spark);
+death_glitter.sprite_index = b_effect_sprite2;
+death_glitter.image_xscale = 0.3 * (1 - facing * 2) * size;
+death_glitter.image_yscale = 0.3 * size;
+death_glitter.image_alpha = 1;
+death_glitter.image_index = 0;
+death_glitter.image_speed = 1;
+death_glitter.depth = depth - 0.1;
+death_glitter.snap = self.id;
+}
+
+if ( state_type != "out" && dead != 1 && abandonearth = 1 )
+{
+abandonearth = 0;
+transform = 1;
+}
+
+if ( transform = 1 )
+{
+char_custom7();
+}

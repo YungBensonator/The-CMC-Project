@@ -1,0 +1,88 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "uthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = down_attack_sprite;
+  timer = 0;
+  time = 80;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  has_hit = 0;
+  targetLock = 0;
+  }
+
+switch ( timer )
+  {
+  case 12: image_index = 1;  break;
+  case 15: image_index = 2;  break;
+  case 18: image_index = 3;  break;
+  case 22: image_index = 4;  break;
+  case 26: image_index = 5;  break;
+  case 30: image_index = 6;  break;
+  case 34: image_index = 7;  break;
+  case 38: image_index = 8;  break;
+  case 42: image_index = 3;  break;
+  case 46: image_index = 4;  break;
+  case 50: image_index = 5;  break;
+  case 54: image_index = 6;  break;
+  case 58: image_index = 7;  break;
+  case 62: image_index = 8;  break;
+  case 66: image_index = 9;  break;
+  case 70: image_index = 10;  break;
+  }
+
+if ( timer <= 18 )
+{
+target.x = x + 17 * size * (1-facing*2);
+target.y = y;
+}
+
+if ( timer = 18 )
+{
+	sound_play ( uthrow_voice );
+	sound_play ( entry_sound );
+
+	eff = instance_create( x + abs(place_x(120)) * (1-facing*2) , y , obj_spark);
+	eff.sprite_index = entry_effect_sprite;
+	eff.image_xscale = 0.5 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.55 * size;
+	eff.image_alpha = 0.9;
+	eff.image_index = 0;
+	eff.image_speed = 1;
+	eff.depth = depth - 0.1;
+	eff.snap = self.id;
+	eff.script = char_custom10;
+	eff.owner = self.id;
+	eff.keepmain = self.keepmain;
+}
+
+if ( timer = 18 || timer = 22 || timer = 26 || timer = 30 || timer = 32 || timer = 36 || timer = 40 || timer = 44 || timer = 48 || timer = 52 || timer = 56 ) 
+	{
+	create_hitbox(1,angle_correct(90),2.5,0,4,1,archetypeearthhit6,obj_spark_hit2, 2 , 3.5 ,abs(place_x(123))/size,-place_y(-10)/size,self.id,4,3);
+	hitbox.di = -1;
+	hitbox.sdi = -1;
+	hitbox.execute_on_hit = "attacker.has_hit = 1; attacker.targetLock = attacked.id;"
+	}
+
+if ( timer = 60 )
+	{
+	eff.image_index = 74;
+	create_hitbox(2,angle_correct(80),7.1,5.5,25,13,archetypeearthhit7,obj_spark_hit3, 2 , 3.5 , abs(place_x(123))/size , -place_y(-10)/size ,self.id,5,3);
+	}
+
+if ( has_hit = 1 and targetLock.custom_boss != 1 and timer > 16 and timer < 60 )
+{
+targetLock.direction = point_direction( targetLock.x , targetLock.y , x + 15 * (1-facing*2) * size , y - 20 * size );
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

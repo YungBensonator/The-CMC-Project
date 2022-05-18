@@ -1,0 +1,46 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "bthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bthrow_sprite;
+  timer = 0;
+  time = 38;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+switch ( timer )
+  {
+  case 4: image_index = 1;  break;
+  case 13: image_index = 2;  break;
+  case 19: image_index = 3;  break;
+  case 29: image_index = 4;  break;
+  case 32: image_index = 4;  break;
+  case 35: image_index = 4;  break;
+  }
+
+if ( timer <= 19 )
+{
+target.x = x + 17 * size * (1-facing*2);
+target.y = y;
+}
+
+if ( timer == 19 )
+  {
+  sound_play ( bthrow_voice );
+  sound_play ( dsmash_sound );
+  
+  proj = create_projectile( 10 , angle_correct(160) , 7 , 4 , 10 , 10 , archetypeearthhit7 , obj_spark_hit4 , 1 , 1 , 30 , 0 , self.id , 30 , char_custom2 );
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

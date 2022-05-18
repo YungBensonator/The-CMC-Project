@@ -1,0 +1,104 @@
+if ( state_type == "stand" || state_type == "crouch" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "taunt";
+  image_speed = 0.25;
+  sprite_index = entry_sprite;
+  image_index = 0;
+  image_alpha = 0;
+  timer = -700;
+  time = 9000;
+  timer_speed = 1;
+  shakey = -100 * size;
+  temp = 0;
+  }
+
+switch ( timer )
+  {
+  case 520: image_index = 28; image_speed = 0; break;
+  case 522: image_index = 29;  break;
+  case 524: image_index = 30;  break;
+  case 560: image_index = 31;  break;
+  case 562: image_index = 32;  break;
+  case 934: sprite_index = taunt_sprite; sound_play ( taunt_voice ); image_index = 0;  break;
+  case 939: image_index = 1;  break;
+  case 943: image_index = 2;  break;
+  case 947: image_index = 3;  break;
+  case 951: image_index = 4;  break;
+  case 954: image_index = 5;  break;
+  case 958: image_index = 6;  break;
+  case 962: image_index = 7;  break;
+  case 966: image_index = 8;  break;
+  case 970: image_index = 9;  break;
+  case 974: image_index = 10;  break;
+  case 979: image_index = 11;  break;
+  case 984: image_index = 12;  break;
+  case 989: image_index = 13;  break;
+  case 994: image_index = 14;  break;
+  case 999: image_index = 15;  break;
+  case 1004: image_index = 16;  break;
+  case 1009: image_index = 17;  break;
+  case 1014: image_index = 18;  break;
+  case 1019: image_index = 19;  break;
+  case 1024: image_index = 20;  break;
+  }
+
+if ( timer = 0 )
+{
+	sound_play ( entry_sound );
+
+	eff = instance_create( x , y , obj_spark );
+	eff.sprite_index = entry_effect_sprite;
+	eff.image_xscale = 0.6 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.6 * size;
+	eff.image_alpha = 0;
+	eff.image_index = 0;
+	eff.image_speed = 1;
+	eff.depth = depth - 8;
+}
+
+if ( eff.image_alpha < 0.9 )
+{
+eff.image_alpha += 0.02;
+}
+
+if ( timer >= 100 && image_alpha < 1 )
+{
+image_alpha += 0.02;
+}
+
+if ( timer >= 100 && shakey < 0 )
+{
+shakey += 0.25;
+}
+
+if ( shakey >= 0 && temp = 0 )
+{
+shakey = 0;
+gfx_land_effect ( x , y , actual_width );
+temp = 1;
+}
+
+if ( timer < 520 && image_index >= 27 )
+{
+image_index -= 27;
+}
+
+if ( timer < 500 && eff.image_index >= 79 )
+{
+eff.image_index = 0;
+}
+
+if ( timer = 564 )
+	{
+	timer = 933;
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,62 @@
+absorb = 0;
+absorb2 = 0;
+no_clash = 1;
+no_reflect = 1;
+priority = 5;
+proj_destroy = 0;
+parry_nodestroy = 1;
+clankWithHitbox = 1;
+ungrazable = 1;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.downb_effect_sprite;
+	image_xscale = 0.4 * (1-facing*2) * size;
+	image_yscale = 0.4 * size;
+	image_speed = 1;
+	image_alpha = 0.85;
+    visible = 1;
+	depth = -7;
+	speed = 0;
+	hit = 2;
+	temp2 = 0;
+  }
+
+time = 9999;
+alarm[0] = 9999;
+
+if ( temp = 0 && temp2 = 0 )
+{
+if ( image_index >= 17 && timer < 900 )
+	{
+	image_index -= 10;
+	}
+
+if ( timer >= 900 )
+	{
+	image_index = 17;
+	temp2 = 1;
+	}
+}
+
+if ( temp = 1 )
+{
+sprite_index = keepmain.downb_effect_sprite2;
+image_index = 0;
+timer = 0;
+temp = 2;
+}
+
+if ( temp = 2 )
+{
+if ( timer = 3 )
+	{
+	sound_play ( keepmain.usmash_sound );
+	proj = create_projectile( 10 , 365 , 6 , 5 , 15 , 10 , keepmain.archetypeearthslash3 , obj_spark_slash3 , 3 , 1.6 , 0 , 8 , attacker.id , 9 , -1 );
+	}
+}
+
+if ( image_index >= image_number - 1 )
+{
+instance_destroy();
+}

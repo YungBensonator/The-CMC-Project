@@ -1,0 +1,72 @@
+if ( timer = 0 )
+{
+  sprite_index = entry_sprite;
+  image_index = 0;
+  image_alpha = 0;
+  image_speed = 0.25;
+  timer_speed = 1;
+  shakey = -100 * size;
+  temp = 0;
+}
+
+switch ( timer )
+  {
+  case 100: image_index = 28; image_speed = 0; break;
+  case 102: image_index = 29;  break;
+  case 104: image_index = 30;  break;
+  case 112: image_index = 31;  break;
+  case 116: image_index = 32;  break;
+  }
+
+if ( timer = 1 )
+{
+	sound_play ( entry_sound );
+	sound_play ( entry_voice );
+
+	eff = instance_create( x - 3 * (1-facing*2) * size , y , obj_spark );
+	eff.sprite_index = entry_effect_sprite;
+	eff.image_xscale = 1 * (1 - facing * 2) * size;
+	eff.image_yscale = 2 * size;
+	eff.image_alpha = 0;
+	eff.image_index = 0;
+	eff.image_speed = 1;
+	eff.depth = depth - 8;
+}
+
+if ( eff.image_alpha < 0.9 )
+{
+eff.image_alpha += 0.02;
+}
+
+if ( timer >= 1 && image_alpha < 1 )
+{
+image_alpha += 0.02;
+}
+
+if ( timer < 100 && shakey < 0 )
+{
+shakey += 1 * size;
+}
+
+if ( shakey >= 0 && temp = 0 )
+{
+eff.image_index = 80;
+shakey = 0;
+gfx_land_effect ( x , y , actual_width );
+temp = 1;
+}
+
+if ( eff.image_index >= 79 && temp = 0 )
+{
+eff.image_index = 0;
+}
+
+if ( timer >= 120 )
+  {
+  visible = 1;
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,164 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 41;
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  has_hit = 0;
+  targetLock = 0;
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 6: image_index = 2;  break;
+  case 8: image_index = 3;  break;
+  case 12: image_index = 5;  break;
+  case 15: image_index = 6;  break;
+  case 18: image_index = 7;  break;
+  case 20: image_index = 8;  break;
+  case 22: image_index = 9;  break;
+  case 25: image_index = 10;  break;
+  case 28: image_index = 11;  break;
+  case 31: image_index = 12;  break;
+  case 33: image_index = 13;  break;
+  case 35: image_index = 14;  break;
+  case 38: image_index = 23;  break;
+
+  case 103: image_index = 16;  break;
+  case 105: image_index = 17;  break;
+  case 109: image_index = 18;  break;
+  case 114: image_index = 19;  break;
+  case 119: image_index = 20;  break;
+  case 123: image_index = 21;  break;
+  case 126: image_index = 22;  break;
+  case 128: image_index = 23;  break;
+  }
+
+if ( timer > 25 )
+{
+force_edge_grab = 1;
+}
+
+if ( timer = 8 ) 
+  {
+sound_play(melty_swing_sound2);
+sound_play(upb_sound);
+sound_play( choose ( upb_voice , upb_voice2 ) );
+
+create_hitbox(4,angle_correct(80),7,0,10,10,archetypeearthhit2,obj_spark_hit3,2.6,0.9,-abs(place_x(88))/size,-place_y(36)/size,self.id,3,2);
+hitbox.image_angle = angle_correct(115);
+hitbox.weight_kb = 1;
+hitbox.hit_stun = 10;
+hitbox.execute_on_hit = "attacker.has_hit = 1; attacker.targetLock = attacked.id;"
+
+eff = instance_create( x + -abs(place_x(75)) * (1-facing*2) , y + place_y(43) , obj_spark);
+eff.sprite_index = upb_effect_sprite;
+eff.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff.image_yscale = 0.4 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 1;
+eff.depth = depth - 0.1;
+eff.snap = self.id;
+eff.script = char_custom10;
+eff.owner = self.id;
+eff.keepmain = self.keepmain;
+
+hspeed = 1.5 * (1-facing*2) * size;
+vspeed = -5 * size;
+  }
+  
+if ( timer = 22 ) 
+  {
+sound_play(melty_swing_sound2);
+sound_play(upb_sound);
+
+create_hitbox(4,angle_correct(80),7,0,10,10,archetypeearthhit2,obj_spark_hit3,2.6,0.9,-abs(place_x(88))/size,-place_y(36)/size,self.id,3,2);
+hitbox.image_angle = angle_correct(115);
+hitbox.weight_kb = 1;
+hitbox.hit_stun = 10;
+hitbox.execute_on_hit = "attacker.has_hit = 1; attacker.targetLock = attacked.id;"
+
+eff2 = instance_create( x + -abs(place_x(75)) * (1-facing*2) , y + place_y(43) , obj_spark);
+eff2.sprite_index = upb_effect_sprite;
+eff2.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff2.image_yscale = 0.4 * size;
+eff2.image_alpha = 0.8;
+eff2.image_index = 0;
+eff2.image_speed = 1;
+eff2.depth = depth - 0.1;
+eff2.snap = self.id;
+eff2.script = char_custom10;
+eff2.owner = self.id;
+eff2.keepmain = self.keepmain;
+
+hspeed = 1.5 * (1-facing*2) * size;
+vspeed = -5 * size;
+  }
+
+if ( timer = 38 && has_hit = 1 )
+{
+timer = 100;
+time = 131;
+image_index = 15;
+}
+
+if ( timer = 109 ) 
+  {
+sound_play(melty_swing_sound2);
+
+create_hitbox(4,angle_correct(50),6.5,6,20,10,archetypeearthslash3,obj_spark_slash3,2.6,0.8,abs(place_x(115))/size,-place_y(30)/size,self.id,4,2);
+hitbox.image_angle = angle_correct(30);
+
+eff3 = instance_create( x + abs(place_x(115)) * (1-facing*2) , y + place_y(30) , obj_spark);
+eff3.sprite_index = upb_effect_sprite2;
+eff3.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff3.image_yscale = 0.4 * size;
+eff3.image_alpha = 0.8;
+eff3.image_index = 0;
+eff3.image_speed = 1;
+eff3.depth = depth - 0.1;
+eff3.snap = self.id;
+eff3.script = char_custom10;
+eff3.owner = self.id;
+eff3.keepmain = self.keepmain;
+
+hspeed = 1.5 * (1-facing*2) * size;
+vspeed = -2.5 * size;
+  }
+
+if ( has_hit = 1 and targetLock.custom_boss != 1 and timer > 8 and timer < 109 )
+{
+targetLock.direction = point_direction( targetLock.x , targetLock.y , x + 15 * (1-facing*2) * size , y - 25 * size );
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
