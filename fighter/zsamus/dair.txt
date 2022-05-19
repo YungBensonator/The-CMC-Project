@@ -26,12 +26,18 @@ if ( timer < time )
 	case 33: image_index = 11; break;
 	case 36: image_index = 12; break;
       }
+            if timer >= 10 && timer <= 23{
+                hspeed = (1 - facing*2)*size;
+                vspeed = 11;
+        }	  
+	  
+	  
 
     if ( timer = 14 )
       {
 	sound_play(attack_voice2);
 	sound_play(attack_sound2);
-	create_hitbox(7,278-facing*16,7.5,3,8,10,kick2,obj_spark_hit3,0.65,0.8,3,6,self.id,15,1);
+	create_hitbox(7,278+facing*-16,4.5,3,8,10,kick2,obj_spark_hit3,0.65,0.8,3,6,self.id,15,1);
 	hitbox.hit_stun = 3;
 	hitbox.di = 0.5;
       }
@@ -47,13 +53,24 @@ if ( timer < time )
       }
     if ( air = 0 )
       {
-	state_type = "land";
+  vspeed = 0;
+  hspeed = 0 
+  shaker = instance_create(x,y,obj_shakescreen2);
+  shaker.ampl = 3;
+  shaker.xampl = 0;
+  shaker.time = 6;
+  create_hitbox(6, 45+facing*90, 5,8, 14, 3, kick2,obj_spark_hit3, 1.8, 1.6 ,2, 12, self.id, 10, 4);	  
+
+	state_type = "attack";
 	attack_type = "none";
 	timer = 0;
-	time = 11;
+	time = 20;
 	sprite_index = land_sprite;
       }
-  }
+	  
+	  
+  }	  
+	  
 
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
   {
