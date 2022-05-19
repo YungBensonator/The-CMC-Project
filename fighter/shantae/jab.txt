@@ -1,0 +1,295 @@
+if ( monkey = 0 && harpy = 0 && elephant = 0 )
+{
+if ( state_type == "stand" )
+  {
+  attacking = 1;
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "jab";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = jab_sprite;
+  if ( combo = 0 )
+  {
+  timer = 0;
+  time = 20;
+  }
+  if ( combo = 1 )
+  {
+  timer = 30;
+  time = 50;
+  }
+  if ( combo = 2 )
+  {
+  timer = 60;
+  time = 85;
+  }
+  timer_speed = 1;
+  }
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 3: image_index = 2; break;
+  case 4: image_index = 3; break;
+  case 5: image_index = 4; break;
+  case 8: image_index = 5; break;
+  case 10: image_index = 6; break;
+  case 12: image_index = 7; break;
+  
+  case 32: image_index = 1; break;
+  case 33: image_index = 2; break;
+  case 34: image_index = 3; break;
+  case 35: image_index = 4; break;
+  case 38: image_index = 5; break;
+  case 40: image_index = 6; break;
+  case 42: image_index = 7; break;
+  
+  case 62: image_index = 1; break;
+  case 63: image_index = 2; break;
+  case 64: image_index = 3; break;
+  case 65: image_index = 4; break;
+  case 68: image_index = 5; break;
+  case 70: image_index = 6; break;
+  case 72: image_index = 7; break;
+  }
+if ( timer = 5 )
+{
+create_hitbox(3,105-facing*30,3.5,0,10,2,sf_kick1,obj_spark_hit1,1.3,0.5,26,18,self.id,3,2);
+var burst;
+    //78, 36
+	burst = instance_create(place_x(90)+x,place_y(24)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+sound_play(hairwhip_sound);
+combo += 1
+}
+if ( timer >= 0 && timer <= 5 )
+{
+after_image(3,c_blue,0.4)
+}
+if ( ai && !attack_success && timer = 11 )
+{
+attacking = 0;
+}
+if ( timer >= 10 && timer < 20 && attacking = 1 && combo = 1 && movedown = 0 )
+{
+timer = 30;
+time = 50;
+}
+if ( timer >= 10 && timer < 20 && combo = 1 && attacking = 1 && movedown = 1 )
+{
+state_type = "stand";
+attack_type = "none";
+timer = 0;
+time = -1;
+char_dtilt();
+}
+if ( timer = 35 )
+{
+create_hitbox2(3,90,3.5,0,10,2,sf_kick1,obj_spark_hit1,1.3,0.5,26,18,self.id,3,2);
+var burst;
+    //78, 36
+	burst = instance_create(place_x(90)+x,place_y(24)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+sound_play(hairwhip_sound);
+combo += 1
+}
+if( timer >= 30 && timer <= 35 )
+{
+after_image(3,c_blue,0.4)
+}
+if ( timer >= 40 && timer < 50 && attacking = 1 && combo = 2 && movedown = 0 )
+{
+timer = 60;
+time = 85;
+attacking = 0;
+}
+if ( timer >= 40 && timer < 50 && combo = 2 && attacking = 1 && movedown = 1 )
+{
+state_type = "stand";
+attack_type = "none";
+timer = 0;
+time = -1;
+char_dtilt();
+attacking = 0;
+}
+if ( timer = 65 )
+{
+create_hitbox3(3,35+facing*110,6,5.7,20,7,sf_kick2,obj_spark_hit2,1.3,0.5,26,18,self.id,3,2);
+combo += 1
+var burst;
+    //78, 36
+	burst = instance_create(place_x(90)+x,place_y(24)+y,obj_jab_burst);
+    burst.snap = self.id;
+	burst.image_xscale = xsize * 0.4;
+    burst.image_yscale = ysize * 0.4;
+sound_play(hairwhip_sound);
+}
+if ( timer >= 60 && timer <= 65 )
+{
+after_image(3,c_blue,0.4)
+}
+if ( timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  combo = 0;
+  timer = 0;
+  time = -1;
+  }
+}
+
+if (monkey == 1) {
+if ( state_type = "stand" )
+  {
+    state_type = "attack";
+    attack_type = "jab";
+    if (elephant == 1) sprite_index = elephant_transform_sprite;
+	if (harpy == 1) sprite_index = harpy_transform_sprite;
+    if (elephant == 1 || harpy == 1) timer = -10;
+	else {
+		timer = 0;
+		sprite_index = monkey_jab_sprite;
+	}
+    time = 21;
+    image_speed = 0;
+    image_index = 1;
+    hspeed = 0;
+  }
+
+    switch ( timer )
+      {
+	case 2: image_index = 2; break;
+	case 4: image_index = 3; break;
+	case 5: image_index = 4; break;
+	case 6: image_index = 5; break;
+	case 9: image_index = 6; break;
+      }
+	  
+	if (timer == -9) {
+		monkey = 1;
+		elephant = 0;
+		harpy = 0;
+		sound_play(transform_sound);
+		transformspark = instance_create(x,y-13 * size,obj_spark);
+		transformspark.sprite_index = b_transform_effect_sprite;
+		transformspark.image_index = 0
+		transformspark.image_speed = 0.8
+		transformspark.depth = trans_depth;
+		transformspark.snap = self.id
+		transformspark.image_xscale = 0.37 * size
+		transformspark.image_yscale = 0.37 * size
+		transform = 1;
+	}
+	if timer = 0 {
+		image_index = 0;
+		sprite_index = monkey_jab_sprite;
+	}
+
+    if ( timer = 4 )
+      {
+	sound_play(attacksnd1)
+	create_hitbox(5,47+facing*86,5.15,2,17,5,slash1,obj_spark_hit1,0.8,0.8,18,6,self.id,6,1);
+	hitbox.hit_stun = 9
+      }
+    if timer = 19
+	interrupt = 1
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none"
+    timer = 0;
+    time = -1;
+  }
+}
+if ( harpy = 1 )
+{
+if ( state_type = "stand" )
+  {
+    state_type = "attack";
+    attack_type = "jab";
+    timer = 0;
+    time = 30;
+    sprite_index = harpy_jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 20: image_index = 3; break;
+	case 22: image_index = 2; break;
+	case 24: image_index = 1; break;
+	case 28: image_index = 0; break;
+      }
+
+    if ( timer = 8 )
+      {
+	sound_play(attacksnd1)
+	create_hitbox(7,40+facing*100,5,4,10,5,punch1,obj_spark_hit1,0.4,0.55,10,13,self.id,5,1);
+      }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none"
+    timer = 0;
+    time = -1;
+  }
+}
+if ( elephant = 1 )
+{
+if ( state_type = "stand" )
+  {
+    state_type = "attack";
+    attack_type = "jab";
+    timer = 0;
+    time = 25;
+    sprite_index = elephant_jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 12: image_index = 4; image_xscale *= 1.1; image_yscale *= 1.1; break;
+	case 14: image_index = 5; break;
+	case 22: image_index = 6; break;
+      }
+
+    if ( timer = 12 )
+      {
+	sound_play(attacksnd3);
+	create_hitbox(12,40+facing*100,7,4.5,10,5,punch3,obj_spark_hit3, 1 ,0.7,35,15,self.id,6,2);
+	    create_wind(1.2,1.1,40,19,7,0,5);
+      }
+	if ( timer = 14 )
+	{
+	hitbox.image_xscale = 0.8 * size;
+	hitbox.image_yscale = 1 * size;
+	hitbox.hitbox_x = size * (37-facing*74);
+	hitbox.hitbox_y = 30 * size;
+	}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    dontrepeat = 0;
+    state_type = "stand";
+    attack_type = "none"
+    timer = 0;
+    time = -1;
+  }
+}

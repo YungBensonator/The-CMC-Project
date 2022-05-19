@@ -1,0 +1,238 @@
+if cantdb > 0{
+  break;
+}
+
+if ( monkey = 0 && harpy = 0 && elephant = 0 )
+{
+if (state_type = "stand" || state_type = "crouch" || state_type = "jump" || state_type = "run") {
+    if ((instance_exists(pikeball_proj1) && pikeball_proj1.attacker = id )  && (instance_exists(pikeball_proj2) && pikeball_proj2.attacker = id ) && (instance_exists(pikeball_proj3) && pikeball_proj3.attacker = id )) {
+    temp = 1
+    }
+    else {
+    temp = 0
+    }
+	special = 1
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+    last_shakex = shakex;
+    last_shakey = shakey;
+    charge_timer = 0;
+        image_speed = 0;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+	temp2 = 0
+	if facing = 0
+	pikeballfacing = 0
+	if facing = 1
+	pikeballfacing = 1
+	if ( pikeball_proj[0] != noone )
+	{
+	 with pikeball_proj[0] hit = 2;
+	 with pikeball_proj[1] hit = 2;
+	 with pikeball_proj[2] hit = 2;
+	 pikeball_proj[0] = noone;
+	}
+}
+
+switch (timer) {
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 9: image_index = 3; break;
+case 15: image_index = 4; break;
+case 19: image_index = 5; break;
+}
+if air = 0 {
+    air_move = 0
+    hspeed = 0
+}
+
+// uncomment this if necessary
+// weird temp2 issues not fixed, needs to be adapted for arrays
+// arrays are good
+
+// use them
+/*
+if temp = 0 {
+
+    
+	 var dud;
+	 dud = 1;
+         sound_play(attack_voice2);
+         effect_create_below(ef_ring,x,y-actual_height * 0.5,0,c_red)
+	 if (!instance_exists(pikeball_proj1) || pikeball_proj1.attacker != id) && pikeball1 <= 0 {
+         pikeball_proj1 = create_projectile(2,364,2.25,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,300,char_custom5); 
+	 pikeball_proj1.angle = 0;
+	 pikeball_proj1.shantae = self.id;
+	 pikeball1 = 300
+	 dud = 0;
+	 temp2 = 1 }
+	 if temp2 = 0 && (!instance_exists(pikeball_proj2) || pikeball_proj2.attacker != id) && pikeball2 <= 0 {
+         pikeball_proj2 = create_projectile(2,364,2.25,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,300,char_custom5); 
+	 pikeball_proj2.angle = 120;
+	 pikeball_proj2.shantae = self.id;
+	 pikeball2 = 300
+	 dud = 0;
+	 temp2 = 1 }
+	 if temp2 = 0 && (!instance_exists(pikeball_proj3) || pikeball_proj3.attacker != id) && pikeball3 <= 0 {
+         pikeball_proj3 = create_projectile(2,364,2.25,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,300,char_custom5); 
+	 pikeball_proj3.angle = 240;
+	 pikeball_proj3.shantae = self.id;
+	 pikeball3 = 300 
+	 dud = 0; }
+	 
+   	 if ( !dud )
+		{
+		duster = instance_create ( x + 3 , y + 2 , obj_dust_effect );
+		duster.facing = 0;
+		duster.hspeed = -3;
+		duster.image_xscale *= size * 0.6;
+		duster.image_yscale *= size * 0.6;
+		duster = instance_create ( x - 3 , y + 2 , obj_dust_effect );
+		duster.facing = 1;
+		duster.hspeed = 3;
+		duster.image_xscale *= size * 0.6;
+		duster.image_yscale *= size * 0.6;
+		duster = instance_create ( x , y - actual_height * 0.5 , obj_spark_shockwave );
+		duster.image_blend = c_red;
+	 	}
+		else
+		{
+		duster = instance_create ( x + 1 , y + 2 , obj_dust_effect );
+		duster.facing = 0;
+		duster.hspeed = -1;
+		duster.image_xscale *= size * 0.2;
+		duster.image_yscale *= size * 0.2;
+		duster = instance_create ( x - 1 , y + 2 , obj_dust_effect );
+		duster.facing = 1;
+		duster.hspeed = 1;
+		duster.image_xscale *= size * 0.2;
+		duster.image_yscale *= size * 0.2;
+		}
+         }
+     }  
+ 
+ else {
+     if timer = 24 {
+         sound_play(attack_voice1)
+	 with pikeball_proj1 hit = 2;
+	 with pikeball_proj2 hit = 2;
+	 with pikeball_proj3 hit = 2;
+		duster = instance_create ( x + 3 , y + 2 , obj_dust_effect );
+		duster.facing = 0;
+		duster.hspeed = -3;
+		duster.image_xscale *= size * 0.6;
+		duster.image_yscale *= size * 0.6;
+		duster = instance_create ( x - 3 , y + 2 , obj_dust_effect );
+		duster.facing = 1;
+		duster.hspeed = 3;
+		duster.image_xscale *= size * 0.6;
+		duster.image_yscale *= size * 0.6;
+		duster = instance_create ( x , y - actual_height * 0.5 , obj_spark_shockwave );
+		duster.image_blend = c_red;
+     }
+    }
+ */
+
+            if timer = 3 {
+		sound_play(downb_voice);
+                impactspark = instance_create(x,y,obj_down_impact)
+                impactspark.image_blend = c_purple
+            }
+	    if timer = 4 {
+  		shakex = last_shakex - lengthdir_x ( charge_timer * 0.01 , charge_timer * 55 ) * ( 1 - facing * 2 );
+  		charge_timer += 1.5
+		if charge_timer >= 30
+		instance_create(x-10*(1-facing*2),y-15,obj_spark_effect)
+  		image_blend = merge_color ( c_white , c_purple , 0.5 + lengthdir_x ( 0.5 , charge_timer * 50 ) );
+  		alarm[7] = 2;
+		}  
+	    if timer = 5 && special = 1 && charge_timer < 72
+	    timer = 3
+	    if ( sin ( charge_timer * pi /6 ) == 1 ) && timer < 6
+    		{
+    		part_particles_create ( psys_front , x - 2 + random ( 4 ) , y - 7 - random ( 5 ) , ptype_smashspark , 1 );
+    		}
+if ( timer == 19 )
+  {
+  if ( charge_timer < 72 )
+  {
+  sound_play(pikeball_voice);
+  sound_play(pikeball_activate_sound);
+  }
+  if ( charge_timer >= 72 )
+  {
+  sound_play( choose ( superpikeball_voice1 , superpikeball_voice2 ) );
+  sound_play(superpikeball_activate_sound);
+  }
+  var i, ok;
+  for ( i = 0 ; i < ( ((charge_timer < 30)*1) + ((charge_timer >= 30 && charge_timer <= 70)*2) + ((charge_timer > 70)*3) ) ; i += 1 )
+    {
+    ok = 1;
+    if ( instance_exists(pikeball_proj[i]) )
+      {
+      if ( pikeball_proj[i].attacker == id )
+        {
+        ok = 1;
+        pikeball_proj[i].hit = 2;
+        }
+        else
+        {
+        ok = 0;
+        }
+      }
+    if ( ok )
+      {
+      pikeball_proj[i] = create_projectile(5,364,4.35,0,12,4,kick2,obj_spark_hit1,0.5,0.5,0,20,self.id,350,char_custom5);
+      pikeball_proj[i].angle = i * 120
+      pikeball_proj[i].shantae = self.id;
+      pikeball_proj[i].no_clash = 1;
+      }
+    }
+  if ( air )
+    {
+    duster = instance_create ( x + 3 , y + 2 , obj_dust_effect );
+    duster.facing = 0;
+    duster.hspeed = -3 * size;
+    duster.image_xscale *= size * 0.6;
+    duster.image_yscale *= size * 0.6;
+    duster = instance_create ( x - 3 , y + 2 , obj_dust_effect );
+    duster.facing = 1;
+    duster.hspeed = 3 * size;
+    duster.image_xscale *= size * 0.6;
+    duster.image_yscale *= size * 0.6;
+    }
+  duster = instance_create ( x , y - actual_height * 0.5 , obj_spark_shockwave );
+  duster.image_blend = c_red;
+  }
+
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump"
+    timer = 0;
+    time =-1;
+}
+}
+if ( monkey = 1 || harpy = 1 || elephant = 1 )
+{
+ 
+if ( air > 0 )
+{
+state_type = "jump";
+}
+if ( air = 0 )
+{
+state_type = "stand";
+}
+attack_type = "none";
+timer = 0;
+time = -1;
+cantdb = 150
+char_b();
+}
