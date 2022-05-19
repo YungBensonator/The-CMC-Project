@@ -1,0 +1,17 @@
+priority = 5
+absorb = 1  // This attack may be absorbed by PSI magnet
+absorb2 = 1
+moving_object = 1;
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.laser_sprite
+    if speed = 0  hspeed=8 - attacker.id.facing*16
+    image_speed = 0.5
+    visible =1
+}
+if timer>1 && facing = 0 && !hit hspeed-=0.2
+if timer>1 && facing = 1 && !hit hspeed+=0.2
+image_angle = direction+facing*180
+if !hit && timer >= 2
+    after_image(3,c_aqua,0.5)
+if (timer = 16 || (is_on_floor(self) && vspeed >= 0))
+instance_destroy()

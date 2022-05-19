@@ -1,0 +1,98 @@
+absorb = 1;
+absorb2 = 1;
+moving_object = 1;
+proj_destroy = 0;
+
+if ( timer <= 1 && hit = 0 )
+  {
+	sprite_index = keepmain.b_proj_sprite;
+	image_xscale = 0.4 * (1-facing*2) * size;
+	image_yscale = 0.4 * size;
+	image_speed = 1;
+	image_alpha = 0.9;
+    visible = 1;
+	depth = -7;
+	direction = 180*facing;
+	speed = 0;
+	create_homing_bubble(7,4,125,0,self.id,19);
+	hit = 2;
+	
+	eff = instance_create( x , y , obj_spark);
+	eff.sprite_index = keepmain.b_effect_sprite2;
+	eff.image_xscale = 0.2 * (1 - facing * 2) * size;
+	eff.image_yscale = 0.2 * size;
+	eff.image_alpha = 0.8;
+	eff.image_index = 0;
+	eff.image_speed = 1;
+	eff.depth = depth - 0.1;
+  }
+
+if ( timer < 20 )
+{
+hspeed = attacker.hspeed;
+vspeed = attacker.vspeed;
+}
+
+if ( image_index >= 6 )
+{
+image_speed = 0;
+}
+
+if ( timer = 20 )
+{
+hit = 0;
+}
+
+if ( timer >= 20 && timer <= 30 )
+{
+if ( target = -1 )
+	{
+	direction = 180*facing;
+	}
+if ( target > -1 && target.object_index = player )
+	{
+	direction = point_direction( x , y , target.x , target.y - ( target.actual_height - 10 ) );
+	}
+if ( target > -1 && target.object_index = obj_enemy )
+	{
+	direction = point_direction( x , y , target.x , target.y - 15 );
+	}
+
+speed = 4;
+}
+
+if ( timer >= 20 )
+{
+if ( image_angle > 360 )
+{
+image_angle -= 360;
+}
+if ( image_angle < 0 )
+{
+image_angle += 360;
+}
+
+if ( temp = 0 )
+	{
+	image_angle += 12 * (1-facing*2);
+	}
+if ( temp = 1 )
+	{
+	image_angle -= 12 * (1-facing*2);
+	}
+}
+
+
+if ( timer = time - 2 || hit = 1 || next_to_rwall || next_to_lwall || under_ceiling || is_on_floor(self) || ( attacker.attack_type != "b" && timer < 20 ) )
+{
+eff2 = instance_create( x , y , obj_spark);
+eff2.sprite_index = keepmain.b_effect_sprite;
+eff2.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff2.image_yscale = 0.4 * size;
+eff2.image_alpha = 1;
+eff2.image_index = 0;
+eff2.image_speed = 1;
+eff2.depth = depth - 0.1;
+
+instance_destroy();
+}

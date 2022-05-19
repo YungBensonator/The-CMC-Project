@@ -1,0 +1,168 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "jump" && cant_zair = 1 )
+  {
+  temp = 0;
+  state_type = "jump";
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+  char_nair();
+  }
+
+if ( state_type == "jump" && cant_zair = 0 )
+  {
+  hspeed = 0;
+  state_type = "air_attack";
+  attack_type = "zair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = zair_sprite;
+  timer = 0;
+  time = 200;
+  air_move = 0;
+  vspeed = -2.5;
+  temp = 0;
+  zairforwardtimer = 0;
+  zairbackwardtimer = 0;
+  sound_play ( zair_sound );
+  }
+
+after_image(2,c_white,0.5)
+gravity_lock = 1;
+
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 6: image_index = 2;  break;
+  case 9: image_index = 3;  break;
+  case 12: image_index = 4;  break;
+  case 15: image_index = 5;  break;
+  }
+
+if ( temp = 1 )
+{
+switch ( zairforwardtimer )
+  {
+  case 0: image_index = 0;  break;
+  case 4: image_index = 1;  break;
+  case 8: image_index = 2;  break;
+  case 12: image_index = 3;  break;
+  case 16: image_index = 4;  break;
+  case 20: image_index = 5;  break;
+  case 24: zairforwardtimer = 3; break;
+  }
+}
+
+if ( temp = 2 )
+{
+switch ( zairbackwardtimer )
+  {
+  case 0: image_index = 0;  break;
+  case 4: image_index = 1;  break;
+  case 8: image_index = 2;  break;
+  case 12: image_index = 3;  break;
+  case 16: image_index = 4;  break;
+  case 20: image_index = 5;  break;
+  case 24: zairbackwardtimer = 3; break;
+  }
+}
+
+if ( timer > 25 )
+{
+force_edge_grab = 1;
+}
+
+if ( timer > 20 )
+{
+
+if ( moveright != 1 && moveleft != 1 )
+{
+sprite_index = zair_idle_sprite;
+hspeed = 0;
+vspeed = 0;
+image_speed = 0.25;
+temp = 0;
+}
+
+if ( moveright = 1 && moveleft != 1 )
+{
+if ( facing = 0 )
+	{
+	sprite_index = zair_forward_sprite;
+	zairforwardtimer += 1;
+	temp = 1;
+	}
+if ( facing = 1 )
+	{
+	sprite_index = zair_backward_sprite;
+	zairbackwardtimer += 1;
+	temp = 2;
+	}
+hspeed = 2;
+vspeed = 1;
+image_speed = 0;
+}
+
+if ( moveright != 1 && moveleft = 1 )
+{
+if ( facing = 1 )
+	{
+	sprite_index = zair_forward_sprite;
+	zairforwardtimer += 1;
+	temp = 1;
+	}
+if ( facing = 0 )
+	{
+	sprite_index = zair_backward_sprite;
+	zairbackwardtimer += 1;
+	temp = 2;
+	}
+hspeed = -2;
+vspeed = 1;
+image_speed = 0;
+}
+
+if ( temp != 1 )
+{
+zairforwardtimer = 0;
+}
+if ( temp != 2 )
+{
+zairbackwardtimer = 0;
+}
+
+if ( attacking || special || movejump || shieldup || grab || smash )
+{
+cant_zair = 1;
+air_move = 1;
+interrupt = 1;
+}
+
+if ( air = 0 )
+  {
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = 8;
+sprite_index = land_sprite;
+  }
+
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 10;
+	cant_zair = 1;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

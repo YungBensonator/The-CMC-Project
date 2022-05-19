@@ -1,0 +1,145 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "stilt";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = stilt_sprite;
+  timer = 0;
+  time = 21;
+  timer_speed = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 5: image_index = 2;  break;
+  case 9: image_index = 3;  break;
+  case 13: image_index = 4;  break;
+  case 16: image_index = 5;  break;
+  case 19: image_index = 6;  break;
+  
+  case 103: image_index = 1;  break;
+  case 105: image_index = 2;  break;
+  case 107: image_index = 3;  break;
+  case 109: image_index = 4;  break;
+  case 111: image_index = 5;  break;
+  case 116: image_index = 6;  break;
+  case 120: image_index = 7;  break;
+  case 123: image_index = 8;  break;
+  case 125: image_index = 9;  break;
+  case 127: image_index = 10;  break;
+
+  case 202: image_index = 1;  break;
+  case 204: image_index = 2;  break;
+  case 207: image_index = 3;  break;
+  case 210: image_index = 4;  break;
+  case 212: image_index = 5;  break;
+  case 218: image_index = 6;  break;
+  case 223: image_index = 7;  break;
+  case 228: image_index = 8;  break;
+  case 231: image_index = 9;  break;
+  }
+
+//------------------------------------------------------------------------PART 1--------------------------------------------------------------------------
+if ( timer = 5 ) 
+  {
+sound_play(melty_swing_sound);
+create_hitbox(3,angle_correct(45),2,0,12,2,archetypeearthhit1,obj_spark_hit1,1.4,1.1,abs(place_x(110))/size,-place_y(55)/size,self.id,5,2);
+hitbox.di = 0.1;
+hitbox.image_angle = 340 * (1-facing*2);
+hspeed = 1 * (1-facing*2) * size;
+
+eff = instance_create( x + abs(place_x(90)) * (1-facing*2) , y + place_y(50) , obj_spark);
+eff.sprite_index = stilt_effect_sprite;
+eff.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff.image_yscale = 0.4 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 1;
+eff.depth = depth - 0.1;
+eff.snap = self.id;
+eff.script = char_custom10;
+eff.owner = self.id;
+eff.keepmain = self.keepmain;
+  }
+
+if ( attacking = 1 && timer >= 10 && timer <= 30 )
+{
+with ( hitbox ) instance_destroy();
+with ( eff ) instance_destroy();
+sprite_index = stilt_sprite2;
+image_index = 0;
+timer = 100;
+time = 129;
+}
+
+
+//------------------------------------------------------------------------PART 2--------------------------------------------------------------------------
+if ( timer = 111 ) 
+  {
+sound_play(melty_swing_sound);
+create_hitbox(3,angle_correct(45),2,0,12,2,archetypeearthhit1,obj_spark_hit1,2.6,0.9,abs(place_x(130))/size,-place_y(35)/size,self.id,4,2);
+hitbox.di = 0.1;
+hitbox.hit_stun = 13;
+hitbox.image_angle = 10 * (1-facing*2);
+hspeed = 1 * (1-facing*2) * size;
+
+eff = instance_create( x + abs(place_x(80)) * (1-facing*2) , y + place_y(5) , obj_spark);
+eff.sprite_index = stilt_effect_sprite2;
+eff.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff.image_yscale = 0.4 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 1;
+eff.depth = depth - 0.1;
+eff.snap = self.id;
+eff.script = char_custom10;
+eff.owner = self.id;
+eff.keepmain = self.keepmain;
+  }
+
+if ( attacking = 1 && timer >= 115 && timer <= 140 )
+{
+with ( hitbox ) instance_destroy();
+with ( eff ) instance_destroy();
+hspeed = 0;
+sprite_index = stilt_sprite3;
+image_index = 0;
+timer = 200;
+time = 233;
+}
+
+//------------------------------------------------------------------------PART 3--------------------------------------------------------------------------
+if ( timer = 212 ) 
+  {
+if ( irandom(1) = 0 )
+	{
+	play_attack_voice();
+	}
+sound_play(melty_swing_sound2);
+create_hitbox(3,angle_correct(18),7,3,15,12,archetypeearthhit2,obj_spark_hit3,1.5,1.3,abs(place_x(110))/size,-place_y(50)/size,self.id,5,2);
+hspeed = 3 * (1-facing*2) * size;
+
+eff = instance_create( x + abs(place_x(120)) * (1-facing*2) , y + place_y(18) , obj_spark);
+eff.sprite_index = stilt_effect_sprite3;
+eff.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff.image_yscale = 0.4 * size;
+eff.image_alpha = 0.8;
+eff.image_index = 0;
+eff.image_speed = 1;
+eff.depth = depth - 0.1;
+eff.snap = self.id;
+eff.script = char_custom10;
+eff.owner = self.id;
+eff.keepmain = self.keepmain;
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

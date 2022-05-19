@@ -1,0 +1,40 @@
+if ( state_type = "down" )
+  {
+  state_type = "attack";
+  attack_type = "down_attack";
+  image_speed = 0.5;
+  sprite_index = down_attack_sprite;
+  image_index = 0;
+  timer = 1;
+  time = 30;
+  timer_speed = 1;
+  }
+
+if (timer = 6)
+    create_hitbox(7,70+facing*40,6.4,4,4,3,slash2,obj_spark_slash2,2.35,1.75,5,16,self.id,3,3);
+
+switch (image_index)
+  {
+  case 2:
+    sound_play(attack_sound);
+    sound_play(attack_sound2);
+    sound_play(attack_sound2);
+    sound_play(attack_voice2);
+    break;
+  case 3:
+    duster = instance_create(x+6-facing*12,y,obj_dust_effect)
+    duster.facing = 1-facing
+    duster.image_alpha = 0.75
+    break;
+  case 4: intangible = 0; break;
+  case 7: image_speed = 0.2; break;
+  case 8: image_speed = 0; break;
+  }
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time =-1;
+  }
+        

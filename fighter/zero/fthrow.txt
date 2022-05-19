@@ -1,0 +1,67 @@
+if time = -1 {
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "fthrow";
+    image_speed = 0.5;
+    sprite_index = fthrow_sprite;
+    image_index=0;
+    timer = 0;
+    time = 40;
+    timer_speed=1;
+    target.timer_speed = 0;
+    target.alarm[0] = 50
+}
+if timer < time {
+	if ( timer <= 6 )
+	{
+	target.x = x + 25 * size * (1-facing*2);
+	target.y = y;
+	}
+    if ( timer >= 7 && timer <= 10 )
+	{
+    target.x = x + 40 * size * (1-facing*2);
+    target.y = y-8 * size;
+    }
+if image_index = 0.5 {
+    sound_play(fthrow_sound);
+    sound_play(fthrow_voice);
+}
+    if timer = 4 || timer = 6 || timer = 8 || timer = 10 || timer = 12 {
+        sound_play(attack_sound2);
+                duster = instance_create(x-6+facing*12,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_yscale *= 0.6*size
+                duster.image_xscale *= 0.8*size
+                spark = instance_create(x+(42-facing*84)*size,y-20*size,obj_spark_shockwave)
+                spark.image_xscale *= 0.1*size
+                spark.image_yscale *= 1*size
+                spark.image_blend = c_blue
+                spark.image_alpha = 0.9
+		sound_play(b_sound1);
+		sound_play(b_sound3);
+		spark2 = instance_create(x+(42-facing*84)*size,y-20*size,obj_spark)
+                spark2.image_xscale *= 1.25*size - (facing*1.25*size*2)
+                spark2.image_yscale *= 1.75*size
+                spark2.image_alpha = 0.75
+		spark2.sprite_index = laser_sprite2;
+		spark2.image_speed = 0.5;
+        create_hitbox(1,90,1,0,8,5,shock3,obj_spark_shock,1.5,1.5,42,20,self.id,1,5);
+	hitbox.di = 0;
+        instance_create(x+42-facing*84,y-15,obj_spark_effect); 
+    }
+    if timer = 13 {
+	image_speed = 0.1
+        script_execute(create_throw_box,5,30+facing*120,6,5,1,1,-1,obj_spark_effect,1.6,1.5,40,8,self.id,1) 
+        hitbox.shake_ampl = 0.33
+    }
+if image_index >= image_number - image_speed
+    image_speed = 0
+}
+if timer >= 24 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

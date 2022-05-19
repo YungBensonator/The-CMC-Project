@@ -1,0 +1,757 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = b_sprite;
+  timer = 0;
+  time = 130;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  has_hit = 0;
+  targetLock = 0;
+  archetype_EARTH_dummy_shrink = 0;
+  final_smash_transition_bg_gfx_shrink = 0;
+  final_smash_explode_gfx_expand = 0;
+  final_smash_super_bg_gfx2_shrink = 0;
+  
+  freeze = instance_create ( 0 , 0 , obj_freeze );
+  freeze.dontpause = eff;
+  freeze.dontpause = proj;
+  freeze.dontpause = self.id;
+  freeze.alarm[0] = 63;
+  }
+
+switch ( timer )
+  {
+  case 2: image_index = 1;  break;
+  case 4: image_index = 2;  break;
+  case 6: image_index = 3;  break;
+  case 8: image_index = 4;  break;
+  case 11: image_index = 5;  break;
+  case 14: image_index = 6;  break;
+  case 67: image_index = 7;  break;
+  case 70: image_index = 8;  break;
+  case 73: image_index = 9;  break;
+  case 76: image_index = 10;  break;
+  case 79: image_index = 11;  break;
+  case 82: image_index = 12;  break;
+  case 85: image_index = 13;  break;
+  case 88: image_index = 14;  break;
+  case 91: image_index = 6;  break;
+  case 94: image_index = 7;  break;
+  case 97: image_index = 8;  break;
+  case 100: image_index = 9;  break;
+  case 103: image_index = 10;  break;
+  case 106: image_index = 11;  break;
+  case 109: image_index = 12;  break;
+  case 112: image_index = 13;  break;
+  case 115: image_index = 14;  break;
+  case 118: image_index = 15;  break;
+  case 121: image_index = 16;  break;
+  case 124: image_index = 17;  break;
+  case 127: image_index = 18;  break;
+  
+  case 750: sprite_index = usmash_sprite; image_index = 9;  break;
+  case 754: image_index = 10;  break;
+  case 758: image_index = 11;  break;
+  case 762: image_index = 12;  break;
+  case 765: image_index = 13;  break;
+  case 768: image_index = 14;  break;
+  case 771: image_index = 6;  break;
+  case 774: image_index = 7;  break;
+  case 777: image_index = 8;  break;
+  case 780: image_index = 9;  break;
+  case 783: image_index = 10;  break;
+  case 786: image_index = 11;  break;
+  case 789: image_index = 12;  break;
+  case 792: image_index = 13;  break;
+  case 795: image_index = 14;  break;
+  case 798: image_index = 6;  break;
+  case 801: image_index = 7;  break;
+  case 804: image_index = 8;  break;
+  case 807: image_index = 9;  break;
+  case 810: image_index = 10;  break;
+  case 813: image_index = 11;  break;
+  case 816: image_index = 12;  break;
+  case 819: image_index = 13;  break;
+  case 822: image_index = 14;  break;
+  case 825: image_index = 15;  break;
+  case 828: image_index = 16;  break;
+  case 838: image_index = 17;  break;
+  case 841: image_index = 18;  break;
+  }
+
+gravity_lock = 2;
+vspeed = 0;
+hspeed = 0;
+
+if ( timer = 14 )
+{
+sound_play ( sideb_super_sound );
+
+eff = instance_create( x + abs(place_x(97)) * (1-facing*2) , y + place_y(29) , obj_spark);
+eff.sprite_index = sab_effect_sprite2;
+eff.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff.image_yscale = 0.4 * size;
+eff.image_alpha = 1;
+eff.image_index = 0;
+eff.image_speed = 1;
+eff.depth = depth - 0.1;
+eff.snap = self.id;
+}
+
+if ( timer = 64 )
+{
+sound_play ( ssmash_sound );
+proj = create_projectile( 5 , angle_correct(30) , 8 , 0 , -1 , 20 , magic3 , obj_spark_hit3 , 1 , 1 , abs(place_x(125))/size , -place_y(30)/size , self.id , 999 , char_custom8 );
+proj.execute_on_hit = "attacker.has_hit = 1;"
+}
+
+//-------------------------------------------------------------------------------ACTIVATE 2ND PHASE + LOAD ALL ASSETS--------------------------------------------------------------
+if ( has_hit = 1 && timer < 130 )
+{
+timer = 200;
+time = 848;
+
+targetLock = target;
+
+baseScale = view_hview/520;
+baseX = view_xview;
+baseY = view_yview;
+baseDepth = -13;
+
+targetLock.alarm[0] = 2;
+targetLock.state_type = "flinch";
+targetLock.speed = 0;
+targetLock.timer_speed = 0;
+targetLock.depth = proj.depth + 1;
+targetLock.intangible = 0;
+
+freeze = instance_create ( 0 , 0 , obj_freeze );
+freeze.dontpause = proj;
+freeze.dontpause = targetLock;
+freeze.dontpause = white_bg;
+freeze.dontpause = black_bg;
+freeze.dontpause = stars_bg_gfx;
+freeze.dontpause = archetype_EARTH_dummy;
+freeze.dontpause = target_dummy;
+freeze.dontpause = final_smash_orb_gfx;
+freeze.dontpause = final_smash_implode_gfx;
+freeze.dontpause = final_smash_super_bg_gfx;
+freeze.dontpause = final_smash_super_bg_gfx2;
+freeze.dontpause = shockwave;
+freeze.dontpause = final_smash_explode_gfx;
+freeze.dontpause = self.id;
+freeze.alarm[0] = 549;
+
+white_bg = instance_create( 0 , 0 , obj_spark);
+white_bg.sprite_index = final_smash_whitebg_sprite;
+white_bg.image_xscale = baseScale*30;
+white_bg.image_yscale = baseScale*30;
+white_bg.x = baseX;
+white_bg.y = baseY;
+white_bg.image_alpha = 0;
+white_bg.image_index = 0;
+white_bg.image_speed = 0;
+white_bg.depth = baseDepth - 1;
+white_bg.script = char_custom10;
+white_bg.owner = self.id;
+white_bg.keepmain = self.keepmain;
+
+black_bg = instance_create( 0 , 0 , obj_spark);
+black_bg.sprite_index = final_smash_blackbg_sprite;
+black_bg.image_xscale = baseScale*30;
+black_bg.image_yscale = baseScale*30;
+black_bg.x = baseX;
+black_bg.y = baseY;
+black_bg.image_alpha = 0;
+black_bg.image_index = 0;
+black_bg.image_speed = 0;
+black_bg.depth = baseDepth - 0.1;
+black_bg.script = char_custom10;
+black_bg.owner = self.id;
+black_bg.keepmain = self.keepmain;
+
+stars_bg_gfx = instance_create( 0 , 0 , obj_spark);
+stars_bg_gfx.sprite_index = final_smash_effect_stars_sprite;
+stars_bg_gfx.image_xscale = baseScale*3;
+stars_bg_gfx.image_yscale = baseScale*3;
+stars_bg_gfx.x = baseX + 460 * baseScale;
+stars_bg_gfx.y = baseY + 280 * baseScale;
+stars_bg_gfx.image_alpha = 0;
+stars_bg_gfx.image_index = 0;
+stars_bg_gfx.image_speed = 0;
+stars_bg_gfx.depth = baseDepth - 0.2;
+stars_bg_gfx.loop = 9999999999999;
+stars_bg_gfx.script = char_custom10;
+stars_bg_gfx.owner = self.id;
+stars_bg_gfx.keepmain = self.keepmain;
+
+archetype_EARTH_dummy = instance_create( 0 , 0 , obj_spark);
+archetype_EARTH_dummy.sprite_index = b_sprite;
+archetype_EARTH_dummy.image_xscale = baseScale*2.2;
+archetype_EARTH_dummy.image_yscale = baseScale*2.2;
+archetype_EARTH_dummy.x = baseX + 300 * baseScale;
+archetype_EARTH_dummy.y = baseY + 450 * baseScale;
+archetype_EARTH_dummy.image_alpha = 0;
+archetype_EARTH_dummy.image_index = 6;
+archetype_EARTH_dummy.image_speed = 0;
+archetype_EARTH_dummy.loop = 9999999999999;
+archetype_EARTH_dummy.depth = baseDepth - 0.5;
+archetype_EARTH_dummy.number = number;
+archetype_EARTH_dummy.script = char_custom10;
+archetype_EARTH_dummy.owner = self.id;
+archetype_EARTH_dummy.keepmain = self.keepmain;
+
+target_dummy = instance_create( 0 , 0 , obj_spark);
+target_dummy.sprite_index = targetLock.sprite_index;
+if ( targetLock.facing = 0 )
+	{
+	target_dummy.image_xscale = (targetLock.image_xscale)*5*baseScale * -1;
+	}
+if ( targetLock.facing = 1 )
+	{
+	target_dummy.image_xscale = (targetLock.image_xscale)*5*baseScale;
+	}
+target_dummy.image_yscale = (targetLock.image_yscale)*5*baseScale;
+target_dummy.x = baseX + 470 * baseScale;
+target_dummy.y = baseY + 380 * baseScale;
+target_dummy.image_alpha = 0;
+target_dummy.image_index = 0;
+target_dummy.image_speed = 0;
+target_dummy.loop = 9999999999999;
+target_dummy.depth = baseDepth - 0.55;
+target_dummy.number = targetLock.number;
+target_dummy.script = char_custom10;
+target_dummy.owner = self.id;
+target_dummy.keepmain = self.keepmain;
+
+final_smash_orb_gfx = instance_create( 0 , 0 , obj_spark);
+final_smash_orb_gfx.sprite_index = final_smash_effect_orb_sprite;
+final_smash_orb_gfx.image_xscale = baseScale*2;
+final_smash_orb_gfx.image_yscale = baseScale*2;
+final_smash_orb_gfx.x = baseX + 480 * baseScale;
+final_smash_orb_gfx.y = baseY + 280 * baseScale;
+final_smash_orb_gfx.image_alpha = 0;
+final_smash_orb_gfx.image_index = 4;
+final_smash_orb_gfx.image_speed = 0;
+final_smash_orb_gfx.depth = baseDepth - 0.6;
+final_smash_orb_gfx.loop = 9999999999999;
+final_smash_orb_gfx.script = char_custom10;
+final_smash_orb_gfx.owner = self.id;
+final_smash_orb_gfx.keepmain = self.keepmain;
+
+final_smash_implode_gfx = instance_create( 0 , 0 , obj_spark);
+final_smash_implode_gfx.sprite_index = final_smash_effect_implode_sprite;
+final_smash_implode_gfx.image_xscale = baseScale*3;
+final_smash_implode_gfx.image_yscale = baseScale*3;
+final_smash_implode_gfx.x = baseX + 480 * baseScale;
+final_smash_implode_gfx.y = baseY + 280 * baseScale;
+final_smash_implode_gfx.image_alpha = 0;
+final_smash_implode_gfx.image_index = 4;
+final_smash_implode_gfx.image_speed = 0;
+final_smash_implode_gfx.depth = baseDepth - 0.7;
+final_smash_implode_gfx.script = char_custom10;
+final_smash_implode_gfx.owner = self.id;
+final_smash_implode_gfx.keepmain = self.keepmain;
+
+final_smash_transition_bg_gfx = instance_create( 0 , 0 , obj_spark);
+final_smash_transition_bg_gfx.sprite_index = final_smash_effect_transition_sprite;
+final_smash_transition_bg_gfx.image_xscale = baseScale*3;
+final_smash_transition_bg_gfx.image_yscale = baseScale*3;
+final_smash_transition_bg_gfx.x = baseX + 480 * baseScale;
+final_smash_transition_bg_gfx.y = baseY + 280 * baseScale;
+final_smash_transition_bg_gfx.image_alpha = 0;
+final_smash_transition_bg_gfx.image_index = 0;
+final_smash_transition_bg_gfx.image_speed = 0;
+final_smash_transition_bg_gfx.depth = baseDepth - 0.65;
+final_smash_transition_bg_gfx.script = char_custom10;
+final_smash_transition_bg_gfx.owner = self.id;
+final_smash_transition_bg_gfx.keepmain = self.keepmain;
+
+final_smash_super_bg_gfx = instance_create( 0 , 0 , obj_spark);
+final_smash_super_bg_gfx.sprite_index = final_smash_effect_bg_sprite;
+final_smash_super_bg_gfx.image_xscale = baseScale*3;
+final_smash_super_bg_gfx.image_yscale = baseScale*3;
+final_smash_super_bg_gfx.x = baseX + 475 * baseScale;
+final_smash_super_bg_gfx.y = baseY + 280 * baseScale;
+final_smash_super_bg_gfx.image_alpha = 0;
+final_smash_super_bg_gfx.image_index = 0;
+final_smash_super_bg_gfx.image_speed = 0;
+final_smash_super_bg_gfx.depth = baseDepth - 0.2;
+final_smash_super_bg_gfx.script = char_custom10;
+final_smash_super_bg_gfx.owner = self.id;
+final_smash_super_bg_gfx.keepmain = self.keepmain;
+
+final_smash_super_bg_gfx2 = instance_create( 0 , 0 , obj_spark);
+final_smash_super_bg_gfx2.sprite_index = final_smash_effect_artwork_sprite;
+final_smash_super_bg_gfx2.image_xscale = baseScale*1.55;
+final_smash_super_bg_gfx2.image_yscale = baseScale*1.55;
+final_smash_super_bg_gfx2.x = baseX + 470 * baseScale;
+final_smash_super_bg_gfx2.y = baseY + 280 * baseScale;
+final_smash_super_bg_gfx2.image_alpha = 0;
+final_smash_super_bg_gfx2.image_index = 0;
+final_smash_super_bg_gfx2.image_speed = 0;
+final_smash_super_bg_gfx2.depth = baseDepth - 0.3;
+final_smash_super_bg_gfx2.script = char_custom10;
+final_smash_super_bg_gfx2.owner = self.id;
+final_smash_super_bg_gfx2.keepmain = self.keepmain;
+
+final_smash_explode_gfx = instance_create( 0 , 0 , obj_spark);
+final_smash_explode_gfx.sprite_index = final_smash_effect_explode_sprite;
+final_smash_explode_gfx.image_xscale = baseScale*3;
+final_smash_explode_gfx.image_yscale = baseScale*3;
+final_smash_explode_gfx.x = baseX + 480 * baseScale;
+final_smash_explode_gfx.y = baseY + 280 * baseScale;
+final_smash_explode_gfx.image_alpha = 0;
+final_smash_explode_gfx.image_index = 0;
+final_smash_explode_gfx.image_speed = 0;
+final_smash_explode_gfx.depth = baseDepth - 0.8;
+final_smash_explode_gfx.script = char_custom10;
+final_smash_explode_gfx.owner = self.id;
+final_smash_explode_gfx.keepmain = self.keepmain;
+}
+
+
+//----------------------------------------------------------KEEP THE TARGET IN PLACE + KEEP CAMERA UPDATED------------------------------------------------------------------
+if ( timer >= 200 && timer <= 749 )
+{
+targetLock.alarm[0] = 2;
+targetLock.state_type = "flinch";
+targetLock.timer_speed = 0;
+targetLock.intangible = 0;
+
+baseScale = view_hview/520;
+baseX = view_xview;
+baseY = view_yview;
+}
+
+	if ( instance_exists ( stars_bg_gfx ) )
+	{
+	stars_bg_gfx.image_xscale = baseScale*3;
+	stars_bg_gfx.image_yscale = baseScale*3;
+	stars_bg_gfx.x = baseX + 460 * baseScale;
+	stars_bg_gfx.y = baseY + 280 * baseScale;
+	}
+
+	if ( instance_exists ( archetype_EARTH_dummy ) )
+	{
+	archetype_EARTH_dummy.image_xscale = baseScale*2.2 - archetype_EARTH_dummy_shrink;
+	archetype_EARTH_dummy.image_yscale = baseScale*2.2 - archetype_EARTH_dummy_shrink;
+	
+	if ( timer < 455 )
+		{
+		archetype_EARTH_dummy.x = baseX + 300 * baseScale;
+		archetype_EARTH_dummy.y = baseY + 450 * baseScale;
+		}
+	if ( timer >= 455 )
+		{
+		archetype_EARTH_dummy.x = baseX + 480 * baseScale;
+		archetype_EARTH_dummy.y = baseY + 280 * baseScale;
+		}
+	}
+
+	if ( instance_exists ( target_dummy ) )
+	{
+	if ( targetLock.facing = 0 )
+		{
+		target_dummy.image_xscale = (targetLock.image_xscale)*5*baseScale * -1;
+		}
+	if ( targetLock.facing = 1 )
+		{
+		target_dummy.image_xscale = (targetLock.image_xscale)*5*baseScale;
+		}
+	target_dummy.image_yscale = (targetLock.image_yscale)*5*baseScale;
+	target_dummy.x = baseX + 470 * baseScale;
+	target_dummy.y = baseY + 380 * baseScale;
+	}
+
+	if ( instance_exists ( final_smash_orb_gfx ) )
+	{
+	final_smash_orb_gfx.image_xscale = baseScale*2;
+	final_smash_orb_gfx.image_yscale = baseScale*2;
+	final_smash_orb_gfx.x = baseX + 480 * baseScale;
+	final_smash_orb_gfx.y = baseY + 280 * baseScale;
+	}
+
+	if ( instance_exists ( final_smash_implode_gfx ) )
+	{
+	final_smash_implode_gfx.image_xscale = baseScale*3;
+	final_smash_implode_gfx.image_yscale = baseScale*3;
+	final_smash_implode_gfx.x = baseX + 480 * baseScale;
+	final_smash_implode_gfx.y = baseY + 280 * baseScale;
+	}
+
+	if ( instance_exists ( final_smash_transition_bg_gfx ) )
+	{
+	final_smash_transition_bg_gfx.image_xscale = baseScale*3 - final_smash_transition_bg_gfx_shrink;
+	final_smash_transition_bg_gfx.image_yscale = baseScale*3 - final_smash_transition_bg_gfx_shrink;
+	final_smash_transition_bg_gfx.x = baseX + 480 * baseScale;
+	final_smash_transition_bg_gfx.y = baseY + 280 * baseScale;
+	}
+
+	if ( instance_exists ( final_smash_super_bg_gfx ) )
+	{
+	final_smash_super_bg_gfx.image_xscale = baseScale*3;
+	final_smash_super_bg_gfx.image_yscale = baseScale*3;
+	final_smash_super_bg_gfx.x = baseX + 475 * baseScale;
+	final_smash_super_bg_gfx.y = baseY + 280 * baseScale;
+	}
+
+	if ( instance_exists ( final_smash_super_bg_gfx2 ) )
+	{
+	final_smash_super_bg_gfx2.image_xscale = baseScale*1.55 - final_smash_super_bg_gfx2_shrink;
+	final_smash_super_bg_gfx2.image_yscale = baseScale*1.55 - final_smash_super_bg_gfx2_shrink;
+	final_smash_super_bg_gfx2.x = baseX + 470 * baseScale;
+	final_smash_super_bg_gfx2.y = baseY + 280 * baseScale;
+	}
+
+	if ( instance_exists ( final_smash_explode_gfx ) )
+	{
+	final_smash_explode_gfx.image_xscale = baseScale*3 + final_smash_explode_gfx_expand;
+	final_smash_explode_gfx.image_yscale = baseScale*3 + final_smash_explode_gfx_expand;
+	final_smash_explode_gfx.x = baseX + 480 * baseScale;
+	final_smash_explode_gfx.y = baseY + 280 * baseScale;
+	}
+
+
+
+//--------------------------------------------------------------------SOUNDS------------------------------------------------------------------------------
+
+if ( timer = 210 )
+{
+sound_play ( final_smash_sound );
+sound_play ( final_smash_sound4 );
+}
+
+if ( timer = 430 )
+{
+sound_play ( entry_sound );
+}
+
+if ( timer = 580 )
+{
+sound_play ( final_smash_sound2 );
+
+shockwave = instance_create(x,y,obj_spark_shockwave)
+shockwave.image_xscale = baseScale*1;
+shockwave.image_yscale = baseScale*1;
+shockwave.x = baseX + 480 * baseScale;
+shockwave.y = baseY + 280 * baseScale;
+shockwave.depth = baseDepth - 0.69;
+}
+
+if ( timer = 650 )
+{
+sound_play ( final_smash_sound3 );
+}
+
+
+//----------------------------------------------------------------WHITE BG CONTROLLER---------------------------------------------------------------------
+if ( timer >= 200 && timer <= 210 )
+{
+white_bg.image_alpha += 0.1;
+}
+
+if ( timer >= 215 && timer <= 300 && white_bg.image_alpha > 0 )
+{
+white_bg.image_alpha -= 0.02;
+}
+
+//----------------------------------------------------------------BLACK BG CONTROLLER (Must destroy later)---------------------------------------------------------------------
+if ( timer = 210 )
+{
+black_bg.image_alpha = 1;
+}
+
+//----------------------------------------------------------------STAR BG CONTROLLER (Must destroy later)---------------------------------------------------------------------
+if ( timer >= 330 && stars_bg_gfx.image_alpha < 0.9 )
+{
+stars_bg_gfx.image_alpha += 0.02;
+}
+
+//-----------------------------------------------------------ARCHETYPE EARTH SPARK CONTROLLER---------------------------------------------------------------------
+if ( timer = 210 )
+{
+archetype_EARTH_dummy.image_alpha = 1;
+archetype_EARTH_dummy.image_speed = 0.25;
+}
+
+if ( timer >= 200 && timer <= 450 && archetype_EARTH_dummy.image_index >= 15 )
+{
+archetype_EARTH_dummy.image_index -= 8;
+}
+
+if ( timer >= 440 && timer <= 450 )
+{
+archetype_EARTH_dummy.image_alpha -= 0.1;
+}
+
+//---------------------------2ND SCENE-----------------------------------
+if ( timer = 455 )
+{
+archetype_EARTH_dummy.sprite_index = final_smash_sprite;
+archetype_EARTH_dummy.image_speed = 0.25;
+archetype_EARTH_dummy.x = baseX + 480 * baseScale;
+archetype_EARTH_dummy.y = baseY + 280 * baseScale;
+}
+
+if ( timer >= 475 && archetype_EARTH_dummy.image_alpha < 1 )
+{
+archetype_EARTH_dummy.image_alpha += 0.1;
+}
+
+if ( timer >= 485 && timer <= 505 )
+{
+archetype_EARTH_dummy_shrink += 0.05 * baseScale;
+}
+
+//---------------------------EXPLODE FINISHER----------------------------
+if ( timer = 640 )
+{
+archetype_EARTH_dummy.image_blend = c_black;
+archetype_EARTH_dummy.depth = baseDepth - 0.85;
+}
+if ( timer >= 640 )
+{
+archetype_EARTH_dummy.image_alpha -= 0.2;
+}
+if ( timer = 646 )
+{
+with ( archetype_EARTH_dummy )
+	{
+	instance_destroy();
+	}
+}
+
+
+//--------------------------------------------------------------TARGET SPARK CONTROLLER---------------------------------------------------------------------
+if ( timer = 210 )
+{
+target_dummy.image_alpha = 1;
+}
+
+if ( timer >= 440 && timer <= 450 )
+{
+target_dummy.image_alpha -= 0.1;
+}
+
+if ( timer = 451 )
+	{
+	with ( target_dummy )
+		{
+		instance_destroy();
+		}
+	}
+
+//--------------------------------------------------------------FINAL SMASH ORB CONTROLLER---------------------------------------------------------------------
+if ( timer = 210 )
+{
+final_smash_orb_gfx.image_alpha = 0.9;
+final_smash_orb_gfx.image_speed = 0.5;
+}
+
+if ( timer >= 200 && timer <= 450 && final_smash_orb_gfx.image_index >= 0 && final_smash_orb_gfx.image_index < 4 )
+{
+final_smash_orb_gfx.image_index += 4;
+}
+
+if ( timer >= 440 && timer <= 450 )
+{
+final_smash_orb_gfx.image_alpha -= 0.1;
+}
+
+if ( timer = 451 )
+	{
+	with ( final_smash_orb_gfx )
+		{
+		instance_destroy();
+		}
+	}
+
+//--------------------------------------------------------------FINAL SMASH IMPLODE CONTROLLER (Destroys automatically)---------------------------------------------------------------------
+if ( timer = 400 )
+{
+final_smash_implode_gfx.image_speed = 0.5;
+final_smash_implode_gfx.image_alpha = 0.9;
+}
+
+//------------------------------------------------------------FINAL SMASH BG TRANSITION CONTROLLER (Must destroy later)---------------------------------------------------------------------
+
+if ( timer = 430 )
+{
+final_smash_transition_bg_gfx.image_speed = 0.5;
+final_smash_transition_bg_gfx.image_alpha = 1;
+}
+
+if ( final_smash_transition_bg_gfx.image_index >= 22 )
+{
+final_smash_transition_bg_gfx.image_speed = 0;
+}
+
+if ( timer >= 475 && timer <= 505 )
+{
+final_smash_transition_bg_gfx_shrink += 0.05 * baseScale;
+}
+
+//------------------------------------------------------------FINAL SMASH BG SWIRL CONTROLLER (Must destroy later)---------------------------------------------------------------------
+if ( timer = 495 )
+{
+final_smash_super_bg_gfx.image_speed = 0.2;
+}
+
+if ( timer >= 495 && final_smash_super_bg_gfx.image_alpha < 0.9 )
+{
+final_smash_super_bg_gfx.image_alpha += 0.1;
+}
+
+if ( final_smash_super_bg_gfx.image_index >= 38 )
+{
+final_smash_super_bg_gfx.image_speed = 0;
+}
+
+//------------------------------------------------------------FINAL SMASH BG ARTWORK CONTROLLER---------------------------------------------------------------------
+
+if ( timer >= 495 && timer <= 515 )
+{
+final_smash_super_bg_gfx2.image_alpha += 0.05;
+}
+
+if ( timer >= 495 && timer <= 600 )
+{
+final_smash_super_bg_gfx2_shrink += 0.0001 * baseScale;
+}
+
+if ( timer >= 580 && timer <= 630 )
+{
+final_smash_super_bg_gfx2.image_alpha -= 0.02;
+}
+
+if ( timer = 631 )
+	{
+	with ( final_smash_super_bg_gfx2 )
+		{
+		instance_destroy();
+		}
+	}
+
+//------------------------------------------------------------FINAL SMASH EXPLODE CONTROLLER (FINALLY)---------------------------------------------------------------------
+
+if ( timer = 630 )
+	{
+	final_smash_explode_gfx.image_alpha = 1;
+	}
+
+if ( timer >= 630 && timer <= 635 )
+	{
+	final_smash_explode_gfx_expand += 1 * baseScale;
+	}
+if ( timer >= 649 )
+	{
+	final_smash_explode_gfx_expand += 5 * baseScale;
+	}
+
+if ( timer = 642 )
+	{
+	final_smash_explode_gfx.image_index = 1;
+	}
+if ( timer = 644 )
+	{
+	final_smash_explode_gfx.image_index = 2;
+	}
+if ( timer = 646 )
+	{
+	final_smash_explode_gfx.image_index = 3;
+	}
+
+//------------------------------------------------------------DESTROY THE REST---------------------------------------------------------------------
+
+if ( timer = 700 )
+{
+	with ( final_smash_super_bg_gfx )
+		{
+		instance_destroy();
+		}
+	with ( final_smash_transition_bg_gfx )
+		{
+		instance_destroy();
+		}
+	with ( black_bg )
+		{
+		instance_destroy();
+		}
+	with ( white_bg )
+		{
+		instance_destroy();
+		}
+	with ( stars_bg_gfx )
+		{
+		instance_destroy();
+		}
+}
+
+//------------------------------------------------------------DEAL DAMAGE + END---------------------------------------------------------------------
+if ( timer >= 650 && timer <= 750 )
+{
+targetLock.percent += 1 * size;
+}
+
+if ( timer >= 750 && timer <= 770 )
+{
+final_smash_explode_gfx.image_alpha -= 0.05;
+}
+
+if ( timer = 750 )
+	{
+	if ( targetLock.percent >= 150 )
+		{
+		targetLock.speed = 0;
+		targetLock.dead = 1;
+		targetLock.state_type = "ded";
+		targetLock.dead_timer = 120;
+		}
+		else
+		{
+		targetLock.y = obj_game_control.camera_boundary_u - 50;
+		targetLock.ignore_physics = 1;
+		proj2 = create_projectile( 5 , angle_correct(281) , 8 , 4 , -1 , 20 , magic3 , obj_spark_hit3 , 1 , 1 , 0 , 0 , self.id , 5 , -1 );
+		proj2.hit_stun = 30;
+		proj2.di = -1;
+		proj2.priority = 5;
+		proj2.x = targetLock.x;
+		proj2.y = targetLock.y;
+		proj2.only_hit = targetLock;
+		}
+	}
+
+if ( timer = 771 )
+{
+with ( final_smash_explode_gfx )
+	{
+	instance_destroy();
+	}
+}
+
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 10;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

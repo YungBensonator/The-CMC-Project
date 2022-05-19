@@ -1,0 +1,92 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = ssmash_sprite;
+  timer = 0;
+  time = 66;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  
+  freeze = instance_create ( 0 , 0 , obj_freeze );
+  freeze.dontpause = eff;
+  freeze.dontpause = eff2;
+  freeze.dontpause = self.id;
+  freeze.alarm[0] = 17;
+  }
+
+switch ( timer )
+  {
+  case 4: image_index = 4;  break;
+  case 8: image_index = 5;  break;
+  case 12: image_index = 6;  break;
+  case 16: image_index = 7;  break;
+  case 18: image_index = 8;  break;
+  case 21: image_index = 9;  break;
+  case 24: image_index = 10;  break;
+  case 27: image_index = 11;  break;
+  case 30: image_index = 12;  break;
+  case 33: image_index = 13;  break;
+  case 36: image_index = 14;  break;
+  case 39: image_index = 15;  break;
+  case 42: image_index = 11;  break;
+  case 45: image_index = 12;  break;
+  case 48: image_index = 13;  break;
+  case 51: image_index = 14;  break;
+  case 54: image_index = 15;  break;
+  case 57: image_index = 16;  break;
+  case 60: image_index = 17;  break;
+  case 63: image_index = 18;  break;
+  }
+
+gravity_lock = 1;
+vspeed = 0;
+hspeed = 0;
+
+if ( timer = 1 )
+{
+sound_play ( sideb_super_sound );
+
+eff = instance_create( x + abs(place_x(67)) * (1-facing*2) * size , y + place_y(46) * size , obj_spark);
+eff.sprite_index = sab_effect_sprite2;
+eff.image_xscale = 0.4 * (1 - facing * 2) * size;
+eff.image_yscale = 0.4 * size;
+eff.image_alpha = 1;
+eff.image_index = 0;
+eff.image_speed = 1;
+eff.depth = depth - 0.1;
+eff.snap = self.id;
+eff.script = char_custom10;
+eff.owner = self.id;
+eff.keepmain = self.keepmain;
+}
+
+if ( timer = 18 )
+{
+sound_play ( ssmash_sound );
+proj = create_projectile( 40 , angle_correct(30) , 8 , 8 , -1 , 20 , magic3 , obj_spark_hit3 , 1 , 1 , abs(place_x(82)) , -place_y(37) , self.id , 62 , char_custom6 );
+}
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 10;
+	}
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

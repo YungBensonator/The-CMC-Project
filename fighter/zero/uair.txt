@@ -1,0 +1,63 @@
+if state_type = "jump" {
+        state_type = "attack";
+        attack_type = "uair";
+        image_speed = 0.5;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 32;
+        timer_speed=1;
+}
+        if timer < time {
+if image_index = 2 {
+    sound_play(attack_sound);
+    sound_play(attack_sound2);
+    sound_play(attack_sound2);
+    sound_play(attack_voice2);
+}
+            state_type = "air_attack";
+	if (attack_success) time = 27;
+            if timer = 4 {
+                create_hitbox(8,70+facing*40,5.9,3.55,15,3,slash3,obj_spark_slash2,1.5,2,23,15,self.id,3,3);
+                hitbox.hitshake_type = 1
+                hitbox.di = 0.6
+            }
+            if timer = 6 {
+                hitbox.damage = round(6*size);
+                hitbox.bkb = 4*size;
+                hitbox.kbg = 3*size;
+                hitbox.dir = 130 - facing*80;
+                hitbox.hitbox_x = size*(-2+facing*4);
+                hitbox.hitbox_y = 32*size;
+                hitbox.shield_damage = 7;
+                hitbox.hitlag_frames = round(6*size);
+            }
+            if timer = 8 {
+                hitbox.damage = round(6*size);
+                hitbox.bkb = 3*size;
+                hitbox.kbg = 2*size;
+                hitbox.dir = 140 - facing*100;
+                hitbox.hitbox_x = size*(-12+facing*24);
+                hitbox.hitbox_y = 24*size;
+                hitbox.shield_damage = 6;
+                hitbox.hitlag_frames = round(6*size);
+		image_speed = 0.25
+            }
+            if air = 0 {
+                state_type="land";
+                sprite_index = land_sprite;
+                attack_type="none";
+                timer=0;
+                if (attack_success) time = 8;
+		else time = 13; 
+            }
+		if image_index >= 6
+			image_speed = 0
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+}
+        

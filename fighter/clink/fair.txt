@@ -1,53 +1,61 @@
 if state_type = "jump" {
-        vspeed -= 0.25;
+        vspeed -= 0.1;
         state_type = "air_attack";
         attack_type = "fair";
-        image_speed = 0.35;
-        sprite_index = fair_sprite;
-        image_index=0.5;
+        image_speed = 0;
+        sprite_index = nair_sprite;
+        image_index=9;
         timer = 0;
-        time = 44;
+        time = 32;
         timer_speed=1;
-        lcancel = 1;
 }
+
+
+switch ( timer )
+{
+	case 4: image_index = 8; break;
+	case 12: sprite_index = fair_sprite; image_index = 0; break;
+	case 14: image_index = 1; break;
+	case 16: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 20: image_index = 4; break;
+	case 22: image_index = 5; break;
+}
+
+
         if timer < time {
             state_type = "air_attack";
-            if timer = 10 {
-                sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
-                sound_play(attack_sound1);
-                create_hitbox(3,300-facing*60,3,0,6,3,slash1,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
-                hitbox.di = 0.4
-                hitbox.critical_chance = 0.7
+            if timer = 14 {
+                sound_play(attack_sound2);
+                play_attack_voice();
+                create_hitbox(12,20+facing*140,6.2,5.7,5,6,slash2,obj_spark_slash2,0.7,0.95,16,15,self.id,3,3);
+				hitbox.di = 0;
             }
-            if timer = 14 || timer = 22 {
-                sound_play(attack_sound1);
-                create_hitbox(3,340-facing*140,3,0,6,3,slash1,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
-                hitbox.di = 0.4
-                hitbox.critical_chance = 0.7
+            if (timer = 17 || timer = 19) && instance_exists(hitbox) {
+                hitbox.damage -= size;
+                //hitbox.bkb -= size*0.2;
+                hitbox.hitbox_x = 0  
+		hitbox.hitbox_y = (16+((timer=19)*4))*size; 
             }
-            if timer = 18 {
-                sound_play(attack_sound1);
-                create_hitbox(3,300-facing*60,2.7,0,6,3,slash1,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
-                hitbox.di = 0.4
-                hitbox.critical_chance = 0.7
+            if timer = 16 && instance_exists(hitbox) {
+                hitbox.hitbox_x = (-15 + facing*30)*size
+		hitbox.hitbox_y = 8*size;   
             }
-            if timer = 26 {
-                sound_play(attack_sound1);
-                create_hitbox(3,35+facing*110,4,7.95,6,7,slash2,obj_spark_slash2,0.95,0.65,16,13,self.id,3,2);
-                hitbox.di = 1.2
-                hitbox.hit_stun = 8
-                hitbox.critical_chance = 0.7
+            if timer = 23 && instance_exists(hitbox) {
+                hitbox.hitbox_x = (16 - facing*32)*size  
+                hitbox.damage -= size; 
+		hitbox.hitbox_y = 18*size;
             }
-            if air = 0 {
-                state_type="land";
-                attack_type="none";
-                sprite_index = land_sprite;
-                timer=0;
-                time=7; 
-            }
-            if timer = 48
-            image_speed=0;
-        }  
+        if timer = 27
+            image_speed = 0.2;
+        if air = 0 {
+            state_type="land";
+            attack_type="none";
+            sprite_index = land_sprite;
+            timer=0;
+            time= 11; 
+        }
+}  
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
     if air > 0
@@ -56,5 +64,5 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
         state_type = "stand";
     timer = 0;
     time =-1;
-}
-        
+    }
+   

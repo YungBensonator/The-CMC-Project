@@ -1,0 +1,105 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  timer = 0;
+  state_type = "air_attack";
+  if ( air = 0 )
+	{
+	hspeed = 0;
+	}
+  if ( air > 0 )
+	{
+	hspeed *= 0.5;
+	}
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  if ( !instance_exists( windbomb ) )
+	{
+	sprite_index = downb_sprite;
+	temp = 0;
+	time = 36;
+	}
+  if ( instance_exists( windbomb ) )
+	{
+	sprite_index = downb_sprite2;
+	temp = 1;
+	time = 30;
+	}
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+  }
+
+if ( temp = 0 )
+{
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 6: image_index = 2;  break;
+  case 9: image_index = 3;  break;
+  case 12: image_index = 4;  break;
+  case 15: image_index = 5;  break;
+  case 18: image_index = 6;  break;
+  case 21: image_index = 7;  break;
+  case 24: image_index = 8;  break;
+  case 27: image_index = 9;  break;
+  case 30: image_index = 10;  break;
+  case 33: image_index = 11;  break;
+  }
+}
+
+if ( temp = 1 )
+{
+switch ( timer )
+  {
+  case 3: image_index = 1;  break;
+  case 6: image_index = 2;  break;
+  case 9: image_index = 3;  break;
+  case 12: image_index = 4;  break;
+  case 15: image_index = 5;  break;
+  case 18: image_index = 6;  break;
+  case 21: image_index = 7;  break;
+  case 24: image_index = 8;  break;
+  case 27: image_index = 9;  break;
+  }
+}
+
+if ( temp = 0 )
+{
+if ( timer = 18 && !instance_exists( windbomb ) )
+	{
+	sound_play ( downb_voice );
+	sound_play ( zair_sound );
+	windbomb = create_projectile( 10 , angle_correct(90) , 6 , 5 , 10 , 10 , archetypeearthslash3 , obj_spark_slash3 , 1 , 1 , abs(place_x(150))/size , -place_y(80)/size , self.id , 900 , char_custom4 );
+	windbomb.temp = 0;
+	}
+}
+
+if ( temp = 1 )
+{
+if ( timer = 18 && instance_exists( windbomb ) )
+	{
+	sound_play ( downb_voice2 );
+	if ( windbomb.temp2 != 1 )
+		{
+		windbomb.temp = 1;
+		}
+	}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 10;
+	}
+  timer = 0;
+  time = -1;
+  }

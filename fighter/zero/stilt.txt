@@ -1,0 +1,54 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "stilt";
+    timer = 0;
+    time = 40;
+    sprite_index = stilt_sprite;
+    image_speed = 0.5;
+    image_index = 0;
+    dbtemp = 0;
+    //hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+if image_index = 3 {
+    sound_play(attack_sound);
+    sound_play(attack_sound3);
+    sound_play(attack_sound3);
+    sound_play(attack_voice4);
+}
+	if (attack_success) time = 30;
+    if ( image_index = 4 )
+      {
+	create_hitbox(9,20+facing*140,5,5,12,3,slash2,obj_spark_slash1,1.5,1.5,30,10,self.id,4,3);
+      }
+
+    if ( timer = 12)
+      {
+	hitbox.damage = 4*size;
+	hitbox.dir = 20+facing*140;
+	hitbox.bkb = 4*size;
+	hitbox.kbg = 4*size;
+	hitbox.shield_damage = 6*size;
+	hitbox.hitlag_frames = 4*size;
+	hitbox.sfx = slash1;
+	hitbox.hitbox_x = size * (24-facing*48);
+	hitbox.hitbox_y = 11*size;
+	hitbox.image_yscale = 0.7
+	hitbox.image_xscale = 0.8
+      }
+
+     if image_index >= 11
+	image_speed = 0
+
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
