@@ -24,12 +24,66 @@ if ( timer < time )
 	case 19: image_index = 9; break;
 	case 22: image_index = 10; break;
       }
+// Animate VFX        
+switch (timer){
+        case 2:                         // sprite keyframe
+                // We use the logic I determined looking at the sheet to create the blur.
+                // Note that while he faces right, it rotates clockwise, so it is not counter-clockwise.
+                blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_texture, /*Start frame*/ 2, /*Apex Frame*/ 5, /*End frame*/ 10, /*CCW*/ 1, /*girth*/ 20, 30);
+                
+               // blur.push_x = 4 * size * (1-facing*2);        // Push blur toward crash
+                blur.image_index = 0;
+                blur.h_squish = -4;        // Thin the blur out a bit //Factor
+                blur.depth = depth - 0.1;
+				blur.push_y = 4*size;
+                blur.index = 0.5;                // This will show the blur between the first and second frames. If this was 0, nothing would show at all.
+                break;
+        case 3:
+                blur.image_index = 1;
+                break;
+        case 4:                         // Sprite keyframe
+                blur.index = 1;        // Set the blur index to match with crash's new sprite index.
+                blur.image_index = 2;
+                break;        
+        case 5:
+                blur.index = 1.33;
+                break;
+        case 6:
+                blur.index = 1.66;
+                break;
+        case 7:                        // Sprite end frame
+                blur.index = 2; // Set the blur index to match with crash's new sprite index.
+                blur.image_index = 3;
+                break;
+        case 8:
+                blur.index = 2.33;
+                break;
+        case 9:
+                blur.index = 2.66;
+                break;
+        case 10:                         
+                blur.index = 3;        // Set the blur index to match with crash's new sprite index.
+                blur.image_index = 2.99;
+                break;
+        case 11:
+                blur.index = 3.5;
+                blur.image_index = 3;
+                break;
+        case 12:
+                blur.index = 4
+                break;
+        case 13:
+                with (blur){
+                        instance_destroy();
+                }
+                break;
+}
 
    if ( timer = 5 )
       {
 	play_attack_voice();
-	sound_play(attack_sound1);
-	create_hitbox(7,85+facing*30,5.45,3,12,7,slash3,obj_spark_slash2,0.85,0.85,13,24,self.id,9,4);
+	sound_play(uaairvc );
+	create_hitbox(6.5,85+facing*30,5.45,3,12,3,slash3,obj_spark_slash2,0.85,0.85,20,24,self.id,9,4);
 	hitbox.hit_stun = 11;
       }
     if ( timer = 7 )
@@ -47,8 +101,8 @@ if ( timer < time )
     if ( timer = 9 )
       {
 	hitbox.dir = 120-facing*60;
-	hitbox.hitbox_x = size * (-12+facing*24);
-	hitbox.hitbox_y = size*33
+	hitbox.hitbox_x = size * (-16+facing*32);
+	hitbox.hitbox_y = size*24
       }
     if ( air = 0 )
       {

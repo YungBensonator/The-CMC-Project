@@ -356,7 +356,7 @@ if ( timer < time )
 	vspeed = -16*size;
       }
     if ( timer >= 8 )
-	hspeed = size * (1.5-facing*2.5);	
+	hspeed = size * (2.5-facing*4.5);	
     if ( timer = 12 )
 	vspeed = -2*size;	
     if ( timer >= 34 )
@@ -367,9 +367,13 @@ if ( timer < time )
     if ( timer = 20 )
 	intangible = 0;
 
-
-
-
+if timer >7 and timer < 46{
+    {
+    a = after_image ( 2 , c_aqua , .25 );
+    a.image_xscale *= 1.0 + ci + random(0.02);
+    a.image_yscale *= 1.0 + ci + random(0.02);
+    }
+}
 
 
 
@@ -390,15 +394,14 @@ time = 76
 image_index=15
 x = target1.x + 1 * (1-facing*2)
 y = target1.y-20
-burry2 = create_hitbox_impaler(9,angle_correct(90),6,3,14,18,kick3,obj_spark_hit4,0.8,0.8,4,6,self.id,14,4);
-burry2.hit=2
+ create_hitbox_impaler(9,angle_correct(90),6,3,14,18,kick3,obj_spark_hit4,0.8,0.8,4,6,self.id,14,4);
 if (instance_exists(hitbox)) {with (hitbox) {instance_destroy();}}
 }
 
 if timer = 78{
 
-		downkick2 = create_hitbox(13,angle_correct(40),3.5,8.7,14,10,kick3,obj_spark_hit4,0.9,0.9,3,10,self.id,40,4);
-		downkick3 = create_hitbox2(13,323+(-106)*facing,6,8.7,14,10,kick3,obj_spark_hit4,0.4,0.4,9,1,self.id,40,4);
+		 create_hitbox(13,angle_correct(40),3.5,8.7,14,10,kick3,obj_spark_hit4,0.9,0.9,3,10,self.id,40,4);
+		 create_hitbox2(13,323+(-106)*facing,6,8.7,14,10,kick3,obj_spark_hit4,0.4,0.4,9,1,self.id,40,4);
 		}
 
    if ( air = 0 && timer >= 7  )
@@ -406,14 +409,18 @@ if timer = 78{
 	dontrepeat = 0;
 	state_type = "land";
 	attack_type = "none";
+	sound_play(land1_voice1);
 	timer = 0;
-	time = 23;
+	time = 29;
 	sprite_index = downbdairgetup_sprite
       }
+if timer = 72{
+vspeed = 8;
+hspeed = (12 - facing*24)*size;
+}
 
 
-
-if timer >= 16 && timer <= 69  && attacking { 
+if timer >= 11 && timer <= 69  && attacking { 
 state_type = "air_attack";
 	    timer = 70;
 	    time = 95;
@@ -421,7 +428,7 @@ state_type = "air_attack";
 		facing = 0;
 	    if ( moveleft )
 		facing = 1;
-	    sound_play(attack_sound2);
+	    sound_play(downbsnd);
 	    sprite_index = downbdair_sprite;
 		//image_speed = 0.50;
 	    image_index = 0;
@@ -432,7 +439,7 @@ state_type = "air_attack";
 	
 }
 
-if timer >= 16 && timer <= 69  && special{ 
+if timer >= 11 && timer <= 69  && special{ 
 state_type = "air_attack";
 	    timer = 70;
 	    time = 95;
@@ -441,14 +448,28 @@ state_type = "air_attack";
 	    if ( moveleft )
 		facing = 1;
 		//image_speed = 0.50;
-	    sound_play(attack_sound2);
+	    sound_play(downbsnd);
 	    sprite_index = downbdair_sprite;
                   hspeed = (3 - facing*6)*size;
                 vspeed = 16;      		
 		if (instance_exists(hitbox)) {with (hitbox) {instance_destroy();}}
 		
 		
-}
+}/*
+if timer = 70{
+eff = instance_create(place_x(46)+x,place_y(49)+y,obj_smash_charge);
+  eff.image_yscale = 0.66 * ysize;
+  eff.image_xscale = eff.image_yscale * (1-facing*2);
+  eff.depth = depth - 0.1;
+  eff.image_speed = 2;
+ }*/
+if timer = 78{
+		burst = instance_create(place_x(98)+x,place_y(83)+y,obj_jab_burst);
+		burst.snap = self.id;
+		burst.image_xscale = xsize * 0.6;
+		burst.image_yscale = ysize * 0.6;
+		burst.image_alpha = 0.9; 
+		}
 
 // Keeps facing when flipkickin in direction 
 if timer = 95{
@@ -470,8 +491,8 @@ if timer >20 and timer < 95 {
 		hspeed = -3.5*size; }
 
 
-//DO NOT TOUCH-----------------------------//////////////////////////////////////////
- if ( timer >= 21 && timer <= 65 )
+//----------------------------//////////////////////////////////////////
+ /*if ( timer >= 21 && timer <= 65 )
       {
 	if ai {
 	if (offstage || ai_state = "recover" ) {
@@ -495,7 +516,7 @@ if timer >20 and timer < 95 {
 	else
 	special = 1
 	}
-	} 
+	} */
 	if ( moveup && special )
 	  {
 	    state_type = "jump";
@@ -505,23 +526,58 @@ if timer >20 and timer < 95 {
 	    char_upb();
 	    exit;
 	  }
+	  
+	if ( attack_success and timer >75 )
+	  {
+	    state_type = "air_flinch";
+	    attack_type = "none";
+	    timer = 100;
+	    time = 122
+		hspeed = (-4 - facing*-8)*size;
+        vspeed = -6;
+	  }
 /////////////////////////////////////////////////////////////////////////////////
-if attacking and timer >75 {
-	    if ( moveright and facing = 0)
-                hspeed = (3 - facing*6)*size;
-                vspeed = 11;
-	    if ( moveleft and facing = 1)
-                hspeed = (3 - facing*6)*size;
-                vspeed = 11;
+if attacking and timer >75 and hitbox.hit <0 { 
+                hspeed = (4 - facing*8)*size;
+                vspeed = 6;
 }	  
-if special and timer >75 {
-	    if ( moveright and facing = 0)
-                hspeed = (3 - facing*6)*size;
-                vspeed = 16;
-	    if ( moveleft and facing = 1)
-                hspeed = (3 - facing*6)*size;
-                vspeed = 16;
+if special and timer >75 and hitbox.hit <0 {
+                hspeed = (4 - facing*8)*size;
+                vspeed = 6;
 }	
+
+
+
+
+        if (timer >= 75){
+if (attack_success || target.object_index == obj_enemy) && ( dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1 && place_meeting ( target.x , target.y , attack_box )){
+				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 145)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
 }
 
 
@@ -534,25 +590,6 @@ if special and timer >75 {
 	    char_upb();
 	    exit;
 	  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	

@@ -6,11 +6,12 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
 	image_index= 0 ;
 	state_type = "air_attack";	
 	sprite_index = dxzair1_sprite ;
-    time = 31;
+    time = 30;
 	image_index = 1
     timer = 0;
     timer_speed=1;
 	has_hit = 0;
+    hiitybitty = 0;
 }
 if timer < time{
 state_type = "air_attack";
@@ -23,28 +24,29 @@ state_type = "air_attack";
 	case 8: image_index = 5; break;
 	case 9: image_index = 6; break;
 	case 10: image_index = 7; break;	
+	/*
 	case 11: image_index = 8; break;
 	case 12: image_index = 9; break;
 	case 13: image_index = 10; break;
+	*/
+	case 11: image_index = 11; break;	
+	case 13: image_index = 12; break;
+	case 16: image_index = 13; break;
+	case 18: image_index = 14; break;
+	case 19: image_index = 15; break;
+	case 20: image_index = 16; break;
 	
-	case 16: image_index = 11; break;	
-	case 18: image_index = 12; break;
-	case 19: image_index = 13; break;
-	case 20: image_index = 14; break;
-	case 21: image_index = 15; break;
-	case 22: image_index = 16; break;
-	
-	case 25: image_index = 17; break;
-	case 27: image_index = 18; break;
-	case 29: image_index = 19; break;
-	case 30: image_index = 20; break;
-	case 31: image_index = 21; break;
+	case 23: image_index = 17; break;
+	case 25: image_index = 18; break;
+	case 27: image_index = 19; break;
+	case 29: image_index = 20; break;
+	case 30: image_index = 21; break;
       }
 	  
 	  
 	if timer =14{
 		sound_play(sideb_sound);
-zair1= create_projectile(6, angle_correct(47),5,0,5,4,shock2,obj_spark_stun,1, 0.7, 16, 20,self.id,8,no_script);	
+zair1= create_projectile(6, angle_correct(47),5,1,5,4,shock2,obj_spark_stun,1, 0.7, 16, 20,self.id,8,no_script);	
 	zair1.hspeed = (6 - facing*12)*size;  
 	  
 	}  
@@ -61,9 +63,21 @@ if instance_exists(zair1) and zair1.hit > 0
   }
 }
 
+if ( hitbox.hit = 1 && attack_shielded = 0 )
+{
+	hiitybitty = 1;
+}
+			if zair1 . hit = 1 && hiitybitty = 0 {
+if instance_exists(zair1)
+  {
+  with (zair1) instance_destroy();
+  }		
 
+                }
+			if zair1 . hit = 1 && hiitybitty = 0 {
+zair1.hspeed = 0	
+                }
 
-	
 if air = 0 and timer > 20
 {
 if instance_exists(zair1)

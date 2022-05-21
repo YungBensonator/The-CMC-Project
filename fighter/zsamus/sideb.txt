@@ -7,6 +7,7 @@ if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
     sprite_index = sideb_sprite;
     image_speed = 0;
     image_index = 0;
+has_hit = 0
   }
 
 if ( timer < time )
@@ -76,20 +77,22 @@ if ( timer < time )
 	    exit;
 	  }
 	}
-    if ( timer = 18 )
+    if ( timer = 15 )
       {
 	sound_play(sideb_sound);
-	create_hitbox(2,20+facing*140,6.35,0,5,6,shock2,obj_spark_shock,0.75,0.6,16,21,self.id,12,5);
-	hitbox.hit_stun = 12;
+	create_hitbox(2,20+facing*140,6.35,0,5,4,shock2,obj_spark_shock,0.75,0.6,16,21,self.id,12,5);
+	hitbox.execute_on_hit = "attacker.has_hit = 1"
+	hitbox.hit_stun = 4;
 	hitbox.shake_kb = 0.5;
 	hitbox.shake_ampl = 1.5;
 	hitbox.di = 0.3;
 	hitbox.weight_kb = 1;
       }
-    if ( timer = 22 )
+    if ( timer = 17 )
       {
-	create_hitbox2(2,20+facing*140,6.25,0,5,6,shock2,obj_spark_shock,1.7,0.5,47,16,self.id,8,5);
-	hitbox2.hit_stun = 12;
+	create_hitbox2(2,20+facing*140,6.25,0,5,4,shock2,obj_spark_shock,1.7,0.5,47,16,self.id,8,5);
+	hitbox.execute_on_hit = "attacker.has_hit = 1"
+	hitbox2.hit_stun = 4;
 	hitbox2.shake_kb = 0.5;
 	hitbox2.shake_ampl = 1.5;
 	hitbox2.di = 0.3;
@@ -106,10 +109,10 @@ if timer <= 12 && ((moveleft && !facing) || (moveright && facing)) {
 	//special  \\\ moveright
 
 // coded so it just like ultimates side b
-if ( timer = 24 and special)
+if ( timer = 21 and special)
 {
 
-	whip = create_projectile(12,145+facing*-110,6.1,6,18,8,shock2,obj_spark_stun,0.7,0.75,79,20,self.id,6,no_script);
+	whip = create_projectile(12,145+facing*-110,6.1,6,18,4,shock2,obj_spark_stun,0.7,0.75,79,20,self.id,6,no_script);
 	whip.shake_type = 1;
 	whip.shake_ampl = 0;
 	whip.absorb = 0
@@ -121,8 +124,8 @@ if ( timer = 24 and special)
 
 else
 {
-if timer =24{
-	whip = create_projectile(12,20+facing*140,6.1,6,18,8,shock2,obj_spark_stun,0.7,0.75,79,20,self.id,6,no_script);
+if timer =21{
+	whip = create_projectile(12,20+facing*140,6.1,6,18,4,shock2,obj_spark_stun,0.7,0.75,79,20,self.id,6,no_script);
 	whip.shake_type = 1;
 	whip.shake_ampl = 0;
 	whip.absorb = 0
@@ -134,7 +137,10 @@ if timer =24{
 }
 
 
-
+if ( has_hit = 1 and timer < 20 )
+{
+target.direction = point_direction(target.x,target.y, x + place_x(118) , y + place_y(37) )
+}
 
 	
 	
