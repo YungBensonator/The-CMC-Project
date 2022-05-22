@@ -1,0 +1,298 @@
+no_hurtbox = 1;
+if (ai = 1) and (state_type != "attack" and state_type != "air_attack" and sprite_index != entry_sprite) and !instance_exists(obj_training){
+	
+	if enemy.state_type = "out" and air = 0{
+		attack_type = "taunt"
+	}
+	
+	if distance_to_object(enemy) < 50 and (enemy.state_type = "attack" or enemy.state_type = "air_attack") and shield_hp > 30 and air = 0 and enemy.facing != facing{
+	shieldup = 1
+	//state_type = "shielding"
+	//attack_type = "none"
+    }
+	
+	if shield_hp <= 30 and state_type = "shielding"
+	state_type = "stand"
+	
+	if enemy <= -1{
+		if target <= -1
+		create_homing_bubble ( 300 ,300, 0 , 0 , self.id , 1 );
+		else
+		enemy = target
+	}
+	//char_ai();
+	
+}
+
+if ai = 1 and (!instance_exists(obj_training) or (instance_exists(obj_training) and obj_training.ai_type = 5)){
+	if state_type = "tumble"
+	{
+    if held_item = -1 {
+    if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x){
+    if enemy.y > y -2
+    attack_type = choose("dair","nair")
+    else if enemy.y < y - 14
+    attack_type = choose("uair","uair","upb","uair")
+    else
+    attack_type = choose("uair","fair","nair","dair","upb")
+    }
+    else
+    attack_type = "bair"
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+	}
+}
+
+//Palette swordtrails start
+
+switch (global.gs_palette[number-1])
+
+{case 0: spread_texture = spread_texture_normal; break;
+case 1: spread_texture = spread_texture_normal; break;
+case 2: spread_texture = spread_texture_normal; break;
+case 3: spread_texture = spread_texture_normal; break;
+case 4: spread_texture = spread_texture_normal; break;
+case 5: spread_texture = spread_texture_normal; break;
+case 6: spread_texture = spread_texture_normal; break; 
+case 7: spread_texture = spread_texture_normal; break;
+case 8: spread_texture = spread_textureBW; break;
+case 9: spread_texture = spread_textureI; break;
+case 10: spread_texture = spread_textureBWI; break;
+case 11: spread_texture = spread_textureG; break;}
+
+//Palette swordtrails end
+
+if cantusedownb > 0
+cantusedownb -=1
+
+if(air = 0) or state_type = "flinch" {cannotup = 0;
+cannotzair = 0
+}
+
+if sprite_index = stand_sprite {image_speed = .15}
+
+if state_type = "jump" && state_type != "edge" {if ( timer = 0 ) {image_index = 0;} 
+							if image_index >= 2 {image_index = 0}}
+
+if (attack_type != "sideb" && attack_type != "fair" && attack_type != "dtilt" && attack_type != "upb" && attack_type != "ssmash" && attack_type != "dsmash" && attack_type != "usmash" && attack_type != "bthrow" && attack_type != "uthrow") {
+image_alpha = 1
+}
+
+if sprite_index = edge_sprite
+image_speed = 0.3
+
+
+
+if state_type = "out" {
+if bankai = 0
+meter = 0
+else
+meter = 1
+
+
+}
+
+if state_type = "air_dodge" or state_type = "dodge" or state_type = "ukemi"{
+if timer = 1{
+    image_alpha = 0
+    sound_play(teleport_sound);
+	tp_spark = create_spark(0,20,self.id);
+	tp_spark.sprite_index = tp_sprite;
+    tp_spark.image_speed = 1.0;
+	tp_spark.image_alpha = 0.7;
+    tp_spark.image_xscale = image_xscale*0.3;
+    tp_spark.image_yscale = image_yscale*0.3;
+    tp_spark.depth = depth - 0.1;
+	
+	}
+if timer >= time*0.8
+image_alpha = 1
+
+}
+
+
+if nigga = 1{
+	stand_sprite = stand_spriteA;
+	crouch_sprite = crouch_spriteA;
+	crawl_sprite = crouch_spriteA;
+	run_sprite = run_spriteA;
+	walk_sprite = walk_spriteA;
+	jump_sprite = jump_spriteA;
+	mid_jump_sprite = mid_jump_spriteA;
+	fall_sprite = fall_spriteA;
+	land_sprite = land_spriteA;
+	shield_sprite = shield_spriteA;
+	parry_sprite = shield_spriteA;
+	air_dodge_sprite = air_dodge_spriteA; 
+	spot_dodge_sprite = spot_dodge_spriteA;
+	roll_sprite = roll_spriteA;
+	flinch_sprite = flinch_spriteA;
+	flinch2_sprite = flinch2_spriteA;
+	flinch3_sprite = flinch3_spriteA;
+	down_sprite = down_spriteA;
+	down_attack_sprite = down_attack_spriteA;
+	edge_sprite = edge_spriteA;
+	edge_climb_sprite = edge_climb_spriteA;
+    swim_sprite = fall_spriteA;
+    ladder_sprite = fall_spriteA;
+    vehicle_sprite = fall_spriteA
+	broken_sprite = broken_spriteA
+	ukemi_sprite = ukemi_spriteA;
+	item_down_sprite = crouch_spriteA;
+	item_forward_sprite = jab_spriteA;
+    item_up_sprite = jab_spriteA;
+    item_heavy_sprite = shield_spriteA;
+    item_swing_sprite = utilt_spriteA;
+    item_shoot_sprite = stilt_spriteA;
+
+
+}
+
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.sprite_index = meter_sprite;
+	MeterHud.image_speed = 0;
+}
+
+
+if(MeterHud.image_index <= 0) {MeterHud.image_index = 0}
+if(meter >= maxmeter){MeterHud.image_index = 55;} else if (meter <= 0){MeterHud.image_index = 0;} else {MeterHud.image_index = meter*55/maxmeter;}
+
+
+if (!instance_exists(CircleHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    CircleHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    CircleHud.step_script = hudThing_step_script;
+    CircleHud.draw_script = hudThing_draw_script;
+    CircleHud.owner = self.id;
+    CircleHud.keepmain = self.keepmain;
+	CircleHud.sprite_index = circle_sprite;
+	CircleHud.image_speed = 0;
+}
+
+if meter >= maxmeter
+CircleHud.image_index = 1;
+else
+CircleHud.image_index = 0;
+
+
+
+if (hitbox.hit = 1 || hitbox2.hit = 1 || proj.hit = 1) and meter < maxmeter and bankai = 0{
+meter += 0.40
+}
+
+if meter >= maxmeter
+meter = maxmeter
+
+if meter < 0
+meter = 0
+
+
+
+
+if bankai =1{
+can_zair = 1
+if  image_alpha > 0.5   //attack_type != "dtilt"
+after_image(3,c_purple,0.5)
+/*
+a = after_image ( 2 , c_purple , .25 );
+a.image_xscale *= 1.15;
+a.image_yscale *= 1.15;
+a.x += -1 + floor ( random ( 3 ) );
+a.y += -1 + floor ( random ( 3 ) );
+*/
+
+if meter > 0
+meter -= 3/60
+
+max_jumps=6;
+walk_speed = 3.9;
+run_speed = 5.0;
+fric = 1.36;
+weight = 0.29;
+grav = 0.30;
+air_speed = 3.3;
+fall_speed = 4.5;
+
+if meter <= 0 and state_type != "attack" and state_type != "air_attack" and state_type != "out" and state_type != "respawn" {
+
+max_jumps=3;
+walk_speed = 2.1;
+run_speed = 3.9;
+fric = 0.96;
+weight = 0.31;
+grav = 0.39;
+air_speed = 2.8;
+fall_speed = 4.9;
+
+
+acceleration = 1
+accelerated = 0
+bankai = 0
+can_zair = 0
+
+	stand_sprite = stand_spriteA;
+	crouch_sprite = crouch_spriteA;
+	crawl_sprite = crouch_spriteA;
+	run_sprite = run_spriteA;
+	walk_sprite = walk_spriteA;
+	jump_sprite = jump_spriteA;
+	mid_jump_sprite = mid_jump_spriteA;
+	fall_sprite = fall_spriteA;
+	land_sprite = land_spriteA;
+	shield_sprite = shield_spriteA;
+	parry_sprite = shield_spriteA;
+	air_dodge_sprite = air_dodge_spriteA; 
+	spot_dodge_sprite = spot_dodge_spriteA;
+	roll_sprite = roll_spriteA;
+	flinch_sprite = flinch_spriteA;
+	flinch2_sprite = flinch2_spriteA;
+	flinch3_sprite = flinch3_spriteA;
+	down_sprite = down_spriteA;
+	down_attack_sprite = down_attack_spriteA;
+	edge_sprite = edge_spriteA;
+	edge_climb_sprite = edge_climb_spriteA;
+    swim_sprite = fall_spriteA;
+    ladder_sprite = fall_spriteA;
+    vehicle_sprite = fall_spriteA
+	broken_sprite = broken_spriteA
+	ukemi_sprite = ukemi_spriteA;
+	item_down_sprite = crouch_spriteA;
+	item_forward_sprite = jab_spriteA;
+    item_up_sprite = jab_spriteA;
+    item_heavy_sprite = shield_spriteA;
+    item_swing_sprite = utilt_spriteA;
+    item_shoot_sprite = stilt_spriteA;
+	
+	
+state_type = "stand";
+attack_type = "none";
+timer = 0;
+time = -1;
+char_custom9();
+
+}
+
+
+
+
+}
+
+if state_type = "air_attack" and attack_type = "transformBack"{
+char_custom9();
+intangible = 0;
+}
+
+
+

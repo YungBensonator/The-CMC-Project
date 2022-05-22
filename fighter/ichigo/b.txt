@@ -1,0 +1,265 @@
+if bankai = 1{
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_spriteB
+        image_index=0
+        timer = 0
+        time = 43
+		hspeed = 0
+		
+		chargetemp = 1
+		onair = 0
+		
+		if air = 0 and moveup{
+		sprite_index = b_spriteB2
+		}
+		else if air > 0{
+		sprite_index = b_spriteB3
+		time = 33
+		onair = 1
+		}
+		
+		special = 1
+		
+		if ai
+		special = 0
+		
+}
+
+if ( timer < time )
+    {
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+    case 28: image_index = 7; break;
+
+      }
+  
+	  
+	if air = 0 and moveup and timer < 9{
+		sprite_index = b_spriteB2
+		}
+	else if air = 0 and !moveup and timer < 9{
+		sprite_index = b_spriteB
+		}
+	if timer = 7 and special = 1 and air = 0 and chargetemp < 2
+	timer = 3
+	
+	if chargetemp < 2 and timer < 10 and special = 1 and timer > 4
+	chargetemp += 0.01
+    
+	if timer < 7 and timer > 3 and air = 0{
+    if !instance_exists(bspark)
+	bspark = instance_create(x+(-8+facing*16)*size,y-(choose(24,32,40))*size,obj_spark_effect2)
+    }
+	if timer = 9 {
+	sound_play(sideb_voice)
+	}
+	if timer = 12{
+	sound_play(b_voice);
+	sound_play(swingsnd2);
+	
+	if sprite_index = b_spriteB3{
+	create_projectile (4,340-facing*140,4.5,2.5,20,10,slash3,obj_spark_slash2,0.4,0.4,10,0,self.id,60,char_custom1);
+    proj.sprite_index = projectile_sprite4;
+	proj.image_index = 0
+	proj.image_speed = 0
+	proj.image_xscale = image_xscale
+	proj.image_yscale = image_yscale
+	proj.hit = 0
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.hspeed = 4-facing*8
+	proj.vspeed = 4
+	proj.orighspeed = proj.hspeed
+	proj.type = "down"
+	proj.image_blend = c_purple
+	
+	
+	}
+	else if sprite_index = b_spriteB2{
+	create_projectile (3*chargetemp,60+facing*60,4.5+chargetemp,2.5*chargetemp,20,10,slash3,obj_spark_slash2,0.4,0.4,30,30,self.id,60,char_custom1);
+    proj.sprite_index = projectile_sprite2;
+	proj.image_index = 0
+	proj.image_speed = 0
+	proj.image_xscale = image_xscale
+	proj.image_yscale = image_yscale
+	proj.hit = 0
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.hspeed = 4-facing*8
+	proj.vspeed = -4
+	proj.orighspeed = proj.hspeed
+	proj.image_blend = c_purple
+	
+	}
+	else{
+	create_projectile (3*chargetemp,20+facing*140,4.5+chargetemp,2.5*chargetemp,20,10,slash3,obj_spark_slash2,0.4,0.4,20,15,self.id,60,char_custom1);
+    proj.sprite_index = projectile_sprite;
+	proj.image_index = 0
+	proj.image_speed = 0
+	proj.image_xscale = image_xscale
+	proj.image_yscale = image_yscale
+	proj.hit = 0
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.hspeed = 6-facing*12
+	proj.orighspeed = proj.hspeed
+	proj.image_blend = c_purple
+	
+	}
+	
+	}
+	
+	if air = 0 and onair = 1{
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=30; }
+  
+  }
+
+
+}
+else
+{
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 65
+		hspeed = 0
+		
+		chargetemp = 1
+		onair = 0
+		
+
+		if air > 0{
+		sprite_index = b_sprite3
+		time = 51
+		onair = 1
+		}
+		
+		special = 1
+		
+		if ai
+		special = 0
+		
+}
+
+if ( timer < time )
+    {
+switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 10: image_index = 5; break;
+	case 12: image_index = 6; break;
+    case 14: image_index = 7; break;
+	case 16: image_index = 8; break;
+	case 18: image_index = 9; break;
+	case 20: image_index = 10; break;
+	case 22: image_index = 11; break;
+    case 24: image_index = 12; break;
+	case 26: image_index = 13; break;
+	case 28: image_index = 14; break;
+	case 30: image_index = 15; break;
+	case 32: image_index = 16; break;
+    case 34: image_index = 17; break;
+	
+	case 56: image_index = 18; break;
+	case 58: 
+	if sprite_index = b_sprite 
+	image_index = 19; 
+	break;
+	//case 40: image_index = 20; break;
+
+      }
+	  
+	  
+    if air = 0 and timer < 9{
+		sprite_index = b_sprite
+		}
+	if timer = 9 and special = 1 and air = 0 and chargetemp < 2
+	timer = 5
+	
+	if chargetemp < 2 and timer < 10 and special = 1 and timer > 4
+	chargetemp += 0.01
+    
+	if timer < 10 and timer > 4 and air = 0{
+    if !instance_exists(bspark)
+	bspark = instance_create(x+(-8+facing*16)*size,y-(choose(24,32,40))*size,obj_spark_effect2)
+    }
+	
+    if timer = 2 {
+	sound_play(sideb_voice);
+		}
+	if timer = 18{	
+	sound_play(b_voice);
+	sound_play(swingsnd2);
+	
+	create_projectile (5*chargetemp,90,5,1.5*chargetemp,15,10*chargetemp,magic3,obj_spark_hit2,0.4,0.4,20,15,self.id,80,char_custom1);
+    proj.sprite_index = projectile_sprite;
+	proj.image_index = 0
+	proj.image_speed = 0
+	proj.image_xscale = image_xscale
+	proj.image_yscale = image_yscale
+	proj.hit = 0
+	proj.di = 0.95
+	proj.hit_stun = 12;
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.hspeed = (5-facing*10)/chargetemp
+	proj.orighspeed = proj.hspeed
+	}
+	if onair = 1 {
+	proj.hspeed = (6-facing*12)/chargetemp	
+	proj.dir = 30+facing*120
+	proj.bkb = 6.5
+	proj.kbg = 3
+	proj.hit_stun = 0
+	proj.di = 0
+	}	
+	
+	if air = 0 and onair = 1{
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=25; }
+  
+  }
+
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

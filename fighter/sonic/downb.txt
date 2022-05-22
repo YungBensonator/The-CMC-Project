@@ -102,11 +102,23 @@ if ( temp = 0 )
 	hitbox.alarm[0] = 60 + (spin_dash_charge*2);
 	hitbox.balloon_dir = angle_correct(20);
 	}
-
-	if ( timer >= 90 )
+//////////////
+	if ( timer >= 60 && movedown = 1 )
+	{
+	sound_stop ( spin_sound );
+	sound_play ( dash_sound );
+	timer = 0;
+	time = 70 + (spin_dash_charge*2);
+	temp = 1;
+	create_hitbox( 5 + (spin_dash_charge/20) , angle_correct(45) , 5.5 + (spin_dash_charge/30) , 5 + (spin_dash_charge/40) , 10 + (spin_dash_charge/5) , 5 + (spin_dash_charge/30) , kick3 ,obj_spark_hit4, 0.8 , 0.8 , 0 , 10 , self.id , 70 + (spin_dash_charge*2) , 1 );
+	hitbox.alarm[0] = 60 + (spin_dash_charge*2);
+	hitbox.balloon_dir = angle_correct(20);
+	}
+	///////////////////
+	/*if ( timer >= 90 )
 	{
 	timer = 10;
-	}
+	}*/
 	
 	//JUMP
 	if ( air = 0 && movejump = 1 )
@@ -122,7 +134,7 @@ if ( temp = 0 )
 	vspeed = -6 * size;
 	spin_dash_airtemp = 2;
 	}
-
+/*
 	//CANCEL WITH SHIELD
 	if ( shieldup = 1 )
 	{
@@ -140,7 +152,7 @@ if ( temp = 0 )
 	timer = 0;
 	time = -1;
 	}
-
+*/
 }
 
 //-----------------------------------------------------------------------------LAUNCH-------------------------------------------------------------
@@ -287,13 +299,23 @@ if ( air = 0 )
 	attack_type="none";
 	sprite_index = land_sprite;
 	timer = 0;
-	time = 8;
+	time = 18;
 }
 
 if ( attacking || special || grab || movejump || shieldup || smash )
 	{
 	interrupt = 1;
 	}
+//New Code	
+
+	
+	
+	
+	
+	
+	
+	
+	
 }
 
 if ( timer >= time - 1 )
@@ -301,6 +323,7 @@ if ( timer >= time - 1 )
   attack_type = "none";
   if ( air == 0 )
     state_type = "stand";
+	
     else
 	{
     state_type = "jump";

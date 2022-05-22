@@ -1,0 +1,133 @@
+if bankai = 1{
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0;
+        sprite_index = dash_attack_spriteB;
+        image_index= 0;
+        timer = 0;
+        time = 37;
+        timer_speed=1;
+		image_alpha = 0
+}
+if timer < time {
+     state_type = "attack";
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+
+      }
+	
+if timer = 1{
+	sound_play(teleport_sound);
+	hspeed = 10-facing*20
+	tp_spark = create_spark(0,20,self.id);
+	tp_spark.sprite_index = tp_sprite;
+    tp_spark.image_speed = 1.0;
+	tp_spark.image_alpha = 0.7;
+    tp_spark.image_xscale = image_xscale*0.3;
+    tp_spark.image_yscale = image_yscale*0.3;
+    tp_spark.depth = depth - 0.1;
+	}
+	
+	if timer < 8 and timer > 3
+	image_alpha += 0.2
+	if timer = 8{
+	image_alpha = 1
+	}	
+	
+	if timer >=4 and timer <= 8
+	hspeed = (run_speed+1)-facing*((run_speed+1)*2)
+	
+	if timer = 16
+      {
+    play_attack_voice()
+	sound_play(bleach_sword2);
+	create_hitbox(6,18+facing*144,4,6,8,3,slash2,obj_spark_hit1,1.8,1.8,15,20,self.id,8,3);
+	
+      }
+	  
+}
+
+
+
+}
+else{		
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0;
+        sprite_index = dash_attack_sprite;
+        image_index= 0;
+        timer = 0;
+        time = 28;
+		image_alpha = 0
+        timer_speed=1;
+}
+if timer < time {
+     state_type = "attack";
+switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 22: image_index = 5; break;
+
+      }
+	if timer >=4 and timer <= 8
+	hspeed = (run_speed+1)-facing*((run_speed+1)*2)
+	
+    if timer = 1{
+	sound_play(teleport_sound);
+	hspeed = 10-facing*20
+	tp_spark = create_spark(0,20,self.id);
+	tp_spark.sprite_index = tp_sprite;
+    tp_spark.image_speed = 1.0;
+	tp_spark.image_alpha = 0.7;
+    tp_spark.image_xscale = image_xscale*0.3;
+    tp_spark.image_yscale = image_yscale*0.3;
+    tp_spark.depth = depth - 0.1;
+	}
+	
+	if timer < 8 and timer > 3
+	image_alpha += 0.2
+	if timer = 8{
+	image_alpha = 1
+	hspeed *= 0.7
+	}	
+	
+	if timer = 12
+	hspeed *= 0.3
+	
+	if timer = 4
+      {
+    play_attack_voice()
+	sound_play(bleach_sword1);
+	create_hitbox(7,18+facing*144,5,6,14,7,slash1,obj_spark_hit1,1.5,0.55,38,19,self.id,10,3);
+	hitbox.di = 0.35
+	
+      }
+	  
+}
+
+
+
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+	if moveleft or moveright
+    state_type = "run";
+	else
+	state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

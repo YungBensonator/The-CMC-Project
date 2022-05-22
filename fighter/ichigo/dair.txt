@@ -1,0 +1,101 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+		if bankai = 1
+        sprite_index = dair_spriteB;
+		else
+		sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 30;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 8: image_index = 3; break;
+	case 20: image_index = 4; break;
+
+      }
+	  
+	if bankai = 0 {
+	//Sword trail shit starts here
+    switch (timer) {
+		case 0: sword_trail = create_sword_trail(self.id, 6, 30, spread_texture); sword_trail.index = 1; sword_trail.depth = 1; break;
+		case 1: sword_trail.end_decay = .2; break;
+        case 2: sword_trail.index += 1; sword_trail.end_decay = 0.4; break;
+		case 3: sword_trail.end_decay = .6; break;
+    	case 4: sword_trail.end_decay = .8; break;
+		case 5: sword_trail.index += 1; sword_trail.end_decay = 1; break;
+    	case 6: sword_trail.end_decay = 1.2; break;
+		case 7: sword_trail.end_decay = 1.4; break;
+		case 8: sword_trail.index += 1; sword_trail.end_decay = 1.6; sword_trail.depth = depth-1; break;
+    	case 9: sword_trail.end_decay = 2.25; break;
+		case 10: sword_trail.end_decay = 2.5; break;
+		case 11: sword_trail.end_decay = 2.75; break;
+		case 12: sword_trail.end_decay = 3; break;
+		case 13: sword_trail.end_decay = 3.25; break;
+		case 14: sword_trail.end_decay = 3.5; break;
+		case 15: sword_trail.end_decay = 3.75; break;
+		case 16: sword_trail.end_decay = 4; break;
+		case 17: 
+            with(sword_trail) {
+                instance_destroy();
+            }
+            break;
+    } 
+    //Sword trail shit ends here
+	}
+
+    if ( timer = 5 ) 
+      {
+    play_attack_voice()
+	sound_play(bleach_sword2);
+	create_hitbox(4,315-facing*90,1,4,12,6,slash3,obj_spark_hit4,1,1.3,28,18,self.id,8,2);
+	
+	if bankai = 1
+	{
+	effectjab = create_spark(17,22,self.id);
+	effectjab.sprite_index = slash_sprite3;
+    effectjab.image_speed = 0.3;
+	effectjab.image_alpha = 0.7;
+    effectjab.image_xscale = image_xscale*0.9;
+    effectjab.image_yscale = image_yscale*(-0.8);
+    effectjab.depth = depth - 0.1;
+	effectjab.snap = self.id
+	effectjab.image_blend = c_purple}
+	
+      }
+	  
+	if timer = 8 {
+	hitbox.hitbox_x = 0;
+	hitbox.hitbox_y = 0;
+	hitbox.image_xscale = 1.8;
+	hitbox.image_yscale = 1;}
+    
+	
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=21; }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+        

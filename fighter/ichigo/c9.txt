@@ -1,0 +1,70 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "transformBack"
+        image_speed = 0
+		
+        sprite_index = downb_spriteB2
+        timer = 0
+        time = 62
+		image_speed = 0
+		
+		image_index=0
+		hspeed = 0
+		
+		spark = instance_create ( 0 , 0 , obj_camerazoom );
+        spark.camera_l = x - 40;
+        spark.camera_r = x + 40;
+        spark.camera_u = y - 40 - actual_height*2;
+        spark.camera_d = y + 4;
+        spark.camera_boundary_zoom = 80;
+        spark.alarm[0] = 61;
+
+        duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 61;
+		
+		air_move = 0
+}
+if ( timer < time )
+{
+gravity = 0
+gravity_lock = 1
+vspeed = 0
+hspeed = 0
+intangible = 1
+switch ( timer )
+    {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break; 
+	case 9: image_index = 3; break; 
+	case 12: image_index = 4; break; 
+	case 15: image_index = 5; break; 
+	case 18: image_index = 6; break; 
+	case 21: image_index = 7; break;
+	case 24: image_index = 8; break; 
+	case 27: image_index = 9; break; 
+	case 30: image_index = 10; break; 
+	case 33: image_index = 11; break;
+	case 36: image_index = 12; break; 
+	case 39: image_index = 13; break; 
+	case 42: image_index = 14; break; 
+
+    }
+if timer = 1
+sound_play(downb_voice);
+
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	
+	bankai = 0
+	
+	
+}

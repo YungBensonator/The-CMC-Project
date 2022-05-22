@@ -1,0 +1,260 @@
+if cantusedownb>0 {break;}
+if bankai = 1{
+
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+		
+        sprite_index = downb_spriteB
+        timer = 0
+        time = 40
+		image_speed = 0
+		
+		image_index=0
+		hspeed = 0
+		
+		air_move = 0
+}
+if ( timer < time )
+{
+gravity = 0
+gravity_lock = 1
+vspeed = 0
+hspeed = 0
+switch ( timer )
+    {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break; 
+	case 9: image_index = 3; break; 
+	case 12: image_index = 4; break; 
+	case 15: image_index = 5; break; 
+	case 18: image_index = 6; break; 
+	case 21: image_index = 7; break;
+	case 24: image_index = 8; break; 
+	case 27: image_index = 9; break; 
+	case 30: image_index = 10; break; 
+    case 33: image_index = 11; break; //start
+	case 36: image_index = 12; break;
+    }
+if timer = 1
+sound_play(downb_voice);
+
+
+if timer = 3 or timer = 9 or timer = 15 or timer = 21  or timer = 27
+{
+//play_attack_voice()
+sound_play(bleach_sword1);
+create_hitbox(1,90,2.1,0,12,2,slash3,obj_spark_hit3,2.4,2.1,0,35,self.id,5,5);
+hitbox.di = 0
+}
+if timer = 30{
+sound_play(bleach_sword1);
+create_hitbox(6,45+facing*90,8.1,5,12,9,slash3,obj_spark_hit3,2.4,2.1,0,35,self.id,5,5);
+}
+
+if timer = 33 and instance_exists(tornado_effect)
+with (tornado_effect){instance_destroy()}
+
+
+if timer = 3{
+	tornado_effect = create_spark(0,0,self.id);
+	tornado_effect.sprite_index = slashes_sprite;
+    tornado_effect.image_speed = 0.19;
+	tornado_effect.image_alpha = 0.7;
+    tornado_effect.image_xscale = image_xscale*0.75;
+    tornado_effect.image_yscale = image_yscale*0.75;
+    tornado_effect.depth = depth - 0.1;
+	tornado_effect.snap = self.id
+	}
+	
+	if timer > 3 and timer < 30 and instance_exists(tornado_effect){
+	if tornado_effect.image_index >=19.9
+	tornado_effect.image_index = 0
+	
+	}
+
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	
+	meter -= 10
+	
+	
+}
+
+
+}
+else if meter >= maxmeter and charging = 0 and bankai = 0
+{
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+		
+        sprite_index = downb_sprite2
+        timer = 0
+        time = 62
+		image_speed = 0
+		
+		image_index=0
+		hspeed = 0
+		
+		spark = instance_create ( 0 , 0 , obj_camerazoom );
+        spark.camera_l = x - 8;
+        spark.camera_r = x + 8;
+        spark.camera_u = y - 4 - actual_height;
+        spark.camera_d = y + 4;
+        spark.camera_boundary_zoom = 80;
+        spark.alarm[0] = 61;
+
+        duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 61;
+		
+		air_move = 0
+}
+if ( timer < time )
+{
+gravity = 0
+gravity_lock = 1
+vspeed = 0
+hspeed = 0
+intangible = 1
+switch ( timer )
+    {
+	case 6: image_index = 1; break;
+	case 12: image_index = 2; break; 
+	case 18: image_index = 3; break; 
+	case 24: image_index = 4; break; 
+	case 30: image_index = 5; break; 
+	case 36: image_index = 6; break; 
+	case 42: image_index = 7; break;
+	case 48: image_index = 8; break; 
+
+    }
+if timer = 1
+sound_play(fs_voice1);
+
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	
+	bankai = 1
+	stand_sprite = stand_spriteB;
+	crouch_sprite = crouch_spriteB;
+	crawl_sprite = crouch_spriteB;
+	run_sprite = run_spriteB;
+	walk_sprite = walk_spriteB;
+	jump_sprite = jump_spriteB;
+	mid_jump_sprite = mid_jump_spriteB;
+	fall_sprite = fall_spriteB;
+	land_sprite = land_spriteB;
+	shield_sprite = shield_spriteB;
+	parry_sprite = shield_spriteB;
+	air_dodge_sprite = air_dodge_spriteB; 
+	spot_dodge_sprite = spot_dodge_spriteB;
+	roll_sprite = roll_spriteB;
+	flinch_sprite = flinch_spriteB;
+	flinch2_sprite = flinch2_spriteB;
+	flinch3_sprite = flinch3_spriteB;
+	down_sprite = down_spriteB;
+	down_attack_sprite = down_attack_spriteB;
+	edge_sprite = edge_spriteB;
+	edge_climb_sprite = edge_climb_spriteB;
+    swim_sprite = fall_spriteB;
+    ladder_sprite = fall_spriteB;
+    vehicle_sprite = fall_spriteB
+	broken_sprite = broken_spriteB
+	ukemi_sprite = ukemi_spriteB;
+	item_down_sprite = crouch_spriteB;
+	item_forward_sprite = jab_spriteB;
+    item_up_sprite = jab_spriteB;
+    item_heavy_sprite = shield_spriteB;
+    item_swing_sprite = utilt_spriteB;
+    item_shoot_sprite = stilt_spriteB;
+	
+}
+
+
+}
+
+
+else if bankai = 0
+{
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+		
+        sprite_index = downb_sprite
+        timer = 0
+        time = 30
+		image_speed = 0.3
+		
+		image_index=0
+		hspeed = 0
+		if !ai
+		special = 1
+}
+if ( timer < time )
+{
+
+if image_index >= 11
+image_index = 5
+
+if meter < maxmeter
+meter+=5.5/30
+
+
+if timer> 25 and special = 1 and meter < maxmeter
+timer = 20
+
+
+charging = 1
+
+
+if image_index >= 5 and !instance_exists(aura){
+        aura = create_spark(0*size,0*size,self.id);
+        aura.snap = self.id
+        aura.sprite_index = charge_sprite
+        aura.image_xscale = image_xscale
+        aura.image_yscale = image_yscale*2
+        aura.image_speed = 0.4
+        aura.image_alpha = 0.4
+        aura.depth =  depth+1
+        aura.snap = self.id 
+}
+
+
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	//cantusedownb = 30
+	
+	charging = 0
+	
+}
+}
+        
