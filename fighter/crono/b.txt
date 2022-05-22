@@ -1,0 +1,300 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  special = 1;
+  attack_type = "b";
+  time = 60;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+  temp2 = 0;
+  }
+
+if ( timer <= 3 && EXmove = 1 && limitbreak > 0 )
+{
+temp = 1;
+}
+if ( timer = 4 && temp = 1 )
+{
+limitbreak = 0;
+limitgauge = 0;
+robo = create_projectile(10,85+facing*10,4.6,6,15,3,slash3,obj_spark_slash2,1,1,10,0,self.id,300,char_custom9);
+robo.y = y * size;
+sprite_index = maxcyclone_start_sprite;
+image_index = 0;
+timer = 200;
+time = 315;
+vspeed = 0;
+hspeed = 0;
+air_move = 0;
+freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 28;
+  freezer.dontpause = self.id;
+}
+
+if timer > 4 && temp = 1 
+{
+gravity = 0
+gravity_lock = 1;  
+fast_fall = 0;
+vspeed = 0;
+fast_fall_temp = 0;
+}
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+case 18: image_index = 6; break;
+case 21: image_index = 7; break;
+case 24: image_index = 8; break;
+case 27: image_index = 9; break;
+case 30: image_index = 10; break;
+case 33: image_index = 11; break;
+case 36: image_index = 12; break;
+case 39: image_index = 13; break;
+case 42: image_index = 14; break;
+case 45: image_index = 15; break;
+case 48: image_index = 16; break;
+case 51: image_index = 17; break;
+case 54: image_index = 18; break;
+case 57: image_index = 19; break;
+
+case 200: super_armor = 1; break;
+case 203: image_index = 2; break;
+case 206: image_index = 3; break;
+case 229: sprite_index = maxcyclone_sprite; sound_play(maxcyclone_sound); sound_play(downb_voice); image_index = 0; break;
+}
+
+if timer > 229 && !instance_exists(eff)
+{
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = maxcyclone_fx;
+	eff.image_xscale = 0.6*(1-facing*2)*size;
+    eff.image_yscale = 0.6*size;
+    eff.x = x + (1 - facing * 2) *size;
+    eff.y = y - 114 *size;
+    eff.image_speed = 0.5;
+    eff.image_index = 0;
+	eff.snap = self.id;
+    eff.depth = depth - 1;
+}
+
+if timer >229
+{
+image_angle -= 25*(1-facing*2);
+if !instance_exists(cyclone) && timer < 310
+{
+	cyclone = create_projectile(1 , 90 , 2 , 0 , 10 ,2 , slash2 , obj_spark_slash3 , 3.9 , 3.9 , 0 , 44 ,self.id, 5, no_script);
+}
+}
+
+if timer = 310
+{
+create_projectile(5 , 45+facing * 90 , 7.5 , 6.5 , 10 , 4 , slash3 , obj_spark_slash3 , 3.9 , 3.9 , 0 , 44 ,self.id, 1, no_script);
+}
+
+if timer = 314
+{
+with (eff){
+      instance_destroy();
+    }
+}
+
+if timer = 30 && !instance_exists(bproj)
+{
+bsword = create_projectile (10,15+facing*150,6.7,6.5,12,8,slash3,obj_spark_slash3,1.0,1.0,0,0,self.id,20,char_custom5);
+bsword.alarm[0] = 1492;
+sound_play(b_voice1);
+sound_play(b_sound1);
+bproj = bsword;
+   tempx = bproj.x;
+  tempy = bproj.y;
+}
+
+if instance_exists(bproj)
+{
+temp2 = 1
+}
+
+if timer <= 4 && temp2 = 1
+{
+  time = 142;
+  timer = 100;
+  hspeed = 0;
+  if air = 0
+  {
+  sprite_index = b_sprite2;
+  }
+  if air > 0
+  {
+  sprite_index = b_air_sprite2;
+  }
+  temp = 0;
+  }
+
+if timer = 109
+{
+sound_play(b_voice2);
+sound_play(b_sound2);
+thunder = create_projectile (10,15+facing*150,6.7,6.5,12,10,shock3,obj_spark_stun,1.0,1.0,0,0,self.id,100,char_custom6);
+thunder.x = tempx
+thunder.y = tempy
+  with (bproj)
+  {
+  instance_destroy();
+  }
+}
+  
+if ( timer <= 103 && EXmove = 1 && limitbreak = 1 )
+{
+temp = 1;
+}
+if ( timer = 104 && temp = 1 )
+{
+limitbreak = 0;
+limitgauge = 0;
+robo = create_projectile(10,85+facing*10,4.6,6,15,3,slash3,obj_spark_slash2,1,1,-10,0,self.id,300,char_custom9);
+robo.y = y * size;
+sprite_index = maxcyclone_start_sprite;
+image_index = 0;
+timer = 200;
+time = 315;
+vspeed = 0;
+hspeed = 0;
+air_move = 0;
+freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 28;
+  freezer.dontpause = self.id;
+}  
+  
+if timer > 104 && temp = 1 
+{
+gravity = 0;
+gravity_lock = 1; 
+fast_fall = 0;
+fast_fall_temp = 0; 
+vspeed = 0;
+}  
+  
+  
+switch (timer)
+{
+case 101: image_index = 1; break;
+case 103: image_index = 2; break;
+case 105: image_index = 3; break;
+case 107: image_index = 4; break;
+case 109: image_index = 5; break;
+case 111: image_index = 6; break;
+case 113: image_index = 7; break;
+case 115: image_index = 8; break;
+case 117: image_index = 9; break;
+case 119: image_index = 6; break;
+case 121: image_index = 7; break;
+case 123: image_index = 8; break;
+case 125: image_index = 9; break;
+case 127: image_index = 6; break;
+case 129: image_index = 7; break;
+case 131: image_index = 8; break;
+case 133: image_index = 9; break;
+case 135: image_index = 6; break;
+case 137: image_index = 7; break;
+case 139: image_index = 8; break;
+case 141: image_index = 9; break;
+
+case 200: super_armor = 1; break;
+case 203: image_index = 2; break;
+case 206: image_index = 3; break;
+case 229: sprite_index = maxcyclone_sprite; image_index = 0; sound_play(maxcyclone_sound); sound_play(downb_voice); break;
+}  
+  
+  
+if timer > 229 && !instance_exists(eff)
+{
+    eff = create_blur(x,y,self.id);
+    eff.sprite_index = maxcyclone_fx;
+	eff.image_xscale = 0.7*(1-facing*2)*size;
+    eff.image_yscale = 0.7*size;
+    eff.x = x + (1 - facing * 2) *size;
+    eff.y = y - 114 *size;
+    eff.image_speed = 0.5;
+    eff.image_index = 0;
+	eff.snap = self.id;
+    eff.depth = depth - 1;
+}  
+  
+if timer = 314
+{
+with (eff){
+      instance_destroy();
+    }
+}  
+  
+if timer >229
+{
+image_angle -= 25*(1-facing*2);
+if !instance_exists(cyclone) && timer < 310
+{
+	cyclone = create_projectile(1 , 90 , 2 , 0 , 10 ,2 , slash2 , obj_spark_slash3 , 3.9 , 3.9 , 0 , 44 ,self.id, 5, no_script);
+	cyclone.no_reflect = 1;
+}
+}
+
+if timer = 310
+{
+cyclone2 = create_projectile(5 , 45+facing * 90 , 7.5 , 6.5 , 10 , 4 , slash3 , obj_spark_slash3 , 3.9 , 3.9 , 0 , 44 ,self.id, 1, no_script);
+cyclone2.no_reflect = 1;
+}
+  
+if (timer >= 104){
+if (attack_success || target.object_index == obj_enemy) && dontrepeat = 0{
+				if ((target.weight <= .22 && target.percent > 105) || (target.weight > .22 && target.weight < .3 && target.percent > 115) || (target.weight > .3 && target.percent > 130)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 50;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }
+
+if ( timer >= time - 1 )
+  {
+  sound_stop(maxcyclone_sound);
+  temp2 = 0;
+  super_armor = 0;
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }
