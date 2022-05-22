@@ -1,0 +1,164 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 463;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		
+		
+        spark = instance_create ( 0 , 0 , obj_camerazoom );
+        spark.camera_l = x - 8;
+        spark.camera_r = x + 8;
+        spark.camera_u = y - 4 - actual_height;
+        spark.camera_d = y + 4;
+        spark.camera_boundary_zoom = 80;
+        spark.alarm[0] = 175;
+
+        duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 175;
+		
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+
+
+switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break; 
+	case 12: image_index = 3; break; 
+	case 16: image_index = 4; break; 
+	case 20: image_index = 5; break; 
+	case 24: image_index = 6; break; 
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break; 
+	case 36: image_index = 9; break; 
+	case 40: image_index = 10; break; 
+    case 44: image_index = 11; break; 
+	case 48: image_index = 12; break;
+	case 52: image_index = 13; break;
+	
+	case 156: image_index = 14; break;
+	
+	
+	case 180: image_index = 15; break;
+	case 184: image_index = 16; break; 
+	case 188: image_index = 17; break; 
+	case 192: image_index = 18; break; 
+	case 196: image_index = 19; break;
+	
+	case 300: image_index = 20; break;
+    case 304: image_index = 21; break; 
+	case 308: image_index = 22; break;
+	case 312: image_index = 23; break;
+	case 316: image_index = 24; break;
+	case 320: image_index = 25; break;
+	case 324: image_index = 26; break;
+	case 328: image_index = 27; break; 
+	case 332: image_index = 28; break; 
+	case 336: image_index = 29; break;
+	case 340: image_index = 30; break; 
+    case 344: image_index = 31; break; 
+	case 348: image_index = 32; break; 
+	case 352: image_index = 33; break;
+	case 356: image_index = 34; break;
+	case 360: image_index = 35; break;
+	case 364: image_index = 36; break;
+	case 368: image_index = 37; break;
+	case 372: image_index = 38; break; 
+	case 376: image_index = 39; break;
+	
+	case 450: image_index = 40; break; 
+    case 454: image_index = 41; break; 
+	case 458: image_index = 42; break; 
+    }
+
+
+if timer = 1 && bankai = 1 {
+timer = 24
+}
+
+if timer = 16
+sound_play(fs_voice1);
+	
+if timer = 24{
+sound_play(magic1);
+create_projectile(25,45+facing*90,3.1,0,12,9,magic3,obj_spark_hit3,2.9,2.1,0,35,self.id,5,-1);
+proj.di = 0
+proj.hit_stun = 120
+proj.priority = 5
+}
+
+if timer = 52
+sound_play(fs_voice2);
+
+	if timer = 188{
+	sound_play(fs_voice3);
+	sound_play(bleach_sword2);
+	
+
+	create_projectile (40,100-facing*20,7,7,80,40,slash3,obj_spark_slash2,0.4,0.4,20,60,self.id,900,char_custom1);
+	proj.di = 0
+	proj.sdi = 0
+    proj.sprite_index = projectile_sprite3;
+	proj.image_index = 0
+	proj.image_speed = 0.5
+	proj.image_xscale = image_xscale*1.5
+	proj.image_yscale = image_yscale*1.5
+	proj.hit = 0
+	proj.depth = depth - 1;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.hspeed = 6-facing*12
+	proj.orighspeed = proj.hspeed
+	proj.priority = 5
+	//proj.image_blend = c_red
+	proj.hit_stun = 200
+	}
+
+
+
+if timer = 348{
+sound_play(fs_voice4);
+	create_projectile (5,90,3,0,-1,4,magic3,obj_spark_fire1,2,2,0,0,self.id,2000,char_custom2);
+	proj.sprite_index = dflame_sprite;
+	proj.image_speed = 0.5
+	proj.hitstun = 6
+	proj.di = 0;
+    proj.size = size;
+	proj.facing=facing
+	proj.scale = scale
+	proj.depth = depth+2
+	
+	
+	}
+	
+
+  
+  
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
