@@ -1,0 +1,133 @@
+absorb = 1;
+
+if timer <= 1 && tag = 0
+{
+image_xscale = 0.1*(1-facing*2)*size;
+image_yscale = 0.1*size;
+sprite_index = attacker.id.shot_sprite
+image_speed = 0.5
+visible =1
+hit = 2;
+depth = depth - 1;
+tempfacing = attacker.id.facing
+hspeed = 7*(1-tempfacing*2)*size;
+}
+
+if tag = 0
+{
+
+if ( timer >= 2 ) //Collision check for the sticky.
+  {
+if ( timer mod 2 == 0 )
+  {
+create_homing_bubble(0.8,0.6,8,8,attacker.id,2);
+proj.destroy = 0;
+proj.target = 0;
+  }
+  
+if ( proj.target > 0 && !proj.target.intangible && proj.target.state_type != "shielding" ) //Makes it stick to the opponent when the projectile touches them.
+	{
+targettemp = proj.target;
+if (targettemp.gvtag = 1 || attacker.tagnumber >= 3)
+	instance_destroy();
+
+tag = 1;
+
+if(attacker.tagnumber < 3)
+	attacker.tagnumber +=1;
+
+if(!attacker.tagID1){
+	attacker.tagID1 = proj.target;
+	targettemp.personaltag = 1;
+}
+else if(!attacker.tagID2){
+	attacker.tagID2 = proj.target;
+	targettemp.personaltag = 2;
+}
+else if(!attacker.tagID3){
+	attacker.tagID3 = proj.target;
+	targettemp.personaltag = 3;
+}
+
+instance_create ( x , y , obj_spark_shockwave );
+if ( attacker.attack_success = 0 )
+{
+projhitbox = create_projectile ( 2,  20 + tempfacing * 140 , 2.6 , 3.4 , 10 , 3 , shock2 , obj_spark_shock , 0.8 , 0.6 , 8 , 8 , attacker.id , 4 , no_script );
+}
+else
+target.percent += 2 * size;
+	}
+  }
+
+if ( next_to_rwall or next_to_lwall or on_floor or on_platform)
+{
+    instance_destroy()
+	attacker.id.shottimer -=1;
+}
+
+if timer = time
+{
+attacker.id.shottimer -=1;
+}
+
+}
+
+if ( tag = 1 ) //Changes its behaviour when sticking to the opponent.
+  {
+    attacker.id.shottimer -=1;
+	parry_nodestroy = 1;
+	sprite_index = attacker.id.reticle_sprite;
+	image_index = 0;
+	image_speed = 0;
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+    time = 1000;
+	alarm[0] = 1000;
+	tag = 2;
+	image_alpha = 0;
+    if targettemp.gvtag = 0
+    {
+     targettemp.gvtag = 1;
+	 target.gvtag = targettemp.gvtag;
+    }
+	depth = depth - 1;
+  }
+  
+if ( tag = 2 ) //Keeps the projectile in place.
+  {
+    if ( timer = 1 or timer = 4 ) and targettemp.gvtag = 1
+{
+image_alpha += 0.2;
+}
+    if ( timer >= 0 )
+	{
+    x = targettemp.x + 0 *(1-facing*2)*targettemp.size;
+    y = targettemp.y-targettemp.actual_height * 0.5 - 5;
+    facing = targettemp.facing;
+	}
+	
+	if timer = time - 1 
+   {
+    targettemp.gvtag = 0;
+	target.gvtag = targettemp.gvtag;
+   }
+   
+   if targettemp.state_type = "out" or targettemp.state_type = "dead"
+   {
+    instance_destroy();
+	
+	if(targettemp.personaltag = 1)
+		attacker.tagID1 = NULL;
+	else if(targettemp.personaltag = 2)
+		attacker.tagID2 = NULL;
+	else if(targettemp.personaltag = 3)
+		attacker.tagID3 = NULL;
+	if targettemp.gvtag = 1
+	{
+    		targettemp.gvtag = 0;
+		target.gvtag = 0;
+	}
+   }
+   
+  }

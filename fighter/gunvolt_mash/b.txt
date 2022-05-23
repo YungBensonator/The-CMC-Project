@@ -1,0 +1,331 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  special = 1;
+  attack_type = "b";
+  time = 40;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  temp = 0;
+  sound_play(gunload);
+  }
+
+switch (timer)
+{
+case 2: image_index = 1; break;
+case 4: image_index = 2; sound_play(b_voice); break;
+case 6: image_index = 3; break;
+case 8: image_index = 4; break;
+case 10: image_index = 5; break;
+case 28: image_index = 6; break;
+case 30: image_index = 7; break;
+case 32: image_index = 8; break;
+}
+
+if timer < 100
+{
+
+  if ( air == 0 )
+	sprite_index = b_sprite;
+  else
+	sprite_index = b_air_sprite;
+}
+
+if timer = 6
+{
+	bshot = create_projectile( 1 , 20 + facing * 140 , 0 , 0 , 3, 0 , shock2 , obj_gunvolt_shothit , 0.1 , 0.1 , 8 , 14 , self.id , 45 , char_custom1);
+	spark = instance_create(x + 8 * (1-facing*2)* size,y - 27 * size,obj_spark_shockwave)
+    spark.image_xscale *= 0.5*size
+    spark.image_yscale *= 0.5*size
+    spark.image_blend = c_blue
+    spark.image_alpha = 0.8
+	sound_play(gunshoot);
+	if shottimer < 3
+	{
+	shottimer += 1;
+	}
+}
+
+if timer = 21 and special = 1 and shottimer != 3
+{
+special = 0;
+timer = 10;
+}
+
+////////////////////////////////////CODE FOR ASTRALSPHERES////////////////////////////////////
+
+
+if ( timer <= 3 and skilluse = 1 and skilltime >= maxskilltime*0.25)
+{
+temp = 1;
+}
+
+if temp = 1
+{
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity_lock = 1;
+vspeed = 0;
+}
+
+if ( timer <= 4 and temp = 1 )
+  {
+  skilltime -= maxskilltime*0.25;
+  time = 256;
+  timer = 100;
+  hspeed = 0;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  sound_play(super_sound);
+  intangible = 1;
+  vspeed = 0;
+  alphatemp = 0;
+  indextemp = 0;
+  air_move = 0;
+  }
+
+if timer = 100
+{
+  freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 50;
+  freezer.dontpause = self.id;
+}
+
+switch (timer)
+{
+case 152: image_index = 1; intangible = 0; break;
+case 154: image_index = 2; break;
+case 156: image_index = 3; break;
+case 158: image_index = 4; break;
+case 160: image_index = 5; break;
+case 162: image_index = 6; break;
+case 164: image_index = 7; break;
+case 166: image_index = 8; break;
+case 168: image_index = 9; break;
+case 170: image_index = 10; break;
+case 172: image_index = 11; break;
+case 174: image_index = 12; break;
+case 176: image_index = 13; break;
+case 178: image_index = 2; break;
+case 180: image_index = 3; break;
+case 182: image_index = 4; break;
+case 184: image_index = 5; break;
+case 186: image_index = 6; break;
+case 188: image_index = 7; break;
+case 190: image_index = 8; break;
+case 192: image_index = 9; break;
+case 194: image_index = 10; break;
+case 196: image_index = 11; break;
+case 198: image_index = 12; break;
+case 200: image_index = 13; break;
+case 202: image_index = 2; break;
+case 204: image_index = 3; break;
+case 206: image_index = 4; break;
+case 208: image_index = 5; break;
+case 210: image_index = 6; break;
+case 212: image_index = 7; break;
+case 214: image_index = 8; break;
+case 216: image_index = 9; break;
+case 218: image_index = 10; break;
+case 220: image_index = 11; break;
+case 222: image_index = 12; break;
+case 224: image_index = 13; break;
+case 226: image_index = 2; break;
+case 228: image_index = 3; break;
+case 230: image_index = 4; break;
+case 232: image_index = 5; break;
+case 234: image_index = 6; break;
+case 236: image_index = 7; break;
+case 238: image_index = 8; break;
+case 240: image_index = 9; break;
+case 242: image_index = 10; break;
+case 244: image_index = 11; break;
+case 246: image_index = 12; break;
+case 248: image_index = 13; break;
+case 250: image_index = 14; break;
+case 252: image_index = 15; break;
+}
+
+if timer = 156
+{
+sound_play(astralspheresound);
+sound_play(astralsphere_voice);
+
+fieldfx = create_blur(x,y,self.id);
+fieldfx.sprite_index = flashfield_sprite;
+fieldfx.image_speed = 0;
+fieldfx.image_xscale = 0.5*(1-facing*2)*size;
+fieldfx.image_yscale = 0.5*size;
+fieldfx.snap = self.id
+fieldfx.depth = depth + 1;
+fieldfx.x = x + 1 * (1-facing*2) *size;
+fieldfx.y = y - 20 *size;
+
+spherefx1 = create_blur(x,y,self.id);
+spherefx1.sprite_index = astralsphere_sprite;
+spherefx1.image_speed = 0;
+spherefx1.image_xscale = 0.35*(1-facing*2)*size;
+spherefx1.image_yscale = 0.35*size;
+spherefx1.depth = depth + 1;
+spherefx1.x = x + 1 * (1-facing*2) *size;
+spherefx1.y = y - 85 *size;
+
+
+spherefx2 = create_blur(x,y,self.id);
+spherefx2.sprite_index = astralsphere_sprite;
+spherefx2.image_speed = 0;
+spherefx2.image_xscale = 0.35*(1-facing*2)*size;
+spherefx2.image_yscale = 0.35*size;
+spherefx2.depth = depth + 1;
+spherefx2.x = x + 50 * (1-facing*2) *size;
+spherefx2.y = y + 25 *size;
+spherefx2.orbit_dir= 120;
+
+spherefx3 = create_blur(x,y,self.id);
+spherefx3.sprite_index = astralsphere_sprite;
+spherefx3.image_speed = 0;
+spherefx3.image_xscale = 0.35*(1-facing*2)*size;
+spherefx3.image_yscale = 0.35*size;
+spherefx3.depth = depth + 1;
+spherefx3.x = x - 50 * (1-facing*2) *size;
+spherefx3.y = y + 25 *size;
+spherefx3.orbit_dir= 240;
+}
+
+fieldfx.image_index = indextemp;
+fieldfx.image_alpha = alphatemp; 
+spherefx1.image_index = indextemp;
+spherefx1.image_alpha = alphatemp;
+spherefx2.image_index = indextemp;
+spherefx2.image_alpha = alphatemp;
+spherefx3.image_index = indextemp;
+spherefx3.image_alpha = alphatemp;
+
+if timer > 156
+{
+if facing = 0
+{
+spherefx1.orbit_dir+=14.5;
+spherefx2.orbit_dir+=14.5;
+spherefx3.orbit_dir+=14.5;
+}
+
+if facing = 1
+{
+spherefx1.orbit_dir-=14.5;
+spherefx2.orbit_dir-=14.5;
+spherefx3.orbit_dir-=14.5;
+}
+
+if (spherefx1.orbit_dir>359) { spherefx1.orbit_dir=0; }
+if (spherefx1.orbit_dir<0) { spherefx1.orbit_dir=359; }
+
+if (spherefx2.orbit_dir>359) { spherefx2.orbit_dir=0; }
+if (spherefx2.orbit_dir<0) { spherefx2.orbit_dir=359; }
+
+if (spherefx3.orbit_dir>359) { spherefx3.orbit_dir=0; }
+if (spherefx3.orbit_dir<0) { spherefx3.orbit_dir=359; }
+
+spherefx1.orbit_x=x+(lengthdir_x(62, spherefx1.orbit_dir));
+spherefx1.orbit_y=(y - 20*size)+(lengthdir_y(62, spherefx1.orbit_dir));
+
+spherefx2.orbit_x=x+(lengthdir_x(62, spherefx2.orbit_dir));
+spherefx2.orbit_y=(y - 20*size)+(lengthdir_y(62, spherefx2.orbit_dir))
+
+spherefx3.orbit_x=x+(lengthdir_x(62, spherefx3.orbit_dir));
+spherefx3.orbit_y=(y - 20*size)+(lengthdir_y(62, spherefx3.orbit_dir))
+
+spherefx1.x=spherefx1.orbit_x;
+spherefx1.y=spherefx1.orbit_y;
+spherefx2.x=spherefx2.orbit_x;
+spherefx2.y=spherefx2.orbit_y;
+spherefx3.x=spherefx3.orbit_x;
+spherefx3.y=spherefx3.orbit_y;
+}
+
+if timer >= 156 and timer <= 166
+{
+alphatemp += 0.1;
+}
+
+switch (timer)
+{
+case 159: indextemp = 1; break;
+case 162: indextemp = 2; break;
+case 165: indextemp = 3; break;
+case 168: indextemp = 0; break;
+case 171: indextemp = 1; break;
+case 174: indextemp = 2; break;
+case 177: indextemp = 3; break;
+case 180: indextemp = 0; break;
+case 183: indextemp = 1; break;
+case 186: indextemp = 2; break;
+case 189: indextemp = 3; break;
+case 192: indextemp = 0; break;
+case 195: indextemp = 1; break;
+case 198: indextemp = 2; break;
+case 201: indextemp = 3; break;
+case 204: indextemp = 0; break;
+case 207: indextemp = 1; break;
+case 210: indextemp = 2; break;
+case 213: indextemp = 3; break;
+case 216: indextemp = 0; break;
+case 219: indextemp = 1; break;
+case 222: indextemp = 2; break;
+case 225: indextemp = 3; break;
+case 228: indextemp = 0; break;
+case 231: indextemp = 1; break;
+case 234: indextemp = 2; break;
+case 237: indextemp = 3; break;
+case 240: indextemp = 0; break;
+case 243: indextemp = 1; break;
+case 246: indextemp = 2; break;
+case 249: indextemp = 3; break;
+case 252: indextemp = 0; break;
+case 242: alphatemp -= 0.1; break;
+case 243: alphatemp -= 0.1; break;
+case 244: alphatemp -= 0.1; break;
+case 245: alphatemp -= 0.1; break;
+case 246: alphatemp -= 0.1; break;
+case 247: alphatemp -= 0.1; break;
+case 248: alphatemp -= 0.1; break;
+case 249: alphatemp -= 0.1; break;
+case 250: alphatemp -= 0.1; break;
+case 251: alphatemp -= 0.1; break;
+case 252: with (fieldfx) {instance_destroy();} with (spherefx1) {instance_destroy();} with (spherefx2) {instance_destroy();} with (spherefx3) {instance_destroy();} break;
+}
+
+if timer >= 156 and timer < 240
+{
+ if !instance_exists(flashfieldhit)
+ {
+ flashfieldhit = create_projectile ( 1 , 90 , 2.5 , 0.5 , 3 , 1 , shock2 , obj_spark_shock , 4.2 , 4.2 , 1 , 20 , self.id , 1 , no_script );
+ flashfieldhit.di = 0.2;
+ flashfieldhit.priority += 4;
+ }
+}
+
+if timer = 240
+{
+ flashfieldhit = create_projectile ( 3 , 362 , 6.8 , 6 , 3 , 12 , shock3 , obj_spark_shock , 4.2 , 4.2 , 1 , 20 , self.id , 3 , no_script );
+ flashfieldhit.di = 0.2;
+ flashfieldhit.priority += 4;
+}
+
+if ( timer >= time - 1 )
+  {
+  temp = 0;
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,92 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "fair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fair_sprite;
+  timer = 0;
+  time = 26;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+switch ( timer ) 
+{
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 8: image_index = 4; break;
+  //case 10: image_index = 4; break;
+  //case 12: image_index = 4; break;
+  case 18: image_index = 5; break;
+}
+
+if timer = 4
+{
+    create_hitbox ( 7 , 25 + facing * 130 , 4.2 , 3 , 14 , 8 , shock2 , obj_spark_shock , 0.95 , 0.95 , 15.40 , 20.10 , self.id , 4 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	play_attack_voice();
+	sound_play(shocksound2);
+    smashshock = create_blur(x,y,self.id);
+    smashshock.sprite_index = smashshock_fx;
+    smashshock.image_index = 0;
+    smashshock.image_speed = 0;
+	smashshock.snap = self.id;
+    smashshock.image_xscale = 0.25*(1-facing*2)*size;
+    smashshock.image_yscale = 0.25*size;
+    smashshock.depth = depth - 1;
+    smashshock.x = x + 15.40 * (1-facing*2) *size;
+    smashshock.y = y - 20.10 *size;
+}
+
+switch ( timer )
+    {
+	case 5: smashshock.image_index = 1; break;
+	case 6: smashshock.image_index = 2; break;
+	case 7: smashshock.image_index = 3; break;
+	case 8: smashshock.image_index = 4; break;
+	case 9: smashshock.image_index = 5; break;
+	case 10: smashshock.image_index = 6; break;
+	case 11: smashshock.image_index = 7; break;
+	case 12: smashshock.image_index = 8; break;
+	case 13: smashshock.image_index = 9; break;
+	case 14: smashshock.image_index = 10; break;
+	case 15: smashshock.image_index = 11; break;
+	case 16: smashshock.image_index = 12; break;
+	case 17: smashshock.image_index = 13; break;
+	case 18: smashshock.image_index = 14; break;
+	case 19: smashshock.image_index = 15; break;
+	case 20: smashshock.image_index = 16; break;
+	case 21: smashshock.image_index = 17; break;
+	case 22: smashshock.image_index = 18; break;
+	}
+
+if timer = 39
+{
+with (smashshock)
+{
+instance_destroy();
+}
+}
+
+if air = 0 
+{
+  state_type="land";
+  attack_type="none";
+  sprite_index = land_sprite;
+  timer=0;
+  time=9; 
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

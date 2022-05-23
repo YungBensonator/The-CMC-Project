@@ -8,7 +8,8 @@ floatspeedh = 4;
 maxfloattime = 150;
 ///
 
- 
+
+
 if (state_type = "flinch" || state_type = "air_flinch" || state_type = "tumble" || state_type = "edge" || state_type = "grabbed" || state_type = "out" || state_type = "respawn" || state_type = "entry" )
 {
 		floattemp = 1;
@@ -100,6 +101,8 @@ if ( sprite_index == jump_sprite && floattemp == 0 )
 	sprite_index = hover_sprite;
 }
 
+
+
 /////////////////Meter Start/////////////////////////////////////
 if (!instance_exists(MeterHud)){
     hud_x = obj_game_control.hud_x[other.number-1];
@@ -112,20 +115,18 @@ if (!instance_exists(MeterHud)){
 }
 
 MeterHud.sprite_index = meter_sprite;
-if(floattime = maxfloattime){MeterHud.image_index = 55;} else {MeterHud.image_index = round(floattime*56/maxfloattime);}
+if(floattime = maxfloattime){MeterHud.image_index = 55;} else {MeterHud.image_index = floattime*56/maxfloattime;}
 MeterHud.image_speed = 0;
 
 /////////////////Meter Stop/////////////////////////////////////
 
 
-if (enemy.state_type = "respawn"){
-temp_spawn += 1
-}
+
 if air = 0 
 {
 	hover_time = 9999;
 	candash = 1 + kaioken;
-	if(floattime < maxfloattime ){floattime += .9;} 
+	if(floattime < maxfloattime ){floattime += 1;} 
 	if (moveup != 1) { floattemp = 1;}
 	upbtemp = 0;
 }
@@ -162,6 +163,14 @@ if slippery > 0
 {fric = 0.6;}
 else
 {fric = 0.95;}
+
+
+
+if dsmashcooldown >= 0
+{
+dsmashcooldown -= 1;
+}
+
 
 ///Dair Cooldown
 if daircooldown >= 1
