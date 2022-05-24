@@ -1,0 +1,91 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "fair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fair_sprite;
+  timer = 0;
+  time = 28;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+switch (timer)
+{
+case 3: image_index = 1; play_attack_voice(); break;
+case 6: image_index = 2; break;
+case 8: image_index = 3; sound_play(swingsnd2); break;
+case 10: image_index = 4; fairslash.image_index = 1; break;
+case 12: image_index = 5; fairslash.image_index = 2; break;
+case 14: image_index = 6; fairslash.image_index = 3; break;
+case 16: image_index = 7; fairslash.image_index = 4; break;
+case 17: with (fairslash){instance_destroy();} break;
+case 18: image_index = 8; break;
+case 24: image_index = 9; break;
+case 26: image_index = 10; break;
+}
+
+//Sword trail shit starts here
+    switch (timer) {
+        case 6: sword_trail = create_sword_trail(self.id, 1, 30, spread_texture); sword_trail.index = 1; break;
+		case 8: sword_trail.index += 1; break;
+		case 10: sword_trail.index += 1; break;
+		case 12: sword_trail.index += 1; break;
+		case 14: sword_trail.index += 1; break;
+		case 16: sword_trail.index += 1; sword_trail.end_decay = 0.33; break;
+		case 18: sword_trail.index += 1; sword_trail.end_decay = 0.66; break;
+		case 19:
+            with(sword_trail) {
+                instance_destroy();
+            }
+            break;
+    }      
+//Sword trail shit ends here
+
+if timer = 8
+{
+/*fairslash = create_blur(x,y,self.id);
+fairslash.sprite_index = fair_fx;
+fairslash.image_index = 0;
+fairslash.image_speed = 0;
+fairslash.image_xscale = 0.7*(1-facing*2)*size;
+fairslash.image_yscale = 0.7*size;
+fairslash.snap = self.id
+fairslash.depth = depth - 1;
+fairslash.x = x + (1 - facing * 2) *size;
+fairslash.y = y - 47*size ;*/
+}
+
+if timer = 10
+{
+create_hitbox(8,20+facing*140,4.7,4.25,9,5,slash2,obj_spark_slash2,1.3,0.8,28,15,self.id,6,2);
+}
+
+if timer = 14
+{
+hitbox.image_xscale = 1.5 * (1-facing*2) * size;
+hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 10 
+hitbox.hitbox_y = size * 35
+}
+
+	if ( air = 0 )
+			{
+                state_type="land";
+                attack_type="none";
+				sprite_index = land_sprite;
+                timer=0;
+                time=12;
+			}	
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

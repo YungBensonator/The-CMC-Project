@@ -1,0 +1,138 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "fthrow";
+  image_speed = 0;
+  image_index = 14;
+  sprite_index = jab_sprite;
+  timer = 0;
+  time = 74;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 54;
+  }
+
+switch (timer)
+{
+case 02: image_index = 15; break;
+case 04: image_index = 16; sound_play(attacksnd2); break;
+case 06: image_index = 17; break;
+case 08: image_index = 18; break;
+case 10: image_index = 19; break;
+case 12: image_index = 20; break;
+case 14: image_index = 21; break;
+case 16: image_index = 22; break;
+
+case 18: sprite_index = stilt_sprite; image_index = 0; break;
+case 20: image_index = 02; break;
+case 22: image_index = 03; sound_play(attacksnd2); break;
+case 24: image_index = 04; break;
+case 26: image_index = 06; break;
+case 28: image_index = 07; break;
+case 30: image_index = 08; break;
+case 32: image_index = 09; break;
+case 34: image_index = 10; break;
+
+case 36: sprite_index = ssmash_sprite; image_index = 0; break;
+case 38: image_index = 1; break;
+case 40: image_index = 2; break;
+case 52: image_index = 3; break;
+case 54: image_index = 4; sound_play(attacksnd2); break;
+case 56: image_index = 5; break;
+case 58: image_index = 6; break;
+case 60: image_index = 7; break;
+case 66: image_index = 8; break;
+case 68: image_index = 9; break;
+case 70: image_index = 10; break;
+ 
+} 
+
+if ( timer < 54 )
+	{
+	target.x = x + 10 * size * (1-facing*2);
+	target.y = y;
+	}
+
+if timer = 04
+{
+    create_hitbox ( 1 , 361 , 5.5 , 5 , 16 , 3 , kick3 , obj_spark_hit3 , 0.79 , 0.87 , 10.85 , 16.80 , self.id , 2 , 2 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+	duster.image_xscale = 0.1*size;
+	duster.image_yscale = 0.1*size;
+}
+
+if timer = 22
+{
+    create_hitbox ( 1 , 361 , 4.5 , 2.5 , 13 , 3 , punch2 , obj_spark_hit3 , 0.39 , 0.75 , 11.55 , 13.65 , self.id , 2 , 2 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+	duster.image_xscale = 0.1*size;
+	duster.image_yscale = 0.1*size;
+}
+
+if timer = 54
+{
+sound_play(attack_voice6);
+}
+
+if ( timer == 54 ) and target.gvtag = 0
+  {
+  create_throw_box ( 10 , 15 + 150 * facing , 5.6 , 5.1 , 14 , 8 , punch3 , obj_spark_hit3 , 0.45 , 0.72 , 16.45 , 13.65 , self.id , 2 );
+  }
+
+if ( timer == 54 ) and target.gvtag = 1
+  {
+  create_throw_box ( 15 , 15 + 150 * facing , 6.5 , 6 , 14 , 12 , shock3 , obj_spark_shock , 0.45 , 0.72 , 16.45 , 13.65 , self.id , 2 );
+  smashshock = create_blur(x,y,self.id);
+  smashshock.sprite_index = smashshock_fx;
+  smashshock.image_index = 0;
+  smashshock.image_speed = 0;
+  smashshock.image_xscale = 0.2*(1-facing*2)*size;
+  smashshock.image_yscale = 0.2*size;
+  smashshock.depth = depth - 1;
+  smashshock.x = x + 21.35 * (1-facing*2) *size;
+  smashshock.y = y - 21 *size;
+  sound_play(shocksound1);
+  }
+
+switch ( timer )
+    {
+	case 55: smashshock.image_index = 1; break;
+	case 56: smashshock.image_index = 2; break;
+	case 57: smashshock.image_index = 3; break;
+	case 58: smashshock.image_index = 4; break;
+	case 59: smashshock.image_index = 5; break;
+	case 60: smashshock.image_index = 6; break;
+	case 61: smashshock.image_index = 7; break;
+	case 62: smashshock.image_index = 8; break;
+	case 63: smashshock.image_index = 9; break;
+	case 64: smashshock.image_index = 10; break;
+	case 65: smashshock.image_index = 11; break;
+	case 66: smashshock.image_index = 12; break;
+	case 67: smashshock.image_index = 13; break;
+	case 68: smashshock.image_index = 14; break;
+	case 69: smashshock.image_index = 15; break;
+	case 70: smashshock.image_index = 16; break;
+	case 71: smashshock.image_index = 17; break;
+	case 72: smashshock.image_index = 18; break;
+	}
+
+if timer = 73
+{
+with (smashshock)
+{
+instance_destroy();
+}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

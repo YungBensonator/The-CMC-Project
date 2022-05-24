@@ -1,0 +1,242 @@
+if (sprite_index = jump_sprite)
+{
+if (timer = 0)
+image_index = 0;
+if (image_index = 9)
+image_speed = 0;
+}
+
+no_hurtbox = 1;
+
+if air = 0 || state_type = "flinch" || state_type = "air_flinch"
+{
+cantsideb = 0;
+cantdownb = 0;
+}
+
+if (sprite_index = mid_jump_sprite)
+{
+if (timer = 0)
+image_index = 0;
+if (image_index = 15)
+image_speed = 0;
+}
+
+if ( state_type = "crouch" )
+{
+sprite_index = crouch_sprite;
+image_speed = 0;
+switch (timer) 
+{
+case 0: image_index = 0; break;
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+}
+}
+
+if(state_type != "air_attack" && state_type != "attack")
+{
+        if (instance_exists(jabslash)){
+		with (jabslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(stiltslash)){
+		with (stiltslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(dtiltslash)){
+		with (dtiltslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(utiltslash)){
+		with (utiltslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(utilt2slash)){
+		with (utilt2slash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(dashatkslash)){
+		with (dashatkslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(ssmashslash)){
+		with (ssmashslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(usmashslash)){
+		with (usmashslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(dsmashslash)){
+		with (dsmashslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(dsmashwhirl)){
+		with (dsmashwhirl){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(dsmashwind)){
+		with (dsmashwind){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(timehole)){
+		with (timehole){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(robo1)){
+		with (robo1){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(nairslash)){
+		with (nairslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(nairland)){
+		with (nairland){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(fairslash)){
+		with (fairslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(bairslash)){
+		with (bairslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(uairslash)){
+		with (uairslash){
+			instance_destroy();
+		}
+		}
+		
+		if (instance_exists(dairslash)){
+		with (dairslash){
+			instance_destroy();
+		}
+		}
+}
+
+if ( attacking = 1 && special = 1 )
+{
+EXmove = 1;
+}
+else
+{
+EXmove = 0;
+}
+
+if (!instance_exists(hudThing)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    hudThing = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    hudThing.step_script = hudThing_step_script;
+    hudThing.draw_script = hudThing_draw_script;
+    hudThing.owner = self.id;
+    hudThing.keepmain = self.keepmain;
+}
+
+if limitbreak = 1 {	
+hudThing.image_index = 58
+}
+else
+{
+hudThing.sprite_index = limitmeter_sprite;
+hudThing.image_speed = 0;
+hudThing.image_index = limitgauge * 57 / 150;
+}
+
+if state_type = "entry" || state_type = "respawn" || state_type = "out" || state_type = "dead" {
+limitgauge = 0
+limittemp = 0
+limittemptimer = 2
+limitbreak = 0
+temppercent = -100
+lastlimittemp = 0
+}
+
+if limittemptimer = 0 {
+limitgauge += limittemp
+lastpercent = percent
+}
+
+if hitbox.hit > 0  {
+if attack_type != "final_smash" {
+limittemp = hitbox.damage*0.8
+limittemptimer -= 1
+}
+}
+else if hitbox2.hit > 0 {
+limittemp = hitbox2.damage*0.8
+limittemptimer -= 1
+}
+else if proj.hit = 1 {
+limittemp = proj.damage*0.2
+limittemptimer = 0
+}
+else if hitbox3.hit > 0 {
+limittemp = hitbox3.damage*0.8
+limittemptimer -= 1
+}
+else if hitbox4.hit > 0 {
+limittemp = hitbox4.damage*0.8
+limittemptimer -= 1
+}
+else if fireball.hit = 1 {
+limittemp = fireball.damage*0.8
+limittemptimer = 0
+}
+else if ssslash.hit = 1 {
+limittemp = ssslash.damage*0.8
+limittemptimer = 0
+}
+else if meteor.hit = 1 {
+limittemp = meteor.damage*0.8
+limittemptimer = 0
+}
+else {
+if state_type != "flinch" && state_type != "air_flinch"
+limittemptimer = 2
+limittemp = 0
+}
+
+if limitgauge >= 150 {
+limitbreak = 1
+}

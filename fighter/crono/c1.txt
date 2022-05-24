@@ -1,0 +1,44 @@
+
+if hit = 0
+  {
+  moving_object = 1;
+  absorb2 = 1;
+	hspeed = 7 * (1-facing*2) * size;
+	sprite_index = keepmain.dsmash_wave_fx;
+    image_xscale = 0.7*(1-facing*2) * size;
+    image_yscale = 0.7*size;
+	image_speed = 0.5
+	visible =1
+	if ( timer <= 1 )
+  {
+  dsmashwave = instance_create (x,y,obj_spark);
+  dsmashwave.sprite_index = keepmain.dsmashproj_sprite;
+  dsmashwave.image_xscale = 0.7*(1-facing*2) * size;
+  dsmashwave.image_yscale = 0.7*size;
+  dsmashwave.image_speed = 1.5;
+  dsmashwave.depth = depth - 1;
+  dsmashwave.speed = speed * (1-facing*2) * size;
+  }
+    if ( hspeed > 0 && next_to_rwall && timer < time - 1 )
+      {
+      timer = time - 1;
+	  with (dsmashwave){
+			instance_destroy();
+			}
+      }
+    if ( hspeed < 0 && next_to_lwall && timer < time - 1 )
+      {
+      timer = time - 1;
+	  with (dsmashwave){
+			instance_destroy();
+			}
+      }
+  }
+  
+if hit = 1 
+{
+hit = 2
+with (dsmashwave){
+			instance_destroy();
+			}
+}

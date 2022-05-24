@@ -1,0 +1,516 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity_lock = 1;
+
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  tempindex = 0;
+  hspeed = 0;
+  vspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = ssmash_sprite;
+  time = 78;
+  timer = 0;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  sound_play(fs_voice);
+  freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 55;
+  freezer.dontpause = self.id;
+  zoom = instance_create ( 0 , 0 , obj_camerazoom );
+  zoom.camera_l = x - 8;
+  zoom.camera_r = x + 8;
+  zoom.camera_u = y - 4 - actual_height;
+  zoom.camera_d = y + 4;
+  zoom.camera_boundary_zoom = 120;
+  zoom.alarm[0] = 55;
+  }
+
+switch ( timer )
+    {
+	case 02: image_index = 1; break;
+	case 04: image_index = 2; break;
+	case 56: image_index = 3; break;
+	case 58: image_index = 4; sound_play(attacksnd3); break;
+	case 60: image_index = 5; break;
+	case 62: image_index = 6; break;
+	case 64: image_index = 7; break;
+	case 70: image_index = 8; break;
+	case 72: image_index = 9; break;
+	case 74: image_index = 10; break;
+	}  
+
+if timer = 58
+{    
+	duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+    create_hitbox ( 1 , 90 , 1.5 , 0 , 14 , 2 , shock2 , obj_spark_shock , 1.2 , 1.2 , 21.35 , 21 , self.id , 4 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+    smashshock = create_blur(x,y,self.id);
+    smashshock.sprite_index = smashshock_fx;
+    smashshock.image_index = 0;
+    smashshock.image_speed = 0.5;
+    smashshock.image_xscale = 0.5*(1-facing*2)*size;
+    smashshock.image_yscale = 0.5*size;
+    smashshock.depth = depth - 1;
+    smashshock.x = x + 21.35 * (1-facing*2) *size;
+    smashshock.y = y - 21 *size;
+	smashshock.snap = self.id;
+	sound_play(shocksound2);
+	hitbox.hit_stun = 8;
+	hitbox.charge_dmg = 0;
+	hitbox.di = 0.2;
+}
+
+if timer > 58 and attack_success = 1 and timer < 74
+{
+speed = 0;
+target1 = target
+target1.y = self.y;
+target1.x = x + (15 - facing*30)*size
+target1.speed = 0;
+target1.gravity_lock = 2;
+target1.ignore_physics = 1;
+}
+
+if timer = 74 and attack_success = 1
+{
+timer = 100;
+time = 470;
+target1 = target
+target1.y = self.y;
+target1.x = x + (15 - facing*30)*size
+target1.speed = 0;
+target1.gravity_lock = 2;
+target1.ignore_physics = 1;
+sprite_index = usmash_sprite;
+image_index = 0;
+image_speed = 0;
+zoom = instance_create ( 0 , 0 , obj_camerazoom );
+zoom.camera_l = x - 8;
+zoom.camera_r = x + 8;
+zoom.camera_u = y - 4 - actual_height;
+zoom.camera_d = y + 4;
+zoom.camera_boundary_zoom = 120;
+zoom.alarm[0] = 360;
+}
+
+if timer > 100 && timer < 448
+{
+speed = 0;
+target1.time = 440;
+target1.timer = 0;
+target1.sprite_index=target1.flinch_sprite
+target1.state_type = "flinch"
+target1.speed = 0;
+target1.gravity_lock = 2;
+target1.ignore_physics = 1;
+target1.x = x + (15 - facing*30)*size
+}
+
+if timer > 78 and timer <= 106
+{
+target1.y = self.y;
+}
+
+switch ( timer )
+    {
+	case 102: image_index = 01; break;
+	case 104: image_index = 02; break;
+	case 106: image_index = 03; break;
+	case 108: image_index = 04; break;
+	case 110: image_index = 05; break;
+	case 112: image_index = 06; break;
+	case 114: image_index = 07; break;
+	case 116: image_index = 06; break;
+	case 118: image_index = 07; break;
+	case 120: image_index = 06; break;
+	case 122: image_index = 07; break;
+	case 124: image_index = 06; break;
+	case 126: image_index = 07; break;
+	case 128: image_index = 08; break;
+	case 130: image_index = 09; break;
+	case 132: image_index = 10; break;
+	case 134: image_index = 11; break;
+	}
+
+//Blur shit starts here
+    switch ( timer )
+      {
+	case 104:  
+    blur = create_itmpnt_blur(/*Attacker*/self.id, /*Texture*/blur_texture, /*Start frame*/2, /*Apex Frame*/5, /*End frame*/5, /*CCW*/1, /*girth*/7, 15);
+    blur.index = 0;
+    blur.image_index = 1;
+    blur.depth -= 0.1;
+	blur.push_x = -6*size*(1-facing*2);
+	blur.h_squish = 7;
+	blur.v_squish = -5;
+    break;
+    case 106:
+    blur.index = 1;
+    blur.image_index = 2;
+    break;
+    case 108:
+    blur.index = 2;
+    blur.image_index = 2;
+    break;
+	case 110:
+	blur.index = 3;
+    blur.image_index = 2;
+    break;
+    case 111: 
+    blur.start_index = 1;
+    blur.image_index = 3;
+    break;
+    case 112: 
+    blur.start_index = 1;
+    blur.image_index = 3.33;
+    break;
+    case 113:
+    blur.start_index = 1;
+    blur.image_index = 3.5;
+    break;
+	case 114: 
+    blur.start_index = 3;
+    blur.image_index = 4; 
+    break;
+    case 115:  
+    blur.start_index = 4;
+    blur.image_index = 4; 
+    break;
+    case 116: with (blur) instance_destroy(); break;
+      }
+    //Blur shit ends here
+
+if timer = 106
+{
+create_hitbox ( 2 , 85 + facing * 10 , 3.4 , 0 , 3 , 5 , punch3 , obj_spark_hit4 , 0.42 , 0.79 , 6.30 , 17.50 , self.id , 4 , 3 );
+hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+sound_play(attack_voice5);
+sound_play(attacksnd4);
+}
+
+if timer = 107
+{
+target1.y = y - 5 * size;
+}
+
+if timer = 108
+{
+target1.y = y - 10 * size;
+}
+
+if timer = 109
+{
+target1.y = y - 15 * size;
+}
+
+if timer = 109
+{
+target1.y = y - 20 * size;
+}
+
+if timer = 110
+{
+target1.y = y - 25 * size;
+}
+
+if timer = 111
+{
+target1.y = y - 30 * size;
+}
+
+if timer = 112
+{
+target1.y = y - 35 * size;
+}
+
+if timer = 113
+{
+target1.y = y - 40 * size;
+}
+
+if timer = 114
+{
+target1.y = y - 45 * size;
+}
+
+if timer = 115
+{
+target1.y = y - 50 * size;
+}
+
+if timer = 116
+{
+target1.y = y - 50 * size;
+}
+
+if timer = 117
+{
+target1.y = y - 55 * size;
+}
+
+if timer = 118
+{
+target1.y = y - 60 * size;
+}
+
+if timer = 119
+{
+target1.y = y - 65 * size;
+}
+
+if timer = 120
+{
+target1.y = y - 70 * size;
+}
+
+if timer = 121
+{
+target1.y = y - 75 * size;
+}
+
+if timer = 122
+{
+target1.y = y - 80 * size;
+}
+
+if timer = 123
+{
+target1.y = y - 85 * size;
+}
+
+if timer >= 124 and timer < 448
+{
+target1.y = y - 90 * size;
+}
+
+if ( timer == 136 )
+    {
+    cut_in_bg = instance_create ( 0 , 0 , obj_custom_gfx );
+    cut_in_bg.depth = -15;
+    cut_in_bg.draw_script = char_custom6;
+    cut_in_bg.keepmain = keepmain;
+    cut_in_bg.image_alpha = 0;
+    cut_in_bg.alarm[0] = 120;
+    cut_in_bg.sprite_index = cut_in_fx_sprite;
+	sound_play(oversurge_voice);
+	freezer = instance_create(x,y,obj_freeze);
+    freezer.alarm[0] = 312;
+    freezer.dontpause = self.id;
+	sprite_index = downb_sprite;
+    image_index = 0;
+    image_speed = 0;
+	sound_play(super_sound);
+    }
+  if ( timer >= 136 && timer < 256 )
+    {
+    if ( temp > 1 )
+      cut_in_bg.x += 64 * ( 1 - facing * 2 );
+      else
+      cut_in_bg.x += 32 * ( 1 - facing * 2 );
+    if ( cut_in_bg.x >= 0 ) cut_in_bg.x -= 720;
+    if ( cut_in_bg.x < -720 ) cut_in_bg.x += 720;
+    }
+  if ( timer >= 136 && timer <= 156 )
+    {
+    if ( cut_in_bg.image_alpha < 1 )
+      cut_in_bg.image_alpha += 0.05;
+    }
+  if ( timer >= 236 && timer <= 256 )
+    {
+    if ( cut_in_bg.image_alpha > 0 )
+      cut_in_bg.image_alpha -= 0.05;
+    }
+	
+	if timer = 136{
+		GVCutIn = create_spark(30,0,self.id);
+		GVCutIn.sprite_index = cut_in_sprite;
+		GVCutIn.image_speed = 0;
+		GVCutIn.image_alpha = 0.1;
+		GVCutIn.depth = -15.5;
+		GVCutIn.image_yscale = view_hview/1280;
+		GVCutIn.image_xscale = GVCutIn.image_yscale;
+		GVCutIn.alarm[0] = 120
+		
+		GVCutIn.x = (view_xview + view_wview*0.95)
+		GVCutIn.y =  view_yview + view_hview
+	}
+	
+	if instance_exists(GVCutIn){
+		GVCutIn.image_yscale = view_hview/1280;
+		GVCutIn.image_xscale = GVCutIn.image_yscale;
+		GVCutIn.y =  view_yview + view_hview
+	}
+	
+	if ( timer >= 136 && timer < 166 )
+		GVCutIn.x -= view_wview * 0.01
+	
+	if ( timer >= 166 && timer < 196 )
+		GVCutIn.x -= view_wview * 0.0025
+	
+	if ( timer >= 196 && timer < 256 )
+		GVCutIn.x -= view_wview * 0.05
+	
+	
+    if ( timer >= 136 && timer <= 151 ){
+    if ( GVCutIn.image_alpha < 1 )
+      GVCutIn.image_alpha += 0.08;
+    }
+    if ( timer >= 241 && timer <= 256 ){
+    if ( GVCutIn.image_alpha > 0 )
+      GVCutIn.image_alpha -= 0.08;
+    }
+
+
+switch (timer)
+{
+case 258: image_index = 1; sound_play(voltanicchain_voice); break;
+case 260: image_index = 2; break;
+case 262: image_index = 3; break;
+case 264: image_index = 4; break;
+case 266: image_index = 5; break;
+case 268: image_index = 6; break;
+case 270: image_index = 7; break;
+case 272: image_index = 8; break;
+case 274: image_index = 9; break;
+case 276: image_index = 10; break;
+case 278: image_index = 11; break;
+case 280: image_index = 12; break;
+case 282: image_index = 13; break;
+case 284: image_index = 2; break;
+case 286: image_index = 3; break;
+case 288: image_index = 4; break;
+case 290: image_index = 5; break;
+case 292: image_index = 6; break;
+case 294: image_index = 7; break;
+case 296: image_index = 8; break;
+case 298: image_index = 9; break;
+case 300: image_index = 10; break;
+case 302: image_index = 11; break;
+case 304: image_index = 12; break;
+case 306: image_index = 13; break;
+case 308: image_index = 2; break;
+case 310: image_index = 3; break;
+case 312: image_index = 4; break;
+case 314: image_index = 5; break;
+case 316: image_index = 6; break;
+case 318: image_index = 7; break;
+case 320: image_index = 8; break;
+case 322: image_index = 9; break;
+case 324: image_index = 10; break;
+case 326: image_index = 11; break;
+case 328: image_index = 12; break;
+case 330: image_index = 13; break;
+case 332: image_index = 14; break;
+case 334: image_index = 15; break;
+}
+
+if timer = 300
+{
+zoom.camera_l = target.x - 8;
+zoom.camera_r = target.x + 8;
+zoom.camera_u = target.y - 4 - actual_height;
+zoom.camera_d = target.y + 4;
+zoom.camera_boundary_zoom = 120;
+}
+
+if timer = 320
+{
+    fsproj1 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,0,0,self.id,300,char_custom7);
+	fsproj1.speed = 7 * size;
+	fsproj1.x = target.x - 100;
+	fsproj1.y = target.y - target.actual_height * 0.5
+	fsproj1.depth = -15.5;
+	sound_play(chainsound);
+	chainhit = create_projectile (2,361,1.5,0,12,1,slash3,obj_spark_slash4,1.0,1.0,0,0,self.id,3,no_script);
+	chainhit.x = target.x;
+	chainhit.y = target.y - target.actual_height * 0.5
+}
+
+if timer = 330
+{
+    fsproj3 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,0,0,self.id,300,char_custom7);
+	fsproj3.speed = 7 * size;
+	fsproj3.x = target.x - 100;
+	fsproj3.y = target.y - 100 - target.actual_height * 0.5;
+	fsproj3.image_angle = 315;
+    fsproj3.direction = 315;
+	fsproj3.depth = -15.5;
+	sound_play(chainsound);
+	chainhit = create_projectile (2,361,1.5,0,12,1,slash3,obj_spark_slash4,1.0,1.0,0,0,self.id,3,no_script);
+	chainhit.x = target.x;
+	chainhit.y = target.y - target.actual_height * 0.5;
+}
+
+if timer = 340
+{
+    fsproj4 = create_projectile (2,35+facing*110,5.4,2,12,8,magic2,obj_spark_hit2,1.0,1.0,0,0,self.id,300,char_custom7);
+	fsproj4.speed = 7 * size;
+	fsproj4.x = target.x + 100;
+	fsproj4.y = target.y - 100 - target.actual_height * 0.5;
+	fsproj4.image_angle = 225;
+    fsproj4.direction = 225;
+	fsproj4.depth = -15.5;
+	sound_play(chainsound);
+	chainhit = create_projectile (2,361,1.5,0,12,1,slash3,obj_spark_slash4,1.0,1.0,0,0,self.id,3,no_script);
+	chainhit.x = target.x;
+	chainhit.y = target.y - target.actual_height * 0.5;
+}
+
+if timer = 360
+{
+fsproj1.image_speed = 0.5;
+fsproj2.image_speed = 0.5;
+fsproj3.image_speed = 0.5;
+fsproj4.image_speed = 0.5;
+}
+
+if timer >= 360 and timer < 448 and !instance_exists(chainshock)
+{
+	sound_play(shocksound3);
+	chainshock = create_projectile (2,361,1.5,0,12,1,shock3,obj_spark_shock,1.0,1.0,0,0,self.id,2,no_script);
+	chainshock.x = target.x;
+	chainshock.y = target.y - target.actual_height * 0.5;
+}
+
+if timer = 448
+{
+    with (fsproj1) {instance_destroy();}
+	with (fsproj2) {instance_destroy();}
+	with (fsproj3) {instance_destroy();}
+	with (fsproj4) {instance_destroy();}
+    sound_play(shocksound4);
+	chainshock = create_projectile (6,25 + facing * 130 , 8.5 , 7 , 12 , 30 , shock3 , obj_spark_shock ,1.0,1.0,0,0,self.id,2,no_script);
+	chainshock.x = target.x;
+	chainshock.y = target.y - target.actual_height * 0.5;
+	smashshock = create_blur(x,y,self.id);
+    smashshock.sprite_index = smashshock_fx;
+    smashshock.image_index = 0;
+    smashshock.image_speed = 0.5;
+    smashshock.image_xscale = 3.5*size;
+    smashshock.image_yscale = 3.5*size;
+    smashshock.depth = -15.5;
+    smashshock.x = target.x;
+    smashshock.y = target.y - target.actual_height * 0.5;
+}
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

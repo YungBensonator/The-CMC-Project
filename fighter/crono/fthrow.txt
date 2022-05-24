@@ -1,0 +1,96 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "air_attack";
+  attack_type = "fthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fthrow_sprite;
+  timer = 0;
+  time = 97;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 70;
+  sound_play(sheath_sound);
+  sound_play(assist_voice1);
+  }
+
+gravity_lock = 1;
+fast_fall = 0;
+fast_fall_temp = 0;
+
+switch (timer)
+{
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 6: image_index = 3; break;
+case 8: image_index = 4; break;
+case 10: image_index = 5; break;
+case 12: image_index = 6; break;
+case 14: image_index = 7; break;
+case 16: image_index = 8; break;
+case 18: image_index = 9; break;
+case 67: sprite_index = fthrow_sprite2; image_index = 0; x = x + size * (70-facing*140); break;
+case 69: image_index = 1; break;
+case 71: image_index = 2; break;
+case 73: image_index = 3; break;
+case 75: image_index = 4; break;
+case 95: image_index = 5; break;
+}
+
+if timer = 2
+{
+marle = create_projectile(10,85+facing*10,4.6,6,15,3,slash3,obj_spark_slash2,1,1,-30,0,self.id,300,char_custom2);
+marle.y = y * size;
+}
+
+if timer > 2 && timer < 67
+{
+target.y = y * size;
+}
+
+if timer = 43
+{
+iceblock = create_blur(x,y,self.id);
+iceblock.sprite_index = iceblock_fx;
+iceblock.image_index = 0;
+iceblock.image_speed = 1.5;
+iceblock.image_xscale = 0.6*(1-facing*2)*target.size;
+iceblock.image_yscale = 0.6*target.size;
+iceblock.depth = -2;
+iceblock.x = target.x *size;
+iceblock.y = target.y - 60 *target.size;
+iceblock.image_alpha = 0.5;
+frost = create_projectile(4,362,0,0,4,3,ice1,obj_spark_ice,1.5,1.5,10,0,self.id,1,no_script);
+frost.hit_stun = 14;
+sound_play(fthrow_sound);
+}
+
+ if timer < 67 && instance_exists(target) && (string(target.state_type) = "air_flinch" || string(target.state_type) = "grabbed") {
+        target.speed = 0
+        target.gravity = 0
+    }
+
+if ( timer == 67 )
+  {
+  create_throw_box ( 10 , 25 + 130 * facing , 3.55 , 5.29 , 14 , 1 , slash3 , obj_spark_slash4 , 10 , 0.7 , -30 , 10 , self.id , 2 );
+sound_play2(freeze3);
+sound_play(swingsnd3);
+icebreak = create_blur(x,y,self.id);
+icebreak.sprite_index = icebreak_fx;
+icebreak.image_index = 0;
+icebreak.image_speed = 0.8;
+icebreak.image_xscale = 0.7*(1-facing*2)*target.size;
+icebreak.image_yscale = 0.7*target.size;
+icebreak.depth = -2;
+icebreak.x = target.x *size;
+icebreak.y = target.y - 150 *target.size;
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
