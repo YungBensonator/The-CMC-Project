@@ -5,7 +5,7 @@ if state_type = "jump" {
         sprite_index = uair_sprite;
         image_index=-0.2;
         timer = 0;
-        time = 20;
+        time = 18;
         timer_speed=1;
 }
         if timer < time {
@@ -14,29 +14,33 @@ if state_type = "jump" {
                 sound_play(attacksnd3);
                 if random(5)>1
                 play_attack_voice()
-                create_hitbox2(4,angle_correct(80),5.9,1.6,13,9,kick2,obj_spark_hit2,0.9,0.9,10,26,self.id,8,2);
-                hitbox.hit_stun = 2
-                create_hitbox(4,angle_correct(80),5.9,1.6,11,8,kick2,obj_spark_hit2,0.74,0.8,10,19,self.id,3,2);
-		hitbox2.hit_stun = 2
+                create_hitbox2(4,angle_correct(110),5,4,13,9,kick2,obj_spark_hit2,0.74,0.9,10,26,self.id,8,2);
+                hitbox.hit_stun = 4
+                create_hitbox(4,angle_correct(80),5.5,3.5,11,8,kick2,obj_spark_hit2,0.74,0.9,11,5,self.id,4,2);
+		        hitbox2.hit_stun = 8
             }
             if timer = 9 {
-                hitbox.damage = round(7*size);
-                hitbox.bkb = 4.9*size;
-                hitbox.kbg = 6*size;
-                hitbox.dir = angle_correct(60);
-                hitbox.hitbox_x = size*(-4+facing*8);
-                hitbox.hitbox_y = 30*size;
-                hitbox.shield_damage = 9;
-                hitbox.hitlag_frames = round(6*size);
-                hitbox.sfx = kick1;
-                hitbox.gfx = obj_spark_hit1;
+                hitbox2.hitbox_x = size*(-4+facing*10);
+                hitbox2.hitbox_y = 30*size;
+                hitbox2.hitlag_frames = round(6*size);
+                hitbox2.sfx = kick1;
+                hitbox2.gfx = obj_spark_hit1;
+                hitbox2.di = -1
+            }
+               if timer = 10 {
+                hitbox2.dir = angle_correct(120);
+                hitbox2.hitbox_x -= 10;
+                hitbox2.hitbox_y -= 15 ;
+                hitbox2.sfx = kick1;
+                hitbox2.gfx = obj_spark_hit1;
+                hitbox2.di = -1
             }
             if air = 0 {
                 state_type="land";
                 sprite_index = land_sprite;
                 attack_type="none";
                 timer=0;
-                time=10; 
+                time=11; 
             }
 }
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
