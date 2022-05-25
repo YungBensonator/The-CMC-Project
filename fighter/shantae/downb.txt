@@ -64,24 +64,24 @@ if temp = 0 {
          sound_play(attack_voice2);
          effect_create_below(ef_ring,x,y-actual_height * 0.5,0,c_red)
 	 if (!instance_exists(pikeball_proj1) || pikeball_proj1.attacker != id) && pikeball1 <= 0 {
-         pikeball_proj1 = create_projectile(2,364,2.25,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,300,char_custom5); 
+         pikeball_proj1 = create_projectile(2,364,2,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,250,char_custom5); 
 	 pikeball_proj1.angle = 0;
 	 pikeball_proj1.shantae = self.id;
-	 pikeball1 = 300
+	 pikeball1 = 250
 	 dud = 0;
 	 temp2 = 1 }
 	 if temp2 = 0 && (!instance_exists(pikeball_proj2) || pikeball_proj2.attacker != id) && pikeball2 <= 0 {
-         pikeball_proj2 = create_projectile(2,364,2.25,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,300,char_custom5); 
+         pikeball_proj2 = create_projectile(2,364,2,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,250,char_custom5); 
 	 pikeball_proj2.angle = 120;
 	 pikeball_proj2.shantae = self.id;
-	 pikeball2 = 300
+	 pikeball2 = 250
 	 dud = 0;
 	 temp2 = 1 }
 	 if temp2 = 0 && (!instance_exists(pikeball_proj3) || pikeball_proj3.attacker != id) && pikeball3 <= 0 {
-         pikeball_proj3 = create_projectile(2,364,2.25,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,300,char_custom5); 
+         pikeball_proj3 = create_projectile(2,364,2,0,4,3,kick2,obj_spark_hit1,0.4,0.4,0,13,self.id,250,char_custom5); 
 	 pikeball_proj3.angle = 240;
 	 pikeball_proj3.shantae = self.id;
-	 pikeball3 = 300 
+	 pikeball3 = 250 
 	 dud = 0; }
 	 
    	 if ( !dud )
@@ -145,12 +145,12 @@ if temp = 0 {
 	    if timer = 4 {
   		shakex = last_shakex - lengthdir_x ( charge_timer * 0.01 , charge_timer * 55 ) * ( 1 - facing * 2 );
   		charge_timer += 1.5
-		if charge_timer >= 30
+		if charge_timer >= 35
 		instance_create(x-10*(1-facing*2),y-15,obj_spark_effect)
   		image_blend = merge_color ( c_white , c_purple , 0.5 + lengthdir_x ( 0.5 , charge_timer * 50 ) );
   		alarm[7] = 2;
 		}  
-	    if timer = 5 && special = 1 && charge_timer < 72
+	    if timer = 5 && special = 1 && charge_timer < 80
 	    timer = 3
 	    if ( sin ( charge_timer * pi /6 ) == 1 ) && timer < 6
     		{
@@ -158,12 +158,12 @@ if temp = 0 {
     		}
 if ( timer == 19 )
   {
-  if ( charge_timer < 72 )
+  if ( charge_timer < 80 )
   {
   sound_play(pikeball_voice);
   sound_play(pikeball_activate_sound);
   }
-  if ( charge_timer >= 72 )
+  if ( charge_timer >= 80 )
   {
   sound_play( choose ( superpikeball_voice1 , superpikeball_voice2 ) );
   sound_play(superpikeball_activate_sound);
@@ -211,6 +211,7 @@ if ( timer == 19 )
 
 if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
+    cantdb = 350
     if air = 0
     state_type = "stand";
     else
@@ -233,6 +234,5 @@ state_type = "stand";
 attack_type = "none";
 timer = 0;
 time = -1;
-cantdb = 150
 char_b();
 }
