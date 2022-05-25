@@ -1,0 +1,143 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = usmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 500;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		lol = 0
+}
+
+if timer < 100 {
+speed=0
+gravity_lock = 1;
+}
+
+if timer >= 200 {
+speed=0
+gravity_lock = 1;
+}
+if ( timer < time ){
+
+switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	
+	case 100: image_index = 7; break;
+	case 108: image_index = 6; break;
+	case 116: image_index = 5; break;
+	case 124: image_index = 4; break;
+	case 132: image_index = 3; break;
+	case 138: image_index = 2; break;
+	
+    }
+	
+	
+	
+	
+	
+	if timer = 16 {
+	thefuckzone = create_projectile(1, 370, 3.5, 0.1, 200, 1, magic2, obj_spark_fire1, 1, 1, 15, 0, self.id, 20, char_custom5);
+	thefuckzone.alarm[0] = 9999
+	}
+	
+	if timer = 100 {
+		sprite_index = mid_jump_sprite
+		image_index = 7
+	}
+	
+	if timer = 108 {
+		vspeed = -5
+		hspeed = -4 * (1-facing*2)
+	}
+	
+	if timer > 108 and air = 0 and timer < 200 {
+		timer = 200
+		sprite_index = ssmash_sprite
+		hspeed = 0
+	}
+	
+	if timer = 151 {
+		timer = 199
+	}
+	
+	if timer = 200 {
+		sprite_index = ssmash_sprite
+		hspeed = 0
+		vspeed = 0
+	}
+	
+	if timer = 201 {
+		bustercharge = create_spark(16,19,self.id);
+    bustercharge.sprite_index = cometcharge_sprite;
+    bustercharge.image_speed = 0.5;
+    bustercharge.image_alpha = 1;
+    bustercharge.image_xscale = 0.8 * (1-facing*2);
+    bustercharge.image_yscale = 0.8;
+    bustercharge.depth = depth - 0.5;
+    bustercharge.snap = self.id
+	bustercharge.loop = 9999
+	}
+	
+	if timer >= 201 and timer < 300 and timer mod 10 = 0{
+		sound_play(bustercharge_sound);
+		duster = instance_create(x-(3-facing*6)*size,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_xscale = 0.4
+                duster.image_yscale = 0.4
+	}
+	
+	if timer = 299 {
+		zawarudo  = instance_create(x,y,obj_freeze)
+zawarudo.dontpause = self.id
+zawarudo.alarm[0] = 50
+zoom = instance_create ( 0 , 0 , obj_camerazoom );
+zoom.camera_l = x - 8;
+zoom.camera_r = x + 8;
+zoom.camera_u = y - 4 - actual_height;
+zoom.camera_d = y + 4;
+zoom.camera_boundary_zoom = 50;
+zoom.alarm[0] = 50;
+sound_play(starko_snd);
+with (thefuckzone) {instance_destroy()}
+	with (bustercharge) {instance_destroy()}
+	}
+	
+	if timer >= 300 and timer < 350 and timer mod 5 = 0 {
+		boom1 = instance_create(x+16*(1-facing*2),y-19,obj_spark_effect);
+	}
+	
+	
+	if timer = 350 {
+		create_projectile(1, angle_correct(30), 5.5, 3, 10, 10, magic2, obj_spark_hit3, 3, 1.5, 11, 19, self.id, 1000, char_custom6);
+	sound_play(shinkubeamrelease_sound);
+	}
+		
+	  
+	
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

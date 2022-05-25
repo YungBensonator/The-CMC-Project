@@ -1,0 +1,71 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+//self explanatory
+sprite_index = attacker.beamhadoken_sprite
+priority = 5
+//you set the projectile's priority with this so you can determine whether or not it's gonna clash against other projectiles
+//from 1 to 4 it'll be able to either clash, be overridden or override projectiles with equal, lower or higher priority respectively.
+//with a value of 5, it'll directly completely ignore any and all other enemy projectiles.
+image_speed = 0.5
+moving_object = 0
+//whether or not this projectile is gonna interact with surfaces like floors, ceilings, walls or platforms.
+//if set to 1, it'll stop its vertical speed if crashing against a floor or ceiling, and its horizontal speed if hitting a wall.
+//if set to 0, it'll go through all surfaces.
+
+speed = 0;
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+looped = 1
+direction = angle_correct(0)
+//set an angle going from 0 to 359, where if your character faces to the right when firing the projectile:
+//0 is to the right, 90 is directly upwards, 180 is to the left, and 270 is directly downwards.
+//Values between these four correspond to diagonals (45, 135, 225, 315)
+hithim = 0
+image_angle = direction+facing*180
+//this sets the projectile's orientation to match the direction it's heading towards.
+//Useful if you're not just shooting it forwards, but at a set direction.
+}
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	time = 1000
+	
+	if image_index < 21 and timer mod 6 = 0 {
+		hit = 0
+	}
+	
+	if image_index >= 19 and looped < 3 {
+		image_index = 3
+		looped += 1
+	}
+	
+	if image_index = 21 {
+	bkb = 8
+	kbg = 7
+	hitlag_frames = 25
+	sfx = magic3
+	gfx = obj_spark_hit4
+	hit = 0
+	}
+	
+	if image_index > 21 {
+		hit = 2
+	}
+	
+	if image_index >= 33 {
+		instance_destroy()
+	}
+	
+}
+	
+
+
+
+	
+
+//this destroys the projectile if it touches a wall, a floor or a platform without having hit any enemies. Delete it if that's not what you want.

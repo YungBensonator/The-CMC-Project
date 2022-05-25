@@ -1,0 +1,128 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+//self explanatory
+sprite_index = attacker.groundburst_sprite
+priority = 5
+//you set the projectile's priority with this so you can determine whether or not it's gonna clash against other projectiles
+//from 1 to 4 it'll be able to either clash, be overridden or override projectiles with equal, lower or higher priority respectively.
+//with a value of 5, it'll directly completely ignore any and all other enemy projectiles.
+image_speed = 0.7
+moving_object = 0
+//whether or not this projectile is gonna interact with surfaces like floors, ceilings, walls or platforms.
+//if set to 1, it'll stop its vertical speed if crashing against a floor or ceiling, and its horizontal speed if hitting a wall.
+//if set to 0, it'll go through all surfaces.
+
+speed = 0;
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+
+direction = angle_correct(0)
+//set an angle going from 0 to 359, where if your character faces to the right when firing the projectile:
+//0 is to the right, 90 is directly upwards, 180 is to the left, and 270 is directly downwards.
+//Values between these four correspond to diagonals (45, 135, 225, 315)
+hithim = 0
+image_angle = direction+facing*180
+//this sets the projectile's orientation to match the direction it's heading towards.
+//Useful if you're not just shooting it forwards, but at a set direction.
+}
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	
+	time = 10000
+	
+	if timer mod 7 = 0 {
+		cross = instance_create(x,y-20,obj_spark);
+		cross.x = x + random_range(-90,-60) * (1-facing*2)
+		cross.y = y - random_range(15,30)
+    cross.sprite_index = attacker.cross_sprite;
+	cross.image_index = 0;
+    cross.anim_speed = 0.7;
+    cross.image_alpha = 1;
+    cross.image_xscale = 0.4 * (1-facing*2);
+    cross.image_yscale = 0.4;
+    cross.depth = depth - 0.1;
+    cross.vspeed = -0.5
+	sound_play(attacker.shot_sound);
+	
+	cross2 = instance_create(x,y-20,obj_spark);
+		cross2.x = x + random_range(-60,-30) * (1-facing*2)
+		cross2.y = y - random_range(10,30)
+    cross2.sprite_index = attacker.cross_sprite;
+	cross2.image_index = 0;
+    cross2.anim_speed = 0.7;
+    cross2.image_alpha = 1;
+    cross2.image_xscale = 0.4 * (1-facing*2);
+    cross2.image_yscale = 0.4;
+    cross2.depth = depth - 0.1;
+    cross2.vspeed = -0.5
+	
+	cross3 = instance_create(x,y-20,obj_spark);
+		cross3.x = x + random_range(-30,0) * (1-facing*2)
+		cross3.y = y - random_range(10,30)
+    cross3.sprite_index = attacker.cross_sprite;
+	cross3.image_index = 0;
+    cross3.anim_speed = 0.7;
+    cross3.image_alpha = 1;
+    cross3.image_xscale = 0.4 * (1-facing*2);
+    cross3.image_yscale = 0.4;
+    cross3.depth = depth - 0.1;
+    cross3.vspeed = -0.5
+	
+	cross4 = instance_create(x,y-20,obj_spark);
+		cross4.x = x + random_range(0,30) * (1-facing*2)
+		cross4.y = y - random_range(10,30)
+    cross4.sprite_index = attacker.cross_sprite;
+	cross4.image_index = 0;
+    cross4.anim_speed = 0.7;
+    cross4.image_alpha = 1;
+    cross4.image_xscale = 0.4 * (1-facing*2);
+    cross4.image_yscale = 0.4;
+    cross4.depth = depth - 0.1;
+    cross4.vspeed = -0.5
+	
+	cross5 = instance_create(x,y-20,obj_spark);
+		cross5.x = x + random_range(30,60) * (1-facing*2)
+		cross5.y = y - random_range(10,30)
+    cross5.sprite_index = attacker.cross_sprite;
+	cross5.image_index = 0;
+    cross5.anim_speed = 0.7;
+    cross5.image_alpha = 1;
+    cross5.image_xscale = 0.4 * (1-facing*2);
+    cross5.image_yscale = 0.4;
+    cross5.depth = depth - 0.1;
+    cross5.vspeed = -0.5
+	
+	cross6 = instance_create(x,y-20,obj_spark);
+		cross6.x = x + random_range(60,90) * (1-facing*2)
+		cross6.y = y - random_range(10,30)
+    cross6.sprite_index = attacker.cross_sprite;
+	cross6.image_index = 0;
+    cross6.anim_speed = 0.7;
+    cross6.image_alpha = 1;
+    cross6.image_xscale = 0.4 * (1-facing*2);
+    cross6.image_yscale = 0.4;
+    cross6.depth = depth - 0.1;
+    cross6.vspeed = -0.5
+	}
+	
+	
+	
+}
+
+if hit = 1 and timer mod 7 = 0
+hit = 0
+
+
+
+
+
+	
+
+
+//this destroys the projectile if it touches a wall, a floor or a platform without having hit any enemies. Delete it if that's not what you want.

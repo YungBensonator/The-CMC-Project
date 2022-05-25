@@ -1,0 +1,77 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+priority = 2
+sprite_index = attacker.car_sprite
+image_speed = 0.4
+moving_object = 1
+sound_play(attacker.car_sound);
+hit = 2
+hspeed = 2 * (1-facing*2);
+vspeed = 3;
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+bubble = create_homing_bubble(1 , 1 , 1 , 10,self.id,100);
+//this sets the projectile's orientation to match the direction it's heading towards.
+//Useful if you're not just shooting it forwards, but at a set direction.
+}
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	
+	bubble.x = x
+	bubble.y = y
+	
+	
+	
+	if timer < 135
+	hit = 2
+	
+	if ( target > 0 && target != self.id ) and timer < 99 {
+	timer = 2000
+	sprite_index = car_boom_sprite
+	image_index = 0
+	sound_stop(attacker.car_sound);
+	}
+	
+	if timer = 100 {
+		sprite_index = attacker.car_boom_sprite
+	image_index = 0
+	sound_stop(attacker.car_sound);
+	}
+	
+	if timer >= 100
+	hspeed = 0
+	
+	if timer = 200 {
+	sprite_index = attacker.blueexplosion_sprite
+	image_xscale = 3 * (1-facing*2)
+	image_yscale = 3
+	hit = 0
+	sound_play(attacker.downbexplosion_sound);
+	}
+	
+	if timer >= 150 and image_index >= 36
+	instance_destroy()
+	
+	
+	
+	
+	
+	
+	
+	
+}
+
+if hit = 1
+time = 1000
+
+
+	
+
+
+//this destroys the projectile if it touches a wall, a floor or a platform without having hit any enemies. Delete it if that's not what you want.

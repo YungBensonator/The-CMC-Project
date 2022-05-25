@@ -1,0 +1,91 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 610;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+
+if timer < time {
+	state_type = "air_attack"
+    switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 6: image_index = 1; break;
+	case 10: image_index = 2; break;
+	
+	case 60: image_index = 1; sprite_index = upbend_sprite; break;
+	case 67: image_index = 2; break;
+	case 600: image_index = 3; break;
+	case 605: image_index = 4;  break;
+      }
+	  
+	  if timer < 60 {
+		  image_angle = 60 * (1-facing*2)
+	  }
+	  
+	  if timer < 15 {
+	  vspeed = 0
+	  hspeed = 0
+	  }
+	  
+	  if timer = 15 {
+		  vspeed = -2
+		  sound_play(rocket_sound);
+		  boom1 = instance_create(x,y,obj_spark_explode2);
+		  sound_play(explode_small);
+	  }
+	  
+	  if timer >= 15 and timer < 60 {
+		  vspeed -= 0.15
+		  hspeed = 1.9 * (1-facing*2)
+		  gravity_lock = 1
+		  air_move = 0
+		  if timer mod 3 = 0
+	instance_create(x,y,obj_smoke);
+
+	  }
+	  
+	  if timer = 60 {
+		  boom1 = instance_create(x,y-16,obj_spark_explode1);
+		  sound_play(explode_big);
+		  vspeed = -6
+		  hspeed = -4 * (1-facing*2)
+		  gravity_lock = 0
+		  image_angle = 0
+		  sound_stop(rocket_sound);
+	  }
+	  
+	  if timer >= 67 and timer < 600 {
+		  air_move = 1
+	  }
+	  
+	  if timer >= 60 and timer < 599 and air = 0 {
+		  timer = 599
+		  force_edge_grab = 1
+		  fast_fall = 1
+fast_fall_temp = 1
+	  }
+	  
+	  
+	  
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

@@ -1,0 +1,41 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "crouch" and air = 0 {
+        state_type = "attack"
+        attack_type = "downb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+        time = 40
+		hspeed = 0
+}
+if ( timer < time )
+    {
+	
+    switch ( timer )
+    {
+	case 0: image_index = 0; break;
+	case 8: image_index = 1; break;
+	case 16: image_index = 2; break;
+	case 24: image_index = 1; break;
+	case 50: image_index = 0; break;
+    }
+	
+	if timer = 32 {
+	create_projectile(5, angle_correct(30), 3, 2, 100, 20, magic3, obj_spark_shock, 0.6, 0.6, 15, 0, self.id, 1000, char_custom3);
+	}
+	  
+	
+
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

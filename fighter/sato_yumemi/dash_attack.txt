@@ -1,0 +1,89 @@
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "dash_attack";
+        image_speed = 0;
+        sprite_index = mid_jump_sprite;
+        image_index=0;
+        timer = 0;
+        time = 45;
+		hspeed *= 0.4
+		has_hit = 0
+}
+if timer < time {
+    state_type = "air_attack";
+	switch (timer) 
+	{
+	case 3: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 13: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 22: image_index = 2; break;
+	case 25: image_index = 3; break;
+	case 28: image_index = 4; break;
+	case 31: image_index = 5; break;
+	case 34: image_index = 6; break;
+	}
+	
+	if timer >= 0 and timer <= 9{
+		vspeed = -4
+	}
+	
+	if timer = 0{
+		sound_play(jump_sound)
+	}
+	
+	if timer = 3{
+		hspeed = 2*size*(1-facing*2)
+	}
+	
+	
+	if timer = 10{
+		direction = angle_correct(340)
+		speed = 6
+		sound_play(dashattack_sound);
+		play_attack_voice()
+		create_hitbox(9,angle_correct(45),8,4,5,9,punch3,obj_spark_hit1,1.0,1.0,00,18,self.id,20,3);
+		hitbox.execute_on_hit = "attacker.has_hit = 1"
+	}
+	
+	if timer >= 10 and timer <= 34{
+		gravity = 0
+		gravity_lock = 1
+		after_image(7,c_white,0.5)
+		with (dacircle)
+		after_image(7,image_blend,0.5)
+	}
+	
+	
+	if timer >= 10 and timer < 34 and (has_hit = 1 or air = 0){
+		timer = 34
+		if air = 0
+		sound_play(thud2_sound)
+		hspeed = -5*size*(1-facing*2)
+		vspeed = -5
+	}
+	
+	
+	
+	if timer = 10{
+		for (i = 0; i < 3; i += 1){
+		dacircle = create_spark( 00 , 18 , dash_atk_eff_sprite , 0 , 0.25 , 0.25 );
+		dacircle.alarm[0] = 30
+		dacircle.angle_add = -30
+		dacircle.image_angle = 30 * i
+		dacircle.image_blend = c_aqua
+		dacircle.snap = self.id
+		dacircle.image_alpha = 0.3
+		dacircle.depth = depth + 2
+		}
+	}
+	
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

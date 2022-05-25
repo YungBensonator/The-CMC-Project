@@ -1,0 +1,66 @@
+if time = -1 {
+hspeed = 0;
+state_type = "air_attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = uair_sprite;
+image_index=0;
+timer = 0;
+time = 33;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 35
+}
+if timer < time {
+     switch (timer) { 
+	case 0: image_index = 0; break; 
+	case 1: image_index = 1; break; 
+	case 3: image_index = 2; break; 
+	case 5: image_index = 3; break; 
+	case 7: image_index = 4; break; 
+	case 9: image_index = 6; break; 
+	case 25: image_index = 7; break; 
+	case 31: image_index = 8; break; 
+}
+	  
+
+	
+	if timer = 7 {
+		sound_play(whiff_sound3);
+        create_hitbox ( 9 , angle_correct(80) , 7.7 , 4.8 , 20 , 11 , slash3 , obj_spark_slash3 , 0.91 , 1.51 , 20 , 20.80 , self.id , 3 , 3 );		
+        vspeed = -6
+		hspeed = 1 * (1-facing*2)
+		
+		genocidecutter = create_spark(-5,17,self.id);
+    genocidecutter.sprite_index = fuckyouskoopslol_sprite;
+    genocidecutter.image_speed = 0.3;
+    genocidecutter.image_alpha = 1;
+    genocidecutter.image_xscale = 0.3 * (1-facing*2);
+    genocidecutter.image_yscale = 0.3;
+    genocidecutter.depth = depth - 0.1;
+    genocidecutter.snap = self.id
+	sound_play(fuckyouskoopslol_sound);
+	}
+	
+
+	
+	
+	  
+	if air = 0 and timer > 7 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=9; }
+  }
+	  
+	
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

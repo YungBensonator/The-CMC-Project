@@ -1,0 +1,57 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+priority = 3
+sprite_index = attacker.cross2_sprite
+
+moving_object = 1
+
+
+hspeed = 0;
+vspeed = 0;
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+image_angle = 334 * (1-facing*2)
+groundburst = instance_create(x,y,obj_spark);
+    groundburst.sprite_index = attacker.groundburst_sprite;
+	groundburst.image_index = 0;
+    groundburst.anim_speed = 0.8;
+    groundburst.image_alpha = 0.9;
+    groundburst.image_xscale = 0.4 * (1-facing*2);
+    groundburst.image_yscale = 0.4;
+    groundburst.depth = depth - 0.1;
+    groundburst.snap = self.id
+//this sets the projectile's orientation to match the direction it's heading towards.
+//Useful if you're not just shooting it forwards, but at a set direction.
+}
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	
+	if timer <= 10 {
+		image_yscale += 0.025
+	}
+	
+	if timer >= 40 {
+		image_yscale -= 0.025
+	}
+	
+	if timer = 59 {
+		instance_destroy()
+	}
+	
+	
+}
+
+if hit {
+	time = 1000
+	//replace this last variable with the actual value you gave the projectile for its duration so that it doesn't disappear if it hits an opponent
+	}
+	
+
+
+//this destroys the projectile if it touches a wall, a floor or a platform without having hit any enemies. Delete it if that's not what you want.

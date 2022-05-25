@@ -1,0 +1,81 @@
+if state_type = "jump"
+  {
+    state_type = "air_attack";
+    attack_type = "nair";
+    sprite_index = nair_sprite;
+    image_index = 0;
+    image_speed = 0;
+    timer = 0;
+    time = 30;
+    timer_speed=1;
+	with (player)
+	hit_by_yumemi_nair = 0
+	with (obj_enemy)
+	hit_by_yumemi_nair = 0
+	
+  }
+
+if ( timer < time )
+  {
+    state_type = "air_attack";
+	switch (timer)
+	{
+	case 6: image_index = 1; break;
+	}
+	
+	if timer >= 6{
+		image_angle += -30+(60*facing)
+	}
+	
+	if timer = 6{
+		play_attack_voice()
+	}
+	
+	if timer = 6 or timer = 10 or timer = 14{
+		sound_play(whiff_sound1);
+		create_hitbox(2,370,4,0,5,2,punch2,obj_spark_hit1,1.4,1.4,00,25,self.id,4,3);
+		hitbox.execute_on_hit = "attacked.hit_by_yumemi_nair = 1; attacked.yumemi = attacker.id"
+		hitbox.weight_kb = 1
+	}
+	if timer = 18{
+		sound_play(whiff_sound1);
+		create_hitbox(2,angle_correct(30),6,4,5,6,punch3,obj_spark_hit1,1.4,1.4,00,25,self.id,10,3);
+	}
+	
+	if timer < 18
+	with (player)
+	if hit_by_yumemi_nair = 1{
+		speed = yumemi.speed + 1
+		direction = point_direction(x,y,yumemi.x,yumemi.y)
+	}
+	
+	if timer < 18
+	with (obj_enemy)
+	if hit_by_yumemi_nair = 1{
+		speed = yumemi.speed + 1
+		direction = point_direction(x,y,yumemi.x,yumemi.y)
+	}
+	
+  
+if air = 0 {
+	if timer < 18
+	create_projectile(2,angle_correct(30),6,4,5,6,punch3,obj_spark_hit1,1.4,1.4,00,25,self.id,1,-1);
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=12;
+}
+	
+  }
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+
+  image_index = 0;
+  timer = 0;
+  time = -1;
+}
