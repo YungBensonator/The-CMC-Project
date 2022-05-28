@@ -7,18 +7,16 @@ no_hurtbox = 1
 	specialtime = 0;
 }
 
-if state_type = "land" && (ubtemp >= 0 || sbtemp > 0 && ubtemp >= 0){
-image_blend = c_purple;
-   movedown = true
-   moveleft = false
-   moveright = false
-   movejump = false
-   image_speed = 0.1
-    state_type="land";
-    attack_type="none";
-    sprite_index = land_sprite;
-
-   
+if state_type = "land" && specialtime > 1 {
+   for (i = specialtime ; i > 0; i -= 1){
+		state_type="tumble";
+		image_blend = c_purple;
+   		image_speed = 0.1
+		flashing = true
+		attack_type = "none"
+		sprite_index = "crouch_sprite"
+		sbtemp = 0;
+}
 
 }
 
@@ -30,26 +28,15 @@ specialtime -= 1
 if specialtime == 0{
 	sbtemp = 0;
 	ubtemp = 0;
-	movedown = false
 	bananako = -4.9
 	image_blend = c_white;
 	flashing = true
-	flashing = false
 	
 
+	
 	
 }
- if attack_type != "none" && specialtime > 0 && air = 0 && ubtemp > 0{
-	 sbtemp = 0;
-	ubtemp = 0;
-	 image_speed = 0.1
-	 attack_type = "none"
-	 state_type="land"
-	 sprite_index = land_sprite;
-	 specialtime = 0;
-	 image_blend = c_white;
-
- }
+flashing = false
 
 if ( instance_exists ( floor1 ) && attack_type = "none" )
 {
