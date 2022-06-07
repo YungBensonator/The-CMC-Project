@@ -356,29 +356,16 @@ if ( timer < time )
 	vspeed = -16*size;
       }
     if ( timer >= 8 )
-	{
 	hspeed = size * (2.5-facing*4.5);	
-	}
     if ( timer = 12 )
-	{
 	vspeed = -2*size;	
-	}
     if ( timer >= 34 )
-	{
-	vspeed = 2.5*size;
-	}
-    if ( timer >= 46 and timer <69)
-	{
+	vspeed = 8*size;
+    if ( timer >= 46 )
 	vspeed = 2*size;
-}
-
-
-
 
     if ( timer = 20 )
-	{
 	intangible = 0;
-	}
 
 if timer >7 and timer < 46{
     {
@@ -413,8 +400,8 @@ if (instance_exists(hitbox)) {with (hitbox) {instance_destroy();}}
 
 if timer = 78{
 
-		 create_hitbox(13,angle_correct(40),3.5,8.7,14,10,kick3,obj_spark_hit4,0.5,0.5,-1,10,self.id,35,2);
-		 create_hitbox2(13,323+(-106)*facing,6,8.7,14,10,kick3,obj_spark_hit4,0.4,0.4,9,1,self.id,35,2);
+		 create_hitbox(13,angle_correct(40),3.5,8.7,14,10,kick3,obj_spark_hit4,0.9,0.9,3,10,self.id,40,4);
+		 create_hitbox2(13,323+(-106)*facing,6,8.7,14,10,kick3,obj_spark_hit4,0.4,0.4,9,1,self.id,40,4);
 		}
 
    if ( air = 0 && timer >= 7  )
@@ -427,7 +414,10 @@ if timer = 78{
 	time = 35;
 	sprite_index = downbdairgetup_sprite
       }
-
+if timer = 72{
+vspeed = 8;
+hspeed = (12 - facing*24)*size;
+}
 
 
 if timer >= 11 && timer <= 69  && attacking { 
@@ -494,22 +484,12 @@ if timer = 95{
     }
 */
 
-if timer >20 and timer < 95 and attacking || special{
+if timer >20 and timer < 95 {
 	    if ( moveright and facing = 0)
-
-		hspeed = 5.5*size;
+		hspeed = 3.5*size;
 	    if ( moveleft and facing = 1)
-		hspeed = -5.5*size;
+		hspeed = -3.5*size; }
 
-		}
-if timer >70 and timer < 95 {
-vspeed= 6
-	    if ( moveright and facing = 0)
-
-		hspeed = 5.5*size;
-	    if ( moveleft and facing = 1)
-		hspeed = -5.5*size;
-		}
 
 //----------------------------//////////////////////////////////////////
  /*if ( timer >= 21 && timer <= 65 )
@@ -613,7 +593,6 @@ if (attack_success || target.object_index == obj_enemy) && ( dontrepeat = 0 && o
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
   {
    // facing = !facing;
-   	intangible = 0;
     dontrepeat = 0;
 	state_type = "jump";
     attack_type = "none";
