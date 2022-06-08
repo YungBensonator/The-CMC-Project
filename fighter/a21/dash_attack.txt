@@ -1,0 +1,77 @@
+if ( state_type = "run" )
+  {
+    state_type = "air_attack";
+    attack_type = "dash_attack";
+    timer = 0;
+    time = 30;
+    sprite_index = super2_sprite1;
+    image_speed = 0;
+    image_index = 3;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 4; break;
+	case 6: image_index = 5; break;
+	case 13: image_index = 6; break;
+	case 16: image_index = 7; break;
+      }
+	if timer = 3 {
+	sound_play(chargestart);
+	sound_play(super2dash);
+	create_hitbox(7,30+facing*120,7,5,6,3,goku_hit,obj_spark_hit4,1.89 , 1.34 , 3.50 , 16.50,self.id,10,2);
+	hitbox.di = 0;
+   }
+   if timer >= 3 && timer <= 13 {
+	speed = 10*(1-facing*2);
+	direction = 0*(1-facing*2);
+	vspeed = 0;
+	gravity_lock = 1;
+	}
+	if timer >= 5 && timer <= 20 && canceltemp = 1 && special {
+		interrupt = 1;
+	}
+   if timer >= 3 && timer <= 13 {
+	if !instance_exists(upb_eff) {
+			upb_eff = instance_create(x+20*(1-facing*2),y-15*size,obj_spark)
+			upb_eff.sprite_index = upb_fx1
+			upb_eff.image_xscale = size*0.3-facing*0.6
+			upb_eff.image_yscale = size*0.3
+			upb_eff.image_speed = 0.6
+			upb_eff.image_alpha = 1
+			upb_eff.depth = 1
+			upb_eff.snap = self.id
+			upb_eff.image_angle = image_angle
+			upb_eff.x = x
+	}
+	if !instance_exists(upb_eff2) {
+			upb_eff2 = instance_create(x+20*(1-facing*2),y-15*size,obj_spark)
+			upb_eff2.sprite_index = upb_fx2
+			upb_eff2.image_xscale = size*0.55-facing*1.1
+			upb_eff2.image_yscale = size*0.55
+			upb_eff2.image_speed = 0.6
+			upb_eff2.image_alpha = 1
+			upb_eff2.depth = 2
+			upb_eff2.snap = self.id
+			upb_eff2.image_angle = image_angle
+			upb_eff2.x = x
+	}
+	}
+   if timer = 13 {
+	   speed *= 0.4;
+   }
+   if timer = 18 {
+	   speed = 0;
+   }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,40 @@
+if ( state_type = "shielding" || state_type = "stand" ) {
+if runtimer <= 0 {
+    timer = 0;
+    time = 27;
+  }
+else if runtimer > 0 {
+    timer = -4;
+    time = 33;
+  }
+    state_type = "attack";
+    attack_type = "grab";
+    sprite_index = grab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    timer_speed = 1;
+}
+if ( timer < time )
+  {
+hspeed *= 0.5;
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 25: image_index = 0; break;
+      }
+    if ( timer = 6 )
+      {
+	sound_play(swingsnd4);
+	create_grab_box(14+(time = 33),25,0.6+((time=33)*0.1),0.35,self.id,2+((time=33)*3));
+      }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    runtimer = 0;
+    timer = 0;
+    time = -1;
+  }

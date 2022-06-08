@@ -1,0 +1,166 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 40;
+    sprite_index = downb_sprite;
+    image_speed = 0;
+    image_index = 0;
+	hspeed = 0;
+	special = 1;
+	sparkingtemp = 0;
+  }
+if ( timer <= 3 && super = 1 && usetemp = 0)
+{
+sparkingtemp = 1;
+}
+if ( timer = 4 && sparkingtemp = 1 && usetemp = 0)
+{
+image_index = 0;
+timer = 100;
+time = 125;
+}
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 12: image_index = 1; break;
+	case 17: image_index = 2; break;
+	case 21: image_index = 0; break;
+	
+	case 105: image_index = 1; break;
+      }
+	  //power charge
+    if timer = 1 {
+		sound_stop(chargestart);
+		sound_stop(downbvoice);
+		sound_stop(chargeloop);
+		}
+	if timer = 18 && special = 1 && card_meter < 7 && !ai{
+		timer = 11
+		time = 50;
+	}
+	if timer > 0 && timer < 40 {
+		speed *= 0.1;
+		air_move = 0;
+	}
+	if timer = 10 {
+		screen_shake(3,3);
+		sound_play(chargestart);
+		sound_play(downbvoice);
+		sound_play(chargeloop);
+	}
+	if powerup = 0 {
+	if timer = 12 || timer = 17 {
+		meter += 1.3;
+	}
+	}
+	if powerup > 0 {
+	if timer = 12 || timer = 17 {
+		meter += 1.9;
+	}
+	}
+	if timer > 10 && timer < 21 {
+	if !instance_exists(downb_eff) {
+			downb_eff = instance_create(x,y,obj_spark)
+			downb_eff.sprite_index = downb_fx1
+			downb_eff.image_xscale = size*0.18-facing*0.36
+			downb_eff.image_yscale = size*0.25
+			downb_eff.image_speed = 0.6
+			downb_eff.image_alpha = 1
+			downb_eff.depth = 1
+			downb_eff.snap = self.id
+	}
+	if !instance_exists(downb_eff2) {
+			downb_eff2 = instance_create(x,y,obj_spark)
+			downb_eff2.sprite_index = downb_fx2
+			downb_eff2.image_xscale = size*0.4-facing*0.8
+			downb_eff2.image_yscale = size*0.4
+			downb_eff2.image_speed = 0.6
+			downb_eff2.image_alpha = 1
+			downb_eff2.depth = 2
+			downb_eff2.snap = self.id
+	}
+	}
+	
+	//sparking
+	if timer = 100 {
+		intangible = 1;
+		sound_play(choose(sparking1,sparking2))
+	}
+	if timer = 105 {
+	create_hitbox(9,90,8,0,14,3,kick3,obj_spark_hit3,4 , 4 , -4.20 , 21,self.id,10,4);
+	hitbox.hit_stun = 100;
+	screen_shake(10,10);
+    sound_play ( sparkingsound );
+    powerup = 600;
+	if !instance_exists(sparking_eff2) {
+		sparking_eff = instance_create(x,y-15*size,obj_spark)
+		sparking_eff.sprite_index = global.explosion_spark
+		sparking_eff.image_xscale = size*1.8*(1-facing*2);
+		sparking_eff.image_yscale = size*1.8
+		sparking_eff.image_speed = 0.6
+		sparking_eff.image_alpha = 1
+		sparking_eff.depth = 1
+		sparking_eff.snap = self.id
+	}
+	if !instance_exists(sparking_eff2) {
+		sparking_eff2 = instance_create(x,y+40*size,obj_spark)
+		sparking_eff2.sprite_index = sparking_fx2
+		sparking_eff2.image_xscale = size*0.12-facing*0.24
+		sparking_eff2.image_yscale = size*0.12
+		sparking_eff2.image_speed = 0.6
+		sparking_eff2.image_alpha = 1
+		sparking_eff2.depth = depth - 0.1
+		sparking_eff2.snap = self.id
+	}
+	spark = instance_create(x,y-25*size,obj_spark_shockwave);
+	spark.image_blend = c_red;
+	spark.image_alpha = 0.7;
+	spark.image_xscale *= 1*size;
+	spark.image_yscale *= 1*size;
+	spark.snap = self.id
+	spark.alarm[0] = 25;
+	spark2 = instance_create(x,y-25*size,obj_spark_shockwave);
+	spark2.image_blend = c_yellow;
+	spark2.image_alpha = 1;
+	spark2.image_xscale *= 1*size;
+	spark2.image_yscale *= 1*size;
+	spark2.snap = self.id
+	spark2.alarm[0] = 25;
+	}
+  if sparking_eff3.image_index = 8 {
+	  image_speed = 0;
+  }
+	if timer >= 100 && timer <= 105 {
+		speed = 5*(1-facing*2)
+		direction = 90*(1-facing*2)
+	}
+	if timer >= 105 && timer <= 130 {
+		hspeed = 0;
+		vspeed = 0;
+		gravity_lock = 0;
+	}
+	if timer = 124 {
+		usetemp = 1;
+		intangible = 0;
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	attack_type = "none";
+	state_type = "stand";
+	if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+	}
+    timer = 0;
+    time = -1;
+  }

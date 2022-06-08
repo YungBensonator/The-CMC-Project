@@ -1,0 +1,248 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" || state_type = "crouch" {
+        size = csize
+        hspeed = 0;
+        air_move=0
+        grab_edge = 0
+        image_angle = 0
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0
+        sprite_index = final_smash_sprite
+		sound_play(fsfire);
+        image_index=0
+		timer = 0
+		time = 110
+        timer_speed=1
+        intangible = 1
+        final_smashes+=1
+        speed = 0
+		image_blend = c_white;
+        smash_power = 0
+		nexttemp = 0;
+		spark = instance_create ( 0 , 0 , obj_camerazoom );
+		spark.camera_l = x - 8;
+		spark.camera_r = x + 8;
+		spark.camera_u = y - 4 - actual_height;
+		spark.camera_d = y + 4;
+		spark.camera_boundary_zoom = 72;
+		spark.alarm[0] = 60;
+
+		duster = instance_create ( 0 , 0 , obj_freeze );
+		duster.dontpause = self.id;
+		duster.alarm[0] = 60;
+}
+if timer = 1 {
+	sound_play(fsvoice1);
+}
+switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 13: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 19: image_index = 5; break;
+	case 22: image_index = 6; break;
+	case 60: image_index = 7; break;
+	case 63: image_index = 8; break;
+	case 66: image_index = 9; break;
+	case 100: image_index = 10; break;
+	
+	case 200: sprite_index = final_smash_sprite2; image_index = 0; break;
+	case 290: image_index = 1; break;
+	case 333: image_index = 2; break;
+	case 338: image_index = 3; break;
+	case 345: image_index = 4; break;
+	case 350: image_index = 3; break;
+	case 355: image_index = 4; break;
+	case 360: image_index = 3; break;
+	case 365: image_index = 4; break;
+	case 370: image_index = 3; break;
+	case 375: image_index = 4; break;
+	case 380: image_index = 3; break;
+	case 385: image_index = 4; break;
+	case 390: image_index = 3; break;
+	case 395: image_index = 4; break;
+	
+	case 500: sprite_index = final_smash_sprite3; image_index = 0; break;
+	case 505: image_index = 1; break;
+	case 535: image_index = 2; break;
+	case 539: image_index = 3; break;
+	
+	case 600: sprite_index = final_smash_sprite4; image_index = 0; break;
+	case 620: image_index = 1; break;
+	case 651: image_index = 2; break;
+	case 681: image_index = 3; break;
+	case 686: image_index = 4; break;
+	case 691: image_index = 5; break;
+	case 696: image_index = 4; break;
+	case 701: image_index = 5; break;
+	case 706: image_index = 4; break;
+	case 711: image_index = 5; break;
+	case 716: image_index = 4; break;
+	case 721: image_index = 5; break;
+}
+if timer > 1 {
+	hspeed = 0;
+	vspeed = 0;
+	gravity_lock = 1;
+}
+if timer = 66 {
+		create_projectile(4,80+facing*20,3.4,2.2,10,7,kick3,obj_spark_hit4,0.4,0.4,17.50 , 29.40,self.id,20,char_custom1);
+		proj.image_angle = 90*(1-facing*2);
+		proj.speed = 5*(1-facing*2);
+		proj.direction = 0*(1-facing*2);
+}
+if proj.hit = 1 && timer < 538 {
+	nexttemp = 1;
+	target.hspeed = 0;
+	target.vspeed = 0;
+	target.gravity_lock = 1;
+	target.state_type = "air_flinch"
+	target.sprite_index = target.flinch_sprite;
+	
+}
+if timer >= 90 && timer <= 110 && nexttemp = 1 {
+	timer = 200
+	time = 400
+	sprite_index = final_smash_sprite2; 
+	target.x = x;
+	target.y = y;
+}
+if timer = 200 {
+		sound_play(fssound1);
+		spark = instance_create ( 0 , 0 , obj_camerazoom );
+		spark.camera_l = x - 8;
+		spark.camera_r = x + 8;
+		spark.camera_u = y - 4 - actual_height;
+		spark.camera_d = y + 4;
+		spark.camera_boundary_zoom = 72;
+		spark.alarm[0] = 138;
+
+		duster = instance_create ( 0 , 0 , obj_freeze );
+		duster.dontpause = self.id;
+		duster.alarm[0] = 138;
+		smoke = instance_create( x,y,obj_spark );
+smoke.sprite_index = taunt_smoke_sprite;
+smoke.image_xscale = 10 * (1-facing*2) * size;
+smoke.image_yscale = 10 * size;
+smoke.image_speed = 0.5;
+smoke.x = x;
+smoke.y = y-15;
+}
+if timer = 290 {
+	sound_play(fssound2);
+}
+
+if timer = 333 {
+		create_projectile(10,361,0,0,0,0,-1,-1,0.1,0.1,17.50 , 29.40,self.id,2,no_script);
+		proj.x = target.x
+		proj.y = target.y-5
+		target.visible = 1;
+		if target.percent < 100 {
+			percent -= 20;
+		}
+}
+if timer > 199 && timer < 538 {
+	target.visible = 0;
+	target.hspeed = 0;
+	target.vspeed = 0;
+	target.gravity_lock = 1;
+	target.state_type = "air_flinch"
+	target.sprite_index = target.flinch_sprite;
+	target.x = x+10*(1-facing*2)*size;
+	target.y = y-10*size;
+}
+if timer = 395 && target.percent < 100 {
+	timer = 500
+	time = 580
+	sprite_index = final_smash_sprite3; 
+}
+if timer = 579 || timer = 799 {
+	intangible = 0;
+}
+if timer = 539 {
+		sound_play(fssound3);
+		create_projectile(25,40+facing*100,8,7.2,10,7,-1,-1,0.1,0.1,17.50 , 29.40,self.id,2,no_script);
+		proj.x = target.x
+		proj.y = target.y-5
+		target.visible = 1;
+		smoke = instance_create( x,y,obj_spark );
+smoke.sprite_index = taunt_smoke_sprite;
+smoke.image_xscale = 0.7 * (1-facing*2) * size;
+smoke.image_yscale = 0.7 * size;
+smoke.image_speed = 0.7;
+smoke.x = target.x;
+smoke.y = target.y-15*size
+smoke.snap = 0;
+}
+if timer > 599 && timer < 620 {
+	target.hspeed = 0;
+	target.vspeed = 0;
+	target.gravity_lock = 1;
+	target.x = x+10*(1-facing*2)*size;
+	target.y = y-30*size;
+}
+if timer > 599 {
+	target.visible = 1;
+	target.state_type = "air_flinch"
+	target.sprite_index = donut_sprite;
+	target.ignore_physics = 1;
+	target.depth = depth - 0.1
+}
+if timer = 390 && target.percent > 99 {
+	timer = 600
+	time = 800
+	sprite_index = final_smash_sprite4;
+}
+if timer = 620 {
+	target.vspeed = -4.8
+	target.hspeed = -1.1* (1-facing*2)
+	donut.gravity = 0.22
+	donut.sprite_index = donut_sprite
+	donut.image_speed = 0
+	donut.image_index = 0
+	donut.image_xscale = image_xscale * 1
+	donut.image_yscale = image_yscale * 1
+	donut.depth = depth - 0.1
+	donut.hit = 2
+}
+if timer > 652 {
+	target.x = x;
+	target.y = y-30*size;
+}
+if timer = 654 {
+			percent -= 40;
+	sound_play(fsvoice3);
+	sound_play(fssound4);
+if target.percent >= 100{
+target.dead = 1
+}
+with (target){
+  if dead = 1{
+    image_angle = 0
+    vspeed = 0
+    hspeed = 0
+    state_type = "ded"
+    dead_timer = 111
+  }
+}
+sound_play(target.starko_voice);
+}
+if timer = 654 {
+}
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	intangible = 0;
+	attack_type = "none";
+	state_type = "stand";
+	if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+	}
+	image_blend = c_white;
+    timer = 0;
+    time = -1;
+  }
