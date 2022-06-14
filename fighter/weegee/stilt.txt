@@ -1,0 +1,154 @@
+if (state_type = "stand" || state_type = "run") {
+    state_type = "attack";
+    attack_type = "stilt";
+    timer = 0;
+    time = 31;
+    sprite_index = stilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	create_hurtbox_precise(self.id,34,stilt_mask)
+}
+
+switch (timer) {
+    case  3: image_index = 1 ; 	break;
+    case  6: image_index = 2 ; 	break;
+    case  8: image_index = 3 ; 	break;
+    case 10: image_index = 4 ; 	break;
+    case 12: image_index = 5 ; 	break;
+    case 14: image_index = 6 ; 	break;
+    case 16: image_index = 7 ; 	break;
+    case 18: image_index = 8 ; 	break;
+    case 20: image_index = 9 ; 	break;
+    case 22: image_index = 10; 	break;
+    case 24: image_index = 11; 	break;
+    case 26: image_index = 0 ; 	break;
+}
+
+//stilt_blur_sprite
+/*
+    Argument0 - owner of the sword trail
+    Argument1 - Number of key frames
+    Argument2 - Interpolation frames
+    Argument3 - Texture for sword trail
+*/
+
+// Sword Trail
+switch (timer) {
+	case 8: 
+		trail = create_sword_trail(self.id, 6, 15, stilt_blur_sprite);
+		break;
+	case 10: 
+		trail.depth = -6.01;
+		trail.index = 1;
+		break;
+	case 12:
+		trail.index = 2;
+		break;
+	case 14: 
+		trail.index = 3;
+		break;
+	case 16: 
+		trail.index = 4;
+		break;
+	case 18: 
+		trail.index = 5;
+		trail.end_decay = 1;
+		break;
+	case 19:
+		trail.end_decay = 2;
+		break;
+	case 20:
+		trail.end_decay = 3;
+		break;
+	case 21:
+		with (trail){
+			instance_destroy();
+		} 
+		break;
+}
+
+if (timer = 10) {
+    eff = create_blur(x + 4 * (1 - facing * 2) * size, y - 15 * size, self.id);
+    eff.sprite_index = stilt_saber_sprite;
+    eff.depth = -6;
+    eff.image_xscale = 0.3 * (1 - facing * 2) * size;
+    eff.image_yscale = 0.18 * size;
+    eff.image_index = 0;
+    eff.image_speed = 0;
+    eff.image_angle = 30 * (1 - facing * 2)
+    eff.image_alpha = 0.8;
+
+    sound_play(stilt_snd);
+    create_hitbox(8, 30 + facing * 120, 5, 4, 8, 4, shock2, obj_spark_shock, 1.3, 0.62, 22, 22.50, self.id, 7, 2);
+    hitbox.image_angle = (1 - facing * 2) * 30;
+}
+
+if (timer = 12) {
+    eff.x = x + 6 * (1 - facing * 2) * size;
+    eff.y = y - 15 * size;
+}
+
+if (timer = 14) {
+    eff.image_angle = 0;
+    eff.x = x + 10 * (1 - facing * 2) * size;
+    eff.y = y - 13 * size;
+
+    hitbox.hitbox_x = size * (1 - (facing * 2)) * 29
+    hitbox.hitbox_y = size * 14.40
+    hitbox.image_xscale = size * 1.3
+    hitbox.image_yscale = size * 0.56
+    hitbox.image_angle = (1 - facing * 2) * 0
+}
+
+if (timer = 16) {
+    eff.image_angle = 340 * (1 - facing * 2);
+    eff.x = x + 10 * (1 - facing * 2) * size;
+    eff.y = y - 13 * size;
+
+    hitbox.hitbox_x = size * (1 - (facing * 2)) * 28
+    hitbox.hitbox_y = size * 7
+    hitbox.image_xscale = size * 1.3
+    hitbox.image_yscale = size * 0.56
+    hitbox.image_angle = (1 - facing * 2) * 344.74
+}
+
+if (timer = 18) {
+    eff.image_angle = 335 * (1 - facing * 2);
+    eff.x = x + 7 * (1 - facing * 2) * size;
+    eff.y = y - 12 * size;
+}
+
+if (timer = 20) {
+    eff.image_angle = 352 * (1 - facing * 2);
+    eff.image_xscale = 0.25 * (1 - facing * 2) * size;
+    eff.x = x + 5 * (1 - facing * 2) * size;
+    eff.y = y - 12 * size;
+}
+
+if (timer = 22) {
+    eff.image_angle = 0;
+    eff.image_xscale = 0.1 * (1 - facing * 2) * size;
+    eff.x = x + 4 * (1 - facing * 2) * size;
+    eff.y = y - 15 * size;
+}
+
+if (timer = 24) {
+    eff.image_angle = 0;
+    eff.image_xscale = 0.05 * (1 - facing * 2) * size;
+    eff.x = x + 4 * (1 - facing * 2) * size;
+    eff.y = y - 15 * size;
+}
+
+if (timer = 26) {
+    with(eff) {
+        instance_destroy();
+    }
+}
+
+if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch") {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+}

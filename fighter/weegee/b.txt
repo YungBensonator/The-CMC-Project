@@ -1,0 +1,76 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "b";
+    timer = 0;
+    time = 60;
+    sprite_index = stand_sprite;
+    image_index = 0;
+    image_speed = 0;
+    hspeed = 0;
+	if ( air > 0 )
+	{
+    vspeed -= 0.1;
+	}
+  }
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -1;
+ 		 }
+
+	if ( timer = 10 )
+	{
+    eff = create_blur(x + 3 * (1 - facing * 2) * size, y - 35 * size, self.id);
+    eff.sprite_index = b_flash_sprite;
+    eff.depth = -7;
+    eff.image_xscale = 0.15 * (1 - facing * 2) * size;
+    eff.image_yscale = 0.15 * size;
+    eff.image_index = 0;
+    eff.anim_speed = 0.25;
+    eff.image_alpha = 0.8;
+	eff.snap = self.id;
+	
+    eff2 = create_blur(x + 7 * (1 - facing * 2) * size, y - 35 * size, self.id);
+    eff2.sprite_index = b_flash_sprite;
+    eff2.depth = -6;
+    eff2.image_xscale = 0.15 * (1 - facing * 2) * size;
+    eff2.image_yscale = 0.15 * size;
+    eff2.image_index = 0;
+    eff2.anim_speed = 0.25;
+    eff2.image_alpha = 0.8;
+	eff2.snap = self.id;
+	}
+
+    if ( timer = 44 )
+      {
+	sound_play(stare_snd);
+	create_projectile(1,45+facing*90,0,0,8,4,fire1,obj_spark_fire1,0.4,0.5,20,35,self.id,120,char_custom1);
+	proj.facing = facing;
+	proj.target = -1;
+	proj.verdir = 0;
+	proj.sprite_index = lazor_sprite;
+	proj.image_xscale = 0.08 * (1-facing*2) * size;
+	proj.image_yscale = 0.08 * size;
+	if ( moveup )
+	    proj.verdir = -1;
+	if ( movedown )
+	    proj.verdir = 1;
+      }
+
+    if ( air = 0 )
+	hspeed = 0;
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	{
+	state_type = "jump";
+	sprite_index = mid_jump_sprite;
+	image_index = 10;
+	}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
