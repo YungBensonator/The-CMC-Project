@@ -55,7 +55,7 @@ if notip = 0 {
         hspeed *= 0.2;
         vspeed *= 0.2;
       }
-      if timer > 7
+      if timer > 25
       force_edge_grab = 1
 
       switch ( timer )
@@ -227,6 +227,7 @@ if notip = 0 {
         attack_type = "none";
         intangible = 0;
         sprite_index = land_sprite;
+        dontrepeat = 0
         if (  timer > 36 )
         time = 3;
         else
@@ -292,7 +293,7 @@ if notip = 0 {
             hspeed *= 0.2;
             vspeed *= 0.2;
           }
-          if timer > 7
+          if timer > 25
           force_edge_grab = 1
 
           switch ( timer )
@@ -506,7 +507,7 @@ if notip = 0 {
                 hspeed *= 0.2;
                 vspeed *= 0.2;
               }
-              if timer > 7
+              if timer > 25
               force_edge_grab = 1
 
               switch ( timer )
@@ -640,9 +641,47 @@ if notip = 0 {
                 break;
               }
 
+
+        if (timer >= 11 && timer !=5 && notip == 0) && obj_score_control.stocks[target.number-1] == 1{
+if (attack_success || target.object_index == obj_enemy) && target.offstage && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 85) || (target.weight > .22 && target.weight < .3 && target.percent > 95) || (target.weight > .3 && target.percent > 110)){
+					    killspark = instance_create(enemy.x-200,enemy.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 78
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 50;
+				spark.camera_r = enemy.x + 50;
+				spark.camera_u = enemy.y - 80;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	
               if ( air == 0 && timer > 6 )
               {
                 state_type = "land";
+                dontrepeat = 0;
                 attack_type = "none";
                 intangible = 0;
                 sprite_index = land_sprite;
