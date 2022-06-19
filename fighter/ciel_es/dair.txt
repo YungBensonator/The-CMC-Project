@@ -1,0 +1,262 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=-0;
+        timer = 0;
+        time = 34;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 16: image_index = 5; break;
+	case 26: image_index = 6; break;
+	case 30: image_index = 7; break;
+	
+	case 38: image_index = 8; break;
+	case 41: image_index = 9; break;
+	case 44: image_index = 10; break;
+	case 47: image_index = 11; break;
+	case 51: image_index = 12; break;
+	case 61: image_index = 13; break;
+	case 65: image_index = 14; break;
+	
+	case 73: image_index = 15; break;
+	case 76: image_index = 16; break;
+	case 79: image_index = 17; break;
+	case 82: image_index = 18; break;
+	case 85: image_index = 19; break;
+	case 89: image_index = 20; break;
+	case 93: image_index = 21; break;
+	case 103: image_index = 22; break;
+	case 107: image_index = 23; break;
+	case 111: image_index = 24; break;
+      }
+	  
+	  
+	  
+	if timer = 10
+	{
+	dairvfx1 = create_spark ( 0 , 0 , dairvfx1_sprite , 0 , .2*(1-facing*2) , .2  );
+	dairvfx1.alarm[0] = 20
+	dairvfx1.snap = self.id;
+	dairvfx1.owner = self.id;
+	dairvfx1.keepmain = self.keepmain;
+	sound_play(stiltswing_sound);
+	sound_play(dair_sound);
+	sound_play(choose(dtilt3_voice,dtilt3_voice2,dtilt3_voice3,dtilt3_voice4))
+		
+	}
+	  
+	if timer = 12
+	{
+	dairvfx1.image_index = 1
+	dairvfx1.script = char_custom10;
+	dairvfx1.identifier = "regularvfx"
+	
+	create_hitbox(4,angle_correct(80),4.6,0,8,4,es_slashhitsound2,obj_spark_slash2,1.3,1.5,0,-place_y(370),self.id,4,3);
+	hitbox.image_angle = angle_correct(0)
+	hitbox.hit_stun = 13
+	hitbox.execute_on_hit = "attacker.vspeed = -4; attacker.hspeed*=.5;"
+	}
+	
+	if (timer >= 14 and timer < 22) and attack_success and ai
+	attacking = 1
+	
+	if (timer >= 14 and timer < 22) and attacking and movedown and attack_success
+	{
+	timer = 25
+    time = 69;
+	attacking = 0;
+	}
+	
+	if (timer >= 22 and timer < 30) and attacking and moveup and !movedown and attack_success
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_uair();
+	}
+	
+	if (timer >= 22 and timer < 30) and attacking and !movedown and !moveright and !moveleft and attack_success
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_nair();
+	}
+	
+	if (timer >= 22 and timer < 30) and special and !moveright and !moveleft and attack_success and smash_power >= 300
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_final_smash();
+	}
+	
+	
+	
+	if timer = 41
+	{
+	dairvfx2 = create_spark ( 0 , 0 , dairvfx1_sprite , 0 , .2*(1-facing*2) , .2  );
+	dairvfx2.alarm[0] = 20
+	dairvfx2.snap = self.id;
+	dairvfx2.owner = self.id;
+	dairvfx2.keepmain = self.keepmain;
+	sound_play(stiltswing_sound);
+	sound_play(dair_sound);
+	sound_play(choose(dtilt3_voice,dtilt3_voice2,dtilt3_voice3,dtilt3_voice4))
+	}
+	  
+	if timer = 44
+	{
+	dairvfx2.image_index = 1
+	dairvfx2.script = char_custom10;
+	dairvfx2.identifier = "regularvfx"
+	
+	create_hitbox(4,angle_correct(80),4.6,0,8,4,es_slashhitsound2,obj_spark_slash2,1.3,1.5,0,-place_y(370),self.id,4,3);
+	hitbox.image_angle = angle_correct(0)
+	hitbox.hit_stun = 20
+	hitbox.execute_on_hit = "attacker.vspeed = -4; attacker.hspeed*=.5;"
+	}
+	
+	if (timer >= 46 and timer < 54) and attack_success and ai
+	attacking = 1
+	
+	if (timer >= 46 and timer < 54) and attacking and movedown and attack_success
+	{
+	timer = 70
+    time = 115;
+	attacking = 0;
+	}
+	
+	if (timer >= 52 and timer < 60) and attacking and moveup and !movedown and attack_success
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_uair();
+	}
+	
+	if (timer >= 52 and timer < 60) and special and moveup and attack_success
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_upb();
+	}
+	
+	if (timer >= 52 and timer < 60) and attacking and !moveright and !moveleft and !movedown and attack_success
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_nair();
+	}
+	
+	if (timer >= 52 and timer < 60) and special and !moveright and !moveleft and attack_success and smash_power >= 300
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_final_smash();
+	}
+	
+	
+	
+	if timer = 82
+	{
+	dairvfx3 = create_spark ( 0 , 0 , dairvfx2_sprite , 0 , .2*(1-facing*2) , .2  );
+	dairvfx3.alarm[0] = 20
+	dairvfx3.snap = self.id;
+	dairvfx3.owner = self.id;
+	dairvfx3.keepmain = self.keepmain;
+	sound_play(stiltswing_sound);
+	sound_play(dair_sound);
+	sound_play(choose(fthrow_voice1,fthrow_voice2,fthrow_voice3))
+	}
+	  
+	if timer = 85
+	{
+	dairvfx3.image_index = 1
+	dairvfx3.script = char_custom10;
+	dairvfx3.identifier = "regularvfx"
+	
+	create_hitbox(6,364,3,6,12,6,es_slashhitsound3,obj_spark_slash3,1.6,1.6,0,-place_y(400),self.id,4,3);
+	hitbox.image_angle = angle_correct(0)
+	hitbox.execute_on_hit = "attacker.vspeed = -4; attacker.hspeed*=.5;"
+	}
+	  
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+	  
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=9; }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+	if timer < 53
+  image_index = 5;
+  else
+  image_index = 9;
+  timer = 1;
+  time = -1;
+  }		
+        

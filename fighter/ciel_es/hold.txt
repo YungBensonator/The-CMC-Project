@@ -1,0 +1,46 @@
+if ( time != -1 )
+  {
+    if instance_exists(target)
+    {
+	state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    sprite_index = hold_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.attack_type = "none"
+    timer_speed=1;
+    pummel = -1;
+	sound_play(grabbed_sound);
+	}
+	else
+	exit;
+  }
+ 
+if ( timer >= 0 )
+{
+target.x = x + 20 * size * (1-facing*2);
+target.y = y;
+}
+
+if ( pummel == -1 )
+ {
+if ( ( !facing && moveright ) || ( facing && moveleft ) )
+    attack_type = "fthrow";
+if ( ( !facing && moveleft ) || ( facing && moveright ) )
+    attack_type = "bthrow";
+if ( moveup )
+    attack_type = "uthrow";
+if ( movedown )
+  {
+    attack_type = "dthrow";
+  }
+ }
+ 
+if string(target.state_type) != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }
+        

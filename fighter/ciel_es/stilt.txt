@@ -1,0 +1,168 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 33;
+        timer_speed=1;
+}
+
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 9: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 15: image_index = 6; break;
+	case 18: image_index = 7; break;
+	case 21: image_index = 8; break;
+	case 24: image_index = 9; break;
+	case 27: image_index = 10; break;
+	case 30: image_index = 11; break;
+      }
+	
+	if timer = 9
+	{
+	sound_play(jab_voice2);
+	
+	sound_play(stiltswing_sound);
+	stiltvfx = create_spark ( 0 , 0 , stiltvfx_sprite , 0 , .24*(1-facing*2) , .24  );
+	stiltvfx.alarm[0] = 15
+	stiltvfx.snap = self.id;
+	stiltvfx.owner = self.id;
+	stiltvfx.keepmain = self.keepmain;
+	stiltvfx.script = char_custom10;
+	stiltvfx.depth = depth-1;
+	stiltvfx.identifier = "regularvfx"
+	
+	stiltvfx2 = create_spark ( 0 , 0 , stiltvfx2_sprite , 0 , .24*(1-facing*2) , .24  );
+	stiltvfx2.alarm[0] = 15
+	stiltvfx2.snap = self.id;
+	stiltvfx2.owner = self.id;
+	stiltvfx2.keepmain = self.keepmain;
+	stiltvfx2.script = char_custom10;
+	stiltvfx2.depth = depth+1;
+	stiltvfx2.identifier = "regularvfx"
+	
+	create_hitbox(7,angle_correct(25),4.5,3,14,7,es_slashhitsound3,obj_spark_slash3,2,1,abs(place_x(360)),-place_y(80),self.id,4,3);
+	hitbox.image_angle = angle_correct(0)
+	}
+	
+	if (timer >= 11 and timer < 19) and attacking and ((moveright and !facing) or (moveleft and facing)) and attack_success
+	{
+	state_type = "stand";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+	hspeed=15*(1-facing*2)
+    char_dash_attack();
+	}
+	
+	if (timer >= 11 and timer < 19) and ((smashright and !facing) or (smashleft and facing)) and attack_success
+	{
+	state_type = "stand";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_ssmash();
+	}
+	
+	if (timer >= 11 and timer < 19) and smashup
+	{
+	state_type = "stand";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_usmash();
+	}
+	
+	if (timer >= 11 and timer < 19) and smashdown
+	{
+	state_type = "stand";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_dsmash();
+	}
+	
+	if (timer >= 11 and timer < 19) and special and ((moveright and !facing) or (moveleft and facing)) and attack_success
+	{
+	state_type = "stand";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_sideb();
+	}
+	
+	if (timer >= 11 and timer < 19) and special and movedown and attack_success
+	{
+	state_type = "stand";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_downb();
+	}
+	
+	if (timer >= 11 and timer < 19) and special and !moveright and !moveleft and attack_success and smash_power >= 300
+	{
+	state_type = "jump";
+    attack_type = "none";
+	attacking = 0;
+    timer = 0;
+    time = -1;
+    char_final_smash();
+	}
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+    
+  }
+  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
