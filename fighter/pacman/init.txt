@@ -1,7 +1,7 @@
 // 0.9 Character Template
 
 //Sprites
-stand_sprite = cspr_add ( "fighter/pacman/idle.gif",6,0,1,0,1,0,0 );
+stand_sprite = cspr_add ( "fighter/pacman/idle.gif",10,0,1,0,1,0,0 );
 sprite_start = stand_sprite;
 
 mask_sprite = cspr_add ( "fighter/pacman/mask.png",1,0,1,0,1,20,35 );
@@ -16,7 +16,7 @@ entry_sprite = cspr_add('fighter/pacman/entry1.gif',4,1,1,0,1,0,0);
 entry2_sprite = cspr_add('fighter/pacman/entry2.gif',7,1,1,0,1,0,0);
 swim_sprite = cspr_add('fighter/pacman/swim.gif',5,1,1,0,1,0,0);
 ladder_sprite = cspr_add('fighter/pacman/ladder.gif',8,1,1,0,1,0,0);
-vehicle_sprite = cspr_add('fighter/char/vehicle.gif',1,1,1,0,1,0,0);
+vehicle_sprite = cspr_add('fighter/char/vehicle.gif',1,1,1,0,1,8,17);
 jump_sprite = cspr_add ( "fighter/pacman/jump.gif",1,0,1,0,1,0,0 );
 mid_jump_sprite = cspr_add ( "fighter/pacman/mid_jump.gif",1,0,1,0,1,0,0 );
 shield_sprite = cspr_add ( "fighter/pacman/shield.gif",1,0,1,0,1,0,0 );
@@ -24,6 +24,7 @@ air_dodge_sprite = cspr_add ( "fighter/pacman/air_dodge.gif",1,0,1,0,1,0,0 );
 spot_dodge_sprite = cspr_add ( "fighter/pacman/spot_dodge.gif",1,0,1,0,1,0,0 );
 roll_sprite = mid_jump_sprite;
 land_sprite = cspr_add ( "fighter/pacman/land.gif",1,0,1,0,1,14,21 );
+gw_stock_sprite = cspr_add ( "fighter/pacman/gw_stock.png",1,0,1,0,1,8,8 );
 
 fall_sprite = cspr_add ( "fighter/pacman/fall.gif",1,0,1,0,1,0,0 );
 flinch_sprite = cspr_add ( "fighter/pacman/flinch.gif",1,0,1,0,1,0,0 );
@@ -80,6 +81,8 @@ dthrow_sprite = cspr_add ( "fighter/pacman/dthrow.gif",1,0,1,0,1,0,0 );
 
 b_sprite = cspr_add ( "fighter/pacman/b.gif",1,0,1,0,1,0,0 );
 b2_sprite = cspr_add ( "fighter/pacman/b2.gif",1,0,1,0,1,0,0 );
+eyes_sprite = cspr_add ( "fighter/pacman/theytookmyfuckingbody2.gif",1,0,1,0,1,40,55 );
+points_sprite = cspr_add ( "fighter/pacman/outta10.png",1,0,1,0,1,16,20 );
 
 upb_sprite = cspr_add ( "fighter/pacman/upb.gif",1,0,1,0,1,0,0 );
 pellet_sprite = cspr_add ( "fighter/pacman/pellet.gif",1,0,1,0,1,3,3 );
@@ -139,10 +142,13 @@ step_script = char_step;
 //Sounds    
 jump_sound = sound_add("fighter/pacman/jump.wav",0,1);
 sound_start = jump_sound
-
-mid_jump_voice = sound_add("fighter/pacman/jump2.wav",0,1);
+mid_jump_sound = sound_add("fighter/pacman/jump2.wav",0,1);
 
 fs_sound = sound_add("fighter/pacman/theme.ogg",0,1);
+
+attack_sound1 = sound_add("fighter/pacman/snd_se_Pacman_swing_s.wav",0,1);
+attack_sound2 = sound_add("fighter/pacman/snd_se_Pacman_swing_m.wav",0,1);
+attack_sound3 = sound_add("fighter/pacman/snd_se_Pacman_swing_l.wav",0,1);
 
 dair_sound = sound_add("fighter/pacman/dair.wav",0,1);
 b_sound = sound_add("fighter/pacman/b.wav",0,1);
@@ -182,115 +188,25 @@ die_voice2 = sound_add("fighter/pacman/die2.wav",0,1);
 
 sound_end = die_voice2;
 
-//Stats
-// REFERENCE:
-// Jigglypuff - 0.17
-// Mr. Game & Watch - 0.19
-// Tails - 0.21
-//~~ Mario - 0.25
-// Samus - 0.3
-// Snake - 0.32
-// DK - 0.33
-// Porky - 0.34
-// Weegee - 0.5
+//Attributes
 weight = 0.235;
-
-// REFERENCE:
-// Jigglypuff - 0.2
-// Samus - 0.21
-// Luigi - 0.23
-//~~ Mario - 0.25
-// Falco - 0.275
-// Ganondorf - 0.29
 grav = 0.18;
-
-// REFERENCE:
-// Luigi - 0.5
-//~~ Mario - 1
-fric = 0.8;
-
-// MAX JUMPS - 3 for 2 jumps + upb
 max_jumps = 3;
-
-// REFERENCE:
-// Phoenix Wright - 1.5
-// Peach - 2
-// Falco - 2.4
-//~~ Mario - 2.5
-// Captain Falcon - 3
-// Sonic - 3.9
+walk_speed = 1.94;
 run_start_speed = 4.2;
-
-// REFERENCE:
-// Porky - 0.06
-// Megaman - 0.075
-//~~ Mario, Sonic - 0.08
-// Metaknight - 0.09
-// Geno - 0.095
-// Falco - 0.1
-// Phoenix Wright - 0.25
-// Ganondorf - 0.3
-// Rayman - 0.4
 run_accel = 0.09;
-
-// REFERENCE:
-// Phoenix Wright - 2.2
-// Ganondorf - 2.5
-// Mewtwo - 2.65
-// Ryu - 2.7
-// Porky - 2.75
-// DK - 2.9
-// Megaman - 3
-//~~ Mario - 3.1
-// Pikachu - 3.75
-// Fox - 4.1
-// Pichu - 4.5
-// Captain Falcon - 4.7
-// Sonic - 5
 run_speed = 3.23;
-dash_speed = 4.2;
+fric = 0.8;
 jump_momentum = 0.72;
-jumptimer = 0.92;
-
-// Effect of these values are heavily dependent on grav, so no reference.
 jump_speed = 5.7;
 mid_jump_speed = 5.8;
 short_hop_speed = 2.5;
-
-// REFERENCE:
-// Sonic - 1.85
-// Shadow - 2.1
-//~~ Mario - 2.3
-// Ristar - 2.4
-// Jigglypuff - 3
-// Wario - 3.1
 air_speed = 2.7;
-
-// REFERENCE:
-// Jigglypuff - 2.2
-// Mewtwo - 2.6
-// Lucario - 2.9
-//~~ Mario - 3.1
-// Chun-Li - 3.2
-// Waluigi - 3.3
-// Mach Rider - 3.4
-// Fox - 3.75
 fall_speed = 3.2;
-
-// REFERENCE:
-// Porky - 0.175
-// Knuckles - 0.18
-//~~ Mario - 0.2
-// Chun-Li - 0.21
-// Snivy - 0.24
-// Toad - 0.25
-// Jigglypuff, Wario - 0.6
+fast_fall_multiplier = 1.5;
 air_accel = 0.28;
+air_fric = 0.1;
 airdash_speed = 8;
-
-// REFERENCE:
-// Porky: - 7
-firc = 0.8
 
 // Play around with these to see what your characters' scaling should be.
 xsize = 0.98;
@@ -337,4 +253,4 @@ hitby = 0;
 mask_index = mask_sprite;
 ai_attack_script = char_ai;
 held_item = -1;
-smash_charge_sound = 0;
+smash_charge_sound = 1;

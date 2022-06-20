@@ -1,0 +1,137 @@
+//B (Weegee Virus)
+
+hit = 2;
+if ( MODE = 0 )
+  {
+    absorb = 1;
+    absorb2 = 1;
+    moving_object = 1;
+    visible = 1;
+    if ( timer >= 2 && timer mod 2 = 0 )
+      {
+	create_homing_bubble(0.7,0.8,0,0,self.id,2);
+	proj.x = x;
+	proj.y = y;
+      }
+    x += 4-facing*8;
+    y += verdir;
+    if ( collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self) )
+      {
+	effect_create_above(ef_ring,x,y,0,c_red);
+	with ( proj )
+		{
+		instance_destroy();
+		}
+	instance_destroy();
+      }
+    if ( target > 0 && target != attacker && target.facing != facing && !target.intangible )
+      {
+	MODE = 1;
+	timer = 0;
+	time  = 70;
+	visible = 0;
+	effect_create_above(ef_ring,x,y,0,c_red);
+	virused = target;
+	with ( proj )
+	{
+	instance_destroy();
+	}
+	exit;
+      }
+if ( timer >= time )
+	{
+	with ( proj )
+		{
+		instance_destroy();
+		}
+	instance_destroy();
+	}
+    exit;
+  }
+
+if ( MODE = 1 )
+  {
+    absorb = 0;
+    reflect = 0;
+    hitonce = 1;
+    priority = 5;
+    proj_destroy = -1;
+    if ( timer = 1 )
+      {
+	//tempxsize = virused.xsize;
+	//tempysize = virused.ysize;
+	//virused.sprite_index = attacker.stand_sprite;
+        virused.visible = 0;
+	virused.image_speed = 0;
+	virused.image_index = 0;
+	//virused.image_xscale = attacker.image_xscale;
+	//virused.image_yscale = attacker.image_yscale;
+	//virused.xsize = 0.9;
+	//virused.ysize = 0.9;
+	virused.gethit = 0;
+	virused.state_type = "air_flinch";
+	virused.timer = 0;
+	virused.time = time;
+        spark = instance_create ( virused.x , virused.y , obj_spark );
+        spark.sprite_index = attacker.stand_sprite;
+        spark.number = attacker.number;
+        spark.sprite_start = attacker.sprite_start;
+        spark.palettedo = 1;
+        spark.snap = virused.id;
+        spark.image_xscale = attacker.xsize * (1-virused.facing*2) * virused.size;
+        spark.image_yscale = attacker.ysize * virused.size;
+        spark.image_speed = 0;
+        spark.alarm[0] = 300;
+        spark.script = char_custom4;
+        spark.keepmain = keepmain;
+      }
+    if ( timer >= time-1 )
+      {
+        spark.alarm[0] = 2;
+        virused.visible = 1;
+	virused.sprite_index = virused.flinch_sprite;
+	//virused.xsize = tempxsize;
+	//virused.ysize = tempysize;
+	virused.alarm[0] = 2;
+	virused.state_type = "grabbed";
+	virused.attacker = attacker;
+	virused.timer = 1;
+	virused.time = 3;
+	virused.timer_speed = 1;
+	virused.speed = 0;
+	instance_destroy();
+      }
+    if ( timer >= 1 )
+      {
+	if ( ( timer >= 4 && virused.timer < 2 ) || virused.alarm[2] > 0 )
+	  {
+            spark.alarm[0] = 2;
+	    virused.sprite_index = virused.flinch_sprite;
+            virused.visible = 1;
+	    //virused.xsize = tempxsize;
+	    //virused.ysize = tempysize;
+	    instance_destroy();
+	    exit;
+	  }
+	//virused.sprite_index = attacker.sprite_index
+	virused.hspeed *= 0.5;
+	virused.intangible = 0;
+	if ( virused.lastmove && !virused.moveup && !virused.movedown && !virused.moveleft && !virused.moveright )
+	    virused.lastmove = 0;
+	if ( !virused.lastmove && ( virused.moveup || virused.movedown || virused.moveleft || virused. moveright ) )
+	  {
+	    virused.timer += 10;
+	    virused.lastmove = 1;
+	  }
+	else
+	if ( !virused.lastmove )
+	    virused.lastmove = ( virused.moveup || virused.movedown || virused.moveleft || virused.moveright );
+	if ( virused.ai && virused.timer mod 10 = 0 )
+	    virused.moveup = 1;
+	if ( !is_on_floor(virused) )
+	    timer += 5;
+      }
+  }
+
+if ( virused.state_type != "flinch" && virused.state_type != "air_flinch" && virused.state_type != "grabbed" )
+    instance_destroy();

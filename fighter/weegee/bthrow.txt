@@ -1,0 +1,213 @@
+if (time = -1) {
+    state_type = "air_attack";
+    attack_type = "bthrow";
+    timer = 0;
+    time = 288;
+    sprite_index = bthrow_sprite2;
+    image_speed = 0.15;
+    image_index = 0;
+    hspeed = 0;
+    target.timer_speed = 0;
+    target.alarm[0] = 300;
+    target.x = x - 60 * (1 - facing * 2) * size;
+    target.y = y;
+    target.image_speed = 0;
+    tempx = -60;
+    tempy = 0;
+}
+
+if timer < time {
+
+    switch ( timer )
+      {
+	case 242: image_index = 1; break;
+	case 244: image_index = 2; break;
+	case 246: image_index = 3; break;
+	case 248: image_index = 4; break;
+	case 250: image_index = 5; break;
+	case 252: image_index = 6; break;
+	case 254: image_index = 7; break;
+	case 256: image_index = 8; break;
+	case 258: image_index = 10; break;
+	case 260: image_index = 11; break;
+	case 262: image_index = 12; break;
+	case 264: image_index = 13; break;
+	case 266: image_index = 14; break;
+	case 268: image_index = 15; break;
+	case 270: image_index = 16; break;
+	case 272: image_index = 17; break;
+	case 274: image_index = 18; break;
+	case 276: image_index = 19; break;
+	case 278: image_index = 20; break;
+	case 280: image_index = 21; break;
+	case 282: image_index = 22; break;
+	case 284: image_index = 23; break;
+	case 286: image_index = 24; break;
+      }
+
+    //Create effects
+    if (timer = 1) {
+        sound_play(bthrow_snd);
+
+        eff = instance_create(x - 20 * (1 - facing * 2) * size, y, obj_spark);
+        eff.sprite_index = bthrow_fred_sprite;
+		eff.number = number;
+        eff.image_xscale = 0.9 * (1 - facing * 2) * size;
+        eff.image_yscale = 0.9 * size;
+        eff.image_index = 0;
+        eff.image_speed = 0.1;
+        eff.alarm[0] = 10;
+
+        eff2 = instance_create(target.x, target.y, obj_spark);
+        eff2.sprite_index = bthrow_ice_sprite;
+        eff2.image_xscale = 0.9 * (1 - facing * 2) * target.size;
+        eff2.image_yscale = 0.9 * target.size;
+        eff2.image_index = 0;
+        eff2.image_speed = 0;
+        eff2.image_alpha = 0.8;
+        eff2.alarm[0] = 10;
+		eff2.depth = target.depth - 2;
+    }
+	
+	
+	if timer = 170{
+		badge_spark = create_spark(30,10,self.id);
+		badge_spark.sprite_index = badge_sprite;
+		badge_spark.image_speed = 0;
+		badge_spark.image_alpha = 0;
+		badge_spark.facing = target.facing
+		badge_spark.image_xscale = (image_xscale * 0.7) * target.size;//remember to change the value when a proper graphic is made.
+		badge_spark.image_yscale = (image_yscale * 0.7) * target.size;
+		badge_spark.depth = target.depth - 0.1;
+		badge_spark.held = target.id
+		badge_spark.weegee = self.id
+		badge_spark.alarm[0] = time + 19
+		badge_spark.script = char_custom5
+		badge_spark.badge = 1
+		badge_spark.alpha_add = 0.1
+		
+		
+		hat_spark = create_spark(30,10,self.id);
+		hat_spark.sprite_index = hat_sprite;
+		hat_spark.image_speed = 0;
+		hat_spark.image_alpha = 0;
+		hat_spark.facing = target.facing
+		hat_spark.image_xscale = (image_xscale * 0.7) * target.size;//remember to change the value when a proper graphic is made.
+		hat_spark.image_yscale = (image_yscale * 0.7) * target.size;
+		hat_spark.depth = target.depth - 0.1;
+		hat_spark.held = target.id
+		hat_spark.weegee = self.id
+		hat_spark.alarm[0] = time + 19
+		hat_spark.script = char_custom5
+		hat_spark.badge = 0
+		hat_spark.alpha_add = 0.1
+		
+		
+	}
+	
+
+    //Ensure the ice remains there when the attack hasn't hit yet. Plus ensure the size changes if the target changes size.
+    if (attack_success = 0) {
+        eff2.x = target.x;
+        eff2.y = target.y;
+        eff2.image_xscale = 0.9 * (1 - facing * 2) * target.size;
+        eff2.image_yscale = 0.9 * target.size;
+        eff2.alarm[0] = 10;
+    }
+
+    //Destroy Ice on Successful hit.
+    if (attack_success = 1) {
+        with(eff2) {
+            instance_destroy();
+        }
+    }
+
+    //Ensure Weegee follows the target's relative positioning at all times until he launches himself.
+    if (timer >= 1 && timer <= 254) {
+        target.x = x + tempx * (1 - facing * 2) * size;
+        target.y = y + tempy * size;
+    }
+
+    //Fredweegee scaling with Weegee accordingly.
+    if (timer >= 1 && timer <= 263) {
+        eff.image_xscale = 0.9 * (1 - facing * 2) * size;
+        eff.image_yscale = 0.9 * size;
+        eff.alarm[0] = 10;
+
+        if (target.state_type != "grabbed") {
+            state_type = "flinch";
+            timer = 0;
+            time = 10;
+            facing = !facing;
+        }
+    }
+
+    //Calculates Fredweegee's position until Weegee himself "jumps" up.
+    if (timer >= 1 && timer <= 254) {
+        eff.x = x - 20 * (1 - facing * 2) * size;
+        eff.y = y;
+    }
+
+    //Fred Weegee will have image_speed set to 0 at an certain point.
+    if (timer >= 1 && timer <= 264 && eff.image_index >= 3.8) {
+        eff.image_index = 0;
+        eff.image_speed = 0;
+    }
+
+    //Transition to launch sprite.
+    if (timer = 240) {
+        sprite_index = bthrow_sprite;
+        image_index = 0;
+        image_speed = 0;
+        sound_play(bthrow_snd2);
+    }
+
+    //To move Weegee up a little at a certain frame. And ensure target's position is refreshed properly as they no longer checks for Weegee's position
+    if (timer = 255) {
+        target.x = target.x;
+        target.y = target.y;
+        vspeed -= 10 * size;
+    }
+    if (timer >= 256 && timer <= 263) {
+        vspeed = 0;
+    }
+
+    //Knock Fredweegee away.
+    if (timer = 264) {
+        eff.speed = 2;
+        eff.gravity = 1;
+        eff.gravity_direction = 270;
+        eff.alarm[0] = 120;
+        eff.direction = 30 + facing * 120;
+        eff.image_speed = 0;
+        eff.image_index = 0;
+    }
+
+    //Swoooce
+    if (timer >= 264 && timer <= 280) {
+        hspeed = -5 * (1 - facing * 2) * size;
+        vspeed = 1 * size;
+    }
+    if (timer = 281) {
+        hspeed = 0;
+    }
+
+    if (timer = 264) {
+        create_hitbox(10, 145 - facing * 110, 8, 5, 30, 4, ice2, obj_spark_ice2, 2.35, 1.12, -0.90, 20.70, self.id, 17, 5);
+    }
+
+}
+if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch") {
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	{
+	state_type = "jump";
+	sprite_index = mid_jump_sprite;
+	image_index = 10;
+	}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    facing = !facing;
+}

@@ -1,0 +1,67 @@
+if ( ai_timer >= time - 2 )
+    ai_state = "idle";
+if ( air = 0 )
+  {
+    if ( collision_rectangle(x-13*size,y-13*size,x+10*size,y,item,0,0) && hold_item = 0 && instance_nearest(x,y-5*size,item).holder = 0 && instance_nearest(x,y-5*size,item).grab > 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 3;
+	sound_play(itemgetsnd);
+	sprite_index = land_sprite;
+	hold_item = 1;
+	held_item = instance_nearest(x,y-5*size,item);
+	held_item.holder = id;
+	held_item.state_type = "held";
+	attacking = 0;
+	exit;
+      }
+    else
+      {
+	if ( distance_to_object(enemy) < 19 )
+	  {
+	    if ( held_item = -1 )
+	      {
+		if ( enemy.percent < 80 )
+		  {
+		    if ( enemy.air = 0 )
+		      {
+			if ( smash_power >= global.gs_fs_charge )
+			    attack_type = "final_smash";
+			else
+			    attack_type = choose("jab","stilt","dtilt","grab","sideb","downb");
+		      }
+		    else
+			attack_type = choose("stilt","utilt","usmash");
+		  }
+		else
+		    attack_type = choose("stilt","ssmash","usmash","downb");
+	      }
+	    else
+		attack_type = "itemfthrow";
+	  }
+	if ( distance_to_object(enemy) >= 19 )
+	  {
+	    if ( held_item = -1 )
+	      {
+		if ( smash_power >= global.gs_fs_charge && abs(enemy.y-y) < 42 )
+		  {
+		    if ( ( facing && enemy.x > x ) || ( !facing && enemy.x < x ) )
+			facing = 1-facing;
+		    attack_type = "final_smash";
+		  }
+		else
+		    attack_type = choose("stilt","dtilt","ssmash","b","sideb");
+	      }
+	    else
+		attack_type = "itemfthrow";
+	    exit;
+	  }
+      }
+  }
+else
+if ( offstage )
+    attack_type = choose("nair","fair","uair","dair");
+else
+    attack_type = choose("nair","fair","bair","uair","dair");

@@ -1,0 +1,223 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+
+    if instance_exists(guiyii)
+	exit;
+    if instance_exists(downb_doll)
+	exit;
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 50;
+    sprite_index = sideb_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed *= 0.25;
+	special = 1;
+	temp = 0;
+  }
+
+    switch ( timer )
+      {
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 3: image_index = 3; break;
+	case 4: image_index = 4; break;
+	case 5: image_index = 5; break;
+	case 6: image_index = 6; mirror.image_index = 1; break;
+	case 7: image_index = 7; mirror.image_index = 2; guiyii.image_index = 1; break;
+	case 8: image_index = 8; mirror.image_index = 3; guiyii.image_index = 2; break;
+	case 10: guiyii.image_index = 3; break;
+	case 13: image_index = 14; mirror.image_index = 11; guiyii.sprite_index = sideb_guiyii_sprite2; guiyii.image_index = 0; break;
+	case 14: image_index = 15; mirror.image_index = 12; guiyii.image_index = 1; break;
+	case 15: image_index = 16; mirror.image_index = 13; guiyii.image_index = 2; break;
+	case 16: image_index = 17; mirror.image_index = 14; break;
+	case 19: image_index = 18; mirror.image_index = 15; break;
+	case 40: image_index = 19; mirror.image_index = 16; break;
+	case 42: image_index = 20; mirror.image_index = 17; break;
+	case 44: image_index = 21; mirror.image_index = 18; break;
+	case 46: image_index = 22; mirror.image_index = 19; break;
+	case 48: image_index = 23; break;
+	
+	case 103: image_index = 9; mirror.image_index = 6; guiyii.image_index = 5; break;
+	case 113: image_index = 10; mirror.image_index = 7; guiyii.image_index = 6; break;
+	case 115: image_index = 11; mirror.image_index = 8; guiyii.image_index = 7; break;
+	case 117: image_index = 12; mirror.image_index = 9; guiyii.image_index = 8; break;
+	case 119: image_index = 13; mirror.image_index = 10; guiyii.image_index = 9; break;
+	case 135: image_index = 14; mirror.image_index = 11; guiyii.image_index = 10; break;
+	case 136: image_index = 15; mirror.image_index = 12; guiyii.image_index = 11; break;
+	case 137: image_index = 16; mirror.image_index = 13; guiyii.image_index = 12; break;
+	case 138: image_index = 17; mirror.image_index = 14; break;
+	case 141: image_index = 18; mirror.image_index = 15; break;
+	case 162: image_index = 19; mirror.image_index = 16; break;
+	case 164: image_index = 20; mirror.image_index = 17; break;
+	case 166: image_index = 21; mirror.image_index = 18; break;
+	case 168: image_index = 22; mirror.image_index = 19; break;
+	case 170: image_index = 23; break;
+      }
+
+
+//----------------------------------------------------SPAWN MIRROR--------------------------------------------------------------------------------------------
+	if ( timer = 5 )
+	{
+	mirror = instance_create( x , y - 21.55 * size, obj_spark);
+	if ( facing = 0 )
+		{
+		mirror.x = x + 22.55 * size;
+		}
+	if ( facing = 1 )
+		{
+		mirror.x = x - 21.55 * size;
+		}
+	mirror.sprite_index = sideb_mirror_sprite;
+	mirror.image_xscale = 0.9 * (1-facing*2) * size;
+	mirror.image_yscale = 0.9 * size;
+	mirror.image_alpha = 1;
+	mirror.image_index = 0;
+	mirror.image_speed = 0;
+	mirror.depth = depth - 0.1;
+	mirror.alarm[0] = 2;
+	mirror.snap = self.id;
+	}
+
+	if ( ( timer >= 5 && timer <= 47 ) || ( timer >= 100 && timer <= 169 ) )
+	{
+	if ( facing = 0 )
+		{
+		mirror.x = x + 22.55 * size;
+		}
+	if ( facing = 1 )
+		{
+		mirror.x = x - 21.55 * size;
+		}
+	mirror.y = y - 21.55 * size;
+	mirror.image_xscale = 0.9 * (1-facing*2) * size;
+	mirror.image_yscale = 0.9 * size;
+	mirror.alarm[0] = 2;
+	}
+	
+	if ( timer = 48 || timer = 170 )
+	{
+	with ( mirror )
+		{
+		instance_destroy();
+		}
+	}
+
+//----------------------------------------------------SPAWN GUIYII--------------------------------------------------------------------------------------------
+	if ( timer = 6 )
+	{
+	guiyii = instance_create( x , y - 17.95 * size , obj_spark);
+	if ( facing = 0 )
+		{
+		guiyii.x = x + 25.25 * size;
+		}
+	if ( facing = 1 )
+		{
+		guiyii.x = x - 24.25 * size;
+		}
+	guiyii.sprite_index = sideb_guiyii_sprite;
+	guiyii.number = number;
+	guiyii.image_xscale = 0.9 * (1-facing*2) * size;
+	guiyii.image_yscale = 0.9 * size;
+	guiyii.image_alpha = 0.8;
+	guiyii.image_index = 0;
+	guiyii.image_speed = 0;
+	guiyii.depth = depth - 0.2;
+	guiyii.alarm[0] = 2;
+	guiyii.snap = self.id;
+	}
+
+	if ( ( timer >= 6 && timer <= 47 ) || ( timer >= 100 && timer <= 169 ) )
+	{
+	if ( facing = 0 )
+		{
+		guiyii.x = x + 25.25 * size;
+		}
+	if ( facing = 1 )
+		{
+		guiyii.x = x - 24.25 * size;
+		}
+	guiyii.y = y - 17.95 * size;
+	guiyii.image_xscale = 0.9 * (1-facing*2) * size;
+	guiyii.image_yscale = 0.9 * size;
+	guiyii.alarm[0] = 2;
+	}
+
+//-----------------------------------------------------------------------ACTIVATE CHARGED VERSION-----------------------------------------------------------
+	if ( special = 1 && timer = 10 && temp = 0 )
+	{
+	timer = 100;
+	time = 172;
+	guiyii.image_index = 3;
+	}
+	if ( ( special = 0 && timer < 10 && temp = 0 ) || ( instance_exists(downb_doll) ) )
+	{
+	temp = 1;
+	}
+
+
+//---------------------------------------------------------------------------------FIRE-----------------------------------------------------------
+    if ( timer = 16 )
+      {
+	with ( guiyii )
+		{
+		instance_destroy();
+		}
+	sound_play(sideb_snd);
+	create_projectile(7,40+facing*100,4.2,3.4,11,4,fire3,obj_spark_fire1,0.4,0.7,30,24,self.id,70,char_custom2);
+	proj.use_palette = number;
+	spark = instance_create(x+size*(30-facing*60),y-24*size,obj_spark_shockwave);
+	spark.image_xscale *= 0.25*size;
+	spark.image_yscale *= 0.6*size;
+	spark.image_blend = c_gray;
+      }
+
+    if ( timer = 138 )
+	{
+		with ( guiyii )
+		{
+		instance_destroy();
+		}
+	
+		downb_doll = create_projectile(15,10+facing*170,3,7,60,25,fire3,obj_spark_fire1,0,0,abs(place_x(43)),0,self.id,1500,char_custom6);
+        downb_doll.hit_stun = 15
+        downb_doll.sprite_index = sideb_guiyii2_stand_sprite;
+		downb_doll.use_palette = number;
+        downb_doll.image_index = 0
+        downb_doll.image_speed = 0
+		downb_doll.depth = depth - 0.3;
+        downb_doll.target = -1
+        downb_doll.priority = 5;
+		downb_doll.vspeed = 0
+		downb_doll.hspeed = 0
+		downb_doll.base_xscale = abs(image_xscale);
+		downb_doll.base_yscale = abs(image_yscale);
+		downb_doll.alice = self.id
+		downb_doll.facing = facing
+		downb_doll.ungrazable = 1
+		downb_doll.bstime = downb_doll.time
+		downb_doll.alarm[0] = downb_doll.time
+		downb_doll.sdi = 0
+		
+	}
+	
+	
+    
+    if ( air = 0 )
+	hspeed = 0;
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	{
+	sprite_index = mid_jump_sprite;
+	image_index = 10;
+	state_type = "jump";
+	}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
