@@ -1,0 +1,252 @@
+if identifier = "breunor1"
+{
+
+if timer = 1
+{
+visible = 1;
+priority = 3
+moving_object = 0;
+sound_play(es.crestspikesappear_sound);
+}
+
+if hit = 0
+tempspeed = speed
+
+if timer < 40
+speed*=.9
+
+if timer < 40 and (hit = 1)
+timer = 40
+
+if hit = 1
+{
+speed = tempspeed
+time = 52;
+alarm[0] = 52
+}
+
+switch (timer)
+{
+case 40: image_alpha = .8; hit = 2; break;
+case 42: image_alpha = .6; break;
+case 44: image_alpha = .4; break;
+case 46: image_alpha = .2; break;
+case 48: image_alpha = .1; break;
+case 50: instance_destroy(); break;
+}
+
+}
+
+
+
+if identifier = "breunor2"
+{
+
+if timer = 1
+{
+visible = 1;
+priority = 3
+moving_object = 0;
+sound_play(es.crestspikesappear_sound);
+}
+
+if hit = 0
+tempspeed = speed
+
+
+if hit = 1
+{
+speed = tempspeed
+time = 82;
+alarm[0] = 82
+}
+
+
+//SECOND BREUNOR DETECTION
+if timer < 70
+{
+
+if collision_rectangle(x,y,x+50*(1-facing*2),y-100, projectile_box, false, true)
+{
+	breunortocombine = instance_nearest(x+5*(1-facing*2),y-7,projectile_box)
+	
+	if breunortocombine.identifier = "breunor1"
+	{
+		
+		combinedbreunorproj = create_projectile(12, dir, 5, 6, 24, 12, es_slashhitsound3, obj_spark_aura, .24*(1-facing*2), .24, 0, 10, attacker.id, 112, char_custom2);
+		combinedbreunorproj.sprite_index = es.bprojcombined_sprite
+		combinedbreunorproj.image_speed = 0;
+		combinedbreunorproj.identifier = "combinedbreunor"
+		combinedbreunorproj.speed = 8.5;
+		combinedbreunorproj.direction = direction;
+		combinedbreunorproj.es = es
+		combinedbreunorproj.facing = facing
+		
+		shockyshockyvfx = instance_create(x,y-10,obj_spark_shockwave)
+		shockyshockyvfx.image_blend = c_teal
+		
+		with (breunortocombine) instance_destroy();
+		instance_destroy();
+	}
+}
+
+}
+
+if timer >= 70
+speed*=.85;
+
+if timer < 70 and hit = 1
+timer = 70
+
+switch (timer)
+{
+case 70: image_alpha = .8; hit = 2; break;
+case 72: image_alpha = .6; break;
+case 74: image_alpha = .4; break;
+case 76: image_alpha = .2; break;
+case 78: image_alpha = .1; break;
+case 80: instance_destroy(); break;
+}
+
+}
+
+
+
+if identifier = "breunor3"
+{
+
+if timer = 1
+{
+visible = 1;
+priority = 3
+moving_object = 0;
+sound_play(es.crestspikesappear_sound);
+}
+
+if hit = 0
+tempspeed = speed
+
+
+if hit = 1
+{
+speed = tempspeed
+time = 212;
+alarm[0] = 212
+}
+
+if timer = 30
+speed = 8;
+
+if timer >= 200
+speed*=.85;
+
+if timer < 200 and hit = 1
+timer = 200
+
+switch (timer)
+{
+case 200: image_alpha = .8; hit = 2; break;
+case 202: image_alpha = .6; break;
+case 204: image_alpha = .4; break;
+case 206: image_alpha = .2; break;
+case 208: image_alpha = .1; break;
+case 210: instance_destroy(); break;
+}
+
+}
+
+
+
+if identifier = "combinedbreunor"
+{
+
+if timer = 1
+{
+sound_play(es.combinedbreunor_sound);
+visible = 1;
+priority = 4
+moving_object = 0;
+}
+
+if hit = 0
+tempspeed = speed
+
+
+if hit = 1
+{
+speed = tempspeed
+time = 112;
+alarm[0] = 112
+}
+
+if timer >= 100
+speed*=.85;
+
+if timer < 100 and hit = 1
+timer = 100
+
+switch (timer)
+{
+case 100: image_alpha = .8; hit = 2; break;
+case 102: image_alpha = .6; break;
+case 104: image_alpha = .4; break;
+case 106: image_alpha = .2; break;
+case 108: image_alpha = .1; break;
+case 110: instance_destroy(); break;
+}
+
+}
+
+
+
+if identifier = "airbreunor"
+{
+
+if timer = 1
+{
+visible = 1;
+priority = 3
+moving_object = 1;
+sound_play(es.crestspikesappear_sound);
+}
+
+if hit = 0
+tempspeed = speed
+
+
+if hit = 1
+{
+speed = tempspeed
+time = 82;
+alarm[0] = 82
+}
+
+if timer >= 70
+speed*=.85;
+
+if timer < 70 and (hit = 1)
+timer = 70
+
+if timer < 70 and (on_floor or on_platform or next_to_lwall or next_to_rwall)
+{
+speed = 0;
+shockyshockyvfx = instance_create(x,y-10,obj_spark_shockwave)
+shockyshockyvfx.image_blend = c_teal
+timer = 70
+}
+
+
+
+switch (timer)
+{
+case 70: image_alpha = .8; hit = 2; break;
+case 72: image_alpha = .6; break;
+case 74: image_alpha = .4; break;
+case 76: image_alpha = .2; break;
+case 78: image_alpha = .1; break;
+case 80: instance_destroy(); break;
+}
+
+}
+
+after_image(max(speed/2,1),c_white,.3);

@@ -1,0 +1,273 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = sideb_sprite
+        image_index=0
+        timer = 0
+        time = 47
+		air_move = 0
+		hspeed=0
+		
+		sound_play(choose(sideb_voice,sideb_voice2))
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack"
+	switch (timer)
+	{
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break;
+		case 12: image_index = 4; break;
+		case 15: image_index = 5; break;
+		case 19: image_index = 6; break;
+		case 21: image_index = 7; break;
+		case 27: image_index = 8; break;
+		case 29: image_index = 9; break;
+		case 33: image_index = 10; break;
+		case 37: image_index = 11; break;
+		case 41: image_index = 12; break;
+		case 44: image_index = 13; break;
+		
+		case 51: image_index = 1; break;
+		case 52: image_index = 2; break;
+		case 54: image_index = 3; break;
+		case 56: image_index = 4; break;
+		case 58: image_index = 5; break;
+		case 60: image_index = 6; break;
+		case 64: image_index = 7; break;
+		case 68: image_index = 8; break;
+		case 72: image_index = 9; break;
+		case 76: image_index = 10; break;
+		case 80: image_index = 11; break;
+		case 84: image_index = 12; break;
+		case 88: image_index = 13; break;
+		case 91: image_index = 13; break;
+	}
+	
+	if (timer <= 37) or (timer > 49 and timer < 56) and air != 0
+	{
+	gravity_lock=1; 
+	vspeed=-.1;
+	}
+	
+	if timer = 3
+	{
+		sound_play(dashattack_sound);
+		
+		if air = 0
+		{
+		duster = instance_create(x-7*(1-facing*2),y,obj_dust_effect);
+		duster.image_xscale = -.2*(1-facing*2)
+		duster.image_yscale = .2;
+		}
+	
+	}
+	
+	if (timer > 3 and timer < 18)
+	{
+	hspeed=4.5*(1-facing*2)
+	
+		if collision_rectangle(x, y, x + place_x(372), y + place_y(10), enemy, false, true)
+		{
+			timer = 19
+			image_index = 6;
+		}
+	}
+	
+	if timer = 20
+	{
+	sound_play(nairswing_sound);	
+	}
+	
+	if timer >= 20 and timer < 40
+	hspeed*=.5;
+	
+	if timer = 21
+	{
+	
+	sound_play(crestspikesappear_sound);
+	
+	sidebvfx = create_spark ( 10 , 0 , sidebvfx_sprite , 0 , .24*(1-facing*2) , .24  );
+	sidebvfx.alarm[0] = 50
+	sidebvfx.owner = self.id;
+	sidebvfx.keepmain = self.keepmain;
+	sidebvfx.depth = depth-1;
+	
+	create_hitbox(8,angle_correct(80),5,0,16,8,es_slashhitsound3,obj_spark_slash3,2.6,1,abs(place_x(235)),-place_y(80),self.id,8,3);
+	hitbox.image_angle = angle_correct(350)
+	
+	}
+	
+	if (timer >= 23 and timer < 33) and special
+	{
+	sprite_index = sideb_sprite2;
+	image_index = 0;
+    timer = 50;
+    time = 94;
+	}
+	
+	if timer = 41
+	hspeed= 0
+	
+	if timer = 41 || timer = 71
+	{
+	sidebvfx.script = char_custom10;
+	sidebvfx.identifier = "regularvfx"
+	}
+	
+	
+	
+	
+	if timer = 54
+	{
+	sound_play(choose(sideb2_voice,sideb2_voice2))
+	}
+	
+	if (timer = 56)
+	{
+	hspeed=2*(1-facing*2)
+	vspeed=-4.5;
+	
+	sound_play(stiltswing_sound)
+	sound_play(jump_sound)
+	
+		if air = 0
+		{
+		duster = instance_create(x+7*(1-facing*2),y,obj_dust_effect);
+		duster.image_xscale = -.1*(1-facing*2)
+		duster.image_yscale = .1;
+		
+		duster = instance_create(x-7*(1-facing*2),y,obj_dust_effect);
+		duster.image_xscale = .1*(1-facing*2)
+		duster.image_yscale = .1;
+		}
+		
+		else
+		{
+		spark = instance_create(x*size,y-7*size,obj_spark_shockwave);
+		spark.image_xscale *= 0.5*size;
+		spark.image_yscale *= 0.1*size;
+		spark2 = instance_create(x*size,y-7*size,obj_spark_shockwave);
+		spark2.image_xscale *= 0.7*size;
+		spark2.image_yscale *= 0.2*size;
+		}
+	}
+		
+	if timer = 60
+	{
+	sound_play(combinedbreunor_sound);
+	
+	sidebvfx2 = create_spark ( 0 , 0 , sidebvfx_sprite2 , 0 , .24*(1-facing*2) , .24  );
+	sidebvfx2.alarm[0] = 40
+	sidebvfx2.owner = self.id;
+	sidebvfx2.keepmain = self.keepmain;
+	sidebvfx2.depth = depth-1;
+	
+	create_hitbox(8,angle_correct(75),5.5,6.7,16,8,es_slashhitsound4,obj_spark_slash4,2.6,1,abs(place_x(270)),-place_y(155),self.id,8,3);
+	hitbox.image_angle = angle_correct(70)
+	
+	}
+	
+	if timer = 80
+	{
+	sidebvfx2.script = char_custom10;
+	sidebvfx2.identifier = "regularvfx"
+	}
+	
+	if (timer >= 57) and air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=13; }
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+	  
+  }
+
+if (timer >= 60){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 90) || (target.weight > .22 && target.weight < .3 && target.percent > 100) || (target.weight > .3 && target.percent > 110)){
+			    killspark = instance_create(enemy.x-120,enemy.y-115,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.5;
+				killspark.image_yscale = size * 0.5;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 90
+				freezer2.alarm[0] = 130
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x + 45;
+				spark.camera_r = enemy.x - 45;
+				spark.camera_u = enemy.y - 15;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	 
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    dontrepeat = 0;
+	attack_type = "none";
+    if air > 0
+		{
+		if sprite_index = sideb_sprite
+        state_type = "jump";
+		if sprite_index = sideb_sprite2
+		{
+		  state_type = "jump";
+		  attack_type = "none";
+		  sprite_index = jump_sprite;
+		  image_index = 9;
+		  }
+		}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

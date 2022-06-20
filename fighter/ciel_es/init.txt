@@ -1,0 +1,550 @@
+// System Animations
+
+	entry_sprite = cspr_add('fighter/ciel_es/entry_strip26.png',26,1,1,0,1,196,283);
+    sprite_start = entry_sprite //from which sprite the game should begin reading downwards in this file. IMPORTANT.
+	
+	entryvfx_sprite = cspr_add('fighter/ciel_es/entryvfx_strip6.png',6,1,1,0,1,157,283);
+	
+    stand_sprite = cspr_add('fighter/ciel_es/stand_strip11.png',11,0,1,0,1,209,177);
+    mask_sprite = cspr_add('fighter/ciel_es/mask.png',1,0,1,0,1,209,177);
+	//your character's hurtbox when doing anything but crouching
+	//should be a square of a different colour than the sprites's background, of the same dimensions as the standing animation's first frame
+	//it should cover the relevant bodyparts of your character's standing animation's first frame
+	//since it uses the standing sprite as a base, it should also share its aligning coordinates (last two numbers)
+	
+	walk_sprite = cspr_add('fighter/ciel_es/walk_strip12.png',12,1,1,0,1,195,177);
+    run_sprite = cspr_add('fighter/ciel_es/run_strip10.png',10,1,1,0,1,168,137);
+    runstop_sprite = cspr_add('fighter/ciel_es/runstop_strip4.png',4,1,1,0,1,214,155);
+	
+	jump_squat_sprite = cspr_add('fighter/ciel_es/jumpsquat_strip2.png',2,1,1,0,1,226,152);
+    jump_sprite = cspr_add('fighter/ciel_es/jump_strip10.png',10,1,1,0,1,197,260);
+    mid_jump_sprite = jump_sprite
+	land_sprite = cspr_add('fighter/ciel_es/land_strip3.png',3,1,1,0,1,221,174);
+	
+	crouch_sprite = cspr_add('fighter/ciel_es/crouch_strip14.png',14,1,1,0,1,209,155);
+    crouch_mask_sprite = cspr_add('fighter/ciel_es/crouchmask.png',1,0,1,0,1,209,155);
+	
+	shield_sprite = cspr_add('fighter/ciel_es/shield_strip3.png',3,1,1,0,1,61,201);
+    roll_sprite = cspr_add('fighter/ciel_es/roll_strip10.png',10,1,1,0,1,220,189);
+	air_dodge_sprite = cspr_add('fighter/ciel_es/airdodge_strip5.png',5,1,1,0,1,111,177); 
+	spot_dodge_sprite = cspr_add('fighter/ciel_es/spotdodge_strip5.png',5,1,1,0,1,201,171);	
+	broken_sprite = cspr_add('fighter/ciel_es/broken_strip4.png',4,1,1,0,1,199,165); 
+	
+	sleep_sprite = broken_sprite // sprite for when jigglypuff sings to you
+	
+    flinch_sprite = cspr_add('fighter/ciel_es/flinch1.png',1,1,1,0,1,218,177);
+    flinch2_sprite = cspr_add('fighter/ciel_es/flinch2.png',1,1,1,0,1,173,170);
+    flinch3_sprite = cspr_add('fighter/ciel_es/flinch3.png',1,1,1,0,1,180,164);
+	
+	launched_sprite = cspr_add('fighter/ciel_es/launched_strip2.png',2,1,1,0,1,57,181);	//this sprite is for when you're actually launched by a strong attack, should be 8 frames long preferably, imagine the sonic battle sprite where you're spinning backwards in the air. Align it in the same way you align flinch sprites, and make sure the sprite doesn't have extra canvas space so that the game actually spins it properly to avoid wack results
+	
+	tumble_sprite = cspr_add('fighter/ciel_es/tumble_strip2.png',2,1,1,0,1,73,207);
+	screenko_sprite = cspr_add('fighter/ciel_es/flinch2.png',1,1,1,0,1,173,170);
+	
+    fall_sprite = cspr_add('fighter/ciel_es/fall_strip2.png',2,1,1,0,1,191,260);
+	
+	taunt_sprite = cspr_add('fighter/ciel_es/taunt_strip9.png',9,1,1,0,1,211,181);
+    win_sprite = cspr_add('fighter/ciel_es/win_strip9.png',9,1,1,0,1,176,178);
+    lose_sprite = cspr_add('fighter/ciel_es/lose_strip9.png',9,1,1,0,1,209,179);
+	
+	edge_sprite = cspr_add('fighter/ciel_es/edge.png',1,1,1,0,1,291,108);
+    edge_climb_sprite = edge_sprite
+	
+	down_sprite = cspr_add('fighter/ciel_es/getup_strip11.png',11,1,1,0,1,223,174);
+    ukemi_sprite = cspr_add('fighter/ciel_es/tech.png',1,1,1,0,1,64,146);
+	
+	
+//MISC SYSTEM SPRITES BELOW, MOST ARE COMMENTED BUT IF YOU WANNA YOU CAN UNCOMMENT THEM BY REMOVING THE DOUBLE SLASHES AT THE START OF EACH
+	
+	//gw_stock_sprite = cspr_add('fighter/ciel_es/flinch.png',1,1,1,0,1,57,92);
+	//alice_taunt_doll_sprite = cspr_add('fighter/ciel_es/stand.png',23,0,1,0,1,45,78);
+	//apron_sprite = cspr_add('fighter/ciel_es/stand.png',23,0,1,0,1,45,78);
+	//apronfail_sprite = cspr_add('fighter/ciel_es/stand.png',23,0,1,0,1,45,78);
+	
+	//neck_sprite = cspr_add('fighter/ciel_es/flinch.png',1,1,1,0,1,57,92);
+	//(hurt sprite where it looks like someone's getting grabbed by the neck, coordinates should be around the neck)
+	
+	penitent_sprite = cspr_add('fighter/ciel_es/flinch.png',1,1,1,0,1,57,92);
+	//(crucified pose, coordinate should be around the neck)
+	
+	//hat_evidence_sprite = cspr_add('fighter/ciel_es/flinch.png',1,1,1,0,1,57,92);
+	//(hat kid evidence picture)
+	
+    swim_sprite = fall_sprite;
+    ladder_sprite = fall_sprite;
+    vehicle_sprite = fall_sprite	
+	henrytaunt_sprite = taunt_sprite; //for if the opponent uses the henry distraction dance assist on you
+
+// Attack Animations
+
+    jab_sprite = cspr_add('fighter/ciel_es/jab1_strip7.png',7,1,1,0,1,213,179);
+    jab_sprite2 = cspr_add('fighter/ciel_es/jab2_strip11.png',11,1,1,0,1,228,275);
+    jab2_vfxsprite = cspr_add('fighter/ciel_es/jab2vfx.png',1,1,1,0,1,44,263);
+	
+    stilt_sprite = cspr_add('fighter/ciel_es/stilt_strip12.png',12,1,1,0,1,216,172);
+    stiltvfx_sprite = cspr_add('fighter/ciel_es/stiltvfx.png',1,1,1,0,1,110,99);
+    stiltvfx2_sprite = cspr_add('fighter/ciel_es/stiltvfx2.png',1,1,1,0,1,94,147);
+	
+    utilt_sprite = cspr_add('fighter/ciel_es/utilt_strip11.png',11,1,1,0,1,240,291);
+    utiltvfx_sprite = cspr_add('fighter/ciel_es/utiltvfx.png',1,1,1,0,1,65,293);
+	
+	dtilt_sprite = cspr_add('fighter/ciel_es/dtilt1_strip7.png',7,1,1,0,1,219,145);
+	dtilt_sprite2 = cspr_add('fighter/ciel_es/dtilt2_strip10.png',10,1,1,0,1,206,218);
+	dtilt_sprite2vfx = cspr_add('fighter/ciel_es/dtilt2vfx.png',1,1,1,0,1,150,158);
+	dtilt_sprite3 = cspr_add('fighter/ciel_es/dtilt3_strip11.png',11,1,1,0,1,236,305);
+	dtilt_sprite3vfx = cspr_add('fighter/ciel_es/dtilt3vfx_strip2.png',2,1,1,0,1,156,317);
+
+    ssmash_sprite = cspr_add('fighter/ciel_es/ssmash_strip15.png',15,1,1,0,1,192,196);
+    ssmashcrest_sprite = cspr_add('fighter/ciel_es/ssmashcrest_strip4.png',4,1,1,0,1,184,108);
+    ssmashspikes_sprite = cspr_add('fighter/ciel_es/ssmashspikes.png',1,1,1,0,1,210,164);
+	sprite_set_precise(ssmashspikes_sprite,1)
+	
+    usmash_sprite = cspr_add('fighter/ciel_es/usmash_strip18.png',18,1,1,0,1,230,297);
+    usmashcrest_sprite = cspr_add('fighter/ciel_es/usmashcrest_strip4.png',4,1,1,0,1,122,277);
+    usmashspikes_sprite = cspr_add('fighter/ciel_es/usmashspikes.png',1,1,1,0,1,64,175);
+	sprite_set_precise(usmashspikes_sprite,1)
+	
+    dsmash_sprite = cspr_add('fighter/ciel_es/dsmash_strip16.png',16,0,1,0,1,202,230);
+    dsmashcrest_sprite = cspr_add('fighter/ciel_es/dsmashcrest_strip4.png',4,1,1,0,1,187,233);
+    dsmashspikes_sprite = cspr_add('fighter/ciel_es/dsmashspikes.png',1,1,1,0,1,156,166);
+	sprite_set_precise(dsmashspikes_sprite,1)
+	
+    nair_sprite = cspr_add('fighter/ciel_es/nair_strip19.png',19,1,1,0,1,240,285);
+    nairvfx1_sprite = cspr_add('fighter/ciel_es/nairvfx1.png',1,1,1,0,1,128,220);
+    nairvfx2_sprite = cspr_add('fighter/ciel_es/nairvfx2.png',1,1,1,0,1,106,193);
+	
+    fair_sprite = cspr_add('fighter/ciel_es/fair_strip14.png',14,1,1,0,1,251,291);
+    fairvfx_sprite = cspr_add('fighter/ciel_es/fairvfx.png',1,1,1,0,1,254,155);
+	
+    bair_sprite = nair_sprite
+	
+    uair_sprite = cspr_add('fighter/ciel_es/uair_strip13.png',13,1,1,0,1,239,272);
+    uairvfx_sprite = cspr_add('fighter/ciel_es/uairvfx.png',1,1,1,0,1,90,330);
+	
+    dair_sprite = cspr_add('fighter/ciel_es/dair_strip25.png',25,1,1,0,1,217,345);	
+    dairvfx1_sprite = cspr_add('fighter/ciel_es/dairspikes1_strip2.png',2,1,1,0,1,88,33);
+    dairvfx2_sprite = cspr_add('fighter/ciel_es/dairspikesfinal_strip2.png',2,1,1,0,1,158,31);
+	
+    zair_sprite = cspr_add('fighter/ciel_es/zair_strip14.png',14,1,1,0,1,218,285);
+    zaircrest_sprite = cspr_add('fighter/ciel_es/zaircrest_strip5.png',5,1,1,0,1,201,266);
+    zairspikes_sprite = cspr_add('fighter/ciel_es/zairspikes.png',1,1,1,0,1,306,380);
+	sprite_set_precise(zairspikes_sprite,1)
+	
+	dash_attack_sprite = cspr_add('fighter/ciel_es/dashattack_strip13.png',13,0,1,0,1,205,194);
+	dash_attackvfx_sprite = cspr_add('fighter/ciel_es/dashattackvfx_strip5.png',5,0,1,0,1,78,188);
+	
+    down_attack_sprite = cspr_add('fighter/ciel_es/getupattack_strip12.png',12,1,1,0,1,214,120);
+	down_attack_spritevfx = cspr_add('fighter/ciel_es/getupattackwave_strip5.png',5,1,1,0,1,140,59);
+	
+    edge_attack_sprite = cspr_add('fighter/ciel_es/edgeattack_strip14.png',14,1,1,0,1,213,200);
+	
+    b_sprite = cspr_add('fighter/ciel_es/b1_strip15.png',15,1,1,0,1,226,186);
+    bvfx_sprite = cspr_add('fighter/ciel_es/b1vfx_strip2.png',2,1,1,0,1,160,264);	
+    bproj_sprite = cspr_add('fighter/ciel_es/b1proj.png',1,1,1,0,1,155,59);
+    bprojcombined_sprite = cspr_add('fighter/ciel_es/bprojcombined.png',1,1,1,0,1,185,125);
+	
+    b2_sprite = cspr_add('fighter/ciel_es/b2_strip13.png',13,1,1,0,1,218,278);
+    b2vfx_sprite = cspr_add('fighter/ciel_es/b2vfx_strip2.png',2,1,1,0,1,66,308);
+    bproj2_sprite = cspr_add('fighter/ciel_es/b2proj.png',1,1,1,0,1,161,104);
+	
+    airb_sprite = cspr_add('fighter/ciel_es/airb_strip13.png',13,1,1,0,1,218,239);
+    airb2_sprite = cspr_add('fighter/ciel_es/airb2_strip11.png',11,1,1,0,1,249,225);
+	
+    airbvfx_sprite = cspr_add('fighter/ciel_es/airbvfx_strip2.png',2,1,1,0,1,90,260);	
+    airb2vfx_sprite = cspr_add('fighter/ciel_es/airb2vfx.png',1,1,1,0,1,155,217);	
+    airbproj_sprite = bproj_sprite
+	
+    upb_sprite = cspr_add('fighter/ciel_es/upb_strip23.png',23,0,1,0,1,226,352);
+    upbvfx_sprite = cspr_add('fighter/ciel_es/upbvfx.png',1,1,1,0,1,144,310);	
+	
+	sideb_sprite = cspr_add('fighter/ciel_es/sideb_strip14.png',14,0,1,0,1,225,175);
+	sideb_sprite2 = cspr_add('fighter/ciel_es/sideb2_strip15.png',15,0,1,0,1,221,268);
+    sidebvfx_sprite = cspr_add('fighter/ciel_es/sidebvfx.png',1,1,1,0,1,241,152);	
+    sidebvfx_sprite2 = cspr_add('fighter/ciel_es/sideb2vfx.png',1,1,1,0,1,50,290);	
+	
+    downb_sprite = cspr_add('fighter/ciel_es/downb_strip9.png',9,0,1,0,1,200,208);
+    downb_sprite2 = cspr_add('fighter/ciel_es/downb2_strip5.png',5,0,1,0,1,158,255);
+    downbland_sprite = cspr_add('fighter/ciel_es/downb3_strip6.png',6,0,1,0,1,185,151);
+    downbvfx_sprite = cspr_add('fighter/ciel_es/downbvfx.png',1,1,1,0,1,191,235);	
+	
+	
+	final_smash_attempt_sprite = cspr_add('fighter/ciel_es/finalsmashattempt_strip18.png',18,1,1,0,1,189,215);
+	final_smash_success_sprite = cspr_add('fighter/ciel_es/finalsmashsuccess_strip29.png',29,1,1,0,1,167,269);
+	final_smash_vfx_sprite = cspr_add('fighter/ciel_es/finalsmashvfx1_strip7.png',7,1,1,0,1,287,227);
+	final_smash_vfx_sprite2 = cspr_add('fighter/ciel_es/finalsmashvfx2_strip5.png',5,1,1,0,1,100,166);
+	final_smash_vfx_sprite3 = cspr_add('fighter/ciel_es/finalsmashvfx3_strip5.png',5,1,1,0,1,244,253);
+	final_smash_vfx_sprite4 = cspr_add('fighter/ciel_es/finalsmashvfx4_strip6.png',6,1,1,0,1,205,154);
+	final_smash_vfx_sprite5 = cspr_add('fighter/ciel_es/finalsmashvfx5_strip5.png',5,1,1,0,1,55,107);
+	
+	finalsmashvfxgray_sprite = cspr_add('fighter/ciel_es/finalsmashvfxgray_strip15.png',15,0,1,0,1,288,140);
+	finalsmashvfxgray2_sprite = cspr_add('fighter/ciel_es/finalsmashvfxgray2_strip16.png',16,0,1,0,1,124,175);
+	
+	blackbg_sprite = cspr_add('fighter/ciel_es/blackbg.png',1,0,0,0,0,25,25);
+	
+// Grabs and Throws
+    
+    grab_sprite = cspr_add('fighter/ciel_es/grab_strip9.png',9,1,1,0,1,200,178);
+    hold_sprite = cspr_add('fighter/ciel_es/hold.png',1,1,1,0,1,170,178);
+    pummel_sprite = cspr_add('fighter/ciel_es/jab.png',7,1,1,0,1,69,92);
+
+    fthrow_sprite = cspr_add('fighter/ciel_es/fthrow_strip12.png',12,1,1,0,1,214,267);
+    fthrowvfx_sprite = cspr_add('fighter/ciel_es/fthrowvfx.png',1,1,1,0,1,218,132);
+    fthrowspike_sprite = cspr_add('fighter/ciel_es/fthrowspike_strip2.png',2,1,1,0,1,1,303);
+	
+    bthrow_sprite = cspr_add('fighter/ciel_es/bthrow_strip13.png',13,0,1,0,1,177,198);
+    bthrowvfx_sprite = cspr_add('fighter/ciel_es/bthrowspike_strip4.png',4,1,1,0,1,0,53);
+    bthrowcrest_sprite = cspr_add('fighter/ciel_es/bthrowcrest.png',1,1,1,0,1,192,171);
+	
+    uthrow_sprite = cspr_add('fighter/ciel_es/uthrow_strip12.png',12,1,1,0,1,182,181);
+    uthrowvfx_sprite = cspr_add('fighter/ciel_es/uthrowspike_strip4.png',4,1,1,0,1,0,227);
+	
+    dthrow_sprite = cspr_add('fighter/ciel_es/b.png',12,1,1,0,1,57,92);;
+	
+// Item-Related
+	
+	item_down_sprite = crouch_sprite;
+	item_forward_sprite = jab_sprite;
+    item_up_sprite = utilt_sprite
+    item_heavy_sprite = shield_sprite;
+	
+    item_swing_sprite = cspr_add('fighter/ciel_es/stilt_strip12.png',12,1,1,0,1,216,172); //sprite for homerun bat, lightsaber, and similar swingable items. Should clearly swing from above and forwards.
+    item_swing_frame = 4; //frame at which the character is at the zenith of swinging their hand/appendage forwards
+    hammer_swing_frame = 2; //frame at which the character starts swinging their hand, should ideally be pointing upwards
+	
+    item_shoot_sprite = cspr_add('fighter/ciel_es/jab1_strip7.png',7,1,1,0,1,213,179); //sprite for ray gun and similar shootable weapons. Should be the character in a position similar to holding a gun.
+    item_shoot_frame = 4; //frame at which the character should shoot the gun in question.
+	
+    sprite_end = item_shoot_sprite //which DECLARED (cspr_add) sprite is the last one the game should load. IMPORTANT.
+
+// Scripts
+	
+    entry_script = char_entry;
+    taunt_script = char_taunt;
+    win_script = char_win;
+    lose_script = char_lose;
+    edge_jump_script = char_edge_jump;
+    edge_roll_script = char_edge_roll;
+    step_script = char_step;
+	
+    jab_script = char_jab;
+	
+    stilt_script = char_stilt;
+    utilt_script = char_utilt;
+    dtilt_script = char_dtilt;
+	
+    ssmash_script=char_ssmash;
+    usmash_script=char_usmash;
+    dsmash_script=char_dsmash;
+	
+    nair_script = char_nair;
+    fair_script = char_fair;
+    bair_script = char_bair;
+    uair_script = char_uair;
+    dair_script = char_dair;
+    zair_script = char_zair;
+	can_zair = 1
+	
+    dash_attack_script = char_dash_attack;
+    edge_attack_script = char_edge_attack;
+    down_attack_script = char_down_attack;
+	
+    b_script = char_b;
+    upb_script = char_upb;
+    sideb_script = char_sideb;
+    smashb_script=sideb_script;
+    downb_script = char_downb;
+    final_smash_script = char_final_smash;
+	
+    grab_script = char_grab;
+    hold_script = char_hold;
+    fthrow_script = char_fthrow;
+    bthrow_script = char_bthrow;
+    uthrow_script = char_uthrow;
+    dthrow_script = char_dthrow;
+    ai_attack_script = char_ai;
+	
+// Sounds
+	
+    jump_sound = sound_add("fighter/ciel_es/jump sound.ogg",0,1);
+    sound_start = jump_sound //from which sound the game should begin loading sounds in. IMPORTANT.
+	
+    es_jabhitsound1 = add_hit_sfx(0,"fighter/ciel_es/cfhit1.ogg")
+    es_jabhitsound2 = add_hit_sfx(1,"fighter/ciel_es/cfhit2.ogg")
+    es_jabhitsound3 = add_hit_sfx(2,"fighter/ciel_es/cfhit3.ogg")
+    es_jabhitsound4 = add_hit_sfx(3,"fighter/ciel_es/cfhit4.ogg")
+    es_slashhitsound1 = add_hit_sfx(4,"fighter/ciel_es/cfslash1.ogg")
+    es_slashhitsound2 = add_hit_sfx(5,"fighter/ciel_es/cfslash2.ogg")
+    es_slashhitsound3 = add_hit_sfx(6,"fighter/ciel_es/cfslash3.ogg")
+    es_slashhitsound4 = add_hit_sfx(7,"fighter/ciel_es/cfslash4.ogg")
+	
+    mid_jump_sound = sound_add("fighter/ciel_es/jump sound2.ogg",0,1);
+	
+    jabswing_sound1 = sound_add("fighter/ciel_es/jabswing1.ogg",0,1);
+    jabswing_sound2 = sound_add("fighter/ciel_es/jabswing2.ogg",0,1);
+	
+    stiltswing_sound = sound_add("fighter/ciel_es/stiltswing.ogg",0,1);
+	
+    usmashland_sound = sound_add("fighter/ciel_es/usmashland.ogg",0,1);
+	
+    ssmash_sound = sound_add("fighter/ciel_es/ssmashsound.ogg",0,1);
+    ssmashswing_sound = sound_add("fighter/ciel_es/ssmashswing.ogg",0,1);
+	
+    crestcast_sound = sound_add("fighter/ciel_es/crestcast.ogg",0,1);
+    crestspikesappear_sound = sound_add("fighter/ciel_es/crestspikesappear.ogg",0,1);
+    combinedbreunor_sound = sound_add("fighter/ciel_es/combinedbreunorsound.ogg",0,1);
+	
+    dashattack_sound = sound_add("fighter/ciel_es/dashattacksound1.ogg",0,1);
+	
+    nairswing_sound = sound_add("fighter/ciel_es/nairswing.ogg",0,1);
+	
+    dair_sound = sound_add("fighter/ciel_es/dairsound.ogg",0,1);
+	
+    grabbed_sound = sound_add("fighter/ciel_es/grabbedsound.ogg",0,1);
+	
+    fthrow_sound = sound_add("fighter/ciel_es/fthrowsound.ogg",0,1);
+	
+    finalsmash_sound = sound_add("fighter/ciel_es/finalsmashsound.ogg",0,1);
+    finalsmash_sound2 = sound_add("fighter/ciel_es/finalsmashsound2.ogg",0,1);
+	
+    finalsmashhit_sound = sound_add("fighter/ciel_es/finalsmashhit1.ogg",0,1);
+    finalsmashhit_sound2 = sound_add("fighter/ciel_es/finalsmashhit2.ogg",0,1);
+	
+    entry_sound = sound_add("fighter/ciel_es/entrysound.ogg",0,1);
+    entry_sound2 = sound_add("fighter/ciel_es/entrysound2.ogg",0,1);
+
+// Voices
+	
+	jump_voice = sound_add("fighter/ciel_es/attack.ogg",0,1); // voice for first jump
+    sound_mute = jump_voice
+	mid_jump_voice = sound_add("fighter/ciel_es/attack.ogg",0,1); // voice for double jump
+	//sound_mute takes the sound you specify and mutes all sounds from that sound onwards for when you grab a Metal Cap.
+	//Effect lasts until Metal Cap runs out.
+	
+	b_voice = sound_add("fighter/ciel_es/bvoice1.ogg",0,1);
+	b_voice2 = sound_add("fighter/ciel_es/bvoice2.ogg",0,1);
+	
+	airb_voice = sound_add("fighter/ciel_es/airbvoice.ogg",0,1);
+	airb_voice2 = sound_add("fighter/ciel_es/airbvoice2.ogg",0,1);
+	
+	
+    upb_voice = sound_add("fighter/ciel_es/upbvoice.ogg",0,1);
+    upb_voice2 = sound_add("fighter/ciel_es/upbvoice2.ogg",0,1);
+	
+	sideb_voice = sound_add("fighter/ciel_es/sidebvoice.ogg",0,1);
+	sideb_voice2 = sound_add("fighter/ciel_es/sidebvoice2.ogg",0,1);
+	
+	sideb2_voice = sound_add("fighter/ciel_es/sideb2voice.ogg",0,1);
+	sideb2_voice2 = sound_add("fighter/ciel_es/sideb2voice2.ogg",0,1);
+	
+    downb_voice = sound_add("fighter/ciel_es/downbvoice.ogg",0,1);
+    downb_voice2 = sound_add("fighter/ciel_es/downbvoice2.ogg",0,1);
+    downb_voice3 = sound_add("fighter/ciel_es/downbvoice3.ogg",0,1);
+	
+	dtilt3_voice = sound_add("fighter/ciel_es/dtilt3voice.ogg",0,1);
+	dtilt3_voice2 = sound_add("fighter/ciel_es/dtilt3voice2.ogg",0,1);
+	dtilt3_voice3 = sound_add("fighter/ciel_es/dtilt3voice3.ogg",0,1);
+	dtilt3_voice4 = sound_add("fighter/ciel_es/dtilt3voice4.ogg",0,1);
+	
+	ssmash_voice = sound_add("fighter/ciel_es/ssmashvoice.ogg",0,1);
+	ssmash_voice2 = sound_add("fighter/ciel_es/ssmashvoice2.ogg",0,1);
+	ssmash_voice3 = sound_add("fighter/ciel_es/ssmashvoice3.ogg",0,1);
+	
+    grab_voice = sound_add("fighter/ciel_es/grabvoice.ogg",0,1);
+	
+    uthrow_voice1 = sound_add("fighter/ciel_es/uthrowvoice.ogg",0,1);
+    uthrow_voice2 = sound_add("fighter/ciel_es/uthrowvoice2.ogg",0,1);
+	
+    fthrow_voice1 = sound_add("fighter/ciel_es/fthrowvoice.ogg",0,1);
+    fthrow_voice2 = sound_add("fighter/ciel_es/fthrowvoice2.ogg",0,1);
+    fthrow_voice3 = sound_add("fighter/ciel_es/fthrowvoice3.ogg",0,1);
+	
+    jab_voice1 = sound_add("fighter/ciel_es/jabvoice1.ogg",0,1);
+    jab_voice2 = sound_add("fighter/ciel_es/jabvoice2.ogg",0,1);
+    jab_voice3 = sound_add("fighter/ciel_es/jabvoice3.ogg",0,1);
+    jab_voice4 = sound_add("fighter/ciel_es/jabvoice4.ogg",0,1);
+	
+    finalsmash_voice1 = sound_add("fighter/ciel_es/finalsmashvoice1.ogg",0,1);
+    finalsmash_voice2 = sound_add("fighter/ciel_es/finalsmashvoice2.ogg",0,1);
+	 
+	hit_voice1 = sound_add("fighter/ciel_es/hit1.ogg",0,1); // voice for when you get hit by a normal attack
+	hit_voice2 = sound_add("fighter/ciel_es/hit2.ogg",0,1); // another voice for when you get hit by a normal attack
+	broken_voice = sound_add("fighter/ciel_es/brokenvoice.ogg",0,1); // voice for when your shield breaks and you get up and are stunned
+	
+    starko_voice = sound_add("fighter/ciel_es/starko.ogg",0,1);
+	
+    fly_voice1 = sound_add("fighter/ciel_es/fly1.ogg",0,1);
+    fly_voice2 = sound_add("fighter/ciel_es/fly2.ogg",0,1);
+	
+    die_voice1 = sound_add("fighter/ciel_es/die.ogg",0,1);
+    die_voice2 = sound_add("fighter/ciel_es/die2.ogg",0,1);;
+	
+	win_voice = sound_add("fighter/ciel_es/winvoice.ogg",0,1);
+	win_voice2 = sound_add("fighter/ciel_es/winvoice2.ogg",0,1);
+	win_voice3 = sound_add("fighter/ciel_es/winvoice3.ogg",0,1);
+	
+	actual_win_voice = choose(win_voice,win_voice2,win_voice3)
+	
+	entry_voice = sound_add("fighter/ciel_es/entryvoice1.ogg",0,1);
+	entry_voice2 = sound_add("fighter/ciel_es/entryvoice2.ogg",0,1);
+	entry_voice3 = sound_add("fighter/ciel_es/entryvoice3.ogg",0,1);
+	
+	taunt_voice = sound_add("fighter/ciel_es/tauntvoice.ogg",0,1);
+	taunt_voice2 = sound_add("fighter/ciel_es/tauntvoice2.ogg",0,1);
+	
+    sound_end = taunt_voice2 //at which DECLARED (sound_add) sound the game should stop loading sounds in. IMPORTANT.
+	
+// Stats
+	
+    weight = 0.20;
+	//Weight determines how easy it is to send opponents flying. Higher weight = Harder to launch overall.
+	//Should be between 0.1 (very light) and 0.4 (very heavy).
+	//Sans uses a negative value so he's incredibly easy to be launched.
+	
+    grav = 0.30;
+	//Grav is gravity, determines at what rate the character will ascend and descend in the air.
+	//0.35 is the standard value. You can play with it if you want.
+	//Jigglypuff uses a 0.2 value, while Fox uses a 0.45 value.
+	//Keep in mind that examples going forward will assume you have this set to 0.35.
+	
+    max_jumps=3;
+    brecover = 0;
+	//The max amount of jumps your character can use, minus one. The default is 3 (so, 2 jumps). Kirby and Jigglypuff use a value of 6 (so, 5 jumps).
+   
+   jump_speed = 7;
+	//How high your jump from the floor can reach. Common values between 4 (mildly low) and 9 (very high).
+   
+   mid_jump_speed = 6.3;
+	//How strong your jumps in midair are. Values for this function equally as the ones for grounded jump.
+	//Some modders make this value be a bit lower than the grounded jump.
+	//The more midair jumps your character has, the lower you should make this value for balance purposes.
+	
+    short_hop_speed = 2.7;
+	//How tall your short hop is. Common values between 2 (very short) and 4 (very tall).
+	//Don't make the value too high, as this would defeat the purpose of a short hop.
+	
+    airdash_speed = 8;
+	//The speed of your Crusade Airdodge.
+	//Works in a similar vein to jump_speed and mid_jump_speed, but you can direct it to any cardinal direction.
+	
+	jump_voice_freq = 0.5
+	mid_jump_voice_freq = 0.5
+	//frequency at which the game plays the character's voice when jumping or double jumping.
+	//Valid values range from 0 to 1. Default is 0.5
+	
+    run_speed = 3.7;
+	//Self explanatory.
+	//Ganondorf uses a 2.5 value (very very slow) while Sonic uses a value of 5 (very fast).
+	
+    walk_speed = 1.1;
+	//Self explanatory. If not specified, the default value is 0.6 of the run speed value.
+	
+	dash_speed = 5.1;
+    run_start_speed = 5.1;
+	//Speed at which you start out your run from a standstill.
+	//If not specified, the default value is 1.55 of the run speed value.
+	//Ideally keep both dash_speed and run_start_speed at the same values.
+	
+    run_accel = 0.90
+	//The higher the value, the less it takes you to go from 0 speed to your top speed (determined by run_speed).
+	//Porky has a value of 0.06 (takes a lot of time to reach top speed), while Rayman has a value of 0.4 (takes very little).
+	
+    fric = 1;
+	//How slippery your character is on the floor.
+	//Luigi has the lowest friction at 0.75 (very slippery), while Porky has the highest friction at 7 (not slippery).
+	
+    walkstopspeed = 0.85
+	
+    air_speed = 2.5;
+	//the top speed you can achieve moving forwards/backwards in midair.
+	//Sonic's airspeed is 1.8 (kinda low), while Wario's is 3.1 (pretty fast).
+	
+    fall_speed = 3.3;
+	//Top speed you can achieve falling down. Don't confuse this with what grav does.
+	//Grav sets the rate at which you ascend, reach your jump's zenith, and begin descending.
+	//Fall speed sets what the top speed at which you can fall is.
+	//If you set the gravity very high and the fall speed very low, you'll jump, immediately reach your jump's zenith but then fall down very slowly.
+	//Jigglypuff has a 2.2 fall_speed (quite low), while Falco has a fall_speed of 5 (very high).
+	
+    fast_fall_multiplier = 2;
+	//How fast you'll fall down if you flick your movement stick downwards/doubletap down on your keyboard twice in the air.
+	//As its name states, it's a multiplier for the fall_speed. The default value is 1.5.
+	
+    air_accel = 0.24;
+	//At what speed you can change directions and maneuver horizontally in mid air.
+	//Porky has a 0.175 air_accel (very, very slow maneuvering) while Jigglypuff has a 0.6 air_accel (can maneuver very freely)
+	
+    xsize = 0.24;
+    ysize = 0.24;
+	//These two change the size of your character. 
+	//Make sure to set these stats up first thing when setting your character's system stats up, since hitbox and projectile positions won't change alongside these two if you change them later. This may cause undesired results.
+	
+	//PLEASE DON'T HAVE THE XSIZE HAVE A DIFFERENT VALUE THAN THE YSIZE. XSIZE = YSIZE.
+	//If for example, xsize = 0.1 and ysize = 0.1, this is a good setting.
+	//If, instead, xsize = 1 but ysize = 0.5, this is horrible. This one will stretch the character horizontally and it will look hideous. You can play around with this to see what I mean. Always make sure xsize and ysize share the same value.
+	
+    ability = "sword"
+	// Ability Kirby gets upon absorbing this character you're making.
+	// Available:
+	// "fire"
+	// "beam"
+	// "fighter"
+	// "wheel"
+	// "laser"
+	// "sword"
+	// "bomb"
+	// "spark"
+	// "parasol"
+	// "falcon"
+	// "ice"
+	// "hammer"
+	// "cutter"
+	// "leaf"
+	// "whip"
+	// "esp"
+	// "sleep"
+	// "animal"
+	// "famicom"
+	// "magic"
+
+    smash_power_gain = 1
+	//Rate at which your smash bar fills up, default is 1.
+	
+    smash_charge_sound = 0
+	//Sound that plays when you charge a smash attack
+	//0 is the default chargesnd1 (find it in the sfx folder), 1 is chargesnd2, anything else won't play anything.
+	
+//Don't touch the ones below
+
+    state_type = "enter";
+    attack_type = "none";
+    image_yscale = ysize;
+    jumptimer = 1 //Determines frame lag on jump.
+    moveright = 0; moveleft = 0; moveup = 0; movedown = 0;
+	attacking =0; movejump = 0;
+	special = 0; shieldup = 0;
+	taunt = 0;
+    mask_index = stand_sprite;
+    points = 0;
+    kos = 0;
+    falls = 0;
+    air = 0;
+    time = 90;
+    timer = 0;
+    timer_speed = 1;
+    facing = 0;
+    target = -1;
+    hitby = 0;
+    special_land_time = 13
+    ranged_attacks = 4
+    ranged_attack_types[0] = "b"
+    ranged_attack_types[1] = "upb"
+    ranged_attack_types[2] = "sideb"
+    ranged_attack_types[3] = "downb"
+    scancel_type[0]=0
+    scancel_type[1]=0
+    scancel_type[2]=1
+    scancel_type[3]=1
+    max_attack_dist = 240
+    held_item=-1
+	no_hurtbox = 1
+	dtiltcancel = 0
