@@ -1,0 +1,87 @@
+if state_type = "stand" || state_type = "run" {
+    hspeed = 0;
+    attacking = 1;
+    state_type = "attack";
+    attack_type = "jab";
+    image_speed = 0.3;
+    sprite_index = jab_sprite;
+    image_index=0.3;
+    timer = 0;
+    time = 21;
+    timer_speed=1;
+}
+
+state_type = "attack";
+if timer = 5 {
+    if attacking = 1
+    autojab = 1
+    sound_play(attack_sound1);
+    create_hitbox(3,70+facing*40,2.5,0.2,3,4,punch1,obj_spark_hit1,0.65,0.65,15,22,self.id,5,1);
+    hitbox.di = 0.4 
+    hitbox.hit_stun = 3
+    }
+//if timer = 6 && ai && random(10) > 6 && !attack_success
+//attacking = 0
+if timer = 5 && hitbox.hit!=0
+    autojab = 0
+if attacking = 0
+    autojab=0
+if timer = 9
+    image_speed = 0
+if timer = 8 && autojab && !attack_success && attacking {
+    timer = 1
+    image_index = 0.6
+    image_speed = 0.3
+    autojab = 0
+}
+if (timer = 6) && ai = 1 { 
+if random(10)>3 || attack_success
+    attacking = 1
+else
+    attacking = 0
+}
+if (timer = 9 || timer = 60) && ai = 1 && random(10)>1.4
+    attacking = 1
+if timer >= 7 && timer < 21 && attacking  = 1 && (!autojab || attack_success) {
+    autojab = 0
+    time = 75
+    timer = 50
+    image_index = 4.3
+    image_speed = 0.3
+    sprite_index = jab_sprite;
+}
+if timer = 53  {
+    sound_play(attack_sound2);
+    create_hitbox(3,90,2.35,0,4,4,punch1,obj_spark_hit1,0.8,0.6,21,22,self.id,4,1);
+    hitbox.di = 0.4
+    hitbox.hit_stun = 4;
+}
+if timer = 60
+    image_speed = 0
+if timer >= 60 && timer < 67 && attacking  = 1 && (!autojab || attack_success) {
+    autojab = 0
+    time = 105
+    timer = 80
+    image_index = 8.3
+    image_speed = 0.3
+    sprite_index = jab_sprite;
+}
+if timer = 83 {
+    if !collision_point(x+8-facing*16,y-1,obj_wall,0,1)
+        x+= 8-facing*16
+    attacking = 0
+    sound_play(attack_sound2);
+    create_hitbox(4,27+facing*126,5.5,5.4,9,10,punch2,obj_spark_hit3,1.5,0.8,25,25,self.id,4,2);
+}
+if timer = 102
+interrupt = 1
+if image_index >= image_number-image_speed
+image_speed = 0
+
+if timer >= time-1 && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

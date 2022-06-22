@@ -1,0 +1,133 @@
+if ( ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" ) && air < max_jumps )
+  {
+    special = 1
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+    state_type = "air_attack";
+    attack_type = "upb";
+    timer = 0;
+    time = 65;
+    sprite_index = upb_sprite;
+    image_speed = 0;
+	charge = 0
+    charge2 = 0
+	temp = 0
+    temp2 = 0
+	if air > 0 {
+    image_index = 0;}
+	else if air = 0
+	{
+	image_index = 1;}
+    hspeed = 0;
+	ast_shakex = shakex;
+    last_shakey = shakey;
+    charge_timer = 0;
+    air_move = 0;
+	alarm [ 7 ] = 1;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 110: image_index = 1; break;
+	case 115: image_index = 2; break;
+      }
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+	
+	if timer = 6 {
+                impactspark = instance_create(x,y,obj_down_impact)
+                impactspark.image_blend = c_white
+            }
+	    if timer >= 6 && timer <= 60 {
+  		shakex = last_shakex - lengthdir_x ( charge_timer * 0.01 , charge_timer * 55 ) * ( 1 - facing * 2 );
+  		image_blend = merge_color ( c_white , c_green , 0.5 + lengthdir_x ( 0.5 , charge_timer * 50 ) );
+  		alarm[7] = 2;
+  		charge_timer += 1.5
+		if temp = 0 && temp2 = 0 {
+		impactspark = instance_create(x,y,obj_down_impact)
+		impactspark.image_blend = c_white
+		temp2 = 10
+		vspeed *= 0.1;
+        stall += .9;
+		}
+		temp2 -= 1
+		}  
+            if timer <= 60 {                   
+                if (timer >= 6 && ((special = 0 && !ai) || (ai && ((random(10)>8.1 && temp) || (random(10)<0.33))))) || timer = 60 {
+                    //temp = 1
+                    charge = timer / 4
+		    if timer = 60
+			charge2 = 1
+		    special = 0;
+    		    image_blend = c_white;
+    		    alarm [ 7 ] = 1;
+                    time = 155
+                    timer = 100
+  		    charge_timer = 0
+		}
+            }
+	
+	if timer = 115 {
+		if temp = 0 {
+		impactspark = instance_create(x,y,obj_down_impact)
+		impactspark.image_blend = c_white
+		}
+	sound_play(upb_sound)
+	create_hitbox(8+(charge/2)+(charge2*2),60+facing*60,5.5,3.5+(charge2*2),20+charge+(charge2*20),2+(charge/2)+(charge2*4),fire2,obj_spark_fire1,0.8,0.9,0,27,self.id,15,4);
+	vspeed = -(3+(charge/2)+(charge2*2))
+	instance_create(x,y,obj_spark_explode1);
+	impactspark = instance_create(x,y,obj_down_impact)
+	create_hitbox3(9+(charge/2)+(charge2*2),285*30,6,1.25+(charge2*2),25,12,fire2,obj_spark_fire1,0.9,0.9,0,4,self.id,3,5);
+	impactspark.image_blend = c_white
+    air_move = 1;
+    gravity = 0;
+	}
+	if timer >= 115 && timer <= 130
+    	if cos(timer*pi)>0.5
+        after_image(4,c_gray,0.75)
+	if timer > 120
+	vspeed *= 1
+	
+    if timer > 120
+	force_edge_grab = 1
+    
+    if ( timer >= 121 && timer <= 165 )
+      {
+	if ai {
+	if (offstage || ai_state = "recover" ) {
+	movejump = 1
+	if y > nearest_edge.y {
+	moveup = 1
+	special = 1 }
+	else {
+	if x < nearest_edge.x {
+	moveright = 1
+	special = 1
+	}
+	if x > nearest_edge.x {
+	moveleft = 1
+	special = 1 }
+	}
+	}
+	else {
+	if random (10) > 3
+	attacking = 1
+	else
+	special = 1
+	}
+	}
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "fall";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

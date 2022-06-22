@@ -1,0 +1,162 @@
+if state_type = "jump" || state_type = "stand" || state_type = "shielding" || state_type = "run" {
+    special = 1
+    attacking = 0
+    timer = 0
+    attack_type = "b"
+    state_type = "air_attack"
+    image_speed = 0
+    sprite_index = b_sprite
+    image_index=0
+    time = 40
+    timer_speed=1
+	temp = 0;
+    if air = 0
+    hspeed = 0
+    else
+    hspeed*=0.3
+}
+if timer < time {
+switch (timer)
+{
+		case 8: image_index =  1; break;
+		case 10: image_index =  2; break;
+		case 12: image_index =  3; break;
+		case 14: image_index =  4; break;
+		case 16: image_index =  5; break;
+		case 18: image_index =  6; break;
+		case 20: image_index =  7; break;
+		case 22: image_index =  8; break;
+		case 24: image_index =  9; break;
+		case 26: image_index =  10; break;
+		case 27: image_index =  9; break;
+		case 28: image_index =  8; break;
+		case 29: image_index =  7; break;
+		case 30: image_index =  6; break;
+		case 31: image_index =  5; break;
+		case 32: image_index =  4; break;
+		case 33: image_index =  3; break
+		case 34: image_index =  2; break;
+		case 35: image_index =  1; break;
+		case 36: image_index =  0; break;
+		case 50: image_index =  9; break;
+		case 51: image_index =  8; break;
+		case 52: image_index =  7; break;
+		case 53: image_index =  6; break;
+		case 54: image_index =  5; break;
+		case 55: image_index =  4; break;
+		case 56: image_index =  3; break
+		case 57: image_index =  2; break;
+		case 58: image_index =  1; break;
+		case 59: image_index =  0; break;
+	}
+if ( timer = 10 ) //image index = 2
+{
+sound_play (b_sound);
+sound_play (b_voice);
+}
+if ( timer = 15 ) //image index = 4
+      {
+	create_homing_bubble(2.15,0.15,37,24,self.id,5);
+      }
+if ( timer >= 16 && timer <= 18 && sprite_index = b_sprite && target > -1 && !target.intangible )
+      {
+	timer = 50;
+	time = 63;
+	target.x = x + (50 - facing * 100) * size;
+	target.y = y;
+	create_hitbox(9,361,3.4,2.4,12,4,punch2,obj_spark_hit3,2.15,0.35,37,24,self.id,4,1);
+	target.state_type = "air_flinch";
+	target.attack_type = "none";
+	target.sprite_index = target.flinch_sprite;
+	target.timer = 0;
+	target.time = 17;
+	target.timer_speed = 0;
+	target.alarm[0] = 2;
+}
+
+if (timer >= 10 && timer <= 26)
+{
+temp = instance_nearest(x+(1-facing*2)*60,y-8*size,projectile_box)
+    if temp.absorb = 1 && distance_to_object(temp) < 17*size && temp.hit != 2 {
+            temp.hit = 1
+            temp.launch = 0
+            temp.time = temp.hitlag_frames+2
+            temp.attack_success = 1
+            percent -= temp.damage*1.5
+            if percent < 0
+            percent=0
+            with temp instance_destroy()
+            create_spark((temp.x-x)/size,(temp.y-y+9)/size,global.shock_spark,0.5,0.25,0.25)
+      }
+}
+if ( timer = 27) //image index = 9
+{
+sound_play (b_sound2);
+}
+
+if ( timer = 51) //image index = 8
+{
+target.x = x + (45 - facing * 90) * size;
+	target.y = y;
+sound_play (b_sound2);
+}
+
+if (timer = 52) //image index = 7
+{
+target.x = x + (40 - facing * 80) * size;
+target.y = y;
+}
+
+if (timer = 53) //image index = 6
+{
+target.x = x + (35 - facing * 70) * size;
+target.y = y;
+}
+
+if (timer = 54) //image index = 5
+{
+target.x = x + (30 - facing * 60) * size;
+target.y = y;
+}
+
+if (timer = 55) //image index = 4
+{
+target.x = x + (25 - facing * 50) * size;
+target.y = y;
+}
+
+if (timer = 56) //image index = 3
+{
+target.x = x + (20 - facing * 40) * size;
+target.y = y;
+}
+
+if (timer = 57) //image index = 2
+{
+target.x = x + (15 - facing * 30) * size;
+target.y = y;
+}
+
+if (timer = 58) //image index = 1
+{
+target.x = x + (10 - facing * 20) * size;
+target.y = y;
+}
+
+if (timer = 59) //image index = 0
+{
+target.x = x + (5 - facing * 10) * size;
+target.y = y;
+}
+}
+   
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air=0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+    }
