@@ -1,0 +1,66 @@
+if ( state_type = "stand" || state_type = "run")
+  {
+    state_type = "attack";
+    attack_type = "dtilt";
+    timer = 0;
+    time = 28;
+    sprite_index = dtilt_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    temp = 0; //used for speed
+    temp2 = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+	{
+		  case 1: image_index = 1; break;
+		  case 3: image_index = 2; break;
+		  case 4: image_index = 3; break;
+		  case 6: image_index = 4; break;
+		  case 8: image_index = 5; break;
+		  case 10: image_index = 6; break;
+		  case 13: image_index = 7; break;
+		  case 16: image_index = 8; break;
+		  case 20: sprite_index = crouch_sprite; break;
+	}
+	fast_fall = 0;
+	fast_fall_temp = 0;
+
+	if ( temp = 0 && timer = 8 )
+	  {
+		flashing = 1;
+		alarm[7] = 4;
+	  }
+	
+	if timer = 1 {
+		create_hitbox(2,5+facing*170,4.8,0,8,2,kick2,obj_spark_hit1,1,0.4,16,5,self.id,9,1);
+		hitbox.di = 0.2;
+	}
+	if timer >= 0 && timer <= 9 {
+		hspeed = 4 - facing*8
+	}
+	if timer == 10 {
+		hspeed = 1.5 - facing*3
+	}
+
+	if timer = 10 {
+		sound_play(attack_sound1);
+		create_hitbox(6,60+facing*60,5.5,3,15,7,kick3,obj_spark_hit1,0.85,1.15,22,16,self.id,6,2);
+		hitbox.hitstun = 7;
+	}
+	
+	if timer = 13 {
+		hitbox.damage = 4*size;
+		hitbox.dir = 125-facing*70;
+		hitbox.bkb = 5.1*size;
+		hitbox.kbg = 2.3*size;
+		hitbox.hitbox_x = 14*size * (1-facing*2);
+		hitbox.hitbox_y = 24*size;
+		hitbox.image_xscale = 1.2*size;
+		hitbox.image_yscale = 0.7*size;
+		hitbox.sfx = kick2;
+    }
+  }

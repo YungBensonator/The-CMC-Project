@@ -1,0 +1,147 @@
+if ( state_type == "jump" || state_type == "run" || state_type == "stand" || state_type == "shielding" )
+{
+	hspeed = 0;
+	state_type = "air_attack";
+	attack_type = "final_smash";
+	image_speed = 0;
+	sprite_index = fs_start_sprite;
+	image_index = 0;
+	timer = 0;
+	time = 155;
+	timer_speed = 1;
+	intangible = 1;
+	final_smashes += 1;
+	air_move = 0;
+	vspeed = 0;
+	grab_edge = 0;
+	freezer = instance_create(x,y,obj_freeze);
+	freezer.alarm[0] = 89;
+	freezer.dontpause = self.id;
+	homingbubble = -1;
+}
+
+if (timer < time) {
+	gravity_lock = 1;
+	vspeed = 0;
+	switch (timer) {
+		case 12: shakex = 1*size*(1-facing*2); break;
+		case 18: shakex = -1*size*(1-facing*2); break;
+		case 24: shakex = 2*size*(1-facing*2); image_index = 1; break;
+		case 30: shakex = -2*size*(1-facing*2); break;
+		case 34: shakex = 2*size*(1-facing*2); break;
+		case 38: shakex = -2*size*(1-facing*2); break;
+		case 42: shakex = 2*size*(1-facing*2); break;
+		case 46: shakex = -2*size*(1-facing*2); break;
+		case 50: shakex = 2*size*(1-facing*2); break;
+		case 54: shakex = 0; image_index = 1; break;
+		case 57: image_index = 2; break;
+		case 60: image_index = 3; sound_play(final_voice2); break;
+		case 76: image_index = 4; break;
+		case 87: image_index = 5; break;
+		case 90: image_index = 6; break;
+		case 110: sprite_index = fs_miss_sprite; image_index = 0; break;
+		case 112: image_index = 1; break;
+		case 114: image_index = 2; break;
+		case 116: image_index = 3; break;
+		case 119: image_index = 4; break;
+		case 122: image_index = 5; break;
+		case 126: image_index = 6; break;
+		case 201: sprite_index = fs_hit_sprite; image_index = 0; break;
+		case 202: image_index = 1; break;
+		case 203: image_index = 2; break;
+		case 206: image_index = 3; break;
+		case 216: image_index = 4; break;
+		case 219: image_index = 5; break;
+		case 244: image_index = 6; break;
+	}
+	
+	if (timer == 2) sound_play(final_voice);
+	
+	if (timer == 90) {
+		target = -1;
+		sound_play(attack_sound5);
+		hspeed = 9.5*(1-facing*2);
+		
+		homingbubble = create_homing_bubble(1.2, 0.9, 20, 12, self.id, 20);
+		
+		if (!special && target <= -1) timer += 6;
+		
+		if (facing) homingbubble.image_angle = 90+aimdir;
+		else homingbubble.image_angle = aimdir;
+		homingbubble.x = x + 20*size*(1-facing*2);
+		homingbubble.y = y - 12*size;
+	}
+	
+	if (homingbubble > 0) {
+		homingbubble.x = x + 20*size*(1-facing*2);
+		homingbubble.y = y - 12*size;
+	}
+	
+	if (timer > 90 && timer < 110) {
+		after_image(2,c_aqua,0.75);
+		if (target > 0) {
+			timer = 200;
+			time = 255;
+		}
+	}
+	
+	if (timer == 110) hspeed *= 0.7;
+	if (timer >= 115 && timer < 200) hspeed *= 0.9;
+	
+	if (timer >= 200 && timer <= 219 && target > 0) {
+		target.x = x + 25*size*(1-facing*2);
+		target.y = y;
+	}
+	
+	if (timer == 203) {
+		create_hitbox(40,20+facing*140,7.8,7.4,-1,20,strong_punch,obj_spark_impact,0.55,0.45,22,16,self.id,3,5);
+	}
+	if (timer == 204) {
+		freezer = instance_create(x,y,obj_freeze);
+		freezer.alarm[0] = 15;
+		freezer.dontpause = self.id;
+	}
+	
+	if (timer >= 203 && timer <= 218 && hitbox.hit == 1) hspeed = 0;
+	
+	if (timer == 219) {
+		create_hitbox(14,20+facing*140,8,9.4,-1,1,-1,obj_spark_hit4,0.55,0.45,22,16,self.id,3,5);
+	}
+	if (timer == 220) {
+		duster = instance_create ( x , y , obj_dust_effect );
+		duster.facing = 1-facing;
+		duster.image_xscale *= 2;
+		duster.image_yscale *= 2;
+		sound_play(b_sound);
+		screen_shake(36,36);
+		effect_create_above(ef_ellipse,x,y,1,c_green);
+		freezer = instance_create(x,y,obj_freeze);
+		freezer.alarm[0] = 53;
+		spark = instance_create ( 0 , 0 , obj_camerazoom );
+		spark.camera_l = x - 25;
+		spark.camera_r = x + 25;
+		spark.camera_u = y - 40;
+		spark.camera_d = y;
+		spark.camera_boundary_zoom = 100;
+		spark.alarm[0] = 40;
+	}
+}
+
+if (timer >= time -1 && state_type != "flinch" && state_type != "air_flinch")
+{
+    attack_type = "none";
+    if ( air > 0 )
+	{
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 5;
+		image_speed = 0;
+	}
+    else
+	{
+		state_type = "stand";
+	}
+    timer = 0;
+    time = -1;
+	intangible = 0;
+}

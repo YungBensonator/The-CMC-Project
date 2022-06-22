@@ -1,0 +1,177 @@
+if(limitbreak != 1)
+{
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" && limitbreak != 1)
+  {
+	attacking = 0;
+	special = 1;
+	attack_type = "downb";
+	timer = 0;
+	image_index = 0;
+	image_speed = 0;
+	timer_speed = 1;   
+	temp2 = 0; 
+	temp4 = 0;
+	if air = 0  {
+		state_type = "attack";
+		sprite_index = downb_sprite;
+		temp = 0
+		time = 30; }
+	else {
+		state_type = "air_attack";
+		sprite_index = downb_sprite;
+		temp = 1
+		time = 79;
+		}
+	if limitbreak = 1 temp4 = 1
+	if temp4 = 1 {
+		timer = -50
+		freezer  = instance_create(x,y,obj_freeze)
+		freezer.dontpause = self.id
+		freezer.alarm[0] = 49
+	}
+
+	sound_play(downb_sound);
+  }
+  
+
+
+ 
+  if(limitbreak = 1){sound_play(downb_sound3);timer = time;}
+  
+  limitgauge += 0.25;
+  
+
+if (air = 0){hspeed *= 0.95;}
+vspeed *= 0.95;
+
+
+
+if timer = -49 && temp4 = 1 {
+	sound_play(downb_sound2);
+	sound_play(downb_sound3);
+	aura3 = instance_create(x,y-18,obj_spark)
+	aura3.sprite_index = mako3_sprite
+	aura3.image_index = 0;
+	aura3.image_speed = 0.875;
+	aura3.image_xscale = 0.3;
+	aura3.image_yscale = 0.3;
+	aura3.depth = -6;
+	aura3.image_alpha = 0.9;
+	aura4 = instance_create(x,y,obj_spark)
+	aura4.sprite_index = mako4_sprite
+	aura4.image_index = 0;
+	aura4.image_speed = 0.33;
+	aura4.image_xscale = 0.4;
+	aura4.image_yscale = 0.4;
+	aura4.depth = -9;
+	aura4.image_alpha = 0.9;
+	super_armor = 1;
+}
+
+if temp = 0 {
+	switch (timer) {
+		case 22: image_index = 1; break;
+		case 27: image_index = 2; break;
+		case 30: image_index = 3; break;
+		case 33: image_index = 4; break;
+	}
+}
+else {
+	switch (timer) {
+		case 22: image_index = 1; break;
+		case 27: image_index = 2; break;
+		case 30: image_index = 3; break;
+		case 33: image_index = 4; break;
+		case 37: image_index = 5; break;
+	}
+}
+if air == 0 {
+	
+	if(!instance_exists ( wave ))
+	{
+		wave = instance_create(x,y,obj_down_impact);
+		wave.image_blend = c_aqua;
+	}
+	if(!instance_exists ( spark ))
+	{
+        spark = instance_create(x,y-17*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.6*size
+        spark.image_yscale *= 0.6*size
+        spark.image_blend = c_aqua
+        spark.image_alpha = 0.8
+       
+	}
+	
+    if timer = 1 {
+		wave = instance_create(x,y,obj_down_impact);
+		wave.image_blend = c_aqua;
+		spark = instance_create(x,y-17*size,obj_spark_shockwave)
+		spark.image_xscale *= 0.6*size
+		spark.image_yscale *= 0.6*size
+		spark.image_blend = c_aqua
+		spark.image_alpha = 0.8
+			
+		if meteor.temp != 0 temp2 = 1
+	}
+
+
+    if timer = 27 {
+		duster = instance_create(x-5*(1-facing*2),y,obj_dust_effect);
+		duster.facing = facing;
+		duster.image_xscale *= 0.85;
+		duster.image_yscale *= 0.85;
+	}
+
+}
+else {
+
+	if(!instance_exists ( spark ))
+	{
+		spark = instance_create(x,y-17*size,obj_spark_shockwave)
+		spark.image_xscale *= 0.6*size
+		spark.image_yscale *= 0.6*size
+		spark.image_blend = c_aqua
+		spark.image_alpha = 0.8
+	}
+
+	if timer = 2 {
+		spark = instance_create(x,y-17*size,obj_spark_shockwave)
+		spark.image_xscale *= 0.6*size
+		spark.image_yscale *= 0.6*size
+		spark.image_blend = c_aqua
+		spark.image_alpha = 0.8
+
+		if meteor.temp != 0 temp2 = 1
+	}
+}
+
+if air = 0 {
+    if state_type = "air_attack" {
+		state_type = "attack";
+	}
+	else {
+		air_move = 0
+		state_type = "attack"
+		hspeed=0 
+	}
+}
+
+if (!special){timer = time;}
+if (timer = time-2){timer = 0;}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    if temp4 = 1 {
+		limitbreak = 0
+		limitgauge = 0
+		temp4 = 0
+	}
+    super_armor = 0
+    attack_type = "none";
+    if air = 0 state_type = "stand";
+    else state_type = "jump";
+    timer = 0;
+    time =-1;
+}
+
+}

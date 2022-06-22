@@ -98,8 +98,8 @@ switch ( timer )
                 sound_play(choose(attack_voice1,attack_voice2));
                 sound_play(spin_sound)
                 sound_play(jump_sound)
-                create_hitbox(2,130-facing*80,6.89,0.2,4,4,slash2,obj_spark_slash2,0.92,1.55,14.25,17.10,self.id,3,1);
-                create_hitbox2(2,50+facing*80,6.89,0.2,4,4,slash2,obj_spark_slash2,0.92,1.55,-14.25,17.10,self.id,3,1);
+                create_hitbox(2,130-facing*80,6.89,0.2,4,4,slash2,obj_spark_slash2,0.75,1.2,10.25,17.10,self.id,3,1);
+                create_hitbox2(2,50+facing*80,6.89,0.2,4,4,slash2,obj_spark_slash2,0.75,1.2,-10.25,17.10,self.id,3,1);
                 hitbox.weight_kb = 1;
                 hitbox2.weight_kb = 1;
 				hitbox.di = 0.25;
@@ -107,16 +107,16 @@ switch ( timer )
             }
             if timer = 13 || timer = 17 || timer = 21 || timer = 25 || timer = 29 {
                 intangible = 0;
-                create_hitbox(1,130-facing*80,3.99,0.2,4,6,slash2,obj_spark_slash2,0.92,1.55,14.25,17.10,self.id,3,1);
-                create_hitbox2(1,50+facing*80,3.99,0.2,4,6,slash2,obj_spark_slash2,0.92,1.55,-14.25,17.10,self.id,3,1);
+                create_hitbox(1,130-facing*80,3.99,0.2,4,6,slash2,obj_spark_slash2,0.75,1.3,10.25,17.10,self.id,3,1);
+                create_hitbox2(1,50+facing*80,3.99,0.2,4,6,slash2,obj_spark_slash2,0.75,1.3,-10.25,17.10,self.id,3,1);
                 hitbox.weight_kb = 1;
                 hitbox2.weight_kb = 1;
                 hitbox.di = 0.25;
 				hitbox2.di = 0.25;
             }
             if timer = 33 {
-                 create_hitbox(3,60+facing*60,7.2,5,12,8,kick3,obj_spark_hit3,0.92,1.55,14.25,17.10,self.id,5,2);
-                 create_hitbox2(3,120-facing*60,7.2,5,12,8,kick3,obj_spark_hit3,0.92,1.55,-14.25,17.10,self.id,5,2);
+                 create_hitbox(3,60+facing*60,7.2,5,12,8,kick3,obj_spark_hit3,0.75,1.35,10.25,17.10,self.id,5,2);
+                 create_hitbox2(3,120-facing*60,7.2,5,12,8,kick3,obj_spark_hit3,0.75,1.35,-10.25,17.10,self.id,5,2);
                  air = max_jumps;
                  hitbox.hit_stun = 3;
                  hitbox2.hit_stun = 3; 
@@ -159,8 +159,9 @@ switch ( timer )
             if timer = 63
                 timer = 49
         }
-        if (timer >= 33){
-if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0 && target.air > 0){
+        if (timer <= 65 && timer > 51){
+		if(obj_score_control.stocks[target.number-1] == 1){
+if (attack_success || target.object_index == obj_enemy) && dontrepeat = 0 && (target.y + obj_game_control.death_u < -90) || target.percent > 145{
 				if ((target.weight <= .22 && target.percent > 95) || (target.weight > .22 && target.weight < .3 && target.percent > 115) || (target.weight > .3 && target.percent > 125)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;
@@ -188,7 +189,7 @@ if (attack_success || target.object_index == obj_enemy) && (obj_score_control.st
 				dontrepeat = 1;
 				}
 				}
-        
+        }
   }  
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" || (timer > 39 && (is_on_floor(self) || vspeed = 0))  {
         attack_type = "none";

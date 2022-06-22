@@ -1,0 +1,100 @@
+if ( time != -1 )
+  {
+	state_type = "attack";
+	attack_type = "hold";
+	timer = 0;
+	time = -1;
+	sprite_index = hold_sprite;
+	image_speed = 0;
+	image_index = 0;
+	hspeed = 0;
+	timer_speed=1;
+	target.attack_type = "none"
+	pummel = -1;
+  }
+
+if ( attacking && pummel == -1 )
+ {
+   attacking = 0;
+   pummel = 0;
+   sprite_index = pummel_sprite;
+   image_speed = 0.55;
+   image_index = 0;
+ }
+
+if ( pummel == -1 )
+ {
+	if facing = 0 
+	{
+		if( moveright = 1)
+		{
+			attack_type = "fthrow";
+			grabtemp = 0;
+		}
+	   else 
+		{
+		if (moveleft = 1)
+		{
+			attack_type = "bthrow";
+			grabtemp = 0;
+		}
+		}
+	}
+			
+	if facing = 1 
+	{
+		if (moveleft = 1)
+		{
+			attack_type = "fthrow";
+			grabtemp = 0;
+		}
+	   else
+		{ 
+		if (moveright = 1)
+		{
+			attack_type = "bthrow";
+			grabtemp = 0;
+		}
+		}
+	}
+
+
+	if (moveup = 1)
+	{	
+		attack_type = "uthrow";
+		grabtemp = 0;
+	}
+	if (movedown = 1)
+	{
+		attack_type = "dthrow";
+		grabtemp = 0;
+		movedown = 0; 
+	}
+  }
+else
+ { 
+pummel += 1;
+    if ( pummel == 10 ) {
+		temp_timer = target.timer;
+		temp_time = target.time;
+		create_hitbox ( 2 , 361 , 1 , 1 , 4 , 3 , punch1 , obj_spark_hit1 , 0.6 , 0.6 , 17 , 19 , self.id , 2 , 0 );
+    }
+    if ( pummel == 11 ) {
+		target.state_type = "grabbed";
+		target.sprite_index = target.flinch_sprite;
+		target.timer = temp_timer;
+		target.time = temp_time;
+		target.timer_speed = 1;
+    }
+    if ( pummel >= 17 ) {
+		sprite_index = hold_sprite;
+		image_speed = 0;
+		image_index = 1;
+    }
+    if ( pummel >= 28 ) pummel = -1;
+ }
+if target.state_type != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0;
+}
