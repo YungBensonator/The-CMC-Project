@@ -1,0 +1,235 @@
+//PART 1 - START OF SETUP PART OF THE MOVE
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "jab"
+    timer = 0;
+    time = 20;
+    sprite_index = jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+	
+	weaponappearvfx2 = create_spark ( 0 , 0 , weaponreappearvfx_sprite2 , .5 , .2 , .2 );
+	weaponappearvfx2.x = virtuouscontract.x
+	weaponappearvfx2.y = virtuouscontract.y-15
+	weaponappearvfx2.owner = self.id;
+	weaponappearvfx2.keepmain = self.keepmain;
+	
+	if instance_exists(virtuouscontract) with (virtuouscontract) instance_destroy();
+	
+	temp_no_hurtbox = 1
+  }
+  
+//PART 1 - END OF SETUP PART OF THE MOVE
+
+//PART 2 - THE JUICE OF THE MOVE - START
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 16: image_index = 3; break;
+	
+	case 42: image_index = 1; break;
+	case 44: image_index = 2; break;
+	case 57: image_index = 3; break;
+	
+	case 83: image_index = 1; break;
+	case 85: image_index = 2; break;
+	case 90: image_index = 3; break;
+	case 94: image_index = 4; break;
+	case 168: sprite_index = jab_sprite; image_index = 3; break;
+	case 172: sprite_index = jab_sprite3; image_index = 0; break;
+      }
+	  
+	if timer = 2
+	{
+	sound_play(jab1_sound);
+	jabvfx = create_spark ( 0 , 0 , jab_spritevfx , 1/3 , .4*(1-facing*2) , .4 );
+	jabvfx.snap = self.id;
+	jabvfx.owner = self.id;
+	jabvfx.keepmain = self.keepmain;
+	jabvfx.script = char_custom10;
+	
+	sound_play(jab_voice1);
+	create_hitbox(2,angle_correct(10),3,0,4,2,twob_slashhs1,obj_spark_slash2,1.2,1.6,abs(place_x(137)),-place_y(66),self.id,5,3);
+	hitbox.image_angle = angle_correct(0)
+	}
+	
+	if (timer >= 4 and timer < 12) and attack_success and ai
+	attacking = 1
+	
+	if (timer >= 4 and timer < 12) and attack_success and attacking
+	{
+	with jabvfx instance_destroy();
+	sprite_index = jab_sprite2;
+	image_index = 0;
+	hspeed = 2*(1-facing*2)
+    timer = 40;
+    time = 61;
+	attacking = 0;
+	}
+	
+	
+	  
+	if timer = 42
+	{
+	jabvfx2 = create_spark ( 0 , 0 , jab_sprite2vfx , 1/2 , .4*(1-facing*2) , .4 );
+	jabvfx2.snap = self.id;
+	jabvfx2.owner = self.id;
+	jabvfx2.keepmain = self.keepmain;
+	jabvfx2.script = char_custom10;
+	
+	sound_play(jab2_sound);
+	
+	sound_play(jab_voice2);
+	create_hitbox(3,angle_correct(20),5.5,0,4,2,twob_slashhs2,obj_spark_slash2,1.6,1,abs(place_x(197)),-place_y(76),self.id,5,3);
+	hitbox.image_angle = angle_correct(0)
+	hitbox.weight_kb = 1;
+	}
+	
+	if (timer >= 46 and timer < 54) and attack_success and ai
+	attacking = 1
+	
+	if (timer >= 44 and timer < 52) and attack_success and attacking
+	{
+	with jabvfx2 instance_destroy();
+	sprite_index = jab_sprite3;
+	image_index = 0;
+    timer = 80;
+    time = 176;
+	}
+	
+	
+	
+	if timer = 85
+	{
+	sound_play(jab3_sound);
+	sound_play(jab_voice3);
+	
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.5*size;
+	duster.image_yscale *= 0.5*size;
+	duster.facing = facing; 
+	
+	jab3contractproj =
+	create_projectile(1, 90, 3, 0, 4, 1, twob_slashhs1, obj_spark_slash3, .4, .4, abs(place_x(130)), -place_y(40), self.id, 360, char_custom2);
+	jab3contractproj.sprite_index = jab_sprite3contactproj
+	jab3contractproj.image_speed = 1/3;
+	jab3contractproj.identifier = "jab3contract";
+	jab3contractproj.hspeed = 9*(1-facing*2)
+	jab3contractproj.facing = facing;
+	jab3contractproj.twob = self.id;
+	
+	contractslashvfx = create_spark ( 0 , 0 , jab_sprite3vfx , 1/3 , .4*(1-facing*2) , .4 );
+	contractslashvfx.owner = self.id;
+	contractslashvfx.x = jab3contractproj.x
+	contractslashvfx.y = jab3contractproj.y
+	contractslashvfx.keepmain = self.keepmain;
+	contractslashvfx.projtostickto = jab3contractproj
+	contractslashvfx.depth = depth-1;
+	contractslashvfx.loop = 9999
+	contractslashvfx.script = char_custom11
+	}
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+
+	// Head spin VFX
+	xx = (61-sprite_get_xoffset(sprite_index))*size*(1-facing*2)*0.7;
+	yy = (32-sprite_get_yoffset(sprite_index))*-size*0.7;
+	head_spin = create_blur(xx+x,y-yy,self.id);
+	head_spin.sprite_index = spr_spin_blur;
+	head_spin.image_xscale = 0.2 * size * (1-facing*2) * 0.7;
+	head_spin.image_yscale = 0.2 * size ;
+	head_spin.snap = self.id;
+	head_spin.alarm[0] = 40;
+	head_spin.image_index = 0;
+	head_spin.anim_speed = 1;
+	head_spin.image_angle = angle_correct(90);
+	head_spin.loop = 1;
+	
+	//FOR GIVING PUNCHES OR KICKS EXTRA IMPACT
+	burstvfx = instance_create ( place_x ( 40 ) + x , place_y ( 15 ) + y , obj_jab_burst );
+	burstvfx.snap = self.id;
+	burstvfx.image_xscale = xsize * 0.4;
+	burstvfx.image_yscale = ysize * 0.4;
+	
+	//NOT SURE WHAT THIS IS BUT I GUESS IT'S FOR WHIFFING? IDK
+	whiffer = gfx_ef_whiff ( x + 28 * ( 1 - facing * 2 )  * size , y - ( actual_height / 2 ) - 1 , 0.65 , 1 , 180 * facing );
+	
+	//A DIFFERENT VERSION OF THE DUST EFFECT, LOOKS MORE OPAQUE AND POTENT THAN THE REGULAR ONE
+	duster = instance_create(x+12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.5*size;
+	duster.image_yscale *= 0.5*size;
+	duster.facing = !facing; 
+	
+	//AN EFFECT FOR SPINNY MOVES LIKE NAIRS AND WHATNOT
+	whirler = gfx_ef_whirl2 ( x  , (y-actual_height/2)+3 , 0.75*size, -20 * (1-facing*2) );
+	whirler.snap = self.id
+	
+	//THE EFFECT THE GAME USES FOR WHEN SOMEONE LANDS ON THE FLOOR, ALSO INCLUDES A SOUND
+	gfx_land_effect ( x , y , actual_width );
+	
+	//THE YELLOW SPARK THING THAT GETS CREATED WHEN USING A SMASH ATTACK
+	part_particles_create ( psys_back , x - 20 + random ( 40) , y - 7 - random ( 9 ) , ptype_smashspark , 1 )
+	
+	//NEW SMASH CHARGE SPARK, THIS ONE'S BLUE AND IT LOOKS COOLER
+    eff = instance_create(place_x(69)+x,place_y(25)+y,obj_smash_charge);
+    eff.image_yscale = 0.4 * ysize;
+    eff.image_xscale = eff.image_yscale * (1-facing*2);
+    eff.depth = depth - 0.1;
+    eff.image_speed = 2;
+	
+	//DOUBLE JUMP EFFECT
+	
+	spark = instance_create(x*size,y-7*size,obj_spark_shockwave);
+	spark.image_xscale *= 0.5*size;
+	spark.image_yscale *= 0.1*size;
+	spark2 = instance_create(x*size,y-7*size,obj_spark_shockwave);
+	spark2.image_xscale *= 0.7*size;
+	spark2.image_yscale *= 0.2*size;
+	}
+	*/
+    
+  }
+//PART 2 - THE JUICE OF THE MOVE - END
+
+//PART 3 - GETTING OUT OF THE MOVE AND GOING BACK TO IDLE - START
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+	contractreappeartemp = 1
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+//PART 3 - GETTING OUT OF THE MOVE AND GOING BACK TO IDLE - END

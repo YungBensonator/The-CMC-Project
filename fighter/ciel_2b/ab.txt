@@ -1,0 +1,95 @@
+if (state_type = "stand" or state_type = "run" or state_type = "crouch" or state_type = "jump")
+  {
+
+		if air = 0
+		state_type = "attack"
+		else
+        state_type = "air_attack"
+		
+        attack_type = "ab"
+        image_speed = 0
+        
+		if air = 0
+		sprite_index = b_sprite
+		else
+		sprite_index = airb_sprite;
+		
+        image_index=0
+        timer = 0
+        time = 95
+		special = 0
+		
+	sound_play(podhard_voice);
+  }
+  
+slide = 0;
+
+if ( timer < time )
+    {
+    switch ( timer )
+    {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 89: image_index = 5; break;
+	case 92: image_index = 6; break;
+	}
+	
+	if timer = 12
+	{
+	sound_play(podthinghard_voice);
+	
+	podshothard = create_projectile(12, angle_correct(25), 6, 7.5, 100, 24, fire2, obj_spark_fire1, .3, .3, 0, 0, self.id, 90, char_custom3);
+	podshothard.identifier = "podshot2"
+	podshothard.sprite_index = podshothardchargevfx_sprite
+	podshothard.image_speed = 1/3
+	podshothard.x = podthing.x+10*(1-facing*2)
+	podshothard.y = podthing.y-5;
+	podshothard.twob = self.id
+	podshothard.facing = facing;
+	podshothard.hit = 2
+	sound_play(podhardcharge_sound);
+	}
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	}
+	*/
+    
+  }
+  
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+	{
+	state_type = "jump";
+	attack_type = "none";
+	sprite_index = jump_sprite;
+
+		timer = 1;
+	image_index = 4;
+	}
+    else
+        {
+		state_type = "stand";
+		timer = 0;
+		}
+    time =-1;
+}

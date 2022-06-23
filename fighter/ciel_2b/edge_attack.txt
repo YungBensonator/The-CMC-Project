@@ -1,0 +1,94 @@
+if state_type = "edge" {
+
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "edge_attack";
+        image_speed = 0;
+        sprite_index = edge_attack_sprite;
+		timer = 0;
+        time = 28;
+        timer_speed=1;
+	
+	weaponappearvfx2 = create_spark ( 0 , 0 , weaponreappearvfx_sprite2 , .5 , .2 , .2 );
+	weaponappearvfx2.x = virtuousdignity.x
+	weaponappearvfx2.y = virtuousdignity.y-24
+	weaponappearvfx2.owner = self.id;
+	weaponappearvfx2.keepmain = self.keepmain;
+	
+	if instance_exists(virtuousdignity) with (virtuousdignity) instance_destroy();
+
+}
+
+if ( image_index < 2 )
+  please_shadow = -1;
+
+if timer < time {
+    attacking = 0;
+    state_type = "attack";
+	
+    switch (timer)
+	{
+	 case 2: image_index=1; intangible=1; break;
+	 case 4: image_index=2; break;
+	 case 24: image_index=3; break;
+	}
+	  
+	
+	if timer = 2
+	{
+	edgeattackvfx = create_spark ( -abs(place_x(22)),-place_y(90), edge_attack_spritevfx , 1/2 , .4*(1-facing*2) , .4 );
+	edgeattackvfx.snap = self.id;
+	edgeattackvfx.owner = self.id;
+	edgeattackvfx.keepmain = self.keepmain;
+	edgeattackvfx.script = char_custom10;
+	
+	sound_play(dtilt_sound);
+	
+	if irandom_range(0,2) = 2
+	sound_play(utilt_voice)
+	
+	create_hitbox(6,angle_correct(179),6,4,12,6,twob_slashhs2,obj_spark_slash3,2,1,20,-place_y(40),self.id,6,5);
+	hitbox.image_angle = angle_correct(0)
+	}
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+}
+  
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+  dignityreappeartemp = 1
+    x+= size * (2-facing*4);
+	intangible=0;
+	sprite_index = stand_sprite;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

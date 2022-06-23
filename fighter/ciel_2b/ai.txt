@@ -1,0 +1,129 @@
+if ai_timer >= time-2
+ai_state="idle"
+
+//If char is on the floor
+if air = 0
+{
+
+//If char is close to an item, grab it
+	if collision_rectangle(x-13,y-13,x+10,y,item,0,0)
+	&& hold_item = 0 && instance_nearest(x,y-5,item).holder = 0
+	&& instance_nearest(x,y-5,item).grab > 0 
+		{
+		attack_type = "none";
+		state_type = "land";
+		sprite_index=land_sprite;
+		timer = 0;
+		time = 3;
+		hold_item = 1;
+		held_item = instance_nearest(x,y-5,item);
+		held_item.holder = id;
+		held_item.state_type = "held"
+		sound_play(itemgetsnd);
+		attacking = 0;
+		exit
+		}  
+	else 
+	//If not, start checking for the distance to the enemy
+	{
+	//If the enemy is on the floor
+		if enemy.air = 0
+		{
+		//If your smash bar charge is full, use it
+		if smash_power  >= global.gs_fs_charge and distance_to_object(enemy) < 50
+			{
+			if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+				facing=1-facing;
+			attack_type = "final_smash"
+			}
+		//If not, actually start checking for where the opponent is
+		else
+			{
+			if held_item = -1
+				{
+				if distance_to_object(enemy) < 30
+					{
+					if enemy.percent < 80
+						{
+						if ( random ( 10 ) <= global.gs_ai[number-1] )
+						attack_type = choose("jab","jab","jab","jab","grab","stilt","dtilt","utilt");
+						}
+					else
+						{
+						if ( random ( 10 ) <= global.gs_ai[number-1] )
+						attack_type = choose("ssmash","dsmash","usmash")
+						}
+					}
+				else	
+				if distance_to_object(enemy) > 29 and distance_to_object(enemy) < 100
+					{
+						if distance_to_object(enemy) < 37
+						if ( random ( 10 ) <= global.gs_ai[number-1] )
+						attack_type = choose("dsmash","usmash","downb")
+						
+						if distance_to_object(enemy) > 36
+						if ( random ( 10 ) <= global.gs_ai[number-1] )
+						attack_type = choose("ssmash","dash_attack","sideb","downb")
+					}
+					
+				if distance_to_object(enemy) > 99 and distance_to_object(enemy) < 200
+					{
+					
+						if distance_to_object(enemy) < 125
+						if ( random ( 10 ) <= global.gs_ai[number-1] )
+						attack_type = choose("dash_attack","sideb","ssmash")
+						
+						if distance_to_object(enemy) > 120 and distance_to_object(enemy) < 155
+						if ( random ( 10 ) <= global.gs_ai[number-1] )
+						attack_type = choose("dash_attack","b")
+						
+						if distance_to_object(enemy) > 154
+						if ( random ( 10 ) <= global.gs_ai[number-1] )
+						attack_type = "b"
+					}
+				}
+				else
+				{
+				attack_type = "itemfthrow"			
+				}
+			}
+		}
+		else
+		{
+		if held_item = -1
+			{
+			if collision_rectangle(x,y,x+35*(1-facing*2), y-40, enemy, false, false)
+				{
+				attack_type =choose("usmash","utilt")
+				}
+			if collision_rectangle(x,y-40,x+35*(1-facing*2), y-80, enemy, false, false)
+				{
+				attack_type = choose("usmash","upb")
+				}
+			}
+		else
+		attack_type = "itemuthrow"
+		}
+    exit
+	}
+}
+else if offstage && enemy.y > y-5
+    attack_type = "fair"
+else {
+    //timer=0
+    if held_item = -1 {
+    if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x){
+    if enemy.y > y -2
+    attack_type = choose("dair","fair")
+    else if enemy.y < y - 14
+    attack_type = choose("uair","uair","fair")
+    else
+    attack_type = choose("uair","fair","fair","nair","dair")
+    }
+    else
+    attack_type = "bair"
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+}

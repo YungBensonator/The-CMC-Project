@@ -1,0 +1,57 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch"
+{
+	state_type = "air_attack"
+	attack_type = "downb"
+	image_speed = 0
+	sprite_index = downb_sprite
+	image_index=0
+	timer = 0
+	time = 12
+	hspeed = 0
+}
+if ( timer < time )
+{
+	state_type = "air_attack";
+	
+	if podstation = 0
+	{
+		if facing = 0
+			chomp.x = x + 18;
+		else
+			chomp.x = x - 18;
+		chomp.y = y - 4;
+		podx = chomp.x;
+		pody = chomp.y;
+	}
+	
+	switch ( timer )
+    {
+		case 1:
+			if podstation = 0
+			{
+				podstation = 1;
+				if random(2) < 1
+					sound_play(pod_downb1);
+			}
+			else
+			{
+				podstation = 0;
+				if random(2) < 1
+					sound_play(pod_downb2);
+			}
+			sound_play(pod_place);
+		break;
+		case 4: image_index = 1; break;
+    }
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch"
+{
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+		state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantusedownb = 20
+}

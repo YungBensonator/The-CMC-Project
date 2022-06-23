@@ -1,0 +1,79 @@
+if identifier = "jab3contract"
+{
+	time = 360
+	alarm[0] = 360
+	
+	if timer = 1
+	{
+	visible = 1;
+	priority = 3
+	hitcheck = 0;
+	victim = -1;
+	returnto2bcheck = 0
+	moving_object = 0
+	
+	}
+
+//Make sure the thing doesnt disappear on hit
+if hit = 1
+{
+time = 369;
+alarm[0] = 369
+hitcheck = 1
+}
+
+//Reduce hspeed so long as the check to come back isnt valid
+if !returnto2bcheck and abs(hspeed) > 0
+hspeed-=.5*(1-facing*2);
+
+//Create a temp variable with the hspeed you had so long as you havent hit anyone
+if !attack_success
+hspeedtemp = hspeed
+
+//As soon as hspeed is 0, make the check to come back valid
+if (hspeed = 0 or timer = 39) and returnto2bcheck = 0
+{
+returnto2bcheck = 1;
+}
+
+//Reset the hits to 0 every 5 frames
+if timer >= 4 and timer < 40 and timer mod 8 = 0
+{
+hit = 0
+attack_success = 0
+}
+
+
+
+if returnto2bcheck and timer = 40
+{
+hit = 0
+attack_success = 0
+damage = 3
+dir = 20+facing*140
+bkb = 5
+kbg = 4
+shield_damage = 10
+hitlag_frames = 6
+gfx = obj_spark_slash4
+sfx = attacker.twob_slashhs3
+}
+
+if returnto2bcheck and timer > 50
+{
+hspeed-=.5*(1-facing*2)
+}
+	
+if hitcheck = 1 and timer < 40
+{
+	victim.direction = point_direction(victim.x,victim.y-victim.actual_height*.5,x,y+3)
+}
+
+if collision_rectangle(x-12,y-3,x+12, y+3, twob, false, false) and timer > 20 and twob.state_type = "attack" and twob.attack_type = "jab"
+	{
+		twob.timer = 166;
+		instance_destroy();
+		
+	}
+
+}

@@ -1,0 +1,126 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 50;
+        timer_speed=1;
+        charge_frame = 4;
+		temp_no_hurtbox = 1
+	
+	weaponappearvfx2 = create_spark ( 0 , 0 , weaponreappearvfx_sprite2 , .5 , .2 , .2 );
+	weaponappearvfx2.x = virtuoustreaty.x
+	weaponappearvfx2.y = virtuoustreaty.y-24
+	weaponappearvfx2.owner = self.id;
+	weaponappearvfx2.keepmain = self.keepmain;
+	
+	if instance_exists(virtuoustreaty) with (virtuoustreaty) instance_destroy();
+	
+	weaponappearvfx3 = create_spark ( 0 , 0 , weaponreappearvfx_sprite2 , .5 , .2 , .2 );
+	weaponappearvfx3.x = virtuousdignity.x
+	weaponappearvfx3.y = virtuousdignity.y-24
+	weaponappearvfx3.owner = self.id;
+	weaponappearvfx3.keepmain = self.keepmain;
+	
+	if instance_exists(virtuousdignity) with (virtuousdignity) instance_destroy();
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 11: image_index = 3; break;
+	case 26: image_index = 4; break;
+	case 43: image_index = 5; break;
+	case 46: image_index = 6; break;
+      }
+	  
+	 if timer = 9
+	 {
+	duster = instance_create(x-5*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale = .05*(1-facing*2)
+	duster.image_yscale = .05;
+	}
+	  
+	if timer = 11
+	{
+	ssmashvfx = create_spark ( 0 , 0 , ssmash_spritevfx , 0 , .4*(1-facing*2) , .4 );
+	ssmashvfx.snap = self.id;
+	ssmashvfx.owner = self.id;
+	ssmashvfx.keepmain = self.keepmain;
+	ssmashvfx.script = char_custom10;
+	
+	sound_play(ssmash_sound);
+	
+	if irandom_range(0,2) = 2
+	sound_play(utilt_voice)
+	create_hitbox(5,90,5.5,0,10,5,twob_slashhs3,obj_spark_slash3,2.35,1.2,abs(place_x(340)),-place_y(166),self.id,7,3);
+	hitbox.charge_dmg = 0
+	hitbox.charge_kb = 0
+	hitbox.weight_kb = 1
+	hitbox.image_angle = angle_correct(25)
+	}
+	
+	if timer = 14
+	ssmashvfx.image_index = 1
+	
+	if timer = 17
+	ssmashvfx.image_alpha = 0
+	
+	if timer = 26
+	{
+	sound_play(swingsnd3);
+	create_hitbox(8,angle_correct(25),5.5,6.5,16,12,twob_slashhs4,obj_spark_slash3,3,1.2,abs(place_x(295)),-place_y(75),self.id,7,3);
+	hitbox.image_angle = angle_correct(345)
+	ssmashvfx.image_alpha = 1
+	ssmashvfx.image_index = 2
+	ssmashvfx.image_speed = 1/2
+	}
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	treatyreappeartemp = 1
+	dignityreappeartemp = 1
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        

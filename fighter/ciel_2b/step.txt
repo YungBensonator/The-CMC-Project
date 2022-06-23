@@ -1,0 +1,518 @@
+if (air = 0)
+{
+	sbtemp = 0;
+	can_hover = 1;
+}
+if cantuseb > 0
+	cantuseb -=1
+if cantusedownb > 0
+	cantusedownb -=1
+
+if sprite_index = stand_sprite and state_type != "respawn"
+{
+image_speed = 0
+
+switch (timer)
+	{
+	case 0: image_index = 0; break;
+	case 100: image_index = 1; break;
+	case 107: image_index = 2; break;
+	case 142: image_index = 3; break;
+	case 149: timer = 0; image_index = 0; break;
+	}
+}
+
+if sprite_index = walk_sprite
+{
+image_speed = 1/5
+}
+
+
+
+///////////////////////////////////Crouch thing for crouching and getting up from crouch visually
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(5,timer) //replace the 12 by the number the last case you add below has
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 5: image_index = 1; break;
+		//put as many cases as frames your crouch animation has
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 5 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 5 ){
+    image_index = 1;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch thing for crouching and getting up from crouch visually
+					
+
+					
+if ( state_type = "jump" && sprite_index == jump_sprite )
+{
+  if ( timer = 0 )
+    image_index = 0; //start out the jump from the jump sprite's very first frame instead of any later ones
+  if ( vspeed < -1.5 && image_index >= 0 )
+    image_index = 0; //stay in that first frame as long as you're going up (you can change the image index in the condition to a later one to loop back)
+  if ( vspeed >= -1.5 && image_index < 1 )
+    image_index = 1; //the moment you start falling, continue the animation
+ 
+ if ( image_index >= 5 )
+    image_index = 3; //remove the comment thing if you want to loop the jump animation back to a previous frame when falling
+}
+
+
+if (sprite_index = spot_dodge_sprite) and timer = 1
+{
+twobdodgesparkleft = create_spark(0,0,spot_dodge_sprite,0,xsize*(1-facing*2),ysize)
+twobdodgesparkleft.hspeed = -4*(1-facing*2)
+twobdodgesparkleft.alarm[0] = 50;
+twobdodgesparkleft.image_blend = make_color_rgb(128,128,128)
+twobdodgesparkleft.image_alpha = .7
+
+twobdodgesparkright = create_spark(0,0,spot_dodge_sprite,0,xsize*(1-facing*2),ysize)
+twobdodgesparkright.hspeed = 4*(1-facing*2)
+twobdodgesparkright.alarm[0] = 50;
+twobdodgesparkright.image_blend = make_color_rgb(128,128,128)
+twobdodgesparkright.image_alpha = .7
+}
+
+
+if (sprite_index = roll_sprite) and timer = 1
+{
+twobdodgesparkleft = create_spark(0,0,roll_sprite,image_speed,xsize*(1-facing*2),ysize)
+twobdodgesparkleft.hspeed = -6*(1-facing*2)
+twobdodgesparkleft.alarm[0] = 50;
+twobdodgesparkleft.image_blend = make_color_rgb(128,128,128)
+twobdodgesparkleft.image_alpha = .9
+
+twobdodgesparkright = create_spark(0,0,roll_sprite,image_speed,xsize*(1-facing*2),ysize)
+twobdodgesparkright.hspeed = 3*(1-facing*2)
+twobdodgesparkright.alarm[0] = 50;
+twobdodgesparkright.image_blend = make_color_rgb(128,128,128)
+twobdodgesparkright.image_alpha = .9
+}
+
+if instance_exists(twobdodgesparkleft)
+{
+twobdodgesparkleft.image_alpha -= .05
+}
+
+if instance_exists(twobdodgesparkright)
+{
+twobdodgesparkright.image_alpha -= .05
+}
+
+
+
+//POD STUFF
+
+if state_type = "respawn"
+	podstation = 0;
+if (state_type = "flinch" || state_type = "air_flinch")
+{
+	if ( instance_exists(visualTaunt) )
+	{
+		with (visualTaunt)
+			instance_destroy();
+	}
+	if ( instance_exists(visuaBoom) )
+	{
+		with (visuaBoom)
+			instance_destroy();
+	}
+	if ( instance_exists(blade) )
+	{
+		with (blade)
+			instance_destroy();
+	}
+	if ( instance_exists(visualB) )
+	{
+		with (visualB)
+			instance_destroy();
+	}
+	if ( instance_exists(visualUS) )
+	{
+		with (visualUS)
+			instance_destroy();
+	}
+	if ( instance_exists(beam) )
+	{
+		with (beam)
+			instance_destroy();
+	}
+	if podstation != 0
+	{
+		chomp.sprite_index = pod_sprite;
+		chomp.image_speed = 0.1;
+		chomp.image_index = 0;
+	}
+}
+if (!instance_exists(sword))
+{
+	with(visualJB)
+		instance_destroy();
+}
+
+if (chomp == 0 || (chomp > 0 && !instance_exists(chomp)))
+{
+	chomp = instance_create(x, y, obj_spark);
+	chomp.number=-number;
+	chomp.depth = depth + 1;
+	chomp.image_xscale = 0.5;
+	chomp.image_yscale = 0.5;
+	chomp.sprite_index = pod_sprite;
+	chomp.image_speed = 0.1;
+	chomp.image_index = 0;
+	chomp.keepmain = keepmain;
+}
+
+if (podstation != 0)
+{
+	chomp.x = podx;
+	chomp.y = pody;
+}
+    
+chomp_timer += 1;
+if (chomp_timer >= 20)
+{
+	chomp_xo = -3 + random(6);
+	chomp_yo = -3 + random(6);
+	chomp_timer = 0;
+}
+with (chomp)
+{
+	if (image_index == 6)
+		image_index = 0;
+	visible = 1;
+	if (podstation == 0)
+	{
+		x = (x * 18 + other.x - 17 * (1 - other.facing * 2)) / 19;
+		y = (y * 23 + other.y - 16) / 24;
+	}
+	image_xscale = 0.4 * (1 - other.facing * 2);
+	image_yscale = 0.4;
+	depth = other.depth + 1;
+}
+
+if (podstation = 0 && movedown != 1)
+{
+	if (attack_type = "none" && state_type = "jump" and holdjump = 1 && vspeed = 0 && can_hover > 0 && hover_time > 0)
+	{
+		sprite_index = hover_sprite;
+		image_speed = 0.125;
+		if sprite_index = hover_sprite and image_index >= 9
+			image_index = 7;
+		vspeed = 0.3;
+		
+		chomp.sprite_index = pod_idle_sprite;
+		chomp.image_speed = 0.1;
+		chomp.image_index = 0;
+		if facing = 0
+			chomp.x = x - 5.5;
+		else
+			chomp.x = x + 5.5;
+		chomp.y = y - 27.2;
+	}
+}
+else
+	can_hover = 0
+
+if global.gs_form[number-1] = 0
+	if (attack_type = "none" && (state_type == "jump" || state_type = "air_flinch" || state_type = "air_dodge") && podstation = 0)
+		can_hover = 1;
+	else
+		can_hover = 0;
+
+
+
+
+if (random(10) == 1)
+{  
+	sound_play(choose(pod_voice,podthing_voice,podthing_voice2));
+	sound_play(podshoot_sound);
+	
+	podshotnormal = create_projectile(1, 361, 1, 1, 3, 1, fire1, obj_spark_fire1, .2, .05, 0, 0, self.id, 90, char_custom3);
+	podshotnormal.identifier = "podshot1"
+	podshotnormal.stun = 13
+	podshotnormal.sprite_index = podshotvfx_sprite
+	podshotnormal.image_speed = 0
+	podshotnormal.x = podthing.x+10*(1-facing*2)
+	podshotnormal.y = podthing.y-5;
+	podshotnormal.twob = self.id
+	podshotnormal.facing = facing;
+	
+	podfirenormalvfx = create_spark ( 0 , 0 , podfirevfx_sprite , 1 , .3*(1-facing*2) , .3 );
+	podfirenormalvfx.owner = self.id;
+	podfirenormalvfx.keepmain = self.keepmain;
+	podfirenormalvfx.x = podthing.x+5*(1-facing*2)
+	podfirenormalvfx.y = podthing.y-5;
+	
+	if distance_to_object(enemy) < 80 and ai
+	special = 0
+}
+
+
+
+
+
+
+//WEAPONS STUFF
+
+//CONTRACT
+
+if !instance_exists(virtuouscontract) and contractreappeartemp = 1
+{
+	virtuouscontract = create_spark(-30,5,self.id)
+	virtuouscontract.facing = facing;
+	virtuouscontract.image_xscale = .4*(1-facing*2);
+	virtuouscontract.image_yscale = .4
+	virtuouscontract.sprite_index = virtuouscontract_sprite;
+	virtuouscontract.image_speed = 0
+	virtuouscontract.script = char_custom1;
+	virtuouscontract.timer = 0
+	virtuouscontract.alarm[0] = 120
+	
+	weaponappearvfx = create_spark ( -30 , 25 , weaponreappearvfx_sprite , .5 , .4 , .4 );
+	weaponappearvfx.owner = self.id;
+	weaponappearvfx.keepmain = self.keepmain;
+	
+	contractreappeartemp = 0
+	contractthing_timer = 0
+	contractvisual_timer = 0
+	
+}
+
+if instance_exists(virtuouscontract)
+{
+	virtuouscontract.facing = facing;
+	virtuouscontract.image_xscale = .4*(1-facing*2);
+	virtuouscontract.alarm[0] = 120
+
+
+		contractthing_timer += 1;
+
+		if ( contractthing_timer >= 5 )
+		  {
+			  contractvisual_timer+=1
+			  
+			  switch(contractvisual_timer)
+			  {
+				case 0: contractthing_yo = 2; break;
+				case 1:contractthing_yo = 3; break;
+				case 2:contractthing_yo = 4; break;
+				case 3: contractthing_yo = 5; break;
+				case 4: contractthing_yo = 6; break;
+				case 5: contractthing_yo = 7; break;
+				case 6: contractthing_yo = 8; break;
+				case 7: contractthing_yo = 9; break;
+				case 8: contractthing_yo = 10; break;
+				case 12: contractthing_yo = 9; break;
+				case 13:contractthing_yo = 8; break;
+				case 14:contractthing_yo = 7; break;
+				case 15: contractthing_yo = 6; break;
+				case 16: contractthing_yo = 5; break;
+				case 17: contractthing_yo = 4; break;
+				case 18: contractthing_yo = 3; break;
+				case 19: contractthing_yo = 2; break;
+			  }
+			  contractthing_timer = 0;
+		  }
+		  
+		  if contractvisual_timer>20
+			{contractvisual_timer=-1}
+			
+			virtuouscontract.x = ( virtuouscontract.x * 20 + self.x - (30 * ( 1 - facing * 2 ) ) ) / 21;
+			virtuouscontract.y = ( virtuouscontract.y * 20 + self.y - (5 + contractthing_yo )) / 21;
+}
+
+
+
+//DIGNITY
+
+if !instance_exists(virtuousdignity) and dignityreappeartemp = 1
+{
+	virtuousdignity = create_spark(-40,5,self.id)
+	virtuousdignity.facing = facing;
+	virtuousdignity.image_xscale = .4*(1-facing*2);
+	virtuousdignity.image_yscale = .4
+	virtuousdignity.sprite_index = virtuousdignity_sprite;
+	virtuousdignity.image_speed = 0
+	virtuousdignity.script = char_custom1;
+	virtuousdignity.timer = 0
+	virtuousdignity.alarm[0] = 120
+	
+	weaponappearvfx = create_spark ( -40 , 25 , weaponreappearvfx_sprite , .5 , .4 , .4 );
+	weaponappearvfx.owner = self.id;
+	weaponappearvfx.keepmain = self.keepmain;
+	
+	dignityreappeartemp = 0
+	dignitything_timer = 0
+	dignityvisual_timer = 0
+}
+
+if instance_exists(virtuousdignity)
+{
+	virtuousdignity.facing = facing;
+	virtuousdignity.image_xscale = .4*(1-facing*2);
+	virtuousdignity.alarm[0] = 120
+
+
+		dignitything_timer += 1;
+
+		if ( dignitything_timer >= 10 )
+		  {
+			  dignityvisual_timer+=1
+			  
+			  switch(dignityvisual_timer)
+			  {
+				case 0: dignitything_yo = 2; break;
+				case 1:dignitything_yo = 3; break;
+				case 2:dignitything_yo = 4; break;
+				case 3: dignitything_yo = 5; break;
+				case 4: dignitything_yo = 6; break;
+				case 5: dignitything_yo = 7; break;
+				case 6: dignitything_yo = 8; break;
+				case 7: dignitything_yo = 9; break;
+				case 8: dignitything_yo = 10; break;
+				case 12: dignitything_yo = 9; break;
+				case 13:dignitything_yo = 8; break;
+				case 14:dignitything_yo = 7; break;
+				case 15: dignitything_yo = 6; break;
+				case 16: dignitything_yo = 5; break;
+				case 17: dignitything_yo = 4; break;
+				case 18: dignitything_yo = 3; break;
+				case 19: dignitything_yo = 2; break;
+			  }
+			  dignitything_timer = 0;
+		  }
+		  
+		  if dignityvisual_timer>20
+			{dignityvisual_timer=-1}
+			
+			virtuousdignity.x = ( virtuousdignity.x * 20 + self.x - (40 * ( 1 - facing * 2 ) ) ) / 21;
+			virtuousdignity.y = ( virtuousdignity.y * 20 + self.y - (5 + dignitything_yo )) / 21;
+}
+
+
+
+//TREATY
+
+if !instance_exists(virtuoustreaty) and treatyreappeartemp = 1
+{
+	virtuoustreaty = create_spark(-50,5,self.id)
+	virtuoustreaty.facing = facing;
+	virtuoustreaty.image_xscale = .4*(1-facing*2);
+	virtuoustreaty.image_yscale = .4
+	virtuoustreaty.sprite_index = virtuoustreaty_sprite;
+	virtuoustreaty.image_speed = 0
+	virtuoustreaty.script = char_custom1;
+	virtuoustreaty.timer = 0
+	virtuoustreaty.alarm[0] = 120
+	
+	weaponappearvfx = create_spark ( -50 , 25 , weaponreappearvfx_sprite , .5 , .4 , .4 );
+	weaponappearvfx.owner = self.id;
+	weaponappearvfx.keepmain = self.keepmain;
+	
+	treatyreappeartemp = 0
+	treatything_timer = 0
+	treatyvisual_timer = 0
+}
+
+if instance_exists(virtuoustreaty)
+{
+	virtuoustreaty.facing = facing;
+	virtuoustreaty.image_xscale = .4*(1-facing*2);
+	virtuoustreaty.alarm[0] = 120
+
+
+		treatything_timer += 1;
+
+		if ( treatything_timer >= 15 )
+		  {
+			  treatyvisual_timer+=1
+			  
+			  switch(treatyvisual_timer)
+			  {
+				case 0: treatything_yo = 2; break;
+				case 1:treatything_yo = 3; break;
+				case 2:treatything_yo = 4; break;
+				case 3: treatything_yo = 5; break;
+				case 4: treatything_yo = 6; break;
+				case 5: treatything_yo = 7; break;
+				case 6: treatything_yo = 8; break;
+				case 7: treatything_yo = 9; break;
+				case 8: treatything_yo = 10; break;
+				case 12: treatything_yo = 9; break;
+				case 13: treatything_yo = 8; break;
+				case 14: treatything_yo = 7; break;
+				case 15: treatything_yo = 6; break;
+				case 16: treatything_yo = 5; break;
+				case 17: treatything_yo = 4; break;
+				case 18: treatything_yo = 3; break;
+				case 19: treatything_yo = 2; break;
+			  }
+			  treatything_timer = 0;
+		  }
+		  
+		  if treatyvisual_timer>20
+			{treatyvisual_timer=-1}
+			
+			virtuoustreaty.x = ( virtuoustreaty.x * 20 + self.x - (50 * ( 1 - facing * 2 ) ) ) / 21;
+			virtuoustreaty.y = ( virtuoustreaty.y * 20 + self.y - (5 + treatything_yo )) / 21;
+}
+
+
+
+//RESPAWNING WEAPON LOGIC
+
+if state_type = "out"
+{
+	if instance_exists(virtuouscontract) with (virtuouscontract) instance_destroy();
+	if instance_exists(virtuoustreaty) with (virtuoustreaty) instance_destroy();
+	if instance_exists(virtuousdignity) with (virtuousdignity) instance_destroy();
+	if instance_exists(podthing) with (podthing) instance_destroy();
+
+}
+
+if (state_type = "air_flinch" or state_type = "respawn" or state_type = "stand") and state_type != "fall"
+{
+contractreappeartemp = 1
+dignityreappeartemp = 1
+treatyreappeartemp = 1
+}
+
+if instance_exists(virtuouscontract) and contractreappeartemp = 1
+contractreappeartemp = 0
+
+if instance_exists(virtuousdignity) and dignityreappeartemp = 1
+dignityreappeartemp = 0
+
+if instance_exists(virtuoustreaty) and treatyreappeartemp = 1
+treatyreappeartemp = 0
+
+//END OF WEAPONS STUFF
