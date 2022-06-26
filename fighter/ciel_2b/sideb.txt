@@ -1,3 +1,4 @@
+if (air > 0){
 fast_fall = 0
 fast_fall_temp = 0
 if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
@@ -260,7 +261,7 @@ state_type = "attack"
 
 
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
-	
+
 	if sprite_index = sideb_sprite3
 	contractreappeartemp = 1
 	
@@ -269,9 +270,200 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
 	
     attack_type = "none";
     if air > 0
+		if upbed = 1{
+		    state_type = "fall"
+		}
+		else{
+			state_type = "jump"}
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+}
+
+else{
+	fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+        time = 55
+	
+	weaponappearvfx2 = create_spark ( 0 , 0 , weaponreappearvfx_sprite2 , .5 , .2 , .2 );
+	weaponappearvfx2.x = virtuouscontract.x
+	weaponappearvfx2.y = virtuouscontract.y-15
+	weaponappearvfx2.owner = self.id;
+	weaponappearvfx2.keepmain = self.keepmain;
+	
+	if instance_exists(virtuouscontract) with (virtuouscontract) instance_destroy();
+	temp_no_hurtbox = 1
+}
+if ( timer < time )
+    {
+	
+    switch ( timer )
+    {
+	case 9: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 24: image_index = 4; break;
+	case 27: image_index = 5; break;
+	case 52: image_index = 6; break;
+    }
+  
+  if ( timer < 30 )
+  {
+  vspeed*=.85
+  gravity_lock = 1;
+  }
+  
+	if timer = 9
+	sound_play(utilt_voice)
+  
+	  
+	if timer = 12
+	{
+	downbvfx = create_spark ( abs(place_x(175)),-place_y(10) , downb_spritevfx , 0 , .4*(1-facing*2) , .4 );
+	downbvfx.snap = self.id;
+	downbvfx.owner = self.id;
+	downbvfx.keepmain = self.keepmain;
+	downbvfx.script = char_custom10;
+	
+	if air = 0
+	{
+	duster = instance_create(x+40*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale = -.05*(1-facing*2)
+	duster.image_yscale = .05;
+	}
+	
+	sound_play(jab3_sound);
+	create_hitbox(4,angle_correct(155),6.3,0,8,2,twob_slashhs2,obj_spark_slash2,1.1,1.8,abs(place_x(180)),-place_y(72),self.id,7,3);
+	hitbox.image_angle = angle_correct(0)
+	hitbox.weight_kb = 1
+	
+	create_hitbox2(4,angle_correct(105),5.5,0,8,2,twob_slashhs2,obj_spark_slash2,2,1.3,-abs(place_x(83)),-place_y(129),self.id,7,3);
+	hitbox2.image_angle = angle_correct(335)
+	hitbox2.weight_kb = 1
+	}
+	
+	if timer = 18
+	{
+	create_hitbox(4,angle_correct(0),6,0,8,2,twob_slashhs3,obj_spark_slash2,1,2,-abs(place_x(60)),-place_y(33),self.id,7,3);
+	hitbox.image_angle = angle_correct(320)
+	hitbox.weight_kb = 1
+	}
+	
+	if timer = 24
+	{
+	create_hitbox(7,366+facing,5,6,14,7,twob_slashhs4,obj_spark_slash4,1.1,1.8,abs(place_x(187)),-place_y(95),self.id,7,3);
+	hitbox.image_angle = angle_correct(355)
+	
+	if air = 0
+	{
+	duster = instance_create(x+40*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale = -.05*(1-facing*2)
+	duster.image_yscale = .05;
+	}
+	}
+	
+	if timer = 30
+	air_move = 1
+	
+	
+    switch ( timer )
+    {
+	case 14: downbvfx.image_index = 1; break;
+	case 16: downbvfx.image_index = 2; break;
+	case 18: downbvfx.image_index = 3; break;
+	case 20: downbvfx.image_index = 4; break;
+	case 22: downbvfx.image_index = 5; break;
+	case 24: downbvfx.image_index = 6; break;
+	case 25: downbvfx.image_index = 7; break;
+	case 26: downbvfx.image_index = 8; break;
+	case 27: with downbvfx instance_destroy(); break;
+	}
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+
+}
+
+ if (timer >= 24 && offstage){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0){
+				if ((target.weight <= .22 && target.percent > 85) || (target.weight > .22 && target.weight < .3 && target.percent > 100) || (target.weight > .3 && target.percent > 110)){
+			    killspark = instance_create(enemy.x-120,enemy.y-115,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.5;
+				killspark.image_yscale = size * 0.5;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 5 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 90
+				freezer2.alarm[0] = 130
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x + 45;
+				spark.camera_r = enemy.x - 45;
+				spark.camera_u = enemy.y - 15;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	 
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+	dontrepeat = 0;
+	contractreappeartemp = 1
+    attack_type = "none";
+	air=max_jumps
+    if air > 0
         state_type = "jump";
     else
         state_type = "stand";
     timer = 0;
     time =-1;
+}
 }

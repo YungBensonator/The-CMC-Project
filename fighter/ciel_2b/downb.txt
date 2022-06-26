@@ -1,63 +1,71 @@
-if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch"
+
+	effect_create_above(ef_ellipse,podthing.x,podthing.y,1,c_black)
+
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch"
 {
 	state_type = "air_attack"
 	attack_type = "downb"
 	image_speed = 0
-	sprite_index = nair_sprite
+	sprite_index = nair_sprite;
 	image_index=0
 	timer = 0
-	time = 12
+	if podstation = 0
+		time = 5
+	else
+		time = 45
 	hspeed = 0
 }
+
 if ( timer < time )
-  {
-    state_type = "air_attack";
-	switch (timer)
+{
+	if podstation = 1
 	{
+		
+		switch ( timer )
+		{
 	case 3: image_index = 1; break;
 	case 4: image_index = 2; break;
 	case 21: image_index = 3; break;
+			
 	}
-	
-	if podstation = 0
-	{
-		if facing = 0
-			chomp.x = x + 18;
-		else
-			chomp.x = x - 18;
-		chomp.y = y - 4;
-		podx = chomp.x;
-		pody = chomp.y;
+		
+			
+		if timer = 4 && podstation = 1
+		{
+			sound_play(shocksound3);
+			if (random(3) > 1){
+			sound_play(podthinghard_voice)
+			}
+			visualB = create_spark(18,14,self.id);
+			visualB.sprite_index = b_visual_sprite;
+			visualB.facing = facing;
+			visualB.x = chomp.x;
+			visualB.y = chomp.y;
+			visualB.image_alpha = 1;
+			visualB.image_speed = 0.3;
+			visualB.image_xscale = self.xsize*size;
+			visualB.image_yscale = self.ysize*size;
+			blade = create_projectile (15.5,33+facing*114,4.5,5.1,9,10,shock3,obj_spark_stun,2,2,x,y+3,self.id,20,no_script)
+			blade.stun_base = 45;
+            podstation = 0;
+			blade.x = chomp.x;
+			blade.y = chomp.y;
+		}
+		
+		
 	}
-	
-	switch ( timer )
-    {
-		case 1:
-			if podstation = 0
-			{
-				podstation = 1;
-				if random(2) < 1
-					sound_play(pod_downb1);
-			}
-			else
-			{
-				podstation = 0;
-				if random(2) < 1
-					sound_play(pod_downb2);
-			}
-			sound_play(pod_place);
-		break;
-		case 4: image_index = 1; break;
-    }
+
+
+ 
 }
+
 if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch"
 {
     attack_type = "none";
     if air > 0
         state_type = "jump";
     else
-		state_type = "stand";
+        state_type = "stand";
     timer = 0;
     time =-1;
-	cantusedownb = 80
 }

@@ -7,7 +7,7 @@ if state_type = "run" || state_type = "stand" || state_type = "jump"{
     image_speed = 0;
     sprite_index = upb_sprite;
     image_index=0;
-    time = 32;
+    time = 45;
     timer_speed=1;
     if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
      facing = 0
@@ -47,6 +47,7 @@ if timer < time {
 	if timer = 5
 	{
 	vspeed = -7.7;
+	upbed = 1;
 	sound_play(jump_sound);
 		
 		if air = 0
@@ -77,8 +78,10 @@ if timer < time {
 	
 	sound_play(jab1_sound);
 	sound_play(jab_voice3);
-	create_hitbox(8,angle_correct(80),7,6.6,16,10,twob_slashhs3,obj_spark_slash3,1.2,2.1,abs(place_x(130)),-place_y(95),self.id,10,4);
+	create_hitbox(8,angle_correct(80),6.8,1,16,10,twob_slashhs3,obj_spark_slash3,1.2,2.1,abs(place_x(130)),-place_y(95),self.id,10,4);
 	hitbox.image_angle = angle_correct(0)
+	hitbox.di = .15
+	hitbox.hitstun = 8
 	}
 	  
 	/*
@@ -110,6 +113,28 @@ if timer < time {
 	vfxthing.script = char_custom10;
 	}
 	*/
+
+if special > 0 && ( moveleft = 1 || moveright = 1 )
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    char_sideb();
+	  }
+
+
+if special > 0 && movedown = 1 && moveup != 1 && moveleft != 1 && moveright != 1
+	  {
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+		if ( smash_power >= global.gs_fs_charge )
+		interrupt = 1;
+		else
+	    char_dair();
+	  }
 }
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
         attack_type = "none";
