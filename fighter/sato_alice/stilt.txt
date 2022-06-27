@@ -1,0 +1,72 @@
+if state_type = "run" || state_type = "stand"{
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 4;
+        time = 52;
+        timer_speed=1;
+		canceltemp = 0
+}
+
+if timer < time{
+switch ( timer )
+      {
+	case 6: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 10: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 16: image_index = 5; break;
+	case 20: image_index = 6; break;
+    case 24: image_index = 7; break;
+    case 28: image_index = 8; break;
+    case 32: image_index = 9; break;
+    case 36: image_index = 10; break;
+    case 40: image_index = 11; break;
+    case 44: image_index = 12; break;
+    case 48: image_index = 13; break;
+      }
+    state_type = "attack";
+	
+	if timer = 12 {
+		play_attack_voice()
+        stilt_doll = instance_create ( x + place_x(31) , y + place_y(52) , obj_spark );
+		stilt_doll.depth = depth + 1;
+		stilt_doll.base_xscale = abs(image_xscale);
+		stilt_doll.base_yscale = abs(image_yscale);
+		stilt_doll.facing = facing;
+		stilt_doll.sprite_index = doll_stilt_sprite;
+		stilt_doll.image_speed = 0;
+		stilt_doll.image_index = 0;
+		stilt_doll.keepmain = keepmain;
+		stilt_doll.script = char_custom1;
+		stilt_doll.alice = self.id;
+		stilt_doll.loop = 9999
+		stilt_doll.number = number
+		stilt_doll.state = 0
+		stilt_doll.timer = 2
+		
+		stilt_doll.dest_x = x + place_x(75)
+		stilt_doll.dest_y = y + place_y(52)
+		stilt_doll.base_x = x + place_x(35)
+		stilt_doll.base_y = y + place_y(58)
+		
+		if movedown
+		stilt_doll.dest_y += 10
+		else if moveup
+		stilt_doll.dest_y -= 10
+		
+		
+	}
+		
+		
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	canceltemp = 0
+    }
+        

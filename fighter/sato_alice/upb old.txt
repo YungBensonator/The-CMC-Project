@@ -1,0 +1,254 @@
+if cantupb>0 {break;}
+if floattime <= 0 {break;}
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch"{
+        state_type = "air_attack"
+        attack_type = "upb"
+        image_speed = 0
+        sprite_index = upb_sprite
+        image_index=0
+        timer = 0
+        time = 7
+		burst += 4
+		canceltemp = 0
+		//special = 1
+		//grab = 1
+		attacking = 0
+		image_alpha = 1
+		
+		turnAngle = 5
+		basespeed = 4.5
+		maxspeed = 7.5
+		dir = 0+facing*180
+		
+		shakey = -15*size
+		special = 1
+		
+		if moveright
+		facing = 0
+		else if moveleft
+		facing = 1
+		
+		
+	if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack"
+
+
+if special = 1 or grab = 1 and timer >=4{
+timer = 1
+}
+
+//shakey = -10*size
+gravity = 0
+gravity_lock = 1
+
+//char_custom11()
+
+////////////////////////////////////////////////////
+movedownright = movedown * moveright
+movedownleft = movedown * moveleft
+moveupright = moveup * moveright
+moveupleft = moveup * moveleft
+
+//////////////////////////////////////////////
+
+
+if moveupright = 1 and dir != 45{
+	if dir > 45 and dir < 225
+	dir -= turnAngle
+	else 
+	dir += turnAngle
+}else
+if movedownright = 1 and dir != 315{
+	if (dir > 315 and dir <= 360) or (dir >= 0  and dir <= 135)
+	dir -= turnAngle
+	else 
+	dir += turnAngle
+}else
+if movedownleft = 1 and dir != 225{
+	if (dir > 225 and dir <= 360) or (dir >= 0  and dir <= 45)
+	dir -= turnAngle
+	else 
+	dir += turnAngle
+}else
+if moveupleft = 1 and dir != 135{
+	if dir > 135 and dir < 315
+	dir -= turnAngle
+	else 
+	dir += turnAngle
+}else
+
+if moveright = 1 and dir != 0{
+	if dir > 0 and dir < 180
+	dir -= turnAngle
+	else
+	dir += turnAngle
+}else
+if moveup = 1 and dir != 90{
+	if dir > 90 and dir < 270
+	dir -= turnAngle
+	else 
+	dir += turnAngle
+}else
+if movedown = 1 and dir != 270{
+	if (dir > 270 and dir <= 360) or (dir >= 0  and dir <= 90)
+	dir -= turnAngle
+	else 
+	dir += turnAngle
+}else
+if moveleft = 1 and dir != 180{
+	if dir > 180 and dir < 360
+	dir -= turnAngle
+	else 
+	dir += turnAngle
+}
+
+
+
+
+//////////////////////////////////////////////
+
+
+
+
+
+
+if dir < 100 and dir > 80 and moveup and !moveleft and !moveright
+dir = 90
+if ((dir < 10 and dir > 0) or dir > 350) and moveright and !moveup and !movedown
+dir = 0
+if (dir < 190 and dir > 170) and moveleft and !moveup and !movedown
+dir = 180
+if dir < 280 and dir > 260 and movedown and !moveleft and !moveright
+dir = 270
+if dir > 35 and dir < 55 and moveupright
+dir = 45
+if dir < 145 and dir > 125 and moveupleft
+dir = 135
+if dir < 235 and dir > 215 and movedownleft
+dir = 225
+if dir < 325 and dir > 305 and movedownright
+dir = 315
+
+if dir <= 90 or dir >= 270
+facing = 0
+else if dir > 90 and dir < 270
+facing = 1
+
+if facing = 0{
+image_angle = dir
+//image_xscale = scale
+}
+if facing = 1{
+image_angle = dir-180
+//image_xscale = -scale
+}
+
+direction = dir
+
+
+
+
+
+if dir >= 360
+dir = 0
+else if dir < 0
+dir = 359
+
+
+
+
+
+/////////////////////////
+
+
+
+
+
+
+
+
+
+burst += 0.075
+
+if floattime > 0
+floattime -= 1
+
+if floattime <= 0{
+	//cantupb = 1
+	interrupt = 1
+}
+
+if moveleft or moveright or movedown or moveup{
+if acceltemp < maxspeed-basespeed
+acceltemp += 0.15
+speed = basespeed + acceltemp
+}else{
+if acceltemp > 0
+acceltemp -= 0.15
+
+if speed > 0
+speed -= 0.5
+else if speed < 0
+speed = 0
+}
+
+after_image(4,c_blue,0.6)
+
+if !instance_exists(effectupb) and speed != 0{
+	effectupb = create_blur(x,y,self.id);
+	effectupb.sprite_index = tp_sprite;
+    effectupb.image_speed = 0.6;
+	effectupb.image_alpha = 0.5;
+    effectupb.image_xscale = 0.7
+    effectupb.image_yscale = 0.7
+    effectupb.depth = depth - 0.1;
+	effectupb.snap = self.id
+	effectupb.image_angle = dir
+	}
+	
+	if instance_exists(effectupb){
+	effectupb.image_angle = dir
+	
+	}
+	
+
+
+if attacking = 1{
+	shakey = 0
+//cantupb = 1
+interrupt = 1
+
+
+}
+
+force_edge_grab = 1
+if timer = 0 and air = 0{
+    //vspeed = -2
+    duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+    duster.facing = facing; }
+	
+
+
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	shakey = 0
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    //cantupb = 1
+}

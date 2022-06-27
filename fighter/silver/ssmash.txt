@@ -1,0 +1,54 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "ssmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = ssmash_sprite;
+  timer = 0;
+  time = 40;
+  timer_speed = 1;
+  charge_frame = 11;
+  }
+
+    switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 8: image_index = 4; break;
+  case 10: image_index = 5; break;
+  case 12: image_index = 6; break;
+  case 14: image_index = 7; sound_play(attack_sound2); break;
+  case 17: image_index = 8; break;
+  case 25: image_index = 9; break;
+  case 28: image_index = 10; break;
+  case 31: image_index = 11; break;
+  case 34: image_index = 12; break;
+  case 37: image_index = 13; break;
+  }
+  
+if timer = 14
+{
+sound_play(psi_sound2);
+sound_play(attack_voice5);
+create_projectile(10,15+facing*150,3.8,5.5,15,7,magic3,obj_spark_shock,0.01,0.01,0,10,self.id,25,char_custom1);
+proj.originaltime = 12;
+proj.priority += 3;
+proj.tempx = 39.48;
+proj.tempy = 12.22;
+proj.charge_dmg = 0.4 * size;
+proj.type = 1;
+proj.sprite_index = ring_fx;
+proj.image_xscale = 0.01 * (1-facing*2) * size;
+proj.image_yscale = 0.01 * size;
+}  
+  
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

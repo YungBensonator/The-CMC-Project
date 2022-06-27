@@ -1,0 +1,73 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    attack_type = "downb";
+    timer = 0;
+    time = 50;
+    sprite_index = downb_sprite;
+    image_speed = 0;
+    image_index = 0;
+	
+  }
+
+if ( timer < time ){
+	switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 7: image_index = 2; break;
+	case 10: image_index = 3; break;
+	case 13: image_index = 4; break;
+	
+	case 17: image_index = 5; break;
+	case 21: image_index = 6; break;
+    case 27: image_index = 5; break;
+    case 31: image_index = 6; break;
+    case 35: image_index = 5; break;
+    case 39: image_index = 6; break;
+	
+    case 43: image_index = 7; break;
+    case 46: image_index = 8; break;
+
+
+      }
+	
+	if timer = 17 and (!instance_exists(downb_doll) or abyss_rune[1] = 1){
+		
+		downb_doll = create_projectile(10,10+facing*160,3,7,25,7,-1,obj_spark_explode1,0,0,abs(place_x(37)),-place_y(39),self.id,600,char_custom10);
+        downb_doll.hit_stun = 5
+        downb_doll.sprite_index = doll_jump_sprite
+		downb_doll.number = number;
+		downb_doll.use_palette = number;
+        downb_doll.image_index = 0
+        downb_doll.image_speed = 0.2
+        downb_doll.target = -1
+        downb_doll.priority = 5;
+		downb_doll.number = number
+		downb_doll.vspeed = -3.8
+		downb_doll.hspeed = 1.5-facing*3
+		downb_doll.base_xscale = abs(image_xscale);
+		downb_doll.base_yscale = abs(image_yscale);
+		downb_doll.alice = self.id
+		downb_doll.facing = facing
+		downb_doll.ungrazable = 1
+		downb_doll.bstime = downb_doll.time
+		
+	}
+	
+	
+	
+}
+
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	//cantusedownb = 30
+}
+        

@@ -1,0 +1,119 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "nair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = nair_sprite;
+  timer = 0;
+  time = 20;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+if ( timer < time )
+  {
+    state_type = "air_attack";
+switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+    case 12: image_index = 2; break;
+	case 15: image_index = 3; break;
+    case 18: image_index = 2; break;
+	case 21: image_index = 3; break;
+    case 24: image_index = 2; break;
+	case 27: image_index = 3; break;
+      }
+
+
+    if timer = 3{
+    play_attack_voice();
+    sound_play(psi_sound1);
+	effectjab = create_blur(x,y-20,self.id);
+	effectjab.sprite_index = ring_fx;
+    effectjab.image_speed = 0;
+	effectjab.image_alpha = 0.7;
+	effectjab.image_xscale = image_xscale*0.2;
+    effectjab.image_yscale = image_yscale*0.2;
+    effectjab.depth = depth - 0.1;
+	effectjab.snap = self.id
+	}
+	if timer = 4{
+	effectjab.image_xscale = image_xscale*0.25
+    effectjab.image_yscale = image_yscale*0.25
+	}
+	if timer = 5{
+	effectjab.image_xscale = image_xscale*0.3
+    effectjab.image_yscale = image_yscale*0.3
+	}
+	if timer = 6{
+	effectjab.image_xscale = image_xscale*0.35
+    effectjab.image_yscale = image_yscale*0.35
+	}
+	if timer = 7{
+	effectjab.image_xscale = image_xscale*0.4
+    effectjab.image_yscale = image_yscale*0.4
+	effectjab.image_alpha -= 0.1
+	}
+	if timer = 8{
+	effectjab.image_xscale = image_xscale*0.45
+    effectjab.image_yscale = image_yscale*0.45
+	effectjab.image_alpha -= 0.1
+	}
+	if timer = 9{
+	effectjab.image_xscale = image_xscale*0.5
+    effectjab.image_yscale = image_yscale*0.5
+	effectjab.image_alpha -= 0.1
+	}
+	if timer = 10{
+	effectjab.image_xscale = image_xscale*0.55
+    effectjab.image_yscale = image_yscale*0.55
+	effectjab.image_alpha -= 0.1
+	}
+	if timer = 11{
+	effectjab.image_xscale = image_xscale*0.6
+    effectjab.image_yscale = image_yscale*0.6
+	effectjab.image_alpha -= 0.1
+	}
+	if timer = 12{
+	effectjab.image_xscale = image_xscale*0.65
+    effectjab.image_yscale = image_yscale*0.65
+	effectjab.image_alpha -= 0.1
+	}
+	if timer = 13{
+	with (effectjab){instance_destroy()}
+	}
+	
+	  
+	if timer = 6{
+	create_hitbox(6,40+facing*100,5.5,3.5,25,7,magic3,obj_spark_hit1,1.5,1.5,0,20,self.id,6,5);
+	hitbox.hit_stun = 8
+	}
+	
+	
+
+
+
+  }
+if air = 0 {
+	
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=10;
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

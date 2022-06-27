@@ -1,0 +1,57 @@
+absorb = 1;
+absorb2 = 1;
+if ( timer <= 1 && temp <= 0)
+  {
+    sprite_index = keepmain.psychocut_sprite;
+	image_xscale = 0.25 * (1-facing*2) * size;
+	image_yscale = 0.25 * size;
+    temp = 1
+    proj_hits = 0
+    silver = attacker
+    xspeed = 5.5
+    facing = silver.facing
+    hspeed = xspeed*(1-attacker.facing*2)
+    facing = attacker.facing
+    visible = 1;
+}
+
+if timer >= 2
+    after_image(5,c_aqua,0.75)
+
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+
+hspeed = xspeed*(1-facing*2)
+
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.9)
+if timer = time+1 && proj_hits <= 3 {
+    proj_hits+=1
+    timer = 0
+    time = 25
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+    if proj_hits = 4 {
+        damage = round(attacker.size*8)
+        bkb= attacker.size*4.45
+        kbg = attacker.size*4.45
+        dir = 25+facing*130
+        hitlag_frames = round(29*attacker.size)
+        shake_ampl = 0.75
+        shake_kb = 7
+        sfx = slash3
+        gfx = obj_spark_slash3
+    }
+}
+if timer = 15 && proj_hits<1
+proj_hits=3
+moving_object = 1;
+
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self.id)   {
+    instance_destroy();
+	}

@@ -1,0 +1,154 @@
+moving_object = 1;
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+
+
+
+on_floor = 0;
+on_platform = 0;
+next_to_lwall = 0;
+next_to_rwall = 0;
+
+while ( collision_line ( x , y , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x , y - actual_height , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) )
+    x -= 1;
+while ( collision_line ( x , y , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x , y - actual_height , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) ) 
+    x += 1;
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_floor , 1 , 1 ) )
+    y -= 1;
+if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_platform , 1 , 1 ) )
+	y -= 1;
+
+if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+    on_floor = 1;
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+    on_platform = 1;
+if ( collision_line ( x + 1 , y , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x + 1 , y - actual_height , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) ) 
+  next_to_rwall = 1;
+if ( collision_line ( x - 1 , y , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x - 1 , y - actual_height , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) )  
+  next_to_lwall = 1;
+
+
+
+if ( timer >= 1 )
+    vspeed += 0.3;
+	
+if ( vspeed > 4.2 )
+    vspeed = 4.2;
+
+if ( on_floor || on_platform )
+  {
+    vspeed = 0;
+	
+	if state = 0{
+	state = 1
+	target = -99
+	}
+	
+  }
+
+//walk
+if state = 1{
+	if on_floor or on_platform 
+	sprite_index = alice.doll_walk_sprite
+	
+	hspeed = 0.9-facing*1.8
+	image_speed = 0.09
+	
+	if target > -1{
+		targetLock = target
+		state = 2
+	}
+	
+	if !instance_exists(proj){
+	create_homing_bubble ( 2.0 , 0.3 , 40 , 8 , self.id , 60 );
+	proj.hspeed = hspeed
+	proj.multi = 1
+	}
+	
+	
+	
+}
+
+//run
+if state = 2{
+	if on_floor or on_platform 
+	sprite_index = alice.doll_run_sprite
+	
+	
+	
+	hspeed = 2.2-facing*4.4
+	image_speed = 0.18
+	
+	if (targetLock.air > 0 or targetLock.y < y - 30) and (on_floor or on_platform ) and !turning{
+		//sprite_index = alice.doll_jump_sprite
+		vspeed = -5
+	}
+	
+	if targetLock.x < x and refresher <= 0 and facing = 0  and (on_floor or on_platform ){
+	tfacing = 1
+	refresher = 15
+	}
+	else if targetLock.x > x and refresher <= 0 and facing = 1 and (on_floor or on_platform ){
+	tfacing = 0
+	refresher = 15
+	}
+	
+	if refresher > 0{
+	refresher -= 1
+	turning = 1
+	
+	
+	if refresher <= 2{
+		facing = tfacing
+		turning = 0
+		refresher = 0
+	}
+	
+	
+	}
+	
+	
+	
+}
+
+
+if ( hspeed != 0 && ( next_to_lwall || next_to_rwall ) ){
+		facing = !facing
+		}
+
+
+
+
+if hit = 1 {
+	state = 3
+    time = bstime
+	timer = time-50
+	vspeed = -9
+	hspeed = 3-random(6)
+	gravity = 0.3
+	sprite_index = alice.doll_flinch_sprite
+	image_index = 0
+	image_speed = 0
+    //instance_create(x,y,obj_spark_explode2)
+    sound_play(explode_big)
+    shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 1.33;
+    shaker.yampl = 0;
+    shaker.time = 9;
+	hit=2
+}
+
+if timer >= time-50 and timer <= time{
+	image_angle += 30
+}
+
+
+
+if timer >= time-30 and timer <= time{
+	image_alpha -= 0.03
+}
+
+
+image_xscale = base_xscale - (facing*(base_xscale*2))
+image_yscale = base_yscale

@@ -1,0 +1,119 @@
+linex = place_x(24)
+liney = place_y(31)
+
+if timer < 5{
+	move_towards_point(dest_x,dest_y,5)
+	
+}
+if timer = 5{
+	speed = 0
+	x = dest_x
+	y = dest_y
+}
+
+if timer >= 5 and timer <= 25{
+	
+	x+= 1-facing*2
+	y-= 0
+	
+}
+
+switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 5: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 9: image_index = 5; break;
+	case 12: image_index = 6; break;
+    case 13: image_index = 7; break;
+    case 16: image_index = 8; break;
+    case 17: image_index = 9; break;
+    case 20: image_index = 10; break;
+    case 21: image_index = 11; break;
+    case 24: image_index = 12; break;
+    case 25: image_index = 13; break;
+    case 28: image_index = 14; break;
+    case 31: image_index = 15; break;
+      }
+
+
+if !instance_exists(line_spark){
+	line_spark = instance_create( x,y,obj_spark);
+	line_spark.sprite_index = alice.line_sprite
+	line_spark.image_xscale = abs(1)
+	line_spark.image_yscale = 0.25
+	line_spark.attached = self.id
+	line_spark.alice = alice
+	line_spark.keepmain = alice.keepmain
+	line_spark.script = char_custom17
+	with (line_spark){script_execute(script)}
+}
+
+
+
+if timer >= 5 and timer <= 25 and timer mod 2 = 1{
+	
+	effectjab = instance_create( x + place_x(48),y + place_y(30),obj_spark);
+	effectjab.sprite_index = alice.stab_sprite;
+	effectjab.image_speed = 0;
+	effectjab.image_alpha = 0.7;
+	effectjab.image_xscale = image_xscale * 0.5;
+	effectjab.image_yscale = image_yscale * 0.2;
+	effectjab.depth = depth - 0.1;
+	//effectjab.snap = self.id
+	effectjab.alarm[0] = 10
+	effectjab.alpha_add = -0.1
+	effectjab.y += random(4)
+	effectjab.y -= 2
+	
+	rando = random(60)
+	rando -= 30
+	
+	effectjab.image_angle = rando
+	
+	
+	
+}
+
+if timer >= 5 and timer <= 21 and timer mod 4 = 1{
+	if n = 1
+	sound_play(alice.attack_sound1);
+	create_projectile(1,30+facing*120,2.2,0,10,4,alice.alice_hit1,obj_spark_hit2,0.65,0.75,abs(place_x(52)),-place_y(32),alice.id,4,-1);
+	proj.hit_stun = 3
+	proj.di = 0;
+	proj.sdi = 0;
+	proj.weight_kb = 1;
+}
+
+if timer = 25{
+	if n = 1
+	sound_play(alice.attack_sound2);
+	create_projectile(3,30+facing*120,7,5,10,4,alice.alice_hit2,obj_spark_hit2,1.2,0.75,abs(place_x(30)),-place_y(32),alice.id,4,-1);
+}
+
+
+if timer = 28{
+	facing = !facing
+}
+
+if timer > 28 and timer < 34{
+	move_towards_point(base_x,base_y,5)	
+}
+if timer = 34{
+	speed = 0
+	x = base_x
+	y = base_y
+	alpha_add = -0.2
+}
+
+if timer = 39{
+	with (line_spark){instance_destroy();};
+	instance_destroy();
+}
+
+image_xscale = base_xscale - (facing*(base_xscale*2))
+image_yscale = base_yscale
+
+timer += 1

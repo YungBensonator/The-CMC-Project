@@ -1,0 +1,135 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        if ( cantupb ) exit;
+        state_type = "air_attack"
+        attack_type = "upb"
+        image_speed = 0
+        image_index=0
+        timer = 0
+        time = 61
+		sprite_index = upb_sprite
+		if !ai
+		special = 1
+		if moveright
+		facing = 0
+		else if moveleft
+		facing = 1
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack";
+
+    if sprite_index = upb_sprite
+	image_index = floor(timer/2)
+	
+	if sprite_index = jump_sprite
+	switch ( timer )
+      {
+	case 32: image_index = 0; break;
+	case 35: image_index = 1; break;
+	case 38: image_index = 2; break;
+	case 41: image_index = 3; break;
+	case 44: image_index = 4; break;
+	case 47: image_index = 5; break;
+	case 50: image_index = 6; break;
+	case 51: image_index = 7; break;
+	case 54: image_index = 8; break;
+	case 57: image_index = 9; break;
+      }
+	
+	
+	if timer = 12{
+		play_attack_voice()
+        //upb_doll = instance_create ( x + place_x(61) , y + place_y(71) , obj_spark );
+		upb_doll = create_projectile(3,90,7,1,20,5,kick3,obj_spark_hit1,0,0,abs(place_x(61)),-place_y(71),alice.id,9000,-1);
+		upb_doll.depth = depth + 1;
+		upb_doll.base_xscale = abs(image_xscale);
+		upb_doll.base_yscale = abs(image_yscale);
+		upb_doll.facing = facing;
+		upb_doll.sprite_index = doll_upb_sprite;
+		upb_doll.image_speed = 0.1;
+		upb_doll.image_index = 1;
+		upb_doll.keepmain = keepmain;
+		upb_doll.script = 0;
+		upb_doll.alice = self.id;
+		upb_doll.loop = 9999
+		upb_doll.use_palette = number;
+		upb_doll.state = 0
+		
+		upb_doll.speed = 9
+		upb_doll.direction = 70+facing*40
+		upb_doll.alarm[0] = 10
+		upb_doll.gravity = 0.15
+		
+		sound_play(swingsnd1);
+		
+		with (upb_doll){
+		    linex = place_x(20)
+	        liney = place_y(34)
+		}
+		
+		
+		line_spark = instance_create( x,y,obj_spark);
+		line_spark.sprite_index = line_sprite
+		line_spark.image_xscale = abs(1)
+		line_spark.image_yscale = 0.25
+		line_spark.attached = upb_doll
+		line_spark.alice = self.id
+		line_spark.keepmain = keepmain
+		line_spark.script = char_custom17
+		with (line_spark){script_execute(script)}
+		
+	}
+	
+	
+	if instance_exists(upb_doll)
+	upb_doll.alarm[0] = 30
+	
+	if instance_exists(upb_doll){
+                if upb_doll.y < y
+		move_towards_point(upb_doll.x, upb_doll.y-10,4.95)
+		with (upb_doll){
+	        image_xscale = base_xscale - (facing*(base_xscale*2))
+	        image_yscale = base_yscale
+
+	    }
+	}
+	
+	if timer = 32{
+                force_edge_grab = 1;
+		upb_doll.sprite_index = doll_flinch_sprite
+		upb_doll.gravity = 0.3
+		image_index = 0
+		sprite_index = jump_sprite
+	}
+	
+	
+	if timer = 37{
+		upb_doll.gravity = 0.3
+	}
+	
+	if timer = 42{
+		speed = 2
+		
+	}
+	
+
+    
+		
+      shakey = 0
+	 
+
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	cantupb = 1
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+  image_index = 8;
+  time = -1;
+  canceltemp = 0
+  timer = 24
+
+}

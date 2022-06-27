@@ -1,0 +1,273 @@
+personalrate = 0
+no_hurtbox = 0
+
+if state_type != "air_attack" and state_type != "attack"{
+    linex = 0
+    liney = -20
+}
+
+if !instance_exists(nb_doll[2]){
+	if instance_exists(nb_doll[1]){
+		doll_count = 1
+	}else{
+		doll_count = 0
+	}
+}
+
+if !instance_exists(nb_doll[1]){
+	if instance_exists(nb_doll[2]){
+		nb_doll[1] = nb_doll[2]
+		nb_doll[2] = 0
+		doll_count = 1
+	}else{
+		doll_count = 0
+	}
+}
+
+if instance_exists(nb_doll[1]) and instance_exists(nb_doll[2]){
+	doll_count = 2
+}
+
+
+
+///////////////////////////////////Crouch shit I stole from mp3
+if ( state_type = "crouch" ){
+	
+	sprite_index = crouch_sprite;
+	image_speed = 0;
+	crouchgetuptimer = min(9,timer)
+	switch (timer){
+		case 0: image_index = 0; break;
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 9: image_index = 3; break;
+	}
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+	image_speed = 0;
+	crouchgetuptimer -= 1;
+	sprite_index = crouch_sprite;
+	crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+	sprite_index = stand_sprite;
+	image_index = 0;
+	crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+	image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 3 ){
+	image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+	image_index = 2;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 9 ){
+	image_index = 3;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+	crouchgetuptimer = 0;
+	crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch shit stolen from mp3
+
+
+if state_type = "stand" and sprite_index = stand_sprite{
+	image_speed = 0.2
+}
+
+
+if state_type = "run" and sprite_index = walk_sprite{
+	image_speed = 0.15
+}
+
+if (state_type == "run") {
+	//Walking
+	 if (runtimer >= 60 && runtimer < 90 && dash_end == 0){
+		sprite_index = runstop_sprite;
+
+		if (runtimer < 62){
+			image_index = 0;
+		} else if (runtimer < 64){
+			image_index = 1;
+		} else if (runtimer < 66){
+			image_index = 2; 
+		} else if (runtimer < 68){
+			image_index = 3; 
+		} else {
+			image_index = 4;
+		}
+	//Turn While running
+	} 
+	//Run normally
+	else if (runtimer >= 50 && runtimer < 60){
+		sprite_index = run_sprite;
+	} 
+	
+}
+
+
+if state_type = "run" and sprite_index = run_sprite{
+	if timer = 0{
+		image_index = 0
+		image_speed = 0.3
+	}
+	if image_index >= 5{
+		image_index = 3
+	}
+	
+}
+
+if state_type="land" && jumping=1 && sprite_index!=jump_sprite{
+    sprite_index=prejump_sprite;
+    image_speed=0.15;
+}
+
+
+if state_type = "jump" and on_airdodge = 1{
+	timer = 24
+	on_airdodge = 0
+}
+
+
+if state_type = "jump" and (sprite_index = jump_sprite or sprite_index = mid_jump_sprite){
+	image_speed = 0
+	if timer < 18 and vspeed >= 0
+	timer = 18
+	
+	switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+	case 21: image_index = 7; break;
+	case 24: image_index = 8; break;
+	case 27: image_index = 9; break;
+	case 29: timer = 23; break;
+      }
+}
+
+if sprite_index = fall_sprite and image_index >= 1.999
+image_index = 0
+
+
+if gensou_smash = 0{
+
+if state_type = "air_dodge" and sprite_index = air_dodge_sprite{
+	on_airdodge = 1
+	image_speed = 0
+	if timer <= 1 and ((facing = 0 and moveleft)or(facing = 1 and moveright)){
+		air_dodge_sprite = air_dodge_spriteB
+	}else if timer <= 1{
+		air_dodge_sprite = air_dodge_spriteF
+	}
+	
+	if air_dodge_sprite = air_dodge_spriteF
+	switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 3: image_index = 3; break;
+	case 4: image_index = 4; break;
+	case 5: image_index = 5; break;
+	case 6: image_index = 4; break;
+	case 7: image_index = 5; break;
+	case 8: image_index = 6; break;
+	case 9: image_index = 7; break;
+	case 10: image_index = 8; break;
+	case 11: image_index = 9; break;
+      }
+	else if air_dodge_sprite = air_dodge_spriteB
+	switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 3: image_index = 3; break;
+	case 4: image_index = 2; break;
+	case 5: image_index = 3; break;
+	case 6: image_index = 2; break;
+	case 7: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 9: image_index = 5; break;
+	case 10: image_index = 6; break;
+	case 11: image_index = 7; break;
+      }
+	
+	
+}
+}else{
+
+if state_type = "air_dodge" and sprite_index = air_dodge_sprite{
+	
+	air_dodge_sprite = air_dash_sprite
+	
+	image_speed = 0.15
+	
+	if image_index >= 4{
+		image_index -= 2
+	}
+	
+	
+}
+
+
+
+}
+
+
+
+maxfloattime = 240
+if floattime > maxfloattime
+floattime = maxfloattime
+
+if floattime < 0
+floattime = 0
+
+if air = 0 or state_type = "flinch" or state_type = "air_flinch"{ 
+cantupb = 0
+cantsideb = 0
+}
+
+if air = 0{
+	if floattime < maxfloattime
+	floattime += 0.1
+}
+
+if hitbox.hit = 1{
+	floattime += 2
+	
+}
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+}
+
+
+
+MeterHud.sprite_index = meter_sprite;
+if(floattime >= maxfloattime){MeterHud.image_index = 55;} else if(floattime <= 0){MeterHud.image_index = 0;} else {MeterHud.image_index = floattime*56/maxfloattime;}
+MeterHud.image_speed = 0;
+
+/////////////////Meter Stop/////////////////////////////////////

@@ -1,0 +1,48 @@
+if instance_exists(grab_doll){
+	grab_doll.alarm[0] = 10
+	grab_doll.hspeed = 0
+	grab_doll.facing = facing
+}
+
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = hold_sprite;
+image_index=0;
+timer = 0;
+time = 15;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 35
+}
+if timer < time {
+	if timer < 10
+	{
+	target.x = grab_doll.x + 5 * size * (1-facing*2);
+	target.y = y;
+	}
+
+    if ( timer = 12 ) 
+      {
+    play_attack_voice()
+	sound_play(whiff_sound2);
+	grab_doll.vspeed = -2
+	create_projectile(6,80+facing*20,5.1,6.75,15,-1,-1,obj_spark_hit4,1.05,1.25,20,15,self.id,9,-1);
+	proj.x = target.x
+	proj.y = target.y - 10
+      }
+    
+	if timer = 14{
+		grab_doll.vspeed = 0
+		}
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

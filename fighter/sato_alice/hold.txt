@@ -1,0 +1,90 @@
+
+if instance_exists(grab_doll){
+	grab_doll.alarm[0] = 3
+	grab_doll.hspeed = 0
+	grab_doll.facing = facing
+}
+
+if ( time != -1 )
+  {
+    if instance_exists(target)
+    {
+	state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    sprite_index = hold_sprite;
+    image_speed = 0.2;
+    image_index = 0;
+    hspeed = 0;
+    target.attack_type = "none"
+    timer_speed=1;
+    pummel = -1;
+	}
+	else
+	exit;
+  }
+if ( attacking && pummel == -1 )
+ {
+   attacking = 0;
+   pummel = 0;
+   sprite_index = hold_sprite;
+   image_speed = 0.2;
+   image_index = image_index;
+   grab_doll.image_index = 0
+ }
+if ( timer >= 0 )
+{
+target.x = grab_doll.x + 5 * size * (1-facing*2);
+target.y = y;
+}
+if ( pummel == -1 )
+ {
+if ( ( !facing && moveright ) || ( facing && moveleft ) )
+    attack_type = "fthrow";
+if ( ( !facing && moveleft ) || ( facing && moveright ) )
+    attack_type = "bthrow";
+if ( moveup )
+    attack_type = "uthrow";
+if ( movedown )
+  {
+    attack_type = "dthrow";
+  }
+ }
+else
+ { 
+pummel += 1;
+    if ( pummel == 10 ) // replace 5 with the frame in which we pummel
+   {
+    temp_timer = target.timer;
+    temp_time = target.time;
+    sound_play2 ( alice_hit1 );
+	grab_doll.image_index = 1
+    create_projectile ( 2 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_hit1 , 0.8 , 0.8 , 10 , 15 , self.id , 2 , 0 );
+	proj.x = target.x
+	proj.y = target.y - 10
+   }
+    if ( pummel == 11 ) // replace 6 with the frame after the one in which we pummel
+   {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+   }
+    if ( pummel = 17 )
+   {
+    sprite_index = hold_sprite;
+    image_speed = image_speed;
+    image_index = image_index;
+   }
+    if ( pummel >= 30 ) // replace 15 with the frame in which pummel ends and we get back to hold
+   {
+    pummel = -1;
+   }
+ }
+if string(target.state_type) != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }
+        

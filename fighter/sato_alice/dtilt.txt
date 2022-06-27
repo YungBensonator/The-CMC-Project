@@ -1,0 +1,50 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        image_index=0;
+        timer = 0;
+        time = 25;
+		sprite_index = dtilt_sprite;
+		temp_no_hurtbox = 1
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+	switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 15: image_index = 4; break;
+	case 18: image_index = 4; break;
+	case 21: image_index = 5; break;
+      }
+	  
+
+    if ( timer = 9 ) 
+      {
+    play_attack_voice()
+	sound_play(whiff_sound1);
+	create_hitbox(9,10+facing*160,6,3,12,1,alice_hit2,obj_spark_hit3,0.55,0.4,abs(place_x(76)),-place_y(56),self.id,6,5);
+      }
+	
+	
+	
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "crouch";
+    attack_type = "none";
+    timer = 9;
+    time = -1;
+	crouchgetuptimer = 12
+	image_index = 3
+	sprite_index = crouch_sprite;
+  }
+        
+

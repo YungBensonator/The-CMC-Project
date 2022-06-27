@@ -1,0 +1,206 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity = 0;
+if upbtemp = 1 {exit;}
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  time = 40;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  intangible = 1;
+  sound_play(esp_sound2);
+  sound_play(upb_voice);
+  }
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 16: image_index = 2; sound_play(upb_sound); break;
+case 19: image_index = 3; break;
+case 21: image_index = 4; break;
+case 23: image_index = 3; break;
+case 25: image_index = 4; break;
+case 27: image_index = 3; break;
+case 29: image_index = 4; intangible = 0; break;
+case 31: image_index = 3; break;
+case 33: image_index = 4; break;
+case 35: image_index = 3; break;
+case 37: image_index = 4; break;
+case 39: image_index = 3; break;
+}
+
+if ( timer <= 16 )
+{
+	speed = 0;
+    gravity = 0;
+    gravity_lock = 1;
+}
+if ( timer = 17 )
+      {
+	if ( ai && ( offstage || ai_state = "recover" ) )
+	  {
+	    if ( y > nearest_edge.y )
+		moveup = 1;
+	    if ( x < nearest_edge.x )
+	      {
+		moveright = 1;
+		moveleft = 0;
+	      }
+	    if ( x > nearest_edge.x )
+	      {
+		moveleft = 1;
+		moveright = 0;
+	      }
+	  }
+	speed = 4.2*size;
+	if ( moveright && !moveup && !movedown )
+	  {
+	    direction = 0;
+	    facing = 0;
+	    temp = direction;
+            force_edge_grab = 0
+	  }
+	if ( moveleft && !moveup && !movedown )
+	  {
+	    direction = 180;
+	    facing = 1;
+	    temp = direction;
+            force_edge_grab = 0
+	  }
+	if ( !moveright && !moveleft && !movedown )
+	  {
+	    direction = 90;
+	    image_angle = 90 - facing*180;
+	    temp = direction;
+            force_edge_grab = 0
+	  }
+	if ( movedown && !moveright && !moveleft )
+	  {
+	    direction = 270;
+	    image_angle = 270 - facing*180;
+	    temp = direction;
+            force_edge_grab = 1
+	  }
+	if ( moveup && moveright )
+	  {
+	    direction = 45;
+	    image_angle = 45;
+	    facing = 0;
+	    temp = direction;
+            force_edge_grab = 0
+	  }
+	if ( moveup && moveleft )
+	  {
+	    direction = 135;
+	    image_angle = 315;
+	    facing = 1;
+	    temp = direction;
+            force_edge_grab = 0
+	  }
+	if ( movedown && moveright )
+	  {
+	    direction = 315;
+	    image_angle = 315;
+	    facing = 0;
+	    temp = direction;
+            force_edge_grab = 1
+	  }
+	if ( movedown && moveleft )
+	  {
+	    direction = 225;
+	    image_angle = 45;
+	    facing = 1;
+	    temp = direction;
+            force_edge_grab = 1
+	  }
+	if ( analog_control )
+	  {
+	    var dis, dir;
+	    dis = point_distance ( 0 , 0 , holdx , holdy );
+	    dir = point_direction ( 0 , 0 , holdx , holdy );
+	    if ( dis > 0.5 )
+	      {
+                var dd;
+                dd = round ( dir / 45 ) * 45;
+                if ( abs ( dir - dd ) < 14 )
+                  dir = dd;
+		direction = dir;
+		image_angle = dir;
+		temp = direction;
+		if ( dir < 85 || dir > 275 )
+		  facing = 0;
+		if ( dir > 95 && dir < 265 )
+		  facing = 1;
+	      }
+	  }
+	temp_facing = facing;
+      }
+	
+if ( timer >= 17 && timer <= 38 )
+      {
+	after_image(6,c_aqua,0.5)
+	gravity = 0;
+    gravity_lock = 1;
+	speed = 6.7*size;
+	if ( facing = temp_facing )
+	    direction = temp;
+	else
+	  {
+	    if ( temp < 180 )
+		direction = 180 - temp;
+	    else
+		direction = 360 - temp;
+	  }
+	image_angle = direction - 180*facing;
+	if ( next_to_rwall || next_to_lwall )
+	    hspeed = 0;
+      }
+    
+    if ( timer >= 17 )
+      {
+        force_edge_grab = 1
+      }  
+
+    if ( vspeed > 2 && ( on_floor || on_platform ) )
+      {
+	if ( hitbox > 0 )
+	with ( hitbox )
+	    instance_destroy();
+	image_angle = 0;
+	state_type = "air_flinch";
+	attack_type = "none";
+	timer = 0;
+	time = 12;
+	sprite_index = mid_jump_sprite;
+	image_speed = 0.25;
+	image_index = 1;
+	vspeed = -3*size;
+	instance_create(x,y+1,obj_down_impact);
+	shaker = instance_create(x,y,obj_shakescreen2);
+	shaker.ampl = 2;
+      }
+	
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    {
+    state_type = "fall";
+	}
+    else
+	{
+    state_type = "stand";
+	}
+  upbtemp = 1;  
+  timer = 0;
+  time = -1;
+  }

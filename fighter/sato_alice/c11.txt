@@ -1,0 +1,163 @@
+if sprite_index = alice.doll_stand_sprite{
+    linex = place_x(19)
+    liney = place_y(25)
+}else if sprite_index = alice.doll_spin_sprite{
+	linex = place_x(51)
+    liney = place_y(24)
+}else if sprite_index = alice.doll_shoot_sprite{
+	linex = place_x(24)
+    liney = place_y(26)
+}else if sprite_index = alice.doll_fly_sprite{
+	linex = place_x(22)
+    liney = place_y(21)
+}
+
+base_x = alice.x + base_x_temp
+base_y = alice.y + base_y_temp
+
+if timer = 0{
+	line_spark = instance_create( x,y,obj_spark);
+	line_spark.sprite_index = alice.line_sprite
+	line_spark.image_xscale = abs(1)
+	line_spark.image_yscale = 0.25
+	line_spark.attached = self.id
+	line_spark.alice = alice
+	line_spark.keepmain = alice.keepmain
+	line_spark.script = char_custom17
+	with (line_spark){script_execute(script)}
+}
+
+if timer <= 10{
+	x+= (4-(timer*0.2))-facing*(8-(timer*0.4))
+}else if timer = 50{
+	alice.target = -1
+	target = -1
+	create_homing_bubble ( 12.5 , 12.5 , 0 , 12 , alice.id , 9 );
+	timer_speed = 1;
+}else if timer = 60{
+	sprite_index = alice.doll_shoot_sprite
+	sound_play(alice.charge_sound);
+	
+	target = alice.target
+	
+	if target != -1{
+		if target.x < x
+			facing = 1
+		else
+			facing = 0
+	}
+	
+}
+
+
+if (timer >= 60 and timer <= 80 and timer mod 5 = 0){
+		//alice.floattime -= maxfloattime*0.2
+		blast = create_projectile(1,90,3,1,20,5,magic1,obj_spark_hit1,0,0,abs(place_x(35)),-place_y(24),alice.id,90,-1);
+		blast.sprite_index = alice.doll_bullet_sprite;
+		blast.image_speed = 0
+		blast.image_xscale = max(image_xscale* 0.6,image_xscale* 0.6 * (-1));
+		blast.image_yscale = image_yscale* 0.6;
+		blast.image_alpha = 0.9
+		blast.hit = 0
+		blast.depth = depth - 1
+		blast.facing = facing
+		if target != -1 and instance_exists(target){
+			blast.direction = point_direction(x,y,target.x,target.y - target.actual_height * 0.5)
+		}
+		else{
+			blast.direction = angle_correct(20 - (80-timer))
+		}
+		blast.speed = .8
+		blast.image_angle = blast.direction
+		
+	}
+
+
+if timer = 90{
+	sprite_index = alice.doll_stand_sprite
+}else if timer = 98{
+	if doll_number = 3{
+		timer = 999
+		sprite_index = alice.doll_fly_sprite
+	}else{
+		timer = 96
+	}
+}
+
+if timer = 10 and doll_number = 420{
+	timer = 200
+}
+
+if timer mod 10 = 0 and timer >= 208 and timer <= 279{
+sprite_index = alice.doll_spin_sprite
+image_speed = 0.25
+create_projectile(0.5,25+facing*130,3.3,0,8,4,slash1,obj_spark_hit1,1.4,1.2,0,11,alice.id,10,-1);
+proj.di = 0
+proj.weight_kb = 0
+proj.hspeed = hspeed
+proj.vspeed = vspeed
+if (doll_number = 420 and instance_exists(alice.sideb_doll)) or (doll_number = 1 and !instance_exists(alice.sideb_doll))
+sound_play(swingsnd1);
+}
+
+if timer = 280{
+	create_projectile(1,15+facing*150,2,9,8,3,slash3,obj_spark_hit1,2.3,1.2,0,11,alice.id,10,-1);	
+}
+if timer >= 208 and timer < 280{
+
+if moveright
+facing = 0
+else if moveleft
+facing = 1
+
+hspeed = 1.5-facing*3
+vspeed = -0.1 + sidebtemp
+
+
+//if timer = 36
+//create_hitbox(2,15+facing*150,2,6,8,9,slash3,obj_spark_hit1,1.8,0.6,0,15,self.id,4,4);
+}
+
+if timer = 280
+hspeed = 0
+
+if timer = 285{
+	sprite_index = alice.doll_stand_sprite
+	image_speed = 0.12
+}
+
+if timer = 300{
+	sprite_index = alice.doll_fly_sprite
+	timer = 1000
+}
+
+
+
+if timer > 1000 and timer < 1006{
+	if alice.x < x
+	facing = 1
+	else
+	facing = 0
+	
+	move_towards_point(base_x,base_y,2.5)	
+}else if timer = 1006{
+	speed = 0
+	x = base_x
+	y = base_y
+	alpha_add = -0.2
+}
+
+
+if timer = 1005 and point_distance(x,y,base_x,base_y) > 10
+timer = 1003
+
+
+if timer = 1011{
+	with (line_spark){instance_destroy();};
+	instance_destroy();
+}
+
+image_xscale = base_xscale - (facing*(base_xscale*2))
+image_yscale = base_yscale
+
+timer += 1

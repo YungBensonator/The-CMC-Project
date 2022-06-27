@@ -1,0 +1,50 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "sideb";
+  time = 43;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  if air = 0 {
+        sprite_index = sideb_sprite
+		}
+		else 
+		{
+		sprite_index = sideb_air_sprite
+		}
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 21: image_index = 3; break;
+  case 24: image_index = 4; sound_play(sideb_voice); break;
+  case 27: image_index = 5; break;
+  case 30: image_index = 6; break;
+  case 33: image_index = 7; break;
+  }
+
+if timer = 21 && !instance_exists(psychocut)
+{
+  psychocut = create_projectile( 1 , 5+facing*170 , 4.5, 0.5 , 4 , 3 , slash1 , obj_spark_slash2 , 0.7 , 0.7 , 15 , 20 , self.id , 20 , char_custom3 );
+  psychocut.temp = 0;
+  psychocut.hit_stun = 4;
+  sound_play(sideb_sound);
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

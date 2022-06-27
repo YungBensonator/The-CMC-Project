@@ -1,0 +1,617 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = sideb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 950;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		speed = 0
+		
+		
+		
+		duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 900;
+		
+		sound_play(super_sound);
+		
+		super_fx = create_spark(0,20,self.id);
+		super_fx.sprite_index = super_spriteEFF;
+		super_fx.image_speed = 0.5;
+		super_fx.image_alpha = 0.7;
+		super_fx.image_xscale = image_xscale * 0.75 ;
+		super_fx.image_yscale = image_yscale * 0.75 ;
+		super_fx.depth = depth - 0.1;
+		
+		
+}
+gravity_lock = 1;
+gravity = 0
+if ( timer < time ){
+
+switch ( timer )
+    {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 10: image_index = 5; break;
+	case 12: image_index = 6; break;
+	case 14: image_index = 7; break;
+	case 16: image_index = 8; break;
+	
+	case 100: image_index = 9; break;
+	case 103: image_index = 10; break;
+	case 106: image_index = 11; break;
+	case 109: image_index = 12; break;
+	
+	
+    }
+	
+	if ( timer == 0 )
+    {
+    cut_in_bg = instance_create ( 0 , 0 , obj_custom_gfx );
+    cut_in_bg.depth = -15;
+    cut_in_bg.draw_script = char_custom16;
+    cut_in_bg.keepmain = keepmain;
+    cut_in_bg.image_alpha = 0;
+    cut_in_bg.alarm[0] = 120;
+    cut_in_bg.sprite_index = cut_in_fx_sprite;
+    }
+  if ( timer >= 0 && timer < 120 )
+    {
+    if ( temp > 1 )
+      cut_in_bg.x += 64 * ( 1 - facing * 2 );
+      else
+      cut_in_bg.x += 32 * ( 1 - facing * 2 );
+    if ( cut_in_bg.x >= 0 ) cut_in_bg.x -= 720;
+    if ( cut_in_bg.x < -720 ) cut_in_bg.x += 720;
+    }
+  if ( timer >= 0 && timer <= 20 )
+    {
+    if ( cut_in_bg.image_alpha < 1 )
+      cut_in_bg.image_alpha += 0.05;
+    }
+  if ( timer >= 100 && timer <= 120 )
+    {
+    if ( cut_in_bg.image_alpha > 0 )
+      cut_in_bg.image_alpha -= 0.05;
+    }
+	
+	if timer = 0{
+		aliceCutIn = create_spark(30,0,self.id);
+		aliceCutIn.sprite_index = cut_in_sprite;
+		aliceCutIn.image_speed = 0;
+		aliceCutIn.image_alpha = 0.1;
+		aliceCutIn.depth = -15.5;
+		aliceCutIn.image_yscale = view_hview/480;
+		aliceCutIn.image_xscale = aliceCutIn.image_yscale;
+		aliceCutIn.alarm[0] = 120
+		
+		aliceCutIn.x = (view_xview + view_wview*0.95)
+		aliceCutIn.y =  view_yview + view_hview
+	}
+	
+	if instance_exists(aliceCutIn){
+		aliceCutIn.image_yscale = view_hview/480;
+		aliceCutIn.image_xscale = aliceCutIn.image_yscale;
+		aliceCutIn.y =  view_yview + view_hview
+	}
+	
+	if ( timer >= 0 && timer < 30 )
+		aliceCutIn.x -= view_wview * 0.01
+	
+	if ( timer >= 30 && timer < 60 )
+		aliceCutIn.x -= view_wview * 0.0025
+	
+	if ( timer >= 90 && timer < 120 )
+		aliceCutIn.x -= view_wview * 0.05
+	
+	
+    if ( timer >= 0 && timer <= 15 ){
+    if ( aliceCutIn.image_alpha < 1 )
+      aliceCutIn.image_alpha += 0.08;
+    }
+    if ( timer >= 105 && timer <= 120 ){
+    if ( aliceCutIn.image_alpha > 0 )
+      aliceCutIn.image_alpha -= 0.08;
+    }
+	
+	
+	if timer = 110{
+	theHome = create_homing_bubble ( 9999 , 9999 , 0 , 15 , self.id , 9 );
+    }
+	
+	if timer = 119 and (target = self.id or target < 0){
+		with (duster){alarm[0] = 2}
+		timer = time - 5
+		duster.alarm[0] = 2
+	}
+    
+	
+	if timer <= 138 and target > -1 and timer >= 120{
+	if target.intangible = 0 and target.imagine_breaker = 0 && target.attack_type != "final_smash"{
+		target.state_type = "air_flinch"
+		target.attack_type = "none"
+		target.sprite_index = target.flinch_sprite;
+		target.image_index = 0;
+		target.image_angle = 0;
+		target.image_alpha = 1;
+		target.timer = 0
+		target.time = 50
+		target.timer_speed = 0
+		target.alarm[0] = 10
+		target.speed = 0
+		target.gravity = 0
+		target.gravity_lock = 1
+		target.timer = 0
+    }
+    }
+	
+	if timer = 120{
+		
+		grab_doll = instance_create ( x + place_x(59) , y + place_y(58) , obj_spark );
+		grab_doll.depth = depth + 1;
+		grab_doll.base_xscale = image_xscale;
+		grab_doll.base_yscale = image_yscale;
+		grab_doll.facing = facing;
+		grab_doll.sprite_index = doll_shoot_sprite;
+		grab_doll.image_speed = 0;
+		grab_doll.image_index = 0;
+		grab_doll.keepmain = keepmain;
+		grab_doll.script = 0;
+		grab_doll.alice = self.id;
+		grab_doll.loop = 9999
+		grab_doll.number = number
+		grab_doll.state = 0
+		//grab_doll.x = target.x -10+facing*20
+		//grab_doll.y = target.y-10
+		
+		grab_doll.alarm[0] = 80
+		
+		
+		
+	}
+	
+	if timer >= 120 and timer <= 180{
+		grab_doll.target = target
+		if point_distance(grab_doll.x,grab_doll.y,target.x -10+facing*20,target.y-10) > 8{
+			with (grab_doll) {move_towards_point(target.x -10+facing*20,target.y-10,7)};
+		}else if nottt = 0{
+			grab_doll.speed = 0
+			nottt = 1
+			sound_play(swingsnd5);
+		}else{
+			grab_doll.speed = 0
+		}
+		
+		if target.x < grab_doll.x
+		    grab_doll.facing = 1
+		else
+			grab_doll.facing = 0
+		
+		with (grab_doll){
+			image_xscale = base_xscale - (facing*(base_xscale*2))
+      	    image_yscale = base_yscale
+			linex = place_x(24)
+       	    liney = place_y(26)
+	    }
+		
+	}
+	
+	
+	
+	if timer < 200 and timer >= 190
+    target.image_alpha -= 0
+	
+	
+if timer = 190{
+	white_bg = create_spark(0,0,self.id);
+	white_bg.sprite_index = white_sprite;
+	white_bg.x = view_xview;
+	white_bg.y = view_yview;
+	white_bg.image_speed = 0;
+	white_bg.image_alpha = 0;
+	white_bg.depth = -60;
+	white_bg.image_yscale = view_hview/520;
+	white_bg.image_xscale = view_hview/520;
+	white_bg.alarm[0] = 20
+	white_bg.alpha_add = 0.1
+}
+
+if timer = 200{
+	white_bg.alpha_add = -0.2
+	baseX = view_xview
+	baseY = view_yview
+	baseScale = view_hview/520;
+	
+	room_bg = create_spark(0,0,self.id);
+	room_bg.sprite_index = fs_bg;
+	room_bg.x = baseX;
+	room_bg.y = baseY;
+	room_bg.image_speed = 0.02;
+	room_bg.image_alpha = 1;
+	room_bg.depth = -20;
+	room_bg.image_yscale = baseScale;
+	room_bg.image_xscale = baseScale;
+	room_bg.alarm[0] = 705
+	room_bg.loop = 9999
+	
+	
+}
+
+if timer = 204{
+	doll_dummy = create_spark(0,0,self.id);
+	doll_dummy.sprite_index = doll_stand_sprite;
+	doll_dummy.image_index = 0;
+	doll_dummy.x = (baseX + 20 * baseScale) ;
+	doll_dummy.y = (baseY + 20 * baseScale) ;
+	doll_dummy.image_speed = 0.15;
+	doll_dummy.image_alpha = 1;
+	doll_dummy.depth = -25;
+	doll_dummy.image_xscale = -7.5*baseScale;
+	doll_dummy.image_yscale = 7.5*baseScale;
+	doll_dummy.alarm[0] = 300
+	doll_dummy.loop = 999999
+	doll_dummy.number = number
+	/*
+	dummy_counter = instance_create(x,y,obj_custom_gfx)
+	dummy_counter.depth = -40;
+    dummy_counter.draw_script = char_custom7;
+    dummy_counter.keepmain = keepmain;
+    dummy_counter.alarm[0] = 600;
+	*/
+}
+
+if timer >= 204 and timer < 260{
+	doll_dummy.y += ((270-20)/55) * baseScale
+	doll_dummy.x += ((800-20)/55) * baseScale
+	doll_dummy.image_yscale += ((7.5-2)/55) * baseScale * (-1);
+	doll_dummy.image_xscale += ((7.5-2)/55) * baseScale;
+	
+}
+
+if timer = 260{
+	doll_dummy.sprite_index = doll_shoot_sprite
+	
+	sound_play(fs_charge_sound)
+	
+	charge_spark = create_spark(0,0,self.id);
+	charge_spark.sprite_index = fs_sprite1;
+	charge_spark.image_speed = 0;
+	charge_spark.image_alpha = 0.9;
+	charge_spark.image_xscale = 3 * baseScale;
+	charge_spark.image_yscale = 3 * baseScale;
+	charge_spark.depth = -26;
+	charge_spark.x = doll_dummy.x - 18 * baseScale;
+	charge_spark.y = doll_dummy.y - 26 * baseScale;
+}
+
+if timer >= 262 and timer < 290 and timer mod 2 = 0{
+	charge_spark.image_index += 1
+	
+}
+if timer = 290{
+	with (charge_spark) {instance_destroy();}
+}
+
+if timer = 300{
+	white_bg = create_spark(0,0,self.id);
+	white_bg.sprite_index = white_sprite;
+	white_bg.x = view_xview;
+	white_bg.y = view_yview;
+	white_bg.image_speed = 0;
+	white_bg.image_alpha = 0;
+	white_bg.depth = -60;
+	white_bg.image_yscale = view_hview/520;
+	white_bg.image_xscale = view_hview/520;
+	white_bg.alarm[0] = 20
+	white_bg.alpha_add = 0.1
+	
+}
+
+if timer = 310{
+	white_bg.alpha_add = -0.2
+	doll_dummy.x = (baseX + 850 * baseScale) ;
+	doll_dummy.y = (baseY + 460 * baseScale) ;
+	
+	doll_dummy.image_angle = -30
+	
+	
+}
+
+if timer = 315{
+	sound_play(beamu_sound1)
+	
+	
+	charge_spark2 = create_spark(0,0,self.id);
+	charge_spark2.sprite_index = fs_sprite2;
+	charge_spark2.image_speed = 0;
+	charge_spark2.image_alpha = 0.9;
+	charge_spark2.image_xscale = 3 * baseScale;
+	charge_spark2.image_yscale = 3 * baseScale;
+	charge_spark2.depth = -26;
+	charge_spark2.x = doll_dummy.x - 15 * baseScale;
+	charge_spark2.y = doll_dummy.y - 50 * baseScale;
+	charge_spark2.image_angle = -30
+	charge_spark2.loop = 9999
+}
+if timer = 318 or timer = 321 or timer = 324
+charge_spark2.image_index += 1
+
+if timer = 327{
+	charge_spark2.sprite_index = fs_sprite3;
+	charge_spark2.image_index = 0
+	charge_spark2.image_speed = 0.3;
+	charge_spark2.image_xscale = 4.0 * baseScale;
+	charge_spark2.image_yscale = 4.0 * baseScale;
+}
+
+if timer = 390
+sound_play(beamu_sound2)
+
+if timer = 485
+sound_play(beamu_sound2)
+
+if timer = 580
+sound_play(beamu_sound2)
+
+if timer = 670
+sound_play(beamu_sound3)
+
+if timer = 440{
+	white_bg = create_spark(0,0,self.id);
+	white_bg.sprite_index = white_sprite;
+	white_bg.x = view_xview;
+	white_bg.y = view_yview;
+	white_bg.image_speed = 0;
+	white_bg.image_alpha = 0;
+	white_bg.depth = -60;
+	white_bg.image_yscale = view_hview/520;
+	white_bg.image_xscale = view_hview/520;
+	white_bg.alarm[0] = 20
+	white_bg.alpha_add = 0.1
+	
+}
+
+
+
+
+if timer = 450{
+	white_bg.alpha_add = -0.2
+	doll_dummy.image_alpha = 0
+	
+	with (charge_spark2){instance_destroy();}
+	
+	room_bg.image_xscale = baseScale *1.5;
+	room_bg.image_yscale = baseScale *1.5;
+	
+	room_bg.image_xscale = baseScale *2.1;
+	room_bg.image_yscale = baseScale *2.1;
+	
+	room_bg.x = baseX-200*baseScale;
+	room_bg.y = baseY-100*baseScale;
+	
+	enemy_dummy = create_spark(0,0,self.id);
+	enemy_dummy.sprite_index = target.stand_sprite;
+	enemy_dummy.image_index = 0;
+	enemy_dummy.x = (baseX + 100 * baseScale) ;
+	enemy_dummy.y = (baseY + 500 * baseScale) ;
+	enemy_dummy.image_speed = 0.1;
+	enemy_dummy.image_alpha = 1;
+	enemy_dummy.depth = -25;
+	enemy_dummy.image_yscale = (target.image_yscale)*3.2*baseScale;
+	enemy_dummy.image_xscale = (target.image_xscale)*3.2*baseScale;
+	enemy_dummy.alarm[0] = 455
+	enemy_dummy.loop = 999999
+	//enemy_dummy.image_angle = -90+target.facing*180
+	enemy_dummy.number = target.number
+	
+	
+	enemy_dummy.depth = -15.5
+	room_bg.depth = -15
+	
+}
+
+if timer >= 451 and timer < 500{
+	enemy_dummy.y += ((400-500)/50) * baseScale
+	enemy_dummy.x += ((250-100)/50) * baseScale
+	enemy_dummy.image_yscale -= (target.image_yscale)*0.01*baseScale;
+	enemy_dummy.image_xscale -= (target.image_xscale)*0.01*baseScale;
+	
+	room_bg.image_speed = 0
+	room_bg.image_xscale -= baseScale *0.01;
+	room_bg.image_yscale -= baseScale *0.01;
+	room_bg.x += 2*baseScale;
+	room_bg.y += 1*baseScale;
+	
+}
+
+if timer = 500{
+	beam_spark0 = create_spark(0,0,self.id);
+	beam_spark0.sprite_index = fs_sprite4;
+	beam_spark0.image_speed = 0.33;
+	beam_spark0.image_alpha = 0.9;
+	beam_spark0.image_xscale = 3 * baseScale;
+	beam_spark0.image_yscale = 3 * baseScale;
+	beam_spark0.depth = -15.8;
+	beam_spark0.x = (baseX + 930 * baseScale) ;
+	beam_spark0.y = (baseY + 20 * baseScale) ;
+	beam_spark0.image_angle = 30
+	beam_spark0.loop = 0
+}
+
+
+if timer = 530{
+	enemy_dummy.sprite_index = target.flinch_sprite
+	enemy_dummy.image_speed = 0
+	
+	
+	beam_spark = create_spark(0,0,self.id);
+	beam_spark.sprite_index = fs_sprite5;
+	beam_spark.image_speed = 0.3;
+	beam_spark.image_alpha = 0.9;
+	beam_spark.image_xscale = 3 * baseScale;
+	beam_spark.image_yscale = 3 * baseScale;
+	beam_spark.depth = -15.8;
+	beam_spark.x = enemy_dummy.x - 0 * baseScale;
+	beam_spark.y = enemy_dummy.y - 30 * baseScale;
+	beam_spark.image_angle = 30
+	beam_spark.loop = 9999
+	
+	
+	bbg_spark = create_spark(0,0,self.id);
+	bbg_spark.sprite_index = fs_sprite6;
+	bbg_spark.image_speed = 0.3;
+	bbg_spark.image_alpha = 0.9;
+	bbg_spark.image_xscale = 4 * baseScale;
+	bbg_spark.image_yscale = 4 * baseScale;
+	bbg_spark.depth = -15.4;
+	bbg_spark.x = enemy_dummy.x - 0 * baseScale;
+	bbg_spark.y = enemy_dummy.y - 30 * baseScale;
+	bbg_spark.image_angle = 0
+	bbg_spark.loop = 9999
+	
+}
+
+if timer >= 540 and timer <= 750{
+	
+	if timer mod 10 = 0{
+		sound_play2(magic1)
+		screen_shake(4,8)
+		target.percent += 1
+		
+		if random(100) > 50{
+			flash = instance_create(0,0,obj_flashscreen)
+		    flash.depth = -15.9
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+}
+
+if timer = 740{
+	white_bg = create_spark(0,0,self.id);
+	white_bg.sprite_index = white_sprite;
+	white_bg.x = view_xview;
+	white_bg.y = view_yview;
+	white_bg.image_speed = 0;
+	white_bg.image_alpha = 0;
+	white_bg.depth = -60;
+	white_bg.image_yscale = view_hview/520;
+	white_bg.image_xscale = view_hview/520;
+	white_bg.alarm[0] = 20
+	white_bg.alpha_add = 0.1
+	
+}
+
+if timer = 750{
+	white_bg.alpha_add = -0.2
+	
+	
+	with (beam_spark){instance_destroy();}
+	with (bbg_spark){instance_destroy();}
+	
+	
+}
+
+if timer >= 750 and timer <= 870 and timer mod 6 = 0{
+	
+	exploder = instance_create(0,0,obj_spark)
+	exploder.sprite_index = global.explosion_spark2
+	exploder.image_speed = 1
+	exploder.depth = -30;
+	exploder.x = enemy_dummy.x + (random(180)-90) * baseScale;
+	exploder.y = enemy_dummy.y - (40 +random(20)) * baseScale;
+	exploder.image_xscale = 1.9 * baseScale;
+	exploder.image_yscale = 1.9 * baseScale;
+	
+	sound_play(explode_big)
+	
+	target.percent += 1
+	
+	
+	if random(100) > 80{
+		flash = instance_create(0,0,obj_flashscreen)
+		flash.depth = -15.9
+	}
+	
+	
+}
+
+if timer = 910{
+	white_bg = create_spark(0,0,self.id);
+	white_bg.sprite_index = white_sprite;
+	white_bg.x = view_xview;
+	white_bg.y = view_yview;
+	white_bg.image_speed = 0;
+	white_bg.image_alpha = 0;
+	white_bg.depth = -60;
+	white_bg.image_yscale = view_hview/520;
+	white_bg.image_xscale = view_hview/520;
+	white_bg.alarm[0] = 35
+	white_bg.alpha_add = 0.1
+	
+}
+
+if timer = 935{
+	white_bg.alpha_add = -0.1
+	target.image_alpha = 1
+	with (enemy_dummy){instance_destroy();}
+	with (room_bg){instance_destroy();}
+	
+	
+}
+
+if timer = 945{
+	
+	create_projectile(7,20+facing*140,4.2,8.4,6,30,-1,-1,7.5,7.5,0,15,self.id,30,-1);
+	proj.x = target.x;
+	proj.y = target.y-20;
+	
+	
+	exploder = instance_create(0,0,obj_spark)
+	exploder.sprite_index = fs_sprite7
+	exploder.image_speed = 1.1
+	exploder.depth = target.depth-1;
+	exploder.x = target.x;
+	exploder.y = target.y-20;
+	exploder.image_xscale = 1.25 * baseScale;
+	exploder.image_yscale = 1.25 * baseScale;
+	
+	sound_play(explode_big)
+	
+	
+}
+
+
+
+
+
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
