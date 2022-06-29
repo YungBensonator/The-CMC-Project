@@ -1,0 +1,103 @@
+global.tenshi_kick = 0
+////
+// VARIABLES
+////
+stg_msk_x = 144;
+stg_msk_y = 238;
+scale = 1.1;
+camera_boundary_l = 0;
+camera_boundary_r = 1280*0.54 * scale;
+camera_boundary_u = 100;
+camera_boundary_d = 720*0.54 * scale;
+camera_boundary_zoom = 292 * scale;
+stg_x = camera_boundary_r * 0.5;
+stg_y = camera_boundary_d ;
+death_l = camera_boundary_l - 150 * scale;
+death_u = camera_boundary_u - 130 * scale;
+death_r = camera_boundary_r + 150 * scale;
+death_d = camera_boundary_d + 170 * scale;
+player_spawn_x [ 0 ] = stg_x + ( 18 - stg_msk_x ) * scale;
+player_spawn_y [ 0 ] = stg_y + ( 139 - stg_msk_y ) * scale;
+player_spawn_x [ 1 ] = stg_x + ( 270 - stg_msk_x ) * scale;
+player_spawn_y [ 1 ] = stg_y + ( 139 - stg_msk_y ) * scale;
+player_spawn_x [ 2 ] = stg_x + ( 58 - stg_msk_x ) * scale;
+player_spawn_y [ 2 ] = stg_y + ( 139 - stg_msk_y ) * scale;
+player_spawn_x [ 3 ] = stg_x + ( 230 - stg_msk_x ) * scale;
+player_spawn_y [ 3 ] = stg_y + ( 139 - stg_msk_y ) * scale;
+player_spawn_x [ 4 ] = stg_x + ( 108 - stg_msk_x ) * scale;
+player_spawn_y [ 4 ] = stg_y + ( 139 - stg_msk_y ) * scale;
+player_spawn_x [ 5 ] = stg_x + ( 180 - stg_msk_x ) * scale;
+player_spawn_y [ 5 ] = stg_y + ( 139 - stg_msk_y ) * scale;
+respawn_x = stg_x + ( 144 - stg_msk_x ) * scale;
+respawn_y = stg_y + ( 60 - stg_msk_y ) * scale;
+
+////
+// RESOURCES
+////
+// masks
+global.msk_stg[0] = stage_msk_add2 ( "stage/hakurei/mask_floor.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[1] = stage_msk_add2 ( "stage/hakurei/mask_leftwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[2] = stage_msk_add2 ( "stage/hakurei/mask_rightwall.png",1,1,0,stg_msk_x,stg_msk_y );
+global.msk_stg[6] = stage_msk_add2 ( "stage/ha/mask_platform.png",1,1,0,stg_msk_x,stg_msk_y );
+
+
+// stage sprites
+global.msk_stg[4] = stage_spr_add ( "stage/hakurei/mg.png",1,stg_msk_x,stg_msk_y );
+//global.msk_stg[5] = stage_spr_add ( "stage/hakurei/fg.png",1,stg_msk_x,stg_msk_y );
+
+// backgrounds
+background_index[0] = stage_bg_add ( "stage/hakurei/bg.png" );
+
+////
+// OBJECTS
+////
+var o;
+// floor
+o = instance_create ( stg_x , stg_y , obj_floor );
+o.sprite_index = global.msk_stg[0];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// left wall
+o = instance_create ( stg_x , stg_y , obj_leftwall );
+o.sprite_index = global.msk_stg[1];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// right wall
+o = instance_create ( stg_x , stg_y , obj_rightwall );
+o.sprite_index = global.msk_stg[2];
+o.image_xscale = scale;
+o.image_yscale = scale;
+// platform
+o = instance_create ( stg_x , stg_y , obj_platform );
+o.sprite_index = global.msk_stg[6];
+o.image_xscale = scale;
+o.image_yscale = scale;
+
+// ledges
+instance_create ( stg_x + ( 8 - stg_msk_x ) * scale , stg_y + ( 140 - stg_msk_y ) * scale , obj_edge_left );
+instance_create ( stg_x + ( 279 - stg_msk_x ) * scale , stg_y + ( 140 - stg_msk_y ) * scale , obj_edge_right );
+
+// mg
+o = instance_create ( stg_x , stg_y , obj_stage_extra );
+o.sprite_index = global.msk_stg[4];
+o.depth = 6;
+o.image_xscale = scale;
+o.image_yscale = scale;
+obj_mg = o;
+
+
+
+
+
+stage_install_bg_object();
+obj_main_bg = obj_stage_bg.id;
+
+with ( obj_stage_bg )
+  {
+  mode = 0;
+  scale = other.scale;
+  obj_mg = other.obj_mg;
+  obj_fg = other.obj_fg;
+  stg_x = other.stg_x;
+  stg_y = other.stg_y;
+  }

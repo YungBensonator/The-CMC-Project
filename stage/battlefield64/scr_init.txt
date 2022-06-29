@@ -1,0 +1,127 @@
+// Initialize boundaries.
+
+camera_boundary_l = -5;
+camera_boundary_u = 0;
+camera_boundary_r = 800;
+camera_boundary_d = 450;
+camera_boundary_zoom = 380;
+
+// Set the death boundaries.
+
+death_l = -130;
+death_u = -143;
+death_r = camera_boundary_r + 130;
+death_d = camera_boundary_d + 110;
+
+// Scaling variables.
+
+var color, top_x, top_y, scale, i;
+scale = 0.75;
+top_x = ( camera_boundary_r - camera_boundary_l ) * 0.5 - 525 * scale;
+top_y = camera_boundary_d - 551 * scale;
+
+// Set the players' starting position and respawn point.
+
+player_spawn_x [ 0 ] = 358 * scale + top_x;
+player_spawn_y [ 0 ] = 235 * scale + top_y;
+
+player_spawn_x [ 1 ] = 660 * scale + top_x;
+player_spawn_y [ 1 ] = 235 * scale + top_y;
+
+player_spawn_x [ 2 ] = 520 * scale + top_x;
+player_spawn_y [ 2 ] = 100 * scale + top_y;
+
+player_spawn_x [ 3 ] = 520 * scale + top_x;
+player_spawn_y [ 3 ] = 338 * scale + top_y;
+
+player_spawn_x [ 4 ] = 348 * scale + top_x;
+player_spawn_y [ 4 ] = 338 * scale + top_y;
+
+player_spawn_x [ 5 ] = 665 * scale + top_x;
+player_spawn_y [ 5 ] = 338 * scale + top_y;
+
+respawn_x = 526 * scale + top_x;
+respawn_y = 7 * scale + top_y;
+
+
+// Load and set the stage collisions.
+
+msk_floor = stage_msk_add ( "stage/battlefield64/m_floor.png" , 1 , 1 , 0 , 0 , 0 );
+msk_platform = stage_msk_add ( "stage/battlefield64/m_platform.png" , 1 , 1 , 0 , 0 , 0 );
+msk_r = stage_msk_add ( "stage/battlefield64/m_r.png" , 1 , 1 , 0 , 0 , 0 );
+msk_l = stage_msk_add ( "stage/battlefield64/m_l.png" , 1 , 1 , 0 , 0 , 0 );
+msk_ceiling = stage_msk_add ( "stage/battlefield64/m_ceiling.png" , 1 , 1 , 0 , 0 , 0 );
+msk_shadow = stage_msk_add ( "stage/battlefield64/shadowmask.png" , 1 , 1 , 0 , 0 , 0 );
+
+i = instance_create ( top_x , top_y , obj_floor );
+i . sprite_index = msk_floor;
+i . image_xscale = scale;
+i . image_yscale = scale;
+
+i = instance_create ( top_x , top_y , obj_platform );
+i . sprite_index = msk_platform;
+i . image_xscale = scale;
+i . image_yscale = scale;
+
+i = instance_create ( top_x , top_y , obj_leftwall );
+i . sprite_index = msk_l;
+i . image_xscale = scale;
+i . image_yscale = scale;
+
+i = instance_create ( top_x , top_y , obj_rightwall );
+i . sprite_index = msk_r;
+i . image_xscale = scale;
+i . image_yscale = scale;
+
+i = instance_create ( top_x , top_y , obj_ceiling );
+i . sprite_index = msk_ceiling;
+i . image_xscale = scale;
+i . image_yscale = scale;
+
+/* Shadow stuff */
+i = instance_create ( top_x , top_y , obj_shadow_display );
+i . light_source = 300;
+i . light_source_y = 0;
+i . depth = -6.1;
+i = instance_create ( top_x , top_y  , obj_shadow );
+i . sprite_index = msk_shadow;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i . image_alpha = 0.5;
+
+// Set the ledges.
+
+instance_create ( top_x + 299 * scale , top_y + 335 * scale , obj_edge_left );
+instance_create ( top_x + 723 * scale , top_y + 335 * scale , obj_edge_right );
+
+// Load and set up the background layers.
+
+background_index[0] = bg_add ( "stage/battlefield64/bg.png" );
+
+// Create terrain objects.
+
+i = instance_create ( top_x , top_y , obj_stage_bgd );
+i . sprite_index = bg_add ( "stage/battlefield64/mg.png" );
+i . depth = 9;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i . image_blend = global.def_tint;
+i = instance_create ( top_x , top_y , obj_stage_bgd );
+i . sprite_index = bg_add ( "stage/battlefield64/fg.png" );
+i . depth = -6;
+i . image_xscale = scale;
+i . image_yscale = scale;
+i . image_blend = global.def_tint;
+
+
+// Install BG.
+
+stage_install_bg_object();
+stage_control = obj_stage_bg.id;
+
+// Load resources.
+
+with ( obj_stage_bg )
+  {
+  mode = 0;
+  }
