@@ -1,0 +1,77 @@
+if cantuse4 > 0 {break;}
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 24;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	      case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	       case 16: image_index = 3; break;
+	case 20: image_index = 4; break;
+	       case 22: image_index = 5; break;
+	case 24: image_index = 6; break;
+      }
+      {
+if timer > 1 {
+after_image(3.8,c_red,0.25)
+}
+
+if timer = 8 {
+sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4,attack_voice4))
+sound_play(attack_snd1);
+  create_hitbox(1, 56+68*facing, 5,4, 2, 1, cutfk1, obj_spark_slash3, 1.9, 1.3 ,4, 8, self.id, 12, 1);
+  create_hitbox2(3, 155+-130*facing, 5,4, 2, 1, cutfk1, obj_spark_slash3, 0.7, 1 ,40, 4, self.id, 12, 1);
+}
+
+ if timer >= 2 && timer < 24{ // flt
+ 
+ fast_fall=0;
+ 
+ fast_fall_temp=0;
+ if vspeed>0.11.5*size {
+ vspeed=0.11.5*size;
+ }
+ }
+ 
+ 
+ if hitbox.hit > 0 && timer > 7{
+  vspeed -= 0.54*size;
+}
+
+ if hitbox.hit < 0 && timer > 1{
+ fast_fall=15;
+ fast_fall_temp=15;
+}
+
+	  
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=28; }
+  }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	cantuse4 = 8
+  }		
+        

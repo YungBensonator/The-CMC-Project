@@ -1,0 +1,75 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0;
+        sprite_index = fair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 22;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break; 
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+
+      }
+if timer > 1 {
+after_image(4.2,c_red,0.25)
+}
+
+
+if timer = 2 {
+sound_play(attack_snd1);
+sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4,attack_voice4))
+  create_hitbox(0.5, 345+-150*facing, 4,3, 5, 2, cutfk1, obj_spark_slash3, 1, 1.7 ,-15, 15, self.id, 2, 1);
+  create_hitbox2(0.5, 345+-150*facing, 4,3, 5, 2, cutfk1, obj_spark_slash3, 1, 1.7 ,20, 15, self.id, 2, 1);
+}
+if timer = 6 {
+
+  create_hitbox(0.5, 28+124*facing, 4,3, 5, 2, cutfk1, obj_spark_slash3, 1.5, 1.7 ,10, 5, self.id, 2, 1);
+}
+if timer = 8 {
+
+  create_hitbox(0.5, 83+14*facing, 3,2, 5, 2, cutfk1, obj_spark_slash3, 1.5, 1.7 ,10, 5, self.id, 4, 1);
+  create_hitbox2(2, 128+-76*facing, 3,2.5, 5, 2, cutfk1, obj_spark_slash3, 1.5, 1.7 ,40, -5, self.id, 4, 1);
+}
+if timer = 10 {
+
+  create_hitbox(5, 128+-76*facing, 2,5, 5, 18, cutfk3, obj_spark_slash3, 1, 1 ,60, -25, self.id, 2, 1);
+	hitbox.hit_stun = 20
+}
+
+if hitbox.hit > 0 && timer > 12{ //Mugen Combos
+interrupt = 1;
+}
+
+
+	
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=22; }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+

@@ -1,0 +1,51 @@
+if cantuse1 > 0 {break;}
+if state_type = "shielding" || state_type = "stand" {
+if runtimer <= 0 {
+        image_speed = 0;
+        timer = 0;
+        time = 24;
+}
+else if runtimer > 0 {
+        image_speed = 0;
+        timer = -5;
+        time = 22;
+}
+        state_type = "attack";
+        attack_type = "grab";
+        sprite_index = grab_sprite;
+        image_index=0;
+        timer_speed=1;
+}
+if timer < time {
+            state_type = "attack";
+			hspeed *= 0.55;
+    switch ( timer )
+      { 
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+                
+        }
+if timer = 8 {
+  sound_play(attack_snd3);
+  sound_play(attack_snd1);
+  create_hitbox(4, 30+facing*100, 2, 0, 4, 2, cutfk1,obj_spark_slash3, 2.9, 1.5, 50, 18, self.id, 12, 1);
+}
+if timer = 16 {
+sound_play(attack_snd1);
+  create_hitbox(4, 177+-174*facing, 6, 1, 4, 4, cutfk4,obj_spark_slash3, 2.9, 1.5, 50, 18, self.id, 12, 1);
+}
+		
+		}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    runtimer = 0;
+    timer = 0;
+    time =-1;
+		cantuse1 = 30
+    }
+        

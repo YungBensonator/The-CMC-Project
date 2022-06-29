@@ -1,0 +1,56 @@
+if cantbair>0 {break;}
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "bair";
+        image_speed = 0;
+        sprite_index = bair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 22;
+        timer_speed=1;
+        vspeed -= 3;
+}
+if timer < time {
+			
+	switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 14: image_index = 3; break;
+	case 18: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 22: image_index = 6; break;
+	case 24: image_index = 7; break;
+      }
+if timer > 1 {
+after_image(3.8,c_red,0.25)
+}
+
+//if timer = 6 { ( was broken asf)
+  //sound_play(attack_sound1);
+  //create_hitbox(1, 100+-20*facing, 6,1.1, 2.3, 2, slash2, obj_spark_slash3, 1, 1.7 ,-4, 8, self.id, 2, 1);
+//}
+if timer = 12 {
+sound_play(attack_snd2);
+sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4,attack_voice4))
+  create_hitbox(3, 100+-20*facing, 6,1.2, 2.6, 6.5, cutfk4, obj_spark_slash3, 2.1, 1.7 ,-30, -6, self.id, 6, 1);
+}
+
+if hitbox.hit > 0 && timer > 5{
+  vspeed -= 0.75*size;
+}
+
+if timer = 21 {cantbair = 10} //------  (60 = 2 seconds, 90 = 3 seconds)
+
+    }  
+//why are you here- yeah ik this shit broken asf	
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
