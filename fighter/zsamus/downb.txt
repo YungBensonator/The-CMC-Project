@@ -279,7 +279,8 @@ if ( ( state_type = "stand" || state_type = "run" || state_type = "crouch" || st
     air_move = 0;
 	target = -99
 	target1 = -99
-		has_hit = 0;
+	has_hit = 0;
+	temp = 0 
   }
 
 if ( timer < time )
@@ -357,7 +358,7 @@ if ( timer < time )
       }
     if ( timer >= 8 )
 	{
-	hspeed = size * (2.5-facing*4.5);	
+	hspeed = size * (3.5-facing*6.5);	
 	}
     if ( timer = 12 )
 	{
@@ -397,9 +398,12 @@ burry1 = create_hitbox(14,angle_correct(270),6.7,3.7,14,10,kick3,obj_spark_hit4,
 
 if timer > 17 && timer < 54 && !instance_exists(instaburry) && target < 0{
 instaburry = create_homing_bubble (  0.8,0.8,4,6, self.id , 4 );}
-
-
-if  target >-1 && timer < 54{
+    if ( temp = 1 )
+      {
+if ( target > 0 && target != self.id )
+target1 = target;
+if ( target1 > 0 )
+{
 target1 = target
 image_speed = 0
 timer = 70
@@ -410,7 +414,7 @@ y = target1.y-20
  create_hitbox_impaler(9,angle_correct(90),6,3,14,18,kick3,obj_spark_hit4,0.8,0.8,4,6,self.id,14,4);
 if (instance_exists(hitbox)) {with (hitbox) {instance_destroy();}}
 }
-
+}
 if timer = 78{
 
 		 create_hitbox(13,angle_correct(40),3.5,8.7,14,10,kick3,obj_spark_hit4,0.5,0.5,-1,10,self.id,35,2);
@@ -557,7 +561,28 @@ vspeed= 6
         vspeed = -6;
 	  }
 /////////////////////////////////////////////////////////////////////////////////
-	
+	if ( air<max_jumps-1 && movejump )
+	  {
+	    if ( moveright )
+		facing = 0;
+	    if ( moveleft )
+		facing = 1;
+	    state_type = "jump";
+	    attack_type = "none";
+	    timer = 0;
+	    time = -1;
+	    sound_play(downb_sound);
+	    sprite_index = mid_jump_sprite;
+	    image_speed = 0.2;
+	    image_index = 0;
+	    hspeed = 0;
+	    vspeed = -mid_jump_speed;
+	    if ( moveright )
+		hspeed = 4.5*size;
+	    if ( moveleft )
+		hspeed = -4.5*size;
+	    exit;
+	  }
 
 
 

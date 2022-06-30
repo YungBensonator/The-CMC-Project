@@ -9,8 +9,7 @@ if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
     image_speed = 0;
     image_index = 0;
     temp = 0; //used for charging
-    if instance_exists(proj)
-    timer = time;
+
   }
 
 if ( timer < time )
@@ -34,6 +33,13 @@ if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
  		 }	  
 	  
 	  
+if timer >= 1
+{
+if instance_exists(pa1)
+  {
+  with (instaburry) instance_destroy();
+  }
+}
 	  
 if timer = 1
     sound_play(chargenew);
@@ -49,9 +55,9 @@ if timer = 1
 	timer = 100;
 	time = 138;
 	sound_play(b_shoot_sound);
-	create_projectile(4,40+facing*100,3,1,7,6,shock2,obj_spark_stun,0.8+temp/250,0.8+temp/250,12,20,self.id,55+temp/2,char_custom1);
-	proj.stun_scalar = temp/25;
-	proj.hitlag_frames = max(6,temp/2)
+	pa1=create_projectile(4,40+facing*100,3,1,7,6,shock2,obj_spark_stun,0.8+temp/250,0.8+temp/250,12,20,self.id,55+temp/2,char_custom1);
+	pa1.stun_scalar = temp/25;
+	pa1.hitlag_frames = max(6,temp/2)
       }
  
 	if timer >= 115 && ai {
