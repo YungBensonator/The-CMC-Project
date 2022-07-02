@@ -1,0 +1,38 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "uthrow";
+image_speed = 0.12;
+sprite_index = uthrow_sprite;
+image_index=0;
+timer = 0;
+time = 43;
+timer_speed=1;
+target.depth = depth-1;
+target.timer_speed = 0;
+target.alarm[0] = 35
+}
+if timer < time {
+	if ( timer >= 0 && timer <= 3 )
+	{
+	target.x = x + -16 * size * (1-facing*2);
+	target.y = y;
+	}
+	
+	if timer = 17 {
+	target.x = x
+	}
+    if timer = 18 {
+        sound_play(zknuckle_voice);
+        create_hitbox(5,55+facing*70,6.7,3,4,1,-1,-1,0.9,0.9,0,22,self.id,1,5);
+	hitbox.di = 0;
+    }
+   
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

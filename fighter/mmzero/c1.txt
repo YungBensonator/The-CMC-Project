@@ -1,0 +1,91 @@
+moving_object = 0;
+absorb2 = 1;
+priority = 4;
+
+ignore_physics = 1
+if movetemp = 1 {
+if ( timer <= 1 && hit = 0 )
+  {
+    sprite_index = keepmain.sboomerang_sprite;
+    if ( speed = 0 )
+	hspeed = 5.75 - attacker.facing * 11.5;
+    image_speed = 1;
+    visible = 1;
+    if ( attacker.moveup )
+	vspeed = -1.7;
+    else
+    if ( attacker.movedown )
+	vspeed = 1.7;
+    if ( hspeed > 0 )
+	facing = 0;
+    else
+	facing = 1;
+  }
+hspeed -= 0.175 - facing * 0.35;
+
+if ( returning )
+  {
+    dir = 130+facing*-80
+    if ( attacker.y - 16 < y + vspeed && vspeed > -3 )
+	vspeed -= 0.25;
+    if ( attacker.y - 16 > y + vspeed && vspeed < 3 )
+	vspeed += 0.25;
+    if ( place_meeting(x,y,attacker) )
+      {
+	if ( attacker.air = 0 && attacker.attack_type = "none" && attacker.state_type = "stand" || attacker.state_type = "run" || attacker.state_type = "crouch" )
+	  {
+	    attacker.state_type = "land";
+		if facing = 0 {
+		attacker.facing = 0
+		}
+		else {
+		attacker.facing = 1
+		}
+	    attacker.timer = 0;
+	    attacker.time = 10;
+		attacker.speed = 0
+		attacker.sprite_index = attacker.sideb_sprite;
+	    attacker.image_speed = 0;
+	    attacker.image_index = 7;
+	  }
+	sound_play(keepmain.sideb_sound2);
+	keepmain.sboomerang = 0;
+	instance_destroy();
+      }
+  }
+if ( instance_exists(attacker) && timer <= 199 )
+    sound_play(keepmain.sideb_sound);
+if ( !returning && ( abs(hspeed) < 0.5 || ( ( next_to_rwall || next_to_lwall ) && hit = 0 ) ) )
+  {
+    hspeed = 0;
+    returning = 1;
+    timer = 2;
+  }
+if ( is_on_floor(self) && vspeed > 0 )
+    vspeed = vspeed
+if ( hit > 0 && returning < 2 )
+  {
+    returning = 2;
+    timer = 2;
+    time = 233;
+    hspeed = 0;
+  }
+if ( ( x < obj_game_control.death_l || x > obj_game_control.death_r || y < obj_game_control.death_u || y > obj_game_control.death_d ) || timer >= 256 )
+  {
+    keepmain.sboomerang = 0;
+    instance_destroy();
+  }
+if place_meeting(x,y,attack_box) && returning < 2 {
+	pooper = instance_nearest(x,y,attack_box)
+	if pooper.id != attacker.id {
+        sound_play(clash1)
+        instance_create(x,y,obj_shield_spark)
+        part_particles_create(psys_front,x,y,ptype_clash,11 );
+		}
+    hspeed = 0;
+    returning = 2;
+    timer = 2;
+    time = 233;
+}
+}
+

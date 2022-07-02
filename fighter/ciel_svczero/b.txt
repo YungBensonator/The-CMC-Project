@@ -1,0 +1,325 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+		if air = 0 
+		{
+		sprite_index = b_sprite;
+		groundbcheck = 1;
+		hspeed = 0;
+		}
+		else
+		sprite_index = airb_sprite;
+        time = 34
+		image_speed = 0;
+		image_index = 0;
+        timer = 0
+		specialpresscheck = 0;
+		bustershotvoiceplay = 0;
+		specialreleasecheck = 0;
+		chargemode = 0;
+		if !ai || (ai and (obj_training.ai_type = 6))
+		special = 1;
+		if ai and (obj_training.ai_type != 6)
+		special = choose(0,1)
+}
+
+if ( timer < time )
+    {
+
+if sprite_index = b_sprite
+{
+switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 11: image_index = 4; break;
+	case 26: image_index = 5; break;
+	case 31: image_index = 6; break;
+		}
+}
+
+if sprite_index = airb_sprite
+{
+switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 11: image_index = 4; break;
+	case 26: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 32: image_index = 7; break;
+		}
+}
+	
+	if timer = 6
+	{
+		sound_play(bustershot_sound);
+		if bustershotvoiceplay = 0
+		{
+		sound_play(bustershot_voice); bustershotvoiceplay = 1;
+		}
+		
+		if sprite_index = b_sprite
+		{
+		bustershot =
+		create_projectile(2, 361, 3, 0, 5, 1, zero_bullethit, obj_spark_hit3, .4, .4, abs(place_x(85)), -place_y(28), self.id, 90, char_custom1);
+		bustershot.sprite_index = bprojlemon_sprite
+		bustershot.image_speed = 0;
+		bustershot.identifier = "pellet"
+		}
+		
+		if sprite_index = airb_sprite
+		{
+		bustershot =
+		create_projectile(2, 361, 3, 0, 5, 1, zero_bullethit, obj_spark_hit3, .4, .4, abs(place_x(105)), -place_y(27), self.id, 90, char_custom1);
+		bustershot.sprite_index = bprojlemon_sprite
+		bustershot.image_speed = 0;
+		bustershot.identifier = "pellet"
+		}
+	}
+	
+	if timer < 32 and !special {specialreleasecheck = 1;}
+	
+	if timer >= 8 and timer < 25 and special and specialreleasecheck = 1
+	{
+	specialpresscheck = 1;
+	}
+	
+	if timer = 25 and specialpresscheck = 1
+	{
+	timer = 5; specialpresscheck = 0; specialreleasecheck = 0;
+	}
+	  
+	if sprite_index = airb_sprite and air = 0 {
+        sprite_index = b_sprite; }
+	  
+	if sprite_index = b_sprite and air = 1 {
+        sprite_index = airb_sprite; }
+		
+		
+//CHARGING START
+		
+	if timer = 32 and special and specialreleasecheck = 0
+	{
+		timer = 100
+		time = 202
+		if air = 0
+		sprite_index = stand_sprite;
+		else
+		{
+			sprite_index = fall_sprite;
+			air_move = 1;
+		}
+		chargemode = 1;
+		image_index = 0;
+		image_speed = .2;
+		
+		if ai and (obj_training.ai_type != 6)
+		{moveleft = 0; moveright = 0; movejump = 0;}
+		
+		bcharge = create_spark ( 0 , 20 , bgreencharge_sprite , .33 , .4*(1-facing*2) , .4 );
+		bcharge.image_index = 0;
+		bcharge.loop = 999;
+		bcharge.snap = self.id;
+	}
+	
+//CHARGING STATE
+
+	if timer > 99 and timer < 202 and chargemode = 1
+	{
+		if (timer mod 20 = 0)
+		{
+			sound_play(bcharging_sound);
+		}
+		
+		if ai and (obj_training.ai_type != 6)
+		{moveleft = 0; moveright = 0; movejump = 0; special = choose(0,1)}
+		
+		switch (timer)
+		{
+			case 100: chargecounter = 1; break;
+			case 120: chargecounter = 2; break;
+			case 140: chargecounter = 3; break;
+			case 160: chargecounter = 4; break;
+		}
+		
+		if moveright and !moveleft
+		{
+			if air = 0
+			{
+			sprite_index = walk_sprite;
+			hspeed = 2.5;
+			facing = 0;
+			image_speed = .25
+			}
+			else
+			{			
+			sprite_index = fall_sprite;
+			image_speed = .2
+			}
+		}
+		
+		if moveleft and !moveright
+		{
+			if air = 0
+			{
+			sprite_index = walk_sprite;
+			hspeed = -2.5;
+			facing = 1;
+			image_speed = .25
+			}
+			else
+			{			
+			sprite_index = fall_sprite;
+			image_speed = .2
+			}
+		}
+		
+		if !moveright and !moveleft
+		{
+		if air = 0
+		{sprite_index = stand_sprite;
+		hspeed = 0;}
+		else
+		sprite_index = fall_sprite;
+		image_speed = .2
+		}
+		
+		if air = 0 and movejump and sprite_index != fall_sprite
+		{
+		vspeed = -7;
+		sprite_index = fall_sprite;
+		image_speed = .2
+		movejump = 0;
+		sound_play(jump_sound);
+		jumpgfx1 = instance_create(x-10+facing*20,y,obj_dust_effect);
+		jumpgfx1.image_xscale = .1*(1-facing*2);
+		jumpgfx1.image_yscale = .05;
+		jumpgfx2 = instance_create(x+10-facing*20,y,obj_dust_effect);
+		jumpgfx2.image_xscale = -.1*(1-facing*2);
+		jumpgfx2.image_yscale = .05;
+		}
+		
+		if air = 1
+		{air_move = 1;}
+		
+		if timer = 180
+		bcharge.sprite_index = byellowcharge_sprite
+		
+		if timer = 200 and special
+		timer = 181;
+		
+		if bcharge.sprite_index = bgreencharge_sprite && !special
+		{
+			time = 244;
+			timer = 210
+			if air = 0
+			sprite_index = b_sprite;
+			else
+			sprite_index = airb_sprite;
+			image_speed = 0;
+			image_index = 0;
+			hspeed = 0;
+			with (bcharge) {instance_destroy()}
+		}
+		else		
+		if bcharge.sprite_index = byellowcharge_sprite && !special
+		{
+			timer = 300
+			time = 378;
+			sprite_index = bfullcharge_sprite;
+			image_speed = 0;
+			image_index = 0;
+			hspeed = 0;
+			with (bcharge) {instance_destroy()}
+		}
+	}
+
+//GREEN CHARGE SHOT
+switch ( timer )
+      {
+	case 212: image_index = 1; break;
+	case 214: image_index = 2; break;
+	case 216: image_index = 3; break;
+	case 221: image_index = 4; break;
+	case 236: image_index = 5; break;
+	case 241: image_index = 6; break;
+		}
+		
+if timer = 216
+	{
+		sound_play(bustershot_sound);
+		sound_play(bustershot_voice);
+		
+		bustershot =
+		create_projectile(7+chargecounter, angle_correct(20), 5+(chargecounter/10), 6+(chargecounter/10), 14+(chargecounter*2), 7+(chargecounter), magic2, obj_spark_special2, .4, .4, abs(place_x(100)), -place_y(28), self.id, 60, char_custom1);
+		bustershot.sprite_index = bprojgreen_sprite
+		bustershot.image_speed = 0.5;
+		bustershot.identifier = "greenchargeshot"
+	}
+
+//FULL CHARGE SHOT
+switch ( timer )
+      {
+	case 305: image_index = 1; break;
+	case 308: image_index = 2; break;
+	case 325: image_index = 3; break;
+	case 326: image_index = 4; break;
+	case 328: image_index = 5; break;
+	case 358: image_index = 6; break;
+	case 368: image_index = 7; break;
+	case 373: image_index = 8; break;
+		}
+		
+if timer > 300 and timer < time and air != 0
+{
+	gravity_lock = 1;
+	hspeed = 0;
+	vspeed = 0;
+	air_move = 0;
+}
+
+if timer = 305
+	{
+		sound_play(bustershotfull_voice);
+	}
+
+if timer = 326
+	{
+		sound_play(bustershotfull_sound);
+		screen_shake(8,8);
+		
+		bustershot =
+		create_projectile(16, angle_correct(20), 6, 7.5, 32, 16, magic3, obj_spark_special3, .4, .4, abs(place_x(85)), -place_y(28), self.id, 30, char_custom1);
+		bustershot.sprite_index = bprojfullcharge_sprite
+		bustershot.image_speed = 1;
+		bustershot.identifier = "fullchargeshot"
+	}
+
+}
+  
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+	
+    if air > 0
+	{
+	state_type = "jump";
+	jump_sprite = jump_sprite2;
+	mid_jump_sprite = jump_sprite2;
+	sprite_index = jump_sprite2;
+	image_index = 2
+    timer = 1;
+	}
+    else
+	{   state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+}
+    time = -1;
+}

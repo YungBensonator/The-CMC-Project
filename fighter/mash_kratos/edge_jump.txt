@@ -1,0 +1,59 @@
+if ( state_type == "edge" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "edge_jump";
+  sprite_index = edge_sprite;
+  image_index = 0;
+  image_speed = 0;
+  if ( percent < 100 )
+        timer = 0;
+        else {
+        timer = -5; }
+  time = 45;
+  timer_speed = 1;
+  intangible = 1;
+  }
+
+if ( timer = -5 )
+{
+instance_create(x-size,y+size,obj_spark_effect);
+}
+
+//This handles the "climb" movement itself before the roll/attack/jump portion of the script starts. You can mostly leave this alone unless you want to improve it. Or remove if you use an actual edge climb animation.
+switch ( timer )
+	{
+	case 4: shakex=-8*size*(1-facing*2); shakey=15*size; break;
+	case 6: shakey=12*size; break;
+	case 8: shakex=-6*size*(1-facing*2); shakey=8*size; break;
+	case 10: shakex=-4*size*(1-facing*2); shakey=4*size; break;
+	case 12: shakex=0*size*(1-facing*2); shakey=0*size; break;
+	case 14: shakex=0*size*(1-facing*2); shakey=0*size; break;
+	}
+
+//The animation portion.
+switch ( timer )
+	{
+	case 4: sprite_index = jump_sprite; image_index=0; break;
+	case 14: sprite_index = crouch_sprite; image_index=0; break;
+	}
+
+//The Jump itself, this marks the end of the edge jump. Jump height is affected by fighter jump height and gravity. Alter the jump height if you wish.
+    if ( timer == 16 )
+	{
+	state_type = "jump";
+	sound_play(jump_sound);
+	hspeed = 2 * (1-facing*2) * size;
+	vspeed = -6 * size;
+	}
+    if ( timer == 15 )
+	intangible = 0;
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+	{
+	intangible = 0;
+    attack_type = "none";
+    state_type = "jump";
+    timer = 0;
+    time = -1;
+	}

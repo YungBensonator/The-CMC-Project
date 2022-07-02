@@ -1,0 +1,67 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+	attacking = 0;
+    special = 0;
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 38;
+    timer_speed=1;
+}
+        if timer < time {
+		state_type = "air_attack"
+		   switch ( timer )
+      {
+	case 4: image_index = 0; break;
+	case 8: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 14: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 18: image_index = 5; break;
+	case 20: image_index = 6; break;
+	case 22: image_index = 7; break;
+	
+	
+
+
+      }
+	  
+	  if timer = 14 {
+	      create_hitbox ( 12 , 85+facing*10 , 7.0, 6.7 , 20 , 10 , slash1 , obj_spark_slash3 , 1.16 , 1.99 , 17.60 , 20.85 , self.id , 8 ,3  );
+		  sound_play(saber2_voice);
+		  }
+		  
+		  if timer = 18 {
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 17.85
+    hitbox.hitbox_y = size * 21.25
+    hitbox.image_xscale = size * 0.97
+    hitbox.image_yscale = size * 0.60
+	}
+	
+	if timer >= 14 and timer < 19 {
+	vspeed = -6.5
+	hspeed = 2-facing*4
+	}
+
+	  
+	  
+	  
+}	  
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

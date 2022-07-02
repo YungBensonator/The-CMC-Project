@@ -1,0 +1,189 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = finalsmashsummon_sprite;
+        image_index=0;
+        timer = 1;
+        time = 119;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		
+	sound_play(finalsmashuse_sound1);
+	sound_play(finalsmashuse_sound2);
+		
+        spark = instance_create ( 0 , 0 , obj_camerazoom );
+        spark.camera_l = x - 5;
+        spark.camera_r = x + 5;
+        spark.camera_u = y - 5 - actual_height;
+        spark.camera_d = y + 5;
+        spark.camera_boundary_zoom = 80;
+        spark.alarm[0] = 51;
+
+        duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 51;
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+
+switch ( timer )
+    {
+	case 51: image_index = 1; break;
+	case 53: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 55: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 57: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 59: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 61: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 63: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 65: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 67: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 69: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 71: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 73: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 75: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 77: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 79: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 81: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 83: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 85: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 87: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 89: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 91: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 93: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 95: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 97: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 99: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 101: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 103: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 105: image_index = 1; finalsmashsummonsaber.image_index = 0; break;
+	case 107: image_index = 2; finalsmashsummonsaber.image_index = 1; break;
+	case 109: image_index = 3; finalsmashsummonsaber.image_index = 2; break;
+	case 111: sprite_index = finalsmashsummon2_sprite; image_index = 0; with (finalsmashsummonsaber) {instance_destroy()} break;
+	case 115: image_index = 1; break;
+	
+	case 204: image_index = 1; break;
+	case 208: image_index = 2; break;
+	case 218: image_index = 3; break;
+	case 224: image_index = 4; break;
+	case 234: image_index = 5; break;
+	
+	case 351: sprite_index = finalsmashsummon2_sprite; image_index = 0; with (finalsmashsummonsaber) {instance_destroy()} break;
+	case 355: image_index = 1; break;
+    }
+	
+	if timer = 1 {blackbgeffect = create_spark ( 0 , 0 , blackbg_sprite , 0 , 100, 100);
+				 blackbgeffect.depth = depth+1;
+				 blackbgeffect.image_alpha = 0;
+				 
+				finalsmashvfx = create_spark ( -abs(place_x(35)) , -place_y(39) , finalsmashsummonvfx_sprite , .5 , .2*(1-facing*2), .2);
+				finalsmashvfx.depth = depth-1;
+				finalsmashvfx.loop = 0;
+				 
+				finalsmashvfx2 = create_spark ( -abs(place_x(35)) , -place_y(39) , finalsmashsummonvfx2_sprite , .5 , .2*(1-facing*2), .2);
+				finalsmashvfx2.depth = finalsmashvfx.depth-1;
+				finalsmashvfx2.loop = 0;}
+	
+	if timer >= 2 && timer <= 22 {blackbgeffect.image_alpha+=.05;}
+
+		if timer = 51
+		{
+		finalsmashsummonsaber = create_spark ( abs(place_x(90)) , -place_y(31) , finalsmashsummonsaber_sprite , 0 , .4*(1-facing*2) , .4 );
+		finalsmashsummonsaber.image_index = 0;
+		finalsmashsummonsaber.loop = 0;
+		finalsmashsummonsaber.snap = self.id;
+		finalsmashsummonsaber.number = -number;
+		
+		sound_play(cyberelfsummon_sound);
+		elfknight = create_projectile(1,angle_correct(0),1,0,-1,4,punch2,obj_spark_hit3,.4,.4,30,0,self.id,58,char_custom4);
+		elfknight.sprite_index = finalsmashknight_entry_sprite
+		elfknight.identifier = "knightelf"
+		elfknight.image_speed = .33;
+		elfknight.zero = self.id;
+		elfknight.hit_stun = 999;
+		}
+	
+	if (timer >= 108 && timer <= 118) or (timer >= 348 && timer < time) {blackbgeffect.image_alpha-=.1;}
+	
+	if timer = 204
+	{
+        spark = instance_create ( 0 , 0 , obj_camerazoom );
+        spark.camera_l = target.x - 20;
+        spark.camera_r = target.x + 20;
+        spark.camera_u = target.y - 20 - target.actual_height;
+        spark.camera_d = target.y + 20;
+        spark.camera_boundary_zoom = 80;
+        spark.alarm[0] = 150;
+
+        duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 100;
+	}
+	
+	if timer = 218
+	{
+		sound_play(cyberelfsummon_sound);
+		elfpaladin = create_projectile(1,angle_correct(0),1,0,-1,4,punch2,obj_spark_hit3,.4,.4,15,0,self.id,200,char_custom4);
+		elfpaladin.sprite_index = finalsmashpaladin_entry_sprite
+		elfpaladin.identifier = "paladinelf"
+		elfpaladin.image_speed = 0;
+		elfpaladin.zero = self.id;
+		elfpaladin.hit = 2;
+		elfpaladin.x = elfknight.x - 40+facing*80;
+	}
+}
+	
+	
+/*if timer > 0 && timer < 71 {
+								target.x = x + 12 * size * (1-facing*2);
+								target.y = y;
+								target.timer_speed = 0;
+								target.speed = 0;}
+	
+if timer > 30 && timer < 72 {target.depth = dthrowtoplayer2.depth+1; target.image_alpha = 0; intangible = 1;}*/
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	}
+	*/
+
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	with (blackbgeffect) {instance_destroy();}
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

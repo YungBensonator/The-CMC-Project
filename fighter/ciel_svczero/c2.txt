@@ -1,0 +1,56 @@
+if timer = 1
+{
+visible = 1;
+priority = 4
+moving_object = 0
+speed = 7
+direction = angle_correct(0)
+image_angle = 0
+
+deccelerate = 1;
+accelerate = 0;
+homeback = 0;
+
+hittotal = 2;
+}
+
+if speed > 0 and deccelerate = 1
+{
+speed-=.2;
+}
+
+if speed = 0 and deccelerate = 1
+{accelerate = 1; homeback = 1; deccelerate = 0;}
+
+if accelerate = 1 and homeback = 1
+{
+if speed < 9
+{speed+=.25;}
+
+direction = point_direction(x,y,zero.x,zero.y-zero.actual_height * .75)
+
+if collision_rectangle(x-1,y-1,x+1, y+1, zero, false, false)
+	{
+	if ( zero.air = 0 && zero.attack_type = "none" && (zero.state_type = "stand" || zero.state_type = "run" || zero.state_type = "crouch") )
+	  {
+	    zero.state_type = "attack";
+		if facing = 0 {
+		zero.facing = 0
+		}
+		else {
+		zero.facing = 1
+		}
+	    zero.timer = 0;
+	    zero.time = 11;
+		zero.speed = 0
+		zero.sprite_index = zero.sideb2_sprite;
+	    zero.image_speed = 0.25;
+	    zero.image_index = 0;
+	  }
+	sound_play(zero.boomeranggrab_sound);
+	instance_destroy();
+	}
+}
+
+if hit = 1
+{time = 240}
