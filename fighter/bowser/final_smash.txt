@@ -1,0 +1,75 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  timer = 0;
+  time = 60;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  sound_play_pitch ( explode_big , .1 );
+  }
+  
+speed = 0;
+gravity_lock = 1;
+  
+if ( timer < 20 )
+  {
+  image_blend = merge_color ( c_white , c_black , timer * 0.05 );
+  alarm[7] = 2;
+  }
+if ( timer >= 20 && timer < 40 )
+  {
+  image_blend = c_black;
+  alarm[7] = 2;
+  }
+if ( timer == 30 )
+  {
+  create_hitbox ( 17 , 362 , 9 , 0 , 90 , 10 , kick3 , obj_spark_hit4 , 3 , 4 , 0 , 48 , self.id , 5 , 6 );
+  hitbox.image_xscale = 3;
+  hitbox.image_yscale = 4;
+  hitbox.hitbox_x = 0;
+  hitbox.hitbox_y = 48;
+  sound_play_pitch ( explode_big , .34 );
+  screen_shake ( 2 , -50 );
+  instance_create ( 0 , 0 , obj_flashscreen );
+  giga_bowser = 1000;
+  giga_palette = 1;
+  if ( file_exists ( temp_directory + "/fighter/bowser/PALETTEGIGA.png" ) )
+    sprite_replace ( global.spr_palette[number-1,slot] , temp_directory + "/fighter/bowser/PALETTEGIGA.png" , 1 , 0 , 0 , 0 , 1 );
+    else
+    sprite_replace ( global.spr_palette[number-1,slot] , "fighter/bowser/PALETTEGIGA.png" , 1 , 0 , 0 , 0 , 1 );
+  d3d_conf_tex_set( conf_pswap[number-1,slot] , 1 , sprite_get_texture ( global.spr_palette[number-1,slot] , 0 ) , tex_int_nearest , tex_wrap_clamp , tex_wrap_clamp );
+  spark = instance_create ( x , y - 32 , obj_fighter_death );
+  spark.image_xscale = 2.5;
+  spark.image_yscale = 2.5;
+  spark = instance_create ( x , y - 64 , obj_fighter_death );
+  spark.image_xscale = 3;
+  spark.image_yscale = 3;
+  spark = instance_create ( x , y - 96 , obj_fighter_death );
+  spark.image_xscale = 2;
+  spark.image_yscale = 2;
+  }
+if ( timer >= 40 )
+  {
+  image_blend = merge_color ( c_black , c_white , ( timer - 40 ) * 0.05 );
+  alarm[7] = 2;
+  }
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

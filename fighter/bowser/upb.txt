@@ -1,0 +1,145 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "upb";
+  if air = 0 {
+	time = 90;
+	}
+  else {
+	time = 49;
+	}
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0.3;
+  timer_speed = 1;
+  dair_fallspeed = 0;
+  }
+if timer < time {
+	state_type = "air_attack";
+	if timer > 25 {
+			force_edge_grab = 1;
+			}
+	if timer = 1 && air = 0 {
+		grounded = 1;
+		}
+	else {
+		grounded = 0;
+		}
+	if timer = 4 {
+		sound_play(upb_sound);
+		}
+	if air = 0 {
+		if timer < 54 {
+		if ( timer mod 5 == 0 )
+			{
+			duster = instance_create ( x , y , obj_dust_effect );
+			duster.image_xscale *= 0.6 + random ( 0.1 );
+			duster.image_yscale *= 0.6 + random ( 0.1 );
+			duster.facing = facing;
+			if ( timer mod 10 == 0 )
+				duster.facing = !duster.facing;
+			}
+		}
+                if timer >=1 && timer <= 42 {
+		if moveright = 1 {
+			hspeed += 1;
+			}
+		if moveleft = 1 {
+			hspeed -= 1;
+			}
+		if hspeed > 3.2 {
+			hspeed = 3.2;
+			}
+		if hspeed < -3.2 {
+			hspeed = -3.2;
+			}
+                      }
+                if timer >= 38 && timer <= 68 {
+                        hspeed *= 0.85
+                        image_speed = 0.35
+                        }
+                if timer = 69 {
+                        hspeed = 0
+                        image_speed = 0
+                        image_index = 22
+                        }
+		if timer = 1 {
+			intangible = 1;
+			}
+		if timer = 8 {
+			intangible = 0;
+			}
+		if timer = 5 {
+			create_hitbox(1,180 - facing*180,4,0,12,5,slash2,obj_spark_slash1,1.5,1.2,5,15,self.id,49,3);
+			}
+		if timer = 8 {
+			hitbox.dir = 362;
+			hitbox.damage = 8;
+			hitbox.bkb = 2.5;
+			hitbox.kbg = 2.7;
+			}
+		if ( timer = 8 || timer = 14 || timer = 22 || timer = 28 || timer = 34 || timer = 40 || timer = 46 ) {
+			create_hitbox(1,180 - facing*180,1,0.5,3,2,slash2,obj_spark_slash2,1.5,1.2,5,15,self.id,2,2);
+			hitbox.di = 1;
+			}
+                if timer = 50 {
+                        create_hitbox(4,60+facing*60,7.1,4,6,5,slash3,obj_spark_slash3,1.5,1.2,5,15,self.id,4,3);
+                        }
+		}
+	if air > 0 {
+		air_move = 0;
+		intangible = 0;
+		if timer = 1 {
+			image_speed = 0.6;
+			}
+		if moveright = 1 {
+			hspeed += 0.5;
+			}
+		if moveleft = 1 {
+			hspeed -= 0.5;
+			}
+		if hspeed > 2.0 {
+			hspeed = 2.0;
+			}
+		if hspeed < -2.0 {
+			hspeed = -2.0;
+			}
+		if grounded = 1 {
+			vspeed = 2.5 * size;
+			}
+		if timer = 5 {
+			image_speed = 0.35;
+			create_hitbox(10,90,5.5,3.5,11,5,slash2,obj_spark_slash2,1.5,1.15,5,15,self.id,4,1);
+			}
+		if timer = 8 || timer = 11 || timer = 14 || timer = 17 || timer = 20 || timer = 23 || timer = 26 || timer = 29 || timer = 32 || timer = 35 || timer = 38 || timer = 41 || timer = 44 {
+			create_hitbox(3,120-facing*60,3.5,0.7,5,4,slash2,obj_spark_slash1,1.5,1.15,5,17,self.id,2,1);
+			}
+		if timer = 1 {
+			vspeed = -2.85 * size;
+			}
+		if timer > 2 && timer < 18 {
+			vspeed -= 0.4 * size;
+			}
+		if vspeed > 1.2 * size {
+			vspeed = 1.2 * size;
+			}
+		}
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
