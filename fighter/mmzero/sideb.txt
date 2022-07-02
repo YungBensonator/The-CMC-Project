@@ -1,0 +1,94 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand"  {
+        state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+		sprite_index = sidebair_sprite
+		image_index=0
+        timer = 0
+		time = 35
+		
+}
+
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 50: image_index = 0; break;
+	case 54: image_index = 1; break;
+	case 58: image_index = 2; break;
+	case 62: image_index = 3; break;
+	case 66: image_index = 4; break;
+	case 70: image_index = 5; break;
+	case 74: image_index = 6; break;
+	case 78: image_index = 7; break;
+	
+
+	
+
+      }
+  	if timer = 12 && !instance_exists(sboom) {
+        sound_play(swingsnd2);
+	    sboom = create_projectile(5, 50+facing*80, 4.5, 3.3, 12, 5, slash1, obj_spark_slash2, 1.0, 1.0, 30, 22, other.id, 180, sboomerang);
+        sboom.sprite_index = sboomerang_sprite;
+		sboom.hit_stun = 7
+		sboom.movetemp = 1 
+      	
+}
+
+
+
+
+
+if timer = 1 and air = 0 {
+sprite_index = sideb_sprite
+time = 90
+timer = 50
+hspeed = 0
+}
+
+if timer = 58 and air = 0 && !instance_exists(sboom) {
+        sound_play(swingsnd2);
+	    sboom = create_projectile(5, 50+facing*80, 4.5, 3.3, 12, 5, slash1, obj_spark_slash2, 1.0, 1.0, 30, 15, other.id, 180, sboomerang);
+        sboom.sprite_index = sboomerang_sprite;
+		sboom.hit_stun = 7
+      	sboom.movetemp = 1 
+
+}
+
+	
+	if air = 0 {
+	if sprite_index = sidebair_sprite {
+		sprite_index = sideb_sprite
+	}
+	}
+	  
+	  
+    if air = 0{
+        air_move = 0
+        state_type = "attack"
+	if sprite_index = airb_sprite
+		sprite_index = b_sprite;
+	}
+	
+
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+

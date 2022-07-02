@@ -1,0 +1,196 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 180;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		sound_play(fs_voice);
+		sound_play(fs_sound);
+  freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 59;
+  freezer.dontpause = bladeofolympus;
+  freezer.dontpause = olympusfx;
+  freezer.dontpause = self.id;
+  
+  zoom = instance_create ( 0 , 0 , obj_camerazoom );
+  zoom.camera_l = x - 8;
+  zoom.camera_r = x + 8;
+  zoom.camera_u = y - 4 - actual_height;
+  zoom.camera_d = y + 4;
+  zoom.camera_boundary_zoom = 120;
+  zoom.alarm[0] = 59;
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+
+switch ( timer )
+    {
+	case 60: image_index = 1; break;
+	case 75: image_index = 2; break;
+	case 79: image_index = 3; break;
+	case 82: image_index = 4; break;
+	case 132: image_index = 5; break;
+	case 152: image_index = 6; break;
+	case 162: image_index = 7; break;
+	case 168: image_index = 8; break;
+	case 174: image_index = 9; break;
+    }
+
+if timer = 10
+{
+    bladeofolympus = create_spark ( -abs(place_x(7)), -place_y(4) , bladeofolympus_sprite , 0 , .4*(1-facing*2) , .4 );
+	bladeofolympus.alarm[0] = 200
+	bladeofolympus.owner = self.id;
+	bladeofolympus.keepmain = self.keepmain;
+	bladeofolympus.script = char_custom10;
+}
+
+switch ( timer )
+    {
+	case 12: bladeofolympus.image_index = 1; break;
+	case 14: bladeofolympus.image_index = 2; break;
+	case 16: bladeofolympus.image_index = 3; break;
+	case 18: bladeofolympus.image_index = 4; break;
+	case 20: bladeofolympus.image_index = 5; break;
+	case 22: bladeofolympus.image_index = 6; break;
+	case 24: bladeofolympus.image_index = 7; break;
+	case 26: bladeofolympus.image_index = 8; break;
+	case 28: bladeofolympus.image_index = 9; break;
+	case 30: bladeofolympus.image_index = 10; break;
+	case 32: bladeofolympus.image_index = 11; break;
+	case 60: bladeofolympus.image_index = 12; break;
+	case 75: bladeofolympus.image_index = 13; break;
+	case 79: bladeofolympus.image_index = 14; break;
+	case 82: bladeofolympus.image_index = 15; break;
+	case 132: bladeofolympus.image_index = 16; break;
+	case 137: bladeofolympus.image_index = 17; break;
+	case 142: bladeofolympus.image_index = 18; break;
+	case 147: bladeofolympus.image_index = 19; break;
+	case 152: bladeofolympus.image_index = 20; break;
+	case 157: bladeofolympus.image_index = 21; break;
+	case 162: bladeofolympus.image_index = 22; break;
+	case 167: bladeofolympus.image_index = 23; break;
+	case 172: bladeofolympus.image_index = 24; break;
+	case 177: bladeofolympus.image_index = 25; break;
+    }
+
+if timer = 32
+{
+    olympusfx = create_blur(x,y,self.id);
+    olympusfx.sprite_index = olympus_fx;
+    olympusfx.image_index = 0;
+    olympusfx.image_speed = 0;
+    olympusfx.image_xscale = 0.4 * (1-facing*2) * size;
+    olympusfx.image_yscale = 0.4 * size;
+    olympusfx.x = x + place_x(62);
+	olympusfx.y = y + place_y(14);
+}
+
+if timer = 60
+{
+if instance_exists(bladeofolympus)
+{
+with (bladeofolympus) {instance_destroy();}
+}
+    bladeofolympus = create_spark ( -abs(place_x(18)), -place_y(4) , bladeofolympus_sprite , 0 , .4*(1-facing*2) , .4 );
+	bladeofolympus.alarm[0] = 200
+	bladeofolympus.owner = self.id;
+	bladeofolympus.image_index = 12;
+	bladeofolympus.keepmain = self.keepmain;
+	bladeofolympus.script = char_custom10;
+}
+
+switch (timer)
+{
+	case 60: olympusfx.image_index = 1; break;
+	case 75: olympusfx.image_index = 2; sound_play(fs_sound2); sound_play(fs_sound2); sound_play(fs_sound2); break;
+	case 79: olympusfx.image_index = 3; break;
+	case 82: olympusfx.image_index = 4; break;
+	case 85: olympusfx.image_index = 5; break;
+	case 90: olympusfx.image_index = 6; break;
+	case 95: olympusfx.image_index = 7; break;
+	case 100: olympusfx.image_index = 8; break;
+}
+
+
+if timer = 75
+{
+    create_hitbox ( 20 , angle_correct(25) , 7.5 , 8.9 , -1 , 19 , slash3 , bloodupright3_hs , 2.80 , 1.58 , -10.40 , 47.60 , self.id , 15 , 7 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright3_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupleft3_hs
+	}
+	
+	screen_shake(-7,-7)
+	
+    duster = instance_create(x, y , obj_dust_effect);
+    duster.image_alpha = 0.75;
+    duster.image_xscale *= 1.55 * (1-facing*2) * size;
+    duster.image_yscale *= 1.55 * size;
+    duster.depth = -16;
+}
+
+if timer = 79
+{
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 40.40
+    hitbox.hitbox_y = size * 28.80
+    hitbox.image_xscale = size * 3.21
+    hitbox.image_yscale = size * 1.70
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0
+	
+	olympusslash = create_projectile( 20 , angle_correct(25) , 6 , 7.5 , 49 , 19 , slash3 , bloodupright3_hs , 0.35, 0.35, abs(place_x(135)), -place_y(120), self.id, 50, char_custom3);
+    olympusslash.sprite_index = olympusslash_fx
+	olympusslash.image_speed = 0;
+	olympusslash.owner = self.id;
+	olympusslash.sethspeed = 15 * (1-facing*2) * size;
+	olympusslash.keepmain = self.keepmain;
+	
+	
+}
+
+if timer = 85
+{
+    olympusfx.x = x + place_x(74);
+	olympusfx.y = y + place_y(20);
+}
+
+
+if timer >= 100 and timer <= 110
+{
+olympusfx.image_alpha -= 0.1;
+}
+
+if timer >= 152 and timer <= 162
+{
+bladeofolympus.image_alpha -= 0.1;
+olympusfx.image_alpha -= 0.1;
+}
+	  
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

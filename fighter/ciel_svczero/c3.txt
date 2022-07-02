@@ -1,0 +1,337 @@
+//Initialization
+if timer = 1
+{
+	visible =1
+	priority = 5;
+}
+
+//ELF WITH A HELMET WOOOOOOOO
+if identifier = "helmetelf"
+{
+	if timer = 1
+	{
+	hspeed = 1*(1-facing*2);
+	vspeed = 0;
+	time = 300;
+	alarm[0] = 300;
+	fallingcounter = 0;
+	moving_object = 1;
+	}
+
+	if timer = 3 && !on_floor
+	{
+	fallingcounter+=1; timer = 2; 
+	}
+
+	if sprite_index = zero.helmetelf_entry_sprite and image_index >= 4
+	{
+	image_index = 3;
+	}
+
+	//Add .125 to the vspeed until it reaches 3 as long as you're not touching the ground
+	if timer < 4 && (!on_floor || !on_platform) && vspeed < 3
+	{
+		vspeed+=.125;
+	}
+
+	//If you land on the floor, reset the falling counter, stop momentum and go into standing sprite.
+	if timer < 4 && (on_floor || on_platform)
+	{
+		fallingcounter = 0;
+		vspeed = 0;
+		hspeed = 0;
+		timer = 4;
+		sprite_index = zero.helmetelf_land_sprite;
+		image_index = 0;
+		image_speed = 0;
+	}
+
+	switch (timer)
+	{
+	case 9: image_index = 1; break;
+	case 14: sprite_index = zero.helmetelf_idle_sprite; image_speed = .2; image_index = 0; break;
+	}
+
+	if timer = 14
+	{
+	hspeed = 1*(1-facing*2);
+	}
+
+	if timer >= 14 && timer < 260 && (!on_floor && !on_platform)
+	{
+		fallingcounter+=1; 
+		
+		if vspeed < 2.5
+		{
+		vspeed+=.125;
+		}
+		sprite_index = zero.helmetelf_entry_sprite; image_speed = .33; image_index = 3;
+	}
+
+	if timer >= 14 && timer < 260 && (on_floor || on_platform)
+	{
+		vspeed = 0;
+		fallingcounter = 0;
+		sprite_index = zero.helmetelf_idle_sprite; image_speed = .2;
+	}
+
+
+	//If you go past the searching frames or falling counter reaches 120, Elf leaves.
+	if timer = 250 || (timer < 260 && fallingcounter = 90)
+	{
+		timer = 260;
+		speed = 0;
+	}
+
+	//Leaving initialization
+	if timer = 260
+	{
+		image_speed = 0;
+		sprite_index = zero.helmetelf_leave_sprite;
+		image_index = 0;
+		speed = 0;
+	}
+
+	if timer >= 260 && timer < time
+	{
+	if timer = 261 {
+					sound_play(zero.cyberelfsummon_sound);
+					}
+		switch (timer)
+		{
+		case 263: image_index = 1; break;
+		case 266: image_index = 2; break;
+		case 269: timer = time
+				image_alpha=0;
+				instance_destroy(); break;
+		}
+	}
+
+	if hit = 1
+	{
+	hspeed = -1*(1-facing*2);
+	vspeed = -1;
+	timer = 400
+	time = 500;
+	sprite_index =  zero.helmetelf_hit_sprite;
+	image_speed = 0;
+	hit = 2;
+	}
+
+	if timer >= 400 && timer < time
+	{
+		switch (timer)
+		{
+		case 405: image_index = 1; break;
+		case 410: image_index = 2; break;
+		case 415: image_index = 3; break;
+		case 420: image_index = 4; break;
+		case 425: timer = 260;
+					time = 300;
+					speed = 0;
+					sprite_index = zero.helmetelf_leave_sprite;
+					image_index = 0; break;
+		}
+		
+		if vspeed < 2.5
+		{
+		vspeed+=.125;
+		}
+		
+		if timer >= 405 and (on_floor || on_platform)
+		{
+			speed = 0;
+		}
+	}
+
+	
+	
+}
+
+//BEE ELF WOOOOOOOO
+if identifier = "beeelf"
+{
+	
+	if timer = 1
+	{
+	speed = 0;
+	time = 9999;
+	alarm[0] = 9999;
+	shotdirection = 0;
+	shotcount = 0;
+	moving_object = 0;
+	}
+	
+	if sprite_index = zero.beeelf_entry_sprite and image_index >= 3 and timer < 20
+	{
+		timer = 20; image_speed = 0; image_index = 3;
+	}
+	
+	if timer >= 20 and timer < 140
+	{
+		facing = zero.facing;
+		image_xscale = .4*(1-facing*2);
+
+		elfthing_timer += 1;
+
+		if ( elfthing_timer >= 10 )
+		  {
+			  visual_timer+=1
+			  
+			  switch(visual_timer)
+			  {
+				case 0: elfthing_yo=4;break
+				case 1:elfthing_yo = 6;break
+				case 2:elfthing_yo = 8;break
+				case 3: elfthing_yo = 10;break
+				case 4: elfthing_yo=12;break
+				case 5: elfthing_yo=10;break
+				case 6: elfthing_yo=8;break;
+				case 7: elfthing_yo=6;break;
+				case 8:elfthing_yo=4;break;
+				case 9:elfthing_yo=2;break;
+			  }
+			  elfthing_timer = 0;
+		  }
+		  
+		  if visual_timer>10
+			{visual_timer=-1}
+			
+			x = ( x * 20 + zero.x - (30 * ( 1 - facing * 2 ) )*size ) / 21;
+			y = ( y * 20 + zero.y - (25 + elfthing_yo )*size) / 21;
+	}
+	
+	if timer = 140
+	{
+		if shotcount = 4
+		{
+			timer = 9980;
+			sprite_index = zero.beeelf_leave_sprite
+			image_index = 0;
+			
+					sound_play(zero.cyberelfsummon_sound);
+					
+		}
+		else
+		{
+		if shotdirection = 0
+		sprite_index = zero.beeelf_action_sprite;
+		if shotdirection = 1
+		sprite_index = zero.beeelf_action2_sprite;
+		image_index = 0;
+		}
+	}
+	
+	switch (timer)
+	{
+		case 144: image_index = 1; break;
+		case 148: image_index = 2; break;
+		case 152: image_index = 3; break;
+		case 156: image_index = 4; break;
+		case 160: image_index = 5; break;
+	}
+	
+	if timer = 152 and shotdirection = 0
+	{
+		stinger =
+		create_projectile(4, angle_correct(25), 4,6, 8, 4, shock2, obj_spark_shock, .4*(1-facing*2), .4, abs(place_x(29)), -place_y(24), attacker.id, 120, no_script);
+		stinger.speed = 3;
+		stinger.hit = 0;
+		stinger.direction = angle_correct(0)
+		stinger.sprite_index = zero.beeshot_sprite;
+		stinger.image_speed = 0;
+	}
+	
+	if timer = 152 and shotdirection = 1
+	{
+		stinger =
+		create_projectile(4, angle_correct(60), 4,6, 8, 4, shock2, obj_spark_shock, .4*(1-facing*2), .4, abs(place_x(27)), -place_y(22), attacker.id, 120, no_script);
+		stinger.speed = 3;
+		stinger.hit = 0;
+		stinger.direction = angle_correct(20)
+		stinger.sprite_index = zero.beeshot2_sprite;
+		stinger.image_speed = 0;
+	}
+	
+	if timer = 164
+	{
+		if shotcount < 4
+		{
+		timer = 20;
+		image_speed = 0;
+		image_index = 3;
+		sprite_index = zero.beeelf_entry_sprite;
+		switch (shotdirection)
+			{
+			case 0: shotdirection = 1; break;
+			case 1: shotdirection = 0; break;
+			}
+		shotcount +=1;
+		}
+	}
+	
+	if timer >= 9980 and timer < time
+	{
+		switch (timer)
+		{
+		case 9983: image_index = 1; break;
+		case 9986: image_index = 2; break;
+		case 9989: image_alpha = 0; instance_destroy(); break;
+		}
+	}
+}
+
+//FISH ELF GO POOOOOOOOOF
+
+if identifier = "fishelf"
+{
+	if timer = 1
+	{
+	speed = 0;
+	moving_object = 0;
+	}
+	
+	if sprite_index = zero.fishelf_entry_sprite
+	{
+		if image_index >= 3
+		{
+		image_speed = .25;
+		}
+		
+		if image_index >= 6
+		{
+		image_index = 3;
+		}
+	}
+	
+	if hit = 1
+	{
+	timer = 350;
+	time = 400; alarm[0] = 400;
+	sprite_index = zero.fishelf_action_sprite;
+	image_index = 0;
+	image_speed = .25;
+	hit = 2;
+	}
+	
+	if timer = 390
+	{timer = 280}
+	
+	if timer = 281
+	{
+	sprite_index = zero.fishelf_leave_sprite;
+	image_index = 0;
+	image_speed = 0;
+	sound_play(zero.cyberelfsummon_sound);
+	}
+	
+	if timer >= 281 and timer < 300
+	{
+		switch (timer)
+		{
+		case 284: image_index = 1; break;
+		case 287: image_index = 2; break;
+		case 290: image_alpha = 0; instance_destroy(); break;
+		}
+	}
+}

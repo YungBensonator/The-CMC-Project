@@ -1,0 +1,103 @@
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=-0;
+        timer = 0;
+        time = 24;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 7: image_index = 2; break;
+	case 8: image_index = 3;	dairstab.image_index = 1; break;
+	case 9: image_index = 4;	dairstab.image_index = 2; break;
+	case 13: image_index = 5;	dairstab.image_index = 3; break;
+	case 14: image_index = 6;	dairstab.image_index = 4; break;
+	case 15: image_index = 7;	dairstab.image_index = 5; break;
+	case 17: image_index = 8; with (dairstab) {instance_destroy()} break;
+	case 20: image_index = 9; break;
+	case 22: image_index = 10; break;
+      }
+	  
+	if timer = 7
+	{
+	dairstab = create_spark ( abs(place_x(91)) , -place_y(106) , dairstab_sprite , 0 , .4*(1-facing*2) , .4 );
+	dairstab.image_index = 0;
+	dairstab.loop = 0;
+	dairstab.snap = self.id;
+	dairstab.number = -number;
+	
+	sound_play(dashattack_voice);
+	sound_play(bairswing_sound);
+	}
+	  
+	if timer = 9
+	{
+	
+	sound_play(utilt_swing);
+	
+	create_hitbox(4,angle_correct(5),5,6.25,8,4,zero_rodhitsound,obj_spark_slash2,1,.4,abs(place_x(61)),-place_y(74),self.id,10,3);
+	hitbox.image_angle = angle_correct(315)
+	create_hitbox2(6,angle_correct(335),6,6.5,14,7,zero_slashhitsound2,obj_spark_slash4,.6,.6,abs(place_x(95)),-place_y(110),self.id,5,3);
+	hitbox2.hitbox_nospikesnd = 1;
+	}
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	}
+	*/
+	  
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=9; }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+   
+    if air > 0
+	{
+	state_type = "jump";
+	jump_sprite = jump_sprite2;
+	mid_jump_sprite = jump_sprite2;
+	sprite_index = jump_sprite2;
+	image_index = 2
+    timer = 1;
+	}
+    else
+       { state_type = "stand";
+		timer = 0;
+		}
+    attack_type = "none";
+    time = -1;
+  }		
+        

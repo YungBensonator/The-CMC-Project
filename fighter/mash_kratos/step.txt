@@ -1,0 +1,74 @@
+if sprite_index = stand_sprite and state_type != "respawn"
+{
+image_speed = 1/7
+}
+
+no_hurtbox = 1;
+
+///////////////////////////////////Crouch thing for crouching and getting up from crouch visually
+if ( state_type = "crouch" ){
+    
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer = min(6,timer) //replace the 12 by the number the last case you add below has
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 2 ){
+    image_index = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 3 ){
+    image_index = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 6 ){
+    image_index = 2;
+} //copypaste this conditional for every frame your crouch animation has, changing the number of the crouchgetuptimer from 12 to whichever corresponds to that frame's switch case number, and the image_index number to the frame number itself.
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch thing for crouching and getting up from crouch visually
+							
+							
+if ( state_type = "jump" && sprite_index == jump_sprite )
+{
+  if ( timer = 0 )
+    image_index = 0; //start out the jump from the jump sprite's very first frame instead of any later ones
+  if ( vspeed < -2 && image_index >= 0 )
+    image_index = 0; //stay in that first frame as long as you're going up (you can change the image index in the condition to a later one to loop back)
+  if ( vspeed >= -2 && image_index < 1 )
+    image_index = 1; //the moment you start falling, continue the animation
+}
+							
+						
+if ( state_type == "flinch" || state_type == "air_flinch" || state_type == "tumble" || state_type == "broken_bounce" || state_type == "sleep_fall" )
+{
+  if ( ( state_type == "air_flinch" || state_type == "tumble" ) && sprite_index == launched_sprite )
+  {
+    sprite_angle = direction + angle_correct ( -135 );
+  }
+}
+
+if attack_type != "downb"
+grav = .35

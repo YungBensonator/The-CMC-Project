@@ -1,0 +1,173 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+}
+
+if ( timer < time )
+  {
+  state_type = "attack";
+  
+	  switch (timer) { 
+	case 4: image_index = 1; break; 
+	case 7: image_index = 2; break; 
+	case 9: image_index = 3; break; 
+	case 10: image_index = 4; break; 
+	case 12: image_index = 5; sound_play(chain_sound); break; 
+	case 14: image_index = 6; break; 
+	case 16: image_index = 7; break; 
+	case 26: image_index = 8; break; 
+	case 29: image_index = 9; break; 
+	case 32: image_index = 10; break; 
+	case 36: image_index = 11; break; 
+	case 40: image_index = 12; break; 
+}
+	  
+	  
+	  if timer = 10
+	  {
+    stiltfx = create_blur(x,y,self.id);
+    stiltfx.sprite_index = stilt_fx;
+    stiltfx.image_index = 0;
+    stiltfx.image_speed = 0;
+    stiltfx.image_xscale = 0.4 * (1-facing*2) * size;
+    stiltfx.image_yscale = 0.4 * size;
+    stiltfx.depth = depth - 1;
+    stiltfx.x = x + place_x(205);
+	stiltfx.y = y + place_y(38);
+	  }
+	  
+	 if timer = 12
+{
+    create_hitbox ( 4 , angle_correct(20) , 3 , 0 , 20 , 7 , slash2 , bloodupright2_hs , 1.87 , 0.42 , 38.40 , 29.20 , self.id , 3 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright2_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupleft2_hs
+	}
+	
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.5*size;
+	duster.image_yscale *= 0.5*size;
+	duster.facing = facing; 
+}	 
+	  
+
+switch ( timer )
+  {
+  case 12: stiltfx.image_index = 1; break;
+  case 14: stiltfx.image_index = 2; break;
+  case 16: stiltfx.image_index = 3; break;
+  }  	  
+	  
+if timer = 18
+{
+with (stiltfx) {instance_destroy();}
+}	  
+	if (timer >= 14 and timer < 24) and attack_success and ai
+	attacking = 1
+	
+	if (timer >= 14 and timer < 24) and attacking
+	{
+    with (stiltfx) {instance_destroy();}
+	sprite_index = stilt_sprite2;
+	image_index = 0;
+    timer = 100;
+    time = 142;
+	attacking = 0;
+	}
+	
+	if (timer >= 14 and timer < 24) and (special and ((facing and moveleft) or (!facing and moveright))) and attack_success
+	{
+    with (stiltfx) {instance_destroy();}
+	state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    char_sideb();
+	}
+	  
+	  switch (timer) { 
+	case 102: image_index = 1; break; 
+	case 104: image_index = 2; break; 
+	case 106: image_index = 3; break; 
+	case 108: image_index = 4; sound_play(chain_sound); break; 
+	case 111: image_index = 5; break; 
+	case 114: image_index = 6; break; 
+	case 124: image_index = 7; break; 
+	case 127: image_index = 8; break; 
+	case 130: image_index = 9; break; 
+	case 134: image_index = 10; break; 
+	case 138: image_index = 11; break; 
+}
+
+if timer = 104
+	  {
+    stiltfx2 = create_blur(x,y,self.id);
+    stiltfx2.sprite_index = stilt_fx2;
+    stiltfx2.image_index = 0;
+    stiltfx2.image_speed = 0;
+    stiltfx2.image_xscale = 0.4 * (1-facing*2) * size;
+    stiltfx2.image_yscale = 0.4 * size;
+    stiltfx2.depth = depth + 1;
+    stiltfx2.x = x + place_x(279);
+	stiltfx2.y = y + place_y(52);
+	  }
+	  
+	  if timer = 108
+{
+   
+   if random (2) > 1
+	{
+	play_attack_voice();
+	}
+	
+    create_hitbox ( 8 , angle_correct(20) , 5 , 6 , 35 , 9 , slash3 , bloodupright2_hs , 1.87 , 0.42 , 38.40 , 29.20 , self.id , 3 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright2_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupleft2_hs
+	}
+	
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.5*size;
+	duster.image_yscale *= 0.5*size;
+	duster.facing = facing; 
+}	 
+
+switch ( timer )
+  {
+  case 106: stiltfx2.image_index = 1; break;
+  case 108: stiltfx2.image_index = 2; break;
+  case 111: stiltfx2.image_index = 3; stiltfx2.depth = depth-1; break;
+  case 114: stiltfx2.image_index = 4; break;
+  }  	  
+	  
+if timer = 117
+{
+with (stiltfx2) {instance_destroy();}
+}
+    
+  }
+  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

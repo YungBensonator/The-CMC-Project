@@ -1,0 +1,173 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 108
+		hspeed = 0
+		special = 1
+		bowchargecounter = 0
+}
+
+if ( timer < time )
+    {
+   switch (timer) { 
+	case 2: image_index = 1; break; 
+	case 4: image_index = 2; break; 
+	case 10: image_index = 3; break; 
+	case 13: image_index = 4; break; 
+	case 16: image_index = 5; break; 
+	case 86: image_index = 6; break; 
+	case 100: image_index = 7; break; 
+	case 104: image_index = 8; break; 
+}
+
+
+	if timer = 2
+	{
+	bowvfx = create_spark ( abs(place_x(90)),-place_y(19) , bbow_sprite , 0 , .4*(1-facing*2) , .4 );
+	bowvfx.alarm[0] = 200
+	bowvfx.snap = self.id;
+	bowvfx.owner = self.id;
+	bowvfx.keepmain = self.keepmain;
+	bowvfx.script = char_custom10;
+	}
+	
+	if timer = 4
+	{
+	arrowvfx = create_spark ( abs(place_x(61)),-place_y(22) , arrowfx_sprite , 0 , .4*(1-facing*2) , .4 );
+	arrowvfx.alarm[0] = 90
+	arrowvfx.snap = self.id;
+	arrowvfx.owner = self.id;
+	arrowvfx.keepmain = self.keepmain;
+	arrowvfx.script = char_custom10;
+	}
+	
+   switch (timer) { 
+	case 4: bowvfx.image_index = 1; break; 
+	case 6: bowvfx.image_index = 2; break; 
+	case 10: bowvfx.image_index = 3; 
+			 arrowvfx.image_index = 1; break; 
+	case 12: bowvfx.image_index = 4;
+			 arrowvfx.image_index = 2; break; 
+	case 16: bowvfx.image_index = 5; 
+			 arrowvfx.image_index = 3; break; 
+	case 86: bowvfx.image_index = 6; break; 
+	}
+	
+	
+
+	if (timer >= 14 and timer < 84 ) and special = 1
+	{
+	bowchargecounter+=1
+	
+	if timer mod 10 = 0
+		{
+			smolshockwavesvfx = instance_create(x+place_x(110),y+place_y(20),obj_spark_shockwave)
+			smolshockwavesvfx.image_xscale*=.5
+			smolshockwavesvfx.image_yscale*=.5
+		}
+	}
+
+	if (timer >= 17 and timer < 84 ) and special != 1
+	{
+	timer = 85
+	}
+	
+	if timer = 86 and bowchargecounter < 70
+	{
+	with arrowvfx instance_destroy();
+	instance_create(x+place_x(110),y+place_y(20),obj_spark_shockwave)
+	
+	sound_play(arrow_sound);
+	
+	arrowproj =
+	create_projectile(3+(bowchargecounter/10), angle_correct(25), 3+(bowchargecounter/25), 3+(bowchargecounter/50), 3+(bowchargecounter/10), 3+(bowchargecounter/15), slash2, obj_spark_slash2, .4, .4, abs(place_x(100)), -place_y(20), self.id, 80, char_custom1);
+	arrowproj.sprite_index = arrowproj_sprite
+	arrowproj.image_speed = .5;	
+	arrowproj.identifier = "barrowproj"
+	arrowproj.speed = 4.5+(bowchargecounter/7);
+	arrowproj.direction = angle_correct(0)
+	arrowproj.image_angle = arrowproj.direction
+	}
+	
+
+	if timer = 86 and bowchargecounter = 70
+	{
+	bowfirevfx = create_spark ( abs(place_x(60)),-place_y(05) , bbowfx_sprite , .5 , .4*(1-facing*2) , .4 );
+	bowfirevfx.alarm[0] = 200
+	bowfirevfx.snap = self.id;
+	bowfirevfx.owner = self.id;
+	bowfirevfx.keepmain = self.keepmain;
+	bowfirevfx.script = char_custom10;
+	
+	screen_shake(4,4)
+	
+	with arrowvfx instance_destroy();
+	
+	fireshockwavevfx = instance_create(x+place_x(110),y+place_y(20),obj_spark_shockwave)
+	fireshockwavevfx.image_blend = c_orange
+	
+	sound_play(b_voice);
+	sound_play(b_sound);
+	firearrowproj =
+	create_projectile(6+(bowchargecounter/10), angle_correct(25), 5+(bowchargecounter/70), 6+(bowchargecounter/75), 25+(bowchargecounter/10), 6+(bowchargecounter/10), fire2, obj_spark_fire1, .4, .4, abs(place_x(100)), -place_y(20), self.id, 80, char_custom1);
+	firearrowproj.sprite_index = arrowproj_sprite
+	firearrowproj.image_speed = .5;	
+	firearrowproj.identifier = "bfirearrowproj"
+	firearrowproj.speed = 7+(bowchargecounter/7);
+	firearrowproj.direction = angle_correct(0)
+	firearrowproj.image_angle = firearrowproj.direction
+	}
+	
+	if timer = 100
+	with bowvfx instance_destroy()
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+  }
+  
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

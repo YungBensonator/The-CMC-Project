@@ -1,0 +1,93 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 42;
+	air_move = 0;
+	hspeed = 0;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+
+if timer < time {
+	state_type = "air_attack"
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 16: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 36: image_index = 4; break;
+	case 39: image_index = 5; break;
+      }
+		
+		
+	if timer < 16
+	{
+	gravity = 0;
+	gravity_lock = 1;
+	vspeed = 0;
+	}
+		
+	if timer = 16
+{
+    create_hitbox ( 16 , angle_correct(87) , 6.4 , 7.4, 20 , 8 , kick3 , obj_spark_hit4 , 1.2 , 1.3 , -1.60 , 33.60 , self.id , 20 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	vspeed = -12 * size;
+	
+	if random (2) > 1
+	{
+	sound_play(choose(smash_voice1,smash_voice2,smash_voice3,smash_voice4));
+	}
+
+sound_play(upb_sound);
+	
+	if air = 0
+	{
+	duster = instance_create(x,y,obj_dust_effect);
+    duster.image_xscale *= 0.8*size;
+    duster.image_yscale *= 0.8 *size;
+    duster.facing = facing;
+	
+	duster = instance_create(x,y,obj_dust_effect);
+    duster.image_xscale *= 0.8*size;
+    duster.image_yscale *= 0.8 *size;
+    duster.facing = 1-facing;
+	}
+		else
+		{
+		spark = instance_create(x*size,y*size,obj_spark_shockwave);
+		spark.image_xscale *= 0.5*size;
+		spark.image_yscale *= 0.1*size;
+		spark2 = instance_create(x*size,y*size,obj_spark_shockwave);
+		spark2.image_xscale *= 0.7*size;
+		spark2.image_yscale *= 0.2*size;
+		}
+}	
+		
+	if timer >= 16
+		{
+		force_edge_grab = 1
+		}
+	  
+	  if timer = 20
+	  {
+	   air_move = 1;
+	  }
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }
