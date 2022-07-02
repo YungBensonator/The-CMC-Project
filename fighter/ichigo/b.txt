@@ -82,7 +82,7 @@ switch ( timer )
 	proj.vspeed = 4
 	proj.orighspeed = proj.hspeed
 	proj.type = "down"
-	proj.image_blend = c_purple
+	proj.image_blend = c_black
 	
 	
 	}
@@ -101,7 +101,10 @@ switch ( timer )
 	proj.hspeed = 4-facing*8
 	proj.vspeed = -4
 	proj.orighspeed = proj.hspeed
-	proj.image_blend = c_purple
+      proj.dir = angle_correct(10)
+	proj.bkb = 6.5
+	proj.kbg = 6
+	proj.image_blend = c_black
 	
 	}
 	else{
@@ -118,7 +121,11 @@ switch ( timer )
 	proj.scale = scale
 	proj.hspeed = 6-facing*12
 	proj.orighspeed = proj.hspeed
-	proj.image_blend = c_purple
+      proj.dir = angle_correct(10)
+	proj.bkb = 6.5
+	proj.kbg = 6
+	proj.image_blend = c_black
+      proj.color = c_black
 	
 	}
 	
@@ -225,20 +232,23 @@ switch ( timer )
 	proj.image_yscale = image_yscale
 	proj.hit = 0
 	proj.di = 0.95
-	proj.hit_stun = 12;
+	proj.hit_stun = 0;
 	proj.depth = depth - 1;
     proj.size = size;
 	proj.facing=facing
 	proj.scale = scale
-	proj.hspeed = (5-facing*10)/chargetemp
+	proj.hspeed = (6-facing*12)/chargetemp
 	proj.orighspeed = proj.hspeed
+      proj.dir = 30+facing*120
+	proj.bkb = 6.5
+	proj.kbg = 5
 	}
 	if onair = 1 {
 	proj.hspeed = (6-facing*12)/chargetemp	
-	proj.dir = 30+facing*120
-	proj.bkb = 6.5
-	proj.kbg = 3
-	proj.hit_stun = 0
+	proj.dir = angle_correct(90)
+	proj.bkb = 3
+	proj.kbg = 0
+	proj.hit_stun = 12
 	proj.di = 0
 	}	
 	
@@ -256,6 +266,7 @@ switch ( timer )
 
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
+    cantb = 200
     if air > 0
         state_type = "jump";
     else
