@@ -1,0 +1,69 @@
+if identifier = "barrowproj"
+{
+
+if timer = 1
+{
+visible = 1;
+priority = 2
+moving_object = 1
+image_angle = direction+facing*180
+gravity = .2
+}
+
+image_angle = direction+facing*180
+
+if hit = 1 {
+		instance_create(x,y,obj_spark_shockwave)
+		instance_destroy()
+		}
+	
+
+if ( next_to_rwall || next_to_lwall ||on_floor || on_platform ) && hit = 0
+{
+instance_create(x,y,obj_spark_shockwave)
+instance_destroy()
+}
+
+}
+
+if identifier = "bfirearrowproj"
+{
+
+if timer = 1
+{
+visible = 1;
+priority = 2
+moving_object = 1
+image_angle = direction+facing*180
+gravity = .2
+}
+
+image_angle = direction+facing*180
+
+if hit = 1 {
+		instance_create(x,y,obj_spark_shockwave)
+		instance_destroy()
+		}
+		
+after_image(4,c_orange,.5)
+	
+if timer mod 3 = 0
+{
+	bfireparticlesvfx = instance_create(x,y,obj_spark);
+	bfireparticlesvfx.sprite_index = attacker.id.flamefx_sprite
+	bfireparticlesvfx.image_index = 0;
+	bfireparticlesvfx.image_speed = 1;
+	bfireparticlesvfx.image_xscale = .4;
+	bfireparticlesvfx.image_yscale = .4;
+	bfireparticlesvfx.depth = depth+1;
+}
+	
+
+if ( next_to_rwall || next_to_lwall ||on_floor || on_platform ) && hit = 0
+{
+	fireshockwavevfx = instance_create(x,y,obj_spark_shockwave)
+	fireshockwavevfx.image_blend = c_orange
+instance_destroy()
+}
+
+}

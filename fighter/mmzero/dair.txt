@@ -1,0 +1,88 @@
+
+if state_type = "jump" {
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0;
+        sprite_index = dair_sprite;
+        image_index=-0;
+        timer = 0;
+        time = 66;
+        timer_speed=1;
+		temp = 0;
+		landtemp = 0
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 4: image_index = 0; break;
+	case 8: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 16: image_index = 3; break;
+	case 20: image_index = 4; break;
+	case 24: image_index = 5; break;
+	case 28: image_index = 6; break;
+	case 32: image_index = 7; break;
+	case 36: image_index = 7; break;
+	case 40: image_index = 7; break;
+	case 44: image_index = 7; break;
+	case 48: image_index = 7; break;
+	case 52: image_index = 7; break;
+	case 56: image_index = 7; break;
+
+      }
+
+    if ( timer = 12 ) 
+      {
+    play_attack_voice()
+	sound_play(swingsnd2);
+	create_hitbox ( 12 , 250 , 7 , 5.9 , 20 , 11 , slash3 , obj_spark_slash4 , 0.53 , 1.10 , 2.55 , -6.80 , self.id , 44 , 4 );
+      }
+	  
+	  if timer = 24 {
+	  hitbox.dir = 60+facing*60;
+	  hitbox.bkb = 6.2;
+	  }
+	  
+	  if hitbox.hit = 1 && temp = 0 {
+      vspeed = -3.8*size;
+      temp = 1
+      }
+	  
+	  
+	  
+      
+	 
+    
+	
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = dairland_sprite;
+		image_index = 0;
+        timer=0;
+        time=14;
+		image_speed = 0.1
+		landtemp = 1
+		if landtemp = 1 && timer > 5 {
+		image_index =1
+		}
+		screen_shake ( 3 , -3 );
+		sound_play(dair_land_sound);
+		}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0 
+        state_type = "jump";
+    else{
+        state_type = "stand";
+		sprite_index = stand_sprite;
+		}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+        

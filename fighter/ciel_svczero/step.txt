@@ -1,0 +1,196 @@
+if (ai = 1) and (state_type != "attack" and state_type != "air_attack" and sprite_index != entry_sprite) and !instance_exists(obj_training) and irandom(10) > 5 {
+	
+	if distance_to_object(enemy) < 50 and (enemy.state_type = "attack" or enemy.state_type = "air_attack") and shield_hp > 30 and air = 0 and enemy.facing != facing{
+	shieldup = 1
+	//state_type = "shielding"
+	//attack_type = "none"
+    }
+	
+	if shield_hp <= 30 and state_type = "shielding"
+	state_type = "stand"
+	
+	if enemy <= -1{
+		if target <= -1
+		create_homing_bubble ( 300 ,300, 0 , 0 , self.id , 1 );
+		else
+		enemy = target
+	}
+	//char_ai();
+	
+}
+
+/////////////////Meter stuff starts here/////////////////////////////////////
+if (!instance_exists(CyberElfHUD)){
+    CyberElfHUD = instance_create ( hud_x, hud_y, obj_custom_gfx);
+	CyberElfHUD.sprite_index = cyberelfhud_sprite;
+	CyberElfHUD.image_speed = 0;
+    CyberElfHUD.step_script = hudThing_step_script;
+    CyberElfHUD.draw_script = hudThing_draw_script;
+    CyberElfHUD.owner = self.id;
+    CyberElfHUD.keepmain = self.keepmain;
+}
+
+if ( instance_exists (CyberElfHUD) )
+{
+switch (cyberelftype)
+{
+case 0: CyberElfHUD.image_index = 0; break;
+case 1: CyberElfHUD.image_index = 1; break;
+case 2: CyberElfHUD.image_index = 2; break;
+}
+CyberElfHUD.hudalpha = obj_game_control.hud_cover[number-1];
+}
+/////////////////Meter stuff ends here/////////////////////////////////////
+
+if sprite_index = stand_sprite
+{
+image_speed = 0.2;
+}
+
+if sprite_index = broken_sprite
+{
+image_speed = 0.1;
+}
+
+if sprite_index = run_sprite
+{
+after_image(3,make_color_rgb(0,255,255),0.75);
+image_speed = 0.33;
+if image_index >= 6 {image_index = 1;}
+}
+
+if sprite_index = fall_sprite
+{
+image_speed = 0.25;
+if image_index >= 2 {image_index = 0;}
+}
+
+///////////////////////////////////Crouch thing for crouching and getting up from crouch visually
+if ( state_type = "crouch" ){
+    
+    if timer < 8
+	{
+	sprite_index = crouching_sprite;
+	}
+	
+    image_speed = 0;
+    crouchgetuptimer = 4 //replace the 12 by the number the last case you add below has
+    switch (timer){
+        case 0: image_index = 0; break;
+        case 3: image_index = 1; break;
+        case 6: image_index = 2; break;
+        case 7: image_index = 3; break;
+        case 8: sprite_index = crouch_sprite;
+				image_index = 0; break;
+        case 28: image_index = 1; break;
+        case 38: image_index = 2; break;
+        case 48: image_index = 3; break;
+        case 63: image_index = 4; break;
+        case 73: image_index = 5; break;
+        case 78: image_index = 6; break;
+        case 83: image_index = 7; break;
+		case 88: image_index = 0; timer = 8; break;
+		//put as many cases as frames your crouch animation has
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouchgetup_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 4){
+    image_index = 0;
+}
+
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch thing for crouching and getting up from crouch visually
+							
+if ( state_type = "jump" && (sprite_index == jump_sprite || sprite_index = mid_jump_sprite))
+{
+	if ( timer = 0 )
+    image_index = 0; //start out the jump from the jump sprite's very first frame instead of any later ones
+	
+	if ( vspeed < -2 )
+	{
+	jump_sprite = jump_sprite1;
+	mid_jump_sprite = jump_sprite1;
+	image_speed = .5;
+	}
+
+  if ( sprite_index = jump_sprite1 && image_index >= 2 )
+    image_index = 0; //stay in that first frame as long as you're going up (you can change the image index in the condition to a later one to loop back)
+
+  if ( vspeed >= -2 && jump_sprite = jump_sprite1 )
+	{
+	jump_sprite = jump_sprite2;
+	mid_jump_sprite = jump_sprite2;
+	image_index = 0;
+	image_speed = .25;
+	} //the moment you start falling, continue the animation
+	
+  if ( sprite_index = jump_sprite2 && image_index >= 2 )
+	image_speed = .5;
+	
+  if ( sprite_index = jump_sprite2 && image_index >= 4 )
+    image_index = 2; //remove the comment thing if you want to loop the jump animation back to a previous frame when falling
+}
+
+
+if attack_type != "taunt" && instance_exists(cielcall)
+{
+	with(cielcall)
+	{
+		instance_destroy();
+	}
+}
+
+if attack_type = "none" or state_type = "air_flinch" or (state_type != "attack" and state_type != "air_attack")
+{
+	if instance_exists(jabslash1) {with (jabslash1) {instance_destroy()}}
+	if instance_exists(jabslash2) {with (jabslash2) {instance_destroy()}}
+	if instance_exists(jabslash3) {with (jabslash3) {instance_destroy()}}
+	
+	if instance_exists(stiltslash) {with (stiltslash) {instance_destroy()}}
+	if instance_exists(utiltstab) {with (utiltstab) {instance_destroy()}}
+	
+	if instance_exists(ssmashslash) {with (ssmashslash) {instance_destroy()}}
+	if instance_exists(dsmashslash) {with (dsmashslash) {instance_destroy()}}
+	if instance_exists(usmashslash) {with (usmashslash) {instance_destroy()}}
+	
+	if instance_exists(nairslash) {with (nairslash) {instance_destroy()}}
+	if instance_exists(fairslash) {with (fairslash) {instance_destroy()}}
+	if instance_exists(uairslash) {with (uairslash) {instance_destroy()}}
+	if instance_exists(bairstab) {with (bairstab) {instance_destroy()}}
+	if instance_exists(dairstab) {with (dairstab) {instance_destroy()}}
+	
+	if instance_exists(upbslash) {with (upbslash) {instance_destroy()}}
+	if instance_exists(bcharge) {with (bcharge) {instance_destroy()}}
+	if instance_exists(airdownbstab) {with (airdownbstab) {instance_destroy()}}
+	
+	if instance_exists(bthrowslash) {with (bthrowslash) {instance_destroy()}}
+}
+
+if instance_exists(zboomerang) 
+{cantusesideb = 1;}
+else
+{cantusesideb = 0;}
+
+if instance_exists(elf) and (state_type != "attack" || state_type != "air_attack")
+{cantusedownb = 1;}
+else
+{cantusedownb = 0;}
+
+if state_type != "attack" and state_type != "air_attack" {groundeddownb = 0; aerialdownbcheck = 0;}

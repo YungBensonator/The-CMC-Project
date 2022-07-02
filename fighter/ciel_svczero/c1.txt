@@ -1,0 +1,35 @@
+if timer = 1
+{
+visible = 1;
+priority = 4
+moving_object = 1
+if identifier = "pellet" {speed = 5; direction = angle_correct(0)}
+if identifier = "greenchargeshot" {speed = 8; direction = angle_correct(0)}
+if identifier = "greenchargeshotdthrow" {speed = 8; direction = angle_correct(320)}
+if identifier = "fullchargeshot" {speed = 14; direction = angle_correct(0)}
+
+image_angle = direction+facing*180
+}
+
+
+if identifier = "pellet" || identifier = "greenchargeshot" || identifier = "greenchargeshotdthrow"
+{	
+	if hit = 0 && (timer = time-2 || collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) {
+		hit=2
+			lightballgfx = instance_create(x,y,obj_spark_shockwave);
+			lightballgfx.image_blend = c_aqua;
+		sound_play(explode_small)
+			timer = time
+			image_alpha=0;
+	}
+}
+
+if (identifier = "greenchargeshot" || identifier = "greenchargeshotdthrow") and hit = 1
+{
+instance_destroy();
+}
+
+if identifier = "fullchargeshot" and hit = 1
+{time = 15}
+
+if identifier = "fullchargeshot" {if image_index >= 13 {instance_destroy();}}

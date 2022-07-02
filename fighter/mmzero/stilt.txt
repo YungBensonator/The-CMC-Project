@@ -1,0 +1,49 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 36;
+        timer_speed=1;
+}
+
+switch ( timer )
+  {
+  case 2: image_index = 0; break;
+  case 5: image_index = 2; break;
+  case 7: image_index = 5; break;
+  case 9: image_index = 12; break;
+  case 16: image_index = 13; break;
+  case 18: image_index = 14; break;
+  case 20: image_index = 15; break;
+  case 24: image_index = 16; break;
+  case 28: image_index = 17; break;
+  case 32: image_index = 18; break;
+  case 34: image_index = 19; break;
+  }
+  
+  if timer >= 4 and timer < 21 {
+  hspeed = walk_speed*0.95*(1-facing*2)
+  }
+
+        if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+            if timer = 9 {
+                create_hitbox(11,30+facing*120,6.3,3.4,15,4,slash3,obj_spark_slash3,1.5,0.65,13,19,self.id,2,3);
+				sound_play(saber_voice);
+				duster = instance_create ( x - 2 * size * ( 1 - facing * 2 ) , y , obj_dust_effect );
+				duster.image_xscale *= 0.5 -facing*1
+				duster.image_yscale *= 0.5
+                }
+				
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

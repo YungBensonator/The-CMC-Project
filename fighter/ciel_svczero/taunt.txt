@@ -1,0 +1,76 @@
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 140;
+        timer_speed=1;
+}
+state_type = "attack";
+
+switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 22: image_index = 4; break;
+	case 26: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 34: image_index = 7; break;
+	case 38: image_index = 8; break;
+	case 68: image_index = 9; break;
+	case 128: image_index = 10; break;
+	case 130: image_index = 11; break;
+	case 132: image_index = 12; break;
+	case 135: image_index = 13; break;
+      }
+	  
+	if timer = 8
+	{
+	cielcall = create_spark ( 28 , 32 , tauntciel_sprite , 0 , .4 , .4 );
+	cielcall.image_index = 0;
+	cielcall.snap = self.id;
+	}
+	
+	if timer = 18
+	{
+	sound_play(taunt_voice1)
+	}
+	
+	if timer = 68
+	{
+	sound_play(taunt_voice2)
+	}
+	
+	if instance_exists(cielcall)
+	{
+		switch(timer)
+		{
+		case 10: cielcall.image_index = 1; break;
+		case 12: cielcall.image_index = 2; break;
+		case 14: cielcall.image_index = 3; break;
+		case 22: cielcall.image_index = 4; break;
+		case 24: cielcall.image_index = 5; break;
+		case 26: cielcall.image_index = 6; break;
+		case 28: cielcall.image_index = 7; break;
+		case 30: cielcall.image_index = 8; break;
+		case 32: cielcall.image_index = 9; break;
+		case 128: cielcall.sprite_index = tauntcielleave_sprite; cielcall.image_index = 0; break;
+		case 130: cielcall.image_index = 1; break;
+		case 132: cielcall.image_index = 2; break;
+		case 134: with (cielcall) {instance_destroy()}; break;
+		}
+	}
+	
+	if timer >= 68 && timer < 127 && (moveleft || moveright || movejump || movedown) {timer = 127;}
+	  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

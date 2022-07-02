@@ -1,0 +1,70 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 53;
+        timer_speed=1;
+        charge_frame = 6;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 11: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 43: image_index = 5; break;
+	case 45: image_index = 6; break;
+	case 47: image_index = 7; break;
+	case 49: image_index = 8; break;
+	case 51: image_index = 9; break;
+      }
+	  
+	if timer = 10
+{
+   
+   if random (2) > 1
+	{
+	sound_play(choose(smash_voice,smash_voice2,smash_voice3,smash_voice4))
+	}
+	
+    dsmashfx = create_blur(x,y,self.id);
+    dsmashfx.sprite_index = dsmash_fx;
+    dsmashfx.image_index = 0;
+    dsmashfx.image_speed = 1;
+	dsmashfx.snap = self.id;
+	dsmashfx.image_angle = 270-facing*180;
+    dsmashfx.image_xscale = 0.25 * (1-facing*2) * size;
+    dsmashfx.image_yscale = 0.25 * size;
+    dsmashfx.depth = depth - 1;
+    dsmashfx.x = x + place_x(122);
+	dsmashfx.y = y + place_y(149);
+	  sound_play2(fire2)
+}	
+	  switch (timer)
+	  {
+	  case 32: dsmashfx.image_index = 26; dsmashfx.image_speed = 0.75; break
+	  }
+	  
+	  if timer = 12
+	  {
+      create_hitbox ( 12 , angle_correct(45) , 6.5 , 6 , 50 , 12 , fire3 , obj_spark_fire1 , 2.70 , 0.90 , 24.80 , 2.40 , self.id , 8 , 3 );
+	  }
+	  
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = frame_where_youre_fully_crouched;
+    timer = 0; }
+	else {state_type = "stand";
+    timer = 0;}
+    attack_type = "none";
+    time = -1;
+  }

@@ -1,0 +1,185 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "jab"
+    timer = 0;
+    time = 28;
+    sprite_index = jab1_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 8: image_index = 3;	jabslash1.image_index = 1; break;
+	case 10: image_index = 4;	jabslash1.image_index = 2; break;
+	case 12: image_index = 5;	jabslash1.image_index = 3; break;
+	case 17: image_index = 6;	jabslash1.image_index = 4; break;
+	case 22: image_index = 7;	jabslash1.image_index = 5; break;
+	case 26: image_index = 8; with (jabslash1) {instance_destroy()} break;
+	
+	case 32: image_index = 1;	jabslash2.image_index = 1; break;
+	case 34: image_index = 2;	jabslash2.image_index = 2; break;
+	case 37: image_index = 3;	jabslash2.image_index = 3; break;
+	case 40: image_index = 4;	jabslash2.image_index = 4; break;
+	case 43: image_index = 5;	jabslash2.image_index = 5; break;
+	case 47: image_index = 6; with (jabslash2) {instance_destroy()} break;
+	
+	case 62: image_index = 1;	jabslash3.image_index = 1;  break;
+	case 64: image_index = 2;	jabslash3.image_index = 2; break;
+	case 66: image_index = 3;	jabslash3.image_index = 3; break;
+	case 68: image_index = 4;	jabslash3.image_index = 4; break;
+	case 70: image_index = 5;	jabslash3.image_index = 5; break;
+	case 73: image_index = 6;	jabslash3.image_index = 6; break;
+	case 76: image_index = 7;	jabslash3.image_index = 7; break;
+	case 81: image_index = 8;	jabslash3.image_index = 8; break;
+	case 85: image_index = 9; with (jabslash3) {instance_destroy()} break;
+      }
+				
+if ((timer >= 10 && timer <= 22) || (timer >= 37 && timer <= 46)) && ai && attack_success
+{attacking = 1; attack_success = 0;}
+	  
+	if timer = 2
+	{
+	sound_play(zsaberswing1_sound);
+	sound_play(jab_voice1);
+	sound_play(normalswing1_sound);
+	}
+	  
+	if timer = 5
+	{
+	create_hitbox(3,angle_correct(0),2,0,6,1,zero_slashhitsound1,obj_spark_slash2,.8,.8,abs(place_x(90)),-place_y(32),self.id,4,3);
+	hitbox.image_angle = angle_correct(0)
+	hitbox.di = 0;
+	hitbox.sdi = 0;
+	
+	create_hitbox2(3,angle_correct(0),2,0,6,1,zero_slashhitsound1,obj_spark_slash2,1,.4,abs(place_x(38)),-place_y(10),self.id,4,3);
+	hitbox2.image_angle = angle_correct(0)
+	hitbox2.di = 0;
+	hitbox2.sdi = 0;
+	
+	jabslash1 = create_spark ( 0 , 0 , jab1slash_sprite , 0 , .4*(1-facing*2) , .4 );
+	jabslash1.image_index = 0;
+	jabslash1.snap = self.id;
+	jabslash1.number = -number;
+	jabslash1.alarm[0] = 30
+	}
+	
+	if timer >= 10 and timer < 22 and attacking
+	{
+	timer = 30;
+	time = 50;
+	sprite_index = jab2_sprite;
+	image_index = 0
+	
+	with (jabslash1) {instance_destroy()}
+	
+	jabslash2 = create_spark ( 0 , 0 , jab2slash_sprite , 0 , .4*(1-facing*2) , .4 );
+	jabslash2.image_index = 0;
+	jabslash2.snap = self.id;
+	jabslash2.number = -number;
+	
+	sound_play(zsaberswing3_sound);
+	sound_play(jab_voice2);
+	sound_play(normalswing2_sound);
+	
+	create_hitbox(4,angle_correct(0),2,0,8,1,zero_slashhitsound2,obj_spark_slash3,.8,1,abs(place_x(90)),-place_y(50),self.id,8,3);
+	hitbox.image_angle = angle_correct(0)
+	hitbox.di = 0;
+	hitbox.sdi = 0;
+	
+	create_hitbox2(4,angle_correct(0),2,0,8,1,zero_slashhitsound2,obj_spark_slash3,.8,.3,abs(place_x(70)),-place_y(5),self.id,8,3);
+	hitbox2.image_angle = angle_correct(0)
+	hitbox2.di = 0;
+	hitbox2.sdi = 0;
+	
+	attacking = 0;
+	}
+	
+	if timer >= 37 and timer < 46 and attacking
+	{
+	timer = 60;
+	time = 90;
+	sprite_index = jab3_sprite;
+	image_index = 0
+	
+	jabslash3 = create_spark ( 0 , 0 , jab3slash_sprite , 0 , .4*(1-facing*2) , .4 );
+	jabslash3.image_index = 0;
+	jabslash3.snap = self.id;
+	jabslash3.number = -number;
+	
+	with (jabslash2) {instance_destroy()}
+	
+	attacking = 0;
+	
+	}
+	
+	if timer = 64
+	{
+	
+	sound_play(zsaberswing5_sound);
+	sound_play(jab_voice3);
+	sound_play(normalswing3_sound);
+	
+	create_hitbox(5,angle_correct(75),5,6.25,10,5,zero_slashhitsound3,obj_spark_slash4,.3,.8,-abs(place_x(6)),-place_y(35),self.id,4,3);
+	hitbox.image_angle = angle_correct(0)
+	
+	create_hitbox2(5,angle_correct(5),5,6.25,10,5,zero_slashhitsound3,obj_spark_slash4,1,.4,abs(place_x(45)),-place_y(-10),self.id,4,3);
+	hitbox2.image_angle = angle_correct(0)
+	
+	create_hitbox3(5,angle_correct(15),5,6.25,10,5,zero_slashhitsound3,obj_spark_slash4,.6,.8,abs(place_x(98)),-place_y(15),self.id,10,3);
+	hitbox3.image_angle = angle_correct(0)
+	}
+	
+	if timer = 66
+	{
+	hitbox.hitbox_x = -abs(place_x(10))*(1-facing*2)
+	hitbox.hitbox_y = -place_y(26)
+	hitbox.image_xscale = .4*(1-facing*2)
+	
+	hitbox2.hitbox_x = abs(place_x(55))*(1-facing*2)
+	hitbox2.hitbox_y = -place_y(-10)
+	hitbox2.image_xscale = 1.2*(1-facing*2)
+	hitbox2.image_yscale = .4
+	
+	hitbox3.hitbox_x = abs(place_x(120))*(1-facing*2)
+	hitbox3.hitbox_y = -place_y(45)
+	hitbox3.image_xscale = .8*(1-facing*2)
+	hitbox3.image_yscale = 1.1
+	}
+	
+	
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	}
+	*/
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

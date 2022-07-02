@@ -1,0 +1,270 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" {
+    special = 1
+    attacking = 0
+    timer = 0
+	if air = 0 {
+	hspeed = 0
+    slide = 0
+	}
+    attack_type = "b"
+    state_type = "air_attack"
+    image_speed = 0
+	if air !=0{
+    sprite_index = airb_sprite}
+	else
+	{sprite_index = b_sprite}
+    image_index=0
+    time = 85
+    timer_speed=1
+    temp = 0
+	temp2 = 0
+	switchtemp = 0;
+}    
+if timer = 0 || timer = 1 || timer = 2 || timer = 3 && switchtemp != 1{
+	if moveright = 1 {
+	facing = 0;
+	switchtemp = 1
+	}
+    if moveleft = 1{
+	facing = 1;
+	switchtemp = 1
+	}
+	}
+	if timer < 14 && special = 0 {
+	temp = 1
+	}
+	if timer = 14 && temp = 1 {
+	timer = 100;
+	time = 131;
+	}
+	if timer > 14 && timer < 85
+	air_move = 0
+	if timer = 15 {
+	sound_play(b_charge_sound);
+	sound_play(charge_voice);
+	}
+    if timer > 15 && timer < 100 && shieldup = 1 && air = 0 {
+        sound_stop(charge_sound)
+        flashing = true
+        alarm[7] = 3
+        state_type = "shielding"
+        timer = 0
+        time = -1
+        attack_type = "none"
+        shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+        shield.p1 = self.id;
+        }
+	if timer = 15 || timer = 25 || timer = 35 || timer = 45 || timer = 55 || timer = 65 {
+	    spark = instance_create(x,y,obj_spark);
+	    spark.sprite_index = charge_spark_sprite;
+	    spark.image_speed = 0.5;
+	    spark.image_xscale = size*1;
+	    spark.image_yscale = size*1;
+	    spark.x = x-10+facing*5;
+	    spark.y = y-15;
+	    spark.snap = self.id
+		
+	    }
+		
+		
+		if timer = 15 || timer = 35 || timer = 55 {
+		sound_play(bustercharge_voice);
+		}
+
+	if sprite_index = b_charged_sprite && image_index = 6
+		image_speed = 0.1;
+	if timer = 75 {
+		time = 95;
+                sound_play(shoot_sound3);
+                sound_play(chargeshot_voice);
+				image_index = 1;
+				if (meter = 0) {
+                create_projectile(15,35+facing*110,6,6.85,10,3,shock2,obj_spark_shock2,1,1,15,25,self.id,80,weaponshot)
+                proj . priority += 4
+                proj . shield_stun = 10
+                proj . hspeed = 7 - facing * 14;
+                proj . sprite_index = bfull_sprite;
+                proj.hitlag_diff = 4
+                instance_create(x+5-facing*16,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster.image_xscale *= size*1.1
+                duster.image_yscale *= size*1.1
+				
+				}
+				if (meter = 1 && !instance_exists(boomerang) ) {
+                create_projectile(18,362,5,6.65,10,3,slash3,obj_spark_slash2,1,1,6,28,self.id,80,boomerangcutter)
+				boomerang = proj;
+                proj . shield_stun = 10
+                proj . sprite_index = keepmain.boomerangcutter2_sprite
+                proj . hitlag_diff = 4
+				proj . priority += 4
+                instance_create(x+5-facing*16,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster.image_xscale *= size*1.1
+                duster.image_yscale *= size*1.1
+				//sprite_index = ssmash_sprite;
+				//image_index = 0;
+	            		//image_speed = 0.65;
+				}
+				if (meter = 2) {
+                create_projectile(2,45+facing*110,6,6.5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . hspeed = 5 - facing * 10;
+                proj . sprite_index = swf1_sprite;
+                proj.hitlag_diff = 4
+                create_projectile(2,150 + facing * (180 - 300),6,6.5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . hspeed = -5 + facing * 10;
+                proj . sprite_index = swf5_sprite;
+                proj.hitlag_diff = 4
+				create_projectile(2,45+facing*110,6,6.5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . vspeed = -5;
+                proj . sprite_index = swf7_sprite;
+                proj.hitlag_diff = 4
+				create_projectile(2,45+facing*110,6,6.5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . vspeed = 5;
+                proj . sprite_index = swf3_sprite;
+                proj.hitlag_diff = 4
+				create_projectile(2,45+facing*110,5,5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . hspeed = 5 - facing * 10;
+				proj . vspeed = 5;
+                proj . sprite_index = swf2_sprite;
+                proj.hitlag_diff = 4
+				create_projectile(2,150 + facing * (180 - 300),6,6.5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . hspeed = -5 + facing * 10;
+				proj . vspeed = 5;
+                proj . sprite_index = swf4_sprite;
+                proj.hitlag_diff = 4
+				create_projectile(2,150 + facing * (180 - 300),6,6.5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . hspeed = -5 + facing * 10;
+				proj . vspeed = -5;
+                proj . sprite_index = swf6_sprite;
+                proj.hitlag_diff = 4
+				create_projectile(2,45+facing*110,6,6.5,5,2,slash3,obj_spark_slash2,1,1,10,25,self.id,80,weaponshot)
+                proj.shield_stun = 3
+                proj . hspeed = 5 - facing * 10;
+				proj . vspeed = -5;
+                proj . sprite_index = swf8_sprite;
+                proj.hitlag_diff = 4
+                instance_create(x+5-facing*16,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster.image_xscale *= size*1.1
+                duster.image_yscale *= size*1.1
+				//sprite_index = ssmash_sprite;
+				//image_index = 0;
+	            		//image_speed = 0.65;
+				}
+				if (meter = 3 && !instance_exists(proj)) {
+                create_projectile(15,35+facing*110,6,6.5,10,3,shock2,obj_spark_shock2,1,1,-10,40,self.id,80,lightningweb2)
+				proj . priority += 4
+                proj . shield_stun = 10
+                proj . hspeed = 5 - facing * 10;
+                proj . sprite_index = lightningweb2_sprite;
+				proj.stun_base = 10;
+                proj.stun_scalar = 2;
+                proj.shake_ampl = 0.2;
+                proj.hitlag_diff = 4
+                instance_create(x+5-facing*16,y-17,obj_spark_effect)
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster.image_xscale *= size*1.1
+                duster.image_yscale *= size*1.1
+                		//sprite_index = ssmash_sprite;
+				//image_index = 0;
+	            		//image_speed = 0.65;
+				}
+		}
+    if timer = 102 {
+if (meter = 0) {
+        sound_play(shoot_sound);
+        create_projectile(2,34+facing*112,5.5,0,4,4,kick1,obj_spark_hit1,1,1,15,25,self.id,60,char_custom7)
+        proj.sprite_index = lemon_sprite
+		proj.hspeed = 7 - facing * 14;
+        proj.shield_stun = .75
+		image_index = 1;
+	    image_speed = 0;
+		}
+if (meter = 1 && !instance_exists(boomerang) ) {
+        sound_play(shoot_sound);
+        create_projectile(5,362,3,4,4,4,slash2,obj_spark_slash1,1,1,10,30,self.id,60,boomerangcutter)
+		boomerang = proj;
+        proj.sprite_index = keepmain.boomerangcutter_sprite
+        proj.shield_stun = .75
+		image_index = 1;
+	    image_speed = 0;
+		}
+if (meter = 2 && !instance_exists(proj)) {
+        sound_play(shoot_sound);
+        wheel = proj;
+        create_projectile(1,45 + facing * (180 - 90),3,3,6,5,slash2,obj_spark_slash1,1,1,10,15,self.id,30,spinwheel)
+		proj . priority += 2
+        proj.sprite_index = spinwheel_sprite
+        proj.shield_stun = .75
+		image_index = 1;
+	    image_speed = 0;
+		}
+if (meter = 3 && !instance_exists(proj)) {
+        sound_play(shoot_sound);
+        proj = create_projectile(3,15 + facing * 150,5,0,8,5,shock2,obj_spark_shock2,0.8,0.8,10,37,self.id,70,lightningweb)
+		proj.sprite_index = lightningweb_sprite;
+		proj . priority += 2
+        proj.shield_stun = .75
+		proj.stun_base = 10;
+        proj.stun_scalar = 2;
+        proj.shake_ampl = 0.2;
+		image_index = 1;
+	    image_speed = 0;
+		}
+    }
+	if timer = 108
+		image_index = 0
+	if timer >= 108 && timer <= 130 && special = 1
+	temp = 2
+	if timer >= 118 && timer <= 130 && ( temp = 2 ) && special = 1{
+	timer = 100
+	temp = 0
+	if temp2 < 3
+	temp2 += 1
+	if temp2 = 3
+	temp2 = 0
+	}
+	if timer >= 118 && timer <= 130 && ( temp < 2 ) && special = 1 {
+	timer = 15
+	time = 85
+	temp = 0
+	}
+	
+	if timer >= 100 && timer <= 130 {
+	if air > 0
+	air_move = 1
+	}
+        if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+                vspeed = 0 }
+if air = 0{
+        air_move = 0
+        state_type = "attack"
+	if sprite_index = airb_sprite
+		sprite_index = b_sprite;
+	}
+if image_index >= image_number - image_speed
+        image_speed = 0
+		
+		
+if timer >=time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    special = 0;
+    }

@@ -1,0 +1,534 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+		if air = 0
+		state_type = "attack"
+		else
+        {
+		state_type = "air_attack"
+		air_move = 0
+		hspeed*=.5
+		}
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = sideb_sprite
+        image_index=0
+        timer = 0
+        time = 42
+		
+    }
+
+if ( timer < time )
+  {
+  slide = 0
+	switch (timer) { 
+	case 5: image_index = 1; break; 
+	case 7: image_index = 2; break; 
+	case 9: image_index = 3; break; 
+	case 11: image_index = 4; break; 
+	case 14: image_index = 5; break; 
+	case 17: image_index = 6; break; 
+	case 28: image_index = 7; break; 
+	case 32: image_index = 8; break; 
+	case 36: image_index = 9; break; 
+	case 39: image_index = 10; break; 
+}
+
+	  if timer = 7
+	  {
+    sidebfx = create_blur(x,y,self.id);
+    sidebfx.sprite_index = sideb_fx;
+    sidebfx.image_index = 0;
+    sidebfx.image_speed = 0;
+	sidebfx.snap = self.id;
+    sidebfx.image_xscale = 0.4 * (1-facing*2) * size;
+    sidebfx.image_yscale = 0.4 * size;
+    sidebfx.depth = depth - 1;
+	  }
+	  
+
+switch ( timer )
+  {
+  case 9: sidebfx.image_index = 1; break;
+  case 11: sidebfx.image_index = 2; break;
+  case 12: sidebfx.image_index = 3; break;
+  }  
+  
+if timer = 9
+{
+	if air = 0
+	{
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.5*size;
+	duster.image_yscale *= 0.5*size;
+	duster.facing = facing; 
+	}
+	
+	if random (2) > 1
+	{
+	sound_play(choose(smash_voice1,smash_voice2,smash_voice3,smash_voice4));
+	}
+
+sound_play(chain_sound);
+
+    create_hitbox ( 6 , angle_correct(45) , 4 , 0 , 10 , 6 , slash3 , bloodupright2_hs , 2.1 , 1.3 , abs(place_x(168)),-place_y(70) , self.id , 6 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 45;
+	
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright2_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupright2_hs
+	}
+}
+	  
+if timer = 14
+{
+with (sidebfx) {instance_destroy();}
+}	  
+	
+	
+	if air != 0
+	{
+	
+	if timer < 28
+		{
+		hspeed*=.97
+		gravity_lock = 1
+		vspeed = 0.1
+		}
+	}
+	
+	if (timer >= 15 and timer < 25) and attack_success and ai
+	special = 1
+	
+	if (timer >= 15 and timer < 25) and special and attack_success
+	{
+	sprite_index = sideb_sprite2;
+	image_index = 0;
+    timer = 100;
+    time = 154;
+	special = 0;
+	with (sidebfx) {instance_destroy();}
+	}
+	
+	
+	
+//////////////////////////////////////////////////////////////PART 2	
+	
+	if air != 0
+	{
+	
+	if (timer >= 100 and timer < 137 )
+		{
+		hspeed*=.97
+		gravity_lock = 1
+		vspeed = 0.1
+		}
+	}
+	
+	switch (timer) { 
+	case 102: image_index = 1; break; 
+	case 104: image_index = 2; break; 
+	case 106: image_index = 3; break; 
+	case 109: image_index = 4; break; 
+	case 112: image_index = 5; break; 
+	case 116: image_index = 6; break; 
+	case 118: image_index = 7; break; 
+	case 120: image_index = 8; break; 
+	case 123: image_index = 9; break; 
+	case 137: image_index = 10; break; 
+	case 141: image_index = 11; break; 
+	case 145: image_index = 12; break; 
+	case 148: image_index = 13; break; 
+	case 151: image_index = 14; break; 
+}
+
+if timer = 104
+{
+    sideb2fx = create_blur(x,y,self.id);
+    sideb2fx.sprite_index = sideb2_fx;
+    sideb2fx.image_index = 0;
+    sideb2fx.image_speed = 0;
+	sideb2fx.snap = self.id;
+    sideb2fx.image_xscale = 0.4 * (1-facing*2) * size;
+    sideb2fx.image_yscale = 0.4 * size;
+    sideb2fx.depth = depth - 1;
+	
+	hspeed=3.3*(1-facing*2)
+	if air = 0
+	{
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.4*size;
+	duster.image_yscale *= 0.4*size;
+	duster.facing = facing; 
+	}
+	
+	if random (2) > 1
+	{
+	sound_play(choose(smash_voice1,smash_voice2,smash_voice3,smash_voice4));
+	}
+
+	sound_play(chain_sound);
+
+	create_hitbox ( 4 , angle_correct(45) , 3.4 , 0 , 8 , 2 , slash2 , bloodupright2_hs , 1.6 , 1 , abs(place_x(164)),-place_y(171) , self.id , 6 , 3 );
+	hitbox.image_angle = ( 1 - facing * 2 ) * 25;
+
+	create_hitbox2 ( 4 , angle_correct(45) , 3.4 , 0 , 8 , 2 , slash2 , bloodupright2_hs , 1.2 , 1.6 , abs(place_x(182)),-place_y(80) , self.id , 8 , 3 );
+	hitbox2.image_angle = ( 1 - facing * 2 ) * 45;
+	hitbox2.hit = 2
+
+	create_hitbox3 ( 4 , angle_correct(45) , 3.4 , 0 , 8 , 2 , slash2 , bloodupright2_hs , 1.6 , 1 , -abs(place_x(51)),-place_y(53) , self.id , 11 , 3 );
+	hitbox3.image_angle = ( 1 - facing * 2 ) * 35;
+	hitbox3.hit = 2
+
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright2_hs
+	hitbox2.gfx = bloodupright2_hs
+	hitbox3.gfx = bloodupright2_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupright2_hs
+	hitbox2.gfx = bloodupright2_hs
+	hitbox3.gfx = bloodupright2_hs
+	}
+}
+
+if timer = 106
+hitbox2.hit = 0
+
+if timer = 109
+hitbox3.hit = 0
+	  
+
+switch ( timer )
+  {
+  case 106: sideb2fx.image_index = 1; break;
+  case 109: sideb2fx.image_index = 2; break;
+  case 112: sideb2fx.image_index = 3; break;
+  }  
+	  
+if timer = 114
+{
+with (sideb2fx) {instance_destroy();}
+}	  
+
+if timer = 112
+hspeed=1.8*(1-facing*2)
+
+if timer = 116
+	{
+	sideb2fx2 = create_blur(x,y,self.id);
+	sideb2fx2.sprite_index = sideb_fx;
+	sideb2fx2.image_index = 0;
+	sideb2fx2.image_speed = 0;
+	sideb2fx2.snap = self.id;
+	sideb2fx2.image_xscale = 0.4 * (1-facing*2) * size;
+	sideb2fx2.image_yscale = 0.4 * size;
+	sideb2fx2.depth = depth - 1;
+	}
+	  
+
+switch ( timer )
+	{
+	case 118: sideb2fx2.image_index = 1; break;
+	case 120: sideb2fx2.image_index = 2; break;
+	case 121: sideb2fx2.image_index = 3; break;
+	}  
+	  
+if timer = 123
+{
+with (sideb2fx2) {instance_destroy();}
+}	
+  
+if timer = 118
+{
+	if air = 0
+	{
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.5*size;
+	duster.image_yscale *= 0.5*size;
+	duster.facing = facing; 
+	}
+	
+	hspeed = 0
+
+sound_play(chain_sound);
+
+	create_hitbox ( 6 , angle_correct(40) , 4 , 0 , 12 , 6 , slash3 , bloodupright2_hs , 2.1 , 1.1 , abs(place_x(178)),-place_y(130) , self.id , 6 , 3 );
+	hitbox.image_angle = ( 1 - facing * 2 ) * 45;
+
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright2_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupright2_hs
+	}
+}
+	
+	if (timer >= 123 and timer < 133) and attack_success and ai
+	{
+	special = 1
+	movedown = choose(0,1)
+	}
+	
+	if (timer >= 123 and timer < 133) and special and attack_success and !movedown
+	{
+	sprite_index = sideb_sprite3;
+	image_index = 0;
+    timer = 200;
+    time = 248;
+	special = 0;
+	with (sideb2fx2) {instance_destroy();}
+	}
+	
+	if (timer >= 123 and timer < 133) and special and attack_success and movedown and air = 0
+	{
+	sprite_index = sideb_sprite3D;
+	image_index = 0;
+    timer = 300;
+    time = 362;
+	special = 0;
+	with (sideb2fx2) {instance_destroy();}
+	}
+	
+
+
+///////////////////////////////////////////////////////PART 3 FRONT
+	
+	if air != 0
+	{
+	
+	if (timer >= 200 and timer < 230 )
+		{
+		hspeed*=.97
+		gravity_lock = 1
+		vspeed = 0.1
+		}
+	}
+
+switch (timer) { 
+	case 203: image_index = 1; break; 
+	case 206: image_index = 2; break; 
+	case 208: image_index = 3; break; 
+	case 210: image_index = 4; break; 
+	case 212: image_index = 5; break; 
+	case 214: image_index = 6; break; 
+	case 217: image_index = 7; break; 
+	case 220: image_index = 8; break; 
+	case 240: image_index = 9; break; 
+	case 244: image_index = 10; break; 
+}	
+
+if timer = 208
+	{
+	sideb3fx = create_blur(x+place_x(231),y+place_y(52),self.id);
+	sideb3fx.sprite_index = sideb3_fx;
+	sideb3fx.image_index = 0;
+	sideb3fx.image_speed = 0;
+	sideb3fx.snap = self.id;
+	sideb3fx.image_xscale = 0.4 * (1-facing*2) * size;
+	sideb3fx.image_yscale = 0.4 * size;
+	sideb3fx.depth = depth - 1;
+	}
+	  
+
+switch ( timer )
+	{
+	case 210: sideb3fx.image_index = 1; break;
+	case 212: sideb3fx.image_index = 2; break;
+	case 214: sideb3fx.image_index = 3; break;
+	case 215: sideb3fx.image_index = 4; break;
+	}  
+	  
+if timer = 216
+{
+with (sideb3fx) {instance_destroy();}
+}	
+  
+if timer = 210
+{
+	if air = 0
+	{
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.5*size;
+	duster.image_yscale *= 0.5*size;
+	duster.facing = facing; 
+	}
+	
+	if random (2) > 1
+	{
+	sound_play(choose(smash_voice1,smash_voice2,smash_voice3,smash_voice4));
+	}
+
+sound_play(chain_sound);
+
+	create_hitbox ( 8 , angle_correct(20) , 5.2 , 6.8 , 16 , 12 , slash3 , bloodupright3_hs , 1.55, .7 , abs(place_x(204)),-place_y(60) , self.id , 5 , 3 );
+	hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright3_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupleft3_hs
+	}
+}
+
+
+
+/////////////////////////////////////////////PART 3 DOWNWARDS
+	
+	if air != 0
+	{
+	
+	if (timer >= 300 and timer < 137 )
+		{
+		gravity_lock = 1
+		hspeed*=.97
+		vspeed = 0.1
+		}
+	}
+	
+	switch (timer) { 
+	case 302: image_index = 1; break; 
+	case 306: image_index = 2; break; 
+	case 312: image_index = 3; break; 
+	case 315: image_index = 4; break; 
+	case 317: image_index = 5; break; 
+	case 320: image_index = 6; break; 
+	case 324: image_index = 7; break; 
+	case 344: image_index = 8; break; 
+	case 348: image_index = 9; break; 
+	case 352: image_index = 10; break; 
+	case 356: image_index = 11; break; 
+	case 359: image_index = 12; break; 
+}
+
+if timer = 312
+	{
+	sideb3dfx = create_blur(x+place_x(257),y+place_y(145),self.id);
+	sideb3dfx.sprite_index = sideb3down_fx;
+	sideb3dfx.image_index = 0;
+	sideb3dfx.image_speed = 0;
+	sideb3dfx.snap = self.id;
+	sideb3dfx.image_xscale = 0.4 * (1-facing*2) * size;
+	sideb3dfx.image_yscale = 0.4 * size;
+	sideb3dfx.depth = depth - 1;
+	}
+	  
+
+switch ( timer )
+	{
+	case 315: sideb3dfx.image_index = 1; break;
+	case 317: sideb3dfx.image_index = 2; break;
+	case 319: sideb3dfx.image_index = 3; break;
+	case 321: sideb3dfx.image_index = 4; break;
+	}  
+	  
+if timer = 322
+{
+with (sideb3dfx) {instance_destroy();}
+}	
+
+if timer = 315
+{
+	
+	if random (2) > 1
+	{
+	sound_play(choose(smash_voice1,smash_voice2,smash_voice3,smash_voice4));
+	}
+
+	sound_play(chain_sound);
+
+	create_hitbox ( 9 , angle_correct(350) , 6 , 7 , 30 , 14 , slash3 , bloodupright3_hs , 2 , 1 , abs(place_x(176)),-place_y(0) , self.id , 6 , 3 );
+	hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+
+	create_hitbox2 ( 9 , angle_correct(290) , 6 , 7 , 30 , 14 , slash3 , bloodupright3_hs , 1.2 , 1.7 , abs(place_x(256)),-place_y(90) , self.id , 6 , 3 );
+	hitbox2.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox2.hit = 2
+	
+	if facing = 0
+	{
+	hitbox.gfx = bloodupright3_hs
+	hitbox2.gfx = bloodupright3_hs
+	}
+	if facing = 1
+	{
+	hitbox.gfx = bloodupleft3_hs
+	hitbox2.gfx = bloodupleft3_hs
+	}
+}
+
+if timer = 317
+{
+	hitbox2.hit = 0
+	screen_shake(6,5)
+	if air = 0
+	{
+	duster = instance_create(x-12*(1-facing*2),y,obj_dust_effect);
+	duster.image_xscale *= 0.4*size;
+	duster.image_yscale *= 0.4*size;
+	duster.facing = facing; 
+	
+	duster = instance_create(x+place_x(290),y,obj_dust_effect);
+	duster.image_xscale *= 0.4*size;
+	duster.image_yscale *= 0.4*size;
+	duster.facing = !facing; 
+	
+	groundslamvfx = create_spark ( abs(place_x(248)), 0 , sideb3downground_fx , .5 , .4 , .4 );
+	groundslamvfx.snap = self.id;
+	groundslamvfx.owner = self.id;
+	groundslamvfx.keepmain = self.keepmain;
+	}
+}
+	  
+	/*
+	if timer = 4
+	{
+	create_hitbox(1,angle_correct(angle_here),3,4,5,6,punch3,obj_spark_hit1,1,1,abs(place_x(20)),-place_y(20),self.id,10,3);
+	hitbox.image_angle = angle_correct(angle_here)
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	projectilething =
+	create_projectile(5, angle_correct(angle_here), 5, 6.25, 15, 7.5, kick2, obj_spark_hit3, .25, .25, abs(place_x(130)), -place_y(104), self.id, 30, char_custom1);
+	projectilething.sprite_index = insert_sprite_here
+	projectilething.image_speed = .5;
+	}
+	*/
+	
+	/*
+	if timer = 4
+	{
+	vfxthing = create_spark ( xpos , ypos , sprite_index , image_speed , xscale , yscale );
+	vfxthing.alarm[0] = lifespan of the spark here
+	vfxthing.snap = self.id;
+	vfxthing.owner = self.id;
+	vfxthing.keepmain = self.keepmain;
+	vfxthing.script = char_custom10;
+	}
+	*/
+	  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

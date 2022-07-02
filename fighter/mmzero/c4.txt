@@ -1,0 +1,42 @@
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.blast_sprite
+    image_speed = 0
+	hit = 2
+    visible =0
+	moving_object = 0;
+	facing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	
+	if attacker.percent>100{
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale
+	else
+	image_xscale=attacker.image_xscale 
+	image_yscale=attacker.image_yscale
+	}else{
+	
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale* 0.5
+	else
+	image_xscale=attacker.image_xscale* 0.5
+	image_yscale=attacker.image_yscale* 0.5
+	}
+	
+	image_alpha=0
+	chosen = choose(10)
+    thexspeed= chosen - attacker.id.facing*(chosen*2)
+	
+}if timer = 31&& hit = 2 {
+hit = 0
+hspeed = thexspeed
+moving_object = 1;
+image_alpha=0.7
+visible =1
+}
+
+if timer >31{
+absorb2 = 1
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()
+}
