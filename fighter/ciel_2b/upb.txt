@@ -1,7 +1,11 @@
 fast_fall = 0
 fast_fall_temp = 0
 if state_type = "run" || state_type = "stand" || state_type = "jump"{
-    timer = 0;
+    ubtemp += 1;
+    if ubtemp > 1{
+    break;
+	}
+	timer = 0;
 	state_type = "air_attack"
     attack_type = "upb"
     image_speed = 0;
@@ -78,9 +82,9 @@ if timer < time {
 	
 	sound_play(jab1_sound);
 	sound_play(jab_voice3);
-	create_hitbox(8,angle_correct(80),6.8,1,16,10,twob_slashhs3,obj_spark_slash3,1.2,2.1,abs(place_x(130)),-place_y(95),self.id,16,3);
+	create_hitbox(8,angle_correct(60),6.5,0,16,10,twob_slashhs3,obj_spark_slash3,1.2,2.1,abs(place_x(130)),-place_y(95),self.id,30,3);
 	hitbox.image_angle = angle_correct(0)
-	hitbox.di = .15
+	hitbox.di = -1
 	hitbox.hitstun = 8
 	}
 	  
@@ -139,7 +143,7 @@ if special > 0 && movedown = 1 && moveup != 1 && moveleft != 1 && moveright != 1
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
         attack_type = "none";
         if air > 0
-        state_type = "fall";
+        state_type = "jump";
         else
         state_type = "stand";
         timer = 0;
