@@ -37,7 +37,7 @@ case 9: image_index = 5; break;
     sound_play ( swingsnd1 );
     create_hitbox(6,135-facing*90,4.8,2.8,12,5,kick1,obj_spark_hit1,0.7,0.55,-10,11,self.id,12,3);
     hitbox.hit_stun = 7;
-    create_hitbox2(12,170-facing*160,7,4.7,24,10,slash3,obj_spark_hit2,0.6,0.45,-30,11,self.id,12,3);
+    create_hitbox2(12,170-facing*160,5,7.4,24,10,slash3,obj_spark_hit2,0.6,0.45,-30,11,self.id,12,3);
   }
   if ( timer = 20 )
   {
@@ -61,7 +61,7 @@ case 9: image_index = 5; break;
 
 
  if (timer == 20){
-if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
+if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0 && hitbox.hit != 1){
 				if ((target.weight <= .22 && target.percent > 80) || (target.weight > .22 && target.weight < .3 && target.percent > 90) || (target.weight > .3 && target.percent > 100)){
 				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
 				killspark.sprite_index = killspark_sprite;
@@ -97,6 +97,7 @@ if (attack_success || target.object_index == obj_enemy) && (obj_score_control.st
 
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
 {
+  dontrepeat = 0;
   attack_type = "none";
   sprite_index = jump_sprite;
   image_index = 6;
