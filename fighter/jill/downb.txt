@@ -1,0 +1,99 @@
+if instance_exists(zombie) {
+exit;
+}
+
+if instance_exists(flamezombie) {
+exit;
+}
+
+if air > 0 {
+exit;
+}
+
+
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+	hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0;
+        sprite_index = downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 23;
+        timer_speed=1;
+		special = 1
+		hspeed = 0
+		jillsandwich = 0
+}
+if timer < time {
+state_type = "air_attack";
+    switch ( timer )
+      {
+	case 7: image_index = 0; break;
+	case 14: image_index = 1; break;
+	case 21: image_index = 2; break;
+
+
+      }
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  if timer = 14 and jillsandwich = 0 {
+	 zombie = create_projectile ( 5, 150-facing*120, 7, 0, 8, 8, slash1, obj_spark_slash2, 2, 2, -80, 0, self.id, 999999, zombie_angery);
+	 zombie.hspeed = 1-facing*2
+	 zombie.sprite_index = zombie_sprite
+	 zombie.image_xscale = 0.44
+	 zombie.image_yscale = 0.44
+	 zombie.hit_stun = 15
+	 zombie.di = 0
+	 sound_play(zombie_voice);
+	 sound_play(surprise_voice);
+
+	 }
+	 
+	  if timer = 7 and special = 1 and air = 0 {
+	 jillsandwich = 1
+	 }
+	 
+	  if timer = 14 and jillsandwich = 1 {
+	 flamezombie = create_projectile ( 5, 90, 0.3, 0.3, 160, 8, fire3, obj_spark_fire1, 2, 2, -80, 0, self.id, 999999, zombie_flaming);
+	 flamezombie.hspeed = 1-facing*2
+	 flamezombie.sprite_index = flamingzombie_sprite
+	 flamezombie.image_xscale = 0.44
+	 flamezombie.image_yscale = 0.44
+	 flamezombie.hit_stun = 15
+	 sound_play(zombie_voice);
+	 sound_play(surprise_voice);
+
+	 }
+
+	 
+
+
+	 
+	 
+	 
+	 
+	 
+
+
+	
+	
+
+}
+			
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

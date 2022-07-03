@@ -1,0 +1,49 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "fair";
+        image_speed = 0;
+        sprite_index = fair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 21;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "air_attack";
+    switch ( timer )
+      {
+	case 4: image_index = 0; break;
+	case 8: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 16: image_index = 3; break;
+
+
+      }
+if timer = 8 {
+ create_hitbox ( 8 , 30+facing*120 , 5.8 , 4.4 , 12 , 7 , kick3 , obj_spark_hit3 , 1.13 , 0.25 , 18.04 , 10.36 , self.id , 8 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 153.43;
+	sound_play(attack_sound2);
+	}
+    
+	
+	if air = 0 {
+        state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=7; }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }		
+

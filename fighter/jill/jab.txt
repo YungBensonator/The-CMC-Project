@@ -1,0 +1,114 @@
+if ( state_type = "stand" || state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "jab"
+    timer = 0;
+    time = 18;
+    sprite_index = jab_sprite;
+    image_speed = 0;
+    image_index = 0;
+	timer_speed = 1;
+	hspeed = 0;
+	string = 0
+	string2 = 0
+  }
+
+if ( timer < time )
+ {
+ state_type = "attack";
+  switch ( timer )
+
+      {
+	case 0: image_index = 0; break;
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 50: image_index = 0; break;
+	case 53: image_index = 1; break;
+	case 56: image_index = 2; break;
+	case 59: image_index = 3; break;
+	case 62: image_index = 4; break;
+	case 100: image_index = 0; break;
+	case 103: image_index = 1; break;
+	case 106: image_index = 2; break;
+	case 109: image_index = 3; break;
+
+
+      }
+      
+
+if timer = 3 {
+ create_hitbox ( 4 , 70+facing*40 , 2.5 , 1 , 7 , 3 , punch1 , obj_spark_hit1 , 0.83 , 1.2 , 22.44 , 20.80 , self.id , 3 , 2 );
+ hitbox.di = 0
+ string = 1
+ hitbox.hit_stun = 4
+ sound_play(attack_sound2);
+}
+
+if ( string = 1 )
+{
+     if ( movedown && attacking )
+     {
+		 masktemp = 0;
+         state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_dsmash();
+     } 
+	 
+	 }
+
+
+
+if timer > 6 and timer < 15 and attacking = 1 {
+sprite_index = jab2_sprite
+timer = 50 
+time = 69
+string = 0
+}
+
+if timer = 53 {
+create_hitbox ( 3 , 90 , 0.1 , 0.1 , 5 , 4 , punch2 , obj_spark_hit2 , 0.93 , 1.2 , 25.08 , 20.80 , self.id , 3 , 2 ); 
+hitbox.di = 0
+string2 = 1
+sound_play(attack_sound2);
+}
+
+if ( string2 = 1 )
+{
+     if ( moveup && attacking )
+     {
+		 masktemp = 0;
+         state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_usmash();
+     } 
+	 
+	 }
+
+if timer > 56 and timer < 69 and attacking = 1 {
+sprite_index = jab3_sprite
+timer = 100
+time = 116
+string2 = 0
+}
+
+if timer = 103 {
+ create_hitbox ( 5 , 30+facing*120 , 4.9 , 5.4 , 9 , 6 , kick3 , obj_spark_hit3 , 1.21 , 1.2 , 22.32 , 17.20 , self.id , 6 , 3 );
+ sound_play(attack_sound3);
+ }
+
+
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
