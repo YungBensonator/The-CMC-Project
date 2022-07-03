@@ -1,0 +1,72 @@
+if state_type = "run" || state_type = "stand" {
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = dash_attack_sprite;
+        image_index=-0;
+        timer = 0;
+        time = 55;
+        timer_speed=1;
+		hspeed = 0
+		charge_frame = 1
+}
+
+
+if timer < time {
+     state_type = "attack";
+	  switch ( timer )
+      {
+	case 7: image_index = 0; break;
+	case 14: image_index = 1; break;
+	case 21: image_index = 2; break;
+	case 28: image_index = 3; break;
+	case 31: image_index = 3; break;
+	case 35: image_index = 3; break;
+	case 38: image_index = 3; break;
+	case 41: image_index = 3; break;
+	case 44: image_index = 3; break;
+	case 47: image_index = 3; break;
+	case 51: image_index = 5; break;
+	case 55: image_index = 6; break;
+	case 59: image_index = 7; break;
+	case 63: image_index = 8; break;
+
+      }
+	 
+	 
+	 
+	 
+    if timer = 28 {
+        duster = instance_create(x,y,obj_dust_effect)
+        duster.facing = facing;
+        sound_play(attack_sound3)
+	    sound_play(youre_finished_voice);
+        create_hitbox ( 16 , 40+facing*100 , 7.5 , 6 , 17 , 22 , punch4 , obj_spark_fire1 , 0.93 , 0.96 , 23.76 , 26.84 , self.id , 19 , 4 );
+        hitbox.shake_ampl = 0.75
+        hitbox.hit_stun = 11
+    firemovething = create_spark(-35,8,self.id);
+    firemovething.sprite_index = bigchargingstars_sprite;
+    firemovething.image_speed = 0.3;
+    firemovething.image_alpha = 0.8;
+    firemovething.image_xscale = image_xscale*1;
+    firemovething.image_yscale = image_yscale*1;
+    firemovething.depth = depth - 0.1;
+    firemovething.snap = self.id
+}
+
+if timer >= 28 and timer < 47 {
+hspeed = 6-facing*12
+}
+
+if timer = 51 {
+hspeed = 0
+}
+ 
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

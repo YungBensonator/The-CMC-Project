@@ -1,0 +1,148 @@
+	time = 999999
+
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.zombie_sprite
+    image_speed = 0.2
+    visible =1
+	moving_object = 1;
+	facing = attacker.facing
+	scale = 0.44
+	size = 0.44	
+	if attacker.facing = 0
+	image_xscale=0.44
+	else
+	image_xscale=-0.44
+	image_yscale=0.44
+
+	
+	
+}
+
+/*
+if ( !is_on_floor(self) ) {
+vspeed = 4
+}
+
+*/
+/*
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) {
+hspeed = 0
+}
+*/
+
+if hit = 1 {
+    slomo_effect_bubble = create_homing_bubble(1.5,1.2,7,15,self.id,7);
+	sprite_index = attacker.id.zombiemunch_sprite
+}
+if ( timer >= 1 && timer <= 7 )
+    {
+    if ( target > -1 && target != self.id )
+        {
+        attacker.target = target;
+        if ( attacker.target.state_type != "down" && attacker.target.intangible = 0 && attacker.target.attack_type != "final_smash" )
+            {
+                attacker.target.state_type = "air_flinch"
+                attacker.target.facing = !facing;
+                attacker.target.attack_type = "none";
+                attacker.target.timer = 0;
+                attacker.target.timer_speed = 0;
+                attacker.target.alarm[0] = 200;
+                attacker.target.depth = 2;
+                timer = 10;
+                attacker.target.gravity_lock = 1;
+            }
+        }
+    }
+    if ( timer >= 10 && timer <= 900) and hit = 1
+        {
+ 
+        //attacker.target.vspeed = 0;
+        //attacker.target.gravity_lock = 2;
+        attacker.target.timer_speed = 0;
+        attacker.target.alarm[0] = 2;
+        attacker.target.state_type = "air_flinch"
+        attacker.target.depth = depth + 1;
+		attacker.target.percent += 0.1
+     
+}
+    if (timer = 10)
+    {
+    attacker.target.sprite_index = choose( attacker.target.flinch_sprite , attacker.target.flinch2_sprite , attacker.target.flinch3_sprite );
+    }
+
+
+
+
+
+if 1000 = 1000{
+
+
+
+
+on_floor = 0;
+on_platform = 0;
+next_to_lwall = 0;
+next_to_rwall = 0;
+
+while ( collision_line ( x , y , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x , y - actual_height , x + actual_width , y - ac2 , obj_leftwall , 1 , 1 ) )
+    x -= 1;
+while ( collision_line ( x , y , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x , y - actual_height , x - actual_width , y - ac2 , obj_rightwall , 1 , 1 ) ) 
+    x += 1;
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_floor , 1 , 1 ) )
+    y -= 1;
+if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y , obj_platform , 1 , 1 ) )
+	y -= 1;
+
+if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+    on_floor = 1;
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+    on_platform = 1;
+if ( collision_line ( x + 1 , y , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) || collision_line ( x + 1 , y - actual_height , x + actual_width + 1 , y - ac2 , obj_leftwall , 1 , 1 ) ) 
+  next_to_rwall = 1;
+if ( collision_line ( x - 1 , y , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) || collision_line ( x - 1 , y - actual_height , x - actual_width - 1 , y - ac2 , obj_rightwall , 1 , 1 ) )  
+  next_to_lwall = 1;
+
+
+
+if ( timer >= 1 )
+    vspeed += 0.15;
+	
+if ( vspeed > 3.5 )
+    vspeed = 3.5;
+
+if ( on_floor || on_platform )
+  {
+    vspeed = 0;
+  }
+
+
+if ( hspeed != 0 && ( next_to_lwall || next_to_rwall ) ){
+	    hspeed = -hspeed;
+		image_xscale = -image_xscale
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
