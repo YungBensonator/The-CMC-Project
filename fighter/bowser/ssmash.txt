@@ -1,0 +1,60 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "ssmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = ssmash_sprite;
+  timer = 0;
+  time = 66;
+  timer_speed = 1;
+  charge_frame = 11;
+  }
+if timer < time {
+		switch ( timer )
+		{
+		case 10: image_index = 1; break;
+		case 14: image_index = 2; break;
+		case 18: image_index = 3; break;
+		case 22: image_index = 4; break;
+		case 26: image_index = 5; image_xscale *= 1.1; image_yscale *= 1.1; shakex = 2-facing*4; break;
+		case 27: shakex = -2+facing*4; break;
+		case 28: shakex = 1-facing*2; break;
+		case 29: shakex = -1+facing*2; break;
+		case 30: shakex = 1-facing*2; break;
+		case 31: shakex = -1+facing*2; break;
+		case 32: shakex = 1-facing*2; break;
+		case 33: shakex = -1+facing*2; break;
+		case 34: shakex = 0; break;
+		case 66: image_index = 6; break;
+		case 69: image_index = 7; break;
+		}
+	if timer = 22 {
+		super_armor = 1;
+		sound_play ( swingsnd3 );
+        dust = instance_create ( x , y , obj_dust_effect );
+		dust.facing = facing;
+		dust.image_xscale *= 1.6;
+		dust.image_yscale *= 1.6;
+		sound_play ( choose ( ssmash_voice , ssmash_voice2 ) );
+		hspeed = 4 * size * ( 1 - facing * 2 );
+		}
+	if timer = 26 {
+		create_hitbox(24,20+facing*140,6.4,7.5,105,22,heavy_spike,obj_spark_fire1,1.65,1.4,25,20,self.id,4,1);
+		hitbox.hit_stun = 10;
+		hspeed = 0 * size * ( 1 - facing * 2 );
+		charge_damage = 1.3;
+		}
+	if timer = 30 {
+		super_armor = 0;
+		}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

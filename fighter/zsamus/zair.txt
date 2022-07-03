@@ -43,96 +43,44 @@ state_type = "air_attack";
 	case 30: image_index = 21; break;
       }
 	  
-	  
-	if timer =14{
-		sound_play(sideb_sound);
-zair1= create_projectile(6, angle_correct(47),5,1,5,4,shock2,obj_spark_stun,1, 0.7, 16, 20,self.id,8,no_script);	
-zair1.priority = 3
-	zair1.hspeed = (6 - facing*12)*size;  
-	  
-	}  
-	if timer =20{
-	zair1.hspeed = 0
-	  
-	}
+	    if ( timer = 11 )
+      {
+    create_hitbox(5,30+facing*120,5.8,0.1,6,4,shock2,obj_spark_stun,1.5,0.6,45,22,self.id,5,4);   
+      }  
 
-if timer >14
-{
-if instance_exists(zair1) and zair1.hit > 0
-  {
-  with (zair1) instance_destroy();
-  }
-}
-
-if ( hitbox.hit = 1 && attack_shielded = 0 )
-{
-	hiitybitty = 1;
-}
-			if zair1 . hit = 1 && hiitybitty = 0 {
-if instance_exists(zair1)
-  {
-  with (zair1) instance_destroy();
-  }		
-
-                }
-			if zair1 . hit = 1 && hiitybitty = 0 {
-zair1.hspeed = 0	
-                }
-
-if air = 0 and timer > 20
-{
-if instance_exists(zair1)
-  {
-  with (zair1) instance_destroy();
-  }
-}	  
-
-	if timer > 16 && timer < 20
-	{
-	if ( collision_rectangle(x,y-33*size,x+size*93,y-8*size,obj_edge_left,1,1) && !facing )
+    if ( timer >= 11 && timer <= 15 )
+      {
+	if ( collision_rectangle(x+size*(5-facing*10),y-12*size,x+size*(75-facing*150),y-32*size,obj_edge_left,1,1) )
 	  {
 	    state_type = "jump";
 	    attack_type = "none";
 	    timer = 0;
 	    time = -1;
-	    facing = 0;
 	    edge = instance_nearest(x,y,obj_edge_left);
-	    x = edge.x-size*7;
-	    y = edge.y + sprite_get_height(sprite_index)*image_yscale-33;
-	    with zair1 instance_destroy();
-	    with hitbox2 instance_destroy();
-	    with hitbox3 instance_destroy();
-	    exit;
+	    x = edge.x;
+	    y = edge.y+20*size;
 	  }
-	if ( collision_rectangle(x-size*93,y-33*size,x,y-8*size,obj_edge_right,1,1) && facing )
+	if ( collision_rectangle(x+size*(5-facing*10),y-12*size,x+size*(75-facing*150),y-32*size,obj_edge_right,1,1) )
 	  {
 	    state_type = "jump";
 	    attack_type = "none";
 	    timer = 0;
 	    time = -1;
-	    facing = 1;
 	    edge = instance_nearest(x,y,obj_edge_right);
-	    x = edge.x+size*7;
-	    y = edge.y + sprite_get_height(sprite_index)*image_yscale-33;
-	    with zair1 instance_destroy();
-	    with hitbox2 instance_destroy();
-	    with hitbox3 instance_destroy();
-	    exit;
+	    x = edge.x;
+	    y = edge.y+20*size;
 	  }
-	}
+      }
 
-
-
-	 
 
     if ( air = 0 )
       {
 	state_type = "attack";
 	attack_type = "none";
 	timer = 0;
-	time = 3;
+	time = 8;
 	sprite_index = land_sprite;
-      }				
+      }			
 				
 				
             }
