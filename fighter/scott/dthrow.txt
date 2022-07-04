@@ -1,0 +1,107 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "dthrow";
+image_speed = 0.25;
+sprite_index = dthrow_sprite;
+image_index=0;
+timer = 0;
+time = 69;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+}
+if image_index > 10 && timer < 48 {
+	image_index = 5
+}
+if timer < time {
+    if timer = 8 {
+		instance_create(x+16-facing*32,y-4,obj_spark_hit3)
+		sound_play(attack_sound2);
+		sound_play2(sf_kick2);
+		target.percent += 1;
+		target.y = y-2
+		shaker = instance_create(x,y,obj_shakescreen2);
+        shaker.ampl = 1;
+        shaker.xampl = 0;
+        shaker.time = 3;
+	}
+	if timer = 8 {
+		target.y = y-3
+	}
+	if timer = 9 {
+		target.y = y-7
+	}
+	if timer = 10 {
+		target.y = y-9
+	}
+	if timer = 11 {
+		target.y = y-11
+	}
+	if timer = 12 {
+		target.y = y-12
+	}
+	if timer = 13 {
+		target.y = y-13
+	}
+	if timer = 14 {
+		target.y = y-13
+	}
+	if timer = 15 {
+		target.y = y-13
+	}
+	if timer = 16 {
+		target.y = y-12
+	}
+	
+	if timer = 17 {
+		target.y = y-11
+	}
+	if timer = 18 {
+		target.y = y-9
+	}
+	if timer = 19 {
+		target.y = y-7
+	}
+	if timer = 20 {
+		target.y = y-6
+	}
+	if timer = 21 {
+		target.y = y-5
+	}
+	if timer = 22 {
+		target.y = y-3
+	}
+	if timer = 23 {
+		target.y = y-2
+	}
+	if timer = 24 || timer = 30 || timer = 36 || timer = 42 || timer = 48 {
+	image_speed = 0.5;
+	instance_create(x+16-facing*32,y-4,obj_spark_hit3)
+        script_execute(create_throw_box,1,270,1,0,5,1,sf_punch2,-1,1.0,0.5,13,6,self.id,2);
+        hitbox.hit_stun = 20;
+	}
+	if timer = 49 {
+	instance_create(x+16-facing*32,y-44,obj_spark_effect)
+		image_index = 8
+        image_speed = 0
+	}
+	if timer = 65 {
+	image_index = 9
+	image_speed = 0.25;
+	sound_play2(sf_kick2);
+	script_execute(create_throw_box,2,72+facing*36,5.6,4.3,5,8,sf_kick1,obj_spark_hit3,1.0,0.5,13,6,self.id,2);
+}	
+    if timer = 67 {
+	image_index = 10
+	}
+	if image_index >= image_number - image_speed
+	image_speed = 0
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

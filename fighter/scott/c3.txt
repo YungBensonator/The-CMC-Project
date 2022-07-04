@@ -1,0 +1,59 @@
+if ( random(5) > 4 )
+    after_image(3,image_blend,0.5);
+absorb2 = 0;
+x = attacker.x + attacker.size * (22-facing*44) + lengthdir_y(64,(timer/time)*180) * (-1+facing*2);
+y = attacker.y - 28;
+
+if ( timer < time )
+  {
+    if ( captured == noone )
+      {
+	if ( collision_rectangle(x-14,y-29,x+8,y+14,player,0,1) )
+	  {
+	    target = instance_nearest(x,y,player);
+	    if ( target != attacker.id && target.intangible == 0 )
+	      {
+		if ( target.state_type == "shielding" )
+		  {
+		    create_projectile ( 3 , 361 , 3 , 3 , 8 , 4 , kick1 , obj_spark_hit1 , 1 , 1 , 0 , 0 , attacker , 4 , no_script );
+		    proj.x = target.x;
+		    proj.y = target.y - target.actual_height * 0.5;
+		    captured = -6;
+		    image_blend = merge_color ( image_blend , c_black , .85 );
+		    var spark;
+		    spark = instance_create ( x , y , obj_spark_shockwave );
+		    spark.image_yscale *= 1.25;
+		    spark.image_xscale *= 0.5;
+		    exit;
+		  }
+		sound_play(swingsnd1);
+		captured = target.id;
+		target.state_type = "air_flinch";
+		target.attack_type = "none";
+		target.timer = 0;
+		target.time = timer + 60;
+		target.sprite_index = target.flinch_sprite;
+	      }
+	  }
+      }
+    else
+    if ( captured > -6 )
+      {
+	captured.x = x;
+	captured.y = y + 20;
+	captured.hspeed = 0;
+	captured.vspeed = 0;
+      }
+  }
+
+if ( timer = time && captured > 0 )
+  {
+    sound_play(swingsnd2);
+    captured.gethit = 0;
+    captured.intangible = 0;
+    with ( captured )
+      {
+	create_projectile(8,50+facing*80,4,1,0,1,-1,obj_spark_effect,0.06,0.06,0,0,other.attacker.id,4,no_script);
+	proj.hitonce = 1;
+      }
+  }

@@ -1,0 +1,64 @@
+if ( state_type = "run" )
+  {
+    state_type = "attack";
+    attack_type = "dash_attack";
+    timer = 0;
+    time = 31;
+    sprite_index = dash_attack_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 18: image_index = 6; break;
+	case 20: image_index = 7; break;
+      }
+
+    if ( timer = 7 )
+      {
+	play_attack_voice();
+	sound_play(attack_sound2);
+	create_hitbox(6,40+facing*100,6.7,3,13,7,sf_punch2,obj_spark_hit4,0.65,0.9,12,18,self.id,9,2);
+	hitbox.hit_stun = 6;
+	duster = instance_create(x-size*(6-facing*12),y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_alpha = 0.75;
+      }
+    if ( timer = 10 )
+      {
+	hitbox.damage = 5*size;
+	hitbox.bkb = 4*size;
+	hitbox.shield_damage = round(8*size);
+	hitbox.sfx = punch2;
+      }
+    if ( timer >= 3 && timer <= 8 )
+	hspeed = size * (4.2-facing*8.4);
+    if ( timer >= 9 && timer <= 18 )
+	hspeed = size * (3.2-facing*6.4);
+    if ( timer >= 19 && timer <= 22 )
+	hspeed = size * (1.5-facing*3);
+  }
+
+if timer > 15 && movejump = 1 
+{
+	state_type = "jump";
+	attack_type = "none";
+	vspeed -= 5.6;
+}
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

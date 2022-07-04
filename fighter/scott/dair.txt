@@ -1,0 +1,73 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "dair";
+        image_speed = 0.2;
+		fast_fall = 0
+        sprite_index = dair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 42;
+        timer_speed=1;
+}
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 10 {
+                sound_play(attack_sound3);
+                create_hitbox2(13,310+facing*-80,2.7,6.5,24,18,sf_kick2,obj_spark_hit2,0.6,0.7,0,37,self.id,20,3);
+				create_hitbox(13,280+facing*-20,3.0,6.75,24,18,sf_kick2,obj_spark_hit2,0.6,0.7,7,16,self.id,20,3);
+		        hitbox.hit_stun = 1; 
+            }
+			
+			if timer >= 10 && timer <= 30 {
+				hspeed = 2.5 -(facing *5) *size
+				vspeed = 7 
+			}
+		    if timer >= 10 && timer < 30 && attack_success || attack2_success {
+            sprite_index = mid_jump_sprite
+			interrupt = 1;
+			vspeed = -5
+			attack_type = "none";
+            if air > 0
+				state_type = "jump";
+            else
+				state_type = "stand";
+            timer = 0;
+            time =-1;
+			}
+			if attack_success || attack2_success && air <= 0 {
+				vspeed = 0
+			}
+            if timer = 10 {
+                hitbox.damage = 11*size;
+                hitbox.bkb = 6.5*size;
+                hitbox.kbg = 1*size;
+				hitbox.weight_kb = 1;
+                hitbox.dir = 60+facing*60;
+                hitbox.shield_damage = round(9*size);
+                hitbox.hitlag_frames = round(5*size);
+                hitbox.sfx = sf_kick1;
+                hitbox.gfx = obj_spark_hit1;
+                hitbox.hit_stun = 0.1;
+				hitbox.dir = 60+facing*60;
+            }
+			if timer = 30 {
+			image_speed = 0.5
+			}
+            if air = 0 {
+                state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=12; }
+        }  
+if timer >= 42 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,120 @@
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "stand" || state_type = "crouch"|| state_type = "run" || state_type = "shielding" ) 
+{
+	special = 1;
+    state_type = "attack"
+    attack_type = "b"
+    image_speed = 0.2
+    sprite_index = b_sprite
+    image_index=0
+    timer = 0
+    time = 80
+    timer_speed=1
+}
+else if state_type = "jump"  
+{
+	special = 1;
+	state_type = "air_attack"
+    attack_type = "b"
+    image_speed = 0.2
+    sprite_index = b_sprite
+    image_index=0
+    timer = 0
+    time = 80
+    timer_speed=1
+}
+
+if (timer > 1 && timer < 25 && air = 0)
+{
+hspeed *= 0.75
+}
+
+if timer = 10 
+{
+heavy_armor = 15
+flashing = 1
+}
+
+if timer = 13 || timer = 18 || timer = 23 
+{
+flashing = 0
+}
+if timer = 15 || timer = 20 
+{
+flashing = 1
+shaker = instance_create(x,y,obj_shakescreen2);
+shaker.ampl = 1;
+shaker.xampl = 1;
+shaker.time = 2;
+}
+	
+if timer = 20 
+{
+heavy_armor = 0
+sound_play(attack_sound4); 
+duster = instance_create(x-(6-facing*12)*size,y,obj_dust_effect)
+duster.facing = facing
+duster2= instance_create(x-(-6-facing*-12)*size,y,obj_dust_effect)
+duster2.facing = facing+1
+duster.image_xscale *= 1.7*size
+duster.image_yscale *= 1.7*size
+duster2.image_xscale *= 1.7*size
+duster2.image_yscale *= 1.7*size
+create_hitbox2(20,90,8,8,53,24,sf_punchs,obj_spark_impact,1.1,1.1,0.2,15,self.id,5,5);
+}
+
+
+if timer = 50 
+{
+heavy_armor = 0
+sound_play(attack_sound4); 
+duster = instance_create(x-(6-facing*12)*size,y,obj_dust_effect)
+duster.facing = facing
+duster2= instance_create(x-(-6-facing*-12)*size,y,obj_dust_effect)
+duster2.facing = facing+1
+duster.image_xscale *= 1.7*size
+duster.image_yscale *= 1.7*size
+duster2.image_xscale *= 1.7*size
+duster2.image_yscale *= 1.7*size
+create_hitbox2(20,90,6,6,53,12,sf_punchs,obj_spark_impact,0.9,0.9,0.2,15,self.id,5,5);
+}
+
+if (special = 1 && timer = 60) 
+{
+	timer = 30;
+}
+
+if (special = 0 && timer = 33) 
+{
+	timer = 61;
+}
+
+if (special = 0 && timer = 30) 
+{
+	//timer = 61;
+}
+
+if (timer = 61) 
+{
+	sprite_index = broken_sprite;
+}
+
+//if (image_index >= image_number - image_speed && timer > 60)
+//{image_speed = 0}
+
+if(attack_success){interrupt = 1;flashing = 0;}	
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	flashing = 0
+}
+
+if timer >= time-1 
+{
+	no_boost +=1;
+}

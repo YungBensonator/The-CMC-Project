@@ -1,0 +1,142 @@
+if state_type = "run" || state_type = "crouch" || state_type = "jump" || state_type = "stand" {
+    attacking = 0;
+    special = 1
+    timer = 0;
+    attack_type = "downb"
+    air_move = 0
+    temp = 0
+    charge = 0
+    movehit = 0
+    movedown = 0
+    if air = 0 {
+        hspeed = 0; }
+    else {
+        hspeed *= 0.5
+        air_move = 0
+        }
+    image_speed = 0.2
+    sprite_index = downb_sprite;
+    image_index=0;
+    time = 98;
+    state_type = "air_attack";
+    timer_speed=1;
+    if moveright = 1 facing = 0
+    if moveleft = 1 facing = 1
+}
+	if timer > 1
+	sftemp_timer = 0
+	if timer <= 5 {
+	moveright = 0
+	moveleft = 0
+	}
+            if timer = 5 {
+                spark = instance_create(x,y,obj_down_impact)
+                spark.image_blend = c_black
+                sound_play(focus_charge_sound)
+                sound_play(focus_charge_voice)
+                heavy_armor = 14
+		image_speed = 0
+            }
+            if timer >= 5 && timer <= 85 && heavy_armor = 0 && temp = 0 {
+                effect_create_above(ef_ring,x+15-facing*30,y-15,0,c_aqua);
+                temp = 1;
+                sound_play(focus_gethit_sound)
+                with instance_nearest(0,0,attack_box) instance_destroy()
+                spark = instance_create(x,y,obj_spark)
+                spark.sprite_index = guardspark; 
+                spark.depth=-2
+                spark.image_alpha=0.8
+                spark.image_xscale*=size*1.25
+                spark.image_yscale*=size*1.25
+                spark.pause =1
+		image_speed = 0;
+            }
+	    if timer > 5 && timer < 85 && (moveright || moveleft) {
+		state_type = "stand";
+		attack_type = "none";
+		timer = 0;
+		time = 6;
+		special = 0;
+		exit;
+	    }
+            if timer <= 85 {                   
+                if (timer >= 6 && ((special = 0 && !ai) || (ai && (random(10)>8.1 && temp || random(10)<0.33)))) || timer = 85 {
+                    //temp = 1
+                    charge = timer - 5
+			special = 0;
+                    sprite_index = downb_sprite
+                    image_index = 3
+                    image_speed = 0.3
+                    timer = 100
+                    time = 143
+                    sound_stop(focus_charge_sound);
+                    sound_stop(focus_charge_voice);
+                }
+            }
+            if timer = 103 && charge >= 79
+                sound_play(focus_attack_voice)
+            if timer = 106 {
+                heavy_armor = 0
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                duster.image_yscale *= size*0.6
+                duster.image_alpha = 0.6
+                image_speed = 0.1
+                if charge < 79
+                    sound_play(choose(dsmash_voice,usmash_voice,attack_voice1,attack_voice2))                
+                sound_play(attack_sound3)
+                create_hitbox(8+charge/8,362 - 2*(charge+temp*35 > 40),2.5+charge/40,4+charge/30,14+round(charge/3)+(charge>=79)*145,9+floor(charge/5),sf_punch3*(charge<79)+sf_punchs*(charge>=79),obj_spark_focus_hit,0.65,0.5,19,22,self.id,1,4)
+                hitbox.shake_ampl = 0.25
+                hitbox.hitshake_type = 2
+                if charge >= 79
+                    hitbox.armor_break = 1
+                target=-1
+            }
+            if timer >= 107 && timer <= 111 && instance_exists(hitbox) {
+                if hitbox.hit
+                    movehit = 1
+            }
+            if (timer = 111 || timer = 112) && attack_success {
+                if target != -1 && string(target.state_type) = "air_flinch" && is_on_floor(target) && charge+temp*35 > 40  {
+                    target.speed = 0
+                    target.launch_speed = 0
+                    target.dir = 90
+                    target.state_type = "broken"
+                    target.time = target.alarm[0]
+                    target.timer = 0
+                }                    
+            }
+            if air = 0 && timer <= 100
+                hspeed = 0
+            if timer = 102 || timer = 104 || timer = 110 || timer = 108 || timer = 112 {
+                if timer = 102 || timer = 104
+                hspeed = 2 - facing*4
+                else 
+                hspeed = 0
+                intangible = 0
+                after_image(5,c_dkgray,charge/80)
+            }
+	if timer = 130
+	image_speed = 0
+	if timer = 125
+	interrupt = 1
+            if air = 0 && ((movedown && !ai) || (ai && random(100)>98.7)) && ((timer < 115 && timer >= 111 && movehit) || (timer > 15 && timer < 80)) {
+                timer = 0
+                time = -1
+                state_type = "crouch"
+                attack_type = "none"
+                sprite_index = crouch_sprite;
+                special = 0
+                heavy_armor = 0
+                sound_stop(focus_charge_voice)
+            }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    hspeed = 1 - facing*2;
+    attack_type = "none";
+    if air > 0
+    state_type = "jump";
+    else state_type = "stand"
+    timer = 0;
+    time =-1;
+    temp = 0
+}

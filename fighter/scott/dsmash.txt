@@ -1,0 +1,107 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dsmash";
+        image_speed = 0.25;
+        sprite_index = dsmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 65;
+        timer_speed=1;
+        charge_frame = 5
+		stuntemp = 0
+}
+       
+if timer < time 
+{
+	state_type = "attack";
+	if timer = 6 
+	{
+		image_index = 1;
+		image_speed = 0;
+	}
+	
+	if timer = 14 && moveleft && facing = 0 
+	{
+		facing = 1;
+	}
+	else if timer = 14 && moveright && facing = 1 
+	{
+		facing = 0;
+	}
+	
+	if timer = 15 
+	{
+		image_speed = 0.5;
+		image_index = 2;
+		duster = instance_create(x+15-facing*30,y,obj_dust_effect);
+		duster.facing = facing+1;
+		sound_play(attack_sound3);
+		create_hitbox(15,35+facing*110,6.1,6.6,18,10,sf_kick3,obj_spark_hit4,1.75,0.5,1,10,self.id,15,2);
+		
+		if ((charge >= 0) && (charge < 35))
+		{
+			hitbox.stun_base = 10
+			hitbox.di = 0
+		}
+		
+		if ((charge >= 35) && (charge < 79))
+		{
+			hitbox.stun_base = 100
+			hitbox.di = 0
+		} 
+		
+		if charge >= 79
+		{
+			hitbox.stun_base = 1000
+			hitbox.di = 0
+		}
+	
+		hitbox.shake_ampl = 0.25
+		hitbox.hitshake_type = 2;
+		hitbox.shake_ampl = 0.25
+		if charge >= 79
+		hitbox.armor_break = 1
+	}
+	
+	if timer >= 107 && timer <= 112 
+	{
+		if attack_success 
+		{
+			stuntemp = 1
+		}
+	}
+	
+	if timer = 16 || timer = 17 || timer = 18 || timer = 19 
+	{
+		hitbox.damage = 9*size
+		hitbox.sfx = kick2
+	}
+	
+	if image_index > image_number-image_speed*2
+		image_speed = 0
+}
+  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" && attack_success && enemy.x > x 
+{
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	facing = 0
+}
+else if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" && attack_success && enemy.x < x 
+{
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	facing = 1
+}
+else if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
