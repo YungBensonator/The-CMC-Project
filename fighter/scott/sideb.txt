@@ -1,0 +1,65 @@
+if (state_type = "stand" || state_type = "run" || state_type = "jump" )
+{
+        if(air = 0){hspeed = 0;}
+        state_type = "air_attack";
+        attack_type = "sideb";
+        image_speed = 0.2;
+        sprite_index = sideb_sprite;
+        image_index = 0;
+        timer = 0;
+        time = 56;
+        timer_speed=1;
+}
+
+if timer < time 
+{
+			if(air = 0)
+			{
+				hspeed *= 0.9
+			}
+
+            if timer = 15
+                instance_create(x+10-facing*20,y-20,obj_spark_effect)
+
+			if timer = 28 
+			{
+				hspeed = 7*(1 - facing*2);
+			}
+			
+            if timer = 29 
+			{    
+                duster = instance_create(x,y,obj_dust_effect);
+                duster.facing = facing; 
+                spark = instance_create(x+size*(1-facing*2)*(22),y-size*15,obj_spark_shockwave);
+                spark.image_xscale *= 0.6*size
+                spark.image_yscale *= 0.6*size
+                sound_play(ssmash_voice);
+                sound_play(ssmash_sound);
+                create_hitbox(21,22+facing*136,5.5,6,30,13,kick3,obj_spark_hit4,0.65,0.6,21,15,self.id,3,5);
+                hitbox.armor_break = 1
+                create_hitbox2(17,362,5.1,5.8,30,11,kick2,obj_spark_hit2,0.5,0.6,11,15,self.id,3,2);
+                hitbox.charge_dmg = 1.1
+                hitbox.charge_hitlag = 1.4
+                hitbox.shake_ampl = 0.5
+                hitbox.shake_type = 1
+                hitbox2.charge_dmg = 0.94
+                hitbox2.charge_hitlag = 1.3
+                hitbox2.shake_ampl = 0.5
+				shaker = instance_create(x,y,obj_shakescreen3);
+				shaker.ampl = 3;
+				shaker.xampl = 0;
+				shaker.time = 6;
+            }
+}  
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" 
+{
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

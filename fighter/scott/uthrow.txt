@@ -1,0 +1,54 @@
+if ( time = -1 )
+  {
+    state_type = "attack";
+    attack_type = "uthrow";
+    timer = 0;
+    time = 24;
+    sprite_index = uthrow_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    target.timer_speed = 0;
+    target.alarm[0] = 50;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 0; break;
+	case 8: image_index = 1; break;
+	case 11: image_index = 2; break;
+	case 14: image_index = 2; break;
+	case 17: image_index = 3; break;
+	case 19: image_index = 4; break;
+	case 21: image_index = 5; break;
+      }
+    if ( timer = 11 )
+      {
+	sound_play(swingsnd2);
+	create_throw_box(7,56+facing*68,5.6,0.2,10,5,sf_punch1,obj_spark_hit2,.75,.75,20,17,self.id,2);
+	target.x += size * (1-facing*2);
+	target.y += 1*size;
+	throw_box.weight_kb = 1;
+      }
+	if ( timer >= 11 && timer <= 14 )
+	{
+	state_type = "air_attack";
+	hspeed = 4 - (facing*8)
+	vspeed = -4
+	}
+	if ( timer >= 14 && timer <= 17 )
+	{
+	hspeed = 2 - (facing*4)
+	vspeed = -2
+	}
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

@@ -1,0 +1,45 @@
+
+
+if state_type = "land" || state_type = "respawn" || state_type = "edge" || state_type = "stand"
+    can_sideb = 1;
+
+if state_type = "respawn"
+	flashing = 0;
+
+if state_type = "land" || state_type = "respawn" || state_type = "edge" || state_type = "stand"
+    no_boost = 0;
+
+if state_type = "air_attack" && attack_type = "b" && air > 0 && timer = 25 && no_boost >= 1 {
+		vspeed *= 0;
+}
+
+
+
+
+if max > 0 {
+	after_image(2,c_green,1)
+	hitbox.hitlag_frames *= 2.5	
+	hitbox2.hitlag_frames *= 2.5	
+	hitbox3.hitlag_frames *= 2.5
+	if hitbox.hitlag_frames || hitbox2.hitlag_frames || hitbox3.hitlag_frames >= 30 {
+		hitbox.hitlag_frames = 30
+	}
+	hitbox.damage *= 1.5
+	hitbox2.damage *= 1.5
+	hitbox3.damage *= 1.5
+	if hitbox.damage >=30 || hitbox2.damage >=30 || hitbox3.damage >= 30 {
+	hitbox.damage = 30
+  }
+	}
+
+
+if max > 0 && state_type = "attack" || state_type = "air_attack" || attack_type = "sideb" && timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	max = 0
+
+}
+
+if max = 1 && state_type = "respawn" {
+	max = 0
+}
+
+if sideb> 0 {sideb -= 1}

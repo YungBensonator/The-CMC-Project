@@ -1,0 +1,33 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0.2;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 18;
+        timer_speed=1;
+}
+        if timer < time {
+            state_type = "attack";
+            if timer = 5 {
+                sound_play(attack_sound2);
+                create_hitbox(5,90,4.5,0.9,5,4,sf_kick2,obj_spark_hit1,1.0,0.5,13,6,self.id,5,2);
+				hitbox.weight_kb = 1;
+                hitbox.di = 0.3;
+                hitbox.hit_stun = 7;
+                hitbox.fx_y = -5
+				duster = instance_create(x-(-20-facing*-40)*size,y,obj_dust_effect)
+				duster.image_xscale = 0.1
+				duster.image_yscale = 0.1
+				duster.facing = facing + 1
+            }
+        }
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
