@@ -1,0 +1,74 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "nair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = nair_sprite;
+  timer = 0;
+  time = 22;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; sound_play(attacksnd3); break;
+  case 8: image_index = 3; break;
+  case 13: image_index = 4; break;
+  case 16: image_index = 5; break;
+  case 19: image_index = 6; break;
+  }
+
+
+if timer = 6
+{
+    create_hitbox ( 8 , 30 + facing * 120 , 3.5 , 5.1 , 12 , 6 , kick3 , obj_spark_hit4 , 1.56 , 0.45 , 25.60 , 24 , self.id , 5 , 2 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 331.93;
+	if ( random (2) < 1 )
+   {
+	play_attack_voice();
+   } 
+}
+
+if timer = 8
+{
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 22
+    hitbox.hitbox_y = size * 26.40
+    hitbox.image_xscale = size * 1.26
+    hitbox.image_yscale = size * 0.35
+    hitbox.image_angle = ( 1 - facing * 2 ) * 330.26
+}
+
+if timer = 10
+{
+	hitbox.damage = 4*size;
+	hitbox.bkb = 2.6*size;
+	hitbox.kbg = 1*size;
+	hitbox.shield_damage = round(8*size);
+	hitbox.hitlag_frames = 4*size;
+	hitbox.sfx = kick2;
+	hitbox.gfx = obj_spark_hit3;
+}
+
+if air = 0 
+{
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=8; 
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,124 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" and ayasex = 0{
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+    sprite_index = upb_sprite;
+    image_index=0;
+    time = 30;
+    timer_speed=1;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+
+if timer < time {
+	speed=0
+        gravity_lock = 1;
+		air_move = 0
+	state_type = "air_attack"
+    switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 3: image_index = 3; break;
+	case 4: image_index = 4; break;
+	case 5: image_index = 5; break;
+	case 6: image_index = 6; break;
+	case 10: image_index = 7; break;
+	
+	case 14: image_index = 0; break;
+	case 16: image_index = 1; break;
+	case 18: image_index = 2; break;
+	case 20: image_index = 3; break;
+	case 22: image_index = 4; break;
+	case 24: image_index = 5; break;
+      }
+	  
+	  if timer = 6 {
+		  trick = create_blur(x - 8 * (1-facing*2),y - 80,self.id);
+    trick.sprite_index = trick_sprite;
+    trick.image_speed = 1;
+    trick.image_alpha = 0.9;
+    trick.image_xscale = 0.25 * (1-facing*2);
+    trick.image_yscale = 0.25;
+    trick.depth = depth - 0.1;
+    trick.snap = self.id
+	sound_play(airhike_sound);
+	  }
+	  
+	  if timer >= 6 and timer < 14 {
+		 image_alpha = 0
+		 intangible = 1
+	 }
+	 
+	 
+	 
+	 if timer = 14 {
+		 image_alpha = 1
+		 intangible = 0
+		 sprite_index = upb2_sprite
+		 image_index = 0
+	sound_play(airhike_sound);
+	ayasex = 1
+	 }
+	  
+	  if timer = 14 and moveup = 0 and moveright = 0 and moveleft = 0 and movedown = 0 {
+	   y = y - 50
+	  sprite_index = upb2_sprite;
+	  image_index = 0
+  }
+  
+  if timer = 14 and moveup = 1 {
+	  y = y - 50
+	  sprite_index = upb2_sprite;
+	  image_index = 0
+  }
+
+  if timer = 14 and moveright = 1 {
+	  x = x + 50
+	  sprite_index = upb2_sprite;
+	  image_index = 0
+  }
+  
+  if timer = 14 and movedown = 1 {
+	  y = y + 50
+	  sprite_index = upb2_sprite;
+	  image_index = 0
+  }
+  
+   if timer = 14 and moveleft = 1 {
+	  x = x - 50
+	  sprite_index = upb2_sprite;
+	  image_index = 0
+  }
+  
+  if timer = 15 {
+	  trick = create_blur(x - 8 * (1-facing*2),y - 80,self.id);
+    trick.sprite_index = trick_sprite;
+    trick.anim_speed = 1;
+    trick.image_alpha = 0.9;
+    trick.image_xscale = 0.25 * (1-facing*2);
+    trick.image_yscale = 0.25;
+    trick.depth = depth - 0.1;
+    trick.snap = self.id
+	sound_play(hereiam_voice);
+	sound_play(hereiam_voice);
+	sound_play(hereiam_voice);
+  }
+	  
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "jump";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

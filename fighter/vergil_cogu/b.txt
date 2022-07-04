@@ -1,0 +1,136 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = nair_sprite
+        image_index=0
+        timer = 0
+        time = 60
+		hspeed = 0
+		target1 = 0
+		target = 0
+		if specialcancel = 1 {
+			timer = 8
+			effect_create_above(ef_ring,x,y-15,0.3,c_aqua)
+		}
+	
+}
+
+if ( timer < time )
+    {
+        gravity_lock = 0;
+		air_move = 0
+    switch ( timer )
+    {
+	case 0: image_index = 0; break;
+	case 6: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 14: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 18: image_index = 5; break;
+	case 20: image_index = 6; break;
+	case 30: image_index = 7; break;
+    }
+	
+	if specialcancel = 1 and timer = 8 {
+		image_blend = c_aqua
+	}
+	
+	if specialcancel = 1 and timer = 11 {
+		image_blend = c_white
+	}
+	
+	if specialcancel = 1 and timer = 14 {
+		image_blend = c_aqua
+	}
+	
+	if specialcancel = 1 and timer = 17 {
+		image_blend = c_white
+	}
+	
+	if specialcancel = 1 and timer = 20 {
+		image_blend = c_aqua
+	}
+	
+	if specialcancel = 1 and timer = 23 {
+		image_blend = c_white
+	}
+	
+	if specialcancel = 1 and timer = 26 {
+		image_blend = c_aqua
+	}
+	
+	if specialcancel = 1 and timer = 29 {
+		image_blend = c_white
+	}
+	
+	if timer = 8 {
+		sound_play(there_voice);
+		sound_play(there_voice);
+	}
+	
+
+	
+	if timer = 19 {
+		create_homing_bubble(7,3,30,15,self.id,6);
+	}
+	
+	if ( target > 0 && target != self.id ) {
+	    target1 = target;
+	  }
+	
+	if timer = 20 {
+	create_projectile(1, angle_correct(80), 4.1, 0, 11, 9, slash1, obj_spark_slash2, 0.35, 0.35, 80, 25, self.id, 1000, char_custom2);
+	proj.di = 0
+	sound_play(judgmentcut_sound);
+	if target1 > 0 {
+	proj.x = target1.x
+	proj.y = target1.y-(target1.actual_height / 2 );
+	}
+	
+	}
+
+	
+	if timer = 20 {
+		sound_play(sheath_sound);
+	}
+	
+	if timer >= 20 and movejump = 1 and bluedabodeedaboda = 0 {
+        bluedabodeedaboda = 1	
+		state_type = "jump"
+		attack_type = "none"
+		image_blend = c_white
+		vspeed = -4
+		timer = 0
+		time = - 1
+		sound_play(jump_sound);
+		specialcancel = 0
+	}
+	
+	if timer >= 20 and ( ( ( moveright && facing = 0 ) or ( moveleft && facing = 1 ) ) ) and special = 1 {
+			  specialcancel = 1
+			  state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_sideb();
+		  }
+	  
+	
+  }
+  
+
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+	specialcancel = 0
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

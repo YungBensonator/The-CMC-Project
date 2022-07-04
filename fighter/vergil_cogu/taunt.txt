@@ -1,0 +1,110 @@
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 190;
+        timer_speed=1;
+		rankhits += 4
+		voiceclip = 0
+}
+state_type = "attack";
+
+switch ( timer )
+      {
+	case 0: image_index = 0; break;
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 22: image_index = 4; break;
+	case 26: image_index = 5; break;
+	case 30: image_index = 6; break;
+	case 34: image_index = 7; break;
+	case 38: image_index = 8; break;
+	case 42: image_index = 9; break;
+	case 46: image_index = 10; break;
+	case 50: image_index = 11; break;
+	case 54: image_index = 12; break;
+	case 58: image_index = 13; break;
+	case 63: image_index = 14; break;
+	case 68: image_index = 15; break;
+	case 73: image_index = 16; break;
+	case 78: image_index = 17; break;
+	case 83: image_index = 18; break;
+	case 88: image_index = 19; break;
+	case 93: image_index = 20; break;
+	case 98: image_index = 21; break;
+	case 103: image_index = 22; break;
+	case 108: image_index = 23; break;
+	case 113: image_index = 24; break;
+	case 118: image_index = 25; break;
+	case 123: image_index = 26; break;
+	case 128: image_index = 27; break;
+	case 133: image_index = 28; break;
+	case 138: image_index = 29; break;
+	case 143: image_index = 30; break;
+	case 148: image_index = 31; break;
+	case 153: image_index = 32; break;
+	case 158: image_index = 33; break;
+	case 160: image_index = 34; break;
+	case 162: image_index = 35; break;
+	case 164: image_index = 36; break;
+	case 166: image_index = 37; break;
+	case 168: image_index = 38; break;
+	case 170: image_index = 39; break;
+	case 172: image_index = 40; break;
+	case 174: image_index = 41; break;
+	case 176: image_index = 42; break;
+	case 178: image_index = 43; break;
+	case 180: image_index = 44; break;
+	case 182: image_index = 45; break;
+      }
+	  
+	  for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  {
+	if ( db_charname[global.gs_character[i],1] == "dante" ) {
+	heartwarmingfamilyreunion = 1}
+	
+  }
+	  
+	  if timer = 46 {
+		  sound_play(coolswing_sound1);
+	  }
+	  
+	  if timer = 58 and rankhits < 16 and !heartwarmingfamilyreunion {
+		  sound_play(choose(taunt_voice1,taunt_voice2,taunt_voice3,taunt_voice4));
+	  }
+	  
+	  if timer = 58 and heartwarmingfamilyreunion = 1 {
+		  sound_play(taunt_dante_voice);
+	  }
+	  
+	  if timer = 57 and rankhits >= 16 and !heartwarmingfamilyreunion{
+		  voiceclip = choose(0, 1)
+		  
+		  if voiceclip = 0
+		  sound_play(morepower_voice);
+		  
+		  if voiceclip = 1
+		  sound_play(now_voice);
+		  
+	  }
+	  
+	  if timer = 115 and voiceclip = 1 {
+		  sound_play(motivated_voice);
+	  }
+	  
+	  if timer = 178 {
+		  sound_play(sheath_sound);
+	  }
+	  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

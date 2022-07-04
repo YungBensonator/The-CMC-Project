@@ -1,0 +1,62 @@
+if timer = 1
+{
+visible = 1;
+priority = 2
+moving_object = 0
+sprite_index = attacker.roundtrip_sprite
+image_speed = 0.5
+decrease = 0
+wait = 0
+}
+
+
+
+if timer > 1 {
+	if hit = 1 and timer mod 7 = 0 {
+		hit = 0
+	}
+	
+	if timer mod 10 = 0 {
+		sound_play(swingsnd2);
+	}
+	
+	target.x = x
+	
+	if timer <= 31 {
+	hspeed -= 0.25 * (1-facing*2)
+	decrease -= 0.25
+	}
+	
+	    target.dir = point_direction(target.x,target.y,x,y)
+		target.hspeed = hspeed
+	
+	if hit = 1 {
+	time = 1000
+	if hspeed != 0
+	hspeed = (initialspeed + decrease) * (1-facing*2)
+	
+    }
+	
+	if hspeed = 0 {
+		wait += 1
+	}
+	
+	if wait >= 50 {
+		hspeed -= 0.25 * (1-facing*2)
+	decrease -= 0.25
+	if collision_rectangle(x-1,y-1,x+1, y+1, attacker.id, false, false)
+	instance_destroy()
+	}
+	
+		
+	
+}
+
+
+
+
+
+
+
+	
+

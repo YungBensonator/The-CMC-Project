@@ -1,0 +1,106 @@
+if time = -1 {
+hspeed = 0;
+state_type = "air_attack";
+attack_type = "bthrow";
+image_speed = 0;
+sprite_index = utilt_sprite;
+image_index=0;
+timer = 0;
+time = 50;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+}
+
+if timer < time {
+	speed = 0
+	gravity_lock = 1
+	switch (timer)
+	{
+	case 0: image_index = 0; break;
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 7: image_index = 3; break;
+	case 9: image_index = 4; break;
+	case 10: image_index = 5; break;
+	case 11: image_index = 6; break;
+	case 13: image_index = 7; break;
+	
+	case 15: image_index = 0; break;
+	case 17: image_index = 1; break;
+	case 19: image_index = 2; break;
+	case 21: image_index = 3; break;
+	case 24: image_index = 4; break;
+	case 27: image_index = 5; break;
+	case 37: image_index = 6; break;
+	case 39: image_index = 7; break;
+	case 41: image_index = 8; break;
+	case 43: image_index = 9; break;
+	case 45: image_index = 10; break;
+	}
+	
+	if timer = 9 {
+		  create_projectile(5, 90, 0, 0, 11, 7, slash3, obj_spark_slash4, 0.75, 0.75, 10, 25, self.id, 1000, char_custom5);
+		  sound_play(coolswing_sound3);
+		  sound_play(drive_voice);
+	  }
+	  
+	  if timer = 21 {
+		  create_projectile(5, angle_correct(35), 6, 5, 11, 7, slash3, obj_spark_slash4, 1, 1, 10, 25, self.id, 1000, char_custom5);
+		  sound_play(coolswing_sound3);
+	  }
+	  
+	  if timer = 1 {
+	  trick = create_blur(x - 20 * (1-facing*2),y - 80,self.id);
+    trick.sprite_index = trick_sprite;
+    trick.image_speed = 1;
+    trick.image_alpha = 0.9;
+    trick.image_xscale = 0.25 * (1-facing*2);
+    trick.image_yscale = 0.25;
+    trick.depth = depth - 0.1;
+    trick.snap = self.id
+	sound_play(airhike_sound);
+     }
+	 
+	 if timer >= 1 and timer < 8 {
+		 image_alpha = 0
+		 intangible = 1
+		 speed=0
+         gravity_lock = 1;
+	 }
+	 
+	 if timer = 8 {
+		 x = target.x + 80 * (1-facing*2)
+		 image_alpha = 1
+		 intangible = 0
+		  trick = create_blur(x - 20 * (1-facing*2),y - 80,self.id);
+    trick.sprite_index = trick_sprite;
+    trick.anim_speed = 1;
+    trick.image_alpha = 0.9;
+    trick.image_xscale = 0.25 * (1-facing*2);
+    trick.image_yscale = 0.25;
+    trick.depth = depth - 0.1;
+    trick.snap = self.id
+	sound_play(airhike_sound);
+	facing = 1-facing
+	 }
+	 
+	 if timer = 43 {
+		 sound_play(sheath_sound);
+	 }
+	 
+	 if timer = 15 {
+		 sprite_index = dtilt_sprite
+		 image_index = 0
+	 }
+	  
+	
+    
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

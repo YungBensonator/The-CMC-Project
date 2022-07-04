@@ -1,0 +1,153 @@
+if state_type = "jump"
+  {
+    state_type = "air_attack";
+    attack_type = "nair";
+    sprite_index = nair_sprite;
+    image_index = 0;
+    image_speed = 0;
+    timer = 0;
+    time = 35;
+    timer_speed=1;
+	repeated = 0
+  }
+
+if ( timer < time )
+  {
+    state_type = "air_attack";
+	switch (timer)
+	{
+	case 0: image_index = 0; break;
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 13: image_index = 4; break;
+	case 15: image_index = 5; break;
+	case 17: image_index = 6; break;
+	case 30: image_index = 7; break;
+	
+	case 50: image_index = 0; break;
+	case 55: image_index = 1; break;
+	case 58: image_index = 2; break;
+	case 61: image_index = 3; break;
+	case 64: image_index = 4; break;
+	case 67: image_index = 5; break;
+	case 70: image_index = 6; break;
+	case 72: image_index = 7; break;
+	case 75: image_index = 8; break;
+	case 78: image_index = 9; break;
+	case 81: image_index = 10; break;
+	}
+	
+	if timer = 6 and repeated = 0 {
+		create_hitbox ( 3 , angle_correct(72) , 4.6 , 0 , 25 , 5 , slash1 , obj_spark_slash2 , 2.34 , 1.47 , 27.60 , 24.50 , self.id , 3 , 3 );
+		   hitbox.execute_on_hit = "
+		   attacker.rankhits += 1
+		   attacker.vspeed = -1.5
+		   "
+		   sound_play(coolswing_sound1);
+		   swordslash = create_blur(x - 12 * (1-facing*2),y - 49,self.id);
+    swordslash.sprite_index = naireffect_sprite;
+    swordslash.anim_speed = 1;
+    swordslash.image_alpha = 0.9;
+    swordslash.image_xscale = 0.23 * (1-facing*2);
+    swordslash.image_yscale = 0.23;
+    swordslash.depth = depth - 0.1;
+    swordslash.snap = self.id
+	swordslash.image_angle = 330 * (1-facing*2)
+	}
+	
+	if timer = 6 and repeated = 1 {
+		create_hitbox ( 3 , angle_correct(72) , 3.9 , 0 , 25 , 5 , slash2 , obj_spark_slash2 , 2.34 , 1.47 , 27.60 , 24.50 , self.id , 3 , 3 );
+		   hitbox.execute_on_hit = "
+		   attacker.rankhits += 1
+		   attacker.vspeed = -1.5
+		   "
+		   //hitbox.hit_stun = 30
+		   hitbox.weight_kb = 1
+		   sound_play(coolswing_sound2);
+		   swordslash = create_blur(x - 18 * (1-facing*2),y - 42,self.id);
+    swordslash.sprite_index = naireffect_sprite;
+    swordslash.anim_speed = 1;
+    swordslash.image_alpha = 0.9;
+    swordslash.image_xscale = 0.23 * (1-facing*2);
+    swordslash.image_yscale = 0.23;
+    swordslash.depth = depth - 0.1;
+    swordslash.snap = self.id
+	}
+	
+	if timer = 17 {
+		sound_play(sheath_sound);
+	}
+	
+	if timer >= 17 and timer < 35 and attacking = 1 and repeated = 0 {
+		repeated = 1
+	    timer = 4
+	}
+	
+	if timer >= 10 and timer < 35 and attacking = 1 and repeated = 1 and movedown = 0 and moveup = 0 and moveright = 0 and moveleft = 0 {
+	    timer = 50
+		time = 100
+		sprite_index = ssmash_sprite
+		image_index = 0
+	}
+	
+	if timer >= 10 and timer < 35 and attacking = 1 and repeated = 1 and ( ( ( moveright && facing = 0 ) or ( moveleft && facing = 1 ) ) ) {
+	    state_type = "jump";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_fair();
+	}
+	
+	if timer >= 50 {
+		speed=0
+        gravity_lock = 1;
+		air_move = 0
+	}
+	
+	if timer = 64 {
+		x = x + 150 * (1-facing*2)
+		sound_play(coolswing_sound4);
+		sound_play(morra_voice);
+		create_projectile(5, angle_correct(50), 7.9, 6, 11, 24, slash3, obj_spark_slash4, 0.27, 0.2, 10, 25, self.id, 1000, no_script);
+	    proj.sprite_index = slash_eff2;
+		proj.image_speed = 0
+		proj.depth = depth - 5
+		screen_shake(3,-5);
+	}
+	
+	if timer = 78 {
+		sound_play(sheath_sound);
+	}
+	
+	if timer >= 68 {
+		proj.image_alpha -= 0.15
+	}
+	
+	if proj.image_alpha <= 0 {
+		with(proj) {instance_destroy()}
+	}
+	
+	
+	
+  
+if air = 0 {
+	
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=7;
+}
+	
+  }
+
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
+  state_type = "jump";
+  attack_type = "none";
+  sprite_index = jump_sprite;
+  image_index = 0;
+  timer = 0;
+  time = -1;
+}

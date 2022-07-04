@@ -1,0 +1,74 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "bair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bair_sprite;
+  timer = 0;
+  time = 23;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+switch ( timer )
+  {
+  case 14: image_index = 1; sound_play(attacksnd3); break;
+  case 16: image_index = 2; break;
+  case 20: image_index = 3; break;
+  }
+
+if timer = 14
+{
+    create_hitbox ( 12 , angle_correct(265) , 5.5 , 6.5 , 20 , 17 , heavy_spike , obj_spark_impact , 0.47 , 0.51 , -24 , 24.40 , self.id , 4 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox.nospikesnd = 1;
+    create_hitbox2 ( 9 , angle_correct(170) , 4.5 , 5.5 , 15 , 8 , punch3 , obj_spark_hit3 , 0.70 , 0.59 , -14.40 , 40 , self.id , 4 , 3 );
+    hitbox2.image_angle = ( 1 - facing * 2 ) * 0;
+	if ( random (2) < 1 )
+   {
+	play_attack_voice();
+   } 
+}
+
+
+if timer = 17
+{
+	hitbox.damage = 3*size;
+	hitbox.bkb = 2.6*size;
+	hitbox.kbg = 1*size;
+	hitbox.dir = angle_correct(170);
+	hitbox.shield_damage = round(8*size);
+	hitbox.hitlag_frames = 4*size;
+	hitbox.sfx = punch2;
+	hitbox.gfx = obj_spark_hit3;
+	
+	hitbox2.damage = 3*size;
+	hitbox2.bkb = 2.6*size;
+	hitbox2.kbg = 1*size;
+	hitbox2.shield_damage = round(8*size);
+	hitbox2.hitlag_frames = 4*size;
+	hitbox2.sfx = punch2;
+	hitbox2.gfx = obj_spark_hit3;
+}
+
+if air = 0 
+{
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=15; 
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

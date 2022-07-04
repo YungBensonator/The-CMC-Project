@@ -1,0 +1,86 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "dair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dair_sprite;
+  timer = 0;
+  time = 24;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; sound_play(attacksnd3); break;
+  case 10: image_index = 3; sound_play(shock_sound); break;
+  case 15: image_index = 4; break;
+  case 21: image_index = 5; break;
+  }
+
+if timer = 10
+{
+    create_hitbox ( 10 , angle_correct(35) , 4.5 , 5.9 , 17 , 8 , shock3 , obj_spark_shock , 1.32 , 0.7 , 36 , 16.80 , self.id , 4 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 319.40;
+	hitbox.nospikesnd = 1;
+	if ( random (2) < 1 )
+   {
+	play_attack_voice();
+   } 
+}
+
+if timer = 6
+{
+    dairfx = create_blur(x,y,self.id);
+    dairfx.sprite_index = dair_fx;
+    dairfx.image_index = 0;
+    dairfx.image_speed = 0;
+	dairfx.snap = self.id;
+    dairfx.image_xscale = 0.4 * (1-facing*2) * size;
+    dairfx.image_yscale = 0.4 * size;
+    dairfx.depth = depth - 1;
+    dairfx.x = x + place_x(154);
+	dairfx.y = y + place_y(81);
+}
+
+switch ( timer )
+  {
+  case 8: dairfx.image_index = 1; break;
+  case 10: dairfx.image_index = 2; break;
+  case 12: dairfx.image_index = 3; break;
+  case 14: dairfx.image_index = 4; break;
+  case 16: dairfx.image_index = 5; break;
+  case 18: dairfx.image_index = 6; break;
+  case 20: dairfx.image_index = 7; break;
+  }  
+
+if timer = 21
+{
+with (dairfx)
+{
+instance_destroy();
+}
+}  
+
+if air = 0 
+{
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=18; 
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

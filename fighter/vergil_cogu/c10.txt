@@ -1,0 +1,49 @@
+priority = 4
+if timer = 1 and hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = attacker.id.summonedswordright_sprite
+    image_speed = 0
+    visible = 1
+	moving_object = 0;
+	facing = attacker.facing
+	
+	
+	
+}
+
+image_angle = direction+facing*180
+
+if timer = 1
+{
+   create_homing_bubble(90,90,0,0,self.id,10);
+}
+
+if target > -1 { 
+	storedx = target.x
+	storedy = target.y
+}
+
+if (target != -1 && target != noone && target != -99 && target != attacker.id) && timer == 2 && target > -1 && (storedx != 0 && storedy != 0) 
+{
+        move_towards_point(storedx,storedy- ( target.actual_height / 2),4)
+		
+}
+
+//kata stinks LMAO!!!!!!
+
+if ( attacker.id.zawarudo = 1 )
+{  
+speed = 0;
+hit = 2; //Just so it wouldn't hit the enemy during timestop.
+timer_speed = 0;
+time = 500; //Whatever the projectile duration is. To ensure it wouldn't be destroyed on their own.
+alarm[0] = 500
+}
+if ( attacker.id.zawarudo = 0 ) and hit = 0
+{
+speed = temp; //Whatever the intended speed would be.
+timer_speed = 1;
+hit = 0;
+alarm[0] = 50
+}
+
+

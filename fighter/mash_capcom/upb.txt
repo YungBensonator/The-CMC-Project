@@ -1,0 +1,140 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" && air < max_jumps )
+  {
+  attacking = 0;
+  special = 0;
+  vspeed -= 0.1;
+  air_move = 0;
+  attack_type = "upb";
+  time = 31;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = upb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  intangible = 1;
+  if moveright
+  {
+  facing = 0;
+  }
+  else if moveleft
+  {
+  facing = 1;
+  }
+  sound_play(upb_voice);
+  }
+
+switch (timer)
+{
+case 01: image_index = 1; break;
+case 03: image_index = 2; sound_play(attacksnd3); sound_play(jump_sound); break;
+case 05: image_index = 3; break;
+case 09: image_index = 4; break;
+case 20: image_index = 5; break;
+case 26: image_index = 6; break;
+}
+
+if timer = 3
+{
+    create_hitbox ( 14 , 85 + facing * 10 , 6.7 , 7.1 , 12 , 10 , punch3 , obj_spark_hit4 , 0.50 , 0.66 , 24.40 , 19.60 , self.id , 12 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	intangible = 0;
+}
+
+if timer = 5
+{
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 13.60
+    hitbox.hitbox_y = size * 46
+    hitbox.image_xscale = size * 0.43
+    hitbox.image_yscale = size * 1.21
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0
+	
+	vspeed = 0;
+	if air = 0
+	{
+	vspeed = -7 * size;
+	}
+	
+	if air > 0
+	{
+	vspeed = -9 * size;
+	}
+	
+	hspeed = 0;
+	hspeed = 1.6 * (1-facing * 2) * size;
+}
+
+if timer >= 5
+{
+force_edge_grab = 1;
+}
+
+
+if timer = 10
+{
+    hitbox.damage = 7*size;
+	hitbox.bkb = 4*size;
+	hitbox.kbg = 4.6*size;
+	hitbox.shield_damage = round(8*size);
+	hitbox.hitlag_frames = 4*size;
+	hitbox.sfx = punch2;
+	hitbox.gfx = obj_spark_hit3;
+}
+
+
+//blur shit
+switch ( timer )
+      {
+	case 1:  
+    blur = create_itmpnt_blur(/*Attacker*/self.id, /*Texture*/blur_texture, /*Start frame*/1, /*Apex Frame*/3, /*End frame*/4, /*CCW*/1, /*girth*/10, 15);
+    blur.index = 0;
+    blur.image_index = 1;
+    blur.depth -= 0.1;
+    blur.h_squish = 9;
+    blur.v_squish = -5;
+	blur.push_x = -10*size*(1-facing*2);
+    break;
+    case 3:
+    blur.index = 1;
+    blur.image_index = 2;
+    break;
+	case 5:
+	blur.index = 2;
+    blur.image_index = 2;
+    break;
+	case 6:
+    blur.image_index = 3; 
+    break;
+    case 7: 
+    blur.start_index = 1;
+    blur.image_index = 3.33;
+    break;
+    case 8:
+    blur.start_index = 1;
+    blur.image_index = 3.5;
+    break;
+	case 9: 
+    blur.start_index = 3;
+    blur.image_index = 4; 
+    break;
+    case 10:  
+    blur.start_index = 4;
+    blur.image_index = 4; 
+    break;
+    case 11: with (blur) instance_destroy(); break;
+      }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "fall";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
