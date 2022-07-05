@@ -1,0 +1,44 @@
+if state = "circling"{
+moving_object = 0
+hit = 2;
+no_reflect = 1;
+parry_nodestroy = 1;
+
+if facing = 0
+orbit_dir+=4.5;
+if facing = 1
+orbit_dir-=4.5;
+
+if (orbit_dir>359) { orbit_dir=0; }
+if (orbit_dir<0) { orbit_dir=359; }
+
+orbit_x=attacker.x+(lengthdir_x(25, orbit_dir));
+orbit_y=(attacker.y - 20*attacker.size)+(lengthdir_y(25, orbit_dir));
+
+x=orbit_x;
+y=orbit_y;
+}
+
+if timer >= time - 1
+{
+attacker.id.downbtemp = 180;
+effect_create_above(ef_ring,x,y,0.07,c_red)
+}
+
+if uses >= 3 and uses < 99{
+	uses = 99
+	timer = time-10
+	
+}
+
+if timer >= time - 10{
+	image_alpha -= 0.1
+	
+	
+}
+
+
+if attacker.id.state_type == "out" or attacker.id.state_type == "dead"
+{
+instance_destroy();
+}
