@@ -1,0 +1,93 @@
+if type = 0
+{
+if timer = 1 && hit = 0 {         // Initialize sprite and speed during frame 1
+    sprite_index = choose(attacker.id.star_spriteG, attacker.id.star_spriteB, attacker.id.star_spriteP, attacker.id.star_spriteY)
+    image_speed = 0
+    visible =1
+	moving_object = 0;
+	tempfacing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	effect_create_above(ef_ring,x * size ,y * size ,0.1,c_purple)
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale * 1
+	else
+	image_xscale=attacker.image_xscale * 1
+	image_yscale=attacker.image_yscale * 1	
+}
+
+image_angle += 10*(1-facing*2);
+
+moving_object = 1;
+
+absorb2 = 1
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0
+instance_destroy()
+if cos(timer*pi)>0.5
+afterimage = after_image(6,c_white,0.3)
+afterimage.number = 0;
+speed += 0.25;
+}
+
+if type = 1
+{
+time = 20
+moving_object = 0;
+ignore_physics = 1;
+
+if timer = 1 {         // Initialize sprite and speed during frame 1
+    sprite_index = choose(attacker.id.star_spriteG, attacker.id.star_spriteB, attacker.id.star_spriteP, attacker.id.star_spriteY)
+    image_speed = 0
+    visible =1
+	tempfacing = attacker.facing
+	scale = attacker.scale
+	size = attacker.size
+	effect_create_above(ef_ring,x * size ,y * size ,0.1,c_purple)
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale * 1
+	else
+	image_xscale=attacker.image_xscale * 1
+	image_yscale=attacker.image_yscale * 1	
+}
+
+image_angle += 10*(1-facing*2);
+
+moving_object = 1;
+
+absorb2 = 1
+if cos(timer*pi)>0.5
+afterimage2 = after_image(6,c_white,0.3)
+afterimage2.number = 0;
+speed += 0.25;
+}
+
+if type = 2
+{
+if timer = 1  {         // Initialize sprite and speed during frame 1
+    sprite_index = choose(attacker.id.star_spriteG, attacker.id.star_spriteB, attacker.id.star_spriteP, attacker.id.star_spriteY)
+    image_speed = 0
+    visible =1
+	hit = 2;
+	tempfacing = attacker.facing
+	if attacker.facing = 0
+	image_xscale=attacker.image_xscale * 1
+	else
+	image_xscale=attacker.image_xscale * 1
+	image_yscale=attacker.image_yscale * 1	
+}
+
+moving_object = 0;
+
+absorb2 = 1
+
+if speed < 0
+{
+speed += 0.05 * (1-tempfacing*2);
+}
+
+if ( timer = ( time - 10 ) || timer = ( time - 8 ) || timer = ( time - 6 ) || timer = ( time - 4 ) || timer = ( time - 2 ) )
+{
+image_alpha -= 0.2;
+}
+
+}

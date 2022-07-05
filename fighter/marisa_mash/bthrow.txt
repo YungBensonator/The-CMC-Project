@@ -1,0 +1,70 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "bthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bthrow_sprite;
+  timer = 0;
+  time = 38;
+  facing = 1-facing;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; play_attack_voice(); break;
+case 18: image_index = 6; break;
+case 21: image_index = 7; break;
+case 24: image_index = 8; break;
+case 27: image_index = 9; break;
+case 30: image_index = 10; break;
+case 33: image_index = 11; break;
+case 36: image_index = 12; break;
+}
+
+if ( timer < 3 )
+	{
+	target.x = x + 2.59 * size * (1-facing*2);
+	target.y = y - 7.40 * size;
+	}
+
+if (timer = 3 or timer = 4 or timer = 5)
+{
+    target.x = x - 1.11 * size * (1-facing*2);
+	target.y = y - 9.62 * size;
+}
+
+if (timer = 6 or timer = 7 or timer = 8 or timer = 9 or timer = 10 or timer = 11)
+{
+    target.x = x - 5.18 * size * (1-facing*2);
+	target.y = y - 9.99 * size;
+}
+
+if (timer = 12 or timer = 13 or timer = 14)
+{
+    target.x = x + 9.25 * size * (1-facing*2);
+	target.y = y - 0.74 * size;
+}
+
+if ( timer == 15 )
+  {
+  create_throw_box ( 12 , 35 + 110 * facing , 6.2 , 6.9 , 14 , 2 , -1 , obj_spark_hit3 , 0.43 , 0.72 , 12.58 , 12.21 , self.id , 2 );
+  target.x = x + 14.43 * size * (1-facing*2);
+  target.y = y - 6.29 * size;
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
