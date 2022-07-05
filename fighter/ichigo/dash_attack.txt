@@ -67,7 +67,7 @@ if state_type = "run" || state_type = "stand" {
         sprite_index = dash_attack_sprite;
         image_index= 0;
         timer = 0;
-        time = 28;
+        time = 60;
 		image_alpha = 0
         timer_speed=1;
 }
@@ -75,19 +75,22 @@ if timer < time {
      state_type = "attack";
 switch ( timer )
       {
-	case 4: image_index = 1; break;
-	case 8: image_index = 2; break;
-	case 12: image_index = 3; break;
-	case 16: image_index = 4; break;
-	case 22: image_index = 5; break;
+	case 4: image_index = 0; break;
+	case 8: image_index = 0; break;
+	case 12: image_index = 0; break;
+	case 16: image_index = 1; break;
+	case 20: image_index = 2; break;
+      case 24: image_index = 3; break;
+	case 28: image_index = 4; break;
+	case 56: image_index = 5; break;
 
       }
-	if timer >=4 and timer <= 8
+	if timer >=16 and timer <= 20
 	hspeed = (run_speed+1)-facing*((run_speed+1)*2)
 	
-    if timer = 1{
+    if timer = 13{
 	sound_play(teleport_sound);
-	hspeed = 10-facing*20
+	hspeed = 15-facing*30
 	tp_spark = create_spark(0,20,self.id);
 	tp_spark.sprite_index = tp_sprite;
     tp_spark.image_speed = 1.0;
@@ -97,21 +100,21 @@ switch ( timer )
     tp_spark.depth = depth - 0.1;
 	}
 	
-	if timer < 8 and timer > 3
+	if timer < 20 and timer > 15
 	image_alpha += 0.2
 	if timer = 8{
 	image_alpha = 1
 	hspeed *= 0.7
 	}	
 	
-	if timer = 12
+	if timer = 24
 	hspeed *= 0.3
 	
-	if timer = 4
+	if timer = 16
       {
     play_attack_voice()
 	sound_play(bleach_sword1);
-	create_hitbox(7,18+facing*144,5,6,14,7,slash1,obj_spark_hit1,1.5,0.55,38,19,self.id,10,3);
+	create_hitbox(10,18+facing*144,5,6,14,9,slash1,obj_spark_hit1,1.5,0.55,38,19,self.id,10,3);
 	hitbox.di = 0.35
 	
       }

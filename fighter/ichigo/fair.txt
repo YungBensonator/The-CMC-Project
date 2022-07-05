@@ -13,7 +13,7 @@ if state_type = "jump" {
 		}
 		else{
 		sprite_index = fair_sprite;
-        time = 25;	
+        time = 28;	
 		image_alpha = 0
 		}
         timer_speed=1;
@@ -91,17 +91,24 @@ if ( timer < time )
 	if timer = 6{
 	play_attack_voice()
 	sound_play(bleach_sword2);
-    create_hitbox(5,30+facing*120,4,6,9,4,slash2,obj_spark_hit3,2.0,1.15,10,16,self.id,10,2);
+    create_hitbox(5,30+facing*120,4,6,9,4,slash2,obj_spark_hit3,1,1.15,20,16,self.id,10,2);
 	
 	}
     
 	}
-	if air = 0 {
+	if (air = 0 && timer < 9)  {
         state_type="land";
         attack_type="none";
         sprite_index = land_sprite;
         timer=0;
         time=7; }
+		
+	if (air = 0 && timer > 9) {
+	state_type="land";
+        attack_type="none";
+        sprite_index = land_sprite;
+        timer=0;
+        time=15; }
   }
 
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
