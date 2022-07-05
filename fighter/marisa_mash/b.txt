@@ -1,0 +1,412 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 1;
+  attack_type = "b";
+  time = 33;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  chargetimer = 0;
+  if chargelvl = 3
+  {
+  sprite_index = b_sprite2;
+  image_index = 0;
+  timer = 300;
+  time = 372;
+  chargelvl = 0;
+  }
+  if chargelvl < 3
+  {
+  chargelvl = 0;
+  }
+  }
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 9: image_index = 3; break;
+case 12: image_index = 4; break;
+case 15: image_index = 5; break;
+case 18: image_index = 6; break;
+case 21: image_index = 7; break;
+case 24: image_index = 8; break;
+case 27: image_index = 9; break;
+case 30: image_index = 10; break;
+}
+
+if timer = 15 and !instance_exists(bproj1)
+{
+    bproj1 = create_projectile ( 3 , 35+facing*110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj1.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj1.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj1.image_yscale = 0.4 * size;
+	bproj1.speed = 3 * (1-facing*2) * size;
+	bproj1.image_speed = 0.65;
+	sound_play(shoot_sound1);
+	sound_play(b_voice1); 
+}
+
+if timer = 17 and !instance_exists(bproj2)
+{
+    bproj2 = create_projectile ( 3 , 35+facing*110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj2.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj2.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj2.image_yscale = 0.4 * size;
+	bproj2.image_angle = 5 * (1-facing*2);
+    bproj2.direction = 5 * (1-facing*2);
+	bproj2.speed = 3 * (1-facing*2) * size;
+	bproj2.image_speed = 0.65;
+	sound_play(shoot_sound1);
+}
+
+if timer = 19 and !instance_exists(bproj3)
+{
+    bproj3 = create_projectile ( 3 , 35+facing*110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj3.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj3.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj3.image_yscale = 0.4 * size;
+	bproj3.image_angle = 10 * (1-facing*2);
+    bproj3.direction = 10 * (1-facing*2);
+	bproj3.speed = 3 * (1-facing*2) * size;
+	bproj3.image_speed = 0.65;
+	sound_play(shoot_sound1);
+}
+
+if timer = 11 and special = 1 and chargelvl < 1 and chargetimer < 20
+{
+timer = 10;
+chargetimer += 1;
+}
+
+if chargetimer = 20 and chargelvl = 0
+{
+sound_play(charge_sound);
+chargelvl = 1;
+chargetimer -= 20;
+effect_create_above(ef_ring,x* size,y - actual_height * 0.5 * size,0.1,c_blue)
+}
+
+if timer = 11 and chargelvl = 1
+{
+timer = 100;
+time = 124;
+}
+
+switch (timer)
+{
+case 103: image_index = 4; break;
+case 106: image_index = 5; break;
+case 109: image_index = 6; break;
+case 112: image_index = 7; break;
+case 115: image_index = 8; break;
+case 118: image_index = 9; break;
+case 121: image_index = 10; break;
+}
+
+if timer = 102 and special = 1 and chargelvl = 1 and chargetimer < 40
+{
+timer = 101;
+chargetimer += 1;
+}
+
+if chargetimer = 40 and chargelvl = 1
+{
+sound_play(charge_sound);
+chargelvl = 2;
+chargetimer -= 30;
+effect_create_above(ef_ring,x* size,y - actual_height * 0.5 * size,0.1,c_blue)
+}
+
+if timer = 106 and !instance_exists(bproj1)
+{
+    bproj1 = create_projectile ( 3 , 35 + facing * 110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj1.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj1.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj1.image_yscale = 0.4 * size;
+	bproj1.speed = 3 * (1-facing*2) * size;
+	bproj1.image_speed = 0.65;
+	sound_play(shoot_sound1);
+	sound_play(b_voice1); 
+}
+
+if timer = 108 and !instance_exists(bproj2)
+{
+    bproj2 = create_projectile ( 3 , 35 + facing * 110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj2.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj2.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj2.image_yscale = 0.4 * size;
+	bproj2.image_angle = 5 * (1-facing*2);
+    bproj2.direction = 5 * (1-facing*2);
+	bproj2.speed = 3 * (1-facing*2) * size;
+	bproj2.image_speed = 0.65;
+	sound_play(shoot_sound1);
+}
+
+if timer = 110 and !instance_exists(bproj3)
+{
+    bproj3 = create_projectile ( 3 , 35 + facing * 110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj3.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj3.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj3.image_yscale = 0.4 * size;
+	bproj3.image_angle = 10 * (1-facing*2);
+    bproj3.direction = 10 * (1-facing*2);
+	bproj3.speed = 3 * (1-facing*2) * size;
+	bproj3.image_speed = 0.65;
+	sound_play(shoot_sound1);
+}
+
+if timer = 112 and !instance_exists(bproj4)
+{
+    bproj4 = create_projectile ( 3 , 35 + facing * 110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj4.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj4.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj4.image_yscale = 0.4 * size;
+	bproj4.image_angle = 15 * (1-facing*2);
+    bproj4.direction = 15 * (1-facing*2);
+	bproj4.speed = 3 * (1-facing*2) * size;
+	bproj4.image_speed = 0.65;
+	sound_play(shoot_sound1);
+}
+
+if timer = 114 and !instance_exists(bproj5)
+{
+    bproj5 = create_projectile ( 3 , 35 + facing * 110 , 4.5 , 5.4 , 12 , 4 , marisahitshock , obj_spark_hit3 , 0.37 , 0.37 , 14.80 , 5 , self.id , 45 , char_custom3 );
+    bproj5.sprite_index = bproj_sprite;
+	effect_create_above(ef_ring,x + 14.80 * (1-facing*2) * size,y - 18.13 * size,0.1,c_green)
+	bproj5.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj5.image_yscale = 0.4 * size;
+	bproj5.image_angle = 20 * (1-facing*2);
+    bproj5.direction = 20 * (1-facing*2);
+	bproj5.speed = 3 * (1-facing*2) * size;
+	bproj5.image_speed = 0.65;
+	sound_play(shoot_sound1);
+}
+
+if timer = 102 and chargelvl = 2
+{
+sprite_index = b_sprite2;
+image_index = 0;
+timer = 200;
+time = 260;
+}
+
+switch (timer)
+{
+case 203: image_index = 1; break;
+case 206: image_index = 2; break;
+case 209: image_index = 3; break;
+case 212: image_index = 4; break;
+case 215: image_index = 5; break;
+case 218: image_index = 6; break;
+case 221: image_index = 7; break;
+case 224: image_index = 8; break;
+case 227: image_index = 9; break;
+case 230: image_index = 10; break;
+case 233: image_index = 15; break;
+case 236: image_index = 16; break;
+case 239: image_index = 17; break;
+case 242: image_index = 18; break;
+case 245: image_index = 19; sound_play(attacksnd4); break;
+case 248: image_index = 20; break;
+case 251: image_index = 21; break;
+case 254: image_index = 22; break;
+case 257: image_index = 23; break;
+}
+
+if timer = 215 and !instance_exists(bproj1)
+{
+    bproj1 = create_projectile ( 5 , 20 + facing * 140 , 5 , 6 , 12 , 4 , marisahit2 , obj_spark_hit3 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 45 , char_custom3 );
+    bproj1.sprite_index = choose(star_spriteG, star_spriteB, star_spriteP, star_spriteY)
+	effect_create_above(ef_ring,x + 2.22 * (1-facing*2) * size,y - 14.43 * size,0.1,c_purple)
+	bproj1.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj1.image_yscale = 0.4 * size;
+	bproj1.speed = 4 * (1-facing*2) * size;
+	bproj1.image_speed = 0.65;
+	bproj1.star = 1;
+	sound_play(shoot_sound2);
+	sound_play(b_voice2); 
+}
+
+if timer = 218 and !instance_exists(bproj2)
+{
+    bproj2 = create_projectile ( 5 , 20 + facing * 140 , 5 , 6 , 12 , 4 , marisahit2 , obj_spark_hit3 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 45 , char_custom3 );
+    bproj2.sprite_index = choose(star_spriteG, star_spriteB, star_spriteP, star_spriteY)
+	effect_create_above(ef_ring,x + 2.22 * (1-facing*2) * size,y - 14.43 * size,0.1,c_purple)
+	bproj2.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj2.image_yscale = 0.4 * size;
+	bproj2.image_angle = 350 * (1-facing*2);
+    bproj2.direction = 350 * (1-facing*2);
+	bproj2.speed = 4 * (1-facing*2) * size;
+	bproj2.image_speed = 0.65;
+	bproj2.star = 1;
+	sound_play(shoot_sound2);
+}
+
+if timer = 221 and !instance_exists(bproj3)
+{
+    bproj3 = create_projectile ( 5 , 20 + facing * 140, 5 , 6 , 12 , 4 , marisahit2 , obj_spark_hit3 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 45 , char_custom3 );
+    bproj3.sprite_index = choose(star_spriteG, star_spriteB, star_spriteP, star_spriteY)
+	effect_create_above(ef_ring,x + 2.22 * (1-facing*2) * size,y - 14.43 * size,0.1,c_purple)
+	bproj3.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj3.image_yscale = 0.4 * size;
+	bproj3.image_angle = 10 * (1-facing*2);
+    bproj3.direction = 10 * (1-facing*2);
+	bproj3.speed = 4 * (1-facing*2) * size;
+	bproj3.image_speed = 0.65;
+	bproj3.star = 1;
+	sound_play(shoot_sound2);
+}
+
+if timer = 224 and !instance_exists(bproj4)
+{
+    bproj4 = create_projectile ( 5 , 20 + facing * 140 , 5 , 6 , 12 , 4 , marisahit2 , obj_spark_hit3 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 45 , char_custom3 );
+    bproj4.sprite_index = choose(star_spriteG, star_spriteB, star_spriteP, star_spriteY)
+	effect_create_above(ef_ring,x + 2.22 * (1-facing*2) * size,y - 14.43 * size,0.1,c_purple)
+	bproj4.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj4.image_yscale = 0.4 * size;
+	bproj4.image_angle = 350 * (1-facing*2);
+    bproj4.direction = 350 * (1-facing*2);
+	bproj4.speed = 4 * (1-facing*2) * size;
+	bproj4.image_speed = 0.65;
+	bproj4.star = 1;
+	sound_play(shoot_sound2);
+}
+
+if timer = 222 and !instance_exists(bproj5)
+{
+    bproj5 = create_projectile ( 5 , 20 + facing * 140 , 5 , 6 , 12 , 4 , marisahit2 , obj_spark_hit3 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 45 , char_custom3 );
+    bproj5.sprite_index = choose(star_spriteG, star_spriteB, star_spriteP, star_spriteY)
+	effect_create_above(ef_ring,x + 2.22 * (1-facing*2) * size,y - 14.43 * size,0.1,c_purple)
+	bproj5.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj5.image_yscale = 0.4 * size;
+	bproj5.image_angle = 10 * (1-facing*2);
+    bproj5.direction = 10 * (1-facing*2);
+	bproj5.speed = 3 * (1-facing*2) * size;
+	bproj5.image_speed = 0.65;
+	bproj5.star = 1;
+	sound_play(shoot_sound2);
+}
+
+if timer = 227 and !instance_exists(bproj6)
+{
+    bproj6 = create_projectile ( 5 , 20 + facing * 140 , 5 , 6 , 12 , 4 , marisahit2 , obj_spark_hit3 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 45 , char_custom3 );
+    bproj6.sprite_index = choose(star_spriteG, star_spriteB, star_spriteP, star_spriteY)
+	effect_create_above(ef_ring,x + 2.22 * (1-facing*2) * size,y - 14.43 * size,0.1,c_purple)
+	bproj6.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj6.image_yscale = 0.4 * size;
+	bproj6.image_angle = 350 * (1-facing*2);
+    bproj6.direction = 350 * (1-facing*2);
+	bproj6.speed = 4 * (1-facing*2) * size;
+	bproj6.image_speed = 0.65;
+	bproj6.star = 1;
+	sound_play(shoot_sound2);
+}
+
+if timer = 230 and !instance_exists(bproj7)
+{
+    bproj7 = create_projectile ( 5 , 20 + facing * 140 , 5 , 6 , 12 , 4 , marisahit2 , obj_spark_hit3 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 45 , char_custom3 );
+    bproj7.sprite_index = choose(star_spriteG, star_spriteB, star_spriteP, star_spriteY)
+	effect_create_above(ef_ring,x + 2.22 * (1-facing*2) * size,y - 14.43 * size,0.1,c_purple)
+	bproj7.image_xscale = 0.4 *(1-facing*2) * size;
+	bproj7.image_yscale = 0.4 * size;
+	bproj7.image_angle = 10 * (1-facing*2);
+    bproj7.direction = 10 * (1-facing*2);
+	bproj7.speed = 3 * (1-facing*2) * size;
+	bproj7.image_speed = 0.65;
+	bproj7.star = 1;
+	sound_play(shoot_sound2);
+}
+
+if timer = 208 and special = 1 and chargelvl = 2 and chargetimer < 60
+{
+timer = 207;
+chargetimer += 1;
+}
+
+if chargetimer = 60 and chargelvl = 2
+{
+sound_play(charge_sound);
+chargelvl = 3;
+chargetimer -= 60;
+effect_create_above(ef_ring,x* size,y - actual_height * 0.5 * size,0.1,c_blue)
+}
+
+if timer = 207 and chargelvl = 3
+{
+timer = 0;
+time = -1;
+}
+
+if timer >= 300
+{
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity = 0;
+gravity_lock = 1;
+vspeed = 0;
+air_move = 0;
+}
+
+switch (timer)
+{
+case 303: image_index = 1; break;
+case 306: image_index = 2; break;
+case 309: image_index = 3; break;
+case 312: image_index = 4; break;
+case 315: image_index = 5; break;
+case 318: image_index = 6; break;
+case 321: image_index = 7; break;
+case 324: image_index = 8; break;
+case 327: image_index = 9; break;
+case 330: image_index = 10; break;
+case 333: image_index = 11; break;
+case 336: image_index = 12; break;
+case 339: image_index = 13; break;
+case 342: image_index = 14; break;
+case 345: image_index = 15; break;
+case 348: image_index = 16; break;
+case 351: image_index = 17; break;
+case 354: image_index = 18; break;
+case 357: image_index = 19; break;
+case 360: image_index = 20; break;
+case 363: image_index = 21; break;
+case 366: image_index = 22; break;
+case 369: image_index = 23; break;
+}
+
+if timer = 315
+{
+ beamu = create_projectile ( 1 , 20 + facing * 140 , 3 , 1 , 5 , 1 , marisahit2 , obj_spark_hit1 , 0.37 , 0.37 , 2.22 , 14.43 , self.id , 30 , char_custom4 );
+ beamu.priority += 5;
+ sound_play(beam_sound);
+ sound_play(b_voice3); 
+}
+
+if timer = 344 and instance_exists(beamu)
+{
+timer = 327
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

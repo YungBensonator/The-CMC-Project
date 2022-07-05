@@ -1,0 +1,75 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "fthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fthrow_sprite;
+  timer = 0;
+  time = 32;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+
+switch (timer)
+{
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 6: image_index = 3; break;
+case 8: image_index = 4; break;
+case 10: image_index = 5; play_attack_voice(); break;
+case 12: image_index = 14; break;
+case 14: image_index = 15; break;
+case 16: image_index = 16; break;
+case 18: image_index = 17; break;
+case 20: image_index = 18; break;
+case 22: image_index = 19; break;
+case 24: image_index = 20; break;
+case 26: image_index = 21; break;
+case 28: image_index = 22; break;
+case 30: image_index = 23; break;
+}
+
+if ( timer == 10 )
+  {
+    create_throw_box ( 10 , 25 + 130 * facing , 5.7 , 6.2 , 14 , 4 , marisahitshock , obj_spark_hit3 , 1.03 , 0.62 , 14.80 , 14.80 , self.id , 2 );
+	sound_play(burst_sound);
+    magicburst = create_blur(x,y,self.id);
+    magicburst.sprite_index = magicblast_sprite;
+    magicburst.image_index = 0;
+    magicburst.image_speed = 0;
+	magicburst.snap = self.id;
+    magicburst.image_xscale = 0.37*(1-facing*2)*size;
+    magicburst.image_yscale = 0.37*size;
+    magicburst.depth = depth - 1;
+    magicburst.x = x + 2.22 * (1-facing*2) *size;
+    magicburst.y = y - 14.43 *size;
+}
+
+switch ( timer )
+    {
+	case 12: magicburst.image_index = 1; break;
+	case 13: magicburst.image_index = 2; break;
+	case 14: magicburst.image_index = 3; break;
+	case 15: magicburst.image_index = 4; break;
+	case 16: magicburst.image_index = 5; break;
+	case 17: magicburst.image_index = 6; break;
+	}
+
+if timer = 18
+{
+with (magicburst)
+{
+instance_destroy();
+}
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

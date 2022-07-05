@@ -1,0 +1,282 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+gravity = 0;
+gravity_lock = 1;
+
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  vspeed = 0;
+  force_edge_grab = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = final_smash_sprite;
+  timer = 0;
+  time = 215;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  sound_play(fs_voice1);
+  freezer = instance_create(x,y,obj_freeze);
+  freezer.alarm[0] = 65;
+  freezer.dontpause = self.id;
+  }
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 6: image_index = 2; break;
+case 62: image_index = 3; break;
+case 65: image_index = 4; break;
+case 68: image_index = 5; break;
+case 71: image_index = 6; break;
+case 74: image_index = 7; break;
+case 77: image_index = 8; break;
+case 80: image_index = 9; break;
+case 83: image_index = 10; break;
+case 86: image_index = 11; break;
+case 89: image_index = 12; break;
+case 92: image_index = 13; break;
+case 95: image_index = 14; break;
+case 98: image_index = 15; break;
+case 101: image_index = 16; break;
+case 104: image_index = 17; break;
+case 107: image_index = 18; break;
+case 110: image_index = 19; break;
+case 113: image_index = 20; break;
+case 116: image_index = 21; break;
+case 119: image_index = 22; break;
+case 122: image_index = 23; break;
+case 125: image_index = 24; break;
+case 128: image_index = 25; break;
+case 131: image_index = 26; break;
+case 134: image_index = 27; break;
+case 137: image_index = 28; break;
+case 140: image_index = 29; break;
+case 143: image_index = 30; break;
+case 146: image_index = 31; break;
+case 149: image_index = 32; break;
+case 152: image_index = 33; break;
+case 155: image_index = 34; break;
+case 158: image_index = 35; break;
+case 161: image_index = 36; break;
+case 164: image_index = 30; break;
+case 167: image_index = 31; break;
+case 170: image_index = 32; break;
+case 173: image_index = 33; break;
+case 176: image_index = 34; break;
+case 179: image_index = 35; break;
+case 182: image_index = 36; break;
+case 185: image_index = 37; break;
+case 188: image_index = 38; break;
+case 191: image_index = 39; break;
+case 194: image_index = 40; break;
+case 197: image_index = 41; break;
+case 200: image_index = 42; break;
+case 203: image_index = 43; break;
+case 206: image_index = 44; break;
+case 209: image_index = 45; break;
+case 212: image_index = 46; break;
+}
+
+if timer = 68
+{
+    sound_play(beam_sound1);
+    sound_play(beam_sound2);
+	sound_play(beam_sound3);
+	sound_play(fs_voice2);
+	
+    masterspark = create_projectile ( 1 , 20 + facing * 140 , 3 , 0 , -1 , 1 , marisahit2 , obj_spark_hit1 , 0.37 , 0.37 , -5.59 , 14 , self.id , 30 , char_custom7 );
+    masterspark.priority += 5;
+	masterspark.hit = 0;
+	masterspark.armor_break = 1;
+	
+	realmasterspark = create_blur(x,y,self.id);
+    realmasterspark.sprite_index = masterspark_sprite;
+    realmasterspark.image_index = 0;
+    realmasterspark.image_speed = 0.5;
+	realmasterspark.alarm[0] = 128;
+    realmasterspark.snap = self.id;
+    realmasterspark.image_xscale = 4*(1-facing*2)*size;
+    realmasterspark.image_yscale = 0.05*size;
+    realmasterspark.depth = depth - 1;
+    realmasterspark.x = x - 5.59 * (1-facing*2) *size;
+    realmasterspark.y = y - 14 *size;
+	
+	msring = create_blur(x,y,self.id);
+    msring.sprite_index = mastersparkring_sprite;
+    msring.image_index = 0;
+    msring.image_speed = 0.75;
+	msring.alarm[0] = 128;
+    msring.snap = self.id;
+	msring.image_alpha = 0;
+    msring.image_xscale = 0.05*(1-facing*2)*size;
+    msring.image_yscale = 0.25*size;
+    msring.depth = depth - 1;
+    msring.x = x + 8.59 * (1-facing*2) *size;
+    msring.y = y - 14 *size;
+	
+	msring2 = create_blur(x,y,self.id);
+    msring2.sprite_index = mastersparkring_sprite2;
+    msring2.image_index = 0;
+    msring2.image_speed = 0.75;
+	msring2.alarm[0] = 128;
+    msring2.snap = self.id;
+	msring2.image_alpha = 0;
+    msring2.image_xscale = 0.25*(1-facing*2)*size;
+    msring2.image_yscale = 0.25*size;
+    msring2.depth = depth - 1;
+    msring2.x = x + 5.59 * (1-facing*2) *size;
+    msring2.y = y - 14 *size;
+}
+
+if timer = 71
+{
+    marisahat = instance_create(x,y,obj_spark);
+    marisahat.sprite_index = final_smash_hat_sprite;
+    marisahat.image_speed = 0.5;
+	marisahat.alarm[0] = 128;
+	marisahat.image_index = 0;
+    marisahat.image_xscale = 0.37*(1-facing*2)*size;
+    marisahat.image_yscale = 0.37*size;
+    marisahat.depth = depth - 1;
+	marisahat.number = -number;
+    marisahat.x = x - 14 * (1 - facing * 2) *size;
+    marisahat.y = y - 33 *size;
+}
+
+if timer <= 73
+{
+msring.image_alpha += 0.2;
+msring2.image_alpha += 0.2;
+}
+
+if timer <= 83
+{
+realmasterspark.image_yscale += 0.05;
+}
+
+switch ( timer )
+{
+case 71: masterspark.hit = 0; break;
+case 74: masterspark.hit = 2; break;
+case 77: masterspark.hit = 0; break;
+case 80: masterspark.hit = 2; break;
+case 83: masterspark.hit = 0; break;
+case 86: masterspark.hit = 2; break;
+case 89: masterspark.hit = 0; break;
+case 92: masterspark.hit = 2; break;
+case 95: masterspark.hit = 0; break;
+case 98: masterspark.hit = 2; break;
+case 101: masterspark.hit = 0; break;
+case 104: masterspark.hit = 2; break;
+case 107: masterspark.hit = 0; break;
+case 110: masterspark.hit = 2; break;
+case 113: masterspark.hit = 0; break;
+case 116: masterspark.hit = 2; break;
+case 119: masterspark.hit = 0; break;
+case 122: masterspark.hit = 2; break;
+case 125: masterspark.hit = 0; break;
+case 128: masterspark.hit = 2; break;
+case 131: masterspark.hit = 0; break;
+case 134: masterspark.hit = 2; break;
+case 137: masterspark.hit = 0; break;
+case 140: masterspark.hit = 2; break;
+case 143: masterspark.hit = 0; break;
+case 146: masterspark.hit = 2; break;
+case 149: masterspark.hit = 0; break;
+case 152: masterspark.hit = 2; break;
+case 155: masterspark.hit = 0; break;
+case 158: masterspark.hit = 2; break;
+case 161: masterspark.hit = 0; break;
+case 164: masterspark.hit = 2; break;
+case 167: masterspark.hit = 0; break;
+case 170: masterspark.hit = 2; break;
+case 173: masterspark.hit = 0; break;
+case 176: masterspark.hit = 2; break;
+case 179: masterspark.hit = 0; break;
+}
+
+if timer = 179
+{
+        masterspark.damage = round(size*25)
+        masterspark.bkb= size*7.5
+        masterspark.kbg = size*8.5
+        masterspark.dir = 20 + facing * 140;
+        masterspark.hitlag_frames = round(14*size)
+        masterspark.shake_ampl = 0.75
+        masterspark.shake_kb = 7
+        masterspark.sfx = marisahit3
+        masterspark.gfx = obj_spark_hit3
+}
+
+if timer >= 68 and timer <= 179
+{
+    if timer mod 5 == 0
+   {
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing;
+	duster.image_xscale = 0.35*size;
+	duster.image_yscale = 0.35*size;
+   }
+}
+
+if timer >= 68 and timer <= 195
+{
+if realmasterspark.image_index >= 24
+realmasterspark.image_index = 0;
+if msring.image_index >= 35
+msring.image_index = 0;
+if msring2.image_index >= 28
+msring2.image_index = 0;
+}
+
+if timer >= 71 and timer < 185
+{
+if marisahat.image_index >= 17
+marisahat.image_index = 0;
+}
+
+if timer = 185
+{
+with (marisahat)
+{
+instance_destroy();
+}
+}
+
+if timer = 190
+{
+with (realmasterspark)
+{
+instance_destroy();
+}
+}
+
+if timer > 179
+{
+if timer < 195 and realmasterspark.image_yscale > 0
+{
+realmasterspark.image_yscale -= 0.1;
+}
+msring.image_alpha -= 0.2;
+msring2.image_alpha -= 0.2;
+}
+
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }
