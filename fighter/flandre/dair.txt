@@ -27,7 +27,7 @@ switch ( timer )
 	}
 	if timer = 12 {
 		sound_play(flandre_swing_sound2);
-		create_hitbox(4,270,5,5,4,9,flandreslash3,obj_spark_slash3,1,1.7,4,15,self.id,4,2);
+		create_hitbox(4,270,4.5,5.2,4,9,flandreslash3,obj_spark_slash3,1,1.7,4,15,self.id,4,2);
 	}
 	if ( timer = 12 && !instance_exists(dair)) {
 		dair = instance_create(x-10*(1-facing*2)*size,y-50*size,obj_spark);
@@ -47,9 +47,42 @@ switch ( timer )
 		timer=0;
 		time=20; 
 	}
+
+	if (timer >= 12){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1) && target.offstage{
+				if ((target.weight <= .22 && target.percent > 45) || (target.weight > .22 && target.weight < .3 && target.percent > 55) || (target.weight > .3 && target.percent > 65)){
+				killspark = instance_create(enemy.x-200,enemy.y-250,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.75;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_yscale = size * 0.95;
+				killspark.image_index = 0;
+				killspark.image_speed = 0.055;
+				killspark.alarm[0] = 100;
+				killspark.depth = depth + 2 ;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(enemy.x,enemy.y,obj_freeze)
+				effect_create_above(ef_ellipse,enemy.x,enemy.y+10,1,c_black)
+				freezer.alarm[0] = 100
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = enemy.x - 30;
+				spark.camera_r = enemy.x + 30;
+				spark.camera_u = enemy.y - 50;
+				spark.camera_d = enemy.y;
+				spark.camera_boundary_zoom = 120;
+				spark.alarm[0] = 70;
+				spark2 = instance_create(enemy.x+8*(1-facing*2),enemy.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 70
+				dontrepeat = 1;
+				}
+				}
+        
+  }	   
   
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
 	{
+	dontrepeat = 0;
     attack_type = "none";
 	image_speed = 0;
     if ( air > 0 )
