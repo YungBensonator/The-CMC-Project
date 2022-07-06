@@ -5,7 +5,7 @@ if ( state_type == "run" || state_type == "stand" || state_type == "jump" || sta
   if air = 0
   {
   state_type = "attack";
-  time = 25;
+  time = 36;
   timer = 0;
   sprite_index = downb_sprite;
   }
@@ -37,7 +37,7 @@ case 14: image_index = 5; break;
 case 16: image_index = 6; break;
 case 18: image_index = 7; break;
 case 20: image_index = 8; break;
-case 22: image_index = 9; effect_create_above(ef_ring,x,y,0.5,c_white); hspeed *= 0.5; break;
+case 32: image_index = 9; effect_create_above(ef_ring,x,y,0.5,c_white); hspeed *= 0.5; break;
 }  
 
 if timer = 9
@@ -46,7 +46,7 @@ sound_play(wolf_voice);
 sound_play(dash_sound);
 }
 
-if timer >=9 && timer < 22
+if timer >=9 && timer < 23
 {
 hspeed = 7.6 * (1-facing*2) * size;
 after_image(4,c_blue,0.5);
@@ -60,11 +60,14 @@ if timer = 9 || timer = 12 || timer = 15 || timer = 18
 
 if timer = 21
 {
-    create_hitbox ( 2 , 15 + facing * 150 , 4.25 , 6.5 , 12, 3 , kick3 , obj_spark_hit4 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 6 , 3 );
+    create_hitbox ( 2 , angle_correct(120) , 4 , 5.7 , 12, 3 , kick3 , obj_spark_hit4 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 6 , 3 );
     hitbox.image_angle = ( 1 - facing * 2 ) * 0;
 }
 
-
+if timer = 22
+{
+hspeed = 1;
+}
 ///////AIR DOWN B
 
 if timer >= 100 && timer < 200
@@ -98,7 +101,7 @@ hitbox.image_angle = ( 1 - facing * 2 ) * 315
 
 if timer = 115
 {
-create_hitbox ( 1 , 315 - facing * 90 , 5.5 , 5.5 , 12, 3 , kick3 , obj_spark_hit3 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 3 , 3 );
+create_hitbox ( 1 , 315 - facing * 90 , 5.5 , 3.5 , 12, 3 , kick3 , obj_spark_hit3 , 1.13 , 0.70 , 1.46 , 10.22 , self.id , 3 , 3 );
 hitbox.image_angle = ( 1 - facing * 2 ) * 315
 }
 if (timer == 115 or timer == 112){
