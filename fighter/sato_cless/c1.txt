@@ -1,0 +1,46 @@
+// iceblock behavior. It is different before it is launched and after it's launched.
+
+if ( timer < 1 )
+  {
+  vspeed += 0.2;
+  }
+  else
+  {
+  moving_object = 1;
+  absorb2 = 1;
+  dir = 90 - sign ( hspeed ) * 30;
+  if ( timer == 6 )
+    {
+    x = attacker.x;
+    y = attacker.y;
+    vspeed = -0.25;
+    hit = 0;
+    hspeed = targethspeed;
+    scale = 1;
+    }
+    else
+    {
+    scale -= 1/360;
+    damage = 6 * size * scale;
+    bkb = 5.2 * size * scale;
+    kbg = 2.2 * size * scale;
+    image_xscale = 1.0*(1-facing*2) * size * scale;
+    image_yscale = 1.0*size*scale;
+    if ( timer mod 4 == 0 )
+      after_image ( 2 , c_aqua , 0.4 );
+    if ( !on_floor && !on_platform )
+      vspeed += 0.25;
+      else
+      vspeed = 0;
+    if ( vspeed > 4 )
+      vspeed = 4;
+    if ( hspeed > 0 && next_to_rwall && timer < time - 1 )
+      {
+      timer = time - 1;
+      }
+    if ( hspeed < 0 && next_to_lwall && timer < time - 1 )
+      {
+      timer = time - 1;
+      }
+    }
+  }

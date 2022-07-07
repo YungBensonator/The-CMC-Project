@@ -1,0 +1,123 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+        sprite_index = downb_sprite
+        image_index=0
+        timer = 0
+        time = 63
+}
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 5: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 20: image_index = 4; break;
+
+      }
+
+
+    if timer = 1{
+	sound_play(downb_voice);
+	}
+    if ( timer = 20 ) 
+      {
+	create_hitbox(10,315+facing*(-90),6.0,7.5,8,6,slash3,obj_spark_slash1,1.0,1.0,18,4,self.id,50,3);
+	hitbox.hit_stun = 4;
+	hitbox.di = 0.3
+	
+	ohphoenix = create_blur(x,y,self.id);
+	ohphoenix.sprite_index = downb_effect_sprite;
+	ohphoenix.x = x;
+    ohphoenix.y = y;
+    ohphoenix.image_speed = 0.3;
+	ohphoenix.image_alpha = 0.7;
+    ohphoenix.image_xscale = 0.9*(1-facing*2) * size;
+    ohphoenix.image_yscale = 0.9* size;
+    ohphoenix.depth = depth - 0.1;
+	
+      }
+
+	  
+	  
+	if timer = 1 || timer = 2 || timer = 3 || timer = 4{
+        hspeed = (3.75-facing*7.5)*(-1)
+		vspeed = -4.75*size
+		}
+    if timer = 5 || timer = 6{
+        hspeed = (2.9 - facing*5.8)*(-1)
+		vspeed = -3.75*size
+    }
+    if timer = 10 || timer = 11 {
+        hspeed = (2.5 - facing*5)*(-1)
+		vspeed = -2.75*size
+    }
+    if timer = 15 {
+        hspeed = 0
+		vspeed = -1.75*size
+    }
+	if timer >=20 and (timer <time){
+	vspeed = 5*size
+	hspeed = (5 - facing*10)*size
+	gravity_lock = 1;
+	
+	}
+  }
+  
+if instance_exists(ohphoenix){
+          ohphoenix.x = x;
+          ohphoenix.y = y;
+          
+}
+  
+if ( timer >= 21 && vspeed > 2 && ( on_floor || on_platform ) )
+    {
+	hspeed = 0;
+	gravity_lock = 0;
+	state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=32;
+	sound_play(explode1);
+	instance_create(x+(12-facing*24),y,obj_spark_explode1);
+	
+	if timer < 21 {
+	if ( hitbox > 0 ) { with ( hitbox ) instance_destroy(); }
+
+	}
+	
+	if instance_exists(ohphoenix) {
+	with (ohphoenix) {instance_destroy()}
+	}
+	
+	duster = instance_create(x+size*(6-facing*12),y,obj_dust_effect);
+	duster.facing = 1-facing;
+	duster.image_alpha = 0.75;
+	duster.image_xscale *= 0.6*size;
+	duster.image_yscale *= 0.4*size;
+	duster = instance_create(x-size*(6-facing*12),y,obj_dust_effect);
+	duster.facing = facing;
+	duster.image_alpha = 0.75;
+	duster.image_xscale *= 0.6*size;
+	duster.image_yscale *= 0.4*size;
+	
+	
+	}
+
+
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	gravity_lock = 0;
+    effect_create_above(ef_smokeup,x,y,0,c_silver)
+}
+        
