@@ -29,8 +29,6 @@ if ( timer < time ) {
 		case 49: image_index = 14; break;
 	}
 	
-	if timer = 17 super_armor = 1
-	
 	if ( timer = 18 ) {
 		duster = instance_create(x,y,obj_dust_effect)
 		duster.image_xscale = 0.25
@@ -39,7 +37,7 @@ if ( timer < time ) {
 		sound_play(dsmash_sound);
 		sound_play(dsmash_voice);
 
-		create_hitbox(16,45+facing*90,7,7.6,56,16,strong_punch,obj_spark_hit4,1.55,0.7,15,8,self.id,3,4);
+		create_hitbox(16,45+facing*90,5,7.6,56,16,strong_punch,obj_spark_hit4,1.55,0.7,15,8,self.id,3,4);
 		hitbox.hit_stun = 16;
 		hitbox.charge_dmg = 1.5;
 		instance_create(x + 11*size*(1-facing*2),y,obj_down_impact);
@@ -48,13 +46,49 @@ if ( timer < time ) {
 	}
 	if ( timer = 19 )
 	{
-		create_hitbox(9,362,6.5,5.7,24,6,kick2,obj_spark_hit4,3.6,0.23,9,3,self.id,3,5);
+		create_hitbox(9,362,6.5,2.7,24,6,kick2,obj_spark_hit4,3.6,0.23,9,3,self.id,3,5);
 	}
-	if timer = 20 super_armor = 0
 }
+if (timer < 19){
+if (attack_success || target.object_index == obj_enemy) && ( dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 130) || (target.weight > .22 && target.weight < .3 && target.percent > 140) || (target.weight > .3 && target.percent > 150)){
+				                killspark = instance_create(target.x-200,target.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(target.x,target.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,target.x,target.y+10,1,c_black)
+				freezer.alarm[0] = 78
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = target.x - 50;
+				spark.camera_r = target.x + 50;
+				spark.camera_u = target.y - 80;
+				spark.camera_d = target.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(target.x+8*(1-facing*2),target.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }
 
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" ) {
-    state_type = "stand";
+    dontrepeat = 0;
+	state_type = "stand";
     attack_type = "none";
     timer = 0;
     time = -1;
