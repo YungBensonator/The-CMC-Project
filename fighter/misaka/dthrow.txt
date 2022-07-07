@@ -1,0 +1,71 @@
+if time = -1 {
+hspeed = 0;
+state_type = "air_attack";
+attack_type = "dthrow";
+image_speed = 0;
+sprite_index = dthrow_sprite;
+image_index=0;
+timer = 0;
+time = 41;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 70
+sound_play(dthrow_voice);
+}
+if timer < time {
+	if ( timer >= 0 && timer <= 27 )
+	{
+	target.x = x + 10 * size * (1-facing*2);
+	target.y = y;
+	target.depth = depth + 1
+	}
+
+    
+switch ( timer )
+      {
+	case 12: image_index = 1; break;
+	case 18: image_index = 2; break;
+	case 24: image_index = 3; break;
+	case 30: image_index = 4; break;
+	case 36: image_index = 5; break;
+
+      }
+    
+	target.depth = depth + 1
+	
+	
+	if timer = 18 or timer = 21 or timer = 24 or timer = 27{
+	sound_play2 ( shock1 );
+    create_hitbox ( 1 , 361 , 1 , 1 , 4 , 2 , -1 , obj_spark_shock , 0.8 , 0.8 , 10 , 15 , self.id , 2 , 3 );
+	}
+
+    if ( timer = 30 ) {
+	create_throw_box(5,60+facing*60,6,3,1.75,4,shock1,obj_spark_shock,1.4,1.4,20,15,self.id,12,3);
+    }
+	target.depth = depth + 1
+	/*
+	if timer = 31{
+grab_cooldown = 240
+with target {
+    if air = 0 {
+    shield_hp = 150;
+    state_type = "broken";   
+    timer = 0;               // Enter broken shield stunned state
+    time = 50 + round(percent/10);
+    attack_type = "none"
+    sprite_index = broken_sprite;
+    speed = 0 }
+    }	
+}
+
+*/
+	
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

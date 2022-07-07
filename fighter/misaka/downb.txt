@@ -1,0 +1,64 @@
+if cantusedownb>0 {break;}
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+	hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0;
+        sprite_index = jab_sprite;
+        image_index=0;
+        timer = 0;
+        time = 120;
+        timer_speed=1;
+        charge_frame=1;
+		
+		if ai and meter >= 100{
+			attacking = 1
+			special = 1
+			
+			time = -1
+			timer = 0
+			if air = 0
+			state_type = "stand"
+			else
+			state_type = "jump"
+			char_smashb();
+			
+		}
+		
+}
+if timer < time {
+	air_move = 0
+	vspeed = 0
+state_type = "air_attack";
+    switch ( timer )
+      {
+	case 10: image_index = 1; break;
+	case 25: image_index = 2; break;
+	case 30: image_index = 3; break;
+	case 110: image_index = 4; break;
+      }
+
+    if ( timer = 10 ) 
+      {
+    play_attack_voice()
+	viga = create_projectile(6,0+facing*180,6.1,4,50,30,kick3,obj_spark_hit1,0,0,-30,0,self.id,120,char_custom3);
+	viga.sprite_index = viga_sprite;
+	viga.image_xscale = image_xscale*0.5
+	viga.image_yscale = image_yscale*0.5
+	viga.image_alpha = 1
+	viga.facing = facing
+	viga.image_angle = 80-facing*160
+	viga.priority = 2
+	viga.hit_stun = 5
+      }
+
+}
+			
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantusedownb = 0
+    }
+        

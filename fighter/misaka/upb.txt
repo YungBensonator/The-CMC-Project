@@ -1,0 +1,280 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" && cantupb = 0 {
+    state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0
+    sprite_index = upb_sprite
+    image_index = 0
+    timer = 0
+    time = 95
+    canceltemp = 0
+	
+	if ai{
+		moveright = 0
+		moveleft = 0
+	}
+	
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+    facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x)
+    facing = 1
+    air_move = 0
+	special = 0
+}
+
+if (timer < time) {
+    state_type = "air_attack"
+
+    switch (timer) {
+        case 215:
+            image_index = 1;
+            break;
+        case 245:
+            image_index = 2;
+            break;
+    }
+	
+	if timer = 1{
+		sound_play(upb_voice);
+		
+		upbRock[1] = create_spark(5,-30,self.id);
+	    upbRock[1].sprite_index = rock_sprite2;
+        upbRock[1].image_speed = 0;
+        upbRock[1].image_alpha = 1;
+        upbRock[1].image_xscale = image_xscale * 0.5;
+        upbRock[1].image_yscale = image_yscale * 0.5;
+        upbRock[1].depth = depth + 2;
+		upbRock[1].alarm[0] = 190
+		
+		upbRock[2] = create_spark(45-random(90),-30,self.id);
+	    upbRock[2].sprite_index = rock_sprite1;
+        upbRock[2].image_speed = 0;
+        upbRock[2].image_alpha = 1;
+        upbRock[2].image_xscale = max(image_xscale * 0.6, image_xscale * 0.6 * (-1));
+        upbRock[2].image_yscale = image_yscale * 0.6;
+        upbRock[2].depth = depth + 2.5;
+        upbRock[2].image_angle = random(360);
+		upbRock[2].alarm[0] = 190
+		
+		upbRock[3] = create_spark(45-random(90),-30,self.id);
+	    upbRock[3].sprite_index = choose(rock_sprite2,rock_sprite1);
+        upbRock[3].image_speed = 0;
+        upbRock[3].image_alpha = 1;
+        upbRock[3].image_xscale = max(image_xscale * 0.5, image_xscale * 0.5 * (-1));
+        upbRock[3].image_yscale = image_yscale * 0.5;
+        upbRock[3].depth = depth + 3;
+        upbRock[3].image_angle = random(360);
+		upbRock[3].alarm[0] = 190
+	}
+	if timer = 2
+	vspeed = - 5
+	
+	if timer < 55 and timer > 2{
+		for (i=1; i<=3; i+=1){
+			with (upbRock[i]){
+				if distance_to_point(other.x,other.y) > 5
+				move_towards_point(other.x,other.y,5)
+				else{
+				x = other.x
+			    y = other.y
+				snap = other.id}
+			}
+		}
+		
+	}
+	air_move = 0
+	if timer = 25{
+		speed = 0
+		gravity = 0
+		gravity_lock = 1
+		image_index = 1
+	}
+	
+	
+	
+	
+	if timer = 201{
+		upbRock[2].y = y - 35
+		
+		gravity_lock = 0
+		vspeed = - 4
+		hspeed = 4-facing*8
+	}
+	if timer = 202{
+		with (upbRock[2]){instance_destroy()}
+		upbRock[2] = create_spark(0,35,self.id);
+	    upbRock[2].sprite_index = rock_sprite1;
+        upbRock[2].image_speed = 0;
+        upbRock[2].image_alpha = 1;
+        upbRock[2].image_xscale = max(image_xscale * 0.6, image_xscale * 0.6 * (-1));
+        upbRock[2].image_yscale = image_yscale * 0.6;
+        upbRock[2].depth = depth + 2;
+        upbRock[2].image_angle = 45+facing*90;
+		upbRock[2].alarm[0] = 30
+		upbRock[2].snap = self.id
+	}
+	
+	if timer = 215{
+	pilar.sprite_index = upbRock[2].sprite_index;
+	pilar.image_xscale = upbRock[2].image_xscale
+	pilar.image_yscale = upbRock[2].image_yscale
+	pilar.image_alpha = 1
+	pilar.facing = facing
+	pilar.image_angle = 315-facing*90
+	pilar.direction = 315-facing*90
+	pilar.speed = 8
+	
+	with (upbRock[2]){instance_destroy()}
+		
+	}
+	
+	if timer > 220 and timer < 290
+	air_move = 1
+	
+	if air = 0 and timer > 215 and timer < 260{
+		hspeed = 0
+		        state_type="land";
+                attack_type="none";
+                sprite_index = land_sprite;
+                timer=0;
+                time=15;
+		
+	}
+	
+	if timer = 301{
+		gravity_lock = 0
+		hspeed = 2-facing*4
+		vspeed = - 30
+	}
+	if timer = 315{
+		y = 0 - 150
+		speed = 0
+		sprite_index = win_sprite
+	viga = create_projectile(0,0,0,0,0,0,kick3,obj_spark_hit1,0,0,0,0,self.id,120,char_custom2);
+	viga.sprite_index = viga_sprite2;
+	viga.image_xscale = image_xscale*0.6
+	viga.image_yscale = image_yscale*0.6
+	viga.image_alpha = 1
+	viga.facing = facing
+	viga.depth = depth + 3
+	viga.vspeed = 15
+	}
+	
+	if timer >= 315 and timer < 380{
+		if instance_exists(viga){
+		    y = viga.y
+		    x = viga.x
+		}
+		viga.depth = depth + 2
+		gravity = 0
+		gravity_lock = 1
+		air_move = 0
+	}
+	
+	if timer = 380{
+		viga.activate = 1
+		viga.vspeed = -2
+		viga.sprite_index = viga_sprite;
+		vspeed = -3
+		
+	}
+	
+	
+	if timer >= 25 and timer <= 90{
+		if ai = 1{
+			if facing = 0
+			moveright = 1
+			else
+			moveleft = 1
+		    moveup = 1
+			if timer >= 85
+			special = 1
+			
+			if !offstage{
+				moveright = 0
+				moveleft = 0
+			}
+			
+		}
+		
+		if attacking = 1{
+			timer = 199
+			time = 260
+			sprite_index = upb_sprite2
+			image_index = 0
+			upbRock[2].image_angle = 45+facing*90
+			upbRock[2].snap = 0
+			upbRock[2].y = y -35
+			upbRock[2].alarm[0] = 60
+		for (i=1; i<=3; i+=2){
+			with (upbRock[i]){
+				gravity = 0.4
+				snap = 0
+				alarm[0] = 50
+			}
+		}
+		}
+		
+		if special = 1{
+			timer = 299
+			time = 390
+			sprite_index = jump_sprite
+			image_index = 0
+			
+		for (i=1; i<=3; i+=1){
+			with (upbRock[i]){
+				gravity = 0.4
+				snap = 0
+				alarm[0] = 50
+			}
+		}
+		}
+		
+		
+		speed = 0
+		gravity = 0
+		gravity_lock = 1
+		air_move = 0
+		if moveright{
+		    x += 4
+			facing = 0
+		}
+		else if moveleft{
+		    x -= 4
+			facing = 1
+		}
+		if movedown
+		    y += 4
+		else if moveup
+		    y -= 4
+	}
+	
+	if timer = 92{
+		for (i=1; i<=3; i+=1){
+			for (i=1; i<=3; i+=1){
+			with (upbRock[i]){
+				gravity = 0.4
+				snap = 0
+				alarm[0] = 50
+			}
+		}
+		}
+		
+	}
+	
+	
+	
+}
+
+
+if timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" {
+	cantupb = 1
+    attack_type = "none";
+    if air > 0
+    state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+}
