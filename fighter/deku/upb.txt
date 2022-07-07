@@ -117,9 +117,46 @@ if timer < time {
 	if (image_index >= image_number - image_speed) image_speed = 0
 }
 
+if (timer >= 30){
+if (attack_success || target.object_index == obj_enemy) && ( dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1 && target.offstage){
+				if ((target.weight <= .22 && target.percent > 70) || (target.weight > .22 && target.weight < .3 && target.percent > 80) || (target.weight > .3 && target.percent > 90)){
+				                killspark = instance_create(target.x-200,target.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(target.x,target.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,target.x,target.y+10,1,c_black)
+				freezer.alarm[0] = 78
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = target.x - 50;
+				spark.camera_r = target.x + 50;
+				spark.camera_u = target.y - 80;
+				spark.camera_d = target.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(target.x+8*(1-facing*2),target.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }
 
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
-    if (temp = 0) state_type = "fall";
+    dontrepeat = 0;
+	if (temp = 0) state_type = "fall";
 	else state_type = "jump";
     attack_type = "none";
     sprite_index = fall_sprite;

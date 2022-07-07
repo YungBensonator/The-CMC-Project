@@ -1,4 +1,4 @@
-if instance_exists(zombie) {
+if (instance_exists(zombie) or zombie_timer > 0) {
 exit;
 }
 
@@ -24,6 +24,7 @@ if state_type = "jump" || state_type = "stand" || state_type = "run" || state_ty
 		special = 1
 		hspeed = 0
 		jillsandwich = 0
+		
 }
 if timer < time {
 state_type = "air_attack";
@@ -53,7 +54,8 @@ state_type = "air_attack";
 	 zombie.image_xscale = 0.44
 	 zombie.image_yscale = 0.44
 	 zombie.hit_stun = 15
-	 zombie.di = 0
+	 zombie.di = -1
+	 zombie_timer = 200
 	 sound_play(zombie_voice);
 	 sound_play(surprise_voice);
 
@@ -64,7 +66,7 @@ state_type = "air_attack";
 	 }
 	 
 	  if timer = 14 and jillsandwich = 1 {
-	 flamezombie = create_projectile ( 5, 90, 0.3, 0.3, 160, 8, fire3, obj_spark_fire1, 2, 2, -80, 0, self.id, 999999, zombie_flaming);
+	 flamezombie = create_projectile ( 5,angle_correct(45), 3.2, 6.3, 160, 8, fire3, obj_spark_fire1, 2, 2, -80, 0, self.id, 999999, zombie_flaming);
 	 flamezombie.hspeed = 1-facing*2
 	 flamezombie.sprite_index = flamingzombie_sprite
 	 flamezombie.image_xscale = 0.44
@@ -77,8 +79,7 @@ state_type = "air_attack";
 
 	 
 
-
-	 
+	
 	 
 	 
 	 

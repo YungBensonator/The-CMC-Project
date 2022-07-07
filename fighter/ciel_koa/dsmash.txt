@@ -6,7 +6,7 @@ if state_type = "stand" || state_type = "run" || state_type = "crouch" {
         sprite_index = dsmash_sprite;
         image_index=0;
         timer = 0;
-        time = 42;
+        time = 40;
         timer_speed=1;
         charge_frame = 1;
 }
@@ -34,19 +34,57 @@ if ( timer < time )
 	if timer = 2 {
 			sound_play(choose(dsmashvoice,dsmashvoice2))}
 	  
-	if timer = 6 {
+	if timer = 5 {
 			sound_play(swinging_sound3);
 			create_hitbox(10,65+facing*50,6,7,20,10,koaattackhit2,obj_spark_hit2,.6,.7,15,7,self.id,3,4);}
 	  
-	if timer = 25 {
+	if timer = 22 {
 			sound_play(swinging_sound2);
 			create_hitbox(12,115-facing*50,7,8,24,12,koaslashhit1,obj_spark_hit3,.6,.7,-15,7,self.id,3,4);}
 
   }
 
+  if (timer >= 43){
+if (attack_success || target.object_index == obj_enemy) && (dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1){
+				if ((target.weight <= .22 && target.percent > 120) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 145)){
+				                killspark = instance_create(target.x-200,target.y-170,obj_spark);
+				killspark.sprite_index = killspark_sprite;
+				killspark.image_xscale = size * 0.65;
+				killspark.image_yscale = size * 0.85;
+	            killspark.image_xscale = size * 0.45;
+				killspark.image_yscale = size * 0.65;
+                killspark.image_xscale = size * 0.65;
+
+				killspark.image_index = 0;
+				killspark.image_speed = 0.045;
+				killspark.alarm[0] = 80;
+				killspark.depth = depth + 1;
+				sound_play(killscreen_voice);
+				screen_shake(30,30);
+				freezer  = instance_create(target.x,target.y,obj_freeze)
+				freezer2  = instance_create(x,y,obj_freeze)
+				effect_create_above(ef_ellipse,target.x,target.y+10,1,c_black)
+				freezer.alarm[0] = 78
+				freezer2.alarm[0] = 80
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+				spark.camera_l = target.x - 50;
+				spark.camera_r = target.x + 50;
+				spark.camera_u = target.y - 80;
+				spark.camera_d = target.y;
+				spark.camera_boundary_zoom = 20;
+				spark.alarm[0] = 60;
+				spark2 = instance_create(target.x+8*(1-facing*2),target.y-26,obj_spark_hit3)
+				spark2.alarm[0] = 50
+				dontrepeat = 1;
+				}
+				}
+        
+  }	
+
 if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
   {
-    if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = 4; }
+    dontrepeat = 0
+	if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = 4; }
 	else {state_type = "stand";}
     attack_type = "none";
     timer = 12;
