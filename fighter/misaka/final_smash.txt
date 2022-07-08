@@ -1,0 +1,189 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 221;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+    if cameFromMeterCancel = 1{
+		cameFromMeterCancel = 0
+		meter = 0
+		
+	}else{
+		cameFromMeterCancel = 0
+		smash_power = 0
+	}
+        air_move=0
+		
+		duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 142;
+		
+		sound_play(super_sound);
+		
+		super_fx = create_spark(0,20,self.id);
+		super_fx.sprite_index = super_spriteEFF;
+		super_fx.image_speed = 0.5;
+		super_fx.image_alpha = 0.7;
+		super_fx.image_xscale = image_xscale * 0.75 ;
+		super_fx.image_yscale = image_yscale * 0.75 ;
+		super_fx.depth = depth - 0.1;
+		
+}
+speed=0
+gravity_lock = 1;
+if ( timer < time ){
+
+
+	
+  if ( timer == 0 )
+    {
+    cut_in_bg = instance_create ( 0 , 0 , obj_custom_gfx );
+    cut_in_bg.depth = -15;
+    cut_in_bg.draw_script = char_custom9;
+    cut_in_bg.keepmain = keepmain;
+    cut_in_bg.image_alpha = 0;
+    cut_in_bg.alarm[0] = 120;
+    cut_in_bg.sprite_index = cut_in_fx_sprite;
+    }
+  if ( timer >= 0 && timer < 120 )
+    {
+    if ( temp > 1 )
+      cut_in_bg.x += 64 * ( 1 - facing * 2 );
+      else
+      cut_in_bg.x += 32 * ( 1 - facing * 2 );
+    if ( cut_in_bg.x >= 0 ) cut_in_bg.x -= 720;
+    if ( cut_in_bg.x < -720 ) cut_in_bg.x += 720;
+    }
+  if ( timer >= 0 && timer <= 20 )
+    {
+    if ( cut_in_bg.image_alpha < 1 )
+      cut_in_bg.image_alpha += 0.05;
+    }
+  if ( timer >= 100 && timer <= 120 )
+    {
+    if ( cut_in_bg.image_alpha > 0 )
+      cut_in_bg.image_alpha -= 0.05;
+    }
+	
+	if timer = 0{
+		misakaCutIn = create_spark(30,0,self.id);
+		misakaCutIn.sprite_index = cut_in_sprite;
+		misakaCutIn.image_speed = 0;
+		misakaCutIn.image_alpha = 0.1;
+		misakaCutIn.depth = -15.5;
+		misakaCutIn.image_yscale = view_hview/1280;
+		misakaCutIn.image_xscale = misakaCutIn.image_yscale;
+		misakaCutIn.alarm[0] = 120
+		
+		misakaCutIn.x = (view_xview + view_wview*0.95)
+		misakaCutIn.y =  view_yview + view_hview
+	}
+	
+	if instance_exists(misakaCutIn){
+		misakaCutIn.image_yscale = view_hview/1280;
+		misakaCutIn.image_xscale = misakaCutIn.image_yscale;
+		misakaCutIn.y =  view_yview + view_hview
+	}
+	
+	if ( timer >= 0 && timer < 30 )
+		misakaCutIn.x -= view_wview * 0.01
+	
+	if ( timer >= 30 && timer < 60 )
+		misakaCutIn.x -= view_wview * 0.0025
+	
+	if ( timer >= 90 && timer < 120 )
+		misakaCutIn.x -= view_wview * 0.05
+	
+	
+    if ( timer >= 0 && timer <= 15 ){
+    if ( misakaCutIn.image_alpha < 1 )
+      misakaCutIn.image_alpha += 0.08;
+    }
+    if ( timer >= 105 && timer <= 120 ){
+    if ( misakaCutIn.image_alpha > 0 )
+      misakaCutIn.image_alpha -= 0.08;
+    }
+	
+	
+switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	
+	case 128: image_index = 3; break;
+	
+	case 136: image_index = 4; break;
+	case 163: image_index = 5; break;
+    }
+	
+	if timer = 8{
+	sound_play(railgun_voice1);
+	sound_play(railgun_sound1);
+    create_projectile(0,361,0,0,0,0,-1,-1,0,0,17,25,self.id,120,char_custom6);
+	proj.vspeed = -1.9
+	proj.gravity = 0.031
+	proj.sprite_index = coinn_sprite
+	proj.image_speed = 0.6
+	proj.image_index = 0
+	proj.image_xscale = image_xscale * 0.1
+	proj.image_yscale = image_yscale * 0.1
+	proj.depth = depth - 1
+	proj.hit = 2
+}
+	
+	if timer = 128{
+		sound_play(railgun_sound2);
+	railgun = create_spark(16,24,self.id);
+	railgun.sprite_index = fs_spriteEFF;
+    railgun.image_speed = 0.305;
+	railgun.image_alpha = 1;
+    railgun.image_xscale = image_xscale * 0.75;
+    railgun.image_yscale = image_yscale * 0.75;
+    railgun.depth = depth - 0.1;
+	railgun.alarm[0] = 200
+		
+	}
+	
+	if timer = 135
+	sound_play(railgun_voice2);
+	
+	if timer >= 142 and timer <= 160 and timer mod 4 = 0{
+		create_hitbox(3,90,2,0,5,0.1,shock1,obj_spark_hit3,11.5,0.6,200,24,self.id,5,5);
+	    hitbox.hit_stun = 10
+		hitbox.weight_kb = 1
+		hitbox.di = 0
+	}
+	if timer = 164{
+		create_hitbox(20,10+facing*160,6.4,5.4,20,25,shock1,railgun_hs,11.5,0.6,200,24,self.id,5,5);
+		
+	}
+	
+}
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	if cameFromMeterCancel = 1{
+		cameFromMeterCancel = 0
+		meter = 0
+		
+	}else{
+		cameFromMeterCancel = 0
+		smash_power = 0
+	}
+    
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

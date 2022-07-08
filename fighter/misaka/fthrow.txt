@@ -1,0 +1,84 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "fthrow";
+image_speed = 0;
+sprite_index = ssmash_sprite;
+image_index=0;
+timer = 0;
+time = 49;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 47
+}
+if timer < time {
+	if ( timer >= 0 && timer <= 24 )
+	{
+	target.x = x + 20 * size * (1-facing*2);
+	target.y = y;
+	}
+switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	
+	
+	case 22: image_index = 4; break;
+	case 25: image_index = 5; break;
+	case 28: image_index = 6; break;
+	case 31: image_index = 7; break;
+	case 34: image_index = 8; break;
+	case 37: image_index = 9; break;
+
+      }
+    
+    if timer = 1{
+	maquinaDeRefri = create_spark(28,0,self.id);
+	maquinaDeRefri.sprite_index = maquina_sprite;
+    maquinaDeRefri.image_speed = 0;
+	maquinaDeRefri.image_alpha = 1;
+	maquinaDeRefri.image_xscale = image_xscale;
+    maquinaDeRefri.image_yscale = image_yscale;
+    maquinaDeRefri.depth = depth + 3;
+	maquinaDeRefri.alarm[0] = 120
+	}
+	
+	if timer = 22{
+	effectjab = create_blur(x,y,self.id);
+	effectjab.sprite_index = ssmash_spriteEFF;
+    effectjab.image_speed = 0.8;
+	effectjab.image_alpha = 0.7;
+	effectjab.image_xscale = image_xscale*0.4;
+    effectjab.image_yscale = image_yscale*0.4;
+    effectjab.depth = depth - 0.1;
+	effectjab.snap = self.id
+	}
+	
+	if ( timer = 25 ) 
+      {
+	play_attack_voice()
+	sound_play2(kick3);
+	create_throw_box(8,10+facing*160,7.1,4,50,0.1,-1,obj_spark_hit1,2.7,1.9,50,30,self.id,8,4);
+      }
+	if timer = 26{
+		maquinaDeRefri.image_blend = c_dkgray
+	maquinaDeRefri.vspeed = -3
+	maquinaDeRefri.hspeed = 4-facing*8
+	maquinaDeRefri.gravity = 0.4
+		
+	}
+
+
+
+
+}
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none"
+    state_type = "stand"
+    timer = 0
+    time =-1
+    }
+        

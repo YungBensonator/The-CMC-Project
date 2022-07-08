@@ -1,0 +1,214 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" and meter >= 100{
+	hspeed = 0;
+	
+	    if (meter >= 300 or (smash_power >= global.smash_power and smash_power >= 50) ) and !movedown and !moveup{
+			if meter >= 300
+			cameFromMeterCancel = 1
+		char_final_smash();
+		exit;
+		}
+		
+        state_type = "air_attack";
+        attack_type = "smashb";
+        image_speed = 0;
+        image_index=0;
+		timer_speed=1;
+		smashb_script = char_smashb;
+        
+		if meter >= 200
+		superTemp = 2
+		else if meter >= 100
+		superTemp = 1
+		
+		if meter >= 200{
+			if movedown
+			superTemp = 1
+			
+		}
+		
+		if superTemp = 2{
+		sprite_index = super_sprite2;
+		timer = 40;
+        time = 205;
+		meter -= 200
+		
+		}else if superTemp = 1{
+		sprite_index = super_sprite1;
+		timer = 40;
+        time = 205;
+		meter -= 100
+		
+		}
+        
+		
+		
+		duster = instance_create ( 0 , 0 , obj_freeze );
+        duster.dontpause = self.id;
+        duster.alarm[0] = 70;
+		
+		sound_play(super_sound);
+		
+		super_fx = create_spark(0,20,self.id);
+		super_fx.sprite_index = super_spriteEFF;
+		super_fx.image_speed = 0.5;
+		super_fx.image_alpha = 0.7;
+		super_fx.image_xscale = image_xscale * 0.75 ;
+		super_fx.image_yscale = image_yscale * 0.75 ;
+		super_fx.depth = depth - 0.1;
+}
+if superTemp = 1{
+
+if timer < time {
+	air_move = 0
+	vspeed = 0
+	gravity = 0
+	gravity_lock = 1
+	
+state_type = "air_attack";
+    switch ( timer )
+      {
+	case 52: image_index = 1; break;
+	case 55: image_index = 2; break;
+	case 58: image_index = 3; break;
+	case 108: image_index = 4; break;
+	
+	case 110: image_index = 5; break;
+	case 112: image_index = 6; break;
+	case 114: image_index = 7; break;
+	case 116: image_index = 8; break;
+	case 118: image_index = 9; break;
+	case 120: image_index = 10; break;
+	case 122: image_index = 11; break;
+	case 124: image_index = 12; break;
+	case 126: image_index = 13; break;
+	case 128: image_index = 14; break;
+	case 130: image_index = 5; break;
+	case 132: image_index = 6; break;
+	case 134: image_index = 7; break;
+	case 136: image_index = 8; break;
+	case 138: image_index = 9; break;
+	case 140: image_index = 10; break;
+	case 142: image_index = 11; break;
+	case 144: image_index = 12; break;
+	case 146: image_index = 13; break;
+	case 148: image_index = 14; break;
+	case 150: image_index = 5; break;
+	case 152: image_index = 6; break;
+	case 154: image_index = 7; break;
+	case 156: image_index = 8; break;
+	case 158: image_index = 9; break;
+	case 160: image_index = 10; break;
+	case 162: image_index = 11; break;
+	case 164: image_index = 12; break;
+	case 166: image_index = 13; break;
+	case 168: image_index = 14; break;
+	
+	case 170: image_index = 15; break;
+	case 180: image_index = 16; break;
+	case 200: image_index = 17; break;
+	
+      }
+    
+	
+	if timer >= 110 and timer <= 160 and timer mod 5 = 0{
+		create_hitbox(1.25,60+facing*60,2,0,4,2,slash2,obj_spark_hit3,1.2,1.2,24,23,self.id,3,2);
+		hitbox.di = 0
+		hitbox.weight_kb = 1
+		create_hitbox2(1.25,33+facing*114,2,0,4,1,magic1,obj_spark_hit3,3,1.8,45,23,self.id,3,2);
+		hitbox2.di = 0
+		hitbox2.weight_kb = 1
+	
+	repeat(3){
+	effectjab = create_spark(40+random(40),10+random(20),self.id);
+	effectjab.sprite_index = stilt_spriteEFF;
+    effectjab.image_speed = 0.6;
+	effectjab.image_alpha = 0.7;
+    effectjab.image_xscale = image_xscale * 0.3 ;
+    effectjab.image_yscale = image_yscale * 0.3 ;
+    effectjab.depth = depth - 0.1;
+	choser = 0 - random(90)
+	effectjab.image_angle = choser -facing*(choser*2)
+	}
+		
+		if air = 0 and !instance_exists(duster){
+		duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+		duster.facing = facing; } 
+	}
+	
+	if timer = 165{
+		create_hitbox2(5,33+facing*114,7,4.9,4,30,slash3,obj_spark_hit3,3,1.8,45,23,self.id,3,2);
+	}
+    
+
+}
+
+}//End super 1
+else if superTemp = 2{
+
+if timer < time {
+	air_move = 0
+	vspeed = 0
+	gravity = 0
+	gravity_lock = 1
+	
+state_type = "air_attack";
+    switch ( timer )
+      {
+	case 102: image_index = 1; break;
+	case 110: image_index = 2; break;
+	case 115: image_index = 3; break;
+	case 170: image_index = 4; break;
+	
+	case 180: image_index = 5; break;
+	
+      }
+    
+	
+	if timer >= 110 and timer <= 160 and timer mod 10 = 0{
+		
+	cicloneDePoeira = create_projectile (0.5,90,3,0,1,3,shock1,obj_spark_shock,0,0,10+random(120),0,self.id,60,char_custom4);
+    cicloneDePoeira.sprite_index = super_sprite2EFF;
+	cicloneDePoeira.hspeed = 0
+	cicloneDePoeira.image_xscale = image_xscale * 0.25
+	cicloneDePoeira.image_yscale = image_yscale * 0.25
+	cicloneDePoeira.hit_stun = 10
+	cicloneDePoeira.image_speed = 0.45;
+	cicloneDePoeira.image_alpha = 0.9;
+	cicloneDePoeira.depth = depth - 1;
+	cicloneDePoeira.facing = facing
+	cicloneDePoeira.lehspeed = 0
+	cicloneDePoeira.di = 0
+	cicloneDePoeira.weight_kb = 1
+
+		//create_hitbox(1.25,20+facing*140,1,0,4,2,slash2,obj_spark_hit3,1.2,1.2,24,23,self.id,3,2);
+	
+	}
+	
+	if timer = 165{
+	cicloneDePoeira = create_projectile (3,45+facing*90,6.4,6.4,1,8,shock1,obj_spark_shock,0,0,60,0,self.id,60,char_custom4);
+    cicloneDePoeira.sprite_index = super_sprite2EFF;
+	cicloneDePoeira.hspeed = 0
+	cicloneDePoeira.image_xscale = image_xscale * 0.7
+	cicloneDePoeira.image_yscale = image_yscale * 0.7
+	cicloneDePoeira.hit_stun = 10
+	cicloneDePoeira.image_speed = 0.45;
+	cicloneDePoeira.image_alpha = 0.9;
+	cicloneDePoeira.depth = depth - 1;
+	cicloneDePoeira.facing = facing
+	cicloneDePoeira.lehspeed = 0
+	}
+    
+
+}
+
+}
+			
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantusedownb = 0
+	smashb_script = sideb_script
+    }
+        

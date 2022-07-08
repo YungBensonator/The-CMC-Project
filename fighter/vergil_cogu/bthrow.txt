@@ -40,20 +40,26 @@ if timer < time {
 	}
 	
 	if timer = 9 {
-		  create_projectile(5, 90, 0, 0, 11, 7, slash3, obj_spark_slash4, 0.75, 0.75, 10, 25, self.id, 1000, char_custom5);
+		  create_projectile(5, 90, 0, 0, 11, 7, slash3, obj_spark_slash4, 0.75, 0.75, 55, -5, self.id, 20, char_custom5);
 		  sound_play(coolswing_sound3);
 		  sound_play(drive_voice);
+		proj.base_xscale = 0.6
+		proj.base_yscale = 0.6
+		proj.facing = facing
 	  }
 	  
 	  if timer = 21 {
-		  create_projectile(5, angle_correct(35), 6, 5, 11, 7, slash3, obj_spark_slash4, 1, 1, 10, 25, self.id, 1000, char_custom5);
+		  create_projectile(5, angle_correct(70), 7, 0, 11, 7, slash3, obj_spark_slash4, 1, 1, 55, -5, self.id, 20, char_custom12);
 		  sound_play(coolswing_sound3);
+		proj.base_xscale = 0.6
+		proj.base_yscale = 0.6
+		proj.facing = facing
 	  }
 	  
 	  if timer = 1 {
 	  trick = create_blur(x - 20 * (1-facing*2),y - 80,self.id);
     trick.sprite_index = trick_sprite;
-    trick.image_speed = 1;
+    trick.image_speed = 2;
     trick.image_alpha = 0.9;
     trick.image_xscale = 0.25 * (1-facing*2);
     trick.image_yscale = 0.25;
@@ -70,12 +76,12 @@ if timer < time {
 	 }
 	 
 	 if timer = 8 {
-		 x = target.x + 80 * (1-facing*2)
+		 x = target.x + 40 * (1-facing*2)
 		 image_alpha = 1
 		 intangible = 0
 		  trick = create_blur(x - 20 * (1-facing*2),y - 80,self.id);
     trick.sprite_index = trick_sprite;
-    trick.anim_speed = 1;
+    trick.anim_speed = 2;
     trick.image_alpha = 0.9;
     trick.image_xscale = 0.25 * (1-facing*2);
     trick.image_yscale = 0.25;
@@ -93,10 +99,51 @@ if timer < time {
 		 sprite_index = dtilt_sprite
 		 image_index = 0
 	 }
+	   if timer >= 55 and timer < 100 and proj_hit = 1 and movejump = 1 {
+		  timer = 100
+		  time = 121
+	  }
+	  
+	  
+	  if timer = 101 {
+	  trick = create_blur(x - 20 * (1-facing*2),y - 80,self.id);
+    trick.sprite_index = trick_sprite;
+    trick.image_speed = 1;
+    trick.image_alpha = 0.9;
+    trick.image_xscale = 0.25 * (1-facing*2);
+    trick.image_yscale = 0.25;
+    trick.depth = depth - 0.1;
+    trick.snap = self.id
+	sound_play(airhike_sound);
+     }
+	 
+	 if timer >= 104 and timer < 112 {
+		 image_alpha = 0
+		 intangible = 1
+	 }
+	 
+	 if timer = 39 {
+		 x = target.x - 8 * (1-facing*2)
+		 y = target.y 
+		 image_alpha = 1
+		 intangible = 0
+		  trick = create_blur(x - 20 * (1-facing*2),y - 80,self.id);
+    trick.sprite_index = trick_sprite;
+    trick.anim_speed = 1;
+    trick.image_alpha = 0.9;
+    trick.image_xscale = 0.25 * (1-facing*2);
+    trick.image_yscale = 0.25;
+    trick.depth = depth - 0.1;
+    trick.snap = self.id
+	sprite_index = jump_sprite
+	sound_play(airhike_sound);
+	otherfunnytempname = 1
+	 }
 	  
 	
     
-}
+  }
+
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
     state_type = "stand";

@@ -1,0 +1,147 @@
+if air = 0
+cantsideb = 0
+
+if sprite_index = stand_sprite
+image_speed = 0.1
+
+if air = 0 or state_type = "flinch" or state_type = "air_flinch"
+sidebtemp = 0
+
+if air = 0 or state_type = "flinch" or state_type = "air_flinch"
+cantupb = 0
+
+
+if state_type = "attack" or state_type = "air_attack" and shieldup = 1 and assistmeter >= maxassistmeter and attack_type != "grab" and attack_type != "hold" and assistmeter != 0{
+	assistmeter = 0
+	script_execute(assist_load_tru);
+	
+}
+
+if state_type = "attack" or state_type = "air_attack" and (special = 1 and attacking = 1) and meter >= 100 and attack_type != "grab" and attack_type != "hold" and attack_type != "smashb"
+and canceltemp = 1{
+		time = -1
+		timer = 0
+		if air = 0
+		state_type = "stand"
+		else
+		state_type = "jump"
+		char_smashb();
+	
+}
+
+if (attack_type = "b" or attack_type = "sideb" or attack_type = "downb" or attack_type = "downb"
+ or attack_type = "jab") and timer < 4{
+	if attack_type = "b" or attack_type = "sideb" or attack_type = "downb" or attack_type = "downb"
+	special = 1
+	if attack_type = "jab"
+	attacking = 1
+}
+
+if (attack_type = "b" or attack_type = "sideb" or attack_type = "downb" or attack_type = "downb"
+ or attack_type = "jab") and timer = 4{
+	if attack_type = "b" or attack_type = "sideb" or attack_type = "downb" or attack_type = "downb"
+	special = 0
+	if attack_type = "jab"
+	attacking = 0
+}
+
+if (special = 1 and attacking = 1) and meter >= 100 and (attack_type = "b" or attack_type = "sideb" or attack_type = "downb" or attack_type = "downb"
+or attack_type = "jab")
+{
+		time = -1
+		timer = 0
+		if air = 0
+		state_type = "stand"
+		else
+		state_type = "jump"
+		char_smashb();
+	
+}
+
+if (state_type = "stand" or state_type = "jump" or state_type = "crouch" or state_type = "run") and (special = 1 and attacking = 1) and meter >= 50
+{
+		time = -1
+		timer = 0
+		if air = 0
+		state_type = "stand"
+		else
+		state_type = "jump"
+		char_smashb();
+	
+}
+
+maxmeter = 100
+
+maxmaxmeter = 300
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.sprite_index = meter_sprite;
+	MeterHud.image_speed = 0;
+}
+
+
+if(MeterHud.image_index <= 0) {MeterHud.image_index = 0}
+
+
+if (!instance_exists(CircleHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    CircleHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    CircleHud.step_script = hudThing_step_script;
+    CircleHud.draw_script = hudThing_draw_script;
+    CircleHud.owner = self.id;
+    CircleHud.keepmain = self.keepmain;
+	CircleHud.sprite_index = circle_sprite;
+	CircleHud.image_speed = 0;
+}
+
+if meter >= maxmaxmeter{
+CircleHud.image_index = 3;
+MeterHud.image_index = 55;
+
+}
+else if meter >= maxmeter *2{
+CircleHud.image_index = 2;
+MeterHud.image_index = ((meter-200)*55/maxmeter);
+
+}
+else if meter >= maxmeter{
+CircleHud.image_index = 1;
+MeterHud.image_index = ((meter-100)*55/maxmeter);
+
+}
+else{
+CircleHud.image_index = 0;
+if(meter >= maxmeter){MeterHud.image_index = 55;} else if (meter <= 0){MeterHud.image_index = 0;} else {MeterHud.image_index = meter*55/maxmeter;}
+
+}
+
+
+
+if (hitbox.hit = 1 || hitbox2.hit = 1 || hitbox3.hit = 1 || proj.hit = 1
+or sparkerB.hit = 1 or viga.hit = 1 or pilar.hit = 1) and meter < maxmaxmeter and attack_type != "smashb"{
+meter += 0.3
+}
+
+if meter >= maxmaxmeter
+meter = maxmaxmeter
+
+if meter < 0
+meter = 0
+
+if ai
+autoCombo = 1
+else
+autoCombo = 0
+
+
+
+

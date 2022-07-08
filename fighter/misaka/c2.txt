@@ -1,0 +1,44 @@
+if hit = 1{
+	time = 120
+	hit = 2
+	
+}
+
+
+on_floor = 0;
+on_platform = 0;
+
+
+
+
+if activate = 0{
+if ( timer >= 1 )
+    vspeed += 0.5;
+	
+if ( vspeed > 15 )
+    vspeed = 15;
+
+while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y+sprite_height*0.9 , obj_floor , 1 , 1 ) )
+    y -= 1;
+if ( vspeed >= 0 )
+    while ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y+sprite_height*0.9 , obj_platform , 1 , 1 ) )
+	y -= 1;
+
+if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1+sprite_height*0.9 , obj_floor , 1 , 1 ) )
+    on_floor = 1;
+if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1+sprite_height*0.9 , obj_platform , 1 , 1 ) )
+    on_platform = 1;
+
+if ( on_floor || on_platform )
+  {
+    vspeed = 0;
+  }
+}else{
+	image_angle += -12 +facing*24
+	gravity = 0.4
+	
+}
+
+
+
+

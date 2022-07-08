@@ -1,0 +1,116 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 36;
+        timer_speed=1;
+		canceltemp = 0
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 15: image_index = 3; break;
+
+      }
+
+    if ( timer = 5 ) 
+      {
+    if random(10)> 5
+    play_attack_voice()
+	//sound_play(swingsnd2);
+	create_hitbox(3,90,5,0,8,6,kick3,obj_spark_hit1,2.2,0.8,0,10,self.id,5,3);
+	hitbox.hit_stun = 10;
+	hitbox.di = 0.01
+	hitbox.sdi = 0
+	hitbox.weight_kb = 1
+	
+	groundimpact = create_blur(x,y,self.id);
+	groundimpact.sprite_index = ground_spriteEFF;
+    groundimpact.image_speed = 0.85;
+	groundimpact.image_alpha = 1.0;
+	groundimpact.image_xscale = image_xscale * 0.75;
+    groundimpact.image_yscale = image_yscale * 0.75;
+    groundimpact.depth = depth + 3;
+	
+	fracture = create_blur(x,y,self.id);
+	fracture.sprite_index = groundfrac_spriteEFF;
+    fracture.image_speed = 0.2;
+	fracture.image_alpha = 0.7;
+	fracture.image_xscale = image_xscale * 0.22;
+    fracture.image_yscale = image_yscale * 0.22;
+    fracture.depth = depth + 2;
+      }
+	
+	
+	if hitbox.hit = 1
+	canceltemp = 1
+				
+	//if timer >=12 and canceltemp = 1
+	//interrupt = 1
+	
+    if ( timer >= 12 && canceltemp = 1 ){
+		if ai{
+		special = 0
+		attacking = 0
+		moveleft = 0
+		moveright = 0
+		movedown = 0
+		moveup = 0
+	}
+		if ai = 1{
+			aipath = choose(1,2)
+			if target.percent >= 80
+			aipath = 3
+			
+	if ai and aipath = 1{
+		attacking = 1
+		if facing = 0
+		moveright = 1
+		else
+		moveleft = 1
+	}if ai and aipath = 2{
+		attacking = 1
+		moveup = 1
+	}if ai and aipath = 3{
+		attacking = 1
+		movedown = 1
+	}
+			
+			
+		}
+		
+		
+     if ( movedown && attacking ) or smashdown
+     {
+         state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_dsmash();
+     } 
+     else if (attacking or special)
+     {
+         interrupt = 1;
+		 notcrouch = 0
+     }
+}
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        
+
