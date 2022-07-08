@@ -89,8 +89,8 @@ target.direction = point_direction(target.x,target.y, x + place_x(59) , y + plac
                 hspeed = (1-facing*2)*size
         }
 
-        if (timer >= 27){
-if (attack_success || target.object_index == obj_enemy) && ( dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1)){
+        if (timer >= 26){
+if (attack_success || target.object_index == obj_enemy) && ( dontrepeat = 0 && obj_score_control.stocks[target.number-1] == 1 && place_meeting ( target.x , target.y , attack_box )){
 				if ((target.weight <= .22 && target.percent > 115) || (target.weight > .22 && target.weight < .3 && target.percent > 130) || (target.weight > .3 && target.percent > 145)){
 killspark = instance_create(target.x-200,target.y-170,obj_spark);
 				killspark.sprite_index = killspark_sprite;
@@ -103,7 +103,7 @@ killspark = instance_create(target.x-200,target.y-170,obj_spark);
 				killspark.image_index = 0;
 				killspark.image_speed = 0.045;
 				killspark.alarm[0] = 80;
-				killspark.depth = depth + 1;
+				killspark.depth = depth - 5;
 				sound_play(killscreen_voice);
 				screen_shake(30,30);
 				freezer  = instance_create(target.x,target.y,obj_freeze)
@@ -120,7 +120,8 @@ killspark = instance_create(target.x-200,target.y-170,obj_spark);
 				spark.alarm[0] = 60;
 				spark2 = instance_create(target.x+8*(1-facing*2),target.y-26,obj_spark_hit3)
 				spark2.alarm[0] = 50
-				dontrepeat = 1;				}
+				dontrepeat = 1;
+				}
 				}
         
   }	      
