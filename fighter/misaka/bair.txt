@@ -14,20 +14,52 @@ state_type = "air_attack";
 
 switch ( timer )
       {
-	case 10: image_index = 1; break;
+	case 14: image_index = 1; break;
       }
 	  
 			
-if timer = 10 {
+if timer = 14 {
     if random(10)> 5
     play_attack_voice()
-	sound_play(swingsnd2);
-    create_hitbox(17,155-facing*130,7,6,16,8,kick2,obj_spark_shock,0.5,0.5,-8,5,self.id,4,3);
-    hitbox.shake_type = 0;
+	sound_play(whiff_sound3);
+    create_hitbox(17,155-facing*130,5,6.5,12,18,strong_punch,obj_spark_shock,0.5,0.5,-13,11,self.id,4,3);
+	hitbox.execute_on_hit = "
+	if attacked.percent / attacked.weight >= 600{
+	with (attacker){
+		alarm[1] = 60
+		shakeme = alarm[1] + 1;
+		camerazoom = instance_create ( 0 , 0 , obj_camerazoom );
+		camerazoom.camera_l = target.x - 10;
+		camerazoom.camera_r = target.x + 10;
+		camerazoom.camera_u = target.y - 40;
+		camerazoom.camera_d = target.y + 0;
+		camerazoom.camera_boundary_zoom = 15;
+		camerazoom.alarm[0] = 60;
+		killspark = instance_create(x,y,obj_spark);
+		killspark.sprite_index = killspark_sprite;
+		killspark.image_xscale = (1280/600)*0.25;
+		killspark.image_yscale = (720/338)*0.3;
+		killspark.image_index = 0;
+		killspark.image_speed = 16/60;
+		killspark.snap = -1
+		killspark.alarm[0] = 60;
+		killspark.depth = min(target.depth-1,depth-1);
+		killspark.alpha_add = -0.02
+		killspark.image_alpha = 1
+		sound_play(killscreen_voice);
+		screen_shake(30,30);
+	}
+	with (attacked){
+		alarm[2] = 60
+		shakeme = alarm[2] + 1;
+	}
+	
+	}
+	"
     hitstun = 4.8
-    hitbox.hitlag_frames = 4*size;
+    hitbox.shake_type = 0;
     hitbox.shake_ampl = 1.15;      
-    create_hitbox2(11,155-facing*130,7.2,3.5,16,8,kick2,obj_spark_hit4,0.5,0.5,-8,5,self.id,5,3);
+    //create_hitbox2(11,155-facing*130,7.2,3.5,16,8,kick2,obj_spark_hit4,0.5,0.5,-8,5,self.id,5,3);
 	
 	}
 		
