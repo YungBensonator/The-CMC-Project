@@ -8,6 +8,7 @@ if ( state_type = "jump" )
     sprite_index = dair_sprite;
     image_speed = 0;
     image_index = 0;
+    canceltemp = 0
   }
 
 if ( timer < time )
@@ -18,27 +19,112 @@ if ( timer < time )
 	case 2: image_index = 2; break;
 	case 3: image_index = 3; break;
 	case 4: image_index = 4; break;
-	case 6: image_index = 5;   eff = instance_create(place_x(12)+x,place_y(44)+y,obj_smash_charge);
+	case 6: image_index = 5;  break;
+	case 8: image_index = 6; break;
+	case 10: image_index = 7; break;
+	case 30: image_index = 8; break;
+	case 32: image_index = 9; break;
+	case 33: image_index = 10; break;
+	case 34: image_index = 11; break;
+	case 36: image_index = 12; break;
+      }
+	  
+	  
+	 if timer = 6 and moveup = 0{
+eff = instance_create(place_x(12)+x,place_y(44)+y,obj_smash_charge);
   eff.image_yscale = 0.66 * ysize;
   eff.image_xscale = eff.image_yscale * (1-facing*2);
   eff.depth = depth - 0.1;
-  eff.image_speed = 2; break;
-	case 8: image_index = 6; break;
-	case 10: image_index = 7; break;
-	case 13: image_index = 8; break;
-	case 14: image_index = 9; break;
-	case 30: image_index = 10; break;
-	case 33: image_index = 11; break;
-	case 36: image_index = 12; break;
-      }
+  eff.image_speed = 2;
+}  
+	  
             if timer >= 10 && timer <= 23{
-                hspeed = (3 - facing*6)*size;
-                vspeed = 11;
+                
+                vspeed = 7;
         }	  
 	  
 	  
+	if ( moveup )
+{
 
     if ( timer = 14 )
+      {
+	sound_play(attack_voice2);
+	sound_play(attack_sound2);
+	create_hitbox(7,90,5.8,0.1,8,6,kick2,obj_spark_hit3,0.65,0.8,3,6,self.id,15,1);
+			burst = instance_create(place_x(37)+x,place_y(79)+y,obj_jab_burst);
+		burst.snap = self.id;
+		burst.image_xscale = xsize * 0.5;
+		burst.image_yscale = ysize * 0.5;
+		burst.image_alpha = 1; 
+	hitbox.di = 0.5;
+      }
+    if ( timer = 20 )
+      {
+	hitbox.damage = 5*size;
+	hitbox.dir = 80-facing*20;
+	hitbox.bkb = 5.8*size;
+	hitbox.kbg = 3.5*size;
+	hitbox.hitlag_frames = 12*size;
+	hitbox.sfx = kick2;
+	hitbox.gfx = obj_spark_hit2;
+      }
+	if hitbox.hit = 1 && (attack_success) {
+	image_angle = 0;
+	image_index = 0;	
+	sprite_index = jump_sprite;
+	timer = 26;
+	hspeed = 0;
+	vspeed = -4;
+	hitbox.hit = 2
+	if air = 2 {
+	air = 1
+	}
+	}
+	
+
+	if ( attack_success = 1 and hitbox.hit = 1 and timer > 13 )
+{
+canceltemp = 1;
+}    
+	
+if ( canceltemp = 1 )  
+{
+     if ( movedown  && ( attacking || (attacking && movejump) ) )
+     {
+         state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         //();
+     } 
+     if ((moveup && !movedown && attacking) || (moveleft && !movedown && attacking) || (moveright && !movedown && attacking) || ( movejump && !attacking && ( !attacking && !movedown ) ) || smash || special || grab )
+     {
+         interrupt = 1;
+     }
+}
+	  
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 16;
+	sprite_index = land_sprite;
+      }
+}
+
+else
+{
+
+            if timer >= 10 && timer <= 23{
+                hspeed = (4 - facing*8)*size;
+                vspeed = 11;
+        }		
+	  
+	  
+
+    if ( timer = 11 )
       {
 	sound_play(attack_voice2);
 	sound_play(attack_sound2);
@@ -64,7 +150,8 @@ if ( timer < time )
   shaker.ampl = 3;
   shaker.xampl = 0;
   shaker.time = 6;
-  create_hitbox(6, 45+facing*90, 5,5, 14, 3, kick2,obj_spark_hit3, 1.8, 1.6 ,2, 12, self.id, 10, 4);	  
+  create_hitbox(6, 45+facing*90, 5,5, 14, 3, kick2,obj_spark_hit3, 1.2, 1.3 ,5, 18, self.id, 10, 4);
+  create_hitbox2(6, 45+facing*90, 5,5, 14, 3, kick2,obj_spark_hit3, 1.2, 1.3 ,-5, 18, self.id, 10, 4);	   
     impactspark = instance_create(x,y,obj_down_impact)
     impactspark.image_blend = c_gray;
 	state_type = "attack";
@@ -72,7 +159,12 @@ if ( timer < time )
 	timer = 0;
 	time = 20;
 	sprite_index = downbdairgetup_sprite;
-      }
+      }	
+
+}  
+	  
+	  
+
 	  
 	  
   }	  
