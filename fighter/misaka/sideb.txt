@@ -8,14 +8,14 @@ if state_type = "jump" || state_type = "stand" || state_type = "run" || state_ty
         sprite_index = sideb_sprite
         image_index=0
         timer = 0
-        time = 50
+        time = 45
     }
 
 if ( timer < time )
     {
 	state_type = "air_attack"
 	//hspeed = 0
-	vspeed = 0.1
+	
 	
 switch ( timer )
       {
@@ -41,7 +41,7 @@ switch ( timer )
         duster.facing=facing
 	}
 	if timer = 8 or timer = 10 or timer = 12 or timer = 14 or timer = 16 or timer = 18{
-	if timer != 30
+	if timer != 18
 	create_hitbox(1,10+facing*160,4.5,0,8,1,slash1,obj_spark_shock,1.5,1.1,5,11,self.id,2,5);
 	else
 	create_hitbox(1,10+facing*160,5,0,8,1,slash1,obj_spark_shock,1.5,1.1,5,11,self.id,2,5);
@@ -56,13 +56,32 @@ switch ( timer )
 	//}
 	
 	if timer = 18
-	hspeed *= 0.2
+	hspeed *= 0.25
 	
 	if timer >= 9 and timer <12{
-	hspeed = (4-facing*8)
+	hspeed = (4.5-facing*9)
 	}
 	
-	if timer >= 4{
+	if timer <= 25{
+		vspeed = 0.1
+	}
+	
+	if timer >= 28{
+		if air > 0{
+			air_move = 0
+			sprite_index = jump_sprite
+			image_index = image_number-1
+			image_speed = 0
+		}
+		if air = 0{
+			hspeed *= 0.9
+			sprite_index = land_sprite
+			image_index = image_number-1
+			image_speed = 0
+		}
+	}
+	
+	if timer >= 4 and timer <= 25{
 	after_image(4,c_ltgray,0.6)
 	}
 
