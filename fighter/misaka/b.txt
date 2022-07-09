@@ -3,7 +3,7 @@ if state_type = "jump" || state_type = "stand" || state_type = "run" || state_ty
         attack_type = "b"
         image_speed = 0
         sprite_index = b_sprite
-		time = 42
+		time = 30
 		image_index=0
         timer = 0
         
@@ -54,10 +54,10 @@ if ( timer < time )
 	//sound_play(swingsnd2);
 	hspeed = 0
 	sound_play(choose(shocker_sound1,shocker_sound2,shocker_sound3))
-	create_hitbox(.5,5+facing*170,3,0,8,3,shock1,obj_spark_shock,2.2,0.9,46,15,self.id,4,5);
+	create_hitbox(3,5+facing*170,3,0,8,3,shock1,obj_spark_shock,2.2,0.9,46,15,self.id,4,5);
 	hitbox.ignore_weight = 1
 	hitbox.weight_kb = 1
-	hitbox.hit_stun = 15
+	hitbox.hit_stun = 10
 	hitbox.sdi = 0
 	hitbox.di = 0
 	
@@ -78,7 +78,7 @@ if ( timer < time )
     sound_play(choose(attack_voice5,attack_voice6,attack_voice7,attack_voice8));
 	hspeed = 0
 	sound_play(choose(shocker_sound1,shocker_sound2,shocker_sound3))
-	create_hitbox(.5,40+facing*100,4.5,0,8,3,shock1,obj_spark_shock,2.5,1.1,50,15,self.id,4,5);
+	create_hitbox(6,40+facing*100,4.5,0,8,3,shock1,obj_spark_shock,2.5,1.1,50,15,self.id,4,5);
 	hitbox.hit_stun = 10
 	hitbox.ignore_weight = 1
 	hitbox.weight_kb = 1
@@ -173,10 +173,10 @@ if ( timer < time )
 
 
 if timer > 100 and timer <= 107
-canceltemp = 0
+canceltemp = 1
 
 if timer > 200 and timer <= 207
-canceltemp = 0
+canceltemp = 1
 
 if timer > 300 and timer <= 307
 canceltemp = 0
@@ -185,10 +185,6 @@ if timer > 400 and timer <= 407
 canceltemp = 0
 
 if hitbox.hit = 1
-canceltemp = 1
-
-if sparkerB.hit = 1 and timer > 400
-canceltemp = 1
 
 if ai{
 	special = 1
@@ -198,7 +194,6 @@ if timer >= 12 and canceltemp = 1 and (attacking = 1 or special = 1) and timer <
 timer = 99
 image_index = 0
 time = 145
-canceltemp = 0
 attacking = 0
 special = 0
 sprite_index = b_sprite2
@@ -213,7 +208,6 @@ if timer >= 112 and canceltemp = 1 and (attacking = 1 or special = 1) and timer 
 timer = 199
 image_index = 0
 time = 245
-canceltemp = 0
 attacking = 0
 special = 0
 sprite_index = b_sprite3
@@ -228,7 +222,6 @@ if timer >= 212 and canceltemp = 1 and (attacking = 1 or special = 1) and timer 
 timer = 299
 image_index = 0
 time = 345
-canceltemp = 0
 attacking = 0
 special = 0
 sprite_index = b_sprite4
@@ -243,7 +236,6 @@ if timer >= 312 and canceltemp = 1 and (attacking = 1 or special = 1) and timer 
 timer = 399
 image_index = 0
 time = 470
-canceltemp = 0
 attacking = 0
 special = 0
 sprite_index = b_sprite5
@@ -266,7 +258,6 @@ if timer >= 415 and canceltemp = 1{
 if attacking = 1 and autoCombo = 1{
 		time = -1
 		timer = 0
-		canceltemp = 0
 		if air = 0
 		    state_type = "stand"
 		else
@@ -276,7 +267,6 @@ if attacking = 1 and autoCombo = 1{
 }else if special = 1{
 		time = -1
 		timer = 0
-		canceltemp = 0
 		if air = 0
 		    state_type = "stand"
 		else
@@ -305,4 +295,5 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     timer = 0;
     time =-1;
 	canceltemp = 0
+      cantb = 200
 }
