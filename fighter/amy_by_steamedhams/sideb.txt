@@ -1,6 +1,4 @@
-if cantsideb = 1 {
- exit;
-}
+if cantsideb>0 {break;}
 
 fast_fall = 0
 fast_fall_temp = 0
@@ -62,26 +60,22 @@ if target > -1 and timer < 27{
 	
 	citemp = -vspeed
 	
-	if timer = 3 {
+	if timer = 3
 	sound_play(tornado_sound);
-	sound_play(sideb_voice);
-	}
 	
-	if timer = 3 || timer = 9 || timer = 15 || timer = 21 || timer = 27 {
+	if timer = 3 or timer = 6 or timer = 9 or timer = 12
+	or timer = 15 or timer = 18 or timer = 21 or timer = 24 or timer = 27{
 	target = -99
-	create_hitbox(3,angle_correct(12),5+citemp,0,4,1,kick1,obj_spark_hit2,1.5,0.8,0,7,self.id,3,-1);
+	create_hitbox(1,90,1.5+citemp,0,4,1,kick1,obj_spark_hit2,1.5,0.8,0,7,self.id,3,-1);
 	hitbox.shield_stun = -4;
-	hitbox.hitstun = 15
-    	hitbox.weight_kb = 1;
+    hitbox.weight_kb = 1;
 	hitbox.di = 0
 	}
-
-	if timer = 27 {
+	if timer = 27
 	sprite_index = sideb_end_sprite
-	}
 	
 	if timer = 30{
-	create_hitbox(5,30+facing*120,5,6.1,4,12,kick3,obj_spark_hit2,1.5,0.8,0,7,self.id,3,-1);
+	create_hitbox(4,30+facing*120,5,6.1,4,12,kick3,obj_spark_hit2,1.5,0.8,0,7,self.id,3,-1);
 	}
 	
 if facing = 0{
@@ -99,10 +93,6 @@ if facing != 0{
 	hspeed = -2
 	else if !moveleft and !moveright
 	hspeed = -3}
-
-if timer = 40 && air > 0 || state_type = "jump" && cantsideb = 0 {
-cantsideb = 1
-}
 	
 
 
@@ -126,4 +116,5 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
         state_type = "stand";
     timer = 0;
     time =-1;
+   cantsideb = 20 
 }
