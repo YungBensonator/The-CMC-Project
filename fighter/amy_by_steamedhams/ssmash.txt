@@ -6,9 +6,9 @@ if state_type = "stand" || state_type ="run"{
         sprite_index = ssmash_sprite;
         image_index=0;
         timer = 0;
-        time = 54;
+        time = 50;
         timer_speed=1;
-        charge_frame = 16;
+        charge_frame = 20;
 }
 if ( timer < time )
   {
@@ -21,35 +21,36 @@ if ( timer < time )
 	case 16: image_index = 4; break;
 	case 20: image_index = 5; break;
 	case 24: image_index = 6; break;
-	case 28: image_index = 7; break;
-	case 32: image_index = 8; break;
-	case 36: image_index = 9; break;
-	case 38: image_index = 10; break;
-	case 40: image_index = 11; break;
+	case 28: image_index = 8; break;
+	case 32: image_index = 9; break;
+	case 36: image_index = 10; break;
+	case 39: image_index = 11; break;
 	case 42: image_index = 12; break;
-	case 48: image_index = 13; break;
+	case 45: image_index = 13; break;
 
       }
 
-    if timer = 19{
-	sound_play(smash_voice);
+    if timer = 12{
+	sound_play(ssmash_voice);
+	}
+
+    if timer = 28{
+	hspeed = 3 - facing*6
+	sound_play(hammerswing4);
 	}
 
     if timer = 32{
-	hspeed = 2 - facing*4
-	}
-
-    if timer = 36{
 	create_hitbox(18,24+facing*132,7.75,7.7,22,9,kick3,obj_spark_special3,1.0,1.5,28,23,self.id,9,3);
 	sound_play(smash_sound);
-	instance_create(x+35-facing*70,y,obj_down_impact)
+	pound = instance_create(x+35-facing*70,y,obj_down_impact)
+	pound.image_blend = c_red;
 	}
 
 
     
   }
 
-if (timer >= 36){
+if (timer >= 32){
 if (attack_success || target.object_index == obj_enemy) && (obj_score_control.stocks[target.number-1] == 1 && dontrepeat = 0){
 				if ((target.weight <= .22 && target.percent > 50) || (target.weight > .22 && target.weight < .3 && target.percent > 60) || (target.weight > .3 && target.percent > 70)){
 				killspark = instance_create(target.x-200,target.y-170,obj_spark);

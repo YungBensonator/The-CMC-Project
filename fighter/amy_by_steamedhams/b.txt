@@ -1,4 +1,3 @@
-if cantneutralb>0 {break;}
 if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
         state_type = "air_attack"
         attack_type = "b"
@@ -6,7 +5,7 @@ if state_type = "jump" || state_type = "stand" || state_type = "run" || state_ty
         sprite_index = dsmash_sprite
         image_index=0
         timer = 0
-        time = 42
+        time = 55;
 		hspeed = 0
 }
 
@@ -25,27 +24,30 @@ if ( timer < time )
 	case 27: image_index = 9; break;
 	case 30: image_index = 10; break;
 	case 33: image_index = 11; break;
-	case 36: image_index = 12; break;
-	case 39: image_index = 13; break;
+	case 47: image_index = 12; break;
+	case 50: image_index = 13; break;
     }
 	if timer = 5{
-	     sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+	     sound_play(b_voice);
 	     sound_play(hammerswing2);}
 	if timer < 15 and vspeed > 0
 	     vspeed = 0
     if timer = 12 {
 	     sound_play(tornado_sound);
+	     sound_play(b_sound);
 	     sound_play(hammerswing2);
-	create_projectile (7,90,6.6,1,12,8,slash2,obj_spark_slash2,1.0,1.0,0,1,self.id,45,char_custom1);
+	create_projectile (7,90,6.6,1,12,10,slash2,obj_spark_slash2,1.0,1.0,0,1,self.id,45,char_custom1);
     proj.sprite_index = projectile_sprite;
     proj.size = size;
 	proj.facing=facing
 	proj.scale = scale
     }
-	if timer = 18 or timer = 24
-	     sound_play(hammerswing2);
   
   }
+
+if timer = 47 {
+	interrupt = 1;
+}
 
 
 if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
@@ -56,5 +58,4 @@ if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
         state_type = "stand";
     timer = 0;
     time =-1;
-    cantneutralb = 50
 }
