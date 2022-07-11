@@ -17,7 +17,7 @@ if(b_temp = 1)
 		else 
 		{
 			state_type = "air_attack";
-			hspeed *= 0.4;
+			//hspeed *= 0.4;
 			if !ktime
 			sprite_index = sideb_continuous_sprite;
 			else
@@ -132,6 +132,10 @@ if(b_temp = 1)
 		temp2 = 4
 		temp3 = 1
 	}
+	if ( countt < 3 && timer > 40 )
+		{
+		if(air != 0 && vspeed > -1){vspeed = 0.5; }
+		}
 	
 	if (timer = 42)
 	{
@@ -156,18 +160,24 @@ if(b_temp = 1)
 			} 
 		}
 		sound_play(attack_voice2);
-		if countt < 3
-		create_projectile(1.75+kaioken*2.3,30+facing*120,3.5+kaioken*1,2+kaioken*0.75,5 + kaioken*2,9+kaioken*1,punch3,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,50,char_custom3);
-		else
-		create_projectile(1.75+kaioken*2.3,361,00,00,5 + kaioken*2,1+kaioken*1,magic1,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,50,char_custom3);
+
 		
+		if ( countt < 3 )
+		{	
+		hspeed *= 0.7;
+		create_projectile(2.25+kaioken*2.3,361,3.5+kaioken*1,2+kaioken*0.75,5 + kaioken*2,13+kaioken*1,punch3,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,90,char_custom3);
+		}
+		else 
+		{
+		create_projectile(1.75+kaioken*2.3,361,00,00,5 + kaioken*2,1+kaioken*1,magic1,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,90,char_custom3);
+		}
 		proj.hit_stun = 1;
 		proj.priority = 1;
 		if !ktime
 		proj.temp = 1
 		else
 		proj.temp = 0
-		if(air != 0 && vspeed > -1){vspeed = -1;}
+		//if(air != 0 && vspeed > -1){vspeed -= 1;}
 		if(air != 0 ){hspeed -= 0.5*(1-facing*2);}
 		special = 0;
 		countt += 1
@@ -192,7 +202,7 @@ if(b_temp = 1)
 	{
 		temp2 += 1
 		sound_play(attack_voice2);
-		create_projectile(1.75+kaioken*2.2,30+facing*120,3.5+kaioken*1,2+kaioken*0.75,5 + kaioken*2,9+kaioken*1,punch3,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,50,char_custom3);
+		create_projectile(1.75+kaioken*2.2,361,3.5+kaioken*1,2+kaioken*0.75,5 + kaioken*2,7+kaioken*1,punch3,obj_spark_hit2,(0.2-facing*0.4)+((0.1-facing*0.2)*kaioken),0.35+kaioken*0.15,12,24,self.id,90,char_custom3);
 		proj.hit_stun = 1;
 		proj.priority = 2;
 		if !ktime
@@ -207,7 +217,7 @@ if(b_temp = 1)
 		{
 			sound_play(sideb_sound);
 		}
-		if(air != 0 && vspeed > -1){vspeed = -1;}
+		//if(air != 0 && vspeed > -1){vspeed = -1;}
 		if(air != 0 ){hspeed -= 0.5*(1-facing*2);}
 		special = 0;
 	}
