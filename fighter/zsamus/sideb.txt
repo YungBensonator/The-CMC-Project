@@ -37,11 +37,16 @@ if ( timer < time )
 	case 30: image_index = 20; break;
 	case 33: image_index = 21; break;
       }
-
+if timer <= 5 && ((moveleft && !facing) || (moveright && facing)) {
+    		facing = 1-facing;
+		hspeed *= -2.255;
+ 		 }
+    if ( air = 0 )
+	hspeed = 0;
     if ( timer = 5 )
       {
 		duster = instance_create(x+2*(1-facing*2),y,obj_dust_effect_bold);
-		duster.image_xscale *= 0.6
+		duster.image_xscale *= 0.9
 		duster.image_speed=0.45
 		duster.image_yscale *= 0.6
 		duster.facing = facing
@@ -81,67 +86,82 @@ if ( timer < time )
 	    exit;
 	  }
 	}
-    if ( timer = 15 )
+
+
+    if ( timer = 14 )
       {
 	sound_play(sideb_sound);
-	create_hitbox(2,20+facing*140,6.35,0,5,4,shock2,obj_spark_shock,0.75,0.6,16,21,self.id,12,5);
+	create_hitbox(2,angle_correct(13),7.95,0,5,4,shock2,obj_spark_shock,0.75,0.65,20,16,self.id,10,3);
+	create_hitbox2(2,angle_correct(13),4.35,0,5,4,shock2,obj_spark_shock,0.65,0.55,20,26,self.id,2,3);
 	hitbox.execute_on_hit = "attacker.has_hit = 1"
-	hitbox.hit_stun = 4;
 	hitbox.shake_kb = 0.5;
 	hitbox.shake_ampl = 1.5;
-	hitbox.di = 0.3;
+	hitbox.di = -1
+	hitbox.weight_kb = 1;
+      }
+    if ( timer = 15 )
+      {
+	create_hitbox(2,angle_correct(13),7.95,0,5,4,shock2,obj_spark_shock,0.75,0.65,41,16,self.id,1,3);
+	create_hitbox2(2,angle_correct(13),7.95,0,5,4,shock2,obj_spark_shock,0.65,0.55,36,26,self.id,1,3);
+	hitbox.execute_on_hit = "attacker.has_hit = 1"
+	hitbox.shake_kb = 0.5;
+	hitbox.shake_ampl = 1.5;
+	hitbox.di = -1
 	hitbox.weight_kb = 1;
       }
     if ( timer = 17 )
       {
-	create_hitbox2(2,20+facing*140,6.25,0,5,4,shock2,obj_spark_shock,1.7,0.5,47,16,self.id,8,5);
+	create_hitbox(2,angle_correct(13),7.95,0,5,4,shock2,obj_spark_shock,0.85,0.85,46,16,self.id,1,3);
 	hitbox.execute_on_hit = "attacker.has_hit = 1"
-	hitbox2.hit_stun = 4;
-	hitbox2.shake_kb = 0.5;
-	hitbox2.shake_ampl = 1.5;
-	hitbox2.di = 0.3;
-	hitbox2.weight_kb = 1;
+	hitbox.shake_kb = 0.5;
+	hitbox.shake_ampl = 1.5;
+	hitbox.di = -1
+	hitbox.weight_kb = 1;
+      }
+    if ( timer = 19 )
+      {
+	create_hitbox(2,angle_correct(13),7.95,0,5,4,shock2,obj_spark_shock,0.85,0.85,66,16,self.id,2,3);
+	hitbox.execute_on_hit = "attacker.has_hit = 1"
+	hitbox.shake_kb = 0.5;
+	hitbox.shake_ampl = 1.5;
+	hitbox.di = -1
+	hitbox.weight_kb = 1;
       }
 
-    if ( air = 0 )
-	hspeed = 0;
-	
-if timer <= 12 && ((moveleft && !facing) || (moveright && facing)) {
-    		facing = 1-facing;
-		hspeed *= -1;
- 		 }	
-	//special  \\\ moveright
-
-// coded so it just like ultimates side b
-if ( timer = 21 and special)
+if ( timer = 20 and moveup)
 {
-
-	whip = create_projectile(12,145+facing*-110,6.1,2,18,4,fire1,obj_spark_fire1,0.7,0.75,79,20,self.id,6,no_script);
-	whip.shake_type = 1;
-	whip.shake_ampl = 0;
-	whip.absorb = 0
-	whip.absorb2 = 0
-	whip.no_reflect = 1
-	whip.no_clash = 1
-	whip.priority = 5
+	create_hitbox(12,angle_correct(114),6,2.65,8,8,fire1,obj_spark_fire1,1,1,69,16,self.id,3,3);
+	hitbox.shake_kb = 0.5;
+	hitbox.shake_ampl = 1.5;
 }
 
 else
 {
-if timer =21{
-	whip = create_projectile(12,20+facing*140,6.1,2,18,4,fire2,obj_spark_fire1,0.7,0.75,79,20,self.id,6,no_script);
-	whip.shake_type = 1;
-	whip.shake_ampl = 0;
-	whip.absorb = 0
-	whip.absorb2 = 0
-	whip.no_reflect = 1
-	whip.no_clash = 1
-	whip.priority = 5
+if timer =20{
+	create_hitbox(12,angle_correct(55),6.125,5.65,8,8,fire1,obj_spark_fire1,1,1,69,16,self.id,3,3);
+	hitbox.shake_kb = 0.5;
+	hitbox.shake_ampl = 1.5;
+
 }
 }
 
 
-if ( has_hit = 1 and timer < 20 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if ( has_hit = 1 and timer < 19 )
 {
 target.direction = point_direction(target.x,target.y, x + place_x(122) , y + place_y(37) )
 }
