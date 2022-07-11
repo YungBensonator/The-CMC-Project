@@ -1,4 +1,8 @@
 if state_type = "run" || state_type = "stand" || state_type  = "jump" {
+		if (sbtemp != 0)
+		{
+		exit;
+		}
         attack_type = "sideb";
         temp = 0
         image_speed = 0;
@@ -31,6 +35,10 @@ if state_type = "run" || state_type = "stand" || state_type  = "jump" {
         else 
         facing = 0 }
         air_move = 0;
+}
+if timer < time
+{
+sbtemp = 1
 }
 if timer < 30 {
 fast_fall = 0;
@@ -184,12 +192,18 @@ if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
 	}
 	if ( air > 0 )
 	{
-	air = max_jumps;
-    state_type = "fall";
-    sprite_index = fall_sprite;
+	//air = max_jumps;
+    state_type = "jump";
+    //sprite_index = fall_sprite;
+    sprite_index = jump_sprite;
+	}
+else
+	{
+    state_type = "stand";
 	}
     timer = 0;
-    time =-1;
-    temp = 0
-	hspeed = 0;
-}
+    time = -1;
+    temp = 0;
+    hspeed = 0;
+    sbtemp = 1;
+ }
