@@ -1,0 +1,95 @@
+fast_fall = 0
+fast_fall_temp = 0
+if cantuse69 > 0 {break;}
+if state_type = "jump"  {
+state_type = "air_attack"
+attack_type = "zair"
+image_speed = 0
+sprite_index = downb_sprite
+image_index=0
+
+timer = 0
+time = 40
+hspeed = 0
+target = -99
+	}
+if ( timer < time )
+    {
+gravity = 0
+gravity_lock = 1
+vspeed = 0
+hspeed = 0
+    switch ( timer )
+    {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 18: image_index = 3; break;}
+	
+if timer > 1 && timer < 40 && !instance_exists(kick) && target < 0{
+kick = create_homing_bubble (  6 ,6, 10 , 15 , self.id , 4 );}
+
+if  target >-1 && timer < 40{
+target1 = target
+hspeed = 0
+vspeed = 0
+image_alpha = 0
+sprite_index = downb2_sprite
+image_angle = 90 - facing*180;
+image_index = 0
+image_speed = 0.25
+timer = 64
+time = 85
+}
+
+if timer = 1{
+sound_play(downb_voice);
+}
+if timer = 70{
+ignore_physics = 1
+x = target1.x - 5 * (1-facing*2)
+y = target1.y-22
+image_alpha = 1
+}
+
+
+
+if timer = 71 and target.percent	> 150{
+sound_play(attack_k1);
+//sound_play(choose(sideb_sound,sideb_sound2));
+//sound_play(AAA_sound);
+intangible = 0
+create_projectile(3,angle_correct(282),7,(.33*abs(hspeed)),20,8,kick2,obj_spark_hit2,1.6,1.6,0,0,self.id,8,no_script);
+//proj.hit_stun = 9999
+//proj.x = target1.x-1*(1-facing*2)*size
+proj.y = target1.y-25*size
+proj.priority = +3}
+else{
+if timer = 71 and target.percent	< 150{
+sound_play(attack_k1);
+//sound_play(choose(sideb_sound,sideb_sound2));
+//sound_play(AAA_sound);
+intangible = 0
+create_projectile(6,angle_correct(282),3.3,(.33*abs(hspeed)),20,8,kick2,obj_spark_hit2,1.6,1.6,0,0,self.id,8,no_script);
+//proj.hit_stun = 9999
+//proj.x = target1.x-1*(1-facing*2)*size
+proj.y = target1.y-25*size
+proj.priority = +3}
+}
+if timer > 1 {
+after_image(3,c_white,0.25)
+}
+if hitbox.hit > 0 && timer < 39{ //don't work
+interrupt = 1;
+}
+
+}
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	cantuse69 = 60
+}

@@ -7,6 +7,7 @@ if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
         image_index=0;
         timer = 0;
         time = 36;
+		canceltemp = 0;
 }
 
 if ( timer < time )
@@ -24,6 +25,30 @@ if ( timer < time )
 	case 28: image_index = 8; break;
 	case 29: image_index = 9; break;
       }
+if ( canceltemp = 1 ) //cancels 
+{
+     if ( movedown  && ( attacking || (attacking && movejump) ) )
+     {
+         state_type = "stand";
+         attack_type = "none";
+         timer = 0;
+         time = -1;
+         char_ssmash();
+     } 
+     if ((moveup && !movedown && attacking) || (moveleft && !movedown && attacking) || (moveright && !movedown && attacking) || ( movejump && !attacking && ( !attacking && !movedown ) ) || smash || special || grab )
+     {
+         interrupt = 1;
+     }
+}
+if ( attack_success = 1 and  timer >= 28 )
+{
+canceltemp = 1;
+}  
+
+if ( attack_success = 1 and  timer >= 40 )
+{
+canceltemp = 1;
+}  
 if timer > 1 {
 after_image(4.2,c_red,0.25)
 }
@@ -31,7 +56,8 @@ after_image(4.2,c_red,0.25)
 if timer = 2 {
 sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4,attack_voice4))
 
-  create_hitbox(1, 81+18*facing, 3.8, 2.5, 4, 1, cutfk1, obj_spark_slash3, 1.9, 0.7, 10, 18, self.id, 1, 1);
+  create_hitbox(1, 81+18*facing, 1.75, 0.1, 4, 1, cutfk1, obj_spark_slash3, 1.9, 0.7, 10, 18, self.id, 1, 1);
+    hitbox.di = -1
     duster = instance_create(x, y, obj_dust_effect)
     duster.facing = facing
     duster.image_alpha = 1.10
