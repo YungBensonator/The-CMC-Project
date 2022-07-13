@@ -1,0 +1,44 @@
+time = 70
+moving_object = 1;
+if timer <= 1 
+{
+image_xscale = 0.4*(1-facing*2)*size;
+image_yscale = 0.4*size;
+sprite_index = attacker.id.tiger_sprite
+image_speed = 0.5
+visible =1
+tempfacing = attacker.id.facing
+hspeed = 5*(1-tempfacing*2)*size;
+sound_play(keepmain.tiger_sound);
+smoke = instance_create( x,y,obj_spark );
+smoke.sprite_index = attacker.id.smoke_sprite;
+smoke.image_xscale = 1.5 * (1-facing*2) * size;
+smoke.image_yscale = 1.5 * size;
+smoke.image_speed = 0.7;
+smoke.x = x - 15 *(1-facing*2)*size;
+smoke.y = y - 10*size;
+}
+
+if hit = 1
+{
+hspeed = 5*(1-tempfacing*2)*size;
+}
+
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1))
+{
+    instance_destroy()
+	instance_create ( x , y-10 , obj_spark_explode1 );
+}
+
+if ( vspeed > 4 )
+      vspeed = 4;
+
+if ( !on_floor && !on_platform )
+      vspeed += 0.25;
+      else
+      vspeed = 0;
+
+if timer = time
+{
+instance_create ( x , y-10 , obj_spark_explode1 );
+}

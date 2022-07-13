@@ -1,0 +1,53 @@
+time = 150
+if timer <= 1 
+{
+image_xscale = 0.4*(1-facing*2)*size;
+image_yscale = 0.4*size;
+sprite_index = attacker.id.hawk_sprite
+image_speed = 0
+visible =1
+sound_play(keepmain.bird_sound);
+tempfacing = attacker.id.facing
+hspeed = 2.5*(1-tempfacing*2)*size;
+smoke = instance_create( x,y,obj_spark );
+smoke.sprite_index = attacker.id.smoke_sprite;
+smoke.image_xscale = 1.5 * (1-facing*2) * size;
+smoke.image_yscale = 1.5 * size;
+smoke.image_speed = 0.7;
+smoke.x = x - 5 *(1-facing*2)*size;
+smoke.y = y - 15*size;
+}
+
+if hit = 1
+{
+hspeed = 2.5*(1-tempfacing*2)*size;
+}
+
+if timer = 65
+{
+sprite_index = attacker.id.hawk2_sprite;
+create_projectile(12,35+tempfacing*110,5.6,6.9,18,6,fire3,obj_spark_fire1,0.84,0.84,0,0,attacker.id,200,char_custom3);
+}
+
+switch (timer)
+{
+case 68: image_index = 0; break;
+case 71: image_index = 1; break;
+case 74: image_index = 2; break;
+}
+
+if timer >= 65
+{
+vspeed = -0.5*size;
+}
+
+if timer = time
+{
+instance_create ( x , y-10 , obj_spark_explode1 );
+}
+
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1))
+{
+    instance_destroy()
+	instance_create ( x , y-10 , obj_spark_explode1 );
+}

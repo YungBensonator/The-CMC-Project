@@ -1,0 +1,65 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 18;
+        timer_speed=1;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch ( timer )
+      {
+	case 3: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 14: image_index = 3; break;
+	
+	case 20: image_index = 0; break;
+	case 22: image_index = 1; break;
+	case 24: image_index = 2; break;
+	case 27: image_index = 3; break;
+	case 32: image_index = 4; break;
+	case 37: image_index = 5; break;
+	case 41: image_index = 6; break;
+      }
+	  
+	if timer = 3
+	{play_attack_voice();
+	sound_play(punch1swing);
+	create_hitbox(5,80+facing*20,3,0,10,5,kfmpunch1hit,obj_spark_hit1,.7,.3,12,17,self.id,6,2);
+	hitbox.hit_stun = 15;
+	}
+	
+	if timer = 24
+	{play_attack_voice();
+	sound_play(stiltdtilt2swing);
+	create_hitbox(7,80+facing*20,6,7,14,7,kfmstiltdtilt2hit,obj_spark_hit2,.5,.5,16,23,self.id,8,3);}
+	
+	if timer = 27
+	{hitbox.image_yscale=.8;
+	hitbox.image_xscale=.6-facing*1.2;
+	hitbox.hitbox_y=28;
+	hitbox.hitbox_x=18-facing*36;
+	}
+				
+if ((timer >= 6 && timer <= 13)) && ai && attack_success
+{attacking = 1; attack_success = 0;}
+	
+	if timer >= 6 && timer < 13 && attacking {timer = 20; time = 43; sprite_index = dtilt_sprite2; image_index = 0; attacking = 0;}
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if movedown {state_type = "crouch"; sprite_index = crouch_sprite; image_index = 2; }
+	else {state_type = "stand";}
+    attack_type = "none";
+    timer = 6;
+    time = -1;
+  }
+        
+

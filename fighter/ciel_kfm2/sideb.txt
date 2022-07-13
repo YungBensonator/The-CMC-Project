@@ -1,0 +1,74 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        if air = 0
+		state_type = "attack"
+		else
+		state_type = "air_attack"
+        attack_type = "sideb"
+        image_speed = 0
+        sprite_index = sideb_sprite
+        image_index=0
+        timer = 0
+        time = 43
+		air_move = 1;
+		hspeedtemp = hspeed;
+		armor_frames = 11;
+		super_armor = 10;
+    }
+
+if ( timer < time )
+  {
+        if air = 0
+		state_type = "attack"
+		else
+		state_type = "air_attack"
+		
+	switch (timer)
+	{
+		case 5: image_index = 1; break;
+		case 8: image_index = 2; break;
+		case 15: image_index = 3; break;
+		case 19: image_index = 4; break;
+		case 23: image_index = 5; break;
+		case 27: image_index = 6; break;
+		case 31: image_index = 7; break;
+		case 35: image_index = 8; break;
+		case 39: image_index = 9; break;
+	}
+	
+	if timer <= 21
+	{gravity_lock=1; vspeed = .25;}
+	
+	if timer = 12 {
+	sound_play(sidebvoice);}
+	 
+	if timer = 15
+	{
+	sound_play(punch2ssmashswing);
+	create_hitbox(9,45+facing*90,6.5,7.75,18,9,kfmfairbairhit,obj_spark_special2,.6,1.1,10,16,self.id,9,4);
+	
+	  if facing = 0 {hspeed=7;}
+	  if facing = 1 {hspeed=-7;}
+	  }
+	  
+	if timer > 15 {after_image(4,c_yellow,0.75)}
+	
+	if timer < 8 {hspeed=hspeedtemp;
+				  if facing = 0 && hspeedtemp > 0 {hspeedtemp-=0.1;}
+				  if facing = 1 && hspeedtemp < 0 {hspeedtemp+=0.1;}}	
+	  
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+		armor_frames = 0;
+		super_armor = 0;
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+}

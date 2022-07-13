@@ -1,0 +1,72 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "bair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bair_sprite;
+  timer = 0;
+  time = 41;
+  timer_speed = 1;
+  lcancel = 1;
+  }
+  
+if (attack_success) time = 31;
+
+switch (timer)
+{
+case 0: image_index = 0; break;
+case 10: image_index = 1; break;
+case 12: image_index = 2; bairslash.image_index = 1; break;
+case 14: image_index = 3; bairslash.image_index = 2; break;
+case 16: image_index = 4; bairslash.image_index = 3; break;
+case 18: image_index = 5; bairslash.image_speed = 1; break;
+case 20: image_index = 6; break;
+case 22: image_index = 7; break;
+case 24: image_index = 8; break;
+case 26: image_index = 9; break;
+case 28: image_index = 10; break;
+case 30: image_index = 11; break;
+}
+
+if timer = 10
+{
+sound_play(slash_sound2);
+play_attack_voice();
+bairslash = instance_create(x,y,obj_spark);
+bairslash.sprite_index = bairslash_sprite;
+bairslash.image_index = 0;
+bairslash.image_speed = 0;
+bairslash.image_xscale = 0.4*(1-facing*2)*size;
+bairslash.image_yscale = 0.4*size;
+bairslash.snap = self.id
+bairslash.depth = depth - 1;
+bairslash.x = x + (1 - facing * 2) *size;
+bairslash.y = y - 38*size ;  
+}
+
+if timer = 12
+{
+create_hitbox ( 8 , 150-facing*120 , 6.1 , 4.5 , 10, 8 , slash3 , obj_spark_slash3 , 1.3 , 0.6 , -20 , 9 , self.id , 4 , 3 );
+}
+
+if air = 0 
+ {
+  state_type="land";
+  attack_type="none";
+  sprite_index = land_sprite;
+  timer=0;
+  time=15; 
+ }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

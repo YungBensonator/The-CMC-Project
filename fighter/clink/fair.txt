@@ -28,8 +28,41 @@ switch ( timer )
             if timer = 14 {
                 sound_play(attack_sound2);
                 play_attack_voice();
-                create_hitbox(12,20+facing*140,6.2,5.7,5,6,slash2,obj_spark_slash2,0.7,0.95,16,15,self.id,3,3);
+                create_hitbox(12,20+facing*140,6.2,5.6,5,6,slash2,obj_spark_slash2,0.7,0.95,16,15,self.id,3,3);
 				hitbox.di = 0;
+hitbox.execute_on_hit = "
+	if attacked.percent / attacked.weight >= 600{
+	with (attacker){
+		alarm[1] = 60
+		shakeme = alarm[1] + 1;
+		camerazoom = instance_create ( 0 , 0 , obj_camerazoom );
+		camerazoom.camera_l = target.x - 10;
+		camerazoom.camera_r = target.x + 10;
+		camerazoom.camera_u = target.y - 40;
+		camerazoom.camera_d = target.y + 0;
+		camerazoom.camera_boundary_zoom = 15;
+		camerazoom.alarm[0] = 60;
+		killspark = instance_create(x,y,obj_spark);
+		killspark.sprite_index = killspark_sprite;
+		killspark.image_xscale = (1280/600)*0.25;
+		killspark.image_yscale = (720/338)*0.3;
+		killspark.image_index = 0;
+		killspark.image_speed = 16/60;
+		killspark.snap = -1
+		killspark.alarm[0] = 60;
+		killspark.depth = min(target.depth-1,depth-1);
+		killspark.alpha_add = -0.02
+		killspark.image_alpha = 1
+		sound_play(killscreen_voice);
+		screen_shake(30,30);
+	}
+	with (attacked){
+		alarm[2] = 60
+		shakeme = alarm[2] + 1;
+	}
+	
+	}
+	"
             }
             if (timer = 17 || timer = 19) && instance_exists(hitbox) {
                 hitbox.damage -= size;

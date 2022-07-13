@@ -1,0 +1,31 @@
+priority = 1
+proj_destroy = 0
+moving_object = 1;
+
+if timer <= 1 {         // Initialize sprite and speed during frame 1
+    image_xscale = 0.4*(1-facing*2)*size;
+    image_yscale = 0.4*size;
+    sprite_index = attacker.id.bomb_sprite;
+	sound_play(keepmain.bombfall_sound);
+    image_speed = 0.3
+    visible =1
+    vspeed = 2.5*size;
+    visible=1
+    hit = 0 }
+	
+if image_index >=11
+{
+image_index = 4;
+}	
+	
+if exploded=0 && (((hit = 0 && (timer = time-2 || collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self))) || (hit > 0 && timer < time-1))) {
+    hit=2
+    exploded = 100
+    timer = time
+    instance_create(x,y,obj_spark_explode1)
+    sound_play(keepmain.bombkaboom_sound);
+    shaker = instance_create(x,y,obj_shakescreen3);
+    shaker.ampl = 1;
+    shaker.xampl = 0;
+    shaker.time = 8;
+}

@@ -1,0 +1,81 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "usmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = usmash_sprite;
+  timer = 0;
+  time = 48;
+  timer_speed = 1;
+  charge_frame = 3;
+  }
+  
+if (attack_success) time = 38;  
+  
+switch (timer)
+{
+case 10: image_index =  1; break;
+case 12: 
+image_index =  2; 
+sound_play(slash_sound2); 
+sound_play(attack_voice9);
+usmashslash = instance_create(x,y,obj_spark);
+usmashslash.sprite_index = usmashslash_sprite;
+usmashslash.image_index = 0;
+usmashslash.image_speed = 0;
+usmashslash.image_xscale = 0.4*(1-facing*2)*size;
+usmashslash.image_yscale = 0.4*size;
+usmashslash.snap = self.id
+usmashslash.depth = depth - 1;
+usmashslash.x = x + 3 * (1 - facing * 2) *size;
+usmashslash.y = y - 62*size;
+duster = instance_create(x,y,obj_dust_effect);
+duster.facing = facing;
+break;
+case 14: image_index = 3; usmashslash.image_index = 1; break;
+case 16: image_index = 4; usmashslash.image_index = 2; break;
+case 18: image_index = 5; usmashslash.image_index = 3; break;
+case 20: image_index = 6; usmashslash.image_speed = 1; break;
+case 22: image_index = 7; break;
+case 24: image_index = 8; break;
+case 26: image_index = 9; break;
+case 28: image_index = 10; break;
+case 30: image_index = 11; break;
+case 32: 
+if attack_success
+{
+sprite_index = land_sprite; 
+image_index = 3; 
+}
+else
+{
+image_index = 12;
+}
+break;
+case 34: 
+if attack_success
+{
+image_index = 4;
+}
+else
+{
+image_index = 13
+}
+break;
+}
+
+if timer = 14
+{
+create_hitbox ( 15 , 85+facing*10 , 6.5 , 5 , 18, 4 , slash3 , obj_spark_slash4 , 1.2 , 1.8 , 40 , 27 , self.id , 4 , 3 ); 
+create_hitbox2 ( 15 , 85+facing*10 , 6.5 , 5 , 18, 4 , slash3 , obj_spark_slash4 , 1.4 , 0.5 , 10 , 52 , self.id , 4 , 3 ); 
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

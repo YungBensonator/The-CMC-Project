@@ -1,0 +1,84 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 120;
+		target=-1;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        smash_power = 0
+        air_move=0
+		voiceplay = 0
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+	 switch (timer)
+	 {
+		case 4: image_index=1; break;
+		case 8: image_index=2; break;
+		case 9: image_index=3; break;
+		case 10: image_index=4; break;
+		case 11: image_index=5; break;
+		case 12: image_index=6; break;
+		case 15: image_index=7; break;
+		case 19: image_index=8; break;
+		case 93: image_index=9; break;
+		case 98: image_index=10; break;
+		case 103: image_index=11; break;
+		case 108: image_index=12; break;
+		case 113: image_index=13; break;
+		case 116: image_index=14; break;
+		case 118: image_index=15; break;
+	 }
+	 
+	if timer > 19 && timer < 93 && timer mod 4 = 0 {if image_index = 8 {image_index = 7;}
+													else {image_index = 8;}}
+	
+	
+	  if timer = 8 {
+	create_hitbox(5,90,4,0,-1,60,kfmfinalsmashhit1,obj_spark_hit3,.4,.4,16,18,self.id,3,3);}
+	
+	if timer = 10 {sound_play(punch2ssmashswing);
+					sound_play(finalsmashvoice2);}
+	
+	if timer = 12 {
+	create_hitbox2(25,89+facing*2,20,0,-1,0.1,kfmfinalsmashhit2,obj_spark_impact,.4,1.2,17,38,self.id,4,3);
+	}
+	
+	if timer > 11 && attack_success = 1 && timer < 19 && !instance_exists(freezer)	
+	{freezer = instance_create(x,y,obj_freeze);
+	freezer.alarm[0] = 90;
+	freezer.dontpause = self.id;
+	if !instance_exists(thunder_effect) {
+	thunder_effect = create_spark(17,0,obj_spark);
+    thunder_effect.sprite_index = thunder_sprite;
+    thunder_effect.image_xscale = 0.96*(1-facing*2)*size;
+    thunder_effect.image_yscale = 0.96*size;
+    thunder_effect.image_speed = 0.2;
+    thunder_effect.image_index = 0;
+	thunder_effect.snap = self.id;
+    thunder_effect.depth = target.depth + 1;
+	thunder_effect.alarm[0] = 60}
+	}
+	
+	if timer = 75 {with (thunder_effect) {instance_destroy();}}
+  }
+
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
