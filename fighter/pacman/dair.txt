@@ -96,7 +96,7 @@ if ( timer > 10 && timer < 75 )
   if ( moveleft ) 
     hspeed = -size * 1.1;
   if ( attack_success )
-    temp = 2;
+    temp = 3;
   }
 
 if ( air == 0 )
@@ -130,6 +130,25 @@ if ( temp == 2 )
   air_move = 0;
   timer = 0;
   time = 32;
+  temp = 1;
+  exit;
+  }
+ 
+ if ( temp == 3 )
+  {
+  //if ( air > 0 )
+  //  air = 1;
+  sound_play ( dair_sound );
+  air_move = 0;
+  fall_lock = 1;
+  with ( hitbox ) instance_destroy();
+  screen_shake ( 4 , 3 );
+  instance_create ( x , y , obj_down_impact );
+  hspeed = 0;
+  vspeed = 0;
+  air_move = 0;
+  timer = 0;
+  time = 18;
   temp = 1;
   exit;
   }
