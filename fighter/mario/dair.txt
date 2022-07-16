@@ -7,7 +7,7 @@ if(state_type = "jump")
 	sprite_index = dair_sprite;
 	image_index = 0;
 	timer = 0;
-	time = 48;
+	time = 42;
 	timer_speed = 1;
 }
 
@@ -46,7 +46,7 @@ if(timer < time)
         /* Active Frames     */ 2,
         /* Priority          */ 1
         );
-		hitbox.di = 0.1;
+		hitbox.di = 1.4;
 	}
 	
 	if(timer == 12 || timer == 20 || timer == 28)	//frames 13, 21, and 29
@@ -69,7 +69,7 @@ if(timer < time)
         /* Active Frames     */ 2,
         /* Priority          */ 1
         );
-		hitbox.di = 0.1;
+		hitbox.di = 1.4;
 	}
 	
 	if(timer == 32)	//frame 33
@@ -79,7 +79,7 @@ if(timer < time)
 		/* Damage            */ 2,
 		/* Direction         */ 362,
 		/* Base KB           */ 4.5,
-		/* KB Growth         */ 5.75,
+		/* KB Growth         */ 1.5,
 		/* Shield Damage     */ 4,
 		/* Hitlag            */ 5,
 		/* SFX               */ kick2,
@@ -96,31 +96,6 @@ if(timer < time)
 	
 	if(!air)
 	{
-		if(timer < 32 && timer > 8)	//landing hitbox put down if autocancel window missed
-		{
-			with(hitbox) 
-			{ 
-				instance_destroy(); 
-			}
-			create_hitbox2(
-            /* Damage            */ 3,
-            /* Direction         */ 30 + facing * 120,
-            /* Base KB           */ 6,
-            /* KB Growth         */ 2.5,
-            /* Shield Damage     */ 4,
-            /* Hitlag            */ 4,
-            /* SFX               */ punch2,
-            /* VFX               */ obj_spark_hit1,
-            /* Width             */ 0.5,
-            /* Height            */ 0.5,
-            /* X                 */ 4,
-            /* Y                 */ 8,
-            /* Owner             */ self.id,
-            /* Active Frames     */ 4,
-            /* Priority          */ 2
-            );
-			hitbox2.remain = true;
-		}
 		state_type = "land";
 		sprite_index = land_sprite;
 		attack_type = "none";
