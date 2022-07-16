@@ -3,8 +3,8 @@ if ( state_type == "run" || state_type == "stand" || state_type == "jump" || sta
   attacking = 0;
   special = 0;
   attack_type = "b";
-  time = 55;
-  timer = 0;
+  time = 60;
+  timer = 3;
   state_type = "air_attack";
   if ( air == 0 )
     hspeed = 0;
@@ -122,7 +122,7 @@ if ( target > 0 )
       {
       instance_create ( x - 3 * size * ( 1 - facing * 2 ) , y - 16 * size , obj_spark_effect );
       sound_play ( attack_voice2 );
-      create_projectile ( 5 , 65 + facing * 50 , 3 , 9.5 , 45 , 10 , kick2 , obj_spark_hit2 , 1 , 1 , 0 , 0 , self.id , 30 , char_custom2 );
+      create_projectile ( 5 , 65 + facing * 50 , 6 , 6.5 , 45 , 10 , kick2 , obj_spark_hit2 , 1 , 1 , 0 , 0 , self.id , 30 , char_custom2 );
       proj.hit = 1;
       proj.hit_player[(target.number-1)*SLOTS_PER_FIGHTER+target.slot] = 1;
       proj.sp = 6;
@@ -132,8 +132,8 @@ if ( target > 0 )
       proj.angle = 0;
       target.state_type = "air_flinch";
       target.timer = 0;
-      target.time = 30;
-      target.alarm[0] = 30;
+      target.time = 12 + (target.percent * 0.18 );;
+      target.alarm[0] = 12 + (target.percent * 0.18 );;
       target.timer_speed = 1;
       }
     if ( temp >= 41 )
@@ -152,6 +152,7 @@ if ( target > 0 )
   // bounce-off
   if ( temp >= 100 && temp < 160 )
     {
+		time = 55;
     hspeed = 0;
     air_move = 0;
     vspeed = -grav * size;
@@ -189,23 +190,23 @@ if ( target > 0 )
       create_projectile ( 5 , 65 + facing * 50 , 6 , 6.5 , 45 , 10 , kick2 , obj_spark_hit2 , 1 , 1 , 0 , 0 , self.id , 30 , char_custom2 );
       proj.hit = 1;
       proj.hit_player[(target.number-1)*SLOTS_PER_FIGHTER+target.slot] = 1;
-      proj.sp = 1 + min ( 8 , target.percent * 0.09 );
+      proj.sp = 4 + min ( 5 , target.percent * 0.03 );
       if ( target.team == team )
         {
         proj.sp = 3 + target.movedown * 3;
         }
-      proj.dirr = 280-facing*20;
+      proj.dirr = 270;
       proj.man = target;
       proj.anglerotate = -20 * ( 1 - facing * 2 );
       proj.angle = 0;
       target.state_type = "air_flinch";
       target.timer = 0;
-      target.time = 30;
-      target.alarm[0] = 30;
+      target.time = 8 + (target.percent * 0.15 );
+      target.alarm[0] = 8 + (target.percent * 0.15 );
       target.timer_speed = 1;
       sprite_index = jump_sprite;
       vspeed = -jump_speed * size;
-      air = max_jumps;
+      air = 1;
       state_type = "jump";
       timer = 0;
       time = -1;
