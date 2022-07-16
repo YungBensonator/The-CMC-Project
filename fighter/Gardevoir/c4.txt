@@ -1,0 +1,42 @@
+absorb = 0;
+absorb2 = 0;
+moving_object = 0;
+no_reflect = 1;
+priority = 5;
+proj_destroy = 0;
+no_clash = 1;
+
+if ( timer <= 1 )
+  {
+    sprite_index = keepmain.wind_sprite;
+	image_xscale = 0.5 * (1-facing*2) * size;
+	image_yscale = 0.35 * size;
+    image_speed = 0.8;
+    visible = 1;
+  }
+
+time = 60;
+
+if ( timer mod 10 < 3 )
+{
+leaf = instance_create( x + random(30) * size , y , obj_spark );
+leaf.sprite_index = attacker.leaf_sprite;
+leaf.image_xscale = 0.5 * (1-facing*2) * size;
+leaf.image_yscale = 0.5 * size;
+leaf.image_speed = 0;
+leaf.image_index = random(6);
+leaf.image_angle = random(360);
+leaf.x = x + ( 10 + random(60) ) * (1-attacker.facing*2) * size
+leaf.y = y + ( choose ( random(12) , random(-12) ) ) * size;
+leaf.direction = 140 + random(80);
+leaf.speed = 1.5 * (1-attacker.facing*2) * attacker.size;
+leaf.alarm[0] = 20;
+}
+
+x = attacker.id.x + 20 * (1-facing*2) * attacker.id.size + attacker.id.hspeed;
+y = attacker.id.y - 28 * attacker.id.size + attacker.id.vspeed;
+
+if ( attacker.attack_type = "none" )
+{
+instance_destroy();
+}

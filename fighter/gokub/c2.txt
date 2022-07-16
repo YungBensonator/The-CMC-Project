@@ -1,0 +1,70 @@
+//proj_destroy = 0
+absorb = 1  // This attack may be absorbed by PSI magnet
+if timer <= 1 && hit = 0 && initialized = 0 {// Initialize sprite and speed during frame 1
+    if attacker.roze = 1 {
+	sprite_index = attacker.id.kamehameha_spriteR
+	}
+	else {
+	sprite_index = attacker.id.kamehameha_sprite
+	}
+    mask = sprite_index
+    if attacker.tempup = 1
+    image_angle = 45-facing*90
+    if attacker.tempdown = 1
+    image_angle = 315+facing*90
+    mask.image_angle = image_angle
+    image_index = 0; image_speed = 0;
+    //image_speed = 1.2;
+    visible=1;
+    proj_hits = 1
+    goku = attacker
+    priority = 5
+    no_clash = 1
+    no_reflect = 1
+    tempfacing = attacker.facing
+//    tempdestroy = -1
+    initialized = 1
+    }
+if ( timer == time && proj_hits == max_hits )
+  {
+  hit = 2;
+  time = 352 - attacker.timer;
+  }
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+visible=1
+//if attacker.kaioken=1
+//image_blend=c_yellow
+//else
+//image_blend =c_white
+if timer = time && proj_hits < max_hits {
+proj_hits+=1
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+if proj_hits = max_hits {
+    damage = round(attacker.size*(5+attacker.kaioken*1))
+    bkb= attacker.size*(5.3+(attacker.kaioken*0.7)+(max_hits*0.43))
+    kbg = attacker.size*(1.85+(attacker.kaioken*1)+(max_hits*0.87))
+    dir = 30+attacker.facing*120
+    hitlag_diff = 2+attacker.kaioken*3
+    }
+timer = 0
+time = 6;
+//time = ( 353 - attacker.id.timer );
+//hit = 2;
+}
+if attacker.id.timer = 330 && proj_hits< max_hits-1
+proj_hits=max_hits-1
+if attacker.id.timer > 335
+proj_hits=max_hits
+if image_index >= image_number-image_speed || goku.attack_type != "b" || (goku.state_type!="air_attack" && goku.state_type!="attack")
+instance_destroy()
+//if tempdestroy = 0
+//instance_destroy();
+//if tempdestroy > 0
+//tempdestroy -= 1

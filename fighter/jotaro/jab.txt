@@ -1,0 +1,176 @@
+if state_type = "stand" || state_type = "run" {
+hspeed = 0;
+state_type = "attack";
+attack_type = "jab";
+timer = 0;
+time = 62;
+sprite_index = jab_sprite;
+image_speed = 0;
+image_index = 0;
+jab2 = 0;
+jabend = 0;
+}
+
+
+if(zawarudo = 0)
+{
+if timer = 1 {
+	attacking = 0;
+	}
+if timer >= 1 && timer < 3 {
+	image_index += 1;
+	}
+if timer = 4 {
+	sound_play(attacksnd1);
+	create_hitbox(2,85+facing*10,1.5,0.5,2,2,punch1,obj_spark_hit1,0.7,0.5,15,20,self.id,2,2);
+	}
+if timer = 6 {
+	image_index = 4;
+	}
+if timer > 2 && timer < 15 && attacking = 1 {
+jab2 = 1;
+}
+
+if timer = 15 {
+	if jab2 = 0 {
+		timer = time-8;
+		image_index = 4;
+		jabend = 1;
+		}
+	else {
+		timer = 16;
+		image_index = 5;
+		attacking = 0;
+		}
+	}
+if timer = 17 {
+	attacking = 0;
+	jab2 = 0;
+	}
+if timer = 25 {
+	image_index = 6;
+	sound_play(attacksnd1);
+	create_hitbox(2,35+facing*110,4,0,2,2,kick2,obj_spark_hit2,0.7,0.5,18,8,self.id,3,2);
+	}
+if timer = 21 || timer = 23 {
+	image_index += 1;
+	}
+if timer > 18 && timer < 29 && attacking = 1 {
+	jab2 = 1;
+	}
+if timer = 29 {
+	if jab2 = 0 {
+		timer = time-8;
+		image_index = 8;
+		jabend = 1;
+		}
+	else {
+		timer = 30;
+		image_index = 9;
+		attacking = 0;
+		jab2 = 0;
+		}
+	}
+if timer = 32 || timer = 34 {
+	stardeltemp = 1;
+	image_index += 1;
+	}
+if timer = 45 {
+	sound_play(attacksnd2);
+	create_hitbox(4,35+facing*110,5,2.5,5,5,kick3,obj_spark_hit3,0.75,0.75,40,16,self.id,2,3);
+	}
+if (timer = 38 || timer = 43 || timer = 45) && jabend = 0 {
+	image_index += 1;
+	}
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  interrupt = 0;
+  }
+}
+
+
+if(zawarudo = 1)
+{
+if timer = 1 {
+	attacking = 0;
+	}
+if timer >= 1 && timer < 3 {
+	image_index += 1;
+	}
+if timer = 4 {
+	sound_play(attacksnd1);
+	create_projectile(2,85+facing*10,1.5,0.5,2,2,punch1,obj_spark_hit1,0.7,0.5,15,20,self.id,2,2);
+	}
+if timer = 6 {
+	image_index = 4;
+	}
+if timer > 2 && timer < 15 && attacking = 1 {
+jab2 = 1;
+}
+
+if timer = 15 {
+	if jab2 = 0 {
+		timer = time-8;
+		image_index = 4;
+		jabend = 1;
+		}
+	else {
+		timer = 16;
+		image_index = 5;
+		attacking = 0;
+		}
+	}
+if timer = 17 {
+	attacking = 0;
+	jab2 = 0;
+	}
+if timer = 25 {
+	image_index = 6;
+	sound_play(attacksnd1);
+	create_projectile(2,35+facing*110,4,0,2,2,kick2,obj_spark_hit2,0.7,0.5,18,8,self.id,3,2);
+	}
+if timer = 21 || timer = 23 {
+	image_index += 1;
+	}
+if timer > 18 && timer < 29 && attacking = 1 {
+	jab2 = 1;
+	}
+if timer = 29 {
+	if jab2 = 0 {
+		timer = time-8;
+		image_index = 8;
+		jabend = 1;
+		}
+	else {
+		timer = 30;
+		image_index = 9;
+		attacking = 0;
+		jab2 = 0;
+		}
+	}
+if timer = 32 || timer = 34 {
+	stardeltemp = 1;
+	image_index += 1;
+	}
+if timer = 45 {
+	sound_play(attacksnd2);
+	create_projectile(4,35+facing*110,5,2.5,5,5,kick3,obj_spark_hit3,0.75,0.75,40,16,self.id,2,3);
+	}
+if (timer = 38 || timer = 43 || timer = 45) && jabend = 0 {
+	image_index += 1;
+	}
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  interrupt = 0;
+  }
+}

@@ -1,0 +1,55 @@
+if ( timer == 0 )
+{
+  testudinata = 0;
+  var i;
+  for ( i = 0 ; i < MAX_FIGHTERS ; i += 1 )
+  {
+    if ( random ( 2 ) < 1 && ( ( db_charname [ global.gs_character [ i ] , 1 ] == "mario" ) || ( db_charname [ global.gs_character [ i ] , 1 ] == "luigi" ) ) )
+      testudinata = 1;
+  }
+  sprite_index = entry_sprite;
+  image_speed = 0.25;
+  image_index = 0;
+  shakex = -60 * ( 1 - facing * 2 );
+  shakey = -60;
+}
+if ( timer > 0 && timer < 30 )
+{
+  shakex += 2 - facing * 4;
+  shakey += 2;
+}
+if ( timer = 30 )
+{
+  sprite_index = crouch_sprite;
+  image_speed = 0;
+  image_index = 1;
+  shakex = 0;
+  shakey = 0;
+}
+if ( timer = 50 )
+  image_index = 0;
+if ( timer = 55 )
+{
+  sprite_index = taunt_sprite;
+  image_speed = 0;
+  image_index = 0;
+}
+if ( timer = 60 )
+{
+  if ( testudinata )
+    sound_play ( entry_voice );
+  else
+    sound_play ( taunt_voice );
+  image_index = 1;
+}
+if ( timer = 84 )
+  image_index = 0;
+if ( timer >= 88 )
+{
+  visible = 1;
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+}

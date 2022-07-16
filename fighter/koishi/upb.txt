@@ -1,0 +1,105 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( air = max_jumps ) exit;
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" )
+{
+  state_type = "air_attack";
+  attack_type = "upb";
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 38;
+  timer_speed = 1;
+  intangible = 1;
+  if ( moveright ) facing = 0;
+  if ( moveleft ) facing = 1;
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 4: sprite_index = upb_sprite; image_index = 0; break;
+    case 7: image_index = 1; break;
+    case 10: image_index = 2; break;
+    case 13: image_index = 3; break;
+    case 16: image_index = 4; break;
+    case 19: image_index = 5; break;
+    case 22: image_index = 6; break;
+    case 25: image_index = 7; break;
+    case 28: image_index = 8; break;
+    case 31: image_index = 9; break;
+    case 34: image_index = 10; break;
+  }
+  air_move = 1;
+  gravity_lock = 1;
+  state_type = "air_attack";
+  if ( timer = 4 )
+    vspeed = -3 * size;
+  if ( timer = 6 )
+  {
+    intangible = 0;
+    sound_play ( upb_sound );
+    if ( random ( 3 ) < 1 )
+      sound_play ( charge_voice );
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.image_xscale *= 0.8 * size;
+    duster.image_yscale *= 0.7 * size;
+    duster.facing = facing;
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.image_xscale *= 0.8 * size;
+    duster.image_yscale *= 0.7 * size;
+    duster.facing = !facing;
+  }
+  if ( timer >= 7 && timer < 34 )
+  {
+    upbheart1 = create_spark ( floor ( 18 * sin ( ( timer - 3 ) * 4 * pi / 60 ) ) , 4 + ( timer - 7 ) , sideb_effect , 0 , 0.25 , 0.25 );
+    upbheart1.image_index = 0;
+    upbheart1.image_angle = 270;
+    upbheart1.alpha_add = -0.1;
+    upbheart1.alarm[0] = 16;
+    upbheart1.snap = self.id;
+    upbheart2 = create_spark ( -floor ( 18 * sin ( ( timer - 3 ) * 4 * pi / 60 ) ) , 4 + ( timer - 7 ) , sideb_effect , 0 , 0.25 , 0.25 );
+    upbheart2.image_index = 1;
+    upbheart2.image_angle = 270;
+    upbheart2.alpha_add = -0.1;
+    upbheart2.alarm[0] = 16;
+    upbheart2.snap = self.id;
+    if ( timer < 25 )
+    {
+      upbheart1.depth = depth + 0.1;
+      upbheart2.depth = depth - 0.1;
+    }
+    else
+    {
+      upbheart1.depth = depth - 0.1;
+      upbheart2.depth = depth + 0.1;
+    }
+  }
+  if ( timer = 7 || timer = 12 || timer = 18 || timer = 24 || timer = 30 )
+  {
+    create_hitbox ( 1 , angle_correct ( 80 ) , 2.85 , 0.1 , 3 , 2 , koishihit2 , obj_spark_hit2 , 1.1 , 1.4 , 0 , 18 , self.id , 1 , 2 );
+    hitbox.di = 0.3;
+    hitbox.weight_kb = 1;
+  }
+  if ( timer = 9 || timer = 15 || timer = 21 || timer = 27 || timer = 33 )
+  {
+    create_hitbox ( 1 , angle_correct ( 100 ) , 2.85 , 0.1 , 3 , 2 , koishihit2 , obj_spark_hit2 , 1.1 , 1.4 , 0 , 18 , self.id , 1 , 2 );
+    hitbox.di = 0.3;
+  }
+  if ( timer = 36 )
+  {
+    create_hitbox ( 8 , angle_correct ( 70 ) , 6.2 , 4.9 , 5 , 4 , koishihit3 , obj_spark_hit3 , 1.25 , 1.4 , 0 , 18 , self.id , 3 , 3 );
+    hitbox.hit_stun = 4;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  air = max_jumps;
+  state_type = "jump";
+  sprite_index = jump_sprite;
+  image_index = 1;
+  attack_type = "none";
+  timer = 0;
+  time = -1;
+}

@@ -1,0 +1,71 @@
+absorb = 0;
+absorb2 = 0;
+moving_object = 0;
+no_reflect = 1;
+priority = 5;
+proj_destroy = 0;
+no_clash = 1;
+
+if ( temp = 1 )
+  {
+    hit = 2;
+  }
+
+
+time = 50;
+x = attacker.id.x - 2 * (1-attacker.facing*2) * attacker.id.size;
+y = attacker.id.y - 20 * attacker.id.size;
+
+if ( timer = 1 && temp = 1 )
+{
+spark = instance_create( x,y,obj_spark );
+spark.sprite_index = attacker.reflect_sprite;
+spark.image_xscale = 0.7 * (1-facing*2) * size;
+spark.image_yscale = 0.7 * size;
+spark.image_speed = 0;
+spark.image_index = 1;
+spark.alarm[0] = 50;
+spark.snap = attacker.id;
+spark.depth = -4;
+spark.speed = 0;
+spark.image_alpha = 0.7;
+spark2 = instance_create( x,y,obj_spark );
+spark2.sprite_index = attacker.reflect_sprite;
+spark2.image_xscale = 0.7 * (1-facing*2) * size;
+spark2.image_yscale = 0.7 * size;
+spark2.image_speed = 0;
+spark2.image_index = 0;
+spark2.alarm[0] = 50;
+spark2.snap = attacker.id;
+spark2.depth = -4;
+spark2.speed = 0;
+}
+
+if ( instance_exists ( spark ) && temp = 1 )
+{
+spark.image_angle += 10;
+}
+
+if ( instance_exists ( spark2 ) && temp = 1 )
+{
+spark2.image_angle += 10;
+}
+
+if ( attacker.attack_type = "none" )
+{
+if instance_exists ( spark )
+{
+	with ( spark )
+	{
+	instance_destroy();
+	}
+}
+if instance_exists ( spark2 )
+{
+	with ( spark2 )
+	{
+	instance_destroy();
+	}
+}
+instance_destroy();
+}

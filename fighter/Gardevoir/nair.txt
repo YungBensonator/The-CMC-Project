@@ -1,0 +1,99 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "nair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = nair_sprite;
+  timer = 0;
+  time = 38;
+  timer_speed = 1;
+  }
+  
+tempx = x + 30 * (1-facing*2) * size;
+tempy = y - 22 * size;
+  
+switch ( timer )
+  {
+  case 4: image_index = 1; break;
+  case 5: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 7: image_index = 4; break;
+  case 11: image_index = 5; break;
+  case 15: image_index = 6; break;
+  }
+
+if ( timer = 8 )
+{
+if ( random ( 4 ) < 1 )
+{
+play_attack_voice();
+}
+sound_play(attacksnd2);
+create_hitbox(2,45+facing*90,5,0,3,2,punch1,obj_spark_hit1,0.69 , 0.5 , 13.28 , 27.80,self.id,1,1);
+hitbox.di = -1;
+}
+
+if ( timer = 10 )
+{
+sound_play(magicblast_sound);
+create_hitbox(8,45+facing*90,4,6,15,1,magic2,obj_spark_shock,0.65,0.65,30,22,self.id,10,5);
+hitbox.no_clash = 1;
+}
+
+if ( timer = 10 )
+{
+  magicblast = instance_create( tempx , tempy , obj_spark );
+  magicblast.sprite_index = magicblast_sprite;
+  magicblast.image_xscale = 0.25 * size;
+  magicblast.image_yscale = 0.25 * size;
+  magicblast.image_speed = 0;
+  magicblast.image_alpha = 0.85;
+  magicblast.alarm = 100;
+}
+if ( timer >= 10 && timer <= 25 )
+{
+  spark = instance_create( tempx , tempy , obj_spark );
+  spark.sprite_index = magicspark_sprite;
+  spark.image_xscale = 0.15 * (1-facing*2) * size;
+  spark.image_yscale = 0.15 * size;
+  spark.image_speed = 0;
+  spark.image_angle = random(360);
+  spark.direction = random(360);
+  spark.speed = 1 * (1-facing*2) * size;
+  spark.alarm[0] = 15;
+  magicblast.x = tempx;
+  magicblast.y = tempy;
+}
+if ( timer >= 20 && timer <= 25 && magicblast.image_alpha > 0 )
+{
+  magicblast.image_alpha -= 0.2;
+}
+if ( timer = 26 )
+{
+with ( magicblast )
+	{
+	instance_destroy();
+	}
+}
+
+if ( air = 0 )
+{
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = 11;
+sprite_index = land_sprite;
+image_index = 0;
+}
+  
+if ( timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 12;
+    timer = 0;
+    time =-1;
+  }

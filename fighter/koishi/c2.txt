@@ -1,0 +1,37 @@
+// Arrow //
+if ( timer < time )
+{
+  image_angle = direction + facing * 180;
+  if ( next_to_rwall || next_to_lwall || on_floor || on_platform || under_ceiling || hit > 0 )
+  {
+    spark = create_spark ( 0 , 0 , owner.fair_effect3 , 1 , 0.3 * ( 1 - facing * 2 ) , 0.3 );
+    spark.image_angle = image_angle;
+    timer = time - 1;
+  }
+  if ( !is_on_floor ( self.id ) )
+  {
+    vspeed += 0.2 * size;
+    hspeed = hspeed;
+  }
+  else
+  {
+    vspeed = 0;
+    hspeed = 0;
+  }
+  if ( vspeed > 3 )
+    vspeed = 3;
+}
+if ( timer > time - 5 )
+  image_alpha -= 0.2;
+if ( timer >= time - 1 )
+{
+  if ( hit = 0 )
+  {
+    shockwave = instance_create ( x , y , obj_spark_shockwave );
+    shockwave.image_alpha = 0.75;
+    shockwave.image_xscale *= 0.5 * size;
+    shockwave.image_yscale *= 0.5 * size;
+  }
+  sound_play2 ( magic2 );
+  instance_destroy();
+}

@@ -1,0 +1,42 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+state_type = "air_attack"
+attack_type = "transformBack"
+image_speed = 0
+sound_play(bushin_sound)
+sprite_index = downb_spriteB2
+timer = 0
+time = 60
+image_speed = 0
+image_index=0
+hspeed = 0
+air_move = 0}
+
+if timer < time {
+
+gravity = 0
+gravity_lock = 1
+vspeed = 0
+hspeed = 0
+intangible = 1
+
+switch ( timer ) {
+case 8: image_index = 2; break;
+case 16: image_index = 4; break;
+case 20: image_index = 5; break;
+case 32: image_index = 8; break;
+case 36: image_index = 9; break;}
+
+if timer = 44 {
+sprite_index = stand_sprite;
+image_speed = 0.25}
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+attack_type = "none";
+if air > 0 {state_type = "jump";}
+else {state_type = "stand";}
+timer = 0;
+time =-1;
+intangible = 0
+bankai = 0}

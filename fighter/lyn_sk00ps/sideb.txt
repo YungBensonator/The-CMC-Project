@@ -1,0 +1,107 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if state_type = "run" || state_type = "stand" || state_type = "jump" && sidebtemp = 0 {
+    attacking = 0
+    attack_type = "sideb"
+    target = none;
+	hspeed = 0;
+	state_type = "air_attack"
+    image_speed = 0;
+    sprite_index = sideb_sprite;
+    image_index=0;
+    timer = 0;
+    time = 55;
+    timer_speed=1;
+	sound_play(swordpull);
+	sidebtemp = 1;
+	air_move = 0;
+}
+switch ( timer )
+  {
+  case 5: image_index = 1; break;
+  case 10: image_index = 2; break;
+  case 18: image_index = 3; break;
+  case 21: image_index = 4; break;
+  case 24: image_index = 5; break;
+  case 27: image_index = 6; break;
+  case 40: image_index = 2; break;
+  case 45: image_index = 1; break;
+  case 50: image_index = 0; break;
+  }
+if timer < time {
+	if ( timer == 1 )
+	{
+    create_homing_bubble(2.8,1.7,48,14,self.id,18);
+	if facing = 0 {
+	duster = instance_create(x+8*(1-facing*2),y,obj_dust_effect);
+    duster.image_xscale = -0.45*size
+    duster.image_yscale = 0.3*size
+	}
+	if facing = 1 {
+	duster = instance_create(x+8*(1-facing*2),y,obj_dust_effect);
+    duster.image_xscale = 0.45*size
+    duster.image_yscale = 0.3*size
+	}
+	}
+	if target > -1 { 
+	storedx = target.x
+	storedy = target.y
+	}
+	if timer = 18 {
+	intangible = 1;
+	sound_play(lynwoosh2);
+	sound_play(attack_voice4);
+	duster = instance_create(x-8*(1-facing*2),y,obj_dust_effect);
+	duster.facing = facing;
+		x = x+100*(1-facing*2)*size;
+       create_hitbox(10,40+facing*100,7,8,10,20,CritHit,obj_spark_slash3,1.16 , 1.04 , 28.86 , 19.89,self.id,2,5);
+        hitbox.shake_ampl = 1.3
+	}
+	if (target != -1 && target != noone && target != -99 && target != attacker.id) && target > -1 {
+	if timer = 18 {
+	if facing = 0 {
+		if x > enemy.x {
+	x = enemy.x - 25*size
+	}
+	if x < enemy.x {
+	x = enemy.x + 25*size
+	}
+	}
+	if facing = 1 {
+	if x < enemy.x {
+	x = enemy.x - 25*size
+	}
+	if x > enemy.x {
+	x = enemy.x - 25*size
+	}
+	}
+       create_hitbox(5,135-facing*90,6,6,10,6,lynhit2,obj_spark_slash3,0.81 , 0.96 , -22.62 , 17.16,self.id,2,5);
+	}
+	}
+	if timer >= 1 && timer <= 40 {
+		gravity_lock = 1;
+		speed = 0;
+		gravity = 0;
+	}
+	if timer = 40 {
+	intangible = 0;
+	sound_play(swordpull);
+	}
+	if timer = 50 {
+	sound_play(swordsheath);
+	}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,103 @@
+if ( time != -1 )
+{
+	if instance_exists(target)
+    {
+	sound_play(magic1);
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "hold";
+	image_speed = 0;
+	sprite_index = hold_sprite;
+	image_index= 2;
+	target.attack_type = "none"
+	target.x = x + (26 - facing*52)*size
+	timer = 0;
+	time = -1;
+	timer_speed=1;
+	pummel = -1;
+	}
+	else
+	exit;
+}
+if ( attacking && pummel == -1 )
+  {
+    attacking = 0;
+    pummel = 0;
+    sprite_index = pummel_sprite;
+    image_speed = 0.2;
+    image_index = 1.1;
+  }
+if ( pummel == -1 )
+{
+if ( stoplock = -1 )
+  {
+    stoplock = create_spark(26,20,stop_sprite,0,1,1);
+    stoplock.size = 0.5*size;
+    stoplock.image_xscale = 0.05*size;
+    stoplock.image_yscale = 0.05*size;
+    stoplock.script = stoplock_script;
+    stoplock.target = target;
+  }
+if facing = 0 {
+    if moveright = 1
+    attack_type = "fthrow";
+    else if moveleft = 1
+    attack_type = "bthrow";
+    }
+if facing = 1 {
+    if moveleft = 1
+    attack_type = "fthrow";
+    else if moveright = 1
+    attack_type = "bthrow";
+    }
+if moveup = 1 
+    attack_type = "uthrow";
+if movedown = 1 {
+    attack_type = "dthrow";
+    movedown = 0; }
+}
+else
+{
+pummel += 1;
+if ( pummel == 10 )
+  {
+	stab = instance_create(x,y-30,obj_spark);
+	stab.sprite_index = stab_fx;
+	stab.image_speed = 1.3;
+	stab.image_xscale = 0.3 - facing*0.6;
+	stab.image_yscale = 0.3;
+	stab.x = x + 25 - facing*50;
+	stab.y = y-30;
+    temp_timer = target.timer;
+    temp_time = target.time;
+	sound_play2 ( slash1 )
+    create_projectile ( 2 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_slash1 , 0.8 , 0.8 , 15 , 15 , self.id , 2 , 0 );
+  }
+if ( pummel == 11 )
+  {
+    target.state_type = "grabbed";
+    target.sprite_index = target.flinch_sprite;
+    target.timer = temp_timer;
+    target.time = temp_time;
+    target.timer_speed = 1;
+  }
+if pummel = 16 {
+sprite_index = pummel_sprite;
+image_index = 4;
+image_speed = 0.5;
+}
+if ( pummel = 23 )
+  {
+    sprite_index = hold_sprite;
+    image_speed = 0;
+    image_index = 2;
+  }
+if ( pummel >= 30 )
+  {
+    pummel = -1;
+  }
+}
+if string(target.state_type) != "grabbed" {
+    state_type = "flinch";
+    time = 15;
+    timer = 0; }

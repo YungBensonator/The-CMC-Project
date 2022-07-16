@@ -1,0 +1,94 @@
+// Thorns N' Roses //
+if ( timer <= 1 )
+{
+  if ( thorn )
+  {
+    sprite_index = keepmain.b_effect1;
+    image_index = floor ( random ( 8 ) );
+    image_xscale = 0.4 * ( 1 - facing * 2 ) * size;
+    image_yscale = 0.4 * size;
+    image_angle = direction;
+    depth = owner.depth + 0.1;
+  }
+  if ( rose )
+  {
+    sprite_index = keepmain.b_effect2;
+    rosescale1 = 0.04 * size;
+    rosescale2 = 0.2 * size;
+    image_xscale = rosescale1;
+    image_yscale = rosescale1;
+    depth = owner.depth - 0.1;
+  }
+}
+if ( timer < time )
+{
+  if ( owner.b_temp2 = 5 )
+    timer = 8;
+  if ( !kirby && owner.ai && owner.b_temp2 = 3 && timer = 1 )
+  {
+    thornsnroses = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 1 , 1 , 0 , 0 , owner.id , time - timer , char_custom9 );
+    thornsnroses.owner = owner;
+    thornsnroses.alarm[0] = time - timer;
+    thornsnroses.direction = direction;
+    thornsnroses.hit = 2;
+  }
+  if ( owner.b_temp = 2 && timer < time - 22 )
+    timer = time - 22;
+  if ( timer = time - 22 && instance_exists ( thornsnroses ) )
+    with ( thornsnroses ) instance_destroy();
+  if ( thorn )
+  {
+    image_angle = direction;
+    if ( timer > time - 10 )
+      image_alpha -= 0.1;
+    if ( timer = time - 10 && explode = 1 )
+      sound_play ( keepmain.b_sound2 );
+  }
+  if ( rose )
+  {
+    if ( rosescale1 < rosescale2 )
+      rosescale1 += 0.02 * size;
+    image_xscale = rosescale1;
+    image_yscale = rosescale1;
+    if ( timer = time - 10 )
+    {
+      image_alpha = 0;
+      shockwave = instance_create ( x , y , obj_spark_shockwave );
+      shockwave.image_xscale *= 0.6 * size;
+      shockwave.image_yscale *= 0.6 * size;
+      shockwave.image_alpha = 0.9;
+      shockwave.image_blend = c_orange;
+      repeat ( 5 )
+      {
+	spark = create_spark ( 0 , 0 , keepmain.petal_effect , 0 , 0.1 , 0.1 );
+	spark.image_index = floor ( random ( 4 ) );
+	spark.xscale_add = 0.03 * size;
+	spark.yscale_add = 0.03 * size;
+	spark.image_alpha = 2;
+	spark.alpha_add = -0.2;
+	spark.speed = size * ( 1 + random ( 2 ) );
+	spark.image_angle = 15 * random ( 24 );
+	spark.angle_add = choose ( 15 , -15 );
+	spark.direction = spark.image_angle;
+	spark.alarm[0] = 8;
+      }
+      if ( direction = 0 )
+	create_projectile ( 5 , angle_correct ( 30 ) , 6.4 , 5.1 , 5 , 4 , keepmain.koishislash2 , obj_spark_slash2 , 0.8 , 0.8 , 0 , 0 , attacker.id , 3 , no_script );
+      if ( direction = 45 + facing * 270 )
+	create_projectile ( 5 , angle_correct ( 60 ) , 6.4 , 5.1 , 5 , 4 , keepmain.koishislash2 , obj_spark_slash2 , 0.8 , 0.8 , 0 , 0 , attacker.id , 3 , no_script );
+      if ( direction = 90 + facing * 180 )
+	create_projectile ( 5 , 90 , 6.4 , 5.1 , 5 , 4 , keepmain.koishislash2 , obj_spark_slash2 , 0.8 , 0.8 , 0 , 0 , attacker.id , 3 , no_script );
+      if ( direction = 315 - facing * 270 )
+	create_projectile ( 5 , angle_correct ( 15 ) , 6.4 , 5.1 , 5 , 4 , keepmain.koishislash2 , obj_spark_slash2 , 0.8 , 0.8 , 0 , 0 , attacker.id , 3 , no_script );
+      if ( direction = 270 - facing * 180 )
+	create_projectile ( 5 , angle_correct ( 0 ) , 6.4 , 5.1 , 5 , 4 , keepmain.koishislash2 , obj_spark_slash2 , 0.8 , 0.8 , 0 , 0 , attacker.id , 3 , no_script );
+      proj.hit_stun = 4;
+    }
+  }
+}
+if ( timer >= time - 1 )
+{
+  if ( owner.b_temp = 1 )
+    owner.b_temp = 0;
+  instance_destroy();
+}

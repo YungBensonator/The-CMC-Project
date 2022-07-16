@@ -1,0 +1,112 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+{
+  special = 1;
+  state_type = "air_attack";
+  attack_type = "downb";
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 54;
+  timer_speed = 1;
+  hspeed *= 0.7;
+  vspeed *= 0.7;
+  downb_temp = 0;
+  if ( instance_exists ( gren ) )
+    downb_temp = 1;
+  if ( random ( 3 ) < 1 )
+    sound_play ( downb_voice );
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 10: image_index = 3; break;
+    case 13: image_index = 4; break; 
+    case 16: image_index = 5; break;
+    case 19: image_index = 6; break;
+    case 22: image_index = 5; break;
+    case 26: image_index = 6; break;
+    case 31: image_index = 5; break;
+    case 37: image_index = 6; break;
+    case 43: image_index = 7; break;
+    case 49: image_index = 8; break; 
+  }
+  if ( air > 0 )
+    sprite_index = downb_air_sprite;
+  else
+    sprite_index = downb_sprite;
+  if ( air = 0 )
+    hspeed *= 0.1;
+  if ( downb_temp = 0 && timer < 15 && ( ( !ai && special = 0 ) || ( ai && distance_to_object ( enemy ) < 24 ) ) )
+    downb_temp = 1;
+  if ( timer = 15 )
+  {
+    sound_play ( downb_sound1 );
+    spark = create_spark ( 7 , 15 , downb_effect , 1 , 0.3 * ( 1 - facing * 2 ) , 0.3 );
+    spark.snap = self.id;
+    if ( downb_temp = 0 )
+    {
+      downb_temp = 3;
+      gren = create_projectile ( 0 , 0 , 0 , 0 , 0 , 0 , -1 , -1 , 0.4 , 0.4 , 14 , 8 , self.id , 120 , char_custom6 );
+      gren.sprite_index = grenade_effect1;
+      gren.absorb = 1;
+      gren.absorb2 = 1;
+      gren.moving_object = 1;
+      gren.image_speed = 0.275;
+      gren.hspeed = 4 * ( 1 - facing * 2 ) * size;
+      gren.vspeed = -2 * size;
+      gren.facing = facing;
+      gren.owner = self.id;
+    }
+    else if ( downb_temp = 1 )
+    {
+      target = 0;
+      bubble = create_homing_bubble ( 0.8 , 0.8 , 25 , 15 , self.id , 4 );
+      bubble.destroy = 0;
+      bubble.target = 0;
+    }
+  }
+  if ( timer >= 16 && timer < 20 && downb_temp = 1 )
+  {
+    if ( bubble.target > 0 )
+      target = bubble.target;
+    if ( target > 0 && !target.intangible )
+    {
+      downb_temp = 2;
+      if ( target.state_type = "broken" || target.air > 0 )
+        create_hitbox ( 5 , angle_correct ( 30 ) , 5.7 , 3.6 , 10 , 2 , koishishock2 , obj_spark_shock2 , 0.8 , 0.8 , 20 , 15 , self.id , 3 , 4 );
+      else
+        with ( target )
+        {
+	  if ( state_type != "shielding" )
+	  {
+	    sound_play ( other.downb_sound4 );
+	    shield_hp = 150;
+	    state_type = "broken";
+	    attack_type = "none";
+	    facing = 1 - other.facing;
+	    sprite_index = broken_sprite;
+	    timer = 0;
+	    time = 110;
+	    speed = 0;
+	  }
+        }
+    }
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  attack_type = "none";
+  if ( air > 0 )
+  {
+    state_type = "jump";
+    sprite_index = jump_sprite;
+    image_index = 1;
+  }
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+}

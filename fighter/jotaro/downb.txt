@@ -1,0 +1,43 @@
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+	    hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "downb";
+        image_speed = 0.2;
+        sprite_index =downb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 50;
+        timer_speed=1;
+}
+            if timer = 2 {
+				sound_play(zuh_wahdouh);
+				sound_play(timestop_sound);
+            } 
+			
+			
+			if (timer = 24 && number_meter > 0 && zawarudo = 0 )
+{
+    effect_create_below(ef_ellipse,x,y,1,c_white);
+        instance_create(0,0,obj_flashscreen);
+        freezer  = instance_create(x,y,obj_freeze);
+        freezer.dontpause = self.id;
+        freezer.alarm[0] = (60* number_meter)+(55-24);
+		background_blend= c_red;
+		spark = instance_create(x,y-18*size,obj_spark_shockwave);
+		spark.image_xscale *= 2*size;
+		spark.image_yscale *= 2*size;
+		spark.image_blend = c_aqua;
+		spark.image_alpha = 0.9;
+		//zawarudo = 1;
+		meter = 0;
+}
+			
+			
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+	zawarudo = 1;
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

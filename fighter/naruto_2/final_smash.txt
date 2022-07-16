@@ -1,0 +1,126 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+size = csize
+grab_edge = 0;
+special = 0;
+state_type = "air_attack";
+attack_type = "final_smash";
+air_move=0
+image_speed = 0;
+sprite_index = final_smash_sprite;
+image_index=0;
+timer = 0;
+time = 63;
+intangible = 1;
+final_smashes+=1
+smash_power = 0
+timer_speed = 1
+sound_play(i_will_finish_you)
+duster = instance_create ( 0 , 0 , obj_freeze );
+duster.dontpause = self.id;
+duster.alarm[0] = 55;}
+
+if timer < time {
+
+gravity_lock = 1;
+gravity = 0
+hspeed = 0;
+vspeed = 0
+
+switch ( timer ) {
+case 7: image_index = 1; break;
+case 14: image_index = 2; break;
+case 22: image_index = 3; break;
+case 28: image_index = 4; break;
+
+case 32: image_index = 5; break;
+case 36: image_index = 6; break;
+case 40: image_index = 7; break; ////create_hitbox
+
+case 46: image_index = 4; break;
+case 50: image_index = 2; break;
+case 54: image_index = 1; break;
+case 58: image_index = 0; break;
+
+case 95: image_index = 7; break;  
+case 100: image_index = 8; break; ////create_effect
+case 160: image_index = 9; break;
+case 168: image_index = 10; break;
+
+case 250: image_index = 4; break; ////effect_end
+case 255: image_index = 2; break;
+case 260: image_index = 1; break;
+case 265: image_index = 0; break;}
+
+if timer = 36 {
+create_hitbox(8,90,0.1,0,-1,8,punch3,obj_spark_hit4,1.78,2.01,22,30,self.id,6,6);
+hitbox.hit_stun = 30;}
+
+if timer >= 36 && timer <= 42 && hitbox.hit = 1 {
+time = 270
+timer = 95
+image_index = 7
+target1 = target;}
+
+if timer = 95 {
+target1.y = y-8*size;}
+
+if timer >= 96 && timer < 250 {
+target1.gravity_lock = 1;
+target1.state_type = "air_flinch";
+target1.image_angle = 0;
+target1.attack_type = "none";
+target1.sprite_index = target1.flinch_sprite;
+target1.timer = 0;
+target1.alarm[0] = 2;}
+
+if timer >= 96 && timer < 115 {
+target1.air_move = 1;
+target1.y -= 7.32*size
+target1.x += 1.82*(1-facing*2)*size}
+
+if timer >= 115 && timer < 250 {
+target1.speed = 0;
+target1.gravity = 0;
+target1.air_move = 0;}
+
+if timer = 100 {
+rasengan = instance_create( x,y,obj_spark );
+rasengan.sprite_index = fs_effect_sprite;
+rasengan.image_xscale = 0.6 * size;
+rasengan.image_yscale = 0.6 * size;
+rasengan.image_speed = 0.3;
+rasengan.x = x + 30 * (1-facing*2) * size;
+rasengan.y = y - 10 * size;
+rasengan.loop = 9999
+rasengan.image_alpha = 0.9}
+
+if timer = 160 {
+sound_play(Oodama_rasengan)
+rasengan.y = y - 20 * size
+rasengan.x = x + 40 * (1-facing*2) * size;}
+
+if timer = 168 {
+rasengan.y = y - 30 * size}
+
+if timer = 160 || timer = 165 || timer = 170 || timer = 175 || timer = 180 || timer = 185 || timer = 190 || timer = 195 || timer = 200 || timer = 205 || timer = 210 || timer = 215 || timer = 220 || timer = 225 || timer = 230 || timer = 235 || timer = 240 || timer = 245 {
+create_hitbox(2,random(360),0.2,0,-1,1,shock2,obj_spark_hit4,2.3,2.3,37,83,self.id,5,2);
+hitbox.hit_stun = 20}
+
+if timer = 250 {
+target1.gravity = 1
+target1.gravity_lock = 0
+create_hitbox(10,90,7.2,8.2,-1,8,shock2,obj_spark_hit4,2.5,2.5,35,85,self.id,5,2);}
+
+if timer = 252 {
+rasengan.image_alpha = 0}
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+attack_type = "none";
+state_type = "stand";
+if air > 0 {state_type = "jump";}
+smash_power = 0
+intangible = 0;
+timer = 0;
+time =-1;}

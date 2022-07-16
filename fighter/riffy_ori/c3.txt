@@ -1,0 +1,72 @@
+use_palette = number;
+
+if hit=1
+{time=240}
+
+
+if hitsno<5
+{
+	if timer=23
+	{vspeed=0}
+	if timer<31
+		{hspeed-=(0.2*(1-facing*2))*attacker.size}
+		if timer=36
+			{sound_play(attacker.nair_spin_sound)}
+	if timer>40 && timer<76
+	{
+		speed=0
+		sprite_index=attacker.spirit_star_big_sprite
+	}
+	if timer>77
+	{
+		sprite_index=attacker.spirit_star_sprite
+		speed+=0.2*attacker.size
+		direction=point_direction(x,y,attacker.x,attacker.y-14)
+		if speed>5*size
+			{speed=5*size}
+	}
+}
+if hit = 1 && hitsno < 6
+{
+	sprite_index=attacker.spirit_star_big_sprite
+	hspeed=0
+	if countdown2 = 0 
+		{countdown2 = 4}
+	if countdown2>0
+		{countdown2-=1}
+	if countdown2=0
+		{
+			hitsno+=1
+			hit=0
+		}
+}
+
+if hitsno>4
+{
+	with(player)
+	{
+		star.damage=2*size
+		star.sfx=punch2
+		star.bkb=5.2*size
+		star.kbg=4.5*size
+	}
+}
+if hitsno>1 && hitsno<6
+	damage=3
+	
+if hitsno=6
+{
+	sprite_index = attacker.spirit_star_sprite
+	hit=1
+	speed+=0.2
+	direction=point_direction(x,y,attacker.x,attacker.y-14)
+	if speed>5
+		{speed=5}
+}
+if timer>77   
+{
+	if (facing =0) && (x < attacker.x + 10*(1-(facing*2)))
+	{instance_destroy()}
+	if (facing =1) && (x > attacker.x + 10*(1-(facing*2)))
+	{instance_destroy()}
+}

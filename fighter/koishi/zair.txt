@@ -1,0 +1,241 @@
+if ( state_type = "jump" )
+{
+  state_type = "air_attack";
+  attack_type = "zair";
+  sprite_index = zair_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 39;
+  timer_speed = 1;
+  zair_temp = 0;
+  if ( ( ai && enemy.y < y - 30 ) || ( !ai && moveup ) )
+  {
+    sprite_index = zair_up_sprite;
+    zair_temp = 1;
+  }
+  else if ( ( ai && enemy.y > y + 15 ) || ( !ai && movedown ) )
+  {
+    sprite_index = zair_down_sprite;
+    time = 29;
+    zair_temp = 2;
+  }
+  if ( ai )
+  {
+    if ( ( facing = 1 && enemy.x > x ) || ( facing = 0 && enemy.x < x ) )
+      facing = 1 - facing;
+  }
+  else
+  {
+    if moveright = 1 facing = 0;
+    if moveleft = 1 facing = 1;
+  }
+}
+if ( timer < time )
+{
+  if ( zair_temp = 0 )
+  {
+    switch ( timer ) 
+    {
+      case 2: image_index = 1; break;
+      case 5: image_index = 2; break;
+      case 8: image_index = 3; break;
+      case 11: image_index = 4; break;
+      case 14: image_index = 5; break;
+      case 18: image_index = 6; break;
+      case 24: image_index = 7; break;
+      case 28: image_index = 8; break;
+      case 32: image_index = 9; break;
+      case 36: sprite_index = mid_jump_sprite; image_index = 1; break;
+    }
+    state_type = "air_attack";
+    if ( timer = 10 )
+    {
+      sound_play ( swing_sound3 );
+      sound_play ( boing_sound );
+      if ( random ( 4 ) < 1 )
+	play_attack_voice();
+    }
+    if ( timer = 12 )
+    {
+      eff = gfx_ef_whiff ( place_x ( 182 ) + x , y + place_y ( 40 ) , -1 * size , 1 * size , angle_correct ( 180 ) );
+      shockwave = instance_create ( x + 20 * ( 1 - facing * 2 ) * size , y - 21 * size , obj_spark_shockwave );
+      shockwave.image_alpha = 0.75;
+      shockwave.image_xscale *= 0.025 * size;
+      shockwave.image_yscale *= 0.35 * size;
+    }
+    if ( timer = 14 )
+    {
+      create_hitbox ( 9 , angle_correct ( 30 ) , 5.4 , 5.6 , 10 , 6 , koishihit3 , obj_spark_hit3 , 0.32 , 0.32 , 39 , 21 , self.id , 5 , 3 );
+      create_hitbox2 ( 7 , angle_correct ( 30 ) , 4.4 , 5 , 10 , 6 , koishihit3 , obj_spark_hit3 , 1.3 , 0.45 , 20 , 21 , self.id , 5 , 3 );
+    }
+    if ( timer = 16 )
+    {
+      hitbox.damage = round ( 5 * size );
+      hitbox.bkb *= 0.8;
+      hitbox.kbg *= 0.8;
+      hitbox.shield_damage = round ( 8 * size );
+      hitbox.hitlag_frames = round ( 6 * size );
+      hitbox.dir = angle_correct ( 25 );
+      hitbox.sfx = koishihit2;
+      hitbox.gfx = obj_spark_hit2;
+      hitbox.priority = 2;
+      hitbox2.damage = round ( 5 * size );
+      hitbox2.bkb *= 0.8;
+      hitbox2.kbg *= 0.8;
+      hitbox2.shield_damage = round ( 8 * size );
+      hitbox2.hitlag_frames = round ( 6 * size );
+      hitbox2.dir = angle_correct ( 25 );
+      hitbox2.sfx = koishihit2;
+      hitbox2.gfx = obj_spark_hit2;
+      hitbox2.priority = 2;
+    }
+  }
+  else if ( zair_temp = 1 )
+  {
+    switch ( timer ) 
+    {
+      case 2: image_index = 1; break;
+      case 5: image_index = 2; break;
+      case 8: image_index = 3; break;
+      case 11: image_index = 4; break;
+      case 14: image_index = 5; break;
+      case 18: image_index = 6; break;
+      case 24: image_index = 7; break;
+      case 28: image_index = 8; break;
+      case 32: sprite_index = zair_sprite; image_index = 9; break;
+      case 36: sprite_index = mid_jump_sprite; image_index = 1; break;
+    }
+    state_type = "air_attack";
+    if ( timer = 10 )
+    {
+      sound_play ( swing_sound3 );
+      sound_play ( boing_sound );
+      if ( random ( 4 ) < 1 )
+	play_attack_voice();
+    }
+    if ( timer = 12 )
+    {
+      eff = gfx_ef_whiff ( place_x ( 138 ) + x , y + place_y ( 6 ) , 1 * size , 1 * size , angle_correct ( 50 ) );
+      shockwave = instance_create ( x + 16 * ( 1 - facing * 2 ) * size , y - 47 * size , obj_spark_shockwave );
+      shockwave.image_alpha = 0.75;
+      shockwave.image_xscale *= 0.025 * size;
+      shockwave.image_yscale *= 0.35 * size;
+      shockwave.image_angle = angle_correct ( 50 );
+    }
+    if ( timer = 14 )
+    {
+      create_hitbox ( 9 , angle_correct ( 60 ) , 5.4 , 5.6 , 10 , 6 , koishihit3 , obj_spark_hit3 , 0.32 , 0.32 , 29 , 61 , self.id , 5 , 3 );
+      create_hitbox2 ( 7 , angle_correct ( 60 ) , 4.4 , 5 , 10 , 6 , koishihit3 , obj_spark_hit3 , 0.5 , 1.3 , 17 , 46 , self.id , 5 , 3 );
+      hitbox2.image_angle = angle_correct ( -40 );
+    }
+    if ( timer = 16 )
+    {
+      hitbox.damage = round ( 5 * size );
+      hitbox.bkb *= 0.8;
+      hitbox.kbg *= 0.8;
+      hitbox.shield_damage = round ( 8 * size );
+      hitbox.hitlag_frames = round ( 6 * size );
+      hitbox.dir = angle_correct ( 55 );
+      hitbox.sfx = koishihit2;
+      hitbox.gfx = obj_spark_hit2;
+      hitbox.priority = 2;
+      hitbox2.damage = round ( 5 * size );
+      hitbox2.bkb *= 0.8;
+      hitbox2.kbg *= 0.8;
+      hitbox2.shield_damage = round ( 8 * size );
+      hitbox2.hitlag_frames = round ( 6 * size );
+      hitbox2.dir = angle_correct ( 55 );
+      hitbox2.sfx = koishihit2;
+      hitbox2.gfx = obj_spark_hit2;
+      hitbox2.priority = 2;
+    }
+  }
+  else if ( zair_temp = 2 )
+  {
+    switch ( timer ) 
+    {
+      case 4: image_index = 1; break;
+      case 6: image_index = 2; break;
+      case 10: image_index = 3; break;
+      case 12: image_index = 4; break;
+      case 14: image_index = 5; break;
+      case 17: image_index = 6; break;
+      case 21: image_index = 7; break;
+      case 25: image_index = 8; break;
+    }
+    state_type = "air_attack";
+    if ( timer = 8 )
+    {
+      sound_play ( swing_sound3 );
+      sound_play ( boing_sound );
+      if ( random ( 4 ) < 1 )
+	play_attack_voice();
+    }
+    if ( timer = 10 )
+    {
+      eff = gfx_ef_whiff ( place_x ( 134 ) + x , y + place_y ( 170 ) , 1 * size , 1 * size , angle_correct ( -50 ) );
+      shockwave = instance_create ( x + 12 * ( 1 - facing * 2 ) * size , y + 5 * size , obj_spark_shockwave );
+      shockwave.image_alpha = 0.75;
+      shockwave.image_xscale *= 0.025 * size;
+      shockwave.image_yscale *= 0.35 * size;
+      shockwave.image_angle = angle_correct ( -50 );
+    }
+    if ( timer = 12 )
+    {
+      create_hitbox ( 9 , angle_correct ( 320 ) , 2.5 , 3.3 , 14 , 8 , koishihit3 , obj_spark_hit3 , 0.3 , 0.3 , 26 , -21 , self.id , 5 , 3 );
+      create_hitbox2 ( 7 , angle_correct ( 20 ) , 4.4 , 5.2 , 10 , 6 , koishihit3 , obj_spark_hit3 , 0.5 , 1.3 , 14 , -6 , self.id , 5 , 3 );
+      hitbox2.image_angle = angle_correct ( 40 );
+    }
+    if ( timer = 14 )
+    {
+      hitbox.damage = round ( 5 * size );
+      hitbox.bkb *= 0.8;
+      hitbox.kbg *= 0.8;
+      hitbox.shield_damage = round ( 8 * size );
+      hitbox.hitlag_frames = round ( 6 * size );
+      hitbox.dir = angle_correct ( 15 );
+      hitbox.sfx = koishihit2;
+      hitbox.gfx = obj_spark_hit2;
+      hitbox.priority = 2;
+      hitbox2.damage = round ( 5 * size );
+      hitbox2.bkb *= 0.8;
+      hitbox2.kbg *= 0.8;
+      hitbox2.shield_damage = round ( 8 * size );
+      hitbox2.hitlag_frames = round ( 6 * size );
+      hitbox2.dir = angle_correct ( 15 );
+      hitbox2.sfx = koishihit2;
+      hitbox2.gfx = obj_spark_hit2;
+      hitbox2.priority = 2;
+    }
+  }
+  if ( air = 0 )
+  {
+    state_type = "land";
+    if ( instance_exists ( hitbox ) )
+      with ( hitbox ) instance_destroy();
+    if ( instance_exists ( hitbox2 ) )
+      with ( hitbox2 ) instance_destroy();
+    hspeed = 0;
+    attack_type = "none";
+    sprite_index = land_sprite;
+    image_index = 0;
+    image_speed = 0;
+    timer = 0;
+    time = 16;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  attack_type = "none";
+  if ( air > 0 )
+  {
+    state_type = "jump";
+    sprite_index = jump_sprite;
+    image_index = 1;
+  }
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+}

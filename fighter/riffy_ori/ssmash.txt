@@ -1,0 +1,241 @@
+if state_type = "stand" || state_type = "run"
+{
+	upbcanceltemp=0
+    hspeed = 0;
+    state_type = "attack";
+    attack_type = "ssmash";
+    timer = 0;
+    image_speed = 0;
+    image_index = 0;
+    charge_frame = 4;
+	speedtemp=0
+if smashori
+	sound_play(cjump_charge)
+}
+if rivalsori
+{
+	if timer =0
+	{
+		if sein_available=0
+			sprite_index=ssmash_sprite
+		else 
+			sprite_index=sein_ssmash_sprite
+	}
+	if sprite_index =ssmash_sprite
+	{ 
+		time = 32
+		if timer<time
+		{
+			switch (timer)
+			{
+				case 0:
+					image_index = 0;
+					break;
+				case 3:
+					image_index = 1;
+					break;
+				case 6:
+					image_index = 2;
+					break;
+				case 9:
+					image_index = 3;
+					break;
+				case 12:
+					image_index = 4;
+					break;
+				case 15:
+					image_index = 5;
+					break;
+				case 18:
+					image_index = 6;
+					break;
+				case 21:
+					image_index = 7;
+					break;
+				case 24:
+					image_index = 8;
+					break;
+			}
+			if timer=6
+				{sound_play(fsmash_sound)}
+			
+			if timer = 9
+			{
+				create_hitbox ( 9 , 55+70*facing , 4.2 , 7.2 , 10 , 7 , seinless_l , obj_spark_hit2 , 1.18 , 0.67 , 24.80 , 10.40 , self.id , 4 , 3 );
+				hspeed= (2*(1-facing*2))*size
+				hitbox.charge_dmg = 0.6
+			}
+		}
+
+	}
+	if sprite_index =sein_ssmash_sprite
+	{
+		time = 44;
+		sein.visible=0
+		if timer>=0 && timer<4
+		{
+			if!instance_exists(sein_aura)
+			{
+				sein_aura = instance_create(x,y,obj_spark)
+				sein_aura.sprite_index=sein_smash_aura
+				sein_aura.image_speed=0.15
+				sein_aura.loop=3
+				sein_aura.snap=self.id
+				sein_aure.image_xscale=0.8*size
+				sein_aure.image_yscale=0.8*size
+				sein_aura.number=number
+			}
+		}
+
+		if timer=0
+		{
+			sound_play(sein_smash_sound)
+			sound_play(sein_smash_charge_sound)
+		}
+			
+		if timer>5
+		{
+			sound_stop(sein_smash_charge_sound)
+			with(sein_aura)
+				{instance_destroy()}
+		}
+		if timer<time
+		{
+			switch (timer)
+			{
+				case 0:
+					image_index = 0;
+					break;
+				case 3:
+					image_index = 1;
+					break;
+				case 6:
+					image_index = 2;
+					break;
+				case 9:
+					image_index = 3; //h1
+					break;
+				case 11:
+					image_index = 4;
+					break;
+				case 13:
+					image_index = 5;
+					break;
+				case 15:
+					image_index = 6; //h2
+					break;
+				case 18:
+					image_index = 7;
+					break;
+				case 20:
+					image_index = 8;
+					break;
+				case 22:
+					image_index = 9; //h3
+					break;
+				case 24:
+					image_index = 10;
+					break;
+				case 27:
+					image_index = 11;
+					break;
+				case 30:
+					image_index = 12;
+					break;
+				case 33:
+					image_index = 13;
+					break;
+				case 36:
+					image_index = 14;
+					break;
+			}
+			if timer =9
+			{
+				sound_play(fsmash_sein_sound)
+				create_hitbox ( 1 , 90-70*(1-facing*2) , 3.5 , 0, 5 , 2 , -1 , obj_spark_hit1, 0.64 , 0.67 , 32 , 10.40 , self.id , 5 , 3 );
+				hitbox.di=-1
+				hitbox.charge_dmg = 0.15
+				hitbox.charge_kb = 0
+				create_hitbox2 ( 1 , 90-70*(1-facing*2), 5 , 1 , 3 , 2 , -1 , obj_spark_hit1, 0.87 , 0.62 , 16 , 11.20 , self.id , 5 , 3 );
+				hitbox2.di=-1
+				hitbox2.charge_dmg = 0
+				hitbox2.charge_kb = 0
+				hspeed = (1.75*(1-facing*2))*size
+			}
+			hitbox.execute_on_hit="sound_play2(attacker.sein_s)"
+			hitbox2.execute_on_hit="sound_play2(attacker.sein_s)"
+			if timer = 15
+			{
+				create_hitbox3 ( 2 , 90-70*(1-facing*2) , 2 , 0 , 7 , 1 , sein_m , obj_spark_hit1, 0.67 , 0.67 , 34.40 , 10.40 , self.id , 7 , 3 );
+				hitbox.di =-1
+				hitbox.charge_dmg = 0.15
+				hitbox.charge_kb = 0
+			}
+			//hitbox3.execute_on_hit="sound_play2(attacker.sein_m)"
+			if timer = 22
+			{
+				create_hitbox4 ( 7 , 90-45*(1-facing*2), 5.4 , 7.7 , 13 , 8 , sein_l , obj_spark_hit2 , 0.99 , 1.35 , 34.40 , 12 , self.id , 5, 3 );
+				hitbox.charge_dmg = 0.3
+			}
+		}
+		if timer=time-2
+			sein.visible=1
+	}
+}
+
+if smashori
+{
+	sprite_index=dash_attack_sprite
+	time = 35
+	
+	charge_frame=5
+	
+	switch(timer)
+	{
+		case 4: image_index=1; break
+		case 8: image_index=2; break
+		case 10: image_index=3; break;
+		case 12: image_index=4; break;
+		case 14: image_index=5; break;
+		case 16: image_index=6; break;
+		case 18: image_index=7; break;
+		case 20: image_index=8; break	
+	}
+	if timer>7 && timer<20 && speedtemp=0
+	{
+		after_image(7,c_white,.4)
+		if timer <17
+		hspeed=((9+smash_charge/14)*(1-facing*2))*size
+	}
+	if timer=8
+		{
+			sound_play(choose(cdash_launch1,cdash_launch2,cdash_launch3))
+			shockwave = instance_create(x,y-8,obj_spark_shockwave)
+			shockwave.image_xscale =0.3*size
+			shockwave.image_yscale =0.3*size
+			shockwave.image_blend = c_aqua
+			shaker = instance_create(x,y,obj_shakescreen3);
+			shaker.ampl = 5;
+			shaker.time = 8;
+			create_hitbox ( 13 , angle_correct(25) , 6.5 , 4.9 , 20 , 7 , punch4 , obj_spark_hit2 , 0.89 , 0.69 , 10.40 , 8 , self.id , 10 , 4 );
+    	}
+		if attack_success
+			speedtemp=1
+	if timer=10
+		sound_stop(cjump_charge)
+	
+	if timer>16 || speedtemp=1
+		hspeed*=0.65
+	
+		
+}
+
+if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch")
+{
+	
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time = -1;
+    interrupt = 0;
+}

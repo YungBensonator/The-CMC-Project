@@ -1,0 +1,162 @@
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" )
+  {
+    if ( cantsideb ) exit;
+    shell_temp = 0;
+    shell_temp2 = 0;
+    vspeed -= 0.1
+    state_type = "air_attack"
+    attack_type = "sideb"
+    image_speed = 0.25
+    sprite_index = sideb_start_sprite
+    image_index=0
+    timer = 0
+    time = 300
+    temp=0
+    timer_speed=1
+    attack_success=0
+    target=-1
+    special=1
+    attacking=0
+    hspeed = 0
+    air_move = 0
+    sound_loop(sideb_loop_sound)
+    movejump = 0
+  }
+
+if ( ai = 1 )
+  {
+    if ai_timer = 5 
+        special = 1
+    if ai_timer = 7 && random(10)>6
+        special = 1
+    else if ai
+        special = 0
+  }
+if ( shell_temp > 0 )
+    shell_temp -= 1
+if ( attack_success > 0 ) {
+    shell_temp2 = 10
+    attack_success = 0
+}
+if ( shell_temp2 > 0 )
+    shell_temp2 -= 1
+if ( timer > 30 )
+    force_edge_grab = 1
+if ( timer >= 10 && temp = 0 )
+  {
+    timer = 10
+    time = 294
+    temp = 5
+    hspeed = temp-facing*(temp*2)
+    sprite_index = sideb_loop_sprite
+  }
+if ( timer >= 10 && temp > 0.1 )
+  {
+    if ( ai = 1 )
+      {
+	if ( !enemy.offstage )
+	  {
+	    if ( enemy.x < x && enemy_dist > 33 )
+	      {
+		moveleft = 1
+		moveright=0
+	      }
+	    if ( enemy.x>x && enemy_dist > 33 )
+	      {
+		moveright = 1
+		moveleft = 0
+	      }
+	  } else {
+	    if ( room_width/2 < x )
+	      {
+		moveleft = 1
+		moveright=0
+	      } else {
+		moveright = 1
+		moveleft = 0
+	      }
+	  } 
+      }
+    if ( cos( timer*pi ) >= 0.8 && temp != -1 )
+	after_image(4,c_ltgray,0.6)
+    if ( temp > 0 )
+      {
+        if ( abs(hspeed) < temp && temp > 0 && !collision_point(x+1*(1-facing*2),y,obj_wall,1,0) )
+            hspeed += 0.035*(temp-facing*(temp*2))
+        if ( attack_success = 0 && shell_temp2 <= 0 && speed >= 0.6*temp && temp != -1 && (!instance_exists(hitbox)&&!instance_exists(hitbox2)) )
+	  {
+            create_hitbox(4+abs(hspeed)/2,60+facing*60,abs(hspeed)*1.5,0.1,6,4,koopa_hit,obj_spark_hit4,0.6,0.6,6,10,self.id,8,2);
+            create_hitbox2(4+abs(hspeed)/2,60+facing*60,abs(hspeed)*1.5,0.1,6,4,koopa_hit,obj_spark_hit4,0.6,0.6,-6,10,self.id,8,2);
+	  }
+      }           
+  }
+if ( moveleft = 1 && facing = 0 && temp > 0 && air = 0 && shell_temp <= 0 )
+  {
+    moveright=0
+    facing=1
+    sound_play(sideb_turn_sound)
+    hspeed*=0.25
+  }
+if ( moveright = 1 && facing = 1 && temp > 0 && air = 0 && shell_temp <= 0 )
+  {
+    moveleft=0
+    facing=0
+    sound_play(sideb_turn_sound)
+    hspeed*=0.25
+  }
+if ( movejump == 1 && temp > 0 && timer > 20 && timer < 280  )
+  {
+    if ( air != 0 ) { cantsideb = 1; }
+    with ( hitbox ) instance_destroy();
+    with ( hitbox2 ) instance_destroy();
+    vspeed -= jump_speed * size;
+    sprite_index = sideb_end_sprite
+    image_speed = 0.25
+    image_index = 0
+    sound_stop(sideb_loop_sound)
+    sound_play(sideb_end_sound)
+    duster = instance_create(x+size*(6-facing*12),y,obj_dust_effect);
+    duster.facing = 1-facing;
+    duster.image_alpha = 0.75;
+    duster.image_xscale *= 0.6*size;
+    duster.image_yscale *= 0.4*size;
+    duster = instance_create(x-size*(6-facing*12),y,obj_dust_effect);
+    duster.facing = facing;
+    duster.image_alpha = 0.75;
+    duster.image_xscale *= 0.6*size;
+    duster.image_yscale *= 0.4*size;
+    timer = 290;
+  }
+if ( timer <= 280 && ( timer = 280 || shieldup = 1 || ( special = 1 && temp > 0 && timer > 20 ) || ( ai && ( offstage || ai_state = "recover" ) ) ) )
+  {
+    temp = -1
+    cantsideb = 1;
+    sprite_index = sideb_end_sprite
+    image_speed = 0.25
+    image_index = 0
+    hspeed*= 0.8
+    sound_stop(sideb_loop_sound)
+    sound_play(sideb_end_sound)
+    timer = 281
+  }
+if ((collision_point(x+sign(hspeed)+5.25,y,obj_wall,1,1))||(collision_point(x+sign(hspeed)-5.25,y,obj_wall,1,1))) && temp > 0
+  {
+    sound_play(thud2_sound);
+    instance_create(x,y,obj_spark_effect);
+    hspeed = -hspeed;
+    facing = !facing;
+    shell_temp = 20;
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+  }

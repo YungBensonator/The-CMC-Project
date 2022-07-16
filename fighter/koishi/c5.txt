@@ -1,0 +1,78 @@
+// Heart //
+image_angle = direction + facing * 180;
+if ( next_to_rwall || next_to_lwall || under_ceiling || hit > 0 )
+{
+  repeat ( 5 )
+  {
+    spark = create_spark ( 0 , 0 , owner.sideb_effect , 0 , 0.02 , 0.02 );
+    spark.image_index = image_index;
+    spark.xscale_add = 0.005 * size;
+    spark.yscale_add = 0.005 * size;
+    spark.image_alpha = 2;
+    spark.alpha_add = -0.2;
+    spark.speed = 1 * size;
+    spark.image_angle = 15 * random ( 24 );
+    spark.angle_add = choose ( 15 , -15 );
+    spark.direction = spark.image_angle;
+    spark.depth = depth + 0.1;
+    spark.alarm[0] = 8;
+  }
+  if ( heart < 2 )
+    owner.nofuse = 1;
+  timer = time - 1;
+}
+if ( heart = 0 )
+{
+  afterimage = after_image ( 7 , c_red , 0.5 );
+  if ( vspeed > -1 )
+    vspeed -= 0.1;
+}
+else if ( heart = 1 )
+{
+  afterimage = after_image ( 7 , c_blue , 0.5 )
+  if ( vspeed < 1 )
+    vspeed += 0.1;
+}
+else if ( heart = 2 )
+  afterimage = after_image ( 7 , c_purple , 0.5 )
+afterimage.number = 0;
+if ( timer > time - 5 )
+{
+  if ( heart < 2 )
+    image_alpha -= 0.1;
+  else
+    image_alpha -= 0.2;
+}
+if ( timer >= time - 1 )
+{
+  if ( heart = 0 )
+  {
+    if ( attacker = owner && owner.nofuse = 0 )
+    {
+      sound_play ( owner.sideb_sound2 );
+      sound_play ( owner.sideb_sound3 );
+      create_projectile ( 6 , angle_correct ( 30 ) , 6.75 , 2.25 , 13 , 7 , owner.koishishock1 , obj_spark_shock , 0.25 , 0.25 , 0 , 0 , attacker.id , 60 , char_custom5 );
+      proj.sprite_index = owner.sideb_effect;
+      proj.image_speed = 0;
+      proj.absorb = 1;
+      proj.absorb2 = 1;
+      proj.moving_object = 1;
+      proj.image_xscale = 0.25 * ( 1 - facing * 2 ) * size;
+      proj.image_yscale = 0.25 * size;
+      proj.hspeed = 6 * ( 1 - facing * 2 ) * size;
+      proj.facing = facing;
+      proj.size = size;
+      proj.hit_stun = 5;
+      proj.shield_stun = 1.5;
+      proj.owner = owner;
+      proj.heart = 2;
+      proj.image_index = proj.heart;
+      shockwave = instance_create ( x , y , obj_spark_shockwave );
+      shockwave.image_xscale *= 1 * size;
+      shockwave.image_yscale *= 1 * size;
+      shockwave.image_alpha = 0.9;
+      shockwave.image_blend = c_purple;
+    }
+  }
+  instance_destroy();
+}

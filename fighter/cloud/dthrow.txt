@@ -1,0 +1,115 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = uthrow_sprite;
+  timer = 0;
+  time = 36;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 300;
+  }
+
+switch (timer) {
+case 4: image_index = 1; break;
+case 7: image_index = 2; break;
+case 10: image_index = 3; break;
+case 13: image_index = 4; break;
+case 24: image_index = 5; break;
+case 28: image_index = 6; break;
+case 36: image_index = 7; break;
+case 39: image_index = 8; break;
+case 42: image_index = 9; break;
+case 45: image_index = 10; break;
+case 48: image_index = 11; break;
+case 51: image_index = 12; break;
+case 54: image_index = 13; break;
+case 57: image_index = 14; break;
+case 60: image_index = 15; break;
+case 63: image_index = 16; break;
+case 66: image_index = 17; break;
+case 80: image_index = 15; break;
+case 90: image_index = 8; break;
+case 95: image_index = 6; break;
+}
+
+
+if timer = 10 {
+	timer_speed = .25;
+}
+if timer = 12 {
+	timer_speed = 1;
+image_blend = c_blue
+alarm[7] = 6
+}
+if timer = 12 {
+        icespark = create_spark(22,16,global.ice_sprite,0.1,0.1*(1-facing*2),0.5)
+	icespark.image_speed = 0
+	icespark.image_angle = 180
+	icespark.image_xscale = 0.3
+	icespark.image_yscale = 0.8
+	}
+if ( timer == 13 )
+  {
+  sound_play(attack_voice2);
+  target.percent += 3;
+  create_projectile( 7 , 270 , 8 , 0 , 15 , 25 , ice1 , obj_spark_ice3, 0.7 , 0.7 , 25 , 25 , self.id , 2 );
+  proj.di = 0.35;
+  sound_play(ice1)
+  }
+if timer = 34
+icespark.image_index = 4
+if timer = 42 {
+	utslash = instance_create(x,y-40,obj_spark);
+	utslash.sprite_index = ftilt_fx;
+	utslash.image_index = 0;
+	utslash.image_speed = 0
+	utslash.image_xscale = 0.55 - facing*1.1;
+	utslash.image_yscale = 0.45;
+	utslash.x = x
+	utslash.y = y-40;
+	utslash.snap = self.id
+  sound_play(attack_voice7);
+  sound_play(attack_sound2);
+  create_projectile( 5 , 90 , 3.1 , 0 , 14 , 5 , slash1 , obj_spark_slash1 , 1.3 , 0.4 , 28 , 37 , self.id , 2 );
+  proj.di = 0
+}
+
+    if timer = 43 || timer = 64{
+	utslash.image_speed = 1
+}
+
+if timer = 63 {
+	utslash = instance_create(x,y-40,obj_spark);
+	utslash.sprite_index = ftilt_fx;
+	utslash.image_index = 0;
+	utslash.image_speed = 0
+	utslash.image_xscale = 0.55 - facing*1.1;
+	utslash.image_yscale = 0.45;
+	utslash.x = x
+	utslash.y = y-40;
+	utslash.snap = self.id
+  sound_play(attack_voice4);
+  sound_play(attack_sound3);
+  create_throw_box( 6 , 70 + 40*facing , 7 , 2.5 , 17 , 11 , slash2 , obj_spark_slash2 , 1.3 , 0.4 , 28 , 37 , self.id , 2 );
+  hitbox.hit_stun = 12;
+}
+
+if timer = 90
+interrupt = 1
+
+if timer >= 80 && timer < 90 
+shakey += 2
+if timer = 90
+shakey = 0
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

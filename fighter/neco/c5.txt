@@ -1,0 +1,190 @@
+if clonetype != "hime"{
+time = 99999
+alarm[0] = 99999
+
+if timer >=1 and timer <= 15{
+image_alpha +=0.8}
+if timer = 15
+image_alpha = 1
+
+if timer > 15{
+if !collision_point(x,y+2,obj_floor,0,1) and !collision_point(x,y+2,obj_platform,0,1)
+      vspeed += 0.15;
+      else
+      vspeed = 0;
+    if ( vspeed > 2 )
+      vspeed = 2;
+
+
+  var obj;
+  if collision_point(x,y,attack_box,0,1){
+  obj = instance_nearest ( x , y , attack_box );
+  
+  if state != "flinch" and state != "dying" and obj.attacker != attacker{
+  hp-= obj.damage
+  state = "flinch"
+  flinchtimer = 0
+  flinchtime = 15
+  
+  if hp <= 0{
+  state = "dying"
+  dietimer = 20
+  }
+  
+  }
+  
+  }
+  
+  if collision_point(x,y,projectile_box,0,1){
+  obj = collision_point(x,y,projectile_box,0,1);
+  
+  if state != "flinch" and state != "dying" and obj.attacker != attacker{
+  hp-= obj.damage
+  state = "flinch"
+  flinchtimer = 0
+  flinchtime = 15
+  
+  if hp <= 0{
+  state = "dying"
+  dietimer = 20
+  }
+  
+  }
+  
+  }
+
+  if state = "flinch"{
+  sprite_index = attacker.flinch_sprite
+  flinchtimer += 1
+  if flinchtimer >= flinchtime
+  state= "stand"
+  
+  }
+  if state = "stand" and clonetype = "dancing"{
+  sprite_index = basesprite
+  
+  }
+  
+  if state = "dying"{
+  sprite_index = attacker.down_sprite
+  image_index = 0
+  image_speed = 0
+  
+  dietimer -=1
+  image_alpha -= 0.05
+  
+  if dietimer = 0
+  instance_destroy()
+  
+  }
+  
+  
+  
+
+
+
+
+
+
+}
+
+}
+if clonetype = "hime"{
+
+time = 99999
+alarm[0] = 99999
+
+if timer >=1 and timer <= 15{
+image_alpha +=0.8}
+if timer = 15
+image_alpha = 1
+
+if timer >15{
+image_speed = 0.1
+if image_index > 1.89 and state = "float"
+image_index = 0
+
+if state = "float"
+hspeed = 3-facing*6
+
+
+if ( target != -1 && target != noone && target != -99 && target != attacker.id ) and state = "float"
+      {
+      state  = "casting"
+	  targetlock = target
+	  image_index = 2
+	  hspeed = 0
+	  explosiontimer = 90
+	  didnt = 0
+      }
+    if  !instance_exists ( proj ) and state = "float"
+      {
+      //target = noone;
+      create_homing_bubble ( 5 , 5 , 0 , 0 , self.id , 3 );
+      //create_homing_bubble ( 1 , 1 , 32, 72 , self.id , 3 );
+      }
+	  
+	  
+if state = "casting"{
+if image_index > 3.89
+image_index = 2
+
+explosiontimer -=1
+
+if explosiontimer <= 30 and didnt = 0{
+didnt = 1
+
+ownexplod = instance_create(targetlock.x,targetlock.y,obj_spark_explode2)
+	ownexplod.sprite_index = attacker.hime_blast_sprite
+	ownexplod.image_speed = 1.5
+    sound_play(explode_big)
+    shaker = instance_create(x,y,obj_shakescreen2);
+    shaker.ampl = 1.33;
+    shaker.yampl = 0;
+    shaker.time = 9;
+sound_play(explode_big)
+
+create_projectile(20,90,8,6,-1,30,0,obj_spark_slash2,1.5,1.5,0,0,attacker.id,12,-1)
+proj.x = targetlock.x
+proj.y = targetlock.y
+
+
+
+    
+
+
+
+}
+
+if explosiontimer < 10
+image_alpha -=0.1
+
+if explosiontimer <= 0
+instance_destroy()
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+}

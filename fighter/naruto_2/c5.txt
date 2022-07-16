@@ -1,0 +1,42 @@
+priority = 3
+
+if timer = 1 && hit = 0 {      
+sprite_index = keepmain.shuriken_sprite
+image_speed = 0.7
+visible = 1
+moving_object = 0;
+tempfacing = facing
+hspeed = 6-facing*12
+devanish = 0}
+
+if (collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit = 0 {
+instance_destroy();}
+
+if timer >= 0 && hit = 1 {
+hspeed = 0.5-tempfacing*1}
+
+if timer >= 1{
+resetvalue = 5
+originaltime = 9999}
+
+if hit = 1{
+time = 9999
+hit = 2
+resetrigger = resetvalue
+devanish +=1}
+
+if resetrigger > 0
+resetrigger -= 1
+
+if resetrigger = 1
+hit = 0
+
+if devanish >= 5 {
+instance_destroy()}
+
+if devanish >= 4 {
+damage = 4
+bkb = 5.1
+kbg = 4.7
+sfx = slash3
+gfx = obj_spark_slash2}

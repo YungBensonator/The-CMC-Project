@@ -1,0 +1,87 @@
+if state_type = "stand" || state_type = "run" 
+{
+	upbcanceltemp=0
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "jab";
+	timer = 0;
+	time = 20;
+	sprite_index = jab_sprite;
+	image_speed = 0;
+	image_index = 0;
+	jab2 = 0;
+	jabend = 0;
+}
+switch (timer)
+	{
+		//hit 1
+		case 3: image_index =0;break;
+		case 6: image_index =1;break;
+		case 9: image_index =2;break;
+		//hit 2
+		case 23: image_index =3;break;
+		case 27: image_index =4;break;
+		case 30: image_index =5;break;
+		case 33: image_index =6;break;
+		//hit3
+		case 56: image_index =7;break;
+		case 58: image_index =8;break;
+		case 59: image_index =9;break;
+		case 61: image_index =10;break;
+		//return
+		case 66: image_index =11;break;
+		case 69: image_index =12;break;
+	}
+	
+if timer = 6 
+	{
+		attacking=0
+		sound_play(jab1_sound);
+		create_hitbox(2,63+54*facing,1.4,0,6,2,punch1,obj_spark_hit1, 0.68 , 0.41 , 9.60 , 8 ,self.id,4,2);
+		hitbox.di = 0.0
+		hitbox.weight_kb=0
+		hitbox.hit_stun = 4
+	}
+
+if timer>=10 && timer<=19 && attacking==1 && (!moveup && !moveright && !movedown && !moveleft) && !special
+	{
+		attacking=0
+		time = 42
+		timer = 20
+	}
+
+if timer = 27
+	{
+		sound_play(jab2_sound)
+		create_hitbox ( 2 , 61+58*facing, 3, 0, 5 , 2 , punch1 , obj_spark_hit1 , 0.60 , 0.33 , 11.20 , 8.80 , self.id , 4 , 2 );
+		hitbox.di = 0.0
+		hitbox.weight_kb=0
+	}
+
+if timer>=30 && timer<=42 && attacking==1 && (!moveup && !moveright && !movedown && !moveleft) && !special
+	{
+		attacking=0
+		time = 73
+		timer = 55
+	}
+
+if ( (timer>=10 && timer<=19) || (timer>=36 && timer<=50) ) && attacking==1 && (moveup || moveright || movedown || moveleft) && !special
+	{interrupt=1}
+if timer = 56
+	{hspeed=(3*(1-facing*2))*size}	
+
+if timer = 60
+	{
+		sound_play(fair_sound)
+		create_hitbox ( 4 , 65+50*facing , 4.2 , 5, 10 , 6 , slap_m , obj_spark_hit2 , 0.78 , 0.33 , 12.80 , 7.20 , self.id , 3 , 2 );
+		hitbox.image_angle = ( 26 + facing * 128 );
+	}
+
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  interrupt = 0;
+  }

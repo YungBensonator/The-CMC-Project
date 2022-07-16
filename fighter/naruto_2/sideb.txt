@@ -1,0 +1,191 @@
+if bankai{
+if canusespecial > 0 {break;}
+if state_type = "run" || state_type = "stand" || state_type = "crouch" || state_type = "jump" { 
+attack_type = "sideb";
+state_type = "air_attack";
+image_speed = 0;
+image_index = 0;
+timer_speed = 1;
+if formation = 0 {time = 42;}
+if formation = 1 {time = 27;}
+timer = 0;
+hspeed = 0;
+if formation = 0 {sprite_index = sideb_spriteB;}
+if formation = 1 {sprite_index = b_spriteB;}
+}
+
+if formation = 0 {
+
+speed = 0
+gravity_lock = 1
+gravity = 0
+
+switch ( timer ) {
+case 4: image_index = 1; break;
+case 8: image_index = 2; break;
+case 12: image_index = 3; break;
+case 16: image_index = 4; break;
+case 30: image_index = 5; break;
+case 34: image_index = 6; break;
+case 38: image_index = 7; break;}
+
+if timer = 12 {
+sound_play(kuchiyose_voice)
+eco = create_spark(0,0,self.id);
+eco.sprite_index = eco_sprite;
+eco.image_speed = 0.4;
+eco.image_xscale = image_xscale*0.15;
+eco.image_yscale = image_yscale*0.15;
+eco.x = x + 50 * (1-facing*2) * size;
+eco.y = y + 10 * size;
+eco.depth = depth - 0.1;}
+
+if timer = 12 {
+projeco = create_projectile(9,20+facing*160,1.23,0,8,22,shock2,obj_spark_shock,2,1,50,10,self.id,23,-1);
+projeco.no_reflect = 1;
+projeco.priority = 2;
+projeco.parry_noreflect = 1;
+projeco.hit_stun = 54;}
+
+}
+
+if formation = 1 {
+
+switch ( timer ) {
+case 8: sprite_index = dsmash_spriteB; image_index = 3; break;
+case 12: image_index = 4; break;
+case 22: image_index = 5; break;}
+
+if timer = 8 {
+smoke = instance_create( x,y,obj_spark );
+smoke.sprite_index = smoke_sprite;
+smoke.image_speed = 0.35;
+smoke.x = x + 25 * (1-facing*2) * size;
+smoke.y = y * size;
+smoke.depth = - 5
+smoke.image_xscale = 1.3 * size
+smoke.image_yscale = 1.3 * size
+smoke.image_alpha = 0.9;}
+
+if timer = 11 {
+sound_play(kuchiyose_voice)
+rana2 = create_spark(x,y,self.id);
+rana2.sprite_index = rana2_sprite;
+rana2.image_speed = 0.2;
+rana2.image_xscale = image_xscale*0.3;
+rana2.image_yscale = image_yscale*0.3;
+rana2.x = x + 1 * (1-facing*2) * size;
+rana2.y = y + 5 * size;
+rana2.loop = 5;
+rana2.depth = - 3;}
+
+if timer = 12 {
+fire = create_projectile(0,368,0,0,-1,0,-1,-1,1,1,50,-10,self.id,50,char_custom8);
+fire.priority = 6;
+fire.no_reflect = 1;}
+fire.mtime = 0;
+fire.parry_noreflect = 1;}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+if formation = 0 {formation = 1;}
+else if formation = 1 {formation = 0;}    
+attack_type = "none";
+if air = 0 {state_type = "stand";}
+else {state_type = "jump";}
+timer = 0;
+time = -1;
+canusespecial = 110;}
+}
+
+else {
+if canusespecial > 0 {break;}
+if state_type = "run" || state_type = "stand" || state_type = "crouch" || state_type = "jump" {
+attack_type = "sideb";
+time = 20;
+timer = 0;
+hspeed = 0;
+sprite_index = sideb_sprite;
+image_index = 0;
+image_speed = 0;
+if air = 0 {
+state_type = "attack";
+temp = 0;}
+else {
+state_type = "air_attack";
+temp = 1;}
+timer_speed = 1;}
+
+if formation = 0 {
+
+switch ( timer ) {
+case 0: image_index = 0; sound_play(b_voice); break;
+case 4: image_index = 1; break;
+case 8: image_index = 2; break;
+case 12: image_index = 3; break;}
+
+if timer = 8 && !instance_exists(kunai) {
+
+if temp = 0 {
+sound_play(shuriken_sound1)
+kunai = create_projectile(6,40+facing*100,2.5,2.5,4,1,kick3,obj_spark_slash3,1,1,0,15,self.id,50,char_custom3); 
+kunai.speed = 8*(1-facing*2)*size;
+kunai.image_yscale = image_yscale*0.7
+kunai.image_xscale = image_xscale*0.7}
+
+else if temp = 1 {
+sound_play(shuriken_sound1)
+kunai = create_projectile(6,40+facing*100,2.5,2.5,4,1,kick3,obj_spark_slash3,1,1,0,15,self.id,50,char_custom3); 
+kunai.speed = 8*(1-facing*2)*size;
+kunai.direction = (-45)*(1-facing*2);
+kunai.image_angle = kunai.direction;
+kunai.image_yscale = image_yscale*0.7
+kunai.image_xscale = image_xscale*0.7}
+
+}
+
+}
+
+if formation = 1 {
+
+switch ( timer ) {
+case 0: image_index = 0; sound_play(b_voice); break;
+case 4: image_index = 1; break;
+case 8: image_index = 2; break;
+case 12: image_index = 3; break;}
+
+if timer = 8 {
+sound_play(shuriken_sound1)
+shuri = create_projectile(0.5,42+facing*96,1.5,0.5,6,1,kick3,obj_spark_slash2,1,1,0,15,self.id,80,char_custom5);
+shuri.image_yscale = image_yscale*0.9;
+shuri.image_xscale = image_xscale*0.9;}
+  
+}
+
+if formation = 2 {
+
+switch ( timer ) {
+case 0: image_index = 0; sound_play(b_voice); break;
+case 4: image_index = 1; break;
+case 8: image_index = 2; break;
+case 12: image_index = 3; break;}
+
+if timer = 8 {
+sound_play(shuriken_sound1)
+sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4))
+create_projectile(0,0,0,0,0,0,0,0,1,1,14,15,self.id,40,char_custom6);
+proj.image_yscale = image_yscale*0.8;
+proj.image_xscale = image_xscale*0.8;}
+
+}
+
+if timer >= time -1 {
+if formation = 0 {formation = 1;}
+else if formation = 1 {formation = 2;}
+else if formation = 2 {formation = 0;}
+attack_type = "none";
+if air > 0 {state_type = "jump";}
+else {state_type = "stand";}
+timer = 0;
+time = -1;
+canusespecial = 15}
+}

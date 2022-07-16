@@ -1,0 +1,115 @@
+moving_object = 0;
+absorb = 0;
+absorb2 = 0;
+priority = 5;
+if attacker.attack_type = "b" {
+switch (timer) {
+case 0: image_index = 0; break;
+case 2: image_index = 1; break;
+case 4: image_index = 2; break;
+case 6: image_index = 3; break;
+case 8: image_index = 4; break;
+case 10: image_index = 5; break;
+case 14: image_index = 6; break;
+case 18: image_index = 7; break;
+case 21: image_index = 8; break;
+
+case 50: image_index = 5; break;
+case 400: image_index = 5; break;
+case 402: image_index = 6; break;
+case 404: image_index = 7; break;
+case 406: image_index = 8; break;
+case 410: image_index = 8; break;
+}
+if ( timer <= 1 )
+  {
+    sprite_index = attacker.id.zamasu_sprite;
+    visible = 1;
+	image_speed = 0;
+	depth = 1;
+  }
+if timer = 8 {
+	grab = create_projectile(5,30+facing*120,2,0,-1,7,-1,obj_spark_stun,1,1,0,0,attacker.id,4,no_script);
+	grab.hit_stun = 1000000000;
+}
+if grab.hit = 1  {
+	grabtemp = 1;
+	timer = 50;
+	time = 410;
+	image_index = 5;
+	target.gravity_lock = 1;
+}
+if timer > 50 && timer < 402 {
+	target.gravity_lock = 1;
+	target.x = zamasu.x+20*(1-facing*2);
+	target.y = zamasu.y;
+	target.gravity = 0;
+	}
+if grabtemp = 0 {
+if ( timer >= 21 )
+  {
+   visible = 0;
+   instance_destroy();
+  }
+}
+if grabtemp = 1 {
+if ( timer >= 410 )
+  {
+   visible = 0;
+   instance_destroy();
+  }
+}
+}
+if attacker.attack_type = "uthrow" {
+switch (timer) {
+case 0: sprite_index = attacker.id.zamasu_sprite; image_index = 0; break;
+case 2: image_index = 1; break;
+case 4: sprite_index = attacker.id.zamasu2_sprite; image_index = 1; break;
+case 6: image_index = 2; break;
+case 8: image_index = 3; break;
+case 10: image_index = 4; break;
+case 20: image_index = 5; break;
+case 26: image_index = 6; break;
+case 30: sprite_index = attacker.id.zamasu_sprite; image_index = 1; break;
+case 32: image_index = 0; break;
+}
+if ( timer <= 1 )
+  {
+    sprite_index = attacker.id.zamasu2_sprite;
+    visible = 1;
+	image_speed = 0;
+  }
+if timer = 10 {
+	create_projectile(5,10+facing*160,6,4,-1,7,goku_hit,obj_spark_hit4,1.08 , 0.40 , 12.60 , 18.20,attacker.id,4,no_script);
+}
+if ( timer >= 32 )
+  {
+   visible = 0;
+   instance_destroy();
+  }
+}
+if attacker.attack_type = "downb" {
+switch (timer) {
+case 0: sprite_index = attacker.id.zamasu_sprite; image_index = 0; break;
+case 2: image_index = 1; break;
+case 3: sprite_index = attacker.id.zamasu3_sprite; image_index = 0; break;
+case 4: image_index = 1; break;
+case 5: image_index = 2; break;
+case 6: image_index = 3; break;
+case 72: image_index = 4; break;
+case 76: image_index = 5; break;
+case 80: sprite_index = attacker.id.zamasu_sprite; image_index = 1; break;
+case 84: image_index = 0; break;
+}
+if ( timer <= 1 )
+  {
+    sprite_index = attacker.id.zamasu3_sprite;
+    visible = 1;
+	image_speed = 0;
+  }
+if ( timer >= 85 )
+  {
+   visible = 0;
+   instance_destroy();
+  }
+}

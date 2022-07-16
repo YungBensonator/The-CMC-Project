@@ -1,0 +1,144 @@
+if ( state_type = "down" )
+  {
+  upbcanceltemp=0
+  state_type = "attack";
+  if smashori
+  state_type="air_attack"
+  attack_type = "down_attack";
+  image_speed = 0;
+  sprite_index = dsmash_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 50;
+  timer_speed = 1;
+  }
+if rivalsori
+{
+switch ( timer )
+	{
+		case 2: image_index = 1; break;
+		case 4: image_index = 2; break;
+		case 6: image_index = 3; break;
+		case 8: image_index = 4; break;
+		case 10: image_index = 5; break;
+		case 12: image_index = 6; break;
+		case 14: image_index = 7; break;
+		case 16: image_index = 8; break;
+		case 18: image_index = 9; break;
+		case 20: image_index = 10; break;
+		case 22: image_index = 11; break;
+		case 24: image_index = 12; break;
+		case 26: image_index = 13; break;
+		case 28: image_index = 14; break;
+		case 30: image_index = 15; break;
+		case 32: image_index = 16; break;
+		case 34: image_index = 17; break;
+		case 36: image_index = 18; break;
+		case 38: image_index = 19; break;
+		case 40: image_index = 20; break;
+		case 42: image_index = 21; break;
+	}
+	if timer < time 
+	{
+		if timer = 5 || timer = 15 || timer = 25
+			{sound_play(dsmash_sound)}
+		if timer> 5 && timer < 12
+			{hspeed= (3 *(1-facing*2))*size}
+	
+		if timer >15 && timer < 22
+			{hspeed= (-6*(1-facing*2))*size}
+		
+		if timer>25 && timer< 32
+			{hspeed= (6*(1-facing*2))*size}
+	
+		if timer>35 && timer < 42
+			{hspeed= (-3 *(1-facing*2))*size}
+
+		if (timer>11 && timer<16) || (timer >21 && timer<26) || (timer>31 && timer<36) || (timer>42)
+			{hspeed=0}
+	
+		if timer=8 || timer = 18 || timer = 28
+			{
+				create_hitbox(8,50+80*facing,5.2,5.7,5,4,seinless_l,obj_spark_hit3,1.21 , 0.77 , 6.65 , 10.45 ,self.id,4,2);
+				hitbox.weight_kb = 0
+			}
+	
+		if timer = 18
+			{hitbox.dir = 130-80*facing}
+		if timer = 28
+			{hitbox.dir = 50+80*facing}
+	}
+}
+
+
+if smashori
+{
+	sprite_index = abyss_b_air_sprite
+	time=24
+	//char animation
+	switch(timer)
+	{
+		case 2: image_index=1; break
+		case 5: image_index=2; break
+		case 8: image_index=3; break
+		case 10: image_index=4; break
+		case 12: image_index=5; break
+		case 14: image_index=6; break
+		case 17: image_index=7; break
+		case 20: image_index=8; break
+	}
+	//effect animation
+	switch(timer)
+	{
+		case 9: blaze_instance.image_index=21; break
+		case 10: blaze_instance.image_index=22; break
+		case 11: blaze_instance.image_index=23; break
+		case 12: blaze_instance.image_index=24; break
+		case 13: blaze_instance.image_index=25; break
+	}
+	
+	if timer<20
+	{
+		if hspeed>0.5
+		{
+			hspeed=0.5
+		}
+		if hspeed<-0.5
+		{
+			hspeed=-0.5
+		}
+	}
+	
+	if timer=5
+		sound_play(choose(nair1_sound,nair2_sound,nair3_sound))
+	if timer>7
+	blaze_instance.x=x
+	blaze_instance.y=y-15*size
+	if timer<8 
+		vspeed*=0.5
+	if timer=5
+		vspeed=-5*size
+	if timer= 8
+	{
+	
+	blaze_instance = instance_create(x,y-15,obj_spark)
+	blaze_instance.sprite_index=blaze_sprite
+	blaze_instance.image_xscale=0.4*size
+	blaze_instance.image_yscale=0.4*size
+	blaze_instance.image_index=20
+	blaze_instance.image_speed=1
+	blaze_instance.depth = depth+1
+	create_hitbox(5, 362, 5.1, 5.9, 5, 3, fire2, obj_spark_fire1, 3 , 3 , 0 , 15 , self.id, 4, 2);
+	}
+
+}
+
+
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

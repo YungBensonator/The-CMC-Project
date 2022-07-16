@@ -1,0 +1,247 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+{
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  sprite_index = crouch_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 530;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  sound_play ( skill_sound );
+  sound_play ( skill_sound );
+  sound_play ( final_smash_voice1 );
+  freeze = instance_create ( 0 , 0 , obj_freeze );
+  freeze.dontpause = self.id;
+  freeze.alarm[0] = 40;
+  skill1 = create_blur ( x , y - 12 * size , self.id );
+  skill1.sprite_index = skill_effect;
+  skill1.image_speed = 0;
+  skill1.image_xscale = 0.01 * size;
+  skill1.image_yscale = 0.01 * size;
+  skill1.xscale_add = 0.006 * size;
+  skill1.yscale_add = 0.006 * size;
+  skill1.image_alpha = 0.04;
+  skill1.depth = depth + 0.1;
+  skill1.alarm[0] = 70;
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 6: image_index = 1; break;
+    case 12: sprite_index = final_smash_sprite; image_index = 0; break;
+    case 300: sprite_index = crouch_sprite; image_index = 1; break;
+    case 304: image_index = 0; break;
+    case 308: sprite_index = b_sprite; image_index = 2; break;
+    case 312: case 320: case 328: image_index = 3; break;
+    case 316: case 324: case 332: image_index = 2; break;
+    case 336: image_index = 4; break;
+    case 340: sprite_index = taunt_sprite; image_index = 0; break;
+    case 344: sprite_index = fall_sprite; break;
+  }
+  speed = 0;
+  size = csize;
+  gravity_lock = 1;
+  state_type = "air_attack";
+  if ( ( timer >= 40 && timer < 300 ) && image_alpha > 0.6 )
+    image_alpha -= 0.05;
+  if ( timer >= 300 && image_alpha < 1 )
+    image_alpha += 0.05;
+  if ( timer < 40 && timer mod 2 == 0 )
+  {
+    spark = instance_create ( x - actual_width + random ( actual_width * 2 ) , y - random ( actual_height / 2 ) , obj_spark );
+    spark.sprite_index = global.spark_sprite2;
+    spark.image_xscale = 0.05;
+    spark.image_yscale = 0.05;
+    spark.image_angle = random ( 360 );
+    spark.draw_color_only = 1;
+    spark.alarm[0] = 8;
+    spark.image_speed = 0.5;
+  }
+  if ( ( timer >= 300 && timer < 340 ) && timer mod 2 == 0 )
+  {
+    spark = instance_create ( x - actual_width + random ( actual_width * 2 ) , y - random ( actual_height ) , obj_spark );
+    spark.sprite_index = global.spark_sprite2;
+    spark.image_xscale = 0.05;
+    spark.image_yscale = 0.05;
+    spark.image_angle = random ( 360 );
+    spark.draw_color_only = 1;
+    spark.alarm[0] = 8;
+    spark.image_speed = 0.5;
+  }
+  if ( timer == 40 )
+  {
+    sound_play ( final_smash_sound1 );
+    create_projectile ( 1 , 90 , 2.5 , 0.1 , -1 , 10 , koishishock1 , obj_spark_shock , 0.85 , 0.85 , 0 , 10 , self.id , 260 , char_custom7 );
+    proj.parry_nodestroy = 1;
+    proj.alarm[0] = 260;
+    proj.hit_stun = 10;
+    proj.temp = 8;
+    wind1 = create_wind ( 3 * size , 3 * size , 50 * size , 10 * size , -1.5 * size , 0 * size , 260 );
+    wind2 = create_wind ( 3 * size , 3 * size , -50 * size , 10 * size , 1.5 * size , 0 * size , 260 );
+    wind3 = create_wind ( 3 * size , 3 * size , 0 * size , 60 * size , 0 * size , 3 * size , 260 );
+    wind4 = create_wind ( 3 * size , 3 * size , 0 * size , -40 * size , 0 * size , -6 * size , 260 );
+    wind5 = create_wind ( 3 * size , 3 * size , 40 * size , 50 * size , -1.5 * size , 3 * size , 260 );
+    wind6 = create_wind ( 3 * size , 3 * size , 40 * size , -20 * size , -1.5 * size , -6 * size , 260 );
+    wind7 = create_wind ( 3 * size , 3 * size , -40 * size , 50 * size , 1.5 * size , 3 * size , 260 );
+    wind8 = create_wind ( 3 * size , 3 * size , -40 * size , -20 * size , 1.5 * size , -6 * size , 260 );
+  }
+  if ( ( timer >= 40 && timer < 300 ) && timer mod 8 == 0 )
+  {
+    superego1 = create_blur ( x , y - 12 * size , self.id );
+    superego1.sprite_index = final_smash_effect1;
+    superego1.image_index = 0;
+    superego1.image_speed = 0;
+    superego1.image_xscale = 0.75 * size;
+    superego1.image_yscale = 0.75 * size;
+    superego1.image_alpha = 0.75;
+    superego1.alpha_add = -0.05;
+    superego1.image_angle = random ( 360 );
+    superego1.angle_add = random ( 2 );
+    superego1.depth = depth + 0.1;
+    superego1.alarm[0] = 8;
+    superego2 = create_blur ( x , y - 12 * size , self.id );
+    superego2.sprite_index = final_smash_effect1;
+    superego2.image_index = 1;
+    superego2.image_speed = 0;
+    superego2.image_xscale = 2 * size;
+    superego2.image_yscale = 2 * size;
+    superego2.xscale_add = -0.1 * size;
+    superego2.yscale_add = -0.1 * size;
+    superego2.image_alpha = 0.5;
+    superego2.alpha_add = -0.05;
+    superego2.image_angle = random ( 360 );
+    superego2.angle_add = -random ( 2 );
+    superego2.depth = depth + 0.1;
+    superego2.alarm[0] = 8;
+    for ( i = 0 ; i < 4; i += 1 )
+    {
+      superego[i] = create_blur ( x + ( random ( 100 ) * ( 1 - floor ( random ( 2 ) ) * 2 ) ) * size , y + ( random ( 100 ) * ( 1 - floor ( random ( 2 ) ) * 2 ) ) * size , self.id );
+      superego[i].sprite_index = final_smash_effect2;
+      superego[i].image_index = 0;
+      superego[i].image_speed = 0;
+      superego[i].image_xscale = 0.3 * size;
+      superego[i].image_yscale = 0.3 * size;
+      superego[i].image_alpha = 1;
+      superego[i].alpha_add = -0.1;
+      superego[i].direction = point_direction ( superego[i].x , superego[i].y , x , y );
+      superego[i].image_angle = point_direction ( superego[i].x , superego[i].y , x , y );
+      superego[i].speed = 3;
+      superego[i].depth = depth + 0.1;
+      superego[i].alarm[0] = 8;
+    }
+  }
+  if ( timer == 275 )
+    repeat ( 2 ) sound_play ( final_smash_sound2 );
+  if ( timer == 300 )
+  {
+    repeat ( 2 ) sound_play ( final_smash_sound3 );
+    freeze = instance_create ( 0 , 0 , obj_freeze );
+    freeze.dontpause = self.id;
+    freeze.alarm[0] = 40;
+    skill2 = create_blur ( x , y - 15 * size , self.id );
+    skill2.sprite_index = skill_effect;
+    skill2.image_index = 1;
+    skill2.image_speed = 0;
+    skill2.image_xscale = 0.01 * size;
+    skill2.image_yscale = 0.01 * size;
+    skill2.xscale_add = 0.006 * size;
+    skill2.yscale_add = 0.006 * size;
+    skill2.image_alpha = 0.04;
+    skill2.depth = depth + 0.1;
+    skill2.alarm[0] = 70;
+  }
+  if ( timer == 308 )
+    sound_play ( final_smash_voice2 );
+  if ( timer == 340 )
+  {
+    repeat ( 2 ) sound_play ( final_smash_sound4 );
+    wind1 = create_wind ( 1.5 * size , 1.5 * size , 20 * size , 20 * size , 1.5 * size , 0 * size , 160 );
+    wind2 = create_wind ( 1.5 * size , 1.5 * size , -20 * size , 20 * size , -1.5 * size , 0 * size , 160 );
+    wind3 = create_wind ( 1.5 * size , 1.5 * size , 0 * size , 40 * size , 0 * size , -6 * size , 160 );
+    wind4 = create_wind ( 1.5 * size , 1.5 * size , 0 * size , 0 * size , 0 * size , 3 * size , 160 );
+    wind5 = create_wind ( 1.5 * size , 1.5 * size , 10 * size , 30 * size , 1.5 * size , -6 * size , 160 );
+    wind6 = create_wind ( 1.5 * size , 1.5 * size , 10 * size , 10 * size , 1.5 * size , 3 * size , 160 );
+    wind7 = create_wind ( 1.5 * size , 1.5 * size , -10 * size , 30 * size , -1.5 * size , -6 * size , 160 );
+    wind8 = create_wind ( 1.5 * size , 1.5 * size , -10 * size , 10 * size , -1.5 * size , 3 * size , 160 );
+  }
+  if ( timer == 340 || timer == 356 || timer == 372 || timer == 388 || timer == 404 || timer == 420 || timer == 436 || timer == 452 || timer == 468 || timer == 484 )
+  {
+    sound_play ( final_smash_sound5 );
+    screen_shake ( 3 , 6 );
+    roti = create_blur ( x , y - 20 * size , self.id );
+    roti.sprite_index = final_smash_effect1;
+    roti.image_index = 2;
+    roti.image_speed = 0;
+    roti.image_xscale = 0.1 * size;
+    roti.image_yscale = 0.1 * size;
+    roti.xscale_add = 0.1 * size;
+    roti.yscale_add = 0.1 * size;
+    roti.image_alpha = 1;
+    roti.alpha_add = -0.1;
+    roti.depth = depth + 0.1;
+    roti.alarm[0] = 8;
+    for ( i = 0 ; i < 16; i += 1 )
+    {
+      roti[i] = create_projectile ( 10 , 364 , 6 , 6.5 , -1 , 10 , koishishock1 , obj_spark_shock , 0.3 , 0.3 , 0 , 20 , self.id , 60 , char_custom8 );
+      roti[i].sprite_index = final_smash_effect2;
+      roti[i].image_index = 1;
+      roti[i].image_speed = 0;
+      roti[i].image_xscale = 0.3 * size;
+      roti[i].image_yscale = 0.3 * size;
+      roti[i].parry_nodestroy = 1;
+      roti[i].direction = 22.5 * i;
+      roti[i].depth = depth + 0.1;
+      roti[i].alarm[0] = 60;
+      roti[i].speed = 6;
+      roti[i].hit = 2;
+    }
+  }
+  if ( timer == 526 && air = 0 )
+  {
+    sprite_index = taunt_sprite;
+    image_index = 3;
+    image_speed = 0;
+  }
+  if ( instance_exists ( skill1 ) )
+  {
+    skill1.x = x;
+    skill1.y = y - 12 * size;
+    skill1.image_angle += 2;
+    if ( ( timer >= 1 && timer < 61 ) && skill1.image_alpha < 1 )
+      skill1.image_alpha += 0.04;
+    if ( timer >= 61 && timer < 70 )
+      skill1.image_alpha -= 0.1;
+  }
+  if ( instance_exists ( skill2 ) )
+  {
+    skill2.x = x;
+    skill2.y = y - 15 * size;
+    skill2.image_angle += 2;
+    if ( ( timer >= 301 && timer < 361 ) && skill2.image_alpha < 1 )
+      skill2.image_alpha += 0.04;
+    if ( timer >= 361 && timer < 370 )
+      skill2.image_alpha -= 0.1;
+  }
+}
+if ( timer >= time - 1 )
+{
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+  {
+    state_type = "jump";
+    sprite_index = jump_sprite;
+    image_index = 1;
+  }
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+}

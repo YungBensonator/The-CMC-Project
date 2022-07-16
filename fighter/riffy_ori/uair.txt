@@ -1,0 +1,192 @@
+if state_type = "jump" {
+upbcanceltemp=0
+state_type = "air_attack";
+attack_type = "uair";
+sprite_index = uair_sprite;
+image_index = 0;
+image_speed = 0;
+fastfalltemp=0
+timer = 0;
+if smashori
+	{
+		vari=0
+		time=40
+	}
+	if (smashori) || (rivalsori && abyssmoves=1)
+	{
+		temp_no_hurtbox=1
+	}
+}
+if rivalsori
+{
+	if abyssmoves=0
+	{
+		time = 32;
+		switch ( timer )
+		{
+			case 3: image_index = 1; break; //3
+			case 5: image_index = 2; break; //6
+			case 7: image_index = 3; break; //9
+			case 9: image_index = 4; break; //11
+			case 11: image_index = 5; break; // 13
+			case 13: image_index = 6; break; //16
+			case 20: image_index = 7; break; //19
+			case 27: image_index=8;break; //21
+		}
+		if timer = 4 
+			sound_play(uair_sound);
+		if timer = 5 
+		{
+			create_hitbox(9,45+90*facing,3.9,7.4,11,5,slap_m,obj_spark_hit2,0.61 , 0.57 , 8.80 , 9.60 ,self.id,8,3);
+			hitbox.hit_stun = 9
+		}
+		hitbox.execute_on_hit="attacker.fastfalltemp=3"
+		if fastfalltemp>0 && movedown
+			vspeed=fall_speed*size
+		if timer = 7
+		{
+			hitbox.hitbox_x -= (1.6*(1-facing*2))*size;
+			hitbox.hitbox_y += 10.80*size;
+			hitbox.image_xscale = 0.92*size
+			hitbox.image_yscale = 0.65*size
+		}
+		if timer = 11
+		{	
+			hitbox.damage=7*size
+			hitbox.hitbox_x -= (20*(1-facing*2))*size;
+			hitbox.hitbox_y -= 5.60*size;
+			hitbox.image_xscale = 0.67*size
+			hitbox.image_yscale = 0.81*size
+			hitbox.dir = 148-116*facing;
+			hitbox.bkb=5.1*size
+			hitbox.kbg=5.2*size
+			hitbox.sfx=slap_s
+		}
+	}
+	if abyssmoves=1
+	{
+		sprite_index=uair_spirit_edge_sprite
+		time=38
+		switch(timer)
+		{
+			case 2: image_index=1; break;
+			case 4: image_index=2; break;
+			case 5: image_index=3; break;
+			case 7: image_index=4; break;
+			case 8: image_index=5; break;
+			case 12: image_index=6; break;
+			case 19: image_index=7; break;
+			case 26: image_index=8; break;
+		}
+		if timer=7
+			sound_play(uair_sound)
+		if timer = 8
+		{
+			create_hitbox ( 8 , 42+96*facing , 5.6 , 6 , 14 , 9 , sein_m , obj_spark_hit1 , 1.84 , 1.68 , 9.60 , 40.80 , self.id , 4 , 3 );
+			create_hitbox2 ( 14 , 64+52*facing , 6.1, 6.5 , 19 , 12 , sein_l , obj_spark_hit2 , 0.76 , 1.44 , 39.20 , 36 , self.id , 4 , 4 );
+			create_hitbox3 ( 14, 77+26*facing , 6.1 , 6.5 , 19 , 12 , sein_l, obj_spark_hit2 , 2.08 , 1.80 , 8.80 , 53.60 , self.id , 4 , 4 );
+		}
+	}
+}
+if smashori
+{
+sprite_index=uair_spirit_edge_sprite
+	
+	
+	switch(timer)
+	{
+		case 3: image_index=1; break;
+		case 6: image_index=2; break;
+		case 8: image_index=3; break;
+		case 11: image_index=4; break;
+		case 13: image_index=5; break;
+		case 16: image_index=6; break;
+		case 21: image_index=7; break;
+		case 26: image_index=8; break;
+	}
+	if timer<28
+	{
+		hspeed*=0.85
+	}
+	/*if timer<21
+	{
+		if vari<1
+		vari+=0.015
+		if vari>1
+		vari=1
+		if vspeed>0
+		{
+			if stalling=1
+		{	
+			
+			if used_air=0 
+				vspeed*=vari
+			if used_air=1
+				vspeed*=1
+			
+		}
+		if stalling=0
+		{
+			vspeed*=0.1
+		}	
+		}
+	}*/
+	if timer=11
+	{
+		sound_play(swingsnd2)
+	}
+	if timer=13
+	{	
+		create_hitbox ( 7 , angle_correct(80) , 5.8, 3.4, 14 , 4 , slash3 , obj_spark_hit1 , 2.62 , 1.97 , 13 , 46.60 , self.id , 5 , 3 );
+		hitbox.image_angle = ( 1 - facing * 2 ) * 339.78;
+	}
+	/*
+	if attack_success && timer=14
+	{
+		vspeed=size*-2
+	}
+	if timer>13 && attack_success
+		hspeed =size*(-1+facing*2)
+	*/
+	if timer> 10 
+	{
+		if movejump && air<max_jumps-1
+		{
+			used_air=1
+			interrupt=1
+		}
+	}
+}
+
+if air = 0 
+	{
+		state_type = "land";
+		attack_type = "none";
+		image_angle = 0;
+		timer = 0;
+		time = 8+smashori*2;
+		sprite_index = land_sprite;
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+
+	attack_type = "none";
+	if ( air > 0 )
+		{
+			used_air=1
+		if attack_success
+		{
+			stalling=0
+		}
+		else 
+		{
+			stalling=1
+		}
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 4;
+		}
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+	    }

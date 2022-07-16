@@ -1,0 +1,37 @@
+if ( timer == 0 )
+{
+  var i;
+  for ( i = 0; i < MAX_FIGHTERS; i += 1 )
+  {
+    if ( instance_number ( player ) <= 2 && db_charname[global.gs_character[i],1] == "utsuho_cogu" )
+      okuu = 1;
+  }
+  sprite_index = down_sprite;
+  image_speed = 0;
+  image_index = 0;
+  visible = 0;
+}
+switch ( timer )
+{
+  case 20: image_index = 1; visible = 1; sound_play ( entry_sound ); break;
+  case 24: image_index = 2; break;
+  case 28: image_index = 3; if ( okuu ) { sound_play ( entry_voice2 ); } else { sound_play ( entry_voice1 ); } break;
+  case 32: image_index = 4; break;
+  case 36: image_index = 5; break;
+  case 40: image_index = 6; break;
+  case 44: image_index = 7; break;
+  case 48: image_index = 8; break;
+  case 52: image_index = 9; break;
+  case 56: image_index = 10; break;
+}
+if ( timer == 20 )
+  create_spark ( 0 , 20 , entry_effect , 0.5 , 0.2 * ( 1 - facing * 2 ) , 0.2 );
+if ( timer >= 60 )
+{
+  visible = 1;
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+}

@@ -1,0 +1,174 @@
+if state_type = "jump" {
+upbcanceltemp=0
+state_type = "air_attack";
+attack_type = "nair";
+fastfalltemp=0
+image_index = 0;
+image_speed = 0;
+timer = 0;
+
+if (rivalsori && abyssmoves=1)
+{
+	temp_no_hurtbox=1
+}
+}
+if rivalsori
+{
+	if abyssmoves=0
+	{
+		sprite_index = nair_sprite;
+		time = 35;
+		switch(timer)
+		{
+			case 3: image_index =1; break;
+			case 6: image_index =2; break;
+			case 9: image_index =3; break;
+			case 12: image_index=4; break;
+			case 15: image_index=5; break;
+			case 18: image_index=6; break;
+			case 21: image_index=7; break;
+		}
+		
+	if timer=2
+		sound_play(nair_spin_sound);
+
+	if timer = 6 
+		create_hitbox(7,60+60*facing,3.4,5.2,11,4,slap_m,obj_spark_hit2,1.25 , 0.64 , 0.80 , 10.40,self.id,16,3);
+		hitbox.execute_on_hit="attacker.fastfalltemp=3"
+	if fastfalltemp>0 && movedown
+		vspeed=fall_speed*size					  
+	}
+
+	if abyssmoves=1
+	{
+		sprite_index=nair_spirit_smash_sprite
+		time= 43
+		switch(timer)
+		{
+			case 3: image_index=1;break;
+			case 6: image_index=2; break;
+			case 9: image_index=3; break;
+			case 12: image_index=4; break;
+			case 15: image_index=5; break;
+			case 18: image_index=6; break;
+			case 21: image_index=7; break;
+			case 29: image_index=8; break;
+		}
+		if timer=3
+			{sound_play(nair_abyss_sound)}
+		if timer=6
+			{create_hitbox ( 9 , 64+52*facing , 5.3 , 6.8 , 18 , 10 , sein_m , obj_spark_hit2 , 1.18 , 1.12 , -10.40 , 32.80 , self.id , 15 , 3 );}
+			
+		if timer=9
+		{
+			hitbox.dir = 59+62*facing
+			hitbox.image_xscale=1.75*size
+			hitbox.image_yscale=1.15* size
+			hitbox.hitbox_x+= (21.60 *(1-facing*2))*size
+			hitbox.hitbox_y+= 6.2*size 
+		}
+		if timer = 12
+		{
+			hitbox.image_xscale= 1.35*size
+			hitbox.image_yscale=1.67*size
+			hitbox.hitbox_x +=(16.8*(1-facing*2))*size
+			hitbox.hitbox_y -= 24.8*size
+		}
+		if timer = 15
+		{
+			hitbox.image_xscale=1.55*size
+			hitbox.image_yscale=1.42*size
+			hitbox.hitbox_x -= (14.4*(1-facing*2))*size
+			hitbox.hitbox_y -=23.2*size
+		}
+		if timer = 18
+		{
+			hitbox.image_xscale=1.42*size
+			hitbox.image_yscale=1.38*size
+			hitbox.hitbox_x -= (24.8*(1-facing*2))*size
+			hitbox.hitbox_y +=4.8*size
+		}
+	}	
+}
+
+if smashori
+{
+	sprite_index=nair_spirit_smash_sprite
+		time= 43
+		switch(timer)
+		{
+			case 3: image_index=1;break;
+			case 9: image_index=2; break; //hitbox
+			case 14: image_index=3; break; //h1
+			case 19: image_index=4; break; //h2
+			case 22: image_index=5; break; //h3
+			case 25: image_index=6; break; //h4
+			case 28: image_index=7; break;
+			case 31: image_index=8; break;
+		}
+		if timer=9
+			{sound_play(swingsnd3)}
+		if timer=14
+			create_hitbox ( 10 , angle_correct(60) , 6.2 , 5.4 , 18 , 8 , kick2 , obj_spark_hit2 , 1.25 , 1 , place_x(97)*(1-facing*2) , -place_y(34) , self.id , 15 , 3 );
+			
+		if timer = 19
+		{
+			hitbox.damage=11*size
+			hitbox.dir=270
+			hitbox.bkb=4.3*size
+			hitbox.kgb=4.9*size
+			hitbox.hitlag_frames = 12*size
+			hitbox.sfx=kick3
+			hitbox.gfx=obj_spark_hit4
+			hitbox.image_xscale= .9*size
+			hitbox.image_yscale=1*size
+			hitbox.hitbox_x = place_x(106)
+			hitbox.hitbox_y = -place_y(77)
+		}
+		if timer = 22
+		{
+			hitbox.damage=8*size
+			hitbox.dir=angle_correct(160)
+			hitbox.bkb=5.4*size
+			hitbox.kbg=4*size
+			hitbox.hitlag_frames=6*size
+			hitbox.sfx=kick2
+			hitbox.gfx=obj_spark_hit3
+			hitbox.image_xscale=1.05*size
+			hitbox.image_yscale=1.02*size
+			hitbox.hitbox_x = place_x(73)
+			hitbox.hitbox_y = -place_y(105)
+		}
+		if timer = 25
+		{
+			hitbox.image_xscale=.95*size
+			hitbox.image_yscale=1*size
+			hitbox.hitbox_x = place_x(35)
+			hitbox.hitbox_y = -place_y(93)
+		}
+}
+
+if air = 0 
+	{
+		state_type = "land";
+		attack_type = "none";
+		timer = 0;
+		time = 9+smashori*7;
+		sprite_index = land_sprite;
+	}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+
+	attack_type = "none";
+	if ( air > 0 )
+	{
+		used_air=1
+		state_type = "jump";
+		sprite_index = jump_sprite;
+		image_index = 4;
+	}
+    else
+		state_type = "stand";
+    timer = 0;
+    time =-1;
+}

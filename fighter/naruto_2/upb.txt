@@ -1,0 +1,169 @@
+fast_fall = 0
+fast_fall_temp = 0
+
+if bankai = 1 {
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" ) && air < max_jumps {
+if moveright {facing = 0;}
+if moveleft {facing = 1;}
+state_type = "air_attack";
+attack_type = "upb";
+timer = 0;
+time = 34;
+sound_play(attack_voice5);
+sound_play(bushin_sound);
+sprite_index = upb_spriteB;
+image_speed = 0.15;
+image_index = 0;
+if air = 0 {
+temp = 0;
+hspeed = 0;}
+else {
+temp = 1;
+hspeed *= 0.8;}
+}
+
+if timer < time {
+
+if timer = 1 {
+sound_play(bushin_sound);
+smoke = instance_create( x,y,obj_spark );
+smoke.sprite_index = smoke_sprite;
+smoke.image_xscale = xsize;
+smoke.image_yscale = ysize;
+smoke.image_speed = 0.3;
+smoke.x = x;
+smoke.y = 1.0*y;}
+
+if timer = 3 {vspeed = -10.65;}
+if vspeed > 0.5 && timer <= 43 {vspeed *= 0.9;}
+if moveright && hspeed < air_speed * 0.75 {hspeed += 0.075;}
+if moveleft && hspeed > -air_speed * 0.75 {hspeed -= 0.075;}
+
+if timer = 3 && !instance_exists(clon) {
+with (clon2) {instance_destroy()}
+clon = create_projectile(4,335-facing*130,1,2,4,4,kick2,obj_smoke,0.8,0.8,0,8,self.id,150,char_custom2);
+clon.stun_base = 41;
+clon.stun_scalar = 13;}
+else if timer = 3 && !instance_exists(clon2) {
+with (clon) {instance_destroy()}
+clon2 = create_projectile(4,335-facing*130,1,2,4,4,kick2,obj_smoke,0.8,0.8,0,8,self.id,150,char_custom2);
+clon2.stun_base = 41;
+clon2.stun_scalar = 13;}
+
+if timer = 4 {
+create_hitbox(6,90,5.46,6.75,12,1,kick2,obj_spark_slash3,0.75,1.5,10,30,self.id,15,12);
+hitbox.hit_stun = 5;
+hitbox.di = -1;
+hitbox.shake_type = 1;
+hitbox.shake_ampl = 0.44;
+hitbox.sdi = 0.76;}
+
+if timer = 9 {
+hitbox.damage = 5;
+hitbox.bkb = 5.1;
+hitbox.kbg = 6.6;}
+
+if timer > 25 {force_edge_grab = 1;}
+
+}
+
+if air = 0 && vspeed > 0 {
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = 5;
+sprite_index = land_sprite;
+with (smoke) instance_destroy();}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+state_type = "jump";
+attack_type = "none";
+sprite_index = jump_sprite;
+image_speed = 0.15;
+timer = 0;
+time = -1;
+air = max_jumps}
+}
+else {
+if state_type = "stand" || state_type = "run" || state_type = "jump" {
+if moveright {facing = 0;}
+if moveleft {facing = 1;}
+state_type = "air_attack";
+attack_type = "upb";
+timer = 0;
+time = 34; 
+sound_play(attack_voice5);
+sound_play(bushin_sound);
+sprite_index = upb_sprite;
+image_speed = 0.15;
+image_index = 0;
+if air = 0 {
+temp = 0;
+hspeed = 0;}
+else {
+temp = 1;
+hspeed *= 0.8;}
+}
+
+if timer < time {
+
+fast_fall = 0;
+fast_fall_temp = 0;
+if timer = 1 {
+sound_play(bushin_sound);
+smoke = instance_create( x,y,obj_spark );
+smoke.sprite_index = smoke_sprite;
+smoke.image_xscale = xsize;
+smoke.image_yscale = ysize;
+smoke.image_speed = 0.37;
+smoke.x = x;
+smoke.y = 1.0*y;}
+if timer = 3 {vspeed = -10.65;}
+if vspeed > 0.5 && timer <= 43 {vspeed *= 0.9;}
+if moveright && hspeed < air_speed * 0.75 {hspeed += 0.075;}
+if moveleft && hspeed > -air_speed * 0.75 {hspeed -= 0.075;}
+
+if timer = 3 && !instance_exists(clon) {
+with (clon2) {instance_destroy()}
+clon = create_projectile(4,335-facing*130,1,2,4,4,kick2,obj_smoke,0.8,0.8,0,8,self.id,150,char_custom2);
+clon.stun_base = 32;
+clon.stun_scalar = 12;}
+else if timer = 3 && !instance_exists(clon2) {
+with (clon) {instance_destroy()}
+clon2 = create_projectile(4,335-facing*130,1,2,4,4,kick2,obj_smoke,0.8,0.8,0,8,self.id,150,char_custom2);
+clon2.stun_base = 32;
+clon2.stun_scalar = 12;}
+
+if timer = 4 {
+create_hitbox(6,90,5.46,6.75,12,1,kick2,obj_spark_slash3,0.75,1.5,10,30,self.id,15,12);
+hitbox.hit_stun = 5;
+hitbox.di = -1;
+hitbox.shake_type = 1;
+hitbox.shake_ampl = 0.44;
+hitbox.sdi = 0.76;}
+
+if timer = 9 {
+hitbox.damage = 5;
+hitbox.bkb = 5.1;
+hitbox.kbg = 6.6;}
+
+if timer > 25 {force_edge_grab = 1;}
+
+}
+
+if air = 0 && vspeed > 0 {
+state_type = "land";
+attack_type = "none";
+timer = 0;
+time = 5;
+sprite_index = land_sprite;
+with (smoke) instance_destroy();}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+state_type = "fall";
+attack_type = "none";
+air = max_jumps;
+timer = 0;
+time = -1;}
+
+}

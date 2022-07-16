@@ -1,0 +1,60 @@
+if ( state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "shielding" )
+  {
+    if ( held_item > 0 )
+      {
+	attack_type = "itemfthrow";
+	exit;
+      }
+    if ( air = 0 )
+	hspeed = 0;
+    timer = 0;
+    attack_type = "b";
+    state_type = "air_attack";
+    image_speed = 0;
+    sprite_index = b_sprite;
+    image_index = 0;
+    time = 27;
+    timer_speed = 1;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 6: image_index = 1; break;
+	case 9: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 21: image_index = 4; break;
+      }
+
+    if ( timer = 18 && (shell = 0 || !instance_exists(shell)) )
+      {
+	sound_play(itemgetsnd);
+	shell = instance_create (x,y-10*size,global.itm_kind[5]);
+	with (shell) image_alpha = 0;
+	hold_item = 1;
+	held_item = shell.id;
+	shell.held = self.id;
+
+	shell_gfx = instance_create(shell.x, shell.y, obj_custom_gfx);
+	shell_gfx.draw_script = char_custom2;
+	shell_gfx.step_script = char_custom3;
+	shell_gfx.sprite_index = shell_sprite;
+	shell_gfx.number = number;
+	shell_gfx.use_palette = number;
+	shell_gfx.image_speed = 0;
+	shell_gfx.image_index = 0;
+	shell_gfx.shell = shell;
+	shell_gfx.keepmain = self.keepmain;
+      }
+  }
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

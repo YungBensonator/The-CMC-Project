@@ -1,0 +1,215 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  temp = 0
+  state_type = "attack";
+  attack_type = "ssmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = jab_sprite;
+  timer = 0;
+  time = 69;
+  timer_speed = 1;
+  charge_frame = 3;
+
+	if (limitbreak = 1) {temp = 1}
+
+	if (temp = 1 )
+	{
+		limitbreak = 0
+		limitgauge = 0
+	}
+  }
+
+if timer < time {
+
+if (temp = 1 && timer = 0)
+{
+	sound_play(limit_activate_sound);
+	aura3 = instance_create(x,y-18,obj_spark)
+	aura3.sprite_index = mako3_sprite
+	aura3.image_index = 0;
+	aura3.image_speed = 0.875;
+	aura3.image_xscale = 0.3;
+	aura3.image_yscale = 0.3;
+	aura3.depth = -6;
+	aura3.image_alpha = 0.9;
+	aura4 = instance_create(x,y,obj_spark)
+	aura4.sprite_index = mako4_sprite
+	aura4.image_index = 0;
+	aura4.image_speed = 0.33;
+	aura4.image_xscale = 0.4;
+	aura4.image_yscale = 0.4;
+	aura4.depth = -9;
+	aura4.image_alpha = 0.9;
+    super_armor = 1;
+}
+
+    switch (timer) {
+	case 8: image_index = 1; break;
+	case 10: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 14: image_index = 4; break;
+	case 16: sprite_index = jab2_sprite; image_index = 0; break;
+	case 18:image_index = 1; break;
+	case 20: image_index = 2; break;
+	case 22: image_index = 3; break;
+	case 24: sprite_index = jab_sprite; image_index = 0; break;
+	case 29: sprite_index = jab3_sprite;image_index = 0; break;
+	case 32: image_index = 1; break;
+	case 34: image_index = 2; break;
+	case 38: sprite_index = jab_sprite; image_index = 2; break;
+	case 40: image_index = 3; break;
+	}
+
+    if timer = 8 || timer = 18 {
+	if timer = 8{
+	if (temp = 0)
+	{sound_play(cslashvc1);}
+	else
+	{sound_play(lcslashvc1);}
+	ssslash = instance_create(x,y-30,obj_spark);
+	ssslash.sprite_index = fsmash_fx1;
+	ssslash.image_index = 0;
+	ssslash.image_speed = 1;
+	ssslash.image_xscale = 0.5 - facing*1;
+	ssslash.image_yscale = 0.45;
+	ssslash.x = x
+	ssslash.y = y-30;
+	ssslash.snap = self.id
+  	cross1 = instance_create(x+50*(1-facing*2),y-17,obj_spark);
+  	if (temp != 1){cross1.sprite_index = dthrow_effect_sprite;}
+  	else {cross1.sprite_index = EXdthrow_effect_sprite;}
+  	cross1.image_xscale = 0.5;
+  	cross1.image_yscale = 0.5;
+  	cross1.image_index = 0;
+  	cross1.image_speed = 0.9;
+	}
+	if timer = 18{
+  	if temp = 0
+  	screen_shake(3,5);
+  	else
+  	screen_shake(5,7);
+  duster = instance_create(x-10*(1-facing*2),y,obj_dust_effect);
+  duster.facing=facing;
+  duster.image_xscale *= 0.65;
+  duster.image_yscale *= 0.65;
+  if temp = 0
+  sound_play(attack_sound3);
+  else
+  sound_play(attack_sound4);
+  sound_play(attack_sound1);
+  sound_play(attack_sound2);
+	if (temp = 0)
+	{sound_play(cslashvc2);}
+	else
+	{sound_play(lcslashvc2);}
+	ssslash2 = instance_create(x,y-30,obj_spark);
+	ssslash2.sprite_index = fsmash_fx2;
+	ssslash2.image_index = 0;
+	ssslash2.image_speed = 1;
+	ssslash2.image_xscale = 0.35 - facing*0.7;
+	ssslash2.image_yscale = 0.25;
+	ssslash2.x = x
+	ssslash2.y = y-50;
+	ssslash2.snap = self.id
+  cross1.image_index = 14;
+  cross2 = instance_create(x+50*(1-facing*2),y-17,obj_spark);
+  if (temp != 1){cross2.sprite_index = dthrow_effect2_sprite;}
+  else {cross2.sprite_index = EXdthrow_effect2_sprite;}
+  cross2.image_xscale = 0.5;
+  cross2.image_yscale = 0.5;
+  cross2.image_index = 0;
+  cross2.image_speed = 0.9;
+	}
+	sound_play(attack_sound2);
+	create_hitbox(6 + (temp*2) ,25+facing*130,2,0,10,2,slash3,obj_spark_slash2,1.75,0.75,40,20,self.id,3,2);
+  	if temp = 1
+  	hitbox.sfx = slash3;
+	//hitbox.hit = 1
+  	hitbox.di = 0
+	hitbox.hit_stun = 20;
+	ssslash.image_speed = 0
+	ssslash2.image_speed = 0
+  	duster = instance_create ( x , y , obj_dust_effect );
+  	duster.facing = facing;
+  	duster.image_xscale *= 0.6;
+  	duster.image_yscale *= 0.6;
+	}
+
+    if timer = 9 || timer = 19 {
+	ssslash.image_speed = 0.9
+	ssslash2.image_speed = 0.9
+}
+
+if (cross1.image_index >= cross1.image_number - cross1.image_speed)
+{cross1.image_speed = 0;}
+if (cross2.image_index >= cross2.image_number - cross2.image_speed)
+{cross2.image_speed = 0;}
+
+    if timer = 34 {
+  if temp = 0
+  screen_shake(4,6);
+  else
+  screen_shake(7,10);
+  duster = instance_create(x-10*(1-facing*2),y,obj_dust_effect);
+  duster.facing=facing;
+  duster.image_xscale *= 0.85;
+  duster.image_yscale *= 0.85;
+  sound_play(attack_sound5);
+  sound_play(attack_sound1);
+  sound_play(attack_sound2);
+	if (temp = 0)
+	{sound_play(cslashvc3);}
+	else
+	{sound_play(lcslashvc3);}
+	ssslash3 = instance_create(x,y-30,obj_spark);
+	ssslash3.sprite_index = fsmash_fx3;
+	ssslash3.image_index = 0;
+	ssslash3.image_speed = 1;
+	ssslash3.image_xscale = 0.3 - facing*0.6;
+	ssslash3.image_yscale = 0.3;
+	ssslash3.x = x
+	ssslash3.y = y-30;
+	ssslash3.snap = self.id
+  cross2.image_index = 14;
+  cross3 = instance_create(x+50*(1-facing*2),y-17,obj_spark);
+  if (temp != 1){cross3.sprite_index = dthrow_effect3_sprite;}
+  else {cross3.sprite_index = EXdthrow_effect3_sprite;}
+  cross3.image_xscale = 0.5;
+  cross3.image_yscale = 0.5;
+  cross3.image_index = 0;
+  cross3.image_speed = 0.9;
+	sound_play(attack_sound6);
+	create_hitbox(8 + (temp*2) ,40+facing*100,6,7.25 + (temp*3) ,15 + (temp*10),10 + (temp*6),cslash3,obj_spark_slash3,1.9,1.15,45,15,self.id,3,2);
+	//hitbox.hit = 1
+	ssslash3.image_speed = 0
+	duster = instance_create ( x , y , obj_dust_effect );
+  	duster.facing = facing;
+  	duster.image_xscale *= 0.75;
+  	duster.image_yscale *= 0.75;
+	}
+
+    if timer = 35 {
+	ssslash3.image_speed = 0.9
+}
+
+}
+
+if ( timer >= time - 1 )
+  {
+	  with (cross1){ instance_destroy();}
+	  with (cross2){ instance_destroy();}
+	  with (cross3){ instance_destroy();}
+	  with (cross4){ instance_destroy();}
+
+  if temp = 1 {
+  limitbreak = 0
+  limitgauge = 0
+  temp = 0
+  }
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

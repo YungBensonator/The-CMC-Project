@@ -1,0 +1,90 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if ( state_type = "jump" )
+{
+  state_type = "air_attack";
+  attack_type = "dair";
+  sprite_index = dair_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 44;
+  timer_speed = 1;
+  if ( moveright ) facing = 0;
+  if ( moveleft ) facing = 1;
+}
+if ( timer < time )
+{
+  switch ( timer ) 
+  {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 3; break;
+    case 12: image_index = 4; break;
+    case 15: image_index = 5; break;
+    case 18: image_index = 6; break;
+    case 21: image_index = 7; break;
+    case 24: image_index = 8; break;
+    case 26: image_index = 9; break;
+    case 29: image_index = 10; break;
+    case 32: image_index = 11; break;
+    case 35: image_index = 12; break;
+    case 38: image_index = 13; break;
+    case 41: sprite_index = mid_jump_sprite; image_index = 9; break;
+  }
+  if ( timer = 15 )
+  {
+    sound_play ( shoot_sound );
+    create_projectile ( 4 , angle_correct ( 35 ) , 5 , 5.2 , 15 , 10 , magic2 , -1 , 0.3 , 0.3 , 10 , 5 , self.id , 45 , char_custom3 );
+    proj.sprite_index = seed_effect;
+    proj.absorb = 1;
+    proj.absorb2 = 1;
+    proj.moving_object = 1;
+    proj.hspeed = 1.6 * ( 1 - facing * 2 ) * size;
+    proj.vspeed = 2.2 * size;
+    proj.facing = facing;
+    proj.owner = self.id;
+    proj.spurt = 0;
+    shockwave = instance_create ( x + 6 * ( 1 - facing * 2 ) * size , y - 10 * size , obj_spark_shockwave );
+    shockwave.image_blend = c_green;
+    shockwave.image_alpha = 0.9;
+    shockwave.image_xscale *= 0.1 * size;
+    shockwave.image_yscale *= 0.4 * size;
+    shockwave.image_angle = angle_correct ( -50 );
+    hspeed = -2.6 * ( 1 - facing * 2 ) * size;
+    vspeed = -3 * size;
+    air_move = 0;
+  }
+  if ( timer = 24 )
+  {
+    hspeed *= 0.75 * size;
+    air_move = 1;
+  }
+  state_type = "air_attack";
+  if ( air = 0 )
+  {
+    state_type = "land";
+    attack_type = "none";
+    sprite_index = land_sprite;
+    image_index = 0;
+    image_speed = 0;
+    hspeed = 0;
+    vspeed = 0;
+    timer = 0;
+    time = 16;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  attack_type = "none";
+  if ( air > 0 )
+  {
+    state_type = "jump";
+    sprite_index = jump_sprite;
+    image_index = 1;
+  }
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+}

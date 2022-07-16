@@ -1,0 +1,72 @@
+if ( time == -1 )
+{
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "fthrow";
+  sprite_index = fthrow_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 47;
+  timer_speed = 1;
+  combo_target = target;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 2: image_index = 1; break;
+    case 4: image_index = 2; break;
+    case 6: image_index = 3; break;
+    case 8: case 12: case 16: case 20: case 24: case 28: case 32: case 36: image_index = 4; break;
+    case 10: case 14: case 18: case 22: case 26: case 30: case 34: case 38: image_index = 5; break;
+    case 40: image_index = 6; break;
+    case 44: image_index = 7; break;
+  }
+  state_type = "attack";
+  if ( timer >= 2 && timer < 4 )
+  {
+    target.x = x + 11 * ( 1 - facing * 2 ) * size;
+    target.y = y - 4 * size;
+  }
+  if ( timer >= 4 && timer < 6 )
+  {
+    target.x = x + 12 * ( 1 - facing * 2 ) * size;
+    target.y = y - 3 * size;
+  }
+  if ( timer >= 6 && timer < 38 )
+  {
+    target.x = x + 13 * ( 1 - facing * 2 ) * size;
+    target.y = y - 2 * size;
+  }
+  if ( ( timer >= 8 && timer < 38 ) && timer mod 4 == 0 )
+    sound_play2 ( koishihit3 );
+  if ( ( timer >= 8 && timer < 38 ) && timer mod 8 == 0 )
+  {
+    combo_hits += 1;
+    target.percent += round ( 2 * size );
+    instance_create ( place_x ( 85 ) + x , y + place_y ( 41 ) , obj_spark_hit1 )
+  }
+  if ( ( timer >= 8 && timer < 38 ) && timer mod 12 == 0 )
+  {
+    gfx_ef_whirl2 ( place_x ( 85 ) + x , y + place_y ( 41 ) , 0.4 * size , angle_correct ( -20 ) );
+    duster = instance_create ( x , y , obj_dust_effect );
+    duster.image_xscale *= 0.7 * size;
+    duster.image_yscale *= 0.5 * size;
+    duster.facing = facing;
+  }
+  if ( timer = 38 )
+  {
+    create_throw_box ( 7 , angle_correct ( 30 ) , 6.4 , 4.2 , 0 , 6 , koishislash3 , obj_spark_slash3 , 0.8 , 0.8 , 14 , 18 , self.id , 1 , 1 );
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  runtimer = 0;
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+}

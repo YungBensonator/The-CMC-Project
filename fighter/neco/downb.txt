@@ -1,0 +1,114 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    //if instance_exists(proj)
+	//exit;
+    attacking = 0
+    attack_type = "downb"
+	
+	timer = 0;
+    
+    timer_speed=1;
+	
+    if air = 0 {
+        state_type = "attack";
+        //hspeed = -10;
+		//vspeed = -7*size;
+        temp = 0;
+        sprite_index = downb_sprite; 
+		image_speed = 0.2;
+		time = 110;
+		hspeed = 0;
+    }
+    else {
+        state_type = "air_attack";
+        hspeed = 0;
+        sprite_index = downb_sprite;
+        temp = 1;
+		image_speed = 0.2;
+		time = 42;
+    }
+    
+    image_index=0;
+    
+}
+
+if timer = 10{
+sound_play(downb_voice)
+hspeed = 0;
+    }
+hspeed = 0;
+//speed = 0
+if timer = 18
+
+    if air = 0 {
+	sound_play(downb_sound2)
+	hspeed = 0;
+	
+	image_speed = 0;
+	duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing; 
+	create_projectile(2,25+facing*130,3,0,0.1,4,explodehit1,obj_spark_hit3,0.7,0.7,6,12,self.id,8,char_custom4); 
+	proj.depth = depth - 1;
+        proj.facing = facing;
+        proj.di = 0.15
+	
+	}else{
+
+    instance_create(x+size*(20-facing*40),y-13*size,obj_spark_effect)}
+	
+	if timer = 90{
+image_speed = 0.2
+    }
+	
+	
+if timer = 22  {
+
+    if air = 0 {
+	
+	
+	}else{
+
+
+    duster = instance_create(x,y,obj_dust_effect);
+    duster.facing = facing; 
+    //sound_play(sideb_sound);
+    create_projectile(4,80+facing*20,2.4,0.1,8,4,magic3,obj_spark_fire1,0,0,16,15,self.id,42,neco_fire);
+    proj.air = (air>0)
+    proj.hit_stun = 2
+    proj.di = 0.7
+    if air > 0 
+        proj.sprite_index = fire_sprite
+    else
+        proj.sprite_index = fire_sprite
+    vspeed *= 0.7;
+    //hspeed *= 0.5;
+	
+	}
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+
+if vspeed > -0.1 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) {
+    air_move = 0
+    state_type = "attack"
+    hspeed=0 
+}
+if temp && air = 0 {
+    state_type="land";
+    attack_type="none";
+    sprite_index = land_sprite;
+    timer=0;
+    time=10;
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "air";
+    timer = 0;
+    time =-1;
+}
+        
+

@@ -1,0 +1,334 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "downb";
+  time = 65;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = downb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  if ( moveright = 1 ) facing = 0;
+  if ( moveleft = 1 ) facing = 1;
+  temp = 0;
+  temp2 = 0;
+  attacking = 0;
+  special = 0;
+  shieldup = 0;
+  movejump = 0;
+  }
+
+switch ( timer )
+  {
+  //Calm Mind
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 61: image_index = 1; break;
+  case 63: image_index = 0; break;
+  
+  //Energy Ball
+  case 102: image_index = 1; break;
+  case 104: image_index = 2; break;
+  case 106: image_index = 3; break;
+  case 108: image_index = 4; break;
+  case 110: image_index = 5; break;
+  case 112: image_index = 6; break;
+  case 114: image_index = 7; break;
+  case 144: image_index = 8; break;
+  case 147: image_index = 9; break;
+  
+  //Moonblast
+  case 230: sprite_index = b_sprite; image_index = 1; break;
+  case 232: image_index = 2; break;
+  case 234: image_index = 3; break;
+  case 236: image_index = 4; break;
+  case 238: image_index = 5; break;
+  case 240: image_index = 6; break;
+  case 242: image_index = 7; break;
+  case 256: image_index = 8; break;
+  case 258: image_index = 9; break;
+  
+  //Teleport
+  case 506: image_index = 3; break;
+  case 508: image_index = 4; break;
+  case 510: image_index = 5; break;
+  case 512: image_index = 6; break;
+  case 514: image_index = 7; break;
+  
+  case 523: image_index = 6; break;
+  case 525: image_index = 5; break;
+  case 527: image_index = 4; break;
+  case 529: image_index = 3; break;
+  case 531: image_index = 2; break;
+  case 533: image_index = 1; break;
+  case 536: image_index = 0; break;
+  }
+
+  
+//--------------------------------------------------------------------------------CALM MIND------------------------------------------------------------------------
+if ( attacking = 1 && timer <= 60 )
+{
+temp2 = 1;
+}
+if ( special = 1 && timer <= 60 )
+{
+temp2 = 2;
+}
+if ( shieldup = 1 && timer <= 60 )
+{
+temp2 = 3;
+}  
+if ( movejump = 1 && timer <= 60 && air < max_jumps )
+{
+temp2 = 4;
+}
+
+if ( timer = 5 )
+{
+sound_play ( calmmind_voice );
+sound_play ( calmmind_sound );
+}
+
+if ( timer = 5 && calmmind = 0 && temp = 0 )
+{
+image_blend = c_aqua;
+alarm[7] = 5;
+temp = 1;
+calmmind += 1;
+spark = instance_create(x,y-37*size,obj_spark_shockwave)
+spark.image_xscale *= 0.5*size;
+spark.image_yscale *= 0.5*size;
+spark.image_blend = c_aqua;
+spark.image_alpha = 0.75;
+}
+
+if ( timer = 5 && calmmind = 1 && temp = 0 )
+{
+image_blend = c_fuchsia;
+alarm[7] = 5;
+temp = 1;
+calmmind += 1;
+spark = instance_create(x,y-37*size,obj_spark_shockwave)
+spark.image_xscale *= 0.5*size;
+spark.image_yscale *= 0.5*size;
+spark.image_blend = c_fuchsia;
+spark.image_alpha = 0.75;
+}
+
+if ( timer = 5 && calmmind = 2 && temp = 0 )
+{
+image_blend = c_purple;
+alarm[7] = 5;
+temp = 1;
+calmmind += 1;
+spark = instance_create(x,y-37*size,obj_spark_shockwave)
+spark.image_xscale *= 0.5*size;
+spark.image_yscale *= 0.5*size;
+spark.image_blend = c_purple;
+spark.image_alpha = 0.75;
+}
+
+if ( timer = 5 && calmmind = 3  && temp = 0)
+{
+image_blend = c_purple;
+alarm[7] = 5;
+temp = 1;
+spark = instance_create(x,y-37*size,obj_spark_shockwave)
+spark.image_xscale *= 0.5*size;
+spark.image_yscale *= 0.5*size;
+spark.image_blend = c_purple;
+spark.image_alpha = 0.75;
+}
+
+
+//--------------------------------------------------------------------------------ENERGY BALL-------------------------------------------------------------------
+
+if ( timer >= 20 && timer <= 60 && temp2 = 1 )
+{
+timer = 100;
+time = 150;
+sprite_index = b_sprite;
+image_index = 0;
+image_speed = 0;
+attacking = 0;
+}
+
+if ( timer = 112 )
+{
+sound_play( energyball_sound );
+sound_play( energyball_voice );
+create_projectile ( 10 , 30+facing*120 , 6 , 6 , 20 , 9 , magic2 , obj_spark_shock , 0.8 , 0.8 , 18 , 28 , self.id , 30 , char_custom5 );
+proj.hspeed = 5 * (1-facing*2) * size;
+}
+
+if ( attacking = 1 && timer >= 112 && timer <= 142 )
+{
+proj.temp = 1;
+}
+
+
+//--------------------------------------------------------------------------------MOONBLAST---------------------------------------------------------------------
+
+if ( timer >= 20 && timer <= 60 && temp2 = 2 )
+{
+timer = 200;
+time = 260;
+}
+
+if ( timer = 201 )
+{
+	sound_play( moonblast_sound );
+	moon = instance_create( x,y,obj_spark );
+	moon.sprite_index = moon_sprite;
+	moon.image_xscale = 0.4 * (1-facing*2) * size;
+	moon.image_yscale = 0.4 * size;
+	moon.image_speed = 0;
+	moon.x = x;
+	moon.y = y - 90 * size;
+	moon.alarm[0] = 39;
+	moon.image_alpha = 0.9;
+	moon.snap = self.id;
+}
+
+if ( timer = 240 )
+{
+sound_play( moonblast_sound2 );
+sound_play( moonblast_voice );
+create_projectile ( 13 , 30+facing*120 , 7 , 6 , 20 , 9 , magic2 , obj_spark_shock , 0.8 , 0.8 , 18 , 28 , self.id , 180 , char_custom8 );
+proj.hspeed = 1.5 * (1-facing*2) * size;
+}
+
+
+//---------------------------------------------------------------------------------REFLECT----------------------------------------------------------------------
+
+
+if ( timer >= 20 && timer <= 60 && temp2 = 3 )
+{
+timer = 400;
+time = 480;
+sprite_index = throw_sprite;
+image_index = 0;
+image_speed = 0.5;
+}
+
+if ( timer = 410 )
+{
+sound_play ( reflect_sound );
+sound_play ( reflect_voice );
+proj = create_projectile ( 10 , 30+facing*120 , 6 , 3 , 20 , 5 , magic2 , obj_spark_shock , 2.8 , 2.8 , -2 , 20 , self.id , 50 , char_custom7 );
+proj.temp = 0;
+proj2 = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 2.8 , 2.8 , -2 , 20 , self.id , 50 , char_custom7 );
+proj2.temp = 1;
+proj3 = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 2.8 , 2.8 , -2 , 20 , self.id , 50 , char_custom3 );
+proj3.hit = 2;
+proj3.no_reflect = 1;
+proj3.reflect = 1;
+}
+
+
+//---------------------------------------------------------------------------------TELEPORT---------------------------------------------------------------------
+if ( timer >= 20 && timer <= 60 && temp2 = 4 )
+{
+timer = 500;
+time = 540;
+sprite_index = upb_sprite;
+image_index = 2;
+image_speed = 0;
+timer_speed = 1;
+}
+
+if ( timer >= 500 && timer <= 540 )
+{
+fast_fall = 0;
+fast_fall_temp = 0;
+hspeed = 0;
+vspeed = 0;
+gravity_lock = 1;
+}
+
+if ( timer = 506 )
+{
+sound_play ( teleport_sound );
+intangible = 1;
+}
+
+    if ( timer = 514 )
+		{
+        spark = instance_create(x,y-19*size,obj_spark_shockwave)
+        spark.image_xscale *= 0.5*size;
+        spark.image_yscale *= 0.5*size;
+        spark.image_blend = c_fuchsia;
+        spark.image_alpha = 0.75;
+        if ( ai = 1 && ai_state = "recover" )
+			{
+            movedown = 0
+            moveup = 1
+            if !(abs(obj_edge_right.x-x)<8) && !(abs(obj_edge_left.x-x)<8) && !collision_point(x+8-facing*16,y-5,obj_wall,1,1) {
+            if x < room_width/2 {
+                moveright = 1
+                moveleft = 0 }
+            else {
+                moveright = 0
+                moveleft = 1 } 
+                }
+            }
+        if ( moveright = 1 )
+			{
+            hspeed = 90 * size;
+			}
+        if ( moveleft = 1 )
+			{
+            hspeed = -90 * size;
+			}
+        if ( moveup = 1 )
+			{
+            vspeed = -90 * size;
+			}
+        else if ( movedown = 1 )
+			{
+            vspeed = 90 * size;
+            temp_fall_speed = vspeed - fall_speed;
+            }
+        }
+
+if ( timer = 531 )
+{
+intangible = 0;
+}
+
+if ( timer > 525 && timer <= 540 )
+{
+force_edge_grab = 1;
+}
+
+
+
+
+//-------------------------------------------------------------------------------------END-----------------------------------------------------------------
+
+if ( timer >= time - 1 )
+  {
+  intangible = 0;
+  attack_type = "none";
+  if ( air == 0 )
+	{
+    state_type = "stand";
+	sprite_index = stand_sprite;
+	image_index = 14;
+	}
+  if ( air > 0 && temp2 = 4 )
+	{
+	state_type = "fall";
+	}
+  if ( air > 0 && temp2 != 4 )
+	{
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 12;
+	}
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,95 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        if ( cantsideb ) exit;
+        state_type = "air_attack"
+        attack_type = "downb"
+        image_speed = 0
+		if air = 0
+			air_temp = 0
+		else
+			air_temp = 1
+	    sprite_index = downb_sprite_CHAOS
+        image_index=0
+        timer = 0
+        time = 51
+		if !ai
+		special = 1
+		else if ai{
+			if instance_exists(downb_clone)
+			special = 1
+		}
+		charge_bonus = 0
+		
+		if air = 0
+		hspeed = 0
+		
+		activating = 0
+    }
+
+if ( timer < time )
+  {
+state_type = "air_attack";
+
+
+	switch ( timer )
+      {
+	case 9: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 15: image_index = 3; break;
+	case 18: image_index = 4; break;
+	case 21: image_index = 5; break;
+	case 24: image_index = 6; break;
+	  }
+
+
+	
+	
+	if timer = 15{
+		
+		if instance_exists(downb_clone){
+			downb_clone.activating = 1
+		}else{
+			
+		
+		
+		sound_play(downb_voice_CHAOS);
+		downb_clone = create_projectile(7,20+facing*140,5,6,4,15,magic1,obj_spark_fire1,0,0,10,00,self.id,600,char_custom7);
+		downb_clone.sprite_index = taunt_sprite;
+		downb_clone.image_speed = 0
+		downb_clone.image_xscale = image_xscale* 1;
+		downb_clone.image_yscale = image_yscale* 1;
+		downb_clone.image_alpha = 1
+		downb_clone.hit = 2
+		downb_clone.depth = depth + 1
+		downb_clone.alarm[0] = 600
+		downb_clone.owner = self.id
+		downb_clone.aired = 1;
+		downb_clone.number = number
+		
+		if air_temp = 1{
+			downb_clone.sprite_index = jump_sprite;
+			downb_clone.aired = 1;
+		}else{
+			downb_clone.sprite_index = entry_sprite;
+			downb_clone.aired = 0
+		}
+		
+		}
+		
+	}
+		
+      
+	 
+
+  }
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+
+}

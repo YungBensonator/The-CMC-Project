@@ -1,0 +1,153 @@
+fast_fall = 0
+fast_fall_temp = 0
+		gravity = 0;
+		gravity_lock = 1;
+if ( state_type == "stand" || state_type == "run" || state_type == "shielding" )
+  {
+	hspeed = 0;
+		
+	state_type = "air_attack";
+	attack_type = "final_smash";
+	
+	image_speed = 0.0;
+	image_index = 0;
+    sprite_index = taunt_sprite;
+
+	timer = 0;
+	time = 581;
+	
+	fs_music = tempmus_play2 ( tree_music , 600 , 1 );
+	
+	timer_speed = 1;
+	
+	spark = instance_create ( 0 , 0 , obj_camerazoom );
+	spark.camera_l = x - 30*size;
+	spark.camera_r = x + 30*size;
+	spark.camera_u = y - (15 - actual_height)*size;
+	spark.camera_d = y + 15*size;
+	spark.camera_boundary_zoom = 300*size;
+	spark.alarm[0] = 400;
+
+	duster = instance_create ( 0 , 0 , obj_freeze );
+	duster.dontpause = self.id;
+	duster.alarm[0] = 362;
+	}
+if timer < time 
+	{
+		if timer=1
+			{sound_play(tree_sound)}
+		
+		spark.camera_l = x - 30*size;
+		spark.camera_r = x + 30*size;
+		spark.camera_u = y - (15 - actual_height)*size;
+		spark.camera_d = y + 15*size;
+		spark.camera_boundary_zoom = 300*size;
+	
+		switch(timer)
+		{
+			case 1: image_index =1;break;
+			case 4:image_index =2; shakey=1;break;
+			case 7:image_index =3;shakey=3;break;
+			case 10: image_index =2;shakey=1;break;
+			case 13:image_index =3;shakey=3;break;
+			case 16:image_index =2;shakey=1;break;
+			case 19: image_index =3;shakey=3;break;
+			case 22:image_index =2;shakey=1;break;
+			case 25:image_index =3;shakey=3;break;
+			case 28: image_index =2;shakey=1;break;
+			case 31: sprite_index= bash_char_sprite; image_index =3; shakey=0; break;
+
+			case 217: sprite_index=taunt_sprite; image_angle=0; image_index=5; shakey=6; break
+			case 223: image_index=6; shakey=7;break
+			case 239: image_index=7; shakey=9; break
+			case 255: image_index=8; shakey=8; break
+			case 261: image_index=9; break
+			case 267: image_index=10; shakey=7; break
+			case 273: image_index=11; break
+			
+			case 360: sprite_index=taunt_sprite; image_index=12; shakey=0;break;
+			case 364: image_index=13;break
+			case 367: image_index =14; break
+			
+			case 430: image_index =15; break
+			case 433: image_index =16; break
+			case 437: image_index =17; break
+			
+			case 440: image_index=18; break
+			case 442: image_index=19; break
+			case 446: image_index=20; break
+			
+			case 549: image_index=21; break;
+			
+			case 543: image_index=22; break;
+			case 546: image_index=23;break;
+			case 549: image_index=24; break
+			case 552: image_index=25;break;
+			case 555: image_index =2; shakey=1;break;
+			case 558: image_index =3; shakey=3;break;
+			case 561: image_index =2; shakey=1;break;
+			case 564: image_index =3; shakey=3;break;
+			case 567: image_index =2; shakey=1;break;
+			case 570: image_index=24;break
+			case 573: image_index=25;break			
+			case 576: image_index=26;break
+		}
+		if timer = 1 
+			{
+				intangible=1
+				sound_play(taunt1_sound)
+			}
+		if timer= 445
+			sound_play(tree_end)
+			
+		if timer >30 && timer<277
+			{vspeed=-0.1*size}
+		
+		if timer >276 && timer <360
+			{vspeed+=0.001*size}
+		
+		if timer>359
+			{vspeed+=0.75*size}
+		
+		if timer=364
+		{
+			scalevar=0.25
+			shockwave = instance_create(x,y-8,obj_spark_shockwave)
+			shockwave.image_xscale =scalevar
+			shockwave.image_yscale =scalevar
+			shockwave.image_speed=0
+
+			shaker = instance_create(x,y,obj_shakescreen3);
+			shaker.ampl = 9;
+			shaker.xampl = 0;
+			shaker.time = 11;
+			
+			create_hitbox ( 15 , 362 , 8.3 , 4.3 , -1 , 1 , seinless_l , obj_spark_special1, 1 , 1, 0 , 8 , self.id , 80 , -1 );
+			hitbox.hitlag_frames=1
+			hitbox.hit_stun=60
+		}
+		if timer>364
+		{
+			shockwave = instance_create(x,y-8,obj_spark_shockwave)
+			shockwave.image_xscale =scalevar
+			shockwave.image_yscale =scalevar
+			shockwave.image_blend=c_aqua
+			scalevar+=0.15
+			hitbox.image_xscale +=1
+			hitbox.image_yscale +=1
+		}
+		if timer = 445 
+		{
+			if rivalsori
+				abyssmoves=1
+		}
+		if timer=545
+    		sound_play(tree_dance);
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+			intangible=0
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}

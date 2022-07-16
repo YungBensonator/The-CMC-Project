@@ -1,0 +1,319 @@
+fast_fall = 0
+fast_fall_temp = 0
+if (state_type = "jump")
+{
+	upbcanceltemp=0
+    state_type = "air_attack";
+    attack_type = "dair";
+    image_index = 0;
+    image_speed = 0;
+    timer = 0;
+	air_move=1
+	returntemp=0
+	bouncetemp=0
+	if (rivalsori && abyssmoves=1)
+	{
+		temp_no_hurtbox=1
+	}
+}
+if timer=0
+	{ubcanceltemp =0}
+if (abyssmoves=0 || smashori) && dair_counter=0 
+{
+    sprite_index = dair_sprite;
+    time = 100;
+	if (timer < time)
+	{
+		if smashori
+		{
+			if timer< 48
+			{
+				if (movejump && air<max_jumps-1) || (moveup && special)
+				{
+					interrupt=1
+				}
+			}
+		}
+		switch(timer)
+		{
+			//fall startup
+			case 4: image_index =1; break;
+			case 8: image_index =2; break;//7
+			case 12: image_index=3; break;//10
+			//fall loop
+			case 15: image_index=4; break;//15
+			case 19: image_index=5; break;//17
+			case 23: image_index=6; break;//19
+			case 27: image_index=7; break;//21
+			case 31: image_index=8; break;//23
+			case 35: image_index=9; break;//25
+			//hit/landhit
+			case 50: image_index=10; break;//30
+			//land
+			case 60: image_index=11; break;
+			case 63: image_index=12; break;
+			case 65: image_index=13; break;
+			case 68: image_index=14; break;
+			case 70: image_index=15; break;
+			case 78: image_index=16; break;
+			case 88: image_index=17; break;
+			case 91: image_index=18; break;
+			//spin after hitting
+			case 101: image_index = 0; break
+			case 105: image_index = 1; break
+			case 109: image_index = 2; break
+			case 113: image_index = 3; break
+			case 117: image_index = 4; break
+			case 121: image_index = 5; break
+			case 125: image_index = 6; break
+			case 129: image_index = 7; break
+			case 133: sprite_index = jump_sprite; image_index = 2; break
+			case 137: image_index = 3; break
+			case 141: image_index = 4; break
+		
+		}
+		gravity = 0
+		hspeed *=0.4*size
+		if (timer > 1 && timer < 14)
+		{
+			got_number=1
+			vspeed = -1*size;
+		}
+		if timer=1
+			{
+				if rivalsori
+					sound_play(dair_spin_sound)
+				if smashori
+					sound_play(choose(stomp_start1,stomp_start2,stomp_start3))
+			}
+		if (timer = 14)
+			{
+				if rivalsori
+					sound_play(dair_fall_sound)
+				if smashori
+					sound_play(choose(stomp_fall1,stomp_fall2,stomp_fall3))
+			}
+			
+		if timer=16
+		{
+			create_hitbox(7, 270, 2.4, 6.9, 14, 5, dair_hit, obj_spark_hit3, 0.73 , .9 , 0 , 10.20 , self.id, 100, 3);
+			hitbox.hit_stun=8
+		}
+		hitbox.execute_on_hit="attacker.bouncetemp=1"
+		if (timer > 15 && timer<40)
+		{
+			if rivalsori
+				ubcanceltemp+=1
+			if smashori
+				returntemp+=1
+			if bouncetemp!=1
+			vspeed = 7 * size;
+			if bouncetemp
+			{
+				vspeed=-mid_jump_speed*size
+				timer=100
+				time=145
+			}
+		}
+
+		if timer>102 && timer <145
+		{
+			if (movejump && air<max_jumps-1 )|| ( ( (!movedown) && (moveup || moveleft || moveright) && attacking ) || attacking)
+				interrupt=1
+		}
+
+		if returntemp >30 && !movedown && timer<45
+		{
+			state_type="jump"
+			sprite_index=jump_sprite
+			timer=0
+			time=-1
+			image_index=0
+		}
+		if timer >=50 
+		{
+			upbcanceltemp=1
+		}
+		
+		if (timer =39) && air >0 
+			{timer=14;}
+		if air = 0&& got_number=1
+		{
+			timer=69
+			got_number=0
+		}
+		if air=0 && timer>15
+		{
+			with ( hitbox )
+				instance_destroy();
+			if timer=70
+			{
+				create_hitbox2 ( 10 , 362 , 6.6 , 2.1 , 9 , 11 , seinless_l , obj_spark_hit4, 2.5 , 2.5, 0 , 8 , self.id , 2 , -1 );
+				hitbox2.remain = 1;
+			if rivalsori
+				sound_play(dair_land_sound)
+			if smashori
+			{
+				hitbox2.sfx=-1
+				sound_play(stomp_ground_sound)
+			}
+			shockwave = instance_create(x,y-8,obj_spark_shockwave)
+			shockwave.image_xscale =0.3*size
+			shockwave.image_yscale =0.3*size
+			shaker = instance_create(x,y,obj_shakescreen3);
+			shaker.ampl = 3;
+			shaker.xampl = 0;
+			shaker.time = 8;
+			}
+		}
+		if timer > 15
+			{force_edge_grab = 1}
+		
+	}
+}
+if abyssmoves=1 && dair_counter=0
+{
+	sprite_index = dair_spirit_smash_sprite
+	time = 135;
+	switch(timer)
+	{
+		//fall startup
+		case 3: image_index =1; break;
+		case 5: image_index =2; break;
+		case 8: image_index=3; break;
+		case 10: image_index=4; break;
+		case 13: image_index=5; break;
+		//fall loop
+		case 15: image_index=6; break;
+		case 17: image_index=7; break;
+		case 19: image_index=8; break;
+		case 21: image_index=9; break;
+		//hit/landhit
+		case 110: image_index=17; break;
+		case 115: image_index=18; break;
+		case 119: image_index=19; break;
+		case 123: image_index=20; break
+		//land
+		case 63: image_index=10; break;
+		case 68: image_index=11; break;
+		case 73: image_index=12; break;
+		case 86: image_index=13; break;
+		case 90: image_index=14; break;
+		case 94: image_index=15; break;
+		case 98: image_index=16; break;
+	}
+	gravity = 0
+	hspeed *=0.25*size
+	if timer=13
+		{sound_play(nair_abyss_sound)}
+    if (timer > 1 && timer < 15)
+    {
+		got_number=1
+        vspeed = -1.2*size;
+    }
+	if (timer = 15)
+    {
+        create_hitbox ( 15 , 270 , 3.7 , 6.8 , 20 , 6 , sein_l , obj_spark_hit4 , 1.12 , 1.58 , 30.40 , 12.40 , self.id , 50 , 4 );
+		hitbox.hit_stun=13
+		create_hitbox2(11, 270, 2.4, 6.9, 14, 4, dair_hit, obj_spark_hit3, 0.69 , 1.21 , 2.40 , 20.40 , self.id, 50, 3);
+		hitbox2.hit_stun=8
+	}
+	hitbox.execute_on_hit="
+							attacker.bouncetemp=1
+						  "
+	hitbox2.execute_on_hit="
+							attacker.bouncetemp=2
+						  "					  
+	if (timer > 15 && timer<24)
+    {
+		ubcanceltemp+=1
+		if bouncetemp=1
+		{
+			with ( hitbox )
+			instance_destroy();
+			with ( hitbox2 )
+			instance_destroy();
+			vspeed=-jump_speed*size;
+			timer = 109
+			time = 128
+		}
+		else if bouncetemp=2
+		{
+			with ( hitbox )
+			instance_destroy();
+			with ( hitbox2 )
+			instance_destroy();
+			vspeed=-mid_jump_speed*size;
+			timer = 109
+			time = 128
+		}
+        else if bouncetemp<1
+			vspeed = 9 * size;
+    }
+	if bouncetemp && timer<24
+		timer=109
+	if (timer=23) && air >0 
+		timer=15;
+	if timer=125
+		dair_counter = 55
+	if timer>109 && timer <130
+	{
+		if (movejump && air<max_jumps-1 )|| ( ( (!movedown) && (moveup || moveleft || moveright) && attacking ) || attacking)
+			interrupt=1
+	}
+	if air = 0 && bouncetemp=0 && timer<62
+			timer=85
+	
+	if (air = 0)
+    {
+        time = 105;
+		with ( hitbox )
+			instance_destroy();
+		with ( hitbox2 )
+			instance_destroy();
+		
+		if timer =86
+		{
+			create_hitbox3 ( 18 , 362 , 7.2 , 2.4 , 9 , 7 , kick3 , obj_spark_hit4, 3 , 3, 15 , 15 , self.id , 5 , 3 );
+			hitbox3.remain = 1;
+			sound_play(dair_abyss_land_sound)
+			
+			shockwave = instance_create(x,y-8,obj_spark_shockwave)
+			shockwave.x = x+(15*(1-facing*2))*size
+			shockwave.y = y-15*size
+			shockwave.image_xscale =0.4*size
+			shockwave.image_yscale =0.4*size
+			
+			shaker = instance_create(x,y,obj_shakescreen3);
+			shaker.ampl = 4;
+			shaker.xampl = 0;
+			shaker.time = 10;
+        }
+    }
+}
+if (ubcanceltemp>29 && (moveup && special))
+	{interrupt=1}
+
+if (timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch")
+{
+upbcanceltemp=0
+    attack_type = "none";
+    if ( air > 0 )
+		{
+   		state_type = "jump";
+		if abyssmoves=0
+			{
+				sprite_index = mid_jump_sprite;
+				image_index = 0;
+			}
+		else
+		{
+			sprite_index=jump_sprite
+			image_index=2
+		}
+		}
+    else
+        state_type = "stand";
+    timer = 0;
+    time = -1;
+}

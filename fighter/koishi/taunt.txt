@@ -1,0 +1,76 @@
+if ( state_type = "stand" || state_type = "crouch" || state_type = "run" )
+{
+  koishie = 0;
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "taunt";
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  timer_speed = 1;
+  if ( okuu ) { sprite_index = b_sprite; time = 121; }
+  else { sprite_index = land_sprite; time = 61; }
+}
+if ( timer < time )
+{
+  state_type = "attack";
+  if ( okuu )
+  {
+    switch ( timer )
+    {
+      case 2: sound_play ( taunt_special_voice );
+      case 4: image_index = 1; break;
+      case 8: case 16: case 24: case 32: case 40: case 48: case 56: case 64: case 72: case 80: case 88: case 96: case 104: case 112: image_index = 2; break;
+      case 12: case 20: case 28: case 36: case 44: case 52: case 60: case 68: case 76: case 84: case 92: case 100: case 108: image_index = 3; break;
+      case 116: image_index = 4; break;
+    }
+  }
+  else
+  {
+    switch ( timer )
+    {
+      case 3: sound_play ( choose ( attack_voice4 , taunt_voice ) ); break;
+      case 6: case 25: case 45: sprite_index = taunt_sprite; image_index = 0; sound_play ( grapple_sound1 ); break;
+      case 9: case 29: case 49: image_index = 1; break;
+      case 13: case 33: case 53: image_index = 2; break;
+      case 17: case 37: case 57: image_index = 3; break;
+      case 21: case 41: sprite_index = land_sprite; image_index = 0; break;
+    }
+    if ( timer = 45 && koishie < 10 )
+      koishie += 1;
+    if ( timer = time - 1 && taunt )
+    {
+      timer -= 20;
+      if ( time = 261 && koishie = 10 )
+        koishie = 11;
+    }
+    if ( timer = time - 1 && koishie = 9 && !taunt )
+    {
+      koishie = 10;
+      timer = 200;
+      time = 261;
+    }
+    if ( timer = 200 || timer = 260 )
+    {
+      sound_play ( explode_small );
+      effect_create_above ( ef_smoke , x , y - 15 * size , 1 * size , c_silver )
+    }
+    if ( timer = 200 )
+    {
+      sprite_index = koishie_sprite;
+      image_speed = 0.3;
+    }
+    if ( timer >= time - 20 && koishie = 11 && !taunt )
+    {
+      koishie = 0;
+      timer = time - 2;
+    }
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+}

@@ -1,0 +1,94 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+if smashori
+state_type = "air_attack";
+
+attack_type = "fthrow";
+image_speed = 0;
+sprite_index = ssmash_sprite;
+image_index=0.0;
+upbcanceltemp=0
+timer = 0;
+time = 26;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 30
+}
+if rivalsori
+{
+if timer < time 
+{
+	if ( timer >= 0 && timer <= 5 )
+	{
+	target.x = x -7 * size * (1-facing*2);
+	target.y = y;
+	}
+	if timer >=3 && timer<6
+	{
+		image_index=1
+		target.x = x -12 * size * (1-facing*2);
+	}
+
+		if ( timer >= 6 && timer < 9 )
+		{
+		image_index=2
+		target.x = x - 13 *(1-facing*2) * size;
+		}
+		if timer>=9 && timer <12
+		{
+		image_index=5
+		target.x = x +20 *(1-facing*2) * size;
+		}
+		if ( timer = 12 )
+		{
+		image_speed=0.33
+		target.x = x + 26-facing*52 * size;
+		create_throw_box(10,14+facing*152,3.2 , 3.8 , 10 , 7 , -1 , obj_spark_effect , 1.18 , 0.67 , 24.80 , 10.40 ,self.id,1)
+		sound_play(swingsnd3);
+		}
+}
+    if timer = 23
+        image_speed = 0
+}
+
+if smashori
+{
+	image_xscale=(-xsize*(1-facing*2))*size
+	sprite_index = bair_spirit_smash_sprite;
+	time =50
+	switch(timer)
+	{
+		case 2: image_index=1;break;
+		case 4: image_index=2;break;
+		case 6: image_index=3;break;
+		case 11: image_index=4;break;
+		case 16: image_index=5;break;
+		case 27: image_index=6;break;//HITBOX
+		case 32: image_index=7;break;
+		case 36: image_index=8;break;
+		case 40: image_index=9;break;
+		case 43: image_index=10;break;
+	}
+	if timer<27
+		vspeed=-0.5*size
+	if timer<20
+		hspeed=-0.8*(1-facing*2)*size
+	if timer>19
+		hspeed*=0.65
+	if timer=22
+		{sound_play(nair_abyss_sound)}
+	if timer =27
+		{
+			vspeed=-1*size
+			create_throw_box(14 , 21+138*facing , 5.8 , 7 , 20 , 10 , kick3 , obj_spark_hit2, 1.57 , 1.10 , 47.20 , 20 , self.id , 5)
+		}
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

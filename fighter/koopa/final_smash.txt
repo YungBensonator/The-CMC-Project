@@ -1,0 +1,152 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  sound_play ( final_smash_voice );
+  hspeed = 0;
+  vspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = fs_start_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 62;
+  timer_speed = 1;
+  intangible = 1;
+  final_smashes += 1;
+  speed = 0
+  smash_power = 0;
+  air_move = 0;
+  fs_sticky = y;
+  fs_object = noone;
+  fs_alpha = 0;
+  fs_throw = 0;
+  temp_no_hurtbox = 1;
+  }
+
+gravity_lock = 1;
+
+if ( timer < 30 )
+  {
+  fs_alpha = min ( 1 , fs_alpha + 0.05 );
+  image_index = floor ( timer / 3 );
+  if ( image_index > 3 ) image_index = 3;
+  y = fs_sticky + lengthdir_y ( 64 , timer * 5 );
+  if ( instance_exists ( fs_object ) ) with ( fs_object ) instance_destroy();
+  fs_object = instance_create ( x + lengthdir_x ( 96 , 90 + timer * 6 ) * ( 1 - facing * 2 ) ,
+  fs_sticky - 120 + lengthdir_y ( 136 , 90 + timer * 6 ) , obj_spark );
+  fs_object . sprite_index = fs_clowncar_sprite;
+  fs_object . image_blend = global.def_tint;
+  fs_object . number = number;
+  fs_object . use_palette = number;
+  fs_object . image_index = timer;
+  fs_object . image_speed = 0;
+  fs_object . image_alpha = fs_alpha;
+  fs_object . image_xscale = size * ( 1 - facing * 2 );
+  fs_object . image_yscale = size;
+  fs_object . depth = depth + 1;
+  exit;
+  }
+if ( timer == 30 )
+  {
+  y+=22
+  fs_alpha = 600;
+  attacking = 0;
+  special = 0;
+  }
+if ( timer >= 30 && timer < 60 )
+  {
+  fs_alpha -= 1;
+  if ( ai )
+    {
+      instance_deactivate_object ( self.id );
+      target = instance_nearest ( x , y , player );
+      instance_activate_object ( self.id );
+      attacking = 1; special = 1;
+      moveright = 0; moveleft = 0; moveup = 0; movedown = 0;
+      if ( x < target.x ) moveright = 1;
+      if ( x > target.x ) moveleft = 1;
+      if ( y < target.y + 48 ) movedown = 1;
+      if ( y > target.y + 48 ) moveup = 1;
+    }
+  if ( fs_throw <= 0 )
+    sprite_index = fs_idle_sprite;
+  if ( fs_throw != 0 )
+    {
+    fs_throw += 1;
+    if ( fs_throw > 0 )
+      {
+	sprite_index = fs_throw_sprite;
+	image_index = floor ( fs_throw * 0.25 );
+      }
+      else
+      {
+	sprite_index = fs_idle_sprite;
+      }
+    }
+  image_speed = 0.5;
+  if movedown = 1 && vspeed < 4
+      vspeed+=0.315
+  if moveup = 1 && vspeed > -4
+      vspeed-=0.315
+  if moveright = 1 && hspeed < 4
+      hspeed+=0.315
+  if moveleft = 1 && hspeed > -4
+      hspeed-=0.315
+  if hspeed > 0 facing = 0
+  else if hspeed < 0 facing = 1
+  if speed > 0.5 speed -= 0.015
+  if attack_success = 1 && random(30)>24 && distance_to_object(target) > 29
+      attack_success=0
+  if attack_success=0 && speed >= 0.8 {
+      attacks-=1
+      if instance_exists(hitbox)
+      with hitbox instance_destroy()
+      create_hitbox(6+(air>0)*3,35+facing*110,7.5+(air>0)*0.65,3.5,-1,2+(air>0)*2,kick3,obj_spark_hit2,1.5,1.5,0,20,self.id,3,6);
+  }
+  if ( fs_throw >= 45 )
+    fs_throw = 0;
+  if ( ( attacking || special ) && fs_throw <= 0 )
+    {
+      sound_play ( itemthrow );
+      create_projectile ( 6, 80 + facing * 20, 7.2, 6.9, -1, 8, explodehit3, obj_spark_fire1, 1, 1, 10, 40, self.id, 120, fs_bomb_script)
+      proj . sprite_index = fs_bomb_sprite;
+      proj . image_xscale = size * ( 1 - facing * 2 );
+      proj . image_yscale = size;
+      proj . hspeed = 3-facing*6 + (hspeed/2);
+      proj . vspeed = -7 + (vspeed/2);
+      proj . keepmain = keepmain;
+      fs_throw = 1;
+    }
+  timer = 32;
+  if ( fs_alpha <= 0 ) timer = 61;
+  }
+
+if ( timer >= time - 1 )
+  {
+    if ( instance_exists ( fs_object ) ) with ( fs_object ) instance_destroy();
+    create_projectile ( 1 , 65 + facing*50 , 4 , 4 , 1 , 1 , punch2 , obj_spark_hit2 , 0 , 0 , 18 , -14 , self.id , 120 , dhd_duckaway );
+    proj . sprite_index = fs_clowncar_sprite;
+    proj . visible = 1;
+    proj . image_blend = global.def_tint;
+    proj . use_palette = number;
+    proj . image_xscale = size * ( 1 - facing * 2 );
+    proj . image_yscale = size;
+    proj . hit = 2;
+    proj . hspeed = 2 * ( 1 - facing * 2 );
+    proj . vspeed = -4;
+    sprite_index = jump_sprite;
+    y-=22
+    hspeed = 0;
+    vspeed -= mid_jump_speed * size * 0.9;
+    smash_power = 0;
+    with ( hitbox ) instance_destroy();
+    attack_type = "none";
+    intangible = 0;
+    if ( air > 0 )
+      state_type = "jump"; 
+    else
+      state_type = "stand";
+    timer = 0;
+    time = -1;
+  }

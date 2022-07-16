@@ -1,0 +1,78 @@
+if state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "jab";
+        image_speed = 0;
+        image_index = 0;
+        sprite_index = jab_sprite;
+        image_index=0;
+        timer = 0;
+        time = 22;
+        timer_speed=1;
+}
+state_type = "attack";
+
+switch ( timer )
+  {
+  case 3: image_xscale *= 1.05; image_yscale *= 0.95; image_index = 1; break;
+  case 4: image_xscale *= 1.10; image_yscale *= 0.90; break
+  case 5: image_xscale *= 1.12; image_yscale *= 0.88; break
+  case 6: image_xscale *= 1.05; image_yscale *= 0.95; image_index = 2; break;
+  case 9: image_index = 3; break;
+  case 15: image_index = 4; break;
+  case 53: image_index = 5; break;
+  case 56: image_index = 6; image_xscale *= 1.06; image_yscale *= 1.06; break;
+  case 59: image_index = 7; image_xscale /= 1.06; image_yscale /= 1.06; break;
+  case 68: image_index = 4; break;
+  case 81: image_index = 8; break;
+  case 84: image_index = 9; image_xscale *= 1.06; image_yscale *= 1.06; break;
+  case 87: image_index = 10; image_xscale /= 1.06; image_yscale /= 1.06; break;
+  case 99: image_index = 4; break;
+  }
+
+if timer = 3 {
+    hspeed = 1-facing*2;
+    sound_play(attacksnd1);
+    create_hitbox(2,20+facing*140,2.75,0,3,2,punch1,obj_spark_hit1,0.8,0.6,19,10,self.id,4,1);  
+    hitbox.di = 0.4
+    hitbox.hit_stun = 1
+}
+if timer = 15
+    image_speed = 0
+if (timer = 10 || timer = 60) && ai = 1 && random(10)>1.4
+    attacking = 1
+if timer >= 9 && timer <= 19 && attacking = 1 {
+    time = 76
+    timer = 52
+    sprite_index = jab_sprite;
+}
+if timer = 56  {
+    hspeed = 1-facing*2;
+    sound_play(attacksnd1);
+    create_hitbox(3,20+facing*140,2.45,0,3,2,punch1,obj_spark_hit1,0.8,0.6,18,10,self.id,4,1);
+    hitbox.di = 0.25
+    hitbox.hit_stun = 2
+}
+if timer = 68
+    image_speed = 0
+if timer >= 61 && timer < 70 && attacking = 1 {
+    time = 105
+    timer = 80
+    sprite_index = jab_sprite;
+}
+if timer = 84 {
+    hspeed = 1-facing*2;
+    attacking = 0
+    sound_play(attacksnd2);
+    create_hitbox(4,20+facing*140,4.3,1.6,7,5,punch2,obj_spark_hit2,0.9,0.7,16,10,self.id,4,1);
+}
+if image_index >= image_number - image_speed
+    image_speed = 0
+if timer = 96
+    interrupt = 1  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

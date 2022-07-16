@@ -1,0 +1,81 @@
+necochaos = 1
+no_hurtbox = 1;
+
+if(air = 0){recovervsp = -6;}
+
+if ( air == 0 ) cantsideb = 0;
+
+if downtimerr >0
+downtimerr -=1
+if downforwardtimerr>0
+downforwardtimerr -=1
+
+if ancientbeam >0
+ancientbeam -=1
+
+if downbacktimerr>0
+downbacktimerr -=1
+
+if phonecall >0
+phonecall -=1
+
+if air = 0 and facing = 0{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveright and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveright and !movedown and ancientbeam = 0
+ancientbeam = 15
+
+if downtimerr>0 and movedown and moveleft and downbacktimerr = 0{
+downbacktimerr = 15
+facing = 0}
+
+
+if downbacktimerr > 0 and moveleft and !movedown and phonecall = 0{
+phonecall = 15
+facing = 0}
+
+}
+
+if air = 0 and facing = 1{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveleft and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveleft and !movedown and ancientbeam = 0
+ancientbeam = 15
+
+
+if downtimerr>0 and movedown and moveright and downbacktimerr = 0{
+downbacktimerr = 15
+facing = 1}
+
+
+
+if downbacktimerr > 0 and moveright and !movedown and phonecall = 0{
+phonecall = 15
+facing = 1}
+
+}
+
+
+if ( attack_type = "edge_climb" )
+{
+customedgeclimb = 1;
+image_speed = 0;
+switch ( timer )
+  {
+  case 0: sprite_index = edge_sprite; break;
+  case 15: sprite_index=jump_sprite; shakex=-8*size*(1-facing*2); shakey=15*size; image_index=8;  break;
+  case 18: shakey=12*size;  break;
+  case 21: shakex=-6*size*(1-facing*2); shakey=8*size;  break;
+  case 24: shakex=-4*size*(1-facing*2); shakey=4*size;  break;
+  case 27: shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  case 30: sprite_index=land_sprite; image_index=0; shakex=0*size*(1-facing*2); shakey=0*size;  break;
+  }
+}

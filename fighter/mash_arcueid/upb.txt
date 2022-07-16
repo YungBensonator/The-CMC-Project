@@ -1,0 +1,259 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump"{
+    timer = 0;
+	state_type = "air_attack"
+    attack_type = "upb"
+    image_speed = 0;
+	
+	if air = 0
+	{
+    sprite_index = upb_sprite;
+	}
+	
+	if air > 0
+	{
+	sprite_index = upb_air_sprite;
+	}
+	
+    image_index=0;
+    time = 42;
+    timer_speed=1;
+	air_move = 0;
+    if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
+     facing = 0
+    if (moveleft = 1 && !ai) || (ai && x > nearest_edge.x) 
+     facing = 1
+}
+
+if timer < time {
+	state_type = "air_attack"
+
+if timer < 8
+{
+vspeed = 0;
+hspeed = 0;
+gravity_lock = 1;
+}
+	
+	if sprite_index = upb_sprite
+	{
+    switch ( timer )
+      {
+	case 1: image_index = 1; break;
+	case 2: image_index = 2; break;
+	case 3: image_index = 3; break;
+	case 4: image_index = 4; break;
+	case 6: image_index = 5; break;
+	case 8: image_index = 6; break;
+	case 11: image_index = 7; break;
+	case 14: image_index = 8; break;
+	case 17: image_index = 9; break;
+	case 19: image_index = 10; break;
+	case 21: image_index = 11; break;
+	case 23: image_index = 12; break;
+	case 25: image_index = 13; break;
+	case 27: image_index = 14; break;
+	case 29: image_index = 15; break;
+	case 31: image_index = 16; break;
+	case 33: image_index = 17; break;
+	case 35: image_index = 18; break;
+	case 37: image_index = 19; break;
+	case 39: image_index = 20; break;
+      }
+	}
+
+    if sprite_index = upb_air_sprite
+	{
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 5: image_index = 3; break;
+	case 6: image_index = 4; break;
+	case 8: image_index = 5; break;
+	case 11: image_index = 6; break;
+	case 14: image_index = 7; break;
+	case 17: image_index = 8; break;
+	case 19: image_index = 9; break;
+	case 21: image_index = 10; break;
+	case 23: image_index = 11; break;
+	case 25: image_index = 12; break;
+	case 27: image_index = 13; break;
+	case 29: image_index = 14; break;
+	case 31: image_index = 15; break;
+	case 33: image_index = 16; break;
+	case 35: image_index = 17; break;
+	case 37: image_index = 18; break;
+      }
+	}
+
+if timer = 6
+{
+sound_play(jump_sound);
+}
+
+if timer = 8
+{
+sound_play(upb_sound); 
+vspeed = -7 * size;
+hspeed = 3 * (1-facing*2) * size;
+sound_play(upb_voice); 
+}
+	
+	if timer >= 8
+		{
+		force_edge_grab = 1
+		}
+
+if timer = 8
+{
+    upbfx = create_blur(x,y,self.id);
+    upbfx.sprite_index = upb_fx;
+    upbfx.image_index = 0;
+    upbfx.image_speed = 0;
+	upbfx.snap = self.id;
+    upbfx.image_xscale = 0.4 * (1-facing*2) * size;
+    upbfx.image_yscale = 0.4 * size;
+    upbfx.x = x + place_x(93);
+	upbfx.y = y + place_y(8);
+    upbfx.depth = depth - 1;
+}
+
+switch ( timer )
+      {
+	case 09: upbfx.image_index = 1; break;
+	case 10: upbfx.image_index = 2; break;
+	case 11: upbfx.image_index = 3; break;
+	case 12: upbfx.image_index = 4; break;
+	case 13: upbfx.image_index = 5; break;
+	case 14: upbfx.image_index = 6; break;
+	case 15: upbfx.image_index = 7; break;
+	case 16: upbfx.image_index = 8; break;
+	case 17: upbfx.image_index = 9; break;
+	case 18: upbfx.image_index = 10; break;
+	case 19: upbfx.image_index = 11; break;
+	case 20: upbfx.image_index = 12; break;
+	case 21: upbfx.image_index = 13; break;
+	case 22: upbfx.image_index = 14; break;
+	}
+
+if timer = 23
+{
+with (upbfx) {instance_destroy();}
+}  
+	  
+if timer = 4 or timer = 6
+{
+    create_hitbox ( 4 , angle_correct(65) , 4.8 , 0 , 25 , 3 , arcueid_hit2 , obj_spark_hit3 , 0.79 , 0.96 , 8 , 13.60 , self.id , 2 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+    hitbox.weight_kb = 1;
+	hitbox.sdi = 0;
+	hitbox.di = 0;
+}	
+
+if timer = 11
+{
+    create_hitbox ( 4 , angle_correct(65) , 4.8 , 0 , 25 , 3 , arcueid_slash , obj_spark_slash2 , 1.70 , 1.3 , 16.40 , 19.60 , self.id , 3 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 69.60;
+    hitbox.weight_kb = 1;
+	hitbox.sdi = 0;
+	hitbox.di = 0;
+}	
+	
+if timer = 14	
+{
+    create_hitbox ( 4 , angle_correct(65) , 5.2 , 6.8 , 35 , 5 , arcueid_slash , obj_spark_slash3 , 1.70 , 1.3 , 16.40 , 19.60 , self.id , 3 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 69.60;
+}
+	
+
+
+if timer >= 23 and timer <= 31 and special
+{
+timer = 100;
+time = 131;
+sprite_index = upb_sprite2;
+image_index = 0;
+vspeed *= 0.5;
+hspeed *= 0.45;
+}	
+	
+if timer >= 100
+{
+gravity = 0;
+gravity_lock = 1;
+}	
+
+switch ( timer )
+      {
+	case 102: image_index = 1; break;
+	case 110: image_index = 2; sound_play(b_sound); break;
+	case 111: image_index = 3; break;
+	case 112: image_index = 4; break;
+	case 113: image_index = 5; break;
+	case 120: image_index = 6; break;
+	case 122: image_index = 7; break;
+	case 124: image_index = 8; break;
+	case 128: image_index = 9; break;
+	}
+
+if timer = 110
+{
+    upbfx2 = create_blur(x,y,self.id);
+    upbfx2.sprite_index = upb_fx2;
+    upbfx2.image_index = 0;
+    upbfx2.image_speed = 0;
+	upbfx2.snap = self.id;
+    upbfx2.image_xscale = 0.4 * (1-facing*2) * size;
+    upbfx2.image_yscale = 0.4 * size;
+    upbfx2.x = x + place_x(109);
+	upbfx2.y = y + place_y(36);
+    upbfx2.depth = depth + 0.1;
+	
+
+	if (random(2) > 1)
+	{
+	sound_play(choose(attack_voice6,attack_voice7,attack_voice8));
+	}
+}
+
+switch ( timer )
+      {
+	case 111: upbfx2.image_index = 1; break;
+	case 112: upbfx2.image_index = 2; break;
+	case 113: upbfx2.image_index = 3; break;
+	case 114: upbfx2.image_index = 4; break;
+	case 115: upbfx2.image_index = 5; break;
+	case 116: upbfx2.image_index = 6; break;
+	case 117: upbfx2.image_index = 7; break;
+	case 118: upbfx2.image_index = 8; break;
+	case 119: upbfx2.image_index = 9; break;
+	case 120: upbfx2.image_index = 10; break;
+	case 121: upbfx2.image_index = 11; break;
+	case 122: upbfx2.image_index = 12; break;
+	case 123: upbfx2.image_index = 13; break;
+	case 124: upbfx2.image_index = 14; break;
+	}
+
+if timer = 125
+{
+with (upbfx2) {instance_destroy();}
+}  
+
+if timer = 112
+{
+    create_hitbox ( 6 , angle_correct(25) , 5.7 , 6.4 , 18 , 8 , arcueid_slash , obj_spark_slash3 , 2.13 , 1.07 , 8.80 , 22.80 , self.id , 4 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}
+	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0
+        state_type = "fall";
+        else
+        state_type = "stand";
+        timer = 0;
+        time =-1;
+    }

@@ -1,0 +1,83 @@
+if ( time = -1 )
+{
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dthrow";
+  sprite_index = dthrow_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 35;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 40
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 1: image_index = 1; break;
+    case 2: image_index = 2; break;
+    case 3: image_index = 3; break;
+    case 5: image_index = 4; break;
+    case 7: image_index = 5; break;
+    case 9: image_index = 6; break;
+    case 11: image_index = 7; break;
+    case 13: image_index = 8; break;
+    case 15: image_index = 9; break;
+    case 17: image_index = 10; break;
+    case 19: image_index = 11; break;
+    case 21: image_index = 12; break;
+    case 24: image_index = 13; break;
+    case 27: image_index = 14; break;
+    case 29: image_index = 15; break;
+    case 31: image_index = 16; break;
+    case 33: image_index = 17; break;
+  }
+  state_type = "attack";
+  if ( timer >= 2 && timer < 4 )
+  {
+    target.x = x + 11 * ( 1 - facing * 2 ) * size;
+    target.y = y - 4 * size;
+  }
+  if ( timer >= 4 && timer < 6 )
+  {
+    target.x = x + 12 * ( 1 - facing * 2 ) * size;
+    target.y = y - 3 * size;
+  }
+  if ( timer >= 6 && timer < 17 )
+  {
+    target.x = x + 13 * ( 1 - facing * 2 ) * size;
+    target.y = y - 2 * size;
+  }
+  if ( timer = 1 )
+  {
+    whirl = gfx_ef_whirl ( place_x ( 18 ) + x , y + place_y ( 66 ) , 0.55 * size , 0.9 * size );
+    whirl.image_angle = angle_correct ( 270 - 180 * ( facing ) );
+  }
+  if ( ( timer >= 1 && timer < 13 ) && timer mod 4 == 0 )
+     sound_play ( swing_sound1 );
+  if ( timer = 15 )
+    sound_play ( swing_sound2 );
+  if ( timer = 16 )
+  {
+    sound_play ( boing_sound );
+    instance_create ( place_x ( 145 ) + x , y , obj_down_impact );
+  }
+  if ( timer = 17 )
+  {
+    if ( random ( 4 ) < 1 )
+      play_attack_voice();
+    create_throw_box ( 5 , angle_correct ( 20 ) , 6.4 , 1.5 , 1 , 1 , koishihit2 , obj_spark_hit2 , 1 , 0.75 , 18 , 9 , self.id , 3 );
+    hitbox.hit_stun = 9;
+    hitbox.di = 1.2;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  runtimer = 0;
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+}

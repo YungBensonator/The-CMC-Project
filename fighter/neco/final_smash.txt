@@ -1,0 +1,80 @@
+if state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "shielding" {
+        hspeed = 0;
+        size = csize
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0.25;
+        sprite_index = final_smash_sprite;
+        image_index=0;
+        timer = 1;
+        time = 120;
+        timer_speed=1;
+        intangible = 1;
+        final_smashes+=1
+        sound_play(final_smash_sound1)
+        smash_power = 0
+        air_move=0
+}
+speed=0
+gravity_lock = 1;
+if timer < time {
+    
+	//create_projectile(15,45+facing*90,5,3,15,5,explodehit3,obj_spark_fire1,xsize,ysize,60,12,self.id,200,char_custom1);
+	
+	if timer = 2{
+	sparkwell = instance_create(x,y,obj_spark);
+	sparkwell.sprite_index = final_smash_well_sprite;
+	sparkwell.image_xscale = image_xscale;
+	sparkwell.image_yscale = image_yscale;
+	sparkwell.image_speed = 0;
+	sparkwell.depth = depth + 1;
+	sparkwell.snap = self.id;
+	
+	
+	/*
+	wellSprite = instance_create(x, y, obj_custom_gfx)
+	wellSprite.sprite_index = final_smash_well_sprite
+	wellSprite.image_speed = 0
+	wellSprite.depth = depth+1
+	*/
+	}
+	if timer = 119{
+	if instance_exists(sparkwell)
+	with (sparkwell) instance_destroy();
+	}
+	
+    if timer = 10 || timer = 20  || timer = 30 || timer = 40 || timer = 50 || timer = 60 || timer = 70 || timer = 80 || timer = 90 || timer = 100 || timer = 110 {
+	
+	if timer = 10 || timer = 30 || timer = 50 || timer = 70 ||  timer = 90 ||  timer = 110{
+	projdir = 0
+	clones = create_projectile(25,45+facing*90,3,10,25,9,explodehit3,obj_spark_fire1,xsize,ysize,0,0,self.id,200,char_custom1);
+	} else {
+	projdir = 1
+	clones = create_projectile(25,(45+facing*90) *(-1),3,10,25,9,explodehit3,obj_spark_fire1,xsize,ysize,0,0,self.id,200,char_custom1);
+	}
+        clones.hit_stun = 5
+        clones.sprite_index = FS_bot_eject_sprite
+	//clones.number = number;
+	clones.use_palette = number;
+        clones.image_index = 0
+        clones.image_speed = 0.05
+        clones.hp = 60
+        clones.stunned = 0
+        clones.proj = noone
+        clones.target = noone
+        clones.hit = 5
+        clones.priority = 5;
+	}
+	
+    }
+if timer >= 120 && state_type != "flinch" && state_type != "air_flinch" {
+    smash_power = 0
+    attack_type = "none";
+    intangible = 0;
+    if air > 0
+    state_type = "jump";
+    else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

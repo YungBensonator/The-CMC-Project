@@ -1,0 +1,312 @@
+if air = 0 and ancientbeam>0{
+ancientbeam = 15
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = entry_sprite
+        image_index=7
+        timer = 0
+        time = 70
+		hspeed = 0
+		special = 1
+}
+
+if ( timer < time )
+    {
+	
+	vspeed *= 0.1
+	
+    switch ( timer )
+    {
+	case 5: image_index = 8; break;
+	case 10: image_index = 9; break;
+	
+	case 55: image_index = 8; break;
+	case 60: image_index = 7; break;
+    }
+	
+	if timer = 1
+	     sound_play(beam_voice);
+		 
+	if timer = 10 or timer = 15 or timer = 20 or timer = 25 or timer = 30{
+	if timer = 10
+	sumframes = 0
+	if timer !=30
+	create_hitbox(1,18+facing*144,4,1,8,0,punch1,obj_spark_slash2,0,0,0,0,self.id,5,5);
+	else 
+	create_hitbox(3,18+facing*144,5,5,8,0,punch1,obj_spark_slash2,0,0,0,0,self.id,20,5);
+	hitbox.sprite_index = beam_sprite
+	hitbox.visible = 1
+	hitbox.image_speed = 0 //0.35
+	hitbox.image_xscale = (0.7-facing*1.4)*size
+	hitbox.image_yscale = 0.7*size
+	hitbox.image_alpha = 0.7
+	hitbox.image_index = sumframes
+	hitbox.hit_stun = 30;
+	hitbox.di = 0.01
+	
+	}
+	
+	if timer >= 12 and instance_exists(hitbox){
+	sumframes += 0.375
+	hitbox.image_index = sumframes
+	if hitbox.image_index > 15
+	with (hitbox){instance_destroy()}
+	
+	}
+	
+	
+	
+  
+  }
+
+}else if air = 0 and necochaos != 1 and phonecall>0{
+phonecall = 15
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = phone_sprite
+        image_index=0
+        timer = 0
+        time = 60
+		hspeed = 0
+		special = 1
+		if facing = 0
+		facing = 1
+		else
+		facing = 0
+		nousepalette = 0
+}
+
+if ( timer < time )
+    {
+	
+	vspeed *= 0.1
+	
+    switch ( timer )
+    {
+	case 5: image_index = 1; break;
+	case 10: image_index = 0; break;
+	case 15: image_index = 1; break;
+	case 20: image_index = 2; break;
+	case 25: image_index = 3; break;
+	case 30: image_index = 2; break;
+	case 35: image_index = 3; break;
+	case 40: image_index = 2; break;
+	case 45: image_index = 3; break;
+	case 50: image_index = 2; break;
+	case 55: image_index = 3; break;
+    }
+	
+	if timer = 20
+	     sound_play(phone_voice);
+		 
+	if timer = 50{
+	tempneco = ceil(random(100))
+	
+	if tempneco > 25{
+	
+	    ice_clone = create_projectile(0,368,0,0,0,0,0,0,0,0,50,0,self.id,300,char_custom5);
+		ice_clone.sprite_index = choose(final_smash_sprite,dance1_sprite,dance2_sprite, kirby_neco_sprite)
+		
+	    if tempneco < 1{
+		ice_clone.sprite_index = kirby_neco_sprite
+		nousepalette = 1}
+		if ice_clone.sprite_index = kirby_neco_sprite
+		nousepalette = 1
+		
+		
+		ice_clone.image_speed = 0.15
+		ice_clone.image_index = 0
+		ice_clone.image_xscale = image_xscale;
+		ice_clone.image_yscale = image_yscale;
+		ice_clone.image_alpha = 0
+		ice_clone.hit = 2
+		ice_clone.clonetype = "dancing"
+		ice_clone.hp = 15+ceil(random(10))
+		ice_clone.state = "stand"
+		//ice_clone.image_blend = c_blue
+		ice_clone.alarm[0] = 99999;
+		if nousepalette != 1
+		ice_clone.use_palette = number;
+		ice_clone.depth = depth + 1
+		ice_clone.basesprite = ice_clone.sprite_index
+		}
+	else {
+	
+	    hime_clone = create_projectile(0,368,0,0,0,0,0,0,0,0,-100,50,self.id,300,char_custom5);
+		hime_clone.sprite_index = hime_sprite;
+		hime_clone.image_speed = 0
+		hime_clone.image_index = 0
+		hime_clone.image_xscale = image_xscale;
+		hime_clone.image_yscale = image_yscale;
+		hime_clone.image_alpha = 0
+		hime_clone.hit = 2
+		hime_clone.clonetype = "hime"
+		hime_clone.hp = 15
+		hime_clone.state = "float"
+		//ice_clone.image_blend = c_blue
+		hime_clone.alarm[0] = 99999;
+		//hime_clone.use_palette = number;
+		hime_clone.depth = depth - 1
+		hime_clone.facing = facing
+		hime_clone.target = -1
+		
+	
+	}
+	
+	}
+
+  
+  }
+
+}
+else if necochaos != 1{
+
+if state_type = "jump" || state_type = "run" || state_type = "stand" || state_type = "crouch" {
+	
+		if(air = 0){hspeed *= 0.1}
+	
+        if air > 0 vspeed -= 0.1;
+        temp = air > 0
+        state_type = "attack";
+        attack_type = "b";
+        image_speed = 0.3;
+        sprite_index =b_sprite;
+        image_index=0;
+        timer = 0;
+        time = 50;
+        timer_speed=1;
+        special = 0;
+		
+        if temp = 1 {
+            time = 50
+            image_speed = 0.3
+            state_type = "air_attack";
+        }
+		
+}
+            if timer = 1
+                sound_play(b_voice);
+            if timer = 10 || timer = 14  || timer = 18 || timer = 22 || timer = 26 || timer = 30 || timer = 32{
+                sound_play(attack_sound1);
+                create_hitbox(1.25,33+facing*114,2,0,4,2,sf_punch2,obj_spark_hit3,0.5,0.6,15,20,self.id,3,2);
+                hitbox.di = 0.7
+                create_hitbox2(1.25,40+facing*100,2,0,4,1,sf_punch2,obj_spark_hit3,0.8,0.8,24,23,self.id,3,2);
+                hitbox2.di = 0.75
+				if air = 0{
+                duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+                duster.facing = facing; }          
+            }
+            if (special = 1 || ai && random(10)>6.5) && (timer >= 21 && timer <= 31) 
+			{
+                special = 0;
+                timer = 9
+                image_index = 2.7
+            }
+           
+    if air = 0 && temp > 0 {
+        state_type="land";
+        attack_type="none";
+        time=4;
+        sprite_index = land_sprite;
+        timer=0;
+        duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+        duster.facing = facing; 
+        duster = instance_create(x+12*size*(1-facing*2),y,obj_dust_effect);
+        duster.facing = 1-facing;  
+    }
+	
+	
+}
+else if necochaos = 1{
+
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        state_type = "air_attack"
+        attack_type = "b"
+        image_speed = 0
+        sprite_index = b_sprite
+        image_index=0
+        timer = 0
+        time = 92
+		hspeed = 0
+		special = 1
+}
+
+if ( timer < time )
+    {
+	hspeed = 0
+	vspeed *= 0.1
+	
+    switch ( timer )
+    {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	
+	
+	case 72: image_index = 4; break;
+	case 76: image_index = 5; break;
+	case 80: image_index = 6; break;
+	case 84: image_index = 7; break;
+	case 88: image_index = 8; break;
+    }
+	
+	if timer = 1
+	     sound_play(b_voice);
+		 
+    if timer = 12
+        instance_create(x+16-facing*32,y-24,obj_spark_effect2)
+	if timer = 25
+		instance_create(x+12-facing*24,y-24,obj_spark_effect2)
+	if timer = 38
+        instance_create(x+16-facing*32,y-24,obj_spark_effect2)
+	if timer = 51
+		instance_create(x+12-facing*24,y-24,obj_spark_effect2)
+	if timer = 64
+        instance_create(x+16-facing*32,y-24,obj_spark_effect2)
+		 
+	if timer = 72{
+	create_hitbox(17,18+facing*144,5,4,-1,30,punch4,obj_spark_slash2,0.7,1,25,22,self.id,12,4);
+	hitbox.hit_stun = 60;
+	hitbox.di = 0.01
+	
+	effectjab = create_blur(x,y,self.id);
+	effectjab.sprite_index = paw_sprite_CHAOS;
+	effectjab.x = hitbox.x;
+    effectjab.y = hitbox.y;
+    effectjab.image_speed = 0;
+	effectjab.image_alpha = 0.7;
+    effectjab.image_xscale = 0.3*1.2*(1-facing*2) * size;
+    effectjab.image_yscale = 0.3*1.2* size;
+    effectjab.depth = depth - 0.1;
+	
+	}
+	
+	if timer = 52+12 and instance_exists(effectjab)
+	with (effectjab){instance_destroy()}
+	
+
+	
+	
+	
+  
+  }
+
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+	ancientbeam = 0
+	phonecall = 0
+}
+        

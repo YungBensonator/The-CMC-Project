@@ -1,0 +1,132 @@
+if ( state_type == "jump" )
+  {
+  vspeed -= 0.1;
+  state_type = "air_attack";
+  attack_type = "fair";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = fair_sprite;
+  timer = 0;
+  time = 58;
+  timer_speed = 1;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	//case 4: image_index = 0; break;
+	case 5: image_index = 0; break;
+	case 6: image_index = 1; break;
+	case 7: image_index = 2; break;
+	case 10: image_index = 3; break;
+  case 14: image_index = 4; break;
+	case 18: image_index = 5; break;
+	case 26: image_index = 6; break;
+      }
+
+
+// Animate VFX
+    switch (timer){
+      case 0: eff = create_sword_trail(self.id, 7, 30, sword_texture); break;
+	  //case 2: eff.index = 1; break;
+	  //case 5: eff.index = 2; break;
+	  case 6: eff.index = 2; eff.depth = 9999; break;
+	  case 7: eff.index = 3; break;
+	  case 14: eff.index = 4; eff.depth = -2; break;
+      case 18: eff.index = 5; break;
+	  case 19: eff.end_decay = 0.33; break;
+      case 20: eff.end_decay = 0.66; break;
+      case 21: eff.end_decay = 1; break;
+      case 22: eff.end_decay = 1.5; break;
+      case 23: eff.end_decay = 2; break;
+      case 24: eff.end_decay = 2.5; break;
+      case 25: eff.end_decay = 3; break;
+      case 26: eff.end_decay = 3.5; break;
+      case 28:
+        with (eff){
+          instance_destroy();
+        }
+        break;
+    }
+
+
+    if ( timer = 14 )
+      {
+	/*
+	faslash = instance_create(x,y-40,obj_spark);
+	faslash.sprite_index = slash_fx1;
+	faslash.image_speed = 0
+	faslash.image_xscale = 0.5 - facing*1;
+	faslash.image_yscale = 0.5;
+	faslash.x = x + 8 - facing*16;
+	faslash.y = y-40;
+	faslash.snap = self.id
+	*/
+	sound_play(choose(attack_voice2,attack_voice3,attack_voice7,attack_voice8,attack_voice10));
+	sound_play(attack_sound2);
+	create_hitbox(16,45+facing*90,5.5,7,25,8,cslash3,obj_spark_slash3,0.9,1.45,27,40,self.id,28,3);
+	hitbox.hit_stun = 12;
+      }
+    if timer = 15 || timer = 17 || timer = 19 || timer = 21 || timer = 23 {
+	faslash.image_speed = 1
+}
+    if timer = 16 || timer = 18 || timer = 20 || timer = 22{
+	faslash.image_speed = 0
+}
+    if timer = 16 {
+    hitbox.dir = 285
+   	hitbox.damage = 18		
+	hitbox.hit_stun = 8;
+	hitbox.bkb = 5.5;
+	hitbox.kbg = 1.5;
+	hitbox.sfx = cslash3;
+	hitbox.hitlag_frames = 10; 	
+	hitbox.hitbox_x = 36*(1-facing*2);
+	hitbox.hitbox_y = 30;
+	hitbox.image_xscale = 1.55;
+	hitbox.image_yscale = 0.9;
+	}
+    if timer = 18 {
+	hitbox.damage = 16		
+	hitbox.hit_stun = 12;
+	hitbox.bkb = 5.5;
+	hitbox.kbg = 7;
+	hitbox.sfx = cslash3;
+	hitbox.hitlag_frames = 8;
+	hitbox.dir = 45+facing*90 	
+	hitbox.hitbox_x = 36*(1-facing*2);
+	hitbox.hitbox_y = 15;
+	hitbox.image_xscale = 1.55;
+	hitbox.image_yscale = 0.7;
+	}	
+    if timer = 22 {
+	hitbox.damage = 14		
+	hitbox.hit_stun = 4;
+    hitbox.bkb = 2.5;	
+	hitbox.kbg = 5;
+	hitbox.sfx = cslash2;
+	hitbox.hitlag_frames = 9;
+	hitbox.dir = 45+facing*90 
+	}
+
+    if ( air = 0 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 16;
+	sprite_index = land_sprite;
+      }
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air > 0 )
+    state_type = "jump";
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,61 @@
+if timer = 0 {
+sprite_index = b_charged_sprite;
+image_speed = 0;
+image_index = 0;
+visible = 1;
+spark = instance_create(x+(5-facing*10), y-34,obj_spark)
+spark.sprite_index = entry_sword_sprite;
+spark.number = number;
+spark.use_palette = number;
+spark.image_speed = 0
+spark.image_angle = 180-facing*360;
+spark.depth = 8
+sound_play(sword_unsheath_sound);
+}
+if timer > 1 && timer < 40 {
+if timer <= 5
+spark.y -= 2
+if timer > 5 && timer <= 10
+spark.y -= 1.5
+if timer > 10 && timer <= 30
+spark.y -= 1
+if timer > 30 && timer <= 35
+spark.y -= 0.75
+if timer > 35
+spark.y -= 0.5
+spark.image_angle -= 15*(1-facing*2)
+}
+if timer > 40 && timer < 79 {
+if timer <= 45
+spark.y += 0.5
+if timer > 45 && timer <= 50
+spark.y += 0.75
+if timer > 50 && timer <= 70
+spark.y += 1
+if timer > 70 && timer <= 75
+spark.y += 1.5
+if timer > 75
+spark.y += 2
+spark.image_angle -= 15*(1-facing*2)
+}
+if timer = 75
+spark.depth = -8
+if timer = 78 {
+sound_play(sword_catch_sound);
+spark.image_index += 2 
+sprite_index = uthrow_sprite;
+image_speed = 0;
+image_index = 5;
+}
+if timer = 15
+sound_play(entry_voice)
+if ( timer >= 120 )
+  {
+  visible = 1;
+  state_type = "stand";
+  sprite_index = stand_sprite;
+  vspeed = 0;
+  timer = 0;
+  time = -1;
+  spark.image_index += 2;
+  }

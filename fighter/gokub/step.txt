@@ -1,0 +1,157 @@
+if (global.unlockingthezamzamman >=3) {
+zamasu_unlock=1;
+}
+
+if timer = 0{
+zamchecker=0;
+}
+
+if state_type != "air_attack" {
+	sound_stop(chargestart);
+    sound_stop(downbvoice);
+	sound_stop(chargeloop);
+}
+if ( attacking = 1 && special = 1 )
+{
+super = 1;
+}
+else
+{
+super = 0;
+}
+if roze = 0 {
+if ( state_type = "crouch" )
+{
+sprite_index = crouch_sprite;
+image_speed = 0;
+switch (timer) 
+{
+case 0: image_index = 1; break;
+case 4: image_index = 0; break;
+}
+}
+}
+if roze = 1 {
+if ( state_type = "crouch" )
+{
+sprite_index = crouch_spriteR;
+image_speed = 0;
+switch (timer) 
+{
+case 0: image_index = 0; break;
+case 4: image_index = 1; break;
+}
+}
+}
+if attack_type != "taunt" {
+	sound_stop(taunt_voice);
+}
+if air = 0 {
+	upbtemp = 0;
+}
+if sprite_index = stand_sprite && state_type = "stand"{
+	image_speed = 0.2
+}
+if rozetimer > 0 {
+	rozetimer -= 1;
+}
+if rozetimer > 0 {
+	roze = 1;
+}
+if rozetimer = 0 && roze = 1 && (state_type != "attack" and state_type != "air_attack"){
+	sound_play (powerdown_sound);
+    sound_play (powerdown_sound);
+    effect_create_above(ef_ring,x,y-16,0,c_red)
+	roze = 0
+	stand_sprite = stand_spriteD;
+	crouch_sprite = crouch_spriteD;
+	walk_sprite = walk_spriteD;
+	run_sprite = run_spriteD;
+	shield_sprite = shield_spriteD;
+	jump_sprite = jump_spriteD;
+	mid_jump_sprite = mid_jump_spriteD;
+	fall_sprite = fall_spriteD;
+	flinch_sprite = flinch_spriteD;
+	flinch1_sprite = flinch_spriteD;
+	flinch2_sprite = flinch2_spriteD;
+	flinch3_sprite = flinch3_spriteD;
+	tumble_sprite = tumble_spriteD;
+	down_sprite = down_spriteD;
+	air_dodge_sprite = air_dodge_spriteD;
+	edge_sprite = edge_spriteD;
+	roll_sprite = roll_spriteD;
+	spot_dodge_sprite= spot_dodge_spriteD;
+	land_sprite = land_spriteD;
+	ukemi_sprite = ukemi_spriteD;
+}
+//change sprites on form change end
+if !roze {
+// Base Form Mode Stats	
+weight = 0.30;	
+max_jumps = 3;
+run_start_speed = 3.5;
+run_accel = 0.15;
+run_speed = 4.5;
+dash_speed = 3.5;
+jump_speed = 7;
+mid_jump_speed = 6.9;
+short_hop_speed = 3;
+air_speed = 2.85;
+fall_speed = 4.1;
+fast_fall_multiplier = 1.5;
+air_accel = 0.25;
+}
+else
+{
+// Roze Form Stats	
+weight = 0.28;	
+max_jumps = 3;
+run_start_speed = 3.7;
+run_accel = 0.17;
+run_speed = 4.7;
+dash_speed = 3.7;
+jump_speed = 7;
+mid_jump_speed = 6.9;
+short_hop_speed = 3;
+air_speed = 2.95;
+fall_speed = 4.1;
+fast_fall_multiplier = 1.5;
+air_accel = 0.27;
+}
+
+/////////////////Meter Start/////////////////////////////////////
+if (!instance_exists(MeterHud)){ 
+    MeterHud = instance_create ( hud_x+40, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.image_xscale = 1;
+	MeterHud.image_yscale = 1;
+}
+if (!instance_exists(CardHud)){
+    CardHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    CardHud.step_script = hudThing_step_script;
+    CardHud.draw_script = hudThing_draw_script;
+    CardHud.owner = self.id;
+    CardHud.keepmain = self.keepmain;
+}
+MeterHud.sprite_index = meter_sprite;
+MeterHud.image_index = meter*58/62;
+MeterHud.image_speed = 0;
+MeterHud.hudalpha = obj_game_control.hud_cover[number-1];
+CardHud.sprite_index = card_meter_sprite;
+CardHud.image_index = card_meter;
+CardHud.image_speed = 0;
+CardHud.hudalpha = obj_game_control.hud_cover[number-1];
+
+if(meter < 0 ){ card_meter -= 1; meter = 59;}
+if(meter > 59 && card_meter != 7 ){meter = 0; card_meter += 1; }
+else if(meter > 59 && card_meter = 7 ){meter = 60;card_meter = 7; }
+if(card_meter > 7 ){card_meter = 7}
+if(card_meter < 0 ){card_meter = 0}
+
+if((hitbox.hit = 1 || hitbox2.hit = 1 || proj.hit = 1) && attack_type != "zair" ) {meter += 1.3 }///////how fast meter charges
+if((meter >= 60 && card_meter = 7 )) {meter += 1.1 }
+if (card_meter = 7) {meter = 0}
+/////////////////Meter Stop/////////////////////////////////////

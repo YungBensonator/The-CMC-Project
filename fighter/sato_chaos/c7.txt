@@ -1,0 +1,56 @@
+moving_object = 0;
+absorb = 0  // This attack may not be absorbed by PSI magnet
+absorb2 = 1
+if aired = 1{
+	on_floor = 0;
+	on_platform = 0;
+	
+	vspeed = 2
+	
+	if ( collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_floor , 1 , 1 ) )
+        on_floor = 1;
+    if ( vspeed >= 0 && collision_rectangle ( x - 2 , y - 2 , x + 2 , y + 1 , obj_platform , 1 , 1 ) )
+        on_platform = 1;
+
+
+    if ( on_floor || on_platform) and vspeed > 0{
+        sound_play(attacker.screw_bounce_sound)
+        sprite_index = attacker.stand_sprite
+		aired = 0
+		vspeed = 0
+		image_speed = 0.2
+    }
+}
+
+if sprite_index = attacker.entry_sprite{
+	image_speed = 0.3;
+	if timer >= 42{
+		image_speed = 0.2
+		sprite_index = attacker.stand_sprite
+	}
+}
+
+
+if activating = 1 and aired = 0{
+	exploder = instance_create(x,y,obj_spark)
+	exploder.sprite_index = attacker.downb_eff_sprite
+	exploder.image_speed = 0.3
+	exploder.image_xscale = image_xscale * 1.0
+	exploder.image_yscale = image_yscale * 1.0
+	
+    
+
+    
+
+    //instance_destroy()	
+	timer = time - 10
+	
+	activating = 2
+	
+}
+if timer >= time-10{
+	image_alpha -= 0.1
+}
+
+if activating = 2 and timer = time - 5
+create_projectile(damage,dir,bkb,kbg,20,21,slash2,obj_spark_hit1,2.5,1.0,40,15,attacker.id,9,-1)

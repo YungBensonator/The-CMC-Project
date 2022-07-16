@@ -1,0 +1,91 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0;
+        if roze = 1 {
+        sprite_index = stilt_spriteR;
+        time = 27;
+		}
+		else {
+        sprite_index = stilt_sprite;
+        time = 35;
+		}
+        image_index=0;
+        timer = 0;
+        timer_speed=1;
+	canceltemp = 0;
+}
+if roze = 0 {
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 7: image_index = 2; break;
+  case 11: image_index = 3; break;
+  case 14: image_index = 4; break;
+  case 16: image_index = 5; break;
+  case 18: image_index = 6; break;
+  case 20: image_index = 7; break;
+  case 22: image_index = 8; break;
+  case 35: image_index = 8; break;
+  }
+}
+if roze = 1 {
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 7: image_index = 2; break;
+  case 11: image_index = 3; break;
+  case 14: image_index = 4; break;
+  case 27: image_index = 4; break;
+  }
+}
+if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+	if roze = 0 {
+        if timer = 11 {
+        sound_play(slash_sound);
+	sound_play(choose(attack_voice2,attack_voice3,attack_voice4))
+		create_hitbox(7,25+facing*130,6.3,7,10,6,slash3,obj_spark_slash3,1.13 , 0.51 , 35.70 , 16.10,self.id,3,2);
+		hitbox.shake_ampl = 0.6
+            }
+			if ( timer >= 14 && timer <= 26 && canceltemp = 1 &&  ( special || smash || movejump ) )
+			{
+				interrupt = 1;
+			}
+	}
+	if roze = 1 {
+            if timer = 7 {
+			sound_play(swingsnd3);
+	sound_play(choose(attack_voice2,attack_voice3,attack_voice4))
+			create_hitbox(4,80+facing*20,5,1,10,6,goku_hit,obj_spark_hit2,0.38 , 0.79 , 17.50 , 23.10,self.id,6,2);
+			hitbox.shake_ampl = 0.6
+				hspeed = 3-facing*6
+            }
+			if timer = 10 {
+				hspeed = 0;
+			}
+			if ( timer >= 10 && timer <= 22 && canceltemp = 1 &&  ( special || smash || movejump || ( attacking && !moveleft = 1 && !moveright = 1 || moveup || movedown) ) )
+			{
+				interrupt = 1;
+			}
+	}
+			if hitbox.hit = 1 {
+				canceltemp = 1;
+			}
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    shakex = 0;
+    shakey = 0;
+	if roze = 1 {
+    sprite_index = stand_spriteR;
+	}
+	else {
+    sprite_index = stand_sprite;
+	}
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,75 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "dthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = throw_sprite;
+  timer = 0;
+  time = 25;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  }
+  
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 0; break;
+  case 6: image_index = 1; break;
+  case 8: image_index = 0; break;
+  case 10: image_index = 1; break;
+  case 12: image_index = 0; break;
+  case 14: image_index = 1; break;
+  case 16: image_index = 0; break;
+  }
+
+if ( !instance_exists ( grabspark ) && timer <= 10 )
+{
+  grabspark = instance_create( x , y , obj_spark );
+  grabspark.sprite_index = magicsgrab_sprite;
+  grabspark.image_xscale = 0.25 * size;
+  grabspark.image_yscale = 0.25 * size;
+  grabspark.image_speed = 0;
+  grabspark.image_alpha = 0.85;
+  grabspark.x = x + 27 * (1-facing*2) * size;
+  grabspark.y = y - 22 * size;
+  grabspark.alarm = 2;
+}
+if ( ( timer mod 6 < 1 ) && timer <= 10 )
+{
+  spark = instance_create( x + 26.5 * (1-facing*2) * size , y - 22 * size , obj_spark );
+  spark.sprite_index = magicspark_sprite;
+  spark.image_xscale = 0.15 * (1-facing*2) * size;
+  spark.image_yscale = 0.15 * size;
+  spark.image_speed = 0;
+  spark.image_angle = random(360);
+  spark.direction = random(360);
+  spark.speed = 1 * (1-facing*2) * size;
+  spark.alarm[0] = 15;
+}
+
+if ( timer = 1 )
+{
+play_attack_voice();
+}
+
+if ( timer <= 10 )
+{
+target.x = x + 23 * size * (1-facing*2);
+target.y = y;
+}
+  
+if ( timer = 10 )
+  {
+  create_throw_box( 8 , 368 , 2 , 0 , 1 , 1 , magic2 , obj_spark_shock , 0.8 , 0.8 , 27 , 22 , self.id , 1 );
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

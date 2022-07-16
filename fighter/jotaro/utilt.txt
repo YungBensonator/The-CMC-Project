@@ -1,0 +1,68 @@
+if state_type = "run" || state_type = "stand" {
+	stardeltemp = 1;
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "utilt";
+        image_speed = 0.2;
+        sprite_index = utilt_sprite;
+        image_index= 0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+        attacking = 0
+}
+
+if(zawarudo = 0)
+{
+        if timer < time {
+            state_type = "attack";
+            if timer = 7 {
+                duster = instance_create(x,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.4*size
+                duster.image_yscale *= 0.3*size
+            }
+            if timer = 8 {
+                sound_play(attacksnd1);
+                sound_play(choose(attack_voice4,attack_voice2,attack_voice3))
+                create_hitbox(9,70+facing*40,4.45,5.95,12,7,kick3,obj_spark_hit3,0.9,0.9,25,65,self.id,9,2);
+                hitbox.di = 0.75
+                hitbox.hit_stun = 6;
+                }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+}
+
+
+if(zawarudo = 1)
+{
+        if timer < time {
+            state_type = "attack";
+            if timer = 7 {
+                duster = instance_create(x,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.4*size
+                duster.image_yscale *= 0.3*size
+            }
+            if timer = 8 {
+                sound_play(attacksnd1);
+                sound_play(choose(attack_voice4,attack_voice2,attack_voice3))
+                create_projectile(10,70+facing*40,4.45,5.95,12,7,kick3,obj_spark_hit3,0.9,0.9,25,65,self.id,9,2);
+                proj.di = 0
+                proj.hit_stun = 6;
+                }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+}

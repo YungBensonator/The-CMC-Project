@@ -1,0 +1,370 @@
+//-----------------------------STAND-------------------------------------------//
+if ( sprite_index == stand_sprite )
+{
+  image_speed = 0.165;
+  if ( standwaittimer = 0 && standwaittemp = 0 )
+    if ( ( image_index >= 3 && image_index < 4 ) && ( random ( 30 ) < 1 ) )
+      standwaittimer = 54;
+}
+if ( state_type == "stand" || state_type == "respawn" )
+{
+  if ( standwaittimer > 0 )
+  {
+    sprite_index = wait_sprite;
+    image_speed = 0;
+    standwaittimer -= 1;
+    standwaittemp = 1;
+  }
+  if ( standwaittimer <= 0 && standwaittemp = 1 )
+  {
+    sprite_index = stand_sprite;
+    image_index = 0;
+    standwaittemp = 0;
+  }
+  if ( standwaittimer > 0 )
+    image_index = 8;
+  if ( standwaittimer > 6 )
+    image_index = 7;
+  if ( standwaittimer > 12 )
+    image_index = 6;
+  if ( standwaittimer > 18 )
+    image_index = 5;
+  if ( standwaittimer > 24 )
+    image_index = 4;
+  if ( standwaittimer > 30 )
+    image_index = 3;
+  if ( standwaittimer > 36 )
+    image_index = 2;
+  if ( standwaittimer > 42 )
+    image_index = 1;
+  if ( standwaittimer > 48 )
+    image_index = 0;
+}
+if ( state_type != "stand" && state_type != "respawn" && standwaittimer > 0 )
+{
+  standwaittimer = 0;
+  standwaittemp = 0;
+}
+
+//-----------------------------CROUCH-------------------------------------------//
+if ( state_type == "crouch" )
+{
+  image_speed = 0;
+  crouchgetuptimer = min ( 6 , timer );
+  switch ( timer ) 
+  {
+    case 0: sprite_index = stand_sprite; image_index = 0; break;
+    case 3: sprite_index = crouch_sprite; image_index = 0; break;
+    case 6: image_index = 1; break;
+    case 86: image_index = 2; break;
+    case 92: image_index = 3; break;
+    case 98: image_index = 4; break;
+    case 104: image_index = 3; break;
+    case 110: image_index = 2; break;
+    case 116: timer = 6; break;
+  }
+}
+if ( state_type == "stand" )
+{
+  if ( crouchgetuptimer > 0 )
+  {
+    sprite_index = crouch_sprite;
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    crouchgetuptemp = 1;
+  }
+  if ( crouchgetuptimer <= 0 && crouchgetuptemp = 1 )
+  {
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchgetuptemp = 0;
+  }
+  if ( crouchgetuptimer > 0 )
+    image_index = 0;
+  if ( crouchgetuptimer > 3 )
+    image_index = 1;
+}
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 )
+{
+  crouchgetuptimer = 0;
+  crouchgetuptemp = 0;
+}
+
+//-----------------------------RUN-------------------------------------------//
+if ( sprite_index == walk_sprite )
+  image_speed = 0.25;
+if ( state_type == "run" )
+{
+  if ( runtimer >= 66 && runtimer < 70 )
+  {
+    sprite_index = land_sprite;
+    if ( !passivetemp )
+    {
+      image_alpha = 1;
+      no_flash = 0;
+    }
+    runfloattimer = 0;
+    runfloattemp = 0;
+  }
+  else if ( runtimer >= -30 && runtimer <= -10 )
+  { 
+    sprite_index = turn_sprite;
+    switch ( runtimer )
+    {
+      case -30: image_index = 0; break;
+      case -27: image_index = 1; break;
+      case -24: image_index = 2; break;
+      case -16: image_index = 1; break;
+      case -13: image_index = 7; break;
+    }
+    if ( runtimer >= -13 )
+    {
+      sprite_index = run_sprite;
+      image_speed = 0.15;
+    }
+  }
+  else if ( runtimer >= 50 && runtimer < 60 )
+  {
+    sprite_index = run_sprite;
+    image_speed = 0.25;
+  } 
+  if ( sprite_index == run_sprite || sprite_index == turn_sprite )
+  {
+    if ( runtimer = 1 )
+    {
+      sound_play ( dash_sound );
+      if ( !passivetemp )
+      {
+	image_alpha = 1;
+	no_flash = 0;
+      }
+      runfloattimer = 80;
+    }
+    if ( runfloattimer > 0 )
+    {
+      runfloattimer -= 1;
+      runfloattemp = 1;
+      if ( runfloattimer >= 53 && passivetemp )
+      {
+	intangible = 1;
+	no_flash = 1;
+      }
+      if ( runfloattimer < 53 )
+      {
+	intangible = 1;
+	no_flash = 1;
+	if ( image_alpha > 0.6 && !passivetemp )
+	  image_alpha -= 0.05;
+      }
+    }
+    if ( runfloattimer <= 0 && runfloattemp = 1 )
+    {
+      if ( !passivetemp )
+      {
+	image_alpha = 1;
+	intangible = 0;
+	no_flash = 0;
+      }
+      runfloattemp = 0;
+      char_custom1();
+    }
+  }
+}
+if ( state_type != "run" && runfloattimer > 0 )
+{
+  if ( !passivetemp )
+  {
+    image_alpha = 1;
+    intangible = 0;
+    no_flash = 0;
+  }
+  runfloattimer = 0;
+  runfloattemp = 0;
+}
+step_sound = run_sound;
+
+//-----------------------------JUMP-------------------------------------------//
+if ( sprite_index == jump_sprite || sprite_index == mid_jump_sprite || sprite_index == fall_sprite )
+  image_speed = 0.3;
+if ( state_type == "jump" )
+{
+  if ( sprite_index == jump_sprite )
+  {
+    if ( timer = 0 )
+      image_index = 0;
+    if ( image_index >= 3 )
+      image_index = 1;
+  }
+  if ( sprite_index == mid_jump_sprite )
+  {
+    if ( image_index >= 12 )
+      image_index = 10;
+  }
+}
+if ( sprite_index == fall_sprite )
+{
+  if ( image_index >= 2 )
+    image_index = 0;
+}
+
+//-----------------------------DODGE-------------------------------------------//
+if ( state_type == "dodge" || state_type == "air_dodge" )
+{
+  if ( timer = 0 )
+    sound_play ( entry_sound );
+  if ( timer < 18 && timer mod 3 == 0 )
+  {
+    repeat ( 5 )
+    {
+      spark = create_spark ( 0 , 20 , petal_effect , 0 , 0.1 , 0.1 );
+      spark.image_index = floor ( random ( 4 ) );
+      spark.xscale_add = 0.03 * size;
+      spark.yscale_add = 0.03 * size;
+      spark.image_alpha = 2;
+      spark.alpha_add = -0.2;
+      spark.speed = size * ( 1 + random ( 2 ) );
+      spark.image_angle = 15 * random ( 24 );
+      spark.angle_add = choose ( 15 , -15 );
+      spark.direction = spark.image_angle;
+      spark.alarm[0] = 8;
+    }
+  }
+  if ( state_type == "air_dodge" && sprite_index == air_dodge_sprite )
+  {
+    image_speed = 0;
+    switch ( timer )
+    {
+      case 0: image_index = 0; break;
+      case 1: image_index = 1; break;
+      case 3: image_index = 2; break;
+      case 4: image_index = 3; break;
+      case 6: image_index = 4; break;
+      case 7: image_index = 5; break;
+      case 9: image_index = 6; break;
+      case 10: image_index = 7; break;
+      case 12: image_index = 8; break;
+      case 13: image_index = 9; break;
+      case 15: image_index = 10; break;
+    }
+  }
+}
+
+//-----------------------------CLIMB-------------------------------------------//
+if ( attack_type == "edge_climb" )
+{
+  customedgeclimb = 1;
+  image_speed = 0;
+  switch ( timer )
+  {
+    case 0: sprite_index = edge_sprite; break;
+    case 18: sprite_index = jump_sprite; image_index = 1; shakex = -4 * size * ( 1 - facing * 2 ); shakey = 12 * size; break;
+    case 21: shakex = -3 * size * ( 1 - facing * 2 ); shakey = 9 * size; break;
+    case 24: shakex = -2 * size * ( 1 - facing * 2 ); shakey = 6 * size; break;
+    case 27: shakex = -1 * size * ( 1 - facing * 2 ); shakey = 3 * size; break;
+    case 30: sprite_index = land_sprite; image_index = 0; shakex = 0; shakey = 0; break;
+  }
+}
+
+//-----------------------------MISC-------------------------------------------//
+if ( global.gs_palette[number-1] = 22 && walk_sprite != walk2_sprite )
+  walk_sprite = walk2_sprite;
+if ( global.gs_form[number-1] = 0 )
+{
+  if ( state_type != "entry" && state_type != "respawn" )
+  {
+    if ( distance_to_object ( enemy ) >= 150 /*&& distance_to_object ( item ) >= 150*/ && distance_to_object ( assist ) >= 150 && distance_to_object ( obj_assist ) >= 150 && distance_to_object ( obj_enemy ) >= 150 && distance_to_object ( obj_hand ) >= 150 && distance_to_object ( obj_hazard ) >= 150 ) 
+      passivetimer = 2;
+  }
+  if ( passivetimer > 0 )
+  {
+    if ( passivealpha > 0.6 )
+      passivealpha -= 0.05;
+    intangible = 1;
+    no_flash = 1;
+    image_alpha = passivealpha;
+    passivetimer -= 1;
+    passivetemp = 1;
+  }
+  if ( passivetimer <= 0 && passivetemp = 1 && !runfloattemp )
+  {
+    if ( passivealpha < 1 )
+      passivealpha += 0.05;
+    image_alpha = passivealpha;
+    if ( passivealpha >= 1 )
+    {
+      intangible = 0;
+      no_flash = 0;
+      passivealpha = 1;
+      passivetemp = 0;
+    }
+  }
+  if ( state_type == "out" && passivetimer > 0 )
+  {
+    image_alpha = 0;
+    passivetimer = 0;
+    passivetemp = 0;
+  }
+}
+if ( ai && thornsnroses = 1 && b_temp = 1 && state_type != "attack" && state_type != "air_attack" && state_type != "edge" && state_type != "out" && state_type != "respawn" && state_type != "flinch" && state_type != "air_flinch" && state_type != "grabbed" )
+{
+  thornsnroses = 0;
+  sprite_angle = 0;
+  if ( air )
+    state_type = "jump";
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  char_b();
+}
+if ( state_type == "down" && timer > 20 && dead == 0 )
+{
+  if ( shieldup || moveup == 1 || timer >= 360 )
+    char_down_attack();
+}
+if ( state_type == "broken" && sprite_index == broken_sprite )
+  image_speed = 0.125;
+if ( !instance_exists ( obj_training ) && obj_score_control.stocks[number-1] = 1 && lose_temp = 0 )
+{
+  if ( random ( 2 ) < 1 )
+  {
+    die_voice1 = lose_voice;
+    die_voice2 = lose_voice;
+  }
+  lose_temp = 1;
+}
+if ( attack_type == "none" )
+{
+  if ( instance_exists ( lightbulb ) )
+    with ( lightbulb ) { instance_destroy(); }
+}
+if ( air = 0 || state_type == "out" || state_type == "edge" || state_type == "flinch" || state_type == "air_flinch" )
+{
+  if ( ( state_type != "flinch" && state_type != "air_flinch" ) && uair_temp > 0 )
+    uair_temp = 0;
+}
+if ( sprite_index == koishie_sprite )
+{
+  if ( tantanpou = 0 )
+  {
+    tantanpou = 1;
+    if ( glitch_transformation = 0 && metal_transformation = 0 )
+      sound_loop ( koishie_voice );
+    if ( random ( 11 ) < 1 )
+      tantanpou = 2;
+  }
+  if ( tantanpou = 2 )
+  {
+    sprite_angle -= 15 * ( 1 - facing * 2 );
+    if ( sprite_angle >= 360 || sprite_angle <= -360 )
+      sprite_angle = 0;
+  }
+}
+if ( tantanpou > 0 && sprite_index != koishie_sprite )
+{
+  if ( tantanpou = 2 )
+    sprite_angle = 0;
+  sound_stop ( koishie_voice );
+  tantanpou = 0;
+}
+if ( tantanpou ) mask_index = crouch_mask_sprite;

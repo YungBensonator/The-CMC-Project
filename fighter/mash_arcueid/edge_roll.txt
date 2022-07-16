@@ -1,0 +1,52 @@
+if state_type = "edge" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "edge_roll";
+        image_index = 0;
+        image_speed = 0;
+        sprite_index = edge_sprite;
+        image_index=0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+}
+if timer < time {
+    state_type = "attack";
+	
+	switch (timer)
+	{
+	case 6: image_index = 1; break;
+	case 12: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 24: image_index = 4; break;
+	case 30: image_index = 5; break;
+	}
+	
+	if ( timer = -15 )
+	instance_create(x-size,y+size,obj_spark_effect);
+	
+    if timer = 1
+        intangible = 1
+		
+    if timer = 15 {
+		facing = 1-facing;
+        x += 8-facing*16;
+        sound_play(roll_dodge_snd);
+        sprite_index = roll_sprite;
+        image_speed = 0;
+        hspeed = -6 + facing*12;
+                }
+				
+    if timer = 31 {hspeed = 0}
+	
+    if timer = 34 {intangible = 0}
+	
+    if timer >= 27 && timer < 31 {hspeed*= 0.75}
+    }  
+if timer >= time && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

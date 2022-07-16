@@ -1,0 +1,161 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+{
+  state_type = "air_attack";
+  attack_type = "b";
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer = 0;
+  time = 40;
+  timer_speed = 1;
+  dir = 0;
+  b_temp2 = 0;
+  if ( b_temp = 0 || b_temp = 2 )
+  {
+    sound_play ( b_voice1 );
+    b_temp = 0;
+  }
+  if ( b_temp = 1 )
+  {
+    sound_play ( b_voice2 );
+    b_temp = 2;
+  }
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 8: image_index = 1; break;
+    case 12: case 20: case 28: image_index = 2; break;
+    case 16: case 24: case 32: image_index = 3; break;
+    case 36: image_index = 4; break;
+  }
+  state_type = "air_attack";
+  if ( b_temp < 2 )
+  {
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    air_move = 0;
+    if ( air > 0 )
+    {
+      gravity_lock = 1;
+      hspeed *= 0.95;
+      vspeed *= 0.95;
+    }
+  }
+  if ( air = 0 )
+    hspeed *= 0.75;
+  if ( timer = 8 && b_temp = 0 )
+  {
+    sound_play ( b_sound1 );
+    if ( moveright ) facing = 0;
+    if ( moveleft ) facing = 1;
+  }
+  if ( timer >= 8 && timer <= 12 )
+  {
+    if ( !moveup && !movedown && ( moveleft || moveright ) )
+      dir = 0;
+    if ( moveup && !movedown )
+    {
+      if ( moveleft || moveright ) dir = 45 + facing * 270;
+      if ( !moveleft && !moveright ) dir = 90 + facing * 180;
+    }
+    if ( !moveup && movedown )
+    {
+      if ( moveleft || moveright ) dir = 315 - facing * 270;
+      if ( !moveleft && !moveright ) dir = 270 - facing * 180;
+    }
+  }
+  if ( timer = 12 && b_temp = 0 )
+  {
+    intangible = 1;
+    size_temp = size;
+    shockwave = instance_create ( x + 9 * ( 1 - facing * 2 ) * size , y - 17 * size , obj_spark_shockwave );
+    shockwave.image_blend = c_green;
+    shockwave.image_alpha = 0.9;
+    shockwave.image_xscale *= 0.1 * size;
+    shockwave.image_yscale *= 0.4 * size;
+  }
+  if ( ( timer = 12 || timer = 14 || timer = 16 || timer = 18 || timer = 20 ) && b_temp = 0 )
+  {
+    if ( dir = 0 )
+    {
+      if ( b_temp2 < 4 )
+	thorn = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.4 , 0.4 , -15 + 25 * ( b_temp2 + 1 ) , 16 , self.id , 600 , char_custom4 );
+      if ( b_temp2 > 0 )
+	rose = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.04 , 0.04 , -15 + 25 * ( b_temp2 + 1 ) , 16 , self.id , 600 , char_custom4 );
+    }
+    if ( dir = 45 + facing * 270 )
+    {
+      if ( b_temp2 < 4 )
+	thorn = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.4 , 0.4 , -8 + 18 * ( b_temp2 + 1 ) , -2 + 18 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+      if ( b_temp2 > 0 )
+	rose = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.04 , 0.04 , -8 + 18 * ( b_temp2 + 1 ) , -2 + 18 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+    }
+    if ( dir = 90 + facing * 180 )
+    {
+      if ( b_temp2 < 4 )
+	thorn = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.4 , 0.4 , 10 , -9 + 25 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+      if ( b_temp2 > 0 )
+	rose = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.04 , 0.04 , 10 , -9 + 25 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+    }
+    if ( dir = 315 - facing * 270 )
+    {
+      if ( b_temp2 < 4 )
+	thorn = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.4 , 0.4 , -8 + 18 * ( b_temp2 + 1 ) , 34 - 18 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+      if ( b_temp2 > 0 )
+	rose = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.04 , 0.04 , -8 + 18 * ( b_temp2 + 1 ) , 34 - 18 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+    }
+    if ( dir = 270 - facing * 180 )
+    {
+      if ( b_temp2 < 4 )
+	thorn = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.4 , 0.4 , 10 , 41 - 25 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+      if ( b_temp2 > 0 )
+	rose = create_projectile ( -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 0.04 , 0.04 , 10 , 41 - 25 * ( b_temp2 + 1 ) , self.id , 600 , char_custom4 );
+    }
+    thorn.hit = 2;
+    thorn.image_speed = 0;
+    thorn.facing = facing;
+    thorn.size = size_temp;
+    thorn.alarm[0] = 600;
+    thorn.direction = dir;
+    thorn.thorn = 1;
+    thorn.rose = 0;
+    thorn.explode = 0;
+    thorn.owner = self.id;
+    thorn.keepmain = keepmain;
+    if ( b_temp2 = 0 )
+      thorn.explode = 1;
+    rose.hit = 2;
+    rose.image_speed = 0;
+    rose.facing = facing;
+    rose.size = size_temp;
+    rose.alarm[0] = 600;
+    rose.direction = dir;
+    rose.thorn = 0;
+    rose.rose = 1;
+    rose.owner = self.id;
+    rose.keepmain = keepmain;
+    b_temp2 += 1;
+  }
+  if ( timer > 20 && b_temp2 = 5 && b_temp = 0 )
+  {
+    intangible = 0;
+    b_temp = 1;
+    b_temp2 = 0;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  attack_type = "none";
+  if ( air > 0 )
+  {
+    state_type = "jump";
+    sprite_index = jump_sprite;
+    image_index = 1;
+  }
+  else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+}

@@ -1,0 +1,64 @@
+if state_type = "run" || state_type = "stand" && sprite_index != land_sprite {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "stilt";
+        image_speed = 0.2;
+        sprite_index = stilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 32;
+        timer_speed=1;
+}
+
+
+
+if(zawarudo = 0)
+{
+        if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+            if timer = 18 {
+                duster = instance_create(x,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.4*size
+                duster.image_yscale *= 0.3*size
+                sound_play(attack_sound2);
+                if random(10) > 2
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+                create_hitbox(10,22+facing*136,4.9,5.7,14,7,kick2,obj_spark_hit2,0.85,0.5,22,16,self.id,6,2);
+                }
+                                           
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+}
+
+
+if(zawarudo = 1)
+{
+        if timer < time  && attack_type = "stilt" {
+            state_type = "attack";
+            if timer = 18 {
+                duster = instance_create(x,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_alpha = 0.75
+                duster.image_xscale *= 0.4*size
+                duster.image_yscale *= 0.3*size
+                sound_play(attack_sound2);
+                if random(10) > 2
+                sound_play(choose(attack_voice1,attack_voice2,attack_voice3));
+                create_projectile(10,22+facing*136,4.9,5.7,14,7,kick2,obj_spark_hit2,0.85,0.5,22,16,self.id,6,2);
+                }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+}
+        

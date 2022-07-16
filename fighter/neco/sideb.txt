@@ -1,0 +1,125 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    special = 1;
+    state_type = "air_attack";
+    attack_type = "sideb";
+    timer = 0;
+    time = 100;
+    sprite_index = sideb_sprite;
+    image_speed = 0.2;
+    image_index = 0;
+    hspeed = 0;
+    air_move = 0;
+    temp = 0; //used for charge
+    temp2 = 0; //used for launch speed
+    temp3 = choose(1,2,3,4,5,6,7,8); //misfire
+    if ( temp3 = 8 )
+	sprite_index = sideb_mis_sprite;
+  }
+
+
+if ( timer < time )
+  {
+    if ( timer = 96 )
+	{
+	image_speed = 0;
+	}
+
+
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+
+    if ( timer mod 16 = 4 && timer < 100 )
+      {
+	sound_play(sideb_charge_sound);
+	flashing = 1;
+	alarm[7] = 2;
+      }
+    if ( timer >= 13 && timer < 100 && (!special || (ai && random (10) > 6 ) ) )
+      {
+	sound_stop(sideb_charge_sound);
+	if ( temp3 = 8 )
+	  {
+        
+	    timer = 100;
+	    time = 133;
+	    sound_play(sideb_launch_sound);
+	    sprite_index = sideb_launch_sprite;
+	    create_hitbox(24,30+facing*120,7.7,9,35,14,fire2,obj_spark_fire1,0.9,0.55,14,8,self.id,33,3);
+	    hspeed = size * (8.2-facing*16.4);
+	    vspeed = -3.3*size; //-3.75*size;
+	    temp2 = 7.2;
+	    instance_create(x,y-12*size,obj_spark_explode1);
+	    instance_create(x,y,obj_shakescreen);
+	  }
+	else
+	  {
+	  
+        
+	    temp = min( timer - 13 , 80 );
+	    timer = 100;
+	    time = 133;
+	    sound_play(sideb_voice);
+	    sound_play(sideb_launch_sound);
+	    sprite_index = sideb_launch_sprite;
+	    create_hitbox(7+temp/5,25+facing*130,5.5+temp/33,4.7+temp/18,10+temp/4,6+temp/10,fire1,obj_spark_fire1,0.85,0.5,14,8,self.id,31,3);
+	    if ( temp >= 20 )
+		hitbox.sfx = fire2;
+	    if ( temp >= 60 )
+		hitbox.sfx = fire3;
+	    temp2 = 3 + temp/20;
+	    hspeed = size * temp2 * (1-facing*2) * 1.6;
+	    vspeed = -3.3 - temp/320;  // -3.2 - temp/320;
+	  }
+      }
+	if ( timer mod 4 = 2 && timer >= 100 )
+    {
+	duster = instance_create (x - 15 * (1-facing*2) * size,y - 9 * size,obj_smoke)
+    }
+    if ( timer >= 96 && timer < 100 && special )
+	timer = 93;
+
+    if ( timer >= 110 && timer <= 127 )
+      {
+	hspeed = size * temp2 * (1-facing*2);
+	vspeed=0
+	gravity_lock = 1;
+      }
+    //if timer > 117
+	//force_edge_grab = 1
+    if ( timer >= 130 )
+	//hspeed *= 0.5;
+    if ( timer >= 100 && attack_success )
+	//hspeed = 0;
+    if ( air = 0 && timer >= 106 )
+	  {
+	  gravity_lock = 0;
+		state_type = "land";
+		attack_type = "none";
+		slide = 0
+		speed = 0
+		timer = 0;
+		time = 35;
+		sprite_index = sideb_land_sprite;
+		image_index = 0
+		image_speed = 0.15;
+
+	  }
+	  
+
+	  
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+  gravity_lock = 0;
+    state_type = "jump";
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 4;
+	image_speed = 0;
+    timer = 0;
+    time = -1;
+
+  }

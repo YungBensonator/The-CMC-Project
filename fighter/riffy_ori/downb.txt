@@ -1,0 +1,759 @@
+///goes in step probably/// 
+//if (state_type = "flinch" || state_type = "air_flinch" && obj > 0 )
+//{ with ( obj ) instance_destroy(); obj = 0;}
+
+//idk
+
+fast_fall = 0
+fast_fall_temp = 0
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+{
+	if smashori && !instance_exists(libu) && lburst_cooldowntimer>0
+		exit
+	angle=0
+	shit=0
+	if smashori && instance_exists(libu)
+	{
+	air_thrown=1
+	special=0
+	expl=instance_create(libu.x,libu.y,obj_spark_explode1)
+	expl.image_xscale=1*size
+	expl.image_yscale=1*size
+	sound_play(choose(lburst_explode1,lburst_explode2))
+	if expl.x>x
+		dirtemp=1
+	else
+		dirtemp=0
+		
+	if dirtemp=1
+		equ=(expl.x-x)*(1-facing*2)
+	else
+		equ=(x-expl.x)*(1-facing*2)*-1
+	ball =create_projectile(10,362,3.4,6.6,7,4,-1,obj_spark_fire1,1.75,1.75,equ,y-expl.y,self.id,5,-1);
+	with(libu)
+		{instance_destroy()}
+	exit
+	expltemp=0
+	timer=0
+	time=-1
+	}
+	if smashori && lburst_cooldowntimer=0
+		{
+			air_thrown=0
+			if instance_exists(ball)
+				exit
+			angle=0
+			if air>0
+			{
+				timer=0
+				airtemp=1
+				time=21
+			}
+			if air=0
+			{
+				timer=0
+				airtemp=0
+				time=124
+			}
+		}
+	upbcanceltemp=0
+	target = 0
+	attacking = 0;
+	special = 1
+	attack_type = "downb";
+	time = 123;
+	timer = 0;
+	state_type = "air_attack";
+	if rivalsori
+		sprite_index = bash_char_sprite;
+	image_index = 0;
+	image_speed = 0;
+	air_move=1
+
+	temp = 0;	
+	obj = 0;
+	tempobjspd = 0;
+}
+if rivalsori
+{
+	if(timer < time)
+	{
+		if( obj > 0)&& obj != flash
+			{target = 0;}
+
+		switch ( timer )
+		{
+			case 4: image_index = 1; break;
+			case 8: image_index = 2; break;
+			//jump to 97 if no target/proj in sight; 
+				//else: enter Bash for 60 frames if special held
+			case 97: image_index = 3; break;
+			case 102: image_index = 4; break;
+			case 106: image_index = 5; break;
+			case 110: image_index = 6; break;
+			case 114: image_index = 7; break;
+		}
+		
+		if timer<4
+		{
+			if moveright
+				facing=0
+			if moveleft
+				facing=1
+		}
+		if (timer = 1)
+		{
+			sound_play(dspecial_jump_sound)
+			if (air = 0)
+				{vspeed = -2.5*size	}
+		}
+		
+		
+		
+		if (timer >= 8 && timer < 21)
+		{
+			obj = collision_rectangle(x ,y+7,x + 15*(1-facing*2),y-15,projectile_box,1,1);
+
+			if ( obj > 0 ) && obj != flash
+				{
+					if obj.hit<2
+					{
+						obj.x = x;
+						obj.y = y+2*size;
+						if(obj.speed != 0)
+							{tempobjspd = obj.speed;}
+						obj.speed = 0;
+					
+						tempobjhit = obj.hit;
+						intangible = 1;
+						intangible_frames = 8;
+
+						obj.alarm[0] += 90;
+						obj.time += 90;
+						obj.timer = 1;
+						obj.timer_speed = 0;
+						obj.attacker = self.id ;
+						timer = 21;
+					}
+					
+				}
+		}
+		
+		
+		if (timer = 21)
+		{
+			if( obj <= 0)
+				{cross = create_homing_bubble(1 , 1, 17 , 5, self.id,2);}
+			reticle = instance_create(x,y,obj_spark);
+			reticle.x = x + (17*(1-facing*2))*size;
+			reticle.y = y - 4*size;
+			reticle.number = - number;
+			reticle.image_xscale=0.8*size
+			reticle.image_yscale =0.8*size
+			reticle.sprite_index = bash_targetting_sprite;
+			reticle.image_speed = 0.5;
+		}
+		
+		if timer<100 && obj = flash
+		{
+			flash.x=x
+			flash.y=y-15*size
+		}
+		
+		if (timer > 21)
+		{
+			switch(timer)
+			{
+				case 74: arrow.image_index = 1; break;
+				case 76: arrow.image_index = 2; break;
+				case 78: arrow.image_index = 3; break;
+				case 80: arrow.image_index = 4; break;
+				case 82: arrow.image_index = 5; break;
+				case 84: arrow.image_index = 6; break;
+				case 86: arrow.image_index = 7; break;
+				case 88: arrow.image_index = 8; break;
+				case 90: arrow.image_index = 9; break;
+				case 92: arrow.image_index = 10; break;
+				case 94: arrow.image_index = 11; break;
+				case 96: arrow.image_index = 12; break;
+				case 98: arrow.image_index = 13; break;
+				case 100: arrow.image_index = 14; break;
+				case 102: arrow.image_index = 15; break;
+				case 104: arrow.image_index = 16; break;
+				case 106: arrow.image_index = 17; break;
+				case 108: arrow.image_index = 18; break;
+				case 110: arrow.image_index = 19; break;
+				case 112: arrow.image_index = 20; break;
+				case 114: arrow.image_index = 21; break;
+			}
+			if (obj > 0) 
+			{
+				if obj.hit<2
+				{
+					if timer=22 && obj = flash
+						{temp=3}
+					intangible = 1;
+					if (timer = 22) && obj != flash 
+					{
+						sound_play(dspecial_targetted_sound);
+						intangible = 1;
+						obj.intangible = 1;
+						obj.image_angle = 0;
+						obj.state_type = "air_flinch";
+						obj.alarm[0] += 90;
+						obj.timer_speed = 0;
+					}
+					if (timer = 24)&& obj != flash
+					{
+						arrow = instance_create(x,y,obj_spark);
+						arrow.sprite_index = bash_arrow_sprite;
+						arrow.number = -number;
+						arrow.x = obj.x;
+						arrow.y = reticle.y-4*size;
+						arrow.depth = depth+1;
+						arrow.image_speed = 0;
+						arrow.image_xscale = 0.8*size;
+						arrow.image_yscale = 0.8*size;
+						arrow.image_angle =45
+						direction=90
+						anggle=270
+						
+					}
+					if (timer > 21 && timer < 97) && obj != flash
+					{
+						if (timer < 25)
+						{
+							if timer=22
+							{
+								keepx=x
+								keepy=y
+							}
+							else
+							{
+								x=keepx
+								y=keepy
+							}
+							if(obj.x < reticle.x + (10*(1-facing*2))*size) 
+								{obj.x += 8*size}
+							if(obj.x > reticle.x + (10*(1-facing*2))*size)
+								{obj.x -= 8*size}
+							if(obj.y > y-10*size) 
+								{obj.y -= 7*size;}
+							if(obj.y < y-10*size) 
+								{obj.y += 7*size;}
+						}
+						else
+						{
+							x=keepx
+							y=keepy
+							obj.x = arrow.x;
+							if(obj.y > y-10*size) 
+								{obj.y -= 7*size;}
+							if(obj.y < y-10*size) 
+								{obj.y += 7*size;}
+						}
+						if obj.hit
+						{
+							with(obj)
+								instance_destroy()
+							speed=5*size
+							direction=90
+							timer=97
+						}
+					}
+					if (timer > 31 && timer < 97) && !special && obj != flash
+					{
+						temp=1
+						timer =96
+						obj.alarm[0]=0
+					}
+					if obj > 0 && obj != flash
+						{temp = 1;}
+					gravity = 0;
+					gravity_lock = 1;
+				}
+				else
+				{
+					if timer<24
+						temp=3
+				}
+			}
+			else if (target > 0  && target != self.id && target.state_type != "dodge" && target.state_type != "edge") 
+			{
+				if target!=obj
+					intangible = 1;
+				if (timer = 22)&& obj != flash
+				{
+					sound_play(dspecial_targetted_sound);
+					if obj > 0 && obj != flash
+					{
+						obj.intangible = 1;
+						obj.image_angle = 0;
+						obj.state_type = "air_flinch";
+						obj.alarm[0] += 90;
+						obj.timer_speed = 0;
+					}
+					target.intangible = 1;
+					target.image_angle = 0;
+					target.state_type = "air_flinch";
+					target.alarm[0] = 90;
+					target.timer_speed = 0;
+					target.sprite_index = choose(target.flinch_sprite,target.flinch2_sprite,target.flinch3_sprite);
+				}
+				if (timer = 24)&& obj != flash
+				{
+					arrow = instance_create(x,y,obj_spark);
+					arrow.sprite_index = bash_arrow_sprite;
+					arrow.number = -number;
+					arrow.image_angle =45
+					direction = 225 + 90*facing
+					anggle = 45 + 90*facing
+					arrow.image_angle = direction-45
+					if obj > 0 && obj != flash
+						{arrow.x = obj.x;}
+					else
+						{arrow.x = target.x;}
+					arrow.y = reticle.y-4*size;
+					arrow.depth = depth+1;
+					arrow.image_speed = 0;
+					arrow.image_xscale = size;
+					arrow.image_yscale = size;
+				}
+				if (timer > 21 && timer < 97) && obj != flash
+				{
+					if (timer < 25)
+					{
+						if timer=22
+						{
+							keepx=x
+							keepy=y
+						}
+						else
+						{
+							x=keepx
+							y=keepy
+						}
+						if obj > 0 && obj != flash
+						{
+							obj.x = reticle.x + (10*(1-facing*2))*size;
+							obj.y = y;
+						}
+						
+						target.x = reticle.x + (10*(1-facing*2))*size;
+						target.y = y;
+					}
+					else
+					{
+						x=keepx
+						y=keepy
+						if obj > 0 && obj != flash
+						{
+							obj.x = arrow.x;
+							obj.y = y;
+						}
+						target.x = arrow.x;
+						target.y = y;
+					}
+				}
+				
+				if (target > 0 ||( obj > 0 ))
+				{temp = 1}
+				if obj=flash
+				{temp=3}
+				gravity = 0;
+				gravity_lock = 1;
+				
+			}
+
+			else
+			{
+				if ( timer < 24)
+				{temp = 3}
+			}
+			if (temp = 3)
+				{
+					temp = 4
+					if timer<90
+					timer = 96
+				}
+			if (timer = 97 && temp = 4)
+				{sound_play(dspecial_no_target_sound)}
+		}
+		if (timer>100 && air = 0)
+		{
+			time=113
+			hspeed*=0.8
+			state_type = "land";
+			sprite_index = land_sprite;
+			attack_type = "none";
+		}
+		if (timer > 106 && air > 0 && temp == 4)
+		{
+		
+			if (timer = 107)
+			{image_index = 8}
+			if timer=120 
+			{
+			state_type = "fall";
+			sprite_index = fall_sprite;
+			attack_type = "none";
+			}
+		}
+		//8WAY AIMING
+
+		if (timer > 96)
+		{target.intangible = 0}
+
+		if timer=96 && temp=1
+		{
+			if instance_exists(arrow)
+			x = arrow.x
+			else 
+			x=reticle.x
+		
+		}
+
+		if (timer = 97 && temp = 1) && obj != flash /// release bash
+		{
+			sound_play(dspecial_launch_sound)
+			intangible = 0;
+			if(target > 0)
+				create_hitbox ( 12 , anggle , 3.85 , 8.2 , 10 , 1 , -1 , obj_spark_hit2 , 2 , 2 , 0 , 15 , self.id , 1 , 4 );
+				hitbox.di=0
+				hitbox.sdi=0
+			speed = 5*size;
+			
+			obj.direction = anggle;
+			if obj = libu
+				{obj.speed=5*size}
+			else
+			{
+			if(tempobjspd <= 0.25)
+				{obj.speed *= -1 }
+			else
+				{obj.speed = tempobjspd;}
+			}
+			obj.timer_speed = 1;
+			obj.hit = tempobjhit;
+			
+		}	
+		
+		if timer>98 && temp=1 && obj !=flash
+			{vspeed+=0.18}
+		
+		if (timer > 24 && timer< 98-(target>0)*19 && temp = 1)
+		{
+		
+			if ( analog_control )
+			{
+				var dis, dir;
+				dis = point_distance ( 0 , 0 , holdx , holdy );
+				dir = point_direction ( 0 , 0 , holdx , holdy );
+				direction = dir;
+				arrow.image_angle = dir-45;
+				if dir>=0 && dir <180
+					{anggle = dir+180}
+				if dir>=180 && dir<=359
+					{anggle = dir-180}
+			}
+			else
+			{
+				if (moveright && !moveup && !movedown && !moveleft)
+				{
+					direction = 0
+					arrow.image_angle = direction -45
+					anggle = 180
+					force_edge_grab = 1
+				}
+				if (moveleft && !moveup && !movedown && !moveright )
+				{
+					direction = 180
+					anggle = 0
+					arrow.image_angle = direction-45
+				}
+				if (moveup && !movedown && !moveleft && !moveright) 
+				{
+					direction = 90
+					anggle = 270
+					arrow.image_angle = direction-45
+				}
+				if (movedown && !moveleft && !moveright && !moveup) 
+				{
+					direction = 270
+					anggle = 90
+					arrow.image_angle = direction-45
+				}
+				if (moveup && moveright) 
+				{
+					direction = 45
+					anggle = 225
+					arrow.image_angle = direction-45
+				}     
+				if (moveup && moveleft) 
+				{
+					direction = 135
+					anggle = 315
+					arrow.image_angle = direction-45
+				}       
+				if (movedown && moveleft) 
+				{
+					direction = 225
+					anggle = 45
+					arrow.image_angle = direction-45
+				}   
+				if (movedown && moveright) 
+				{
+					direction = 315
+					anggle = 135
+					arrow.image_angle = direction-45
+				}
+			}
+		}
+	}
+}
+
+if smashori
+{
+
+	if air>0 
+	{
+		time=21
+		sprite_index=light_burst_prepare_air_sprite
+	
+		switch(timer)
+		{
+			case 3: image_index=1; break
+			case 6: image_index=2; break
+			case 9: image_index=3; break
+			case 12: image_index=4; break
+			case 15: image_index=5; break
+			case 18: image_index=6; break
+		}
+		
+		if timer=3
+		{
+			special=0
+			air_thrown=1
+		}
+		if timer=7
+			bub = create_homing_bubble(3 , 3, 25 , -25, self.id,2)
+		bub.x=x+(30-facing*60)*size
+		bub.y=y-20*size
+		if timer=8
+			{trajectory = point_direction(x, y, target.x, target.y-15*(target.size))}
+		if timer=9
+		{
+			lburst_cooldowntimer=120
+			if target.x<x
+				facing=1
+			if target.x>x
+				facing=0
+			
+			sound_play(choose(lburst_throw,lburst_throw1,lburst_throw2))
+			libu = create_projectile(5,30+facing*120,5.4,2,7,4,libu_explode,obj_spark_fire1,0.65,0.65,5,15,self.id,180,char_custom5);
+			libu.sprite_index = light_burst_proj_sprite
+			libu.use_palette = number
+			libu.image_xscale=xsize*(1-facing*2)*size
+			libu.image_yscale=ysize*size
+			libu.image_speed =0.2
+			libu.speed=3*size
+			if target>0
+				libu.direction= trajectory
+			else
+				libu.direction = 25+facing*130
+		}
+		if timer=10 && target>0
+			target=0
+	}
+
+	if air=0 && air_thrown=1
+	{
+		sprite_index=land_sprite
+		state_type="land"
+		timer=0
+		time=-1
+	}
+
+	if air=0 && air_thrown=0
+	{
+		hspeed*=0.5
+		sprite_index = light_burst_prepare_sprite;
+		
+		switch ( timer )
+		{
+			case 4: image_index=1; break;
+			case 8: image_index=2; break;
+			case 41: image_index=3;break;
+			case 47: image_index=4;break;
+			case 53: image_index=5;break;
+			case 59: image_index=6;break;
+		}
+		time = 67;
+		if timer=0
+		{
+			libu.direction=10*facing*160
+			sound_play(lburst_charge)
+			arc = instance_create(x,y,obj_spark)
+			arc.number=-number
+			arc.depth = depth + 1
+			arc.image_xscale = (0.6*(1-facing*2))*size
+			arc.image_yscale = 0.6*size
+			arc.x = x+(5*(1-facing*2))*size
+			arc.y = y-5*size
+			arc.sprite_index =light_burst_arc_sprite
+			arc.image_index=28
+			arc.image_angle=0
+			arc.image_alpha=0
+			arc.image_speed=0
+		}
+
+		if timer<8
+		{
+			if arc.image_alpha !=1
+				arc.image_alpha +=0.125
+		}
+
+		if special && timer>8 && timer<39
+		{
+			if attacking || shieldup || movejump
+			{
+				sound_play(choose(lburst_aim_cease1,lburst_aim_cease2,lburst_aim_cease3))
+				timer=0
+				time=-1
+				state_type="stand"
+				sprite_index=stand_sprite				
+			}
+		
+			timer=10
+		
+			arc.x = x+(5*(1-facing*2))*size
+			arc.y = y- 5*size
+		
+			if moveright
+				facing=0
+			if moveleft
+				facing=1
+			
+			if ( analog_control )
+			{
+				var dis, dir;
+				dis = point_distance ( 0 , 0 , holdx , holdy );
+				dir = point_direction ( 0 , 0 , holdx , holdy );
+				if ( dis > 0.5 )
+				{
+					var dd;
+					dd = round ( dir / 45 ) * 45;
+					if ( abs ( dir - dd ) < 1 )
+						dir = dd;
+					if (dir >=0 && dir <40) && (dir >140 && dir < 200)
+						arc.image_angle=dir
+
+					if dir >90 && dir <270
+					{
+						facing=1
+						arc.image_yscale=-0.6*size
+						arc.image_xscale=0.6*size
+					}
+					else
+					{
+						facing=0
+						arc.image_yscale=0.6*size
+						arc.image_xscale=0.6*size
+					}
+					if facing=0
+					{
+						if dir>=40 && dir<=90 && dir<=340 && dir >=270
+						{
+							if dir>=40 && dir<=90
+							dir=40
+							if dir<=340 && dir >=270
+							dir=340
+						}
+						if (dir>=0 && dir <=40) || (dir>=340 && dir <=360)
+							arc.image_angle=dir
+					}
+					if facing=1
+					{
+						if dir<=140 && dir >90 && dir>=200 && dir <270
+						{
+							if dir<=140 && dir >90
+								dir=140
+							if dir>=200 && dir <270
+								dir=200
+						}	
+						if dir>=140 && dir <=200
+							arc.image_angle=dir
+					}
+				}
+			}
+			else
+			{
+				if moveup
+				{
+					if angle<40
+					angle+=2
+					if angle>40
+					angle=40
+				}
+				if movedown
+				{
+					if angle>-20
+					angle-=2 
+					if angle<-20
+					angle=-20
+				}
+				arc.image_angle=(0+angle*(1-facing*2))
+				arc.image_xscale=(0.6*(1-facing*2))*size
+			}
+		}
+		if !special && timer>10 && timer<39
+		{
+			shit=arc.image_angle+(10*(1-facing*2))
+			special=0
+			timer=39
+		}
+
+		if timer=40
+		{
+			lburst_cooldowntimer=150
+			special=0
+			sound_stop(lburst_charge)
+			sound_play(choose(lburst_throw,lburst_throw1,lburst_throw2))
+			libu= create_projectile(8,30+facing*120,6.1,2.6,7,4,libu_explode,obj_spark_fire1,0.65,0.65,5,15,self.id,180,char_custom5);
+			libu.sprite_index = light_burst_proj_sprite
+			libu.use_palette = number
+			libu.image_xscale=(0.8-facing*1.6)*size
+			libu.image_yscale=0.8*size
+			libu.image_speed =0.2
+			libu.direction=facing*180+shit
+			libu.speed=4*size
+		}
+		if timer=41
+		{
+			with(arc)
+				{instance_destroy()}
+		}
+	}
+}
+	if ( timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+	target = 0;
+	obj=0
+	temp=0
+	if (air = 0)
+	{
+		time = 10;
+		timer = 0;
+		state_type = "land";
+	}
+	else
+	{
+		if (temp = 4)
+			state_type = "jump";/*state_type = "fall"//*/
+		else
+			state_type = "jump"
+	}
+	attack_type = "none";
+	timer = 0;
+}
+	

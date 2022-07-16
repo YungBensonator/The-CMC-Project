@@ -1,0 +1,62 @@
+absorb = -1
+if timer <= 1 && temp = 0 {         // Initialize sprite and speed during frame 1
+    image_speed = 0.45;
+    visible=1;
+    temp = 1
+    proj_hits = 1
+	image_alpha=0.70
+    }
+	
+
+if image_index >= 30{
+//timer = 7
+//proj_hits=7
+instance_destroy()
+}
+if attacker.id.timer >= 90
+instance_destroy()
+
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+
+if facing = 0{
+x = attacker.id.x+6
+}else{
+x = attacker.id.x-6
+}
+
+visible=1
+//image_xscale += 0.004*(1-attacker.facing*2)
+//image_yscale += 0.007
+sprite_index = attacker.id.fire_blast_sprite
+//draw_sprite_ext(attacker.id.final_smash_blast_sprite,-1,x,y,image_xscale,image_yscale,0,c_white,0.85)
+if timer = time+1 && proj_hits <= 7 {
+proj_hits+=1
+if proj_hits = 7 {
+damage *= 0.2
+//bkb = 8.6*attacker.size
+//kbg = 7.8*attacker.size
+bkb = 3.6*attacker.size
+kbg = 3.8*attacker.size
+sfx = explodehit3
+gfx = obj_spark_fire1
+bloom = 5 }
+hit = 0
+launch =0
+attack_success=0
+target.hitby=0
+timer = 0
+time = 7
+//image_index = image_number-8
+}
+if attacker.id.timer > 80 && proj_hits<7 {
+proj_hits=7
+damage *= 2.0
+bkb = 2.75*attacker.size
+kbg = 2.75*attacker.size
+sfx = explodehit3 
+gfx = obj_spark_fire1
+}

@@ -1,0 +1,316 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump"){
+		hspeed = 0;
+		attack_type = "sideb"
+        state_type = "air_attack";
+        image_speed = 0;
+		if roze = 1 {
+        sprite_index = sideb_spriteR;
+		time = 90;
+			air_move = 0;
+		}
+		else {
+        sprite_index = sideb_sprite;
+        time = 30;
+		}
+        image_index=0;
+        timer = 0;
+        timer_speed=1;
+		projtemp = 0;
+		holdtemp = 0;
+		canceltemp = 0;
+		temp = 0;
+		special = 1;
+		super = 0;
+}
+if hitbox.hit = 1 {
+	canceltemp = 1;
+}
+if roze = 0 {
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 4: image_index = 2; break;
+  case 6: image_index = 3; break;
+  case 8: image_index = 4; break;
+  case 15: image_index = 5; break;
+  case 30: image_index = 5; break;
+  }
+}
+if roze = 1 {
+switch ( timer )
+  {
+  case 6: image_index = 1; break;
+  case 40: image_index = 2; break;
+  case 42: image_index = 3; break;
+  case 44: image_index = 4; break;
+  case 46: image_index = 5; break;
+  case 48: image_index = 6; break;
+  case 50: image_index = 7; break;
+  case 52: image_index = 8; break;
+  case 54: image_index = 9; break;
+  case 57: image_index = 10; break;
+  case 60: image_index = 11; break;
+  case 63: image_index = 12; break;
+  case 66: image_index = 13; break;
+  case 69: image_index = 14; break;
+  case 80: image_index = 15; break;
+  case 83: image_index = 16; break;
+  case 90: image_index = 16; break;
+  
+  //Divine Lasso
+  case 154: image_index = 1; break;
+  case 158: image_index = 2; break;
+  case 218: image_index = 3; break;
+  case 248: image_index = 4; break;
+  case 252: image_index = 5; break;
+  case 256: image_index = 6; break;
+  case 260: image_index = 7; break;
+  case 280: image_index = 7; break;
+  
+  case 400: sprite_index = teleport_sprite; image_index = 0; break;
+  case 402: sprite_index = super1pt2_sprite; image_index = 1; break;
+  case 406: image_index = 3; break;
+  case 410: image_index = 4; break;
+  case 414: image_index = 5; break;
+  case 418: image_index = 6; break;
+  case 422: image_index = 7; break;
+  case 426: image_index = 3; break;
+  case 430: image_index = 4; break;
+  case 434: image_index = 5; break;
+  case 438: image_index = 6; break;
+  case 442: image_index = 7; break;
+  case 446: image_index = 3; break;
+  case 450: image_index = 4; break;
+  case 454: image_index = 5; break;
+  case 458: image_index = 6; break;
+  case 462: image_index = 7; break;
+  case 466: sprite_index = super1pt3_sprite; image_index = 0; break;
+  case 468: image_index = 1; break;
+  case 470: image_index = 2; break;
+  case 472: image_index = 3; break;
+  case 474: image_index = 4; break;
+  case 476: image_index = 5; break;
+  case 478: image_index = 6; break;
+  case 480: image_index = 7; break;
+  case 482: image_index = 8; break;
+  case 484: image_index = 9; break;
+  case 486: image_index = 10; break;
+  case 490: image_index = 11; break;
+  case 540: image_index = 11; break;
+  }
+}
+if roze = 1 {
+if ( timer <= 3 && super = 1 && card_meter > 2)
+{
+temp = 1;
+}
+if ( timer = 4 && temp = 1 )
+{
+card_meter -= 3;
+image_index = 0;
+sprite_index = super1pt1_sprite;
+timer = 150;
+time = 280;
+}
+}
+        if timer < time {
+			if roze = 0 {
+            if timer = 8 {
+                sound_play(gokuprojectile);
+                create_projectile(5,70+facing*40,5,4.4,15,7,punch3,obj_spark_hit3,0.7,0.7,30,15,self.id,40,char_custom1);
+				proj.hit_stun = 1;
+				proj.speed = 9*(1-facing*2)
+				proj.direction = 0*(1-facing*2)
+                }
+			}
+			if roze = 1 {
+			if timer > 0 && timer < 80 {
+			vspeed *= 0.2;
+			gravity = 0;
+			gravity_lock = 1;
+			}
+            if timer = 6 {
+                sound_play(gokuprojectile);
+                create_projectile(5,30+facing*120,2,0,15,7,punch3,obj_spark_hit3,0.7,0.7,30,15,self.id,20,char_custom1);
+				proj.hit_stun = 20;
+				proj.speed = 9*(1-facing*2)
+				proj.direction = 0*(1-facing*2)
+            }
+			if timer = 27 && projtemp = 0 {
+				timer = 80
+			}
+			if proj.hit = 1 && timer < 27{
+				projtemp = 1;
+				timer = 40;
+			}
+			if proj.hit = 1 && timer > 5 && timer < 27 {
+				holdtemp = 1;
+			}
+			if timer = 40 {
+				y = y-3*size
+			}
+            if timer = 63 {
+                sound_play(slash_sound);
+                sound_play(choose(sidebvoice,attack_voice5));
+                create_hitbox(5,30+facing*120,6,7,15,7,slash3,obj_spark_slash3,0.7,0.7,30,15,self.id,17,2);
+				speed = 11*(1-facing*2)
+				direction = 0*(1-facing*2)
+            }
+			if timer = 80 {
+				speed = 0;
+			}
+			if holdtemp = 1 && timer > 0 && timer < 63{
+				target.speed = 0;
+				target.gravity_lock = 2;
+				target.gravity = 0;
+				target.state_type = "air_flinch"
+				target.sprite_index = target.flinch_sprite;
+			}
+			
+			//Divine Lasso Start
+			if timer > 150 && timer < 700 {
+			vspeed = 0;
+			gravity = 0;
+			gravity_lock = 1;
+			}
+			if timer = 150 {
+				sound_play(super1voice1);
+			}
+			if timer = 158 {
+				sound_play(slash_sound);
+			}
+			if timer = 218 {
+				y = y-3*size
+                create_hitbox(4,90,2,0,0,6,punch3,obj_spark_hit3,0.49 , 0.93 , 16.10 , 12.60,self.id,22,2);
+				speed = 11*(1-facing*2)
+				direction = 0*(1-facing*2)
+			}
+			if hitbox.hit = 1 && timer > 150 && timer < 248 {
+				hspeed = 0;
+				timer = 249;
+				target.speed = 0;
+			}
+			if timer = 100 {
+				hspeed = 0;
+			}
+			if hitbox.hit = 1 && timer > 217 && timer < 248{
+				target.x = x+25*(1-facing*2)
+				target.y = y
+				target.speed = 0;
+				target.gravity_lock = 1;
+				target.gravity = 0;
+			}
+			if timer = 256 {
+				y = y-3*size
+                create_hitbox(9,30+facing*120,2,0,-1,6,slash3,obj_spark_slash3,1.05 , 0.92 , 25.20 , 30.80,self.id,4,2);
+			}
+			if timer = 240 {
+				timer = 260;
+				sprite_index = flinch3_sprite;
+				hspeed = 0;
+			}
+			
+			if timer = 264 && canceltemp = 1 && attack_shielded = 0 {
+				target.x = x+25*(1-facing*2)
+				target.y = y
+				target.speed = 0;
+				target.gravity_lock = 1;
+				target.gravity = 0;
+				sprite_index = teleport_sprite;
+				timer = 400;
+				time = 540;
+			}
+			if timer = 400 {
+				sound_play(upb_sound);
+				x = x - 120*(1-facing*2)*size
+			}
+			if timer = 150 {
+				intangible = 1;
+				sound_play(chargestart);
+				spark = instance_create ( 0 , 0 , obj_camerazoom );
+	spark.camera_l = x - 8;
+	spark.camera_r = x + 8;
+	spark.camera_u = y - 4 - actual_height;
+	spark.camera_d = y + 4;
+	spark.camera_boundary_zoom = 120;
+	spark.alarm[0] = 68;
+
+	duster = instance_create ( 0 , 0 , obj_freeze );
+	duster.dontpause = self.id;
+	duster.alarm[0] = 68;
+			}
+			if timer = 218 {
+				intangible = 0;
+			}
+			if ( timer > 157 && timer < 540 && !instance_exists(downb2)) {
+			downb2 = create_blur(x,y,self.id);
+			downb2.sprite_index = downbeff_spriteR;
+			downb2.image_speed = 0.4
+			downb2.image_alpha = 0.8
+			downb2.image_xscale = size*0.7*(1-facing*2);
+			downb2.image_yscale = size*0.7;
+			downb2.snap = self.id
+			downb2.depth = 1
+			}
+			if timer > 400 && timer < 520 {
+				target.x = target.x
+				target.y = y
+				target.speed = 0;
+				target.gravity_lock = 2;
+				target.gravity = 0;
+				target.state_type = "air_flinch"
+				target.sprite_index = target.flinch_sprite;
+			}
+			if timer = 400 {
+				sound_play(super1voice2);
+			}
+			if timer = 422 || timer = 442 || timer = 462 {
+			sound_play(slash_sound);
+			lassproj1 = create_projectile(2,361,0,0,-1,6,slash3,obj_spark_slash3,0.6,0.6,15,20,self.id,100,char_custom4);
+			lassproj1.speed = 15*(1-facing*2)
+			lassproj1.direction = 0*(1-facing*2)
+			lassproj2 = create_projectile(2,361,0,0,-1,6,slash3,obj_spark_slash3,0.6,0.6,20,15,self.id,100,char_custom4);
+			lassproj2.speed = 15*(1-facing*2)
+			lassproj2.direction = 0*(1-facing*2)
+			lassproj3 = create_projectile(2,361,0,0,-1,6,slash3,obj_spark_slash3,0.6,0.6,25,10,self.id,100,char_custom4);
+			lassproj3.speed = 15*(1-facing*2)
+			lassproj3.direction = 0*(1-facing*2)
+			}
+			if lassproj1.hit = 1 || lassproj2.hit = 1 || lassproj3.hit = 1 {
+			lassproj1.speed = 0;
+			lassproj2.speed = 0;
+			lassproj3.speed = 0;
+			}
+			if timer = 520 && !instance_exists(sparky) {
+			sparky = instance_create(x+5*size*(1-2*facing),y,obj_spark);
+			sparky.sprite_index = spirit_boom_sprite
+			sparky.image_xscale *= 1*size*(1-2*facing);
+			sparky.image_yscale *= 1*size;
+			sparky.direction = facing*180;
+			sparky.image_speed = 1.2;
+			sparky.image_alpha = 1
+			sparky.x = target.x
+			sparky.y = target.y
+			}
+			if timer = 520 {
+			create_projectile(12,30+facing*120,7,6.5,-1,12,-1,-1,1,1,25.20,30.80,self.id,1,no_script);
+			proj.x = target.x
+			proj.y = target.y
+			instance_create(0,0,obj_flashscreen)
+			screen_shake(10,10);
+			sound_play(blast_sound)
+			lassproj1.image_alpha = 0;
+			lassproj2.image_alpha = 0;
+			lassproj3.image_alpha = 0;
+			}
+			
+			}
+			
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

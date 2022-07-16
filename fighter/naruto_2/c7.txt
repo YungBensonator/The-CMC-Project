@@ -1,0 +1,48 @@
+use_palette = number
+time = 35
+absorb = 0;
+absorb2 = 0;
+moving_object = 0;
+hit = 2;
+parry_noreflect = 1;
+no_reflect = 1;
+no_destroy = 1;
+parry_nodestro = 1;
+no_clash = 1;
+
+if timer <= 1 && narutotemp = 0 {
+sprite_index = keepmain.bair_sprite;
+image_speed = 0;
+image_xscale = attacker.id.xsize*(1-facing*2)*size;
+image_yscale = attacker.id.ysize;
+visible = 1;
+tempfacing = facing;
+image_index = 1;}
+
+else if timer <= 1 && narutotemp = 1 {
+sprite_index = keepmain.bair_spriteB;
+image_speed = 0;
+image_xscale = attacker.id.xsize*(1-facing*2)*size;
+image_yscale = attacker.id.ysize;
+visible = 1;
+tempfacing = facing;
+image_index = 1;}
+
+switch ( timer ) {
+case 3: image_index = 2; break;
+case 6: image_index = 3; break;
+case 22: image_index = 4; break;}
+
+if timer = 22 {
+smokeb = instance_create(x,y,obj_spark);
+smokeb.sprite_index = keepmain.smoke_sprite;
+smokeb.image_xscale = attacker.id.xsize*1.44;
+smokeb.image_yscale = attacker.id.ysize*1.44;
+smokeb.image_speed = 0.5;}
+
+if timer = 27 {
+image_alpha = 0;}
+
+if timer = 3 {
+bit = create_projectile(8,160-facing*140,6.67,7.55,12,2,kick3,obj_spark_hit2,1.01,0.65,-25,19,attacker.id,9,-1);
+bit.hit = 0;}

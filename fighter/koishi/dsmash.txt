@@ -1,0 +1,61 @@
+if ( state_type = "stand" || state_type = "crouch" || state_type = "run" )
+{
+  hspeed = 0;
+  sprite_index = stilt_sprite;
+  image_speed = 0;
+  image_index = 0;
+  state_type = "attack";
+  timer = 0;
+  time = 47;
+  charge_frame = 8;
+  sound_play_pitch ( dsmash_sound1 , 1 );
+  shockwave = instance_create ( x , y - 16 * size , obj_spark_shockwave );
+  shockwave.image_blend = c_red;
+  shockwave.image_alpha = 0.9;
+  shockwave.image_xscale *= 0.9 * size;
+  shockwave.image_yscale *= 0.6 * size;
+}
+if ( timer < time )
+{
+  switch ( timer )
+  {
+    case 3: image_index = 1; break;
+    case 6: image_index = 2; break;
+    case 9: image_index = 1; break;
+    case 12: image_index = 4; break;
+    case 15: image_index = 5; break; 
+    case 18: image_index = 6; break;
+    case 21: image_index = 5; break;
+    case 24: sprite_index = crouch_sprite; image_index = 0; break;
+  }
+  state_type = "attack";
+  if ( timer = ( charge_frame - 1 ) )
+    sound_play_pitch ( charge_sound , 1 );
+  if ( timer = 12 )
+  {
+    sound_play_pitch ( dsmash_sound2 , 1 );
+    sound_play ( choose ( fly_voice1 , hit_voice2 ) );
+    create_hitbox ( 12 , angle_correct ( 15 ) , 6.1 , 6.9 , 16 , 7 , koishishock2 , obj_spark_shock2 , 1.2 + 0.6 * ( smash_charge == 90 ) , 0.6 , 15 + 5 * ( smash_charge == 90 ) , 22 , self.id , 7 , 4 );
+    create_hitbox2 ( 12 , angle_correct ( 165 ) , 6.1 , 6.9 , 16 , 7 , koishishock2 , obj_spark_shock2 , 1.2 + 0.6 * ( smash_charge == 90 ) , 0.6 , -15 - 5 * ( smash_charge == 90 ) , 22 , self.id , 7 , 4 );
+    hitbox.shield_stun = 4;
+    hitbox2.shield_stun = 4;
+    spark = create_spark ( 0 , 23 , global.death_spark , 0.75 , choose ( -0.3 - 0.15 * ( smash_charge == 90 ) , 0.3 + 0.15 * ( smash_charge == 90 ) ) , 0.3 );
+    spark.image_blend = c_red;
+    spark.depth = depth + 0.1;
+    duster = instance_create ( x - 5 * ( 1 - facing * 2 ) * size , y , obj_dust_effect );
+    duster.image_xscale *= 0.5 * size;
+    duster.image_yscale *= 0.5 * size;
+    duster.facing = facing;
+    duster = instance_create ( x - 5 * ( 1 - facing * 2 ) * size , y , obj_dust_effect );
+    duster.image_xscale *= 0.8 * size;
+    duster.image_yscale *= 0.4 * size;
+    duster.facing = !facing;
+  }
+}
+if ( timer >= time - 1 && state_type != "flinch" && state_type != "air_flinch" )
+{
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+}

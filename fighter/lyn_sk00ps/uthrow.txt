@@ -1,0 +1,45 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "uthrow";
+image_speed = 0;
+sprite_index = uthrow_sprite;
+image_index=0;
+timer = 0;
+time = 48;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 50
+target.state_type = "air_flinch";
+target.depth = depth - 1;
+}
+switch ( timer )
+  {
+  case 2: image_index = 1; break;
+  case 15: sprite_index = downb_sprite2; image_index = 6; break;
+  case 18: image_index = 7; break;
+  case 31: image_index = 8; break;
+  case 34: image_index = 9; break;
+  }
+
+if timer < time {
+    state_type = "attack";
+	if timer = 0 {
+    sound_play(choose(attack_voice1,attack_voice2,attack_voice5,no_voice));
+	sound_play(lynwoosh2);
+    create_hitbox(15,80+facing*20,6.8,7.1,23,11,lynhit3,obj_spark_slash3,1,1,20,15,self.id,3,4);
+	}
+	if timer = 15 {
+	sound_play(swordpull);
+	}
+	if timer = 34 {
+	sound_play(swordsheath);
+	}
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
+        

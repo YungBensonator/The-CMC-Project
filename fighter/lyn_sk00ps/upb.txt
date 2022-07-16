@@ -1,0 +1,103 @@
+fast_fall = 0
+fast_fall_temp = 0
+if state_type = "run" || state_type = "stand" || state_type = "jump" {
+    attacking = 0;
+    special = 0;
+    attack_type = "upb"
+    hspeed = 0
+	air_move = 0;
+    if air = 0 {
+        state_type = "air_attack";
+        hspeed = 0;
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing; 
+		nofall = 1;
+		}
+    else {
+		nofall = 0;
+        state_type = "air_attack";
+        }
+        image_speed = 0;
+        sprite_index = upb_sprite;
+        image_index= 0;
+    timer = 0;
+        time = 60;
+        timer_speed=1;
+        intangible = 1
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+}
+switch ( timer )
+  {
+  case 5: image_index = 1; break;
+  case 10: image_index = 2; break;
+  case 18: image_index = 3; break;
+  case 21: image_index = 4; break;
+  case 24: image_index = 5; break;
+  case 27: image_index = 6; break;
+  case 30: image_index = 7; break;
+  case 34: image_index = 8; break;
+  case 38: image_index = 9; break;
+  case 42: image_index = 10; break;
+  case 46: image_index = 11; break;
+  }
+if timer < time {
+	if timer = 1 {
+		sound_play(choose(upb_voice1,upb_voice2,no_voice))
+	sound_play(lynwoosh2);
+		if air = 0 {
+		speed = 6*(1-facing*2);
+		}
+		if air > 0 {
+		speed = 7*(1-facing*2);
+		}
+		direction = 60*(1-facing*2);
+	}
+	if timer = 18 {
+		intangible = 0;
+	}
+	if timer < 18 && frac(timer/2) = 0 {
+            after_image(6,c_green,0.5)
+	}
+	if timer < 18 {
+		force_edge_grab = 1
+	}
+	if timer = 18 {
+	sound_play(lynwoosh);
+	create_hitbox(12,220+facing*100,6.8,5.1,23,20,CritHit,obj_spark_slash3,0.74 , 0.67 , -21.98 , -18.89,self.id,3,4);
+	create_hitbox2(6,160-facing*140,4.8,3.1,9,6,lynhit3,obj_spark_slash3,1.60 , 0.89 , 5.46 , -2.73,self.id,3,4);
+	hitbox2.image_angle = 20*(1-facing*2);
+	}
+	if timer = 19 {
+	hitbox.damage = 6*size;
+	hitbox.bkb = 4.85*size;
+	hitbox.kbg = 3.65*size;
+	hitbox.shield_damage = round(9*size);
+	hitbox.hitlag_frames = round(6*size);
+	hitbox.sfx = lynhit3
+	}
+	if timer > 1 {
+		if air = 0 {
+        image_angle = 0;
+        state_type = "land";
+        sprite_index = land_sprite;
+        attack_type = "none";
+        time = 20;
+        timer = 0;
+    }
+	}
+}  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+        attack_type = "none";
+        if air > 0 {
+		if nofall = 0 {
+        state_type = "fall";
+		}
+		if nofall = 1 {
+        state_type = "jump";
+		}
+		}
+        timer = 0;
+        time =-1;
+    }
+        
