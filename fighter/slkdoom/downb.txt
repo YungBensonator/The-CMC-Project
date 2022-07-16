@@ -1,0 +1,86 @@
+if (state_type == "stand" || state_type == "run" || state_type == "jump") {
+	if (mana_pts >= 200) exit;
+	state_type = "air_attack";
+	attack_type = "downb";
+	timer = 0;
+	time = 46;
+	sprite_index = downb_sprite;
+	image_speed = 0;
+	image_index = 0;
+	special = 1;
+	intangible = 1;
+}
+
+if (timer < time) {
+	if (timer == 4 || timer == 11) intangible = 0;
+	hspeed = 0;
+	vspeed *= 0.91;
+	
+	if (timer == 33) {
+		target = 0;
+		homingbubble = create_homing_bubble(12, 12, 0, 0, self.id, 2);
+	}
+	
+	if (timer == 34) {
+		if (string(target.state_type) != "out" && distance_to_object(target) < 240) {
+			if (air == 0) {
+				duster = instance_create(x,y,obj_dust_effect);
+				duster.facing = facing;
+				duster = instance_create(x,y,obj_dust_effect);
+				duster.facing = !facing;
+			}
+			aimg = after_image(8, 16711935, 0.75);
+			with (target) {
+				aimg = after_image(8, 0, 0.75);
+			}
+			mana_pts += 24;
+			if (mana_pts > 200) {
+				mana_pts = 200;
+				manaspark = instance_create(x-size,y-size*20,obj_spark_effect);
+				manaspark.image_blend = c_blue;
+			}
+		}
+	}
+	if (instance_exists(manaspark)) {
+		manaspark.image_blend = c_blue;
+		manaspark.image_xscale *= 2;
+		manaspark.image_yscale *= 2;
+	}
+	if (timer > 34) {
+		if (instance_exists(aimg)) {
+			if (aimg.image_xscale > 0) aimg.image_xscale += 0.08;
+			else aimg.image_xscale -= 0.08;
+			aimg.image_yscale += 0.08;
+			aimg.image_alpha -= 0.075;
+		}
+		with (target) {
+			if (instance_exists(aimg)) {
+				if (aimg.image_xscale > 0) aimg.image_xscale += 0.08;
+				else aimg.image_xscale -= 0.08;
+				aimg.image_yscale += 0.08;
+				aimg.image_alpha -= 0.075;
+			}
+		}
+	}
+	
+	if (ai) {
+		if (distance_to_object(enemy) < 160 || distance_to_object(enemy) > 240 || string(enemy.state_type) == "attack" || string(enemy.state_type) == "air_attack") {
+			special = 0;
+			movejump = 1;
+		}
+		else special = 1;
+	}
+	
+	if (special && timer == 45 && mana_pts < 200) {
+		timer = 7;
+		intangible = 1;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	if (air > 0) state_type = "jump";
+	else state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

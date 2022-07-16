@@ -1,0 +1,112 @@
+if (state_type == "stand" || state_type == "run") {
+	if (mana_pts < 24) weakattack = 1;
+	else weakattack = 0;
+	state_type = "attack";
+	attack_type = "dsmash";
+	if (weakattack) {
+		timer = -18;
+		time = 150;
+		sprite_index = flinch3_sprite;
+		mana_power = 0.9;
+	}
+	else {
+		timer = 0;
+		time = 150;
+		sprite_index = crouch_sprite;
+		mana_power = 1 + mana_pts/200;
+	}
+	image_speed = 0;
+	image_index = 0;
+	charge_frame = 5;
+}
+
+if (timer < time) {
+	if (timer == 1 && !weakattack) {
+		manaspark = instance_create(x-size,y-size*20,obj_spark_effect);
+		manaspark.image_blend = c_blue;
+	}
+	if (instance_exists(manaspark)) {
+		manaspark.image_blend = c_blue;
+		manaspark.image_xscale *= 1.5;
+		manaspark.image_yscale *= 1.5;
+	}
+	hspeed = 0;
+	switch (timer) {
+		case -13: sprite_index = down_sprite; break;
+		case -3: image_index = 1; break;
+		case 1: if (weakattack) { sprite_index = crouch_sprite; image_index = 0; } break;
+		case 18: instance_create(x-size,y-size*20,obj_spark_effect); break;
+		case 22: if (!weakattack) sound_play(voice_wmp); else sound_play(die_voice1); break;
+		case 26: sprite_index = dsmash_sprite; image_index = 0; break;
+		case 32: image_index = 1; sound_play(swingsnd4); break;
+		case 143: image_index = 0; break;
+	}
+	
+	if (timer == 46) {
+		sound_play(blast_sound);
+		effectorb = create_spark(15,20,self.id);
+		effectorb.sprite_index = gloworb_sprite;
+		effectorb.image_speed = 0;
+		effectorb.image_alpha = 0.96;
+		effectorb.image_xscale = image_xscale*0.018*(0.2 + mana_power*0.9);
+		effectorb.image_yscale = image_yscale*0.018*(0.2 + mana_power*0.9);
+		effectorb.depth = depth - 0.5;
+		effectorb.x = x;
+		effectorb.y = y - size*20;
+		if (!weakattack) mana_pts = 0;
+		intangible = 1;
+	}
+	if (timer > 46) {
+		effectorb.image_xscale = image_xscale*0.018*(timer-45)*(0.2 + mana_power*0.9);
+		effectorb.image_yscale = image_yscale*0.018*(timer-45)*(0.2 + mana_power*0.9);
+	}
+	if (timer > 98) {
+		effectorb.image_alpha -= 0.12;
+		intangible = 0;
+	}
+	if (timer == 106) {
+		with (effectorb) instance_destroy();
+	}
+
+	if (timer == 51 || timer == 57 || timer == 63 || timer == 70 || timer == 75 || timer == 80 || timer == 85 || timer == 90) {
+		create_hitbox(1.2*(0.5 + mana_power/2), 90, 2.4, 0.2, 8*mana_power, 1, magic2, obj_spark_hit4, effectorb.image_xscale*5/size, effectorb.image_yscale*5/size, 0, 20, self.id, 20, 5);
+		hitbox.hit_stun = 6;
+		hitbox.charge_dmg = 0.1;
+		if (mana_power > 1.3) instance_create(x, y, obj_shakescreen2);
+		if (mana_power > 1.6) {
+			instance_create(x, y, obj_shakescreen2);
+			instance_create(x, y, obj_shakescreen2);
+		}
+		if (mana_power >= 2) {
+			instance_create(x, y, obj_shakescreen2);
+			instance_create(x, y, obj_shakescreen2);
+			instance_create(x, y, obj_shakescreen2);
+		}
+	}
+	if (timer == 95) {
+		create_hitbox(12*mana_power, 90, 3 + 2.5*mana_power, 3.6 + 1.2*mana_power, 48*mana_power, 16, magic3, obj_spark_hit4, effectorb.image_xscale*5.5, effectorb.image_yscale*5.5, 0, 20, self.id, 6, 5);
+		hitbox.hit_stun = 8;
+		hitbox.charge_dmg = 0.8 + 0.2*mana_power;
+		if (mana_power > 1.3) instance_create(x, y, obj_shakescreen2);
+		if (mana_power > 1.6) {
+			instance_create(x, y, obj_shakescreen2);
+			instance_create(x, y, obj_shakescreen2);
+		}
+		if (mana_power > 1.9) {
+			instance_create(x, y, obj_shakescreen2);
+			instance_create(x, y, obj_shakescreen2);
+			instance_create(x, y, obj_shakescreen2);
+		}
+	}
+	if (timer > 46 && timer < 94) {
+		hitbox.image_xscale = effectorb.image_xscale*5;
+		hitbox.image_yscale = effectorb.image_yscale*5;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

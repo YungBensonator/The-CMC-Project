@@ -1,0 +1,36 @@
+if (state_type == "stand" || state_type == "run") {
+	state_type = "attack";
+	attack_type = "dash_attack";
+	timer = 0;
+	time = 22;
+	sprite_index = dash_attack_sprite;
+	image_speed = 0;
+	image_index = 0;
+	hspeed *= 1.1;
+}
+
+if (timer < time) {
+	if (timer == 1) {
+		sound_play(attack_sound4);
+		duster = instance_create(x,y,obj_dust_effect);
+		duster.facing = facing; 
+		create_hitbox(8, 20+facing*140, 5.6, 5.4, 24, 6, punch3, obj_spark_hit1, 0.9, 0.6, 10, 14, self.id, 14, 3);
+		hitbox.hit_stun = 4;
+	}
+	if (timer == 8) {
+		hitbox.damage = 4*size;
+		hitbox.bkb = 4.8*size;
+		hitbox.kbg = 3.6*size;
+		hitbox.shield_damage = 16;
+		hitbox.hitlag_frames = 3;
+		hitbox.sfx = punch2;
+		hitbox.hit_stun = 2;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

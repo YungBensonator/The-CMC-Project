@@ -1,0 +1,135 @@
+/////////////////Meter stuff starts here/////////////////////////////////////
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);  
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+}
+MeterHud.sprite_index = meter_sprite;
+MeterHud.image_index = meter;
+MeterHud.image_speed = 0;
+
+no_hurtbox = 1;
+
+meter = meter_gain;
+
+////////////////Meter Stuff ends here/////////////////////////////////////
+
+if ( state_type == "land" )
+if ( timer == 1 && !jumping )
+  sound_play ( land_sound );
+
+if (sprite_index = stand_sprite)
+image_speed = 0.12;
+
+if (sprite_index = jump_sprite)
+{
+if (timer = 0)
+image_index = 0;
+if (image_index = 7)
+image_speed = 0;
+}
+
+if (sprite_index = mid_jump_sprite)
+{
+if (timer = 0)
+image_index = 0;
+if (image_index = 7)
+image_speed = 0;
+}
+
+if (air = 0) {
+sbtemp = 0;
+upbtemp = 0;
+}	
+
+if (state_type = "flinch" || state_type = "air_flinch") {
+sbtemp = 0;
+upbtemp = 0;
+}
+
+if downtimerr >0
+downtimerr -=1
+if downforwardtimerr>0
+downforwardtimerr -=1
+if hadoken >0
+hadoken -=1
+
+if air = 0 and facing = 0{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveright and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveright and !movedown and hadoken = 0
+hadoken = 15
+}
+
+if air = 0 and facing = 1{
+if movedown and downtimerr = 0
+downtimerr = 15
+
+if downtimerr>0 and movedown and moveleft and downforwardtimerr = 0
+downforwardtimerr = 15
+
+if downforwardtimerr > 0 and moveleft and !movedown and hadoken = 0
+hadoken = 15
+}
+
+//Wall Cling Stuff//
+if sprite_index = wall_cling_sprite {
+	if timer <= 1{
+		image_speed = 0
+		image_index = 0
+		sound_play(wall_cling_sound);
+	}
+	y += 1
+	if special && image_index = 0{
+		image_index = 1
+		image_speed = 0.5
+		//state_type = "attack"
+	}
+	if image_index >= 1{
+		if image_index = 1 {
+			if meter = 0{
+    			sound_play(shoot_sound);
+        		create_projectile(2,361,0,0,4,4,kick1,obj_spark_hit1,1,1,-20,15,self.id,60,weaponshot)
+			proj.sprite_index = bustershotR_sprite;
+			proj.hspeed = -5*(1-2*facing);
+        		proj.shield_stun = .75
+			}
+			if (meter = 1 && !instance_exists(boomerang)){
+    			sound_play(shoot_sound);
+        		create_projectile(5,362,3,4,4,4,slash2,obj_spark_slash1,1,1,-20,15,self.id,60,boomerangcutter)
+			boomerang = proj;
+        		proj.sprite_index = keepmain.boomerangcutter_sprite
+        		proj.shield_stun = .75
+			}
+			if (meter = 2 && !instance_exists(proj)) {
+    			sound_play(shoot_sound);
+        		wheel = proj;
+        		create_projectile(1,45 + facing * (180 - 90),3,3,6,5,slash2,obj_spark_slash1,1,1,-20,5,self.id,30,spinwheel)
+        		proj.sprite_index = spinwheel_sprite
+        		proj.shield_stun = .75
+			}
+			if (meter = 3 && !instance_exists(proj)) {
+    			sound_play(shoot_sound);
+        		proj = create_projectile(3,15 + facing * 150,5,0,8,5,shock2,obj_spark_shock2,0.8,0.8,-20,25,self.id,70,lightningweb)
+			proj.sprite_index = lightningweb_sprite;
+        		proj.shield_stun = .75
+			proj.stun_base = 10;
+        		proj.stun_scalar = 2;
+        		proj.shake_ampl = 0.2;
+			}
+		}
+            	if image_index = 8.5 {
+                	image_speed = 0
+			image_index = 0
+            	}
+	}
+	
+}

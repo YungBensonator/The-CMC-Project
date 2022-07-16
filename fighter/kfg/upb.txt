@@ -1,0 +1,159 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+    state_type = "air_attack";
+    attack_type = "upb";
+    timer = 0;
+    time = 34;
+    sprite_index = upb_sprite;
+    image_index = 0;
+    image_speed = 0;
+    hspeed = 0;
+	upbcount = 0;
+    air_move = 0;
+	special = 0;
+	upbtemp = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 1: image_index = 1; break;
+	case 5: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 16: image_index = 5; break;
+	case 20: image_index = 6; break;
+	case 24: image_index = 7; break;
+	case 28: image_index = 8; break;
+	
+	case 50: sprite_index = uair_sprite; image_index = 0; break;
+	case 52: image_index = 1; break;
+	case 54: image_index = 2; break;
+	case 57: image_index = 3; break;
+	case 60: image_index = 4; break;
+	case 62: image_index = 5; break;
+	case 65: image_index = 6; break;
+	case 68: image_index = 7; break;
+	case 71: image_index = 8; break;
+	case 74: image_index = 9; break;
+	case 78: image_index = 10; break;
+	
+	//
+	case 101: sprite_index = upb_sprite3; image_index = 4; break;
+	case 105: image_index = 5; break;
+	case 109: image_index = 6; break;
+	case 113: image_index = 7; break;
+	case 117: image_index = 8; break;
+	case 121: image_index = 9; break;
+	case 125: image_index = 10; break;
+	case 130: image_index = 11; break;
+      }
+  }  
+switch (timer){
+        case 51: 
+				blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_sprite, /*Start frame*/ 1, /*Apex Frame*/ 3, /*End frame*/ 4, /*CCW*/ 1, /*girth*/ 8, 30);
+				blur.image_index = 0;
+				blur.push_y = 3
+				blur.push_x = -9 * size * (1-facing*2); 
+				blur.h_squish = -5; 
+				blur.v_squish = -10; 
+				blur.depth = 1;
+                blur.index = 0.5; break;
+				blur.image_angle = 180*(1-facing*2);
+        case 52: blur.image_index = 1; break;
+        case 53: blur.index = 1; blur.image_index = 2; break;		
+        case 54: blur.index = 2; blur.image_index = 3; break;
+		case 55: blur.index = 2.33; break;     
+		case 56: blur.index = 2.66; break;
+        case 57: blur.index = 3; blur.image_index = 3; break;
+		case 58: blur.index = 3.5; break;
+        case 59: blur.index = 4; blur.image_index = 4; break;
+		case 60: blur.index = 4.33; break;
+        case 61: with (blur){instance_destroy();}
+		}
+		
+if timer = 9 && upbcount = 0 {
+	sound_play(atksound2);
+	duster = instance_create(x+size*(6-facing*12),y,obj_dust_effect);
+	duster.facing = facing;
+	duster.depth = 1;
+	speed = 11.3*(1-facing*2);
+	direction = 75*(1-facing*2);
+	create_hitbox(7,70+facing*40,6.75,0,20,7,kick2,obj_spark_hit3,0.6 , 0.6 , 12.87 , 24.18,self.id,5,1);
+	hitbox.di = 0;
+}
+if timer > 10 {
+	force_edge_grab = 1;
+}
+if timer >= 11 && timer <= 15 {
+	speed *=0.9
+}
+if timer > 25 {
+	air_move = 1;
+}
+if timer = 14 {
+	upbcount += 1
+}
+if timer = 15 && upbcount < 2 {
+	timer = 9 
+}
+if timer >= 13 && timer <= 25 && special && upbtemp = 1 && attack_shielded = 0 {
+    timer = 50;
+    time = 82;
+    sprite_index = uair_sprite;
+    image_index = 0;
+	speed *= 0.4
+	target.x = x+5*(1-facing*2);
+	target.y = y;
+}
+if timer = 54 {
+	vspeed = -3
+	sound_play(atksound2);
+	create_hitbox(5,60+facing*60,6.75,0,20,10,kick2,obj_spark_hit3,0.76 , 1.53 , 11.70 , 14.82,self.id,5,1);
+	hitbox.di = 0;
+}
+if timer >= 58 && timer <= 70 && special {
+    timer = 100;
+    time = 140;
+    sprite_index = upb_sprite3;
+    image_index = 4;
+	if (instance_exists(blur)) {with (blur){instance_destroy();}}
+}
+if timer = 101 {
+	vspeed = -7
+	hspeed = 2-facing*4;
+	sound_play(upbvoice)
+	}
+if timer = 109 {
+	sound_play(atksound2);
+	create_hitbox(5,270,4.75,6.9,20,15,kick3,obj_spark_hit3,1.19 , 2.15 , 13.65 , 25.21,self.id,5,1);
+}
+if ( air = 0 && timer > 9 )
+      {
+	state_type = "land";
+	attack_type = "none";
+	shakex = 0;
+	timer = 0;
+	time = 15;
+	sprite_index = land_sprite;
+      }
+if hitbox.hit =1  {
+ upbtemp = 1;
+}
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	if upbtemp = 0 {
+	state_type = "fall"
+	}
+	if upbtemp = 1 {
+    state_type = "jump";
+	}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

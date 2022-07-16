@@ -1,0 +1,61 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 1;
+  attack_type = "sideb";
+  time = 55;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = sideb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  sound_play(bandit_voice);
+  air_move = 0;
+  has_hit = 0;
+  bringer = 0;
+  }
+
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  }
+  
+if timer = 8 
+{
+sound_play(jump_sound);
+sprite_index = sideb_sprite2;
+image_index = 0;
+vspeed = 0;
+vspeed -= 5 * size;
+hspeed = 0;
+hspeed = 1.4 * (1-facing*2) * size;
+} 
+  
+switch ( timer )
+  {
+  case 09: image_index = 1; break;
+  case 29: image_index = 2; break;
+  case 32: image_index = 3; sound_stop(bandit_voice); sound_play(bringer_voice); sound_play(fafnir_sound); break;
+  case 40: image_index = 4; break;
+  case 43: image_index = 5; break;
+  case 46: image_index = 6; break;
+  case 49: image_index = 7; break;
+  case 52: image_index = 8; break;
+  }
+  
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "fall";
+  timer = 0;
+  time = -1;
+  }

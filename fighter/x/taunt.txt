@@ -1,0 +1,82 @@
+if air = 0 and hadoken > 0{
+hadoken = 15
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 100;
+        time = 180;
+        timer_speed=1;
+}
+if timer < time 
+{
+switch (timer)
+    {
+	case 110: image_index = 1; break;
+	case 115: image_index = 2; break;
+	case 120: image_index = 3; break;
+	}
+
+if (timer = 100 && percent !=0)
+{
+sound_play(choose(taunt_voice,taunt_voice2))
+}
+
+if timer = 120 {
+if (percent = 0 && !instance_exists(hado))
+{
+sound_play(hadoken_voice)
+sound_play(hadoken_sound)
+duster = instance_create ( x , y , obj_dust_effect );
+duster.facing = facing;
+hado = create_projectile(5,10 + facing * (180 - 20),2,3,5,5,sf_shell,obj_spark_hit1,1,1,12,33,self.id,30,weaponshot)
+hado.sprite_index = hadoken_sprite
+hado.hspeed = 1 - facing * 2
+hado.image_speed = 0.5
+hado.shield_stun = .75;
+hado.hit_stun = 40;
+}
+ 
+}
+
+}
+}
+
+if state_type = "stand" || state_type = "crouch" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "taunt";
+        image_speed = 0;
+        sprite_index = taunt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 80;
+        timer_speed=1;
+}
+if timer < time 
+{
+switch (timer)
+    {
+	case 10: image_index = 1; break;
+	case 15: image_index = 2; break;
+	case 20: image_index = 3; break;
+	}
+
+if (timer = 0)
+{
+sound_play(choose(taunt_voice,taunt_voice2))
+}
+ 
+}
+	
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+	hadoken = 0;
+}
+        

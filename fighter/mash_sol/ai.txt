@@ -1,0 +1,133 @@
+//grounded behavior
+if air = 0 {
+	if collision_rectangle(x-13,y-13,x+10,y,item,0,0) && hold_item = 0 && instance_nearest(x,y-5,item).holder = 0 && instance_nearest(x,y-5,item).grab > 0 
+		{
+        attack_type = "none";
+        state_type = "land";
+        sprite_index=land_sprite;
+        timer = 0;
+        time = 3;
+        hold_item = 1;
+        held_item = instance_nearest(x,y-5,item);
+        held_item.holder = id;
+        held_item.state_type = "held"
+        sound_play(itemgetsnd);
+        attacking = 0;
+        exit
+        } 
+		
+	else {
+//from up close
+
+if distance_to_object(enemy) < 30 {
+    //timer=0
+	
+    if smash_power >= global.gs_fs_charge && enemy.air = 0
+		{
+		if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+			facing=1-facing;
+		attack_type = "final_smash" 
+		}
+    else {
+    if enemy.air=0 
+		{
+		if held_item = -1 
+		{
+			if enemy.percent < 80
+			attack_type = choose("jab","jab","stilt","dtilt","grab","grab","utilt","dtilt","b","sideb")
+			else 
+				{
+					attack_type = choose("dsmash","usmash","ssmash","grab","downb")
+				}
+		}
+		else
+		attack_type = "itemfthrow"
+		}
+    else {
+    if held_item = -1
+    attack_type = choose("usmash","utilt","upb")
+    else
+    attack_type = choose("itemfthrow","itemuthrow") 
+		}
+    exit
+    }
+}
+	
+//from afar
+if distance_to_object(enemy) > 40 {
+
+	{
+
+    //timer=0
+    if held_item = -1 {
+    if smash_power >= global.gs_fs_charge && abs(enemy.y-self.y) < 36
+	{
+        if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+            facing=1-facing;
+        attack_type = "final_smash" 
+    }
+	
+    else 
+		{
+        if distance_to_object(enemy) <= 50 && enemy.air = 0
+			{
+				if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+            facing=1-facing;
+				attack_type = choose("ssmash","dsmash","usmash","downb","upb")
+			}
+        if distance_to_object(enemy) > 50 && distance_to_object(enemy) < 130 && random(2) > 1 && enemy.y < y + size*5
+			{
+				if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+            facing=1-facing;
+				attack_type = choose("sideb","b","dsmash","usmash","downb") 
+			}
+		}
+    }
+    else
+    attack_type = "itemfthrow" 
+    exit
+    
+	}
+	
+	}
+}
+//grounded attacks end
+}
+//grounded behavior end
+
+//aerials
+else if offstage && enemy.y > y-5 && ((facing=0 && enemy.x>x+24) || (facing=1 && enemy.x<x-24))
+    attack_type = "dair"
+else
+	{
+    //timer=0
+    if held_item = -1 {
+	{
+	
+    if smash_power >= global.gs_fs_charge && enemy.air = 0
+	{
+		if ((facing=1 && enemy.x>x) || (facing=0 && enemy.x<x))
+			facing=1-facing;
+		attack_type = "final_smash"
+	}
+	else {
+		if (facing=0 && enemy.x > x) || (facing=1 && enemy.x<=x)
+			{
+			if enemy.y > y -2
+			attack_type = choose("dair","dair","fair","nair","fair","fair","uair")
+			if enemy.y < y - 14
+			attack_type = choose("uair","upb")
+			if enemy.y > y - 14 && enemy.y < y-2
+			attack_type = choose("fair","nair","b","uair","dair")
+			}
+		else
+		attack_type = "bair"
+		}
+	}
+	
+	}
+	
+    else
+    attack_type = "itemfthrow"
+    exit
+}

@@ -1,0 +1,136 @@
+if ( state_type == "stand" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "jab";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = jab_sprite;
+  timer = 0;
+  time = 15;
+  timer_speed = 1;
+  has_hit = 0;
+  canceltemp = 0;
+  }
+
+ switch ( timer )
+  {
+  case 3: image_index = 1; sound_play(swingsound1); sound_play(choose(attack_voice1,attack_voice3,attack_voice8,attack_voice8,attack_voice8)); break;
+  case 7: image_index = 2; break;
+  case 9: image_index = 3; break;
+  case 11: image_index = 4; break;
+  case 13: image_index = 5; break;
+  }
+
+if timer = 7
+{
+    create_hitbox ( 3 , 90 , 2.5 , 0.5 , 4 , 3 , solhit1 , obj_spark_hit1 , 0.73 , 0.48 , 14.25 , 30.40 , self.id , 3 , 2 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox.execute_on_hit = "attacker.has_hit = 1;"
+	hitbox.di = 0.7;
+    create_hitbox2 ( 3 , 90 , 2.5 , 0.5 , 4 , 3 , solhit1 , obj_spark_hit1 , 0.65 , 0.59 , 13.11 , 11.97 , self.id , 3 , 2 );
+    hitbox2.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox2.execute_on_hit = "attacker.has_hit = 1;"
+	hitbox2.di = 0.7;
+}
+
+if timer >= 7 and timer < 15 and attack_success = 1 and attacking = 1
+{
+  sprite_index = jab_sprite2;
+  timer = 100;
+  time = 124;
+  timer_speed = 1;
+  image_index = 0;
+}
+
+if timer < 100 and has_hit = 1 and timer >= 7
+    canceltemp = 1
+
+if timer < 122 and has_hit = 1 and timer > 100
+    canceltemp = 1
+
+if timer < 216 and has_hit = 1 and timer > 200
+    canceltemp = 1
+
+switch ( timer )
+  {
+  case 104: image_index = 1; sound_play(swingsound2); sound_play(choose(attack_voice2,attack_voice4,attack_voice8,attack_voice8,attack_voice8)); break;
+  case 106: image_index = 2; break;
+  case 108: image_index = 3; break;
+  case 113: image_index = 4; break;
+  case 116: image_index = 5; break;
+  case 119: image_index = 6; break;
+  case 122: image_index = 7; break;
+  }
+
+if timer = 106
+{
+    create_hitbox ( 4 , 15 + facing * 150 , 2.5 , 0.5 , 10 , 4 , solslash1 , obj_spark_slash2 , 1.45 , 0.68 , 7.79 , 15.20 , self.id , 2 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox.di = 0.7;
+	hitbox.execute_on_hit = "attacker.has_hit = 1;"
+}
+
+if timer >= 106 and timer < 122 and attack_success = 1 and attacking = 1
+{
+  sprite_index = jab_sprite3;
+  timer = 200;
+  time = 240;
+  timer_speed = 1;
+  image_index = 0;
+}
+
+switch ( timer )
+  {
+  case 204: image_index = 1; break;
+  case 206: image_index = 2; break;
+  case 208: image_index = 3; sound_play(swingsound3); sound_play(choose(attack_voice5,attack_voice6,attack_voice8,attack_voice8,attack_voice8)); break;
+  case 210: image_index = 4; break;
+  case 212: image_index = 5; break;
+  case 214: image_index = 6; break;
+  case 216: image_index = 7; break;
+  case 230: image_index = 8; break;
+  case 234: image_index = 9; break;
+  case 238: image_index = 10; break;
+  }
+
+if timer = 212
+{
+    create_hitbox ( 4 , 25 + facing * 130 , 5.5 , 4.5 , 17 , 5 , solslash2 , obj_spark_slash3 , 1.19 , 0.86 , 31.73 , 27.55 , self.id , 2 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox.execute_on_hit = "attacker.has_hit = 1;"
+    create_hitbox2 ( 4 , 25 + facing * 130 , 5.5 , 4.5 , 17 , 5 , solslash2 , obj_spark_slash3 , 0.96 , 0.55 , 19 , 10.45 , self.id , 2 , 3 );
+    hitbox2.image_angle = ( 1 - facing * 2 ) * 0;
+	hitbox2.execute_on_hit = "attacker.has_hit = 1;"
+}
+
+if ((timer >= 7 and timer < 15) or (timer >= 106 and timer < 122)) and ai and attack_success
+{
+attacking = 1; 
+attack_success = 0;
+}
+
+
+if (timer >= 7 and canceltemp = 1 and (special = 1) and timer <= 15)
+	or (timer >= 106 and canceltemp = 1 and (special = 1) and timer <= 119)
+	or (timer >= 212 and canceltemp = 1 and (special = 1) and timer <= 216){
+		if special = 1 and attacking{
+    		state_type = "stand"
+    		timer = 0
+    		time = -1
+    		exit;
+    	}else if special = 1 and !attacking{
+    		state_type = "stand"
+    		timer = 0
+    		time = -1
+    		exit;
+    	}
+	}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

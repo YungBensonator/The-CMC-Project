@@ -1,0 +1,151 @@
+if (state_type == "stand" || state_type == "run") {
+	if (mana_pts < 24) weakattack = 1;
+	else weakattack = 0;
+	state_type = "attack";
+	attack_type = "usmash";
+	if (weakattack) {
+		timer = -18;
+		time = 104;
+		sprite_index = flinch3_sprite;
+		mana_power = 0.9;
+	}
+	else {
+		timer = 0;
+		time = 104;
+		sprite_index = crouch_sprite;
+		mana_power = 1 + mana_pts/200;
+	}
+	image_speed = 0;
+	image_index = 0;
+	charge_frame = 5;
+}
+
+if (timer < time) {
+	if (timer == 1 && !weakattack) {
+		manaspark = instance_create(x-size,y-size*20,obj_spark_effect);
+		manaspark.image_blend = c_blue;
+	}
+	if (instance_exists(manaspark)) {
+		manaspark.image_blend = c_blue;
+		manaspark.image_xscale *= 1.5;
+		manaspark.image_yscale *= 1.5;
+	}
+	hspeed = 0;
+	switch (timer) {
+		case -13: sprite_index = down_sprite; break;
+		case -3: image_index = 1; break;
+		case 1: if (weakattack) { sprite_index = crouch_sprite; image_index = 0; } break;
+		case 18: instance_create(x-size,y-size*20,obj_spark_effect); break;
+		case 26: sprite_index = dsmash_sprite; image_index = 0; break;
+		case 32: image_index = 1; sound_play(swingsnd4); break;
+		case 40: if (!weakattack) sound_play(voice_die); else sound_play(die_voice2); break;
+		case 97: image_index = 0; break;
+	}
+	
+	//create_projectile(3 + 2*mana_power, 330-facing*120, 3.1 + mana_power, 2.8 + mana_power, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -910 + j, 206 + j/4, self.id, 250, chaosspear_script);
+
+	if (timer == 54) {
+		instance_create(0,0,obj_flashscreen);
+		if (!weakattack) mana_pts = 0;
+		sound_play(spear_sound);
+		sound_play(spear_sound);
+		sound_play(spear_sound);
+		if (mana_power >= 2) {
+			for (i = 0; i < 7; i += 1) {
+				switch (i) {
+					case 0: j = -64; break;
+					case 1: j = 10; break;
+					case 2: j = 74; break;
+					case 3: j = 128; break;
+					case 4: j = 182; break;
+					case 5: j = 246; break;
+					case 6: j = 320; break;
+				}
+				if (i == 3) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -910 + j, 206 + j/4, self.id, 250, chaosspear_script);
+				if (i > 0) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -820 + j, 270 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -730 + j, 334 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -640 + j, 388 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -550 + j, 442 + j/4, self.id, 250, chaosspear_script);
+				if (i < 6) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -460 + j, 506 + j/4, self.id, 250, chaosspear_script);
+				if (i == 3) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -370 + j, 570 + j/4, self.id, 250, chaosspear_script);
+			}
+		}
+		else if (mana_power > 1.6) {
+			for (i = 0; i < 5; i += 1) {
+				switch (i) {
+					case 0: j = 10; break;
+					case 1: j = 74; break;
+					case 2: j = 128; break;
+					case 3: j = 182; break;
+					case 4: j = 246; break;
+				}
+				if (i == 2) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -910 + j, 206 + j/4, self.id, 250, chaosspear_script);
+				if (i > 0) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -820 + j, 270 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -730 + j, 334 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -640 + j, 388 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -550 + j, 442 + j/4, self.id, 250, chaosspear_script);
+				if (i < 4) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -460 + j, 506 + j/4, self.id, 250, chaosspear_script);
+				if (i == 2) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -370 + j, 570 + j/4, self.id, 250, chaosspear_script);
+			}
+		}
+		else if (mana_power > 1.2) {
+			for (i = 1; i < 4; i += 1) {
+				switch (i) {
+					case 0: j = 10; break;
+					case 1: j = 74; break;
+					case 2: j = 128; break;
+					case 3: j = 182; break;
+					case 4: j = 246; break;
+				}
+				if (i == 2) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -910 + j, 206 + j/4, self.id, 250, chaosspear_script);
+				if (i > 0) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -820 + j, 270 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -730 + j, 334 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -640 + j, 388 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -550 + j, 442 + j/4, self.id, 250, chaosspear_script);
+				if (i < 4) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -460 + j, 506 + j/4, self.id, 250, chaosspear_script);
+				if (i == 2) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -370 + j, 570 + j/4, self.id, 250, chaosspear_script);
+			}
+		}
+		else if (mana_power > 0.94) {
+			for (i = 1; i < 3; i += 1) {
+				switch (i) {
+					case 0: j = 10; break;
+					case 1: j = 74; break;
+					case 2: j = 128; break;
+					case 3: j = 182; break;
+					case 4: j = 246; break;
+				}
+				if (i == 2) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -910 + j, 206 + j/4, self.id, 250, chaosspear_script);
+				if (i > 0) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -820 + j, 270 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -730 + j, 334 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -640 + j, 388 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -550 + j, 442 + j/4, self.id, 250, chaosspear_script);
+				if (i < 4) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -460 + j, 506 - j/4, self.id, 250, chaosspear_script);
+				if (i == 2) create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -370 + j, 570 - j/4, self.id, 250, chaosspear_script);
+			}
+		}
+		else {
+			for (i = 2; i < 3; i += 1) {
+				switch (i) {
+					case 0: j = 10; break;
+					case 1: j = 74; break;
+					case 2: j = 128; break;
+					case 3: j = 182; break;
+					case 4: j = 246; break;
+				}
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -820 + j, 270 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -730 + j, 334 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -640 + j, 388 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -550 + j, 442 + j/4, self.id, 250, chaosspear_script);
+				create_projectile(3 + 2*mana_power, 330-facing*120, 3.3, 2.2, 12*mana_power, 4, magic2, -1, 0.5, 0.5, -460 + j, 506 - j/4, self.id, 250, chaosspear_script);
+			}
+		}
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

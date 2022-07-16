@@ -1,0 +1,126 @@
+if ( state_type == "stand" || state_type == "run" || state_type == "jump" || state_type == "shielding" )
+  {
+  hspeed = 0;
+  size = csize;
+  state_type = "air_attack";
+  attack_type = "final_smash";
+  image_speed = 0;
+  sprite_index = final_smash_sprite;
+  image_index = 0;
+  timer = 0;
+  time = 141;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  sound_play ( finalsmash_voice );
+  gravity = 0;
+  vspeed = 0;
+  speed = 0;
+  freezer  = instance_create(x,y,obj_freeze)
+  freezer.dontpause = self.id
+  freezer.alarm[0] = 80
+  }
+if (timer < time)
+{   
+fast_fall = 0
+fast_fall_temp = 0
+	
+switch (timer)
+    {
+	case 3: image_index = 1; break;
+	case 6: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	case 15: 
+	image_index = 5; 
+	sound_play (transform_sound)
+	effect_create_above(ef_ring,x,y,0,c_purple)
+	impactspark = instance_create(x,y,obj_down_impact)
+	impactspark.image_blend = c_purple	
+	break;
+	case 25: image_index = 6; break;
+	case 80: 
+	sound_play( finalsmash_voice2 )
+	image_index = 7; 
+	vspeed = -4;
+	hspeed = 1 - facing*2;
+	break;
+	case 83: image_index = 8; break;
+	case 93: 
+	image_index = 9; 
+	sound_play (superdash_sound)
+	break;
+	case 95: image_index = 10; break;
+	case 97: image_index = 11; break;
+	case 99: image_index = 12; break;
+	case 101: 
+	image_index = 13; 
+	hspeed = 6 - facing*12;
+	break;
+	case 103: 
+	image_index = 14; 
+	break;
+	case 105: image_index = 15; break;
+	case 107: image_index = 16; break;
+	case 109: image_index = 17; break;
+	case 111: image_index = 18; break;
+	case 113: image_index = 19; break;
+	case 115: image_index = 20; break;
+	case 117: image_index = 21; break;
+	case 119: image_index = 22; break;
+	case 121: image_index = 23; break;
+	case 123: image_index = 24; break;
+	case 125: image_index = 25; break;
+	case 127: image_index = 26; break;
+	case 129: image_index = 27; break;
+	case 131: image_index = 28; break;
+	case 133: image_index = 29; break;
+	case 135: 
+	image_index = 30; 
+	hspeed *= 0.5;
+    effect_create_above(ef_ring,x,y,0,c_blue)
+	sound_play (teleport_sound)
+	break;
+	}
+if (timer >= 93 && timer < 131)
+{  
+gravity_lock = 2;
+vspeed = 0;
+}
+if (timer = 101|| timer = 103 ||timer = 107|| timer = 109 ||timer = 113||timer = 115 ||timer = 119 ||timer = 121 ||timer = 125 ||timer = 127){
+create_hitbox(4, 15 + facing * 150, 5.6, 0 , -1 , 5, crush, obj_spark_shock, 2.5, 1.5 , -5, 17, self.id, 2, 10 );
+hitbox.armor_break = 1 
+hitbox.shake_type = 1
+hitbox.hitshake_type = 2
+hitbox.shake_ampl = 1.3}
+if (timer = 133)
+{  
+gravity_lock = 2;
+vspeed = 0;
+create_hitbox(9, 15 + facing * 150, 7, 7.5 , 5 , 10, heavy_spike, obj_spark_, 2.5, 1.5 , -5, 17, self.id, 2, 10 );
+hitbox.armor_break = 1 
+hitbox.shake_type = 1
+hitbox.hitshake_type = 2
+hitbox.shake_ampl = 1.3
+}
+
+if (timer >= 3 && timer <=79)
+{  
+gravity_lock = 2;
+vspeed = 0;
+}
+
+if (timer >=101 && timer <=127){after_image(6,c_yellow,0.6)}}
+if ( timer >= time - 1 )
+  {
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

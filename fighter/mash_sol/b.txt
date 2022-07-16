@@ -1,0 +1,128 @@
+if dragoninstall = 1
+{
+char_custom2();
+}
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "b";
+  time = 54;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  sound_play(gunflame_voice);
+  if air = 0
+  {
+  gunflametype = 0;
+  }
+  if air > 0 
+  {
+  gunflametype = 1;
+  }
+  }
+  
+switch ( timer )
+  {
+  case 1: image_index = 1; break;
+  case 3: image_index = 2; break;
+  case 5: image_index = 3; break;
+  case 7: image_index = 4; break;
+  case 10: image_index = 5; break;
+  case 13: image_index = 6; break;
+  case 17: image_index = 7; break;
+  case 21: image_index = 8; break;
+  case 25: image_index = 9; break;
+  case 29: image_index = 10; break;
+  case 36: image_index = 11; break;
+  case 41: image_index = 12; break;
+  case 46: image_index = 13; break;
+  }
+
+
+if gunflametype = 0
+{  
+if timer = 7
+{
+sound_play(fafnir_sound);
+gflame1 = create_projectile (2,15+facing*150,4.5,1.5,20,5,solhit3,obj_spark_fire1,1.0,1.0,20,0,self.id,30,char_custom1);
+gflame1.di = 0;
+gflame1.priority += 3;
+gflame1.owner = self.id;
+gflame1.sprite_index = gunflame_sprite;
+gflame1.image_xscale = 0.2 * (1-facing*2) * size;
+gflame1.image_yscale = 0.2 * size;
+}  
+  
+if timer = 17
+{
+sound_play(fafnir_sound);
+gflame2 = create_projectile (2,15+facing*150,4.5,1.5,20,5,solhit3,obj_spark_fire1,1.0,1.0,37,0,self.id,30,char_custom1);
+gflame2.di = 0;
+gflame2.priority += 3;
+gflame2.owner = self.id;
+gflame2.sprite_index = gunflame_sprite;
+gflame2.image_xscale = 0.2 * (1-facing*2) * size;
+gflame2.image_yscale = 0.2 * size;
+}    
+  
+if timer = 27
+{
+sound_play(fafnir_sound);
+gflame3 = create_projectile (2,15+facing*150,4.5,1.5,20,5,solhit3,obj_spark_fire1,1.0,1.0,54,0,self.id,30,char_custom1);
+gflame3.di = 0;
+gflame3.priority += 3;
+gflame3.owner = self.id;
+gflame3.sprite_index = gunflame_sprite;
+gflame3.image_xscale = 0.2 * (1-facing*2) * size;
+gflame3.image_yscale = 0.2 * size;
+}    
+  
+if timer = 37
+{
+sound_play(fafnir_sound);
+gflame4 = create_projectile (2,25+facing*130,3.5,4.7,20,5,solhit3,obj_spark_fire1,1.0,1.0,71,0,self.id,30,char_custom1);
+gflame4.di = 0;
+gflame4.priority += 3;
+gflame4.owner = self.id;
+gflame4.sprite_index = gunflame_sprite;
+gflame4.image_xscale = 0.2 * (1-facing*2) * size;
+gflame4.image_yscale = 0.2 * size;
+} 
+}
+
+if gunflametype = 1
+{  
+if timer = 7
+{
+sound_play(fafnir_sound);
+gflame1 = create_projectile (5,25+facing*130,3.5,4.7,20,5,solhit3,obj_spark_fire1,1.0,1.0,20,0,self.id,30,char_custom1);
+gflame1.di = 0;
+gflame1.priority += 1;
+gflame1.owner = self.id;
+gflame1.sprite_index = gunflame_sprite;
+gflame1.image_xscale = 0.25 * (1-facing*2) * size;
+gflame1.image_yscale = 0.25 * size;
+if air > 0
+{
+vspeed = 0;
+vspeed -= 2 * size;
+}
+}  
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

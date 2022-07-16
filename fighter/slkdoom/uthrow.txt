@@ -1,0 +1,42 @@
+if (time == -1) {
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "uthrow"
+	timer = 0;
+	time = 52;
+	sprite_index = dsmash_sprite;
+	image_speed = 0;
+	image_index = 0;
+	target.timer_speed = 0;
+	target.alarm[0] = 50;
+}
+
+if (timer < time) {
+	switch (timer) {
+		case 8: image_index = 1; break;
+	}
+	if (timer <= 8) {
+		target.x = x + 12*size*(1-facing*2);
+		target.y = y - 11*size;
+	}
+	else if (timer <= 25) {
+		target.x = x;
+		target.y = y - 24*size;
+	}
+	
+	if (timer == 26) {
+		target.state_type = "flinch";
+		target.timer = 0;
+		target.time = 5;
+		target.intangible = 1;
+		sound_play(spear_sound);
+		create_projectile(8, 90, 6, 4, 12, 6, magic2, -1, 0.5, 0.5, 0, 32, self.id, 40, chaosspear2_script);
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

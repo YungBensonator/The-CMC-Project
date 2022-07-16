@@ -1,0 +1,186 @@
+if ( state_type = "stand" )
+  {
+    attacking = 0;
+    state_type = "attack";
+    attack_type = "stilt";
+	if rekka = 0 {
+    timer = 0;
+    time = 23;
+    sprite_index = stilt_sprite;
+    image_index = 0;
+	}
+	if rekka = 1 {
+	timer = 50;
+	time = 81;
+	sprite_index = stilt_sprite2;
+	image_index = 0;
+	}
+	if rekka = 2 {
+	timer = 100;
+	time = 150;
+	sprite_index = stilt_sprite3;
+	image_index = 0;
+	}
+    image_speed = 0;
+    hspeed = 0;
+	canceltemp = 0;
+	if enemy.x>x {
+		facing = 0;
+	}
+	if enemy.x<x {
+		facing = 1;
+	}
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 8: image_index = 4; break;
+	case 12: image_index = 5; break;
+	case 16: image_index = 6; break;
+	case 20: image_index = 7; break;
+	
+	
+	case 50: sprite_index = stilt_sprite2; image_index = 0; break;
+	case 53: image_index = 1; break;
+	case 56: image_index = 2; break;
+	case 60: image_index = 3; break;
+	case 64: image_index = 4; break;
+	case 68: image_index = 5; break;
+	case 71: image_index = 6; break;
+	case 74: image_index = 7; break;
+	case 77: image_index = 8; break;
+	case 79: image_index = 9; break;
+	
+	case 100: sprite_index = stilt_sprite3; image_index = 0; break;
+	case 103: image_index = 1; break;
+	case 105: image_index = 2; break;
+	case 107: image_index = 3; break;
+	case 110: image_index = 4; break;
+	case 113: image_index = 5; break;
+	case 116: image_index = 6; break;
+	case 119: image_index = 7; break;
+	case 123: image_index = 8; break;
+	case 127: image_index = 9; break;
+	case 130: image_index = 10; break;
+	case 134: image_index = 11; break;
+      }
+    if ( timer = 4 )
+      {
+	sound_play(choose(attack_voice1,no_voice));
+	sound_play(atksound1);
+	create_hitbox(2,30+facing*120,3.05,0,3,6,kick1,obj_spark_hit1,1.39 , 0.59 , 24.18 , 9.75,self.id,2,2);
+	hitbox.hit_stun = -2;
+	hitbox.di = 0.2;
+      }
+    if ( timer >= 5 && timer <= 16 && attacking )
+      {
+	timer = 50;
+	time = 81;
+	sprite_index = stilt_sprite2;
+	image_index = 0;
+      }
+    if ( timer = 56 )
+      {
+	attacking = 0;
+	sound_play(atksound2);
+	sound_play(choose(attack_voice2,no_voice));
+	create_hitbox(3,30+facing*120,3.25,0,3,6,kick2,obj_spark_hit1,1.13 , 0.65 , 23.79 , 19.89,self.id,4,2);
+	hitbox.hit_stun = 4;
+	hitbox.di = 0.2;
+      }
+	
+		
+    if ( timer >= 57 && timer <= 66 && attacking )
+      {
+	timer = 100;
+	time = 150;
+	sprite_index = stilt_sprite3;
+	image_index = 0;
+      }
+	if timer = 106 {
+	hspeed = 9-facing*18;
+	}
+    if ( timer = 107 )
+      {
+	  
+	attacking = 0;
+	sound_play(atksound2);
+	sound_play(choose(attack_voice3,no_voice));
+	create_hitbox(3,30+facing*120,4.25,6,10,10,kick3,obj_spark_hit1,0.96 , 0.63 , 24.50 , 21.84,self.id,3,2);
+	hitbox.hit_stun = 4;
+	hitbox.di = 0.2;
+		hspeed = 0;
+      }
+	switch (timer){
+        case 101: 
+				blur = create_itmpnt_blur( /*Attacker*/ self.id, /*Texture*/ blur_sprite, /*Start frame*/ 1, /*Apex Frame*/ 2, /*End frame*/ 3, /*CCW*/ 1, /*girth*/ 6, 30);
+				blur.image_index = 0;
+				blur.push_y = -3
+				blur.push_x = -15 * size * (1-facing*2); 
+				blur.h_squish = -10; 
+				blur.v_squish = -7; 
+				blur.depth = 1;
+                blur.index = 0.5; break;
+				blur.image_angle = 180*(1-facing*2);
+        case 102: blur.image_index = 1; break;
+        case 103: blur.index = 1; blur.image_index = 2; break;
+		case 104:  blur.index = 1.33; break;  					
+		case 105:  blur.index = 1.66; break;  				
+        case 106: blur.index = 2; blur.image_index = 3; break;
+		case 107: blur.index = 2.33; break;     
+		case 108: blur.index = 2.66; break;
+        case 109: blur.index = 3; blur.image_index = 3; break;
+		case 110: blur.index = 3.5; break;
+        case 111: blur.index = 4; blur.image_index = 4; break;
+		case 112: blur.index = 4.33; break;
+        case 113: with (blur){instance_destroy();}
+		}
+	//cancel stuff
+	if hitbox.hit = 1 {
+		canceltemp = 1;
+	}
+	//cancel into second hit
+	if timer >= 50 && timer <= 55 && canceltemp = 1 && ( ( attacking && (moveup || movedown ) ) ){
+	interrupt = 1;
+	rekka = 1;
+	}
+	//cancel into third hit
+	if timer >= 100 && timer <= 106 && canceltemp = 1 && (( attacking && (moveup || movedown ) )) {
+	interrupt = 1;
+	rekka = 2;
+	}
+	//cancel into smash attack 
+	if timer >= 6 && timer <= 20 && canceltemp = 1 && ( smash || smashleft || smashright || smashup || smashdown ) {
+	interrupt = 1;
+	}
+	//cancel into smash attack 2
+	if timer >= 58 && timer <= 72 && canceltemp = 1 && ( smash || smashleft || smashright || smashup || smashdown ) {
+	interrupt = 1;
+	rekka = 2;
+	}
+	if timer >= 6 && timer <= 20 && canceltemp = 1 && special {
+		interrupt = 1;
+	} 
+	if timer >= 58 && timer <= 72 && canceltemp = 1 && special {
+		interrupt = 1;
+	if (instance_exists(blur)) {with (blur){instance_destroy();}}
+	} 
+	if timer >= 109 && timer <= 123 && canceltemp = 1 && special {
+		interrupt = 1;
+	if (instance_exists(blur)) {with (blur){instance_destroy();}}
+	} 
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+	rekka = 0;
+  }

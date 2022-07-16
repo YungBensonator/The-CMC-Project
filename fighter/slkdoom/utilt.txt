@@ -1,0 +1,33 @@
+if (state_type == "stand" || state_type == "run") {
+	state_type = "attack";
+	attack_type = "utilt";
+	timer = 0;
+	time = 27;
+	sprite_index = utilt_sprite;
+	image_speed = 0;
+	image_index = 0;
+}
+
+if (timer < time) {
+	switch (timer) {
+		case 3: image_index = 1; break;
+		case 6: image_index = 2; break;
+		case 10: image_index = 3; break;
+		case 15: image_index = 4; break;
+		case 21: image_index = 5; break;
+	}
+
+	if (timer == 4) {
+		sound_play(attack_sound3);
+		hspeed = 1.2 - facing*2.4;
+		create_hitbox(7, 50+facing*80, 5.4, 4.8, 16, 3, kick3, obj_spark_hit1, 0.9, 1, 17, 17, self.id, 5, 2);
+		hitbox.hit_stun = 4;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

@@ -1,0 +1,105 @@
+if ( time == -1 )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "bthrow";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = bthrow_sprite;
+  timer = 0;
+  time = 57;
+  timer_speed = 1;
+  target.timer_speed = 0;
+  target.alarm[0] = 50;
+  sound_play(choose(attack_voice1,attack_voice3)); 
+  }
+
+switch(timer)
+{
+case 04: image_index = 01; break;
+case 08: image_index = 02; break;
+case 12: image_index = 03; break;
+case 16: image_index = 04; break;
+case 20: image_index = 05; break;
+case 24: image_index = 06; sound_play(swing_sound4); break;
+case 28: image_index = 07; sound_play(choose(attack_voice2,attack_voice4)); break;
+case 32: image_index = 08; break;
+case 36: image_index = 09; break;
+case 40: image_index = 10; break;
+case 44: image_index = 11; break;
+case 48: image_index = 12; break;
+case 51: image_index = 13; break;
+case 54: image_index = 14; break;
+}
+
+if ( timer < 4 )
+	{
+	target.x = x + place_x(318);
+	target.y = y + place_y(126) + target.actual_height * 0.5;
+	}
+
+if (timer >= 4 and timer < 8)
+{
+    target.x = x + place_x(315);
+	target.y = y + place_y(128) + target.actual_height * 0.5;
+}
+
+if (timer >= 8 and timer < 12)
+{
+    target.x = x + place_x(320);
+	target.y = y + place_y(161) + target.actual_height * 0.5;
+}
+
+if (timer >= 12 and timer < 16)
+{
+    target.x = x + place_x(319);
+	target.y = y + place_y(161) + target.actual_height * 0.5;
+}
+
+if (timer >= 16 and timer < 20)
+{
+    target.x = x + place_x(320);
+	target.y = y + place_y(161) + target.actual_height * 0.5;
+}
+
+if (timer >= 20 and timer < 24)
+{
+    target.x = x + place_x(317);
+	target.y = y + place_y(161) + target.actual_height * 0.5;
+}
+
+if (timer >= 24 and timer < 28)
+{
+    target.x = x + place_x(301);
+	target.y = y + place_y(161) + target.actual_height * 0.5;
+}
+
+if (timer >= 28 and timer < 32)
+{
+    target.x = x + place_x(114);
+	target.y = y + place_y(75) + target.actual_height * 0.5;
+}
+
+if (timer >= 32 and timer < 36)
+{
+    target.x = x + place_x(115);
+	target.y = y + place_y(135) + target.actual_height * 0.5;
+}
+
+if ( timer == 36 )
+  {
+    target.x = x + place_x(144);
+	target.y = y + place_y(198) + target.actual_height * 0.5;
+    create_throw_box ( 10 , 99 - 18 * facing , 6.2 , 6.9 , 14 , 4 , solhit3 , obj_spark_hit3 , 0.74 , 0.81 , -15.77 , 15.20 , self.id , 2 );
+    poop = instance_create(x,y,obj_down_impact)
+	poop.x = x - 15.77 * (1-facing*2) * size;
+    screen_shake(1,13)
+  }
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

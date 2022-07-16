@@ -1,0 +1,47 @@
+if (time == -1) {
+	hspeed = 0;
+	state_type = "air_attack";
+	attack_type = "dthrow"
+	timer = 0;
+	time = 44;
+	sprite_index = b_sprite;
+	image_speed = 0;
+	image_index = 1;
+	target.timer_speed = 0;
+	target.alarm[0] = 90;
+}
+
+if (timer < time) {
+	switch (timer) {
+		case 30: sprite_index = dthrow_sprite; image_index = 0; image_angle = 270 - facing*180; break;
+	}
+	if (timer <= 27) {
+		target.x = x + 16*size*(1-facing*2);
+		target.y = y + 4*size;
+		if (timer < 20) vspeed = -0.25 * (19-timer);
+		else vspeed = 0;
+	}
+	else if (timer <= 41) {
+		target.x = x + 2*size*(1-facing*2);
+		target.y = y + 16*size;
+		vspeed = 1 * (timer-28);
+	}
+	
+	if (air == 0 && timer > 28 && timer <= 41) {
+		timer = 42;
+		vspeed = -4.1;
+		if (dthrowi_cooldown <= 0) {
+			create_hitbox_impaler(10, 270, 9, 1.2, 14, 9, crush, obj_spark_hit3, 1.1, 0.6, 0, 6, self.id, 2, 2);
+			dthrowi_cooldown = 300;
+		}
+		else create_hitbox(10, 270, 5, 1.2, 14, 9, crush, obj_spark_hit3, 1.1, 0.6, 0, 6, self.id, 2, 2);
+	}
+	else if (timer == 41) timer = 40;
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "jump";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

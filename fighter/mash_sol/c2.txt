@@ -1,0 +1,78 @@
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  special = 0;
+  attack_type = "c2";
+  time = 37;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = b_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  sound_play(gunflame_voice);
+  if air = 0
+  {
+  gunflametype = 0;
+  }
+  if air > 0 
+  {
+  gunflametype = 1;
+  }
+  }
+  
+switch ( timer )
+  {
+  case 1: image_index = 1; break;
+  case 3: image_index = 2; break;
+  case 5: image_index = 3; break;
+  case 7: image_index = 4; break;
+  case 9: image_index = 5; break;
+  case 11: image_index = 6; break;
+  case 15: image_index = 7; break;
+  case 18: image_index = 8; break;
+  case 20: image_index = 9; break;
+  case 22: image_index = 10; break;
+  case 27: image_index = 11; break;
+  case 30: image_index = 12; break;
+  case 33: image_index = 13; break;
+  }
+
+if timer = 7
+{
+sound_play(boom_sound);
+gflame1 = create_projectile (13,55+facing*70,5.5,5.9,20,8,solhit3,obj_spark_fire1,1.0,1.0,20,0,self.id,30,char_custom3);
+gflame1.di = 0;
+gflame1.priority += 3;
+gflame1.owner = self.id;
+gflame1.sprite_index = gunflame_spriteD;
+gflame1.image_xscale = 0.2 * (1-facing*2) * size;
+gflame1.image_yscale = 0.2 * size;
+
+duster = instance_create(x,y,obj_dust_effect);
+duster.facing = facing; 
+duster.image_xscale = 0.27 * (1 - facing * 2) * size;
+duster.image_yscale = 0.20 * size;
+
+screen_shake(0.8,12)
+
+if air > 0
+{
+vspeed = 0;
+vspeed -= 2 * size;
+}
+
+}  
+  
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  if ( air == 0 )
+    state_type = "stand";
+    else
+    state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

@@ -1,0 +1,149 @@
+if ( state_type = "stand" )
+  {
+    attacking = 0;
+    state_type = "attack";
+    attack_type = "dtilt";
+	if rekka = 0 {
+    timer = 0;
+    time = 16;
+    sprite_index = dtilt_sprite;
+    image_index = 0;
+	}
+	if rekka = 1 {
+	timer = 50;
+	time = 81;
+	sprite_index = dtilt_sprite2;
+	image_index = 0;
+	}
+	if rekka = 2 {
+	timer = 100;
+	time = 130;
+	sprite_index = dtilt_sprite3;
+	image_index = 0;
+	}
+    image_speed = 0;
+    hspeed = 0;
+	canceltemp = 0;
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 3: image_index = 2; break;
+	case 9: image_index = 3; break;
+	case 12: image_index = 4; break;
+	
+	
+	case 50: sprite_index = dtilt_sprite2; image_index = 0; break;
+	case 52: image_index = 1; break;
+	case 54: image_index = 2; break;
+	case 56: image_index = 3; break;
+	case 59: image_index = 4; break;
+	case 63: image_index = 5; break;
+	case 67: image_index = 6; break;
+	case 71: image_index = 7; break;
+	case 75: image_index = 8; break;
+	
+	case 100: sprite_index = dtilt_sprite3; image_index = 0; break;
+	case 105: image_index = 1; break;
+	case 111: image_index = 2; break;
+	case 116: image_index = 3; break;
+	case 121: image_index = 4; break;
+      }
+    if ( timer = 2 )
+      {
+	sound_play(choose(attack_voice1,no_voice));
+	sound_play(atksound1);
+	create_hitbox(2,30+facing*120,1.85,0,3,6,kick1,obj_spark_hit1,1.07 , 0.38 , 16.77 , 1.56,self.id,4,1);
+	hitbox.hit_stun = 4;
+	hitbox.di = 0.2;
+      }
+    if ( timer >= 3 && timer <= 13 && attacking )
+      {
+	timer = 50;
+	time = 81;
+	sprite_index = dtilt_sprite2;
+	image_index = 0;
+      }
+    if ( timer = 54 )
+      {
+	attacking = 0;
+	sound_play(choose(attack_voice2,no_voice));
+	sound_play(atksound2);
+	create_hitbox(2,30+facing*120,3.85,0,3,6,kick2,obj_spark_hit1,1.02 , 0.47 , 21.06 , 4.29,self.id,4,1);
+	hitbox.hit_stun = 4;
+	hitbox.di = 0.2;
+      }
+	
+    if ( timer >= 59 && timer <= 72 && attacking )
+      {
+	timer = 100;
+	time = 130;
+	sprite_index = dtilt_sprite3;
+	image_index = 0;
+      }
+	if timer = 106 {
+	hspeed = 8-facing*16;
+	}
+    if ( timer = 107 )
+      {
+	attacking = 0;
+	sound_play(choose(attack_voice3,no_voice));
+	sound_play(atksound2);
+	create_hitbox(3,30+facing*120,4.25,5,10,10,kick3,obj_spark_hit1,1.13 , 0.36 , 9.36 , 1.56,self.id,4,1);
+	hitbox.hit_stun = 4;
+	hitbox.di = 0.2;
+	hspeed *= 0.8;
+      }
+	if timer >= 108 {
+		hspeed *= 0.8;
+		}
+	//cancel stuff
+	if hitbox.hit = 1 {
+		canceltemp = 1;
+	}
+	//cancel into smash attack 
+	if timer >= 4 && timer <= 18 && canceltemp = 1 && ( smash || smashleft || smashright || smashup || smashdown ) {
+	interrupt = 1;
+	}
+	//cancel into smash attack 2
+	if timer >= 56 && timer <= 70 && canceltemp = 1 && ( smash || smashleft || smashright || smashup || smashdown ) {
+	interrupt = 1;
+	rekka = 2;
+	}
+	//cancel into second hit
+	if timer >= 50 && timer <= 53 && canceltemp = 1 && (( attacking && ( moveleft || moveright || moveup ) ) ) {
+	interrupt = 1;
+	rekka = 1;
+	}
+	//cancel into third hit
+	if timer >= 100 && timer <= 106 && canceltemp = 1 && (( attacking && ( moveleft || moveright || moveup ) ) ){
+	interrupt = 1;
+	rekka = 2;
+	}
+	if timer >= 4 && timer <= 18 && canceltemp = 1 && special {
+		interrupt = 1;
+	}
+	if timer >= 56 && timer <= 70 && canceltemp = 1 && special {
+		interrupt = 1;
+	} 
+	if timer >= 109 && timer <= 123 && canceltemp = 1 && special {
+		interrupt = 1;
+	}  
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+	if movedown = 1 {  
+    state_type = "crouch";
+	}
+	else {
+	state_type = "stand"
+    }
+	attack_type = "none";
+    timer = 0;
+    time = -1;
+	rekka = 0;
+  }

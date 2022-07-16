@@ -1,0 +1,201 @@
+no_hurtbox = 1;
+has_abs = 1;
+
+
+///////////////////////////////////Crouch shit I stole from mp3
+if ( state_type = "crouch" ){
+    
+    image_speed = 0;
+    crouchgetuptimer = min(3,timer)
+    switch (timer){
+        case 0: image_index = 0; sprite_index = crouch_sprite; break;
+        case 4: image_index = 1; break;
+        case 22: image_index = 2; break;
+		case 30: image_index = 3; break;
+		case 38: image_index = 4; break;
+        case 46: image_index = 5; break;
+		case 54: image_index = 6; break;
+		case 62: timer = 5; image_index = 1; break;
+    }
+}
+
+if ( state_type = "stand" && crouchgetuptimer > 0 ){
+    image_speed = 0;
+    crouchgetuptimer -= 1;
+    sprite_index = crouch_sprite;
+    crouchtemp = 1;
+}
+
+if ( state_type = "stand" && crouchgetuptimer = 0 && crouchtemp = 1 ){
+    sprite_index = stand_sprite;
+    image_index = 0;
+    crouchtemp = 0;
+}
+
+if ( state_type = "stand" && crouchgetuptimer >= 1 and crouchgetuptimer <= 3 ){
+    image_index = 0;
+}
+
+if ( state_type != "stand" && state_type != "crouch" && crouchgetuptimer > 0 ){
+    crouchgetuptimer = 0;
+    crouchtemp = 0;
+}
+///////////////////////////////////////End of Crouch shit stolen from mp3
+
+if sprite_index = stand_sprite
+{
+image_speed = 0.13;
+}
+
+if ( sprite_index = jump_sprite and image_index >= 12 )
+{
+image_index = 10;
+}
+
+if ( sprite_index = mid_jump_sprite and image_index >= 12 )
+{
+image_index = 10;
+}
+
+if air = 0 or state_type == "flinch" or state_type == "air_flinch"
+{
+zairtemp = 0;
+sidebtemp = 0;
+}
+
+if ( sprite_index = broken_sprite and image_index >= 4 )
+{
+image_index = 1;
+}
+
+if ( state_type == "walk" or state_type == "run" )
+  step_sound = custom_step_sound;
+  
+if ( state_type == "land" )
+if ( timer == 1 && !jumping )
+  sound_play ( landin_sound );
+  
+if ( ( state_type == "air_flinch" || state_type == "tumble" ) && sprite_index == launched_sprite )
+{
+  image_speed = 0.25;
+  sprite_angle = direction + angle_correct ( -135 );
+}
+
+if dustchase = 1
+{
+if cos(timer*pi)>0.5
+after_image(7,c_white,0.5)
+}
+
+if state_type == "attack" or state_type = "air_attack" and dustchase = 1
+{
+dustchase = 0;
+}
+
+if (!instance_exists(MeterHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    MeterHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    MeterHud.step_script = hudThing_step_script;
+    MeterHud.draw_script = hudThing_draw_script;
+    MeterHud.owner = self.id;
+    MeterHud.keepmain = self.keepmain;
+	MeterHud.sprite_index = meter_sprite;
+    MeterHud.image_index = meter;
+}
+
+
+if (!instance_exists(CircleHud)){
+    hud_x = obj_game_control.hud_x[other.number-1];
+    hud_y = window_h-128+lengthdir_y(obj_game_control.hudp_shake[i]*0.8,obj_game_control.hudp_shake[i]*60);    
+    CircleHud = instance_create ( hud_x, hud_y, obj_custom_gfx);
+    CircleHud.step_script = hudThing_step_script;
+    CircleHud.draw_script = hudThing_draw_script;
+    CircleHud.owner = self.id;
+    CircleHud.keepmain = self.keepmain;
+	CircleHud.sprite_index = circle_sprite;
+}
+
+if dragoninstall = 1
+CircleHud.sprite_index = circle_sprite;
+else
+CircleHud.sprite_index = -1;
+CircleHud.image_speed = 0.23;
+
+if dragoninstall = 1 {
+	aaa = after_image ( 3 , c_red , 0.5 );
+ aaa.image_xscale *= 1.15;
+ aaa.image_yscale *= 1.15;
+ aaa.x += -1 + floor ( random ( 3 ) );
+ aaa.y += -1 + floor ( random ( 3 ) );
+ 
+ 
+walk_speed = 2.1;
+run_speed = 4.5;
+run_accel = 0.2;
+run_start_speed = 3.6;
+air_speed = 3.1;
+air_accel = 0.32;
+ 
+}
+else
+{
+walk_speed = 1.86;
+run_speed = 3.8;
+run_accel = 0.1;
+run_start_speed = 3;
+air_speed = 2.6;
+air_accel = 0.26;
+}
+
+if dragoninstall = 1 and meter = 0 {
+dragoninstall = 0
+super_armor = 0;
+	shield_hp = 150;
+	if air = 0
+	{
+        state_type = "broken"; 
+	    timer = 0  
+	}
+	else{
+		state_type = "broken_bounce"
+	    vspeed = 6
+		timer = -1
+	}
+	time = 480
+    attack_type = "none"
+    sprite_index = broken_sprite;
+	image_index = 0;
+	speed = 0
+}
+
+if dragoninstall = 1 and meter > 0 and attack_type != "c9" {
+	meter -= 0.05
+}
+
+MeterHud.image_index = meter;
+if(MeterHud.image_index <= 0) {MeterHud.image_index = 0}
+MeterHud.image_speed = 0;
+
+if(MeterHud.image_index <= 0) {MeterHud.image_index = 0}
+MeterHud.image_speed = 0;
+
+if meter >= 55
+meter = 55
+
+if meter <= 0{
+meter = 0
+}
+
+if (hitbox.hit = 1 || hitbox2.hit = 1 || hitbox3.hit = 1 || proj.hit = 1) and meter < 55 and dragoninstall = 0{
+meter += 0.5
+}
+
+if state_type == "out" or state_type == "dead"
+{
+meter = 0;
+if dragoninstall = 1
+{
+dragoninstall = 0;
+}
+}

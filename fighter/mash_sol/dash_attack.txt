@@ -1,0 +1,102 @@
+if ( state_type == "run" || state_type == "stand" )
+  {
+  hspeed *= 0.5;
+  state_type = "attack";
+  attack_type = "dash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = dash_attack_start_sprite;
+  timer = 0;
+  time = 56;
+  timer_speed = 1;
+  air_move = 0;
+  has_hit = 0;
+  canceltemp = 0;
+  }
+
+fast_fall = 0
+fast_fall_temp = 0;
+
+if has_hit = 1 and timer >= 14 and timer < 100 
+    canceltemp = 1 
+
+switch (timer)
+{
+case 3: image_index = 1; break;
+case 12: sprite_index = dash_attack_sprite; image_index = 0; state_type =  "air_attack"; break;
+case 14: image_index = 1; sound_play(choose(attack_voice1,attack_voice2,attack_voice3,attack_voice4,attack_voice7,attack_voice8)); break;
+case 43: image_index = 0; break;
+}
+
+if timer = 12
+{
+sound_play(jump_sound);
+vspeed = -2.5 * size;
+hspeed = 5 * (1-facing*2) * size;
+  duster = instance_create(x,y,obj_dust_effect);
+  duster.facing = facing;
+  duster.image_xscale = 0.25*size;
+  duster.image_yscale = 0.25*size;
+}
+
+if timer = 14
+{
+    create_hitbox ( 10 , 25 + facing * 130 , 5.4 , 6 , 17 , 7 , solhit3 , obj_spark_hit4 , 0.78 , 0.44 , 13.49 , 23.56 , self.id , 15 , 2 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}
+
+if timer = 20
+{
+hitbox.damage = 8*size;
+hitbox.bkb = 2*size;
+hitbox.kbg = 3.3*size;
+hitbox.dir = 35 + facing * 110;
+hitbox.sfx = solhit1;
+hitbox.gfx = obj_spark_hit2;
+}
+
+if timer >= 12 and timer < 43
+{
+if dragoninstall = 0
+{
+if cos(timer*pi)>0.5
+after_image(7,c_white,0.5)
+}
+if dragoninstall = 1
+{
+if cos(timer*pi)>0.5
+after_image(7,c_red,0.5)
+}
+}
+
+
+if (timer >= 14 and canceltemp = 1 and (special = 1)){
+		if special = 1 and attacking{
+    		state_type = "jump"
+    		timer = 0
+    		time = -1
+    		exit;
+    	}else if special = 1 and !attacking{
+    		state_type = "jump"
+    		timer = 0
+    		time = -1
+    		exit;
+    	}
+	}
+
+if (air == 0 and timer >= 14) 
+{
+    state_type = "land";
+    attack_type = "none";
+    sprite_index = land_sprite;
+	timer = 0;
+    time = 14; 
+}
+
+if ( timer >= time - 1 )
+  {
+  attack_type = "none";
+  state_type = "jump";
+  timer = 0;
+  time = -1;
+  }

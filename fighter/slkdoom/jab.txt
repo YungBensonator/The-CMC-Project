@@ -1,0 +1,100 @@
+if (state_type == "stand" || state_type == "run") {
+	state_type = "attack";
+	attack_type = "jab";
+	timer = 0;
+	time = 24;
+	sprite_index = jab_sprite;
+	image_speed = 0;
+	image_index = 0;
+	temp = 0;
+}
+
+if (timer < time) {
+	switch (timer) {
+		case 5: image_index = 1; break;
+		case 101: image_index = 2; break;
+		case 106: image_index = 3; break;
+		
+		case 201: sprite_index = utilt_sprite; image_index = 0; break;
+		case 203: image_index = 1; break;
+		case 205: image_index = 2; break;
+		case 208: image_index = 3; break;
+		case 211: image_index = 4; break;
+		case 214: image_index = 5; break;
+		
+		case 301: sprite_index = bair_sprite; image_index = 0; break;
+		case 304: image_index = 1; break;
+		case 307: image_index = 2; break;
+		case 310: image_index = 3; break;
+	}
+	
+	if (timer == 5) {
+		sound_play(attack_sound1);
+		hspeed = 1.2 - facing*2.4;
+		create_hitbox(2, 25+facing*130, 3.3, 0, 8, 2, punch2, obj_spark_hit1, 0.9, 0.6, 16, 15, self.id, 5, 2);
+		hitbox.hit_stun = 3;
+	}
+	if (timer == 106) {
+		sound_play(attack_sound2);
+		hspeed = 1.5 - facing*3;
+		create_hitbox(2, 25+facing*130, 4.3, 0, 8, 2, punch3, obj_spark_hit1, 1, 0.7, 16, 15, self.id, 5, 2);
+		hitbox.hit_stun = 3;
+	}
+	
+	if (timer == 204) {
+		sound_play(attack_sound3);
+		create_hitbox(3, 30+facing*120, 3.6, 0, 8, 2, kick2, obj_spark_hit1, 0.9, 1, 17, 17, self.id, 5, 2);
+		hitbox.hit_stun = 4;
+	}
+	
+	if (timer == 307) {
+		sound_play(attack_sound4);
+		hspeed = 2.4 - facing*4.8;
+		create_hitbox(4, 20+facing*140, 5.3, 4.5, 16, 5, kick3, obj_spark_hit1, 1, 0.6, 13, 14, self.id, 5, 3);
+		hitbox.hit_stun = 4;
+	}
+	
+	
+	if (attacking) {
+		if (timer >= 6 && timer < 100) {
+			temp = 1;
+		}
+		if (timer >= 107 && timer < 200) {
+			temp = 1;
+		}
+		if (timer >= 211 && timer < 300) {
+			temp = 1;
+		}
+	}
+	
+	if (temp) {
+		if (timer >= 10 && timer < 100) {
+			time = 124;
+			timer = 100;
+			temp = 0;
+			attacking = 0;
+			target = 0;
+		}
+		if (timer >= 111 && timer < 200) {
+			time = 228;
+			timer = 200;
+			temp = 0;
+			attacking = 0;
+			if (instance_exists(target)) hspeed = (3.3 + min(1, distance_to_object(target)*0.014))*(1-facing*2);
+			else hspeed = 3.3*(1-facing*2);
+		}
+		if (timer >= 215 && timer < 300) {
+			time = 326;
+			timer = 300;
+			temp = 0;
+			attacking = 0;
+		}
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

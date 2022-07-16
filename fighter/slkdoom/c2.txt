@@ -1,0 +1,42 @@
+if (timer == 1 && hit == 0) {
+	sprite_index = attacker.id.chaosspear_sprite;
+	image_speed = 0.5;
+	visible = 1;
+	facing = attacker.facing;
+	scale = attacker.scale;
+	size = attacker.size;
+	victim = attacker.target;
+	absorb = 3;
+	hit = 2;
+
+	if (attacker.facing == 0) image_xscale = attacker.image_xscale*0.9;
+	else image_xscale = -attacker.image_xscale*0.9;
+	image_yscale = attacker.image_yscale*0.8;
+
+	image_angle = 90;
+	direction = 90;
+	
+	speed = 5;
+	moving_object = 1;
+	x += attacker.hspeed;
+	victim.intangible = 0;
+}
+
+if (timer >= 1) {
+	if ((collision_point(x+sign(hspeed),y,obj_wall,1,1) || is_on_floor(self)) && hit == 2) hit = 0;
+	if (timer >= 18 && hit == 2) hit = 0;
+	after_image(2, c_blue, 0.2);
+	
+	if (hit == 2) {
+		victim.x = x;
+		victim.y = y;
+		victim.state_type = "flinch";
+		victim.timer = 0;
+		victim.time = 5;
+	}
+}
+
+if (hit == 1) {
+	instance_create(x, y, obj_spark_explode2);
+	instance_destroy();
+}

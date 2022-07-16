@@ -1,0 +1,98 @@
+if ( state_type == "stand" || state_type == "run" )
+  {
+  hspeed = 0;
+  state_type = "attack";
+  attack_type = "usmash";
+  image_speed = 0;
+  image_index = 0;
+  sprite_index = usmash_sprite;
+  timer = 0;
+  time = 44;
+  timer_speed = 1;
+  charge_frame = 1;
+  }	
+         if timer < time {
+		 state_type = "air_attack";
+		 air_move = 0;
+ switch (timer)
+    {
+	case 12: image_index = 1; break;
+	case 15: image_index = 2; break;
+	case 18: image_index = 3; break;
+	case 21: image_index = 4; break;
+	case 24: image_index = 5; break;
+	case 27: image_index = 6; break;
+	case 30: image_index = 7; break;
+	case 33: image_index = 8; break;
+	case 36: image_index = 9; break;
+	}	
+
+if (smash_charge < 90)
+{
+	
+         if ( timer == 15 )
+  {
+  sound_play ( swingsnd1 );
+  sound_play ( shoot_sound2 );
+  sound_play ( x_voice10 );
+  create_hitbox(3,85 + facing * (180 - 170),5.5,0,1,1,punch4,obj_spark_hit4,0.65,0.65,10,20,self.id,2,1);
+  hitbox.di = 0;
+  hitbox.charge_dmg = 0
+  hitbox.hitstun = 5
+  }
+		if (timer == 18 )
+  {
+  vspeed = -6.5 * size;
+  hspeed = 0.5 - facing * 1 * size;
+  }
+  
+		if ( timer == 21 || timer == 24 || timer == 27)
+  {
+  create_hitbox(2,85 + facing * (180 - 170),4,0,5,4,slash2,obj_spark_slash1,1.4,1,3,30,self.id,2,1);
+  hitbox.di = 0;
+  hitbox.charge_dmg = 0
+  hitbox.hitstun = 5
+  }
+        if ( timer == 30 )
+  {
+  create_hitbox(5,85 + facing * (180 - 170),5.8,6.7,5,4,slash3,obj_spark_slash2,1.4,1,3,30,self.id,2,1);
+  hitbox.charge_dmg = 0.4
+  hitbox.di = 0.1;
+  }
+}
+			
+else 
+
+	{
+	
+         if ( timer == 15 )
+  {
+  sound_play ( swingsnd7 );
+  sound_play ( shoot_sound4 );
+  sound_play ( x_voice10 );
+  create_hitbox(3,90,5.5,0,1,1,punch4,obj_spark_hit4,0.65,0.65,10,20,self.id,2,1);
+  hitbox.charge_dmg = 0;
+  new_index = image_index;
+  sprite_index = usmash2_sprite;
+  image_index = new_index;
+  }	
+         if ( timer == 18 )
+  {
+  vspeed = -7 * size;
+  hspeed = 0.5 - facing * 1 * size;
+  new_index = image_index;
+  sprite_index = usmash2_sprite;
+  image_index = new_index;
+  create_projectile(2,90,5.8,6.7,5,5,slash2,obj_spark_slash2,0.7,0.7,0,0,other.id,40,wingspiral)
+  proj.sprite_index = wingspiral_sprite;
+  proj.charge_dmg = 0.4
+  proj.di = 0.1;
+  }
+}	
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }

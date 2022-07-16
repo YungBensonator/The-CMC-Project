@@ -1,0 +1,78 @@
+if (time != -1) {
+	if (instance_exists(target)) {
+		state_type = "attack";
+		attack_type = "hold";
+		timer = 0;
+		time = -1;
+		sprite_index = grab_sprite;
+		image_speed = 0;
+		image_index = 1;
+		hspeed = 0;
+		target.attack_type = "none";
+		timer_speed = 1;
+		pummel = -1;
+	}
+	else exit;
+}
+
+if (ai == 1) {
+	if (target.time - target.timer > 12 && random(5) > max(0.1, 0.08 + 4.9 * (100 - enemy.percent)/100)) {
+		attacking = 1;
+	}
+	else {
+		attacking = 0;
+		moveleft = 0;
+		moveright = 0;
+		moveup = 0;
+		movedown = 0;
+		if (y - obj_game_control.death_u > x - obj_game_control.death_l) moveleft = 1;
+		else if (y - obj_game_control.death_u > obj_game_control.death_r - x) moveright = 1;
+		else if (random(100) > min(80, target.percent)) movedown = 1;
+		else moveup = 1;
+	}
+}
+
+if (attacking && pummel == -1) {
+	attacking = 0;
+	pummel = 0;
+	sprite_index = grab_sprite;
+	image_speed = 0;
+	image_index = 1;
+}
+
+if (timer >= 0) {
+	target.x = x + 22 * size * (1-facing*2);
+	target.y = y;
+}
+
+if (pummel == -1) {
+	if ((!facing && moveright) || (facing && moveleft)) attack_type = "fthrow";
+	if ((!facing && moveleft) || (facing && moveright)) attack_type = "bthrow";
+	if (moveup) attack_type = "uthrow";
+	if (movedown) attack_type = "dthrow";
+}
+else { 
+	pummel += 1;
+	if (pummel == 14) {
+		temp_timer = target.timer;
+		temp_time = target.time - 2;
+		create_hitbox(1, 180*facing, 4, 0, 8, 4, magic3, obj_spark_explode2, 0.7, 0.7, 18, 18, self.id, 2, 5);
+		instance_create(x, y, obj_shakescreen2);
+		instance_create(x, y, obj_shakescreen2);
+	}
+	if (pummel == 15) {
+		target.state_type = "grabbed";
+		target.sprite_index = target.flinch_sprite;
+		target.timer = temp_timer;
+		target.time = temp_time;
+		target.timer_speed = 1;
+	}
+	if (pummel >= 18) {
+		pummel = -1;
+	}
+}
+if (string(target.state_type) != "grabbed") {
+	state_type = "flinch";
+	time = 15;
+	timer = 0;
+}

@@ -1,0 +1,64 @@
+if (state_type == "edge") {
+	state_type = "attack";
+	attack_type = "edge_attack";
+	timer = 0;
+	time = 50;
+	sprite_index = edge_sprite;
+	image_speed = 0;
+	image_index = 0;
+	
+	if (percent < 100) timer = 0;
+	else timer = -10;
+	intangible = 1;
+}
+
+if (timer < time) {
+	if (instance_exists(manaspark)) {
+		manaspark.image_blend = c_blue;
+		manaspark.image_xscale *= 1.5;
+		manaspark.image_yscale *= 1.5;
+	}
+	hspeed *= 0.9;
+	attacking = 0;
+	state_type = "attack";
+	switch (timer) {
+		case -10: instance_create(x-size,y+size,obj_spark_effect); break;
+		case 6: sprite_index = jump_sprite; image_index = 0; x += 2 - facing*4; break;
+		case 12: sprite_index = roll_sprite; image_index = 0; hspeed = 4.6 - facing*9.2; break;
+		case 15: image_index = 1; break;
+		case 18: image_index = 2; break;
+		case 21: image_index = 3; break;
+		case 24: sprite_index = land_sprite; image_index = 0; intangible = 0; break;
+		case 32: sprite_index = ssmash_sprite; image_index = 1; facing = 1-facing; break;
+		case 36: sprite_index = dthrow_sprite; image_index = 0; image_angle = 330 - facing*300; break;
+		case 44: image_angle = 0; sprite_index = ssmash_sprite; image_index = 0; break;
+	}
+	
+	if (timer == 29) {
+		if (mana_pts < 24) timer = 49;
+		else {
+			manaspark = instance_create(x-size,y-size*20,obj_spark_effect);
+			manaspark.image_blend = c_blue;
+		}
+	}
+	
+	if (timer == 15) {
+		sound_play(attacksnd3);
+		create_hitbox(4, 180 - facing*180, 7, 1.4, -1, 3, -1, -1, 1.1, 1.1, 4, 16, self.id, 3, 5);
+		hitbox.hit_stun = 8;
+	}
+	
+	if (timer == 36) {
+		sound_play(spear_sound);
+		create_projectile(5, 330-facing*120, 4, 2.1, 12, 6, magic2, -1, 0.5, 0.5, 16, 8, self.id, 150, chaosspear_script);
+		mana_pts -= 8;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	facing = 1-facing;
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

@@ -1,0 +1,29 @@
+if (timer <= 0) {
+	sprite_index = mid_jump_sprite;
+	image_speed = 0;
+	image_index = 0;
+}
+
+switch (timer) {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: sprite_index = land_sprite; image_index = 0; break;
+	case 56: sprite_index = crouch_sprite; image_index = 0; sound_play(voice_die); break;
+	case 60: sprite_index = dsmash_sprite; image_index = 0; break;
+	case 64: image_index = 1; break;
+	case 90: image_index = 0; break;
+}
+
+if (timer == 65) {
+	instance_create(0,0,obj_flashscreen);
+	sound_play(spear_sound);
+}
+
+if (timer >= 96) {
+	visible = 1;
+	state_type = "stand";
+	sprite_index = stand_sprite;
+	timer = 0;
+	time = -1;
+}

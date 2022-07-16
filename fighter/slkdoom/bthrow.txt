@@ -1,0 +1,59 @@
+if (time == -1) {
+	hspeed = 0;
+	state_type = "air_attack";
+	attack_type = "bthrow"
+	timer = 0;
+	time = 48;
+	sprite_index = grab_sprite;
+	image_speed = 0;
+	image_index = 0;
+	target.timer_speed = 0;
+	target.alarm[0] = 50;
+}
+
+if (timer < time) {
+	switch (timer) {
+		case 8: sprite_index = mid_jump_sprite; image_index = 0; break;
+		case 9: vspeed -= 3.7; break;
+		case 12: sound_play(attack_sound1); break;
+		case 24: sound_play(attack_sound1); break;
+		case 36: sound_play(attack_sound2); break;
+	}
+	if (timer <= 8) {
+		target.x = x + 22*size*(1-facing*2);
+		target.y = y;
+	}
+	else if (timer <= 44) {
+		hspeed = -2.5 + facing*5;
+		image_angle += 45 - facing*90;
+		target.x = x + cos(degtorad(360-image_angle-180*facing))*22*size;
+		target.y = y + sin(degtorad(360-image_angle-180*facing))*22*size;
+	}
+	
+	if (timer > 10 && timer <= 44 && air == 0) timer = 45;
+	
+	if (timer == 45) {
+		vspeed = 0;
+		sound_play(explode1);
+		target.x = x - 24*size*(1-facing*2);
+		target.y = y;
+		create_hitbox(10.2, 135 - facing*90, 7.8, 4.8, 18, 9, kick3, obj_spark_explode2, 1.2, 0.9, -18, 6, self.id, 2, 5);
+		hitbox.hit_stun = 6;
+		sprite_index = land_sprite;
+		image_index = 0;
+		image_angle = 0;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+	if (air > 0) state_type = "jump";
+	else {
+		state_type = "land";
+		time = 8;
+		sprite_index = land_sprite;
+		image_index = 0;
+	}
+}

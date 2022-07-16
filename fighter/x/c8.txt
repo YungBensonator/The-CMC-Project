@@ -1,0 +1,47 @@
+absorb = 1
+time = 50
+hit = 2
+parry_nodestroy = 1
+if attacker.sprite_index = attacker.wall_cling_sprite
+hspeed = -6*(1-2*facing)
+else
+hspeed = 6*(1-2*facing)
+image_speed = 0.5 ;
+stuntemp = 0;
+moving_object = 1;
+if ( next_to_rwall || next_to_lwall ||on_floor ||on_ceiling )
+{
+    instance_destroy()
+}
+
+if (timer < 15 && !instance_exists(volt)){
+volt = create_projectile(3 , 15 + facing * 150 , 5 , 3 , 3 , 3 , shock3 , obj_spark_shock2 , 0.5 , 0.5 , 15 , -15 , attacker.id , 3);
+volt.image_speed = 0.5
+if attacker.sprite_index = attacker.wall_cling_sprite
+volt.hspeed = -6*(1-2*facing)
+else
+volt.hspeed = 6*(1-2*facing)
+volt.absorb = 1
+volt.moving_object = 0
+volt.stun_base = 10
+volt.hit = 1;}
+
+if (timer > 15){
+hspeed = 0;
+stuntemp = 1;}
+
+if (timer = 16 && !instance_exists(elec))
+{
+elec = create_projectile(9 , 40 + facing * 100 , 4.5 , 5 , 4 , 15 , shock3 , obj_spark_shock2 , 1 , 1.5 , 15 , -15 , attacker.id , 34);
+elec.image_speed = 0.5
+elec.absorb = 1
+elec.absorb2 = 0
+elec.moving_object = 0
+elec.stun_base = 10
+elec.stun_scalar = 2
+elec.shake_ampl = 0.2
+elec.time = 34
+elec.di = 0.5;
+elec.hit = 1;	
+}				
+

@@ -1,0 +1,22 @@
+if (state_type = "stand" || state_type = "crouch" || state_type = "run") {
+	hspeed = 0;
+	state_type = "attack";
+	attack_type = "taunt"
+	timer = 0;
+	time = 104;
+	sprite_index = taunt_sprite;
+	image_speed = 0;
+	image_index = 0;
+}
+
+switch (timer) {
+	case 0: sound_play(voice_hm); break;
+	case 56: image_index = 1; break;
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

@@ -1,0 +1,188 @@
+if (state_type == "stand" || state_type == "run") {
+	if (mana_pts < 24) weakattack = 1;
+	else weakattack = 0;
+	state_type = "attack";
+	attack_type = "dtilt";
+	if (weakattack) {
+		timer = -8;
+		time = 100;
+		sprite_index = flinch3_sprite;
+	}
+	else {
+		timer = 0;
+		time = 88;
+		sprite_index = crouch_sprite;
+	}
+	image_speed = 0;
+	image_index = 0;
+	attacking = 1;
+}
+
+if (timer < time) {
+	if (weakattack) {
+		
+		//Weakened mana attack start
+		
+		hspeed = 0;
+		switch (timer) {
+			case 8: sprite_index = crouch_sprite; break;
+			case 16: effectorb.image_alpha = 0.2; break;
+			case 17: effectorb.image_alpha = 0.3; break;
+			case 18: effectorb.image_alpha = 0.4; break;
+			case 19: effectorb.image_alpha = 0.45; break;
+			case 20: effectorb.image_alpha = 0.5; break;
+			case 21: effectorb.image_alpha = 0.55; break;
+			case 22: effectorb.image_alpha = 0.6; break;
+			case 34: sound_play(voice_ha); break;
+			case 36: sprite_index = dsmash_sprite; image_index = 0; break;
+			case 40: image_index = 1; sound_play(swingsnd4); break;
+			case 43: intangible = 0; break;
+			case 95: image_index = 0; break;
+		}
+		
+		if (timer == 13) {
+			effectorb = create_spark(0,15,self.id);
+			effectorb.sprite_index = glowshield_sprite;
+			effectorb.image_speed = 0;
+			effectorb.image_alpha = 0.1;
+			effectorb.image_xscale = image_xscale*0.264;
+			effectorb.image_yscale = image_yscale*0.264;
+			effectorb.depth = depth - 0.5;
+			effectorb.x = x;
+			effectorb.y = y - size*15;
+		}
+		if (timer > 13 && timer < 48) effectorb.x = x;
+		if (timer > 41) {
+			effectorb.image_xscale = image_xscale*0.06*(timer-38);
+			effectorb.image_yscale = image_yscale*0.06*(timer-38);
+		}
+		if (timer > 53) {
+			effectorb.image_alpha -= 0.15;
+		}
+		if (timer == 57) {
+			with (effectorb) instance_destroy();
+		}
+
+		if (timer == 42) {
+			sound_play(spear_sound);
+			create_hitbox(12, 362, 6, 3, 36, 9, magic3, obj_spark_hit4, effectorb.image_xscale*7, effectorb.image_yscale*7, 0, 15, self.id, 12, 5);
+			hitbox.hit_stun = 8;
+		}
+		if (timer == 45) {
+			hitbox.damage = 8*size;
+			hitbox.bkb = 5.2*size;
+			hitbox.kbg = 2.6*size;
+			hitbox.shield_damage = 20;
+			hitbox.hitlag_frames = 6;
+			hitbox.sfx = magic2;
+			hitbox.hit_stun = 4;
+		}
+		if (timer == 52) {
+			hitbox.damage = 5*size;
+			hitbox.bkb = 4.8*size;
+			hitbox.kbg = 2*size;
+			hitbox.shield_damage = 10;
+			hitbox.hitlag_frames = 2;
+			hitbox.sfx = magic1;
+			hitbox.hit_stun = 1;
+		}
+		if (timer > 42 && timer < 54) {
+			hitbox.image_xscale = effectorb.image_xscale*6;
+			hitbox.image_yscale = effectorb.image_yscale*6;
+		}
+		
+		//Weakened mana attack end
+		
+	}
+	else {
+		
+		//Proper mana attack start
+		
+		if (timer == 1) {
+			manaspark = instance_create(x-size,y-size*20,obj_spark_effect);
+			manaspark.image_blend = c_blue;
+		}
+		if (instance_exists(manaspark)) {
+			manaspark.image_blend = c_blue;
+			manaspark.image_xscale *= 1.5;
+			manaspark.image_yscale *= 1.5;
+		}
+		hspeed = 0;
+		switch (timer) {
+			case 14: effectorb.image_alpha = 0.2; break;
+			case 15: effectorb.image_alpha = 0.3; break;
+			case 16: effectorb.image_alpha = 0.4; break;
+			case 17: effectorb.image_alpha = 0.5; break;
+			case 18: effectorb.image_alpha = 0.6; break;
+			case 19: effectorb.image_alpha = 0.7; break;
+			case 20: effectorb.image_alpha = 0.8; intangible = 1; break;
+			case 28: sound_play(voice_ha); break;
+			case 30: sprite_index = dsmash_sprite; image_index = 0; break;
+			case 34: image_index = 1; sound_play(swingsnd4); break;
+			case 37: intangible = 0; break;
+			case 83: image_index = 0; break;
+		}
+		
+		if (timer == 13) {
+			effectorb = create_spark(0,15,self.id);
+			effectorb.sprite_index = glowshield_sprite;
+			effectorb.image_speed = 0;
+			effectorb.image_alpha = 0.1;
+			effectorb.image_xscale = image_xscale*0.264;
+			effectorb.image_yscale = image_yscale*0.264;
+			effectorb.depth = depth - 0.5;
+			effectorb.x = x;
+			effectorb.y = y - size*15;
+			mana_pts -= 24;
+		}
+		if (timer > 13 && timer < 48) effectorb.x = x;
+		if (timer > 35) {
+			effectorb.image_xscale = image_xscale*0.072*(timer-33);
+			effectorb.image_yscale = image_yscale*0.072*(timer-33);
+		}
+		if (timer > 47) {
+			effectorb.image_alpha -= 0.2;
+		}
+		if (timer == 51) {
+			with (effectorb) instance_destroy();
+		}
+
+		if (timer == 36) {
+			sound_play(spear_sound);
+			create_hitbox(15, 362, 6.4, 3, 40, 9, magic3, obj_spark_hit4, effectorb.image_xscale*7, effectorb.image_yscale*7, 0, 15, self.id, 12, 5);
+			hitbox.hit_stun = 8;
+		}
+		if (timer == 39) {
+			hitbox.damage = 9*size;
+			hitbox.bkb = 5.4*size;
+			hitbox.kbg = 2.8*size;
+			hitbox.shield_damage = 28;
+			hitbox.hitlag_frames = 6;
+			hitbox.sfx = magic2;
+			hitbox.hit_stun = 4;
+		}
+		if (timer == 46) {
+			hitbox.damage = 6*size;
+			hitbox.bkb = 5*size;
+			hitbox.kbg = 2.1*size;
+			hitbox.shield_damage = 16;
+			hitbox.hitlag_frames = 2;
+			hitbox.sfx = magic1;
+			hitbox.hit_stun = 1;
+		}
+		if (timer > 36 && timer < 48) {
+			hitbox.image_xscale = effectorb.image_xscale*6;
+			hitbox.image_yscale = effectorb.image_yscale*6;
+		}
+		
+		//Proper mana attack end
+		
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

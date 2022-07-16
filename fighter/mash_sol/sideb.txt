@@ -1,0 +1,214 @@
+if sidebtemp = 1
+{
+exit;
+}
+
+if dragoninstall = 1
+{
+char_custom4();
+}
+
+fast_fall = 0;
+fast_fall_temp = 0;
+
+if ( state_type == "run" || state_type == "stand" || state_type == "jump" || state_type == "crouch" )
+  {
+  attacking = 0;
+  if ai = 0
+  {
+  special = 1;
+  }
+  if ai > 0 and random(3) > 1
+  {
+  special = 0;
+  }
+  else
+  {
+  special = 1;
+  }
+  attack_type = "sideb";
+  time = 40;
+  timer = 0;
+  state_type = "air_attack";
+  hspeed = 0;
+  sprite_index = sideb_sprite;
+  image_index = 0;
+  image_speed = 0;
+  timer_speed = 1;
+  sound_play(bandit_voice);
+  air_move = 0;
+  has_hit = 0;
+  bringer = 0;
+  }
+
+//---BANDIT REVOLVER---//
+switch ( timer )
+  {
+  case 3: image_index = 1; break;
+  case 6: image_index = 2; break;
+  case 8: image_index = 3; break;
+  case 100: image_index = 4; break;
+  case 104: image_index = 5; break;
+  case 108: image_index = 6; break;
+  case 111: image_index = 7; sound_stop(bandit_voice); sound_play(revolver_voice); sound_play(swingsound4); break;
+  case 114: image_index = 8; break;
+  case 116: image_index = 9; break;
+  case 118: image_index = 10; break;
+  case 120: image_index = 11; break;
+  }
+
+if timer = 8
+{
+vspeed = 0;
+vspeed -= 3.35 * size;
+
+sound_play(jump_sound);
+
+duster = instance_create(x,y,obj_dust_effect);
+duster.facing = facing; 
+duster.image_xscale = 0.27 * (1 - facing * 2) * size;
+duster.image_yscale = 0.20 * size;
+
+hspeed = 0;
+hspeed += 4 * (1-facing*2) * size;
+
+if bringer = 0
+{
+create_hitbox ( 5 , 25 + facing * 130 , 6.5 , 0.5 , 10 , 8 , solhit2 , obj_spark_hit3 , 0.66 , 0.63 , 4.94 , 19.38 , self.id , 9 , 2 );
+hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+hitbox.hit_stul = 6;
+hitbox.di = 0.2;
+hitbox.execute_on_hit = "attacker.has_hit = 1;"
+}
+}
+  
+if timer >= 12 and timer < 99 and has_hit = 1
+{
+timer = 99;
+time = 135;
+} 
+  
+if timer = 111
+{
+    create_hitbox ( 5 , 25 + facing * 130 , 6.3 , 6.8 , 13 , 9 , solhit3 , obj_spark_hit4 , 0.39 , 0.73 , 1.33 , 42.18 , self.id , 7 , 2 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0;
+}  
+  
+if timer = 114
+{
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 6.84
+    hitbox.hitbox_y = size * 37.43
+    hitbox.image_xscale = size * 1.03
+    hitbox.image_yscale = size * 0.39
+    hitbox.image_angle = ( 1 - facing * 2 ) * 66.50
+}
+
+if timer = 116
+{
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 11.97
+    hitbox.hitbox_y = size * 30.21
+    hitbox.image_xscale = size * 0.91
+    hitbox.image_yscale = size * 0.48
+    hitbox.image_angle = ( 1 - facing * 2 ) * 0
+}
+
+if timer = 116
+{
+    hitbox.hitbox_x = size * ( 1 - ( facing * 2 ) ) * 11.02
+    hitbox.hitbox_y = size * 16.34
+    hitbox.image_xscale = size * 0.88
+    hitbox.image_yscale = size * 0.49
+    hitbox.image_angle = ( 1 - facing * 2 ) * 311.05
+}
+  
+  
+if (timer > 8 and timer < 200 and air = 0 ) 
+{  
+    attack_type = "none";
+    state_type = "land";
+    sprite_index = land_sprite;
+    timer=0;
+    time = 12; 
+}  
+  
+  
+//---BANDIT BRINGER---//
+if timer = 7 and special = 1
+{
+timer = 200;
+time = 249;
+sprite_index = sideb_sprite2;
+image_index = 0;
+bringer = 1
+duster = instance_create(x,y,obj_dust_effect);
+duster.facing = facing; 
+duster.image_xscale = 0.27 * (1 - facing * 2) * size;
+duster.image_yscale = 0.20 * size;
+vspeed = 0;
+vspeed -= 5 * size;
+hspeed = 0;
+hspeed = 1.4 * (1-facing*2) * size;
+sound_play(jump_sound);
+} 
+  
+switch ( timer )
+  {
+  case 203: image_index = 1; break;
+  case 223: image_index = 2; break;
+  case 226: image_index = 3; sound_stop(bandit_voice); sound_play(bringer_voice); sound_play(fafnir_sound); break;
+  case 234: image_index = 4; break;
+  case 237: image_index = 5; break;
+  case 240: image_index = 6; break;
+  case 243: image_index = 7; break;
+  case 246: image_index = 8; break;
+  }
+  
+if timer = 220
+{
+    boomfx = create_blur(x,y,self.id);
+    boomfx.sprite_index = sideb_fx;
+    boomfx.image_index = 0;
+    boomfx.image_speed = 0;
+    boomfx.image_xscale = 0.22 * (1-facing*2) * size;
+    boomfx.image_yscale = 0.22 * size;
+    boomfx.depth = depth - 1;
+}  
+  
+if timer >= 220 and timer < 229
+{
+    boomfx.x = x - 5.70 * (1-facing*2) * size;
+    boomfx.y = y - 40.47 *size;
+}  
+  
+switch ( timer )
+  {
+  case 223: boomfx.image_index = 1; break;
+  case 226: boomfx.image_index = 2; break;  
+  case 229: boomfx.image_speed = 0.5; break;
+  }
+  
+if timer = 226
+{
+    create_hitbox ( 12 , 315 - facing * 90 , 6.1 , 6.7 , 40 , 20 , solhit3 , obj_spark_fire1 , 1.00 , 0.60 , 11.78 , 20.33 , self.id , 3 , 3 );
+    hitbox.image_angle = ( 1 - facing * 2 ) * 306.51;
+	hitbox.nospikesnd = 1;
+}  
+  
+if (timer > 226 and air = 0 ) 
+{  
+    attack_type = "none";
+    state_type = "land";
+    sprite_index = land_sprite;
+    timer=0;
+    time = 22; 
+}   
+  
+  
+if ( timer >= time - 1 )
+  {
+  sidebtemp = 1
+  attack_type = "none";
+  state_type = "stand";
+  timer = 0;
+  time = -1;
+  }

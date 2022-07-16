@@ -1,0 +1,125 @@
+if (state_type == "stand" || state_type == "run") {
+	state_type = "air_attack";
+	attack_type = "ssmash";
+	timer = 0;
+	time = 156;
+	sprite_index = ssmash_sprite;
+	image_speed = 0;
+	image_index = 1;
+	charge_frame = 11;
+}
+
+if (timer < time) {
+	vspeed = 0;
+	if (timer == 68 && mana_pts >= 24) {
+		manaspark = instance_create(x-size,y-size*20,obj_spark_effect);
+		manaspark.image_blend = c_blue;
+	}
+	if (instance_exists(manaspark)) {
+		manaspark.image_blend = c_blue;
+		manaspark.image_xscale *= 1.5;
+		manaspark.image_yscale *= 1.5;
+	}
+	
+	switch (timer) {
+		case 8: image_index = 0; break;
+		case 15: instance_create(x-size,y-size*20,obj_spark_effect); break;
+		case 17: image_index = 1; break;
+		case 22: image_index = 2; break;
+	}
+
+	if (timer == 22) {
+		sound_play(attack_sound2);
+		create_hitbox(12, 25+facing*130, 6.8, 5.7, 24, 10, punch4, obj_spark_hit4, 1, 0.7, 19, 15, self.id, 14, 3);
+		hitbox.hit_stun = 4;
+	}
+	if (timer == 32) {
+		hitbox.damage = 7*size;
+		hitbox.bkb = 5.7*size;
+		hitbox.kbg = 3.8*size;
+		hitbox.shield_damage = 12;
+		hitbox.hitlag_frames = 4;
+		hitbox.hit_stun = 2;
+	}
+	
+	if (timer > 67) {
+		if (timer < 129 && !target.custom_boss) {
+			target.x = temptarget_x;
+			target.y = temptarget_y;
+			target.state_type = "flinch";
+			target.timer = 0;
+			target.time = 10;
+			speed = 0;
+			y = yprevious;
+		}
+		
+		hspeed *= 0.92;
+		
+		switch (timer) {
+			case 75: x = target.x; y = target.y; break;
+			case 76: x = target.x + 24*(1-facing*2); y = target.y; break;
+			
+			case 85: x = target.x; y = target.y; break;
+			case 82: x = target.x - 24*(1-facing*2); y = target.y; break;
+			
+			case 85: x = target.x; y = target.y; break;
+			case 86: x = target.x; y = target.y - 24; break;
+			
+			case 88: x = target.x; y = target.y; break;
+			case 89: x = target.x; y = target.y + 24; break;
+			
+			case 91: x = target.x; y = target.y; break;
+			case 92: x = target.x + 24*(1-facing*2); y = target.y; break;
+			
+			case 94: x = target.x; y = target.y; break;
+			case 95: x = target.x; y = target.y + 24; break;
+			
+			case 99: x = target.x; y = target.y; break;
+			case 100: x = target.x - 24*(1-facing*2); y = target.y; break;
+			case 103: sprite_index = bair_sprite; image_index = 0; break;
+			case 128: image_index = 1; break;
+			case 132: image_index = 2; break;
+			case 136: image_index = 3; break;
+		}
+		if (timer == 75 || timer == 81 || timer == 85 || timer == 88 || timer == 91 || timer == 94 || timer == 99) {
+			sound_play(attack_sound3);
+			create_hitbox(0.6, 90, 5.5, 0.6, 2, 1, punch2, obj_spark_hit1, 1, 1, 0, 16, self.id, 2, 1);
+			hitbox.charge_dmg = 0;
+		}
+		else if (timer == 129) {
+			hspeed = 2.5 - facing*5;
+			sound_play(attacksnd3);
+			create_hitbox(3, 25+facing*130, 7, 6.1, 24, 7, kick3, obj_spark_hit4, 1, 0.6, 13, 14, self.id, 4, 3);
+			hitbox.charge_dmg = 0.5;
+		}
+	}
+	else if (timer == 66) timer = 300;
+	else if (timer > 30) {
+		hspeed *= 0.93;
+	}
+	else if (timer >= 22) {
+		hspeed = size*(6 - facing*12);
+	}
+	else hspeed = 0;
+	
+	if (mana_pts >= 24 && attack_success && instance_exists(target) && timer < 37 && timer > 22) {
+		timer = 67;
+		target.speed = 0;
+		target.state_type = "flinch";
+		target.timer = 0;
+		target.time = 10;
+		mana_pts -= 24;
+		sprite_index = mid_jump_sprite;
+		image_index = 0;
+		temptarget_x = target.xprevious;
+		temptarget_y = target.yprevious;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	if (air > 0) state_type = "jump";
+	else state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

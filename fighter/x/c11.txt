@@ -1,0 +1,55 @@
+proj_destroy = -1;
+moving_object = 1;
+if ( timer <= 1 && hit = 0 )
+  {
+    if ( speed = 0 )
+	if attacker.sprite_index = attacker.wall_cling_sprite
+	hspeed = -7*(1-2*attacker.facing);
+	else
+	hspeed = 7*(1-2*attacker.facing);
+    image_speed = 0.6;
+    visible = 1;
+	vspeed = -4.5;
+    if ( hspeed > 0 )
+	facing = 0;
+    else
+	facing = 1;
+  }
+vspeed +=0.25
+if (vspeed > 4)
+{vspeed = 0}
+hspeed -= 0.2 - facing * 0.4;
+
+if ( returning )
+  {
+    if ( attacker.y - 10 < y + vspeed && vspeed > -5 )
+	vspeed -= 0.50;
+    if ( attacker.y - 10 > y + vspeed && vspeed < 5 )
+	vspeed += 0.50;
+    if ( place_meeting(x,y,attacker) )
+      {
+	keepmain.boomerang = 0;
+	instance_destroy();
+      }
+  }
+if ( image_angle = 300 && instance_exists(attacker) && timer <= 199 )
+    sound_play(keepmain.sideb_sound);
+if ( !returning && ( abs(hspeed) = 0.8 || ( ( next_to_rwall || next_to_lwall ) && hit = 0 ) ) )
+  {
+    hspeed = 0;
+    returning = 1;
+    timer = 2;
+  }
+if ( is_on_floor(self) && vspeed > 0 )
+    vspeed *= -0.85;
+if ( hit > 0 && !returning )
+  {
+    returning = 1;
+    timer = 2;
+    time = 233;
+  }
+if ( ( x < obj_game_control.death_l || x > obj_game_control.death_r || y < obj_game_control.death_u || y > obj_game_control.death_d ) || timer >= 256 )
+  {
+    keepmain.boomerang = 0;
+    instance_destroy();
+  }

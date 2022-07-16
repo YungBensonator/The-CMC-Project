@@ -1,0 +1,57 @@
+if (state_type == "down") {
+	state_type = "attack";
+	attack_type = "down_attack"
+	timer = 0;
+	time = 61;
+	sprite_index = down_sprite;
+	image_speed = 0;
+	image_index = 1;
+	downatkangle = 0;
+}
+
+if (timer < time) {
+	if (instance_exists(manaspark)) {
+		manaspark.image_blend = c_blue;
+		manaspark.image_xscale *= 1.5;
+		manaspark.image_yscale *= 1.5;
+	}
+	switch (timer) {
+		case 1: intangible = 1; break;
+		case 10: image_index = 2; break;
+		case 16: sprite_index = dsmash_sprite; image_index = 0; break;
+		case 18: sound_play(voice_ha); break;
+		case 22: image_index = 1; sound_play(swingsnd4); break;
+		case 26: intangible = 0; break;
+		case 54: image_index = 0; break;
+	}
+	
+	if (timer == 21) {
+		if (mana_pts < 24) timer = 56;
+		else {
+			manaspark = instance_create(x-size,y-size*20,obj_spark_effect);
+			manaspark.image_blend = c_blue;
+		}
+	}
+	
+	if (timer == 26) {
+		sound_play(spear2_sound);
+		create_projectile(5, 15, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		create_projectile(5, 165, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		create_projectile(5, 90, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		create_projectile(5, 270, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		
+		create_projectile(5, 45, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		create_projectile(5, 135, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		create_projectile(5, 225, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		create_projectile(5, 315, 5.2, 3.5, 12, 6, magic2, 0, 0.5, 0.5, 0, 0, self.id, 150, chaosspear_script);
+		mana_pts -= 24;
+	}
+}
+
+if (timer >= time-1 && state_type != "flinch" && state_type != "air_flinch") {
+	intangible = 0;
+	state_type = "stand";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+}

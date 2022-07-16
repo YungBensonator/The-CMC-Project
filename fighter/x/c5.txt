@@ -1,0 +1,67 @@
+//Tornado Fang (D-Air)
+absorb = -1
+absorb2 = 0
+proj_destroy = 0;
+
+if ( timer <= 1 && temp <= 0)
+{
+sprite_index = keepmain.tornadofang_sprite;
+image_speed = 1 ;
+image_xscale = 1 * (1-facing*2) * size;
+image_yscale = 1 * size;
+temp = 1
+proj_hits = 0
+mmx = attacker
+facing = mmx.facing
+facing = attacker.facing
+visible = 1;
+if(facing = 0){image_angle = 270}
+if(facing = 1){image_angle = 90}
+}
+
+if attack_success = 1 && timer = time {
+time += 1
+attack_success=2;
+attacker.id.attack_hits-=1;
+}
+
+vspeed += 0.2;
+
+visible=1
+draw_sprite_ext(sprite_index,-1,x,y,image_xscale,image_yscale,0,image_blend,0.9)
+if timer = time+1 && proj_hits <= 1 {
+    proj_hits+=1
+    timer = 0
+    time = 20
+    hit = 0
+    launch =0
+    attack_success=0
+    target.hitby=0
+    if proj_hits = 2 {
+        damage = round(attacker.size*3)
+        bkb= attacker.size*5
+        kbg = attacker.size*5
+        dir = 320 - facing * (640 - 540)
+        hitlag_frames = round(5*attacker.size)
+        shake_ampl = 0.75
+        shake_kb = 7
+        sfx = slash2
+        gfx = obj_spark_slash2
+    }
+}
+
+if timer = 75 && proj_hits<1
+proj_hits=1
+moving_object = 1;
+
+if ( next_to_rwall || next_to_lwall ||on_floor ||on_platform )
+{
+    y = yprevious;
+	vspeed = 0;
+    instance_destroy()
+}
+if collision_point(x+sign(hspeed),y,obj_wall,1,1) && hit = 0
+instance_destroy()
+
+
+

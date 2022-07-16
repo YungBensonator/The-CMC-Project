@@ -1,0 +1,112 @@
+fast_fall = 0
+fast_fall_temp = 0
+gravity = 0
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" ) && upbtemp = 0{
+        hspeed = 0;
+		vspeed = 0;
+        state_type = "air_attack";
+        attack_type = "upb";
+        image_speed = 0.25;
+        sprite_index = upb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 44;
+        timer_speed=1;
+        if moveright = 1 facing = 0
+        if moveleft = 1 facing = 1
+        air_move=0
+        temp = 0
+        temp2 = drill_sound2
+		upbtemp = 1;
+		force_edge_grab = 1;
+}
+if timer < time {
+    if timer > 30
+	force_edge_grab = 1
+    state_type = "air_attack";
+    if temp
+        gravity = 0
+    if timer = 13 {
+        timer+=1
+        image_index+=image_speed
+        duster = instance_create(x,y,obj_dust_effect);
+        duster.facing = facing;
+        sound_play(sideb_start_sound)
+        sound_play(sideb_voice)
+        image_speed = 0.3
+        instance_create(x,y,obj_down_impact)
+        vspeed = -7*size
+        
+        }
+    if timer >= 14 && timer <= 30 {
+        vspeed = -6*size
+        temp = 1
+    }
+}
+if temp = 1 {
+    if cos(timer*pi)>0.5
+        after_image(6,c_blue,0.6)
+}
+if timer = 13 || timer = 16 || timer = 19 || timer = 22 || timer = 25 {
+    temp2+=1
+    image_index+=image_speed
+}
+if timer >= 15 {
+    if attacking || special {
+        temp = 0
+	if air != 0 and !moveup {
+        vspeed -= size*1.5
+		hspeed = 0
+    	air_move = 1;
+	}
+	interrupt = 1
+	}
+    if ( movejump){
+	interrupt = 1
+	temp = 0
+	}
+    if ( shieldup && air = 0 )
+	{
+	flashing = true;
+	alarm[7] = 3;
+	state_type = "shielding";
+	attack_type = "none";
+	timer = 0;
+	time = -1;
+	shield = instance_create(x,y-image_yscale*sprite_get_height(sprite_index)/2,obj_shield);
+	}
+}
+if timer = 30 {
+    temp = 0
+    image_angle = 0
+    if air != 0{
+    vspeed = -2*size
+    }
+    else
+    vspeed = -4*size
+}
+if hspeed > 0 && (collision_point(x,y+1,obj_platform,1,1) || collision_point(x,y+1,obj_floor,1,1)) && timer >= 39 - temp*4 {
+            state_type="land"
+			hspeed = 0;
+            attacking = 0
+            temp = 0
+            image_angle = 0
+            attack_type="none"
+            //instance_create(x,y,obj_down_impact)
+            sprite_index = land_sprite
+            image_index = 0
+            image_speed = 0
+            timer=0
+            time=8
+}
+if image_index = 13
+	image_speed = 0
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+if air != 0
+    state_type = "jump";
+else
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+}
