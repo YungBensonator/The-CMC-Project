@@ -1,0 +1,285 @@
+if ( ( state_type = "stand" || state_type = "run" || state_type = "jump" ) && air < max_jumps )
+  {
+    switch ( copy )
+      {
+	case "none":
+	    special = 1;
+	    timer = 0;
+	    time = 1280;
+	    sprite_index = b_sprite;
+	    temp = 0; //for catching
+	    btemp = 0;
+	    target = -1;
+	    break;
+      }
+    state_type = "air_attack";
+    attack_type = "b";
+    image_speed = 0;
+    image_index = 0;
+    air_move = 1;
+    target1 = -1;
+  }
+
+
+// Inhale -----------------------------------
+
+if ( timer < time && copy = "none" )
+  {
+    switch ( timer )
+      {
+	case 7: image_index = 1; sound_play(b_sound1); break;
+	case 14: image_index = 1; break;
+	case 19: sound_stop(b_sound1); sound_play(b_sound2); break;
+	case 20: image_index = 2; break;
+	case 27: image_index = 3; break;
+	case 34: image_index = 2; break;
+	case 40: image_index = 3; break;
+      }
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+
+    if ( timer = 10 )
+      {
+	sound_play(b_sound);
+	x_start = x;
+      }
+    if (timer >= 20 && timer <= 43){
+        btemp = instance_nearest(x,y-10*size,projectile_box);
+    }
+    if ( timer >= 15 && timer <= 41 && timer mod 4 = 1 )
+      {
+	create_homing_bubble(2,1.8,25,3,self.id,3);
+	duster = instance_create(x,y,obj_dust_effect);
+	duster.facing = facing;
+	duster.sprite_index = spr_dust2;
+	duster.image_xscale = 0.1;
+	duster.image_yscale = duster.image_xscale;
+      }
+    if ( ai && timer >= 27 && random(15) > 9 )
+	special = 0;
+    if ( timer >= 25 && timer <= 49 && !special && temp = 0 )
+      {
+	timer = 300;
+	time = 324;
+      }
+    if ( timer = 43 && special )
+      {
+	timer = 20;
+	sound_stop(b_sound2);
+	sound_play(b_sound2);
+      }
+    if ( air = 0 )
+	hspeed = 0;
+    if ( timer >= 18 && timer <= 41 && target > -1 && !target.intangible && target.attack_type != "final_smash" )
+      {
+	if ( temp = 0 )
+	  {
+	    target.attacker = self.id;
+	    target.state_type = "grabbed";
+	    target.attack_type = "none";
+	    target.speed = 0;
+	    target1 = target;
+	    temp = 1;
+	  }
+	if ( temp = 1 )
+	  {
+	special = 1
+	    if ( target.y != y - 4*size )
+		target.y += 0.25 * ( y - 4*size - target.y );
+	    if ( !facing )
+	      {
+		if ( target.x > x )
+		    target.x -= 3.5*size;
+		else
+		    target.x = x;
+	      }
+	    if ( facing )
+	      {
+		if ( target.x < x )
+		    target.x += 3.5*size;
+		else
+		    target.x = x;
+	      }
+	    if ( target.x = x )
+	      {
+		movedown = 0;
+		attacking = 0;
+		special = 0;
+		shieldup = 0;
+		timer = 50;
+		time = 100;
+		timer_speed = 1;
+	      }
+	  }
+      }
+
+    if (distance_to_object(btemp) < 5*size && btemp.hit != 2 && timer < 50){
+	
+	target1 = btemp;
+	btemp.hit = 1
+        btemp.launch = 0
+        btemp.time = btemp.hitlag_frames+2
+        btemp.attack_success = 1
+		movedown = 0;
+		attacking = 0;
+		special = 0;
+		shieldup = 0;
+	    	temp = 1;
+		timer = 50;
+		time = 100;
+		timer_speed = 1;
+	with btemp instance_destroy()
+    }
+  }
+
+
+
+// Hold Enemy -----------------------------------
+if ( timer < time && copy = "none" )
+  {
+    fast_fall = 0;
+    fast_fall_temp = 0;
+    if ( timer = 51 )
+      {
+	sound_stop(b_sound1);
+	sound_play(b_sound4);
+	sprite_index = b_sprite;
+	image_speed = 0;
+	image_index = 4;
+	hspeed = 0;
+	target.time = 60 + target.percent;
+      }
+    if ( timer >= 52 && timer <= 169 )
+      {
+	if ( timer = 58 )
+	  {
+	    timer = 250;
+	    time = 292;
+	  }
+	if ( vspeed > 0.5 && air = 0 )
+	  {
+	    effect_create_above(ef_smokeup,x-16*size,y,0,c_white);
+	    effect_create_above(ef_smokeup,x+16*size,y,0,c_white);
+	    vspeed = 0;
+	    gravity = 0;
+	  }
+	else
+	  {
+	    if ( vspeed < fall_speed )
+		gravity = grav*GRAV_MUL;
+	    else
+		vspeed = fall_speed;
+	  }
+	if ( target1 > 0 )
+	  {
+	    target1.x = x;
+	    target1.y = y;
+	    target1.gravity = 0;
+	    target1.visible = 0;
+	    target1.alarm[0] = 2;
+	    target1.timer_speed = 0;
+	  }
+      }
+  }
+
+// Star Shot -----------------------------------
+if ( timer < time && copy = "none" )
+  {
+    if ( timer = 251 )
+      {
+	sprite_index = b_sprite;
+	image_speed = 0;
+	image_index = 4;
+      }
+
+    switch ( timer )
+      {
+	case 257: image_index = 3; break;
+	case 270: image_index = 2; break;
+	case 280: image_index = 1; break;
+	case 290: image_index = 0; break;
+      }
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+
+    if ( timer = 260 )
+      {
+	sound_play(b_sound5);
+	sound_play(b_sound6);
+	create_projectile(10+target1.weight*17.5,30+facing*120,6.5,5.25+target1.weight*3,20,7.2+target.weight*7,kick2,obj_spark_hit3,0.875,0.975,10,13,self.id,25,char_custom1);
+	proj.image_xscale = 1.5;
+	proj.image_yscale = 1.5;
+	target1.intangible = 1;
+	target1.intangible_frames = 24;
+      }
+	if ( timer >= 250 && timer <= 290 )
+	{
+	target1.visible = 0;
+	}
+    if ( timer >= 261 && timer <= 290 && instance_exists(proj) )
+    {
+	target1.state_type = "air_flinch";
+	target1.attack_type = "none";
+	target1.speed = 0;
+	target1.gravity = 0;
+	target1.alarm[0] = 2;
+	target1.intangible = 1;
+	target1.timer_speed = 0;
+    }
+  }
+
+
+// End -----------------------------------
+if ( timer < time && copy = "none" )
+  {
+    if ( timer = 301 )
+      {
+	sound_stop(b_sound1);
+	sound_play(b_sound3);
+	sprite_index = b_sprite;
+	image_speed = 0;
+	image_index = 2;
+      }
+
+    switch ( timer )
+      {
+	case 307: image_index = 1; break;
+	case 316: image_index = 0; break;
+      }
+
+    fast_fall = 0;
+    fast_fall_temp = 0;
+  }
+
+// End Script -----------------------------------
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+	{
+	state_type = "stand";
+	}
+    else
+	{
+    if ( air != max_jumps )
+	state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 1;
+	}
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+    if ( target1 != -1 && copy = "none" )
+      {
+	target1.state_type = "flinch";
+	target1.timer = 0;
+	target1.time = 15;
+	target1.visible = 1;
+	target1.speed = 3;
+	target1.direction = 60 + random(61);
+	target1.intangible = 0;
+	target1.intangible_frames = 0;
+	target1.timer_speed = 1;
+      }
+  }

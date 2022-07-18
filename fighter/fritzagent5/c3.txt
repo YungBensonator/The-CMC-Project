@@ -1,0 +1,137 @@
+absorb = -1
+can_reflect=0;
+absorb2=0;
+parry_nodestroy=1;
+if tempposition < 1{
+    switch ( alarm[0] )
+      {
+    case 299: image_index = 0; break;
+    case 295: image_index = 1; break;
+    case 291: image_index = 2; break;
+    case 287: image_index = 3; break;
+    case 283: image_index = 2; break;
+    case 279: image_index = 1; break;
+    case 275: image_index = 0; break;
+    case 188: image_index = 0; image_speed=0; sprite_index=UltronIsMyCity.dronepunch_sprite; break;
+    case 184: image_index = 1; hspeed= 4-facing*8; break;
+    case 180: image_index = 2; break;
+    case 176: image_index = 3; break;
+    case 172: image_index = 4; hspeed=0; break;
+    case 168: image_index = 0; sprite_index=UltronIsMyCity.droneentry_sprite; break;
+    case 164: image_index = 1; break;
+    case 160: image_index = 2; break;
+      }
+}
+if tempposition > 0{
+    switch ( alarm[0] )
+      {
+    case 299: image_index = 0; break;
+    case 295: image_index = 1; break;
+    case 291: image_index = 2; break;
+    case 287: image_index = 3; break;
+    case 283: image_index = 2; break;
+    case 279: image_index = 1; break;
+    case 275: image_index = 0; break;
+    case 188: image_index = 0; image_speed=0; break;
+    case 184: image_index = 1; break;
+    case 180: image_index = 2; hspeed= 3-facing*6; vspeed = 6; break;
+    case 156: image_index = 3; break;
+    case 152: image_index = 4; hspeed=0; vspeed=0; break;
+    case 148: image_index = 0; sprite_index=UltronIsMyCity.droneidle_sprite; image_speed=0.25; break;
+    case 128: image_index = 0; sprite_index=UltronIsMyCity.droneentry_sprite; image_speed=0; break;
+    case 124: image_index = 1; break;
+    case 120: image_index = 2; break;
+      }
+}
+    if ((alarm[0] > 168 && alarm[0] < 200 && tempposition< 1) || (alarm[0] > 156 && alarm[0] < 200 && tempposition>0)) &&  (collision_rectangle ( x -17.50  , y - 45.85 , x + 17.15  , y + 0 , attack_box , 1 , 1 )){
+    temp = instance_nearest(x,y,attack_box);
+    if temp.attacker!=UltronIsMyCity{
+    vspeed=0;
+    hspeed=0;
+    alarm[0]=300;
+    timer=300;
+    sprite_index=UltronIsMyCity.dronehurt_sprite;
+    }
+    else{
+    temp=0;
+    }
+    }
+    if ((alarm[0] > 168 && alarm[0] < 200 && tempposition< 1) || (alarm[0] > 156 && alarm[0] < 200 && tempposition>0)) &&  (collision_rectangle ( x -17.50  , y - 45.85 , x + 17.15  , y + 0 , projecile_box , 1 , 1 )){
+    temp = instance_nearest(x,y,projectile_box);
+    if temp.attacker!=UltronIsMyCity{
+    vspeed=0;
+    hspeed=0;
+    alarm[0]=300;
+    timer=300;
+    sprite_index=UltronIsMyCity.dronehurt_sprite;
+    }
+    else{
+    temp=0;
+    }
+    }
+
+    if tempposition < 1{
+    if alarm[0]= 184{
+    beamer=create_projectile(5,37+106*facing,4,5.6,30,5,punch3,obj_spark_hit1,1.25 , 1.06 , 26.95 , 24.15, UltronIsMyCity.id, 12, no_script);
+    beamer.hit=0;
+    beamer.alarm[0]=12;
+    beamer.hit_stun=20;
+    beamer.priority=2;
+     }
+    beamer.x=x+26.95*( 1 - facing * 2 )*size;
+    beamer.y=y-24.15*size;
+         if alarm[0] < 168{
+     vspeed=-3;
+     if !instance_exists(flamyboi1){
+        flamyboi1 = instance_create(x , y-30 * size, obj_spark)
+        flamyboi1.attacker=UltronIsMyCity;
+        flamyboi1.sprite_index = UltronIsMyCity.stilt_eff_sprite;
+        flamyboi1.image_xscale = size*0.5;
+        flamyboi1.image_yscale = size*0.5;
+        flamyboi1.depth = depth+1;
+        flamyboi1.image_angle=90;
+        }
+     flamyboi1.x=x;
+     flamyboi1.y=y-30*size;
+     }
+    if alarm[0] = 271{
+    alarm[0]=171;
+    }
+}
+if tempposition > 0{
+    if alarm[0]= 180{
+    beamer=create_projectile(3,309+(-78)*facing,6,3.6,30,5,punch3,obj_spark_hit1, 1.08 , 0.91 , 18.90 , 14.35, UltronIsMyCity.id, 24, no_script);
+    beamer.hit=0;
+    beamer.alarm[0]=12;
+    beamer.hit_stun=4;
+    beamer.priority=2;
+     }
+    beamer.x=x+18.90*( 1 - facing * 2 )*size;
+    beamer.y=y-14.35*size;
+if alarm[0] < 128{
+     vspeed=-3;
+     if !instance_exists(flamyboi1){
+        flamyboi1 = instance_create(x , y-30 * size, obj_spark)
+        flamyboi1.attacker=UltronIsMyCity;
+        flamyboi1.sprite_index = UltronIsMyCity.stilt_eff_sprite;
+        flamyboi1.image_xscale = size*0.5;
+        flamyboi1.image_yscale = size*0.5;
+        flamyboi1.depth = depth+1;
+        flamyboi1.image_angle=90;
+        }
+     flamyboi1.x=x;
+     flamyboi1.y=y-30*size;
+     }
+
+     if alarm[0]<= 152 && alarm[0]>128{
+     hspeed= 0; vspeed = 0;
+     }
+    if alarm[0] = 271{
+    alarm[0]=131;
+    }
+    if (collision_rectangle( x -17.50  , y - 10.85 , x + 17.15  , y + 0  , obj_floor , 1 , 1 ) || collision_rectangle ( x -17.50  , y - 10.85 , x + 17.15  , y + 0  , obj_platform , 1 , 1 )) && alarm[0] >= 128{
+    hspeed=0;
+    vspeed=0;
+    }
+}
+

@@ -1,0 +1,221 @@
+if state_type = "jump" || state_type = "stand" || state_type = "run" || state_type = "crouch" {
+        vspeed -= 0.1
+        state_type = "air_attack"
+        attack_type = "final_smash"
+        image_speed = 0.25
+        sprite_index = final_smash_sprite;
+        image_index=0
+        image_speed = 0
+        background_blend = c_ltgray
+        timer = 0
+        time = 240
+        temp=0
+        timer_speed=1
+        attack_success=0
+        target=-1
+        special=1
+        attacking=0
+        charge=0
+        hspeed = 0
+        air_move = 0
+        sound_play(final_smash_voice1);
+	sound_play(final_smash_sound); 
+        temp = 0
+        sound_play(super)
+        instance_create(x,y-15*size,obj_spark_effect2)
+        angle = 0
+        grab_edge = 0
+        final_smashes += 1
+        size = csize
+        if global.crowdcheering <= 0 {
+            global.crowdcheering = 45
+            global.crowdtarget = self.id
+            FMODSoundPlay(crowd_launch2)
+         }
+        freezer  = instance_create(x,y,obj_freeze)
+        freezer.dontpause = self.id
+        freezer.alarm[0] = 44
+        spark = create_spark(0,28,global.electricity_spark,1,-0.35*(1-facing*2),1)
+        spark.image_alpha = 0.8
+        spark.image_xscale *= 0.8*size
+        spark.image_yscale *= 0.4*size
+        spark.alarm[0] = 18
+    }
+switch ( timer )
+      {
+	case 15: image_index = 1; sound_play(final_smash_cheer); break;
+	case 17: image_index = 2; break;
+        case 19: image_index = 1; break;
+	case 21: image_index = 2; break;
+        case 23: image_index = 3; break;
+	case 28: image_index = 4; break;
+	case 36: image_index = 5; break;
+	case 38: image_index = 6; break;
+        case 40: image_index = 7; break;
+        case 42: image_speed = 1; break;
+        case 184: image_speed = 0; image_index = 16; break;
+        case 190: image_speed = 0; image_index = 17; break;
+        case 220: image_speed = 0; image_index = 4; break;
+        case 230: image_speed = 0; image_index = 18; break;
+        case 234: image_speed = 0; image_index = 2; break;
+        case 236: image_speed = 0; image_index = 1; break;
+        case 238: image_speed = 0; image_index = 0; break;
+        
+      }
+
+if ai = 1 {
+    if timer > 45 && timer < 170 && enemy_dist < 175*size && enemy_dist > 50*size {
+        special = 1
+        if enemy.y < y-1 && enemy.air = 0 || collision_point(x + 8*(1-facing*2),y,obj_wall,1,0)
+            movejump = 1
+        else
+            movejump = 0
+    }
+    else
+        special = 0 
+}
+if timer = 17 {
+    sound_play(final_smash_sound1)
+    for (i=0; i<=8; i+=1) {
+        spark = create_spark(0,28,global.electricity_spark,1,-0.35*(1-facing*2),1)
+        spark.image_alpha = 0.8
+        spark.image_xscale *= 1*size
+        spark.image_yscale *= 0.4*size
+        spark.alarm[0] = 18
+    }
+}
+gravity_lock = 1;
+if timer < 180 && timer >= 45
+{
+if (timer mod 10 == 0){
+	sound_play(downb_sound3);
+	spark = create_spark(0,28,global.electricity_spark,1,-0.35*(1-facing*2),1)
+        spark.image_alpha = 0.8
+        spark.image_xscale *= 2*size
+        spark.image_yscale *= 0.6*size
+        spark.alarm[0] = 4
+	instance_create(x,y,obj_down_impact) 
+}
+if cos(timer*pi)>0.5{
+	spark2 = create_spark(0,28,global.electricity_spark,1,-0.35*(1-facing*2),1)
+        spark2.image_alpha = 0.8
+        spark2.image_xscale *= -2.5*size
+        spark2.image_yscale *= 0.45*size
+        spark2.alarm[0] = 4
+}
+
+vspeed = -0.05;
+if(image_index >= 16)
+	image_index = 8;
+if !instance_exists(hitbox) {
+      	attacks-=1
+	if timer < 170
+		create_hitbox(2,90,2.65,0,-1,0.1,ddhit4,obj_spark_shock,4.5,1.4,0,24,self.id,5,6);
+}
+if timer == 170{
+	sound_play(downb_sound3);
+	sound_play(downb_sound6);
+	create_hitbox(7,35+facing*110,8.25,8.1,-1,0.1,heavy_spike,obj_spark_impact,5.0,3.4,0,24,self.id,5,6);
+}
+
+}
+else
+{
+vspeed = 0;
+hspeed = 0;
+}
+if timer>=45 && temp = 0 {
+        if charge<5.5
+        charge+=0.1
+        special=1 - ai
+        time = 240
+        duster=instance_create(x,y,obj_dust_effect)
+        duster.facing=facing
+        duster=instance_create(x,y,obj_dust_effect)
+        duster.facing=-facing
+        temp = 0.5
+    }
+if timer >= 45 && temp = 0.5 {
+    timer=46
+    temp=2.25
+    hspeed = (temp-facing*temp*2)*0.5
+}
+if timer >= 45 && temp > 0.1 && timer < 170 {
+        if ai = 1 {
+            if !enemy.offstage && !offstage {
+                if enemy.x < x && enemy_dist > 33 {
+                    moveleft = 1
+                    moveright=0
+                }
+                if enemy.x>x && enemy_dist > 33 {
+                    moveright = 1
+                    moveleft = 0
+                }
+            }
+            else {
+                if room_width/2 < x {
+                    moveleft = 1
+                    moveright=0
+                }
+                else {
+                    moveright = 1
+                    moveleft = 0
+                }
+            } 
+        }
+        if temp>0 {
+            if abs(hspeed) < temp + (shoot_time>30)*1.2*size && temp > 0 && !collision_point(x + 8*(1-facing*2),y,obj_wall,1,0)
+            hspeed += 0.035*(temp-facing*temp*2)*(1-(air>0)*0.65)
+            } 
+       if abs(image_index - 1) < image_speed && air = 0
+        sound_play(rambi_step_sound)         
+    }
+if moveleft = 1 && facing = 0 && speed > temp/2 {
+    moveright=0
+    facing=1
+    attack_success=0
+    hspeed*=0.5
+ }
+if moveright = 1 && facing = 1 && speed > temp/2 {
+    moveleft=0
+    facing=0
+    attack_success=0
+    hspeed*=0.5
+ }
+if ( on_floor || on_platform ) if ( air > 0 ) air = 0;
+if special = 1 && shoot_time = 0 {
+    shoot_time = 160 
+}
+if shoot_time > 0
+    shoot_time -= 1
+if timer > 425
+{
+gravity_lock = 1;
+vspeed = 0;
+hspeed = 0;
+}
+if timer = time-20 {
+    temp = -1
+    timer += 1
+    angle = 0
+}
+if frac(timer/2) = 0 && temp != -1
+    after_image(5,c_white,0.5)
+smash_power = 0
+if timer > 170 && temp = -1
+hspeed = 0.5 - facing*1
+if timer >= time-2 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    special = 0
+    angle = 0
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    effect_create_above(ef_smokeup,x,y,0,c_silver)
+    smash_power = 0
+    background_blend = c_white
+}
+        

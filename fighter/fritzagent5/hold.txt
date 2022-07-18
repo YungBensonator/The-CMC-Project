@@ -1,0 +1,103 @@
+facingtracker = facing;
+if ( time != -1 )
+  {
+    state_type = "attack";
+    attack_type = "hold";
+    timer = 0;
+    time = -1;
+    sprite_index = hold_sprite;
+    image_speed = 0;
+    image_index = 1;
+    hspeed = 0;
+    target.attack_type = "none"
+    timer_speed=1;
+    pummel = -1;
+    hecklesy=target.y;
+    hecklesx=target.x;
+  }//37.80
+if ( attacking && pummel == -1 )
+ {
+   attacking = 0;
+   pummel = 0;
+   sprite_index = pummel_sprite;
+   image_speed = 0;
+   image_index = 0;
+ }
+if ( pummel == -1 )
+ {
+if facing = 0 {
+    if moveright = 1{
+    attack_type = "fthrow";
+  }
+
+    if moveleft = 1{
+    attack_type = "bthrow";
+    target.facing = 0}
+    }
+if facing = 1 {
+    if moveleft = 1{
+    attack_type = "fthrow";
+  }
+    if moveright = 1{
+    attack_type = "bthrow";
+    target.facing = 0}
+    }
+if moveup = 1 
+    attack_type = "uthrow";
+if movedown = 1 {
+    attack_type = "dthrow";
+    movedown = 0; }
+ }
+else
+ { 
+pummel += 1;
+if pummel > 0{
+if target.state_type != "grabbed"{
+  zoomba+=1;
+}
+if zoomba > 0{
+  target.state_type="grabbed";
+}
+    target.y=hecklesy;
+    target.x=hecklesx;
+    target.sprite_index = target.flinch_sprite;
+    if pummel == 25{
+    target.timer = temp_timer;
+    target.time = temp_time; 
+    }
+    target.timer_speed = 1;
+switch(pummel){
+case 1: image_index=0; sound_play(atk_voice1) break;
+case 8: image_index=1; break;
+case 16: image_index=2; break;
+case 24: image_index=3; break;
+case 39: image_index=4; break;
+case 44: image_index=5; break;
+case 49: image_index=6; break;
+}
+}
+    if ( pummel == 24 ) // replace 5 with the frame in which we pummel
+   {
+    temp_timer = target.timer;
+    temp_time = target.time;
+    sound_play2 ( punch2 );
+    create_projectile ( 9 , 361 , 1 , 1 , 4 , 6 , -1 , obj_spark_hit1 , 0.62,1.36 ,17.64,19.11 , self.id , 2 , 0 );
+   }
+    if ( pummel = 54 )
+   {
+    sprite_index = hold_sprite;
+    image_speed = 0;
+    image_index = 1;
+   }
+    if ( pummel >= 55 ) // replace 15 with the frame in which pummel ends and we get back to hold
+   {
+    pummel = -1;
+   }
+ }
+if ((target.state_type != "grabbed" || zoomba>0) && pummel < 1) {
+    state_type = "flinch";
+    target=0;
+    zoomba=0;
+    time = 15;
+    timer = 0; }
+        

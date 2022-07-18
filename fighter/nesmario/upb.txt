@@ -1,0 +1,84 @@
+if ( air = max_jumps )
+{
+exit;
+}
+if ( ( state_type = "stand" || state_type = "run" || state_type = "jump" ) )
+  {
+    if ( moveright )
+	facing = 0;
+    if ( moveleft )
+	facing = 1;
+    state_type = "air_attack";
+    attack_type = "upb";
+    timer = 0;
+    time = 50;
+    sound_play(bump_sound);
+    sprite_index = upb_sprite;
+    image_speed = 0;
+    image_index = 0;
+	gravity_lock = 1;
+    if ( air = 0 )
+      {
+	
+	hspeed = 0;
+      }
+    else
+      {
+	
+	hspeed *= 0.8;
+      }
+  }
+
+if ( timer < time )
+  {
+    fast_fall = 0;
+    fast_fall_temp = 0;
+
+    if ( timer >= 1 && timer < 5 ) {
+	vspeed = 0
+	hspeed = 0
+	gravity_lock = 2;
+	sprite_index = crouch_sprite;
+	}
+	if timer = 6 {
+	vspeed = -8.67 * size;
+	}
+    if ( vspeed > 1.8 && timer <= 43 )
+	vspeed *= 0.9;
+    if ( moveright && hspeed < air_speed * 0.75 )
+	hspeed += 0.075;
+    if ( moveleft && hspeed > -air_speed * 0.75 )
+	hspeed -= 0.075;
+    if ( timer = 7){
+	create_projectile(0,361,4,0,4,3,-1,-1,0.8,0.8,-5,-15,self.id,170,char_custom3);
+	sprite_index = upb_sprite;
+	}
+    if timer > 25
+	force_edge_grab = 1;
+    if ( timer >= 10 && attacking )
+      {
+	interrupt = 1;
+	air = max_jumps;
+	can_die = 1;
+	cantb = 1;
+      }
+  }
+ if ( air = 0 && vspeed > 0 )
+    {
+	state_type = "land";
+	attack_type = "none";
+	timer = 0;
+	time = 5;
+	sprite_index = land_sprite;
+    }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "jump";
+    attack_type = "none";
+    image_speed = 0.25;
+    air = max_jumps;
+    cantb = 1;
+    timer = 0;
+    time = -1;
+  }

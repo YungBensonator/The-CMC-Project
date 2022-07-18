@@ -1,0 +1,345 @@
+if  ( state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump")
+  {
+
+    state_type = "air_attack";
+    attack_type = "b";
+    timer = 0;
+    time = 42;
+    sprite_index = b_sprite;
+    image_speed = 0;
+    image_index = 0;
+    hspeed = 0;
+    air_move = 0;
+    vspeed/=4;
+    special=0;
+    specialcheck=0;
+    nougat=1;
+    retractiblecocc=0;
+    save_smash_charge=0;
+    save_smash_kb=0;
+  }
+
+
+    switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 6: image_index = 1; intangible=1; sound_play(reflector_sound); break;
+    case 26: image_index = 2; break;
+    case 30: image_index = 3; break;
+    case 34: image_index = 4; sound_play(sheath_sound); break;
+    case 38: image_index = 5; break;
+    case 100: image_index = 0; sprite_index = ssmash_sprite; break;
+    case 105: image_index = 1; break;
+    case 110: image_index = 2; break;
+    case 115: image_index = 3; break;
+    case 120: image_index = 4; break;
+    case 125: image_index = 5; break;
+    case 128: image_index = 6; break;
+    case 131: image_index = 7; break;
+    case 135: image_index = 8; break;
+    case 139: image_index = 9; intangible=0; break;
+    case 142: image_index = 10; break;
+    case 146: image_index = 11; break;
+    case 160: image_index = 12; break;
+    case 166: image_index = 13; break;
+    case 172: image_index = 14; break;
+    case 200: image_index = 0; break;
+    case 208: image_index = 1; sound_stop(special_sound); sound_play(special_sound); break;
+    case 210: image_index = 2; break;
+    case 212: image_index = 3; break;
+    case 214: image_index = 4; break;
+    case 216: image_index = 1; break;
+    case 218: image_index = 2; break;
+    case 220: image_index = 3; break;
+    case 222: image_index = 0; break;
+      }
+ if timer= 6{   image_blend=c_aqua;
+                reflector = instance_create(x+11.97*( 1 - facing * 2)*size , y-26.88* size, obj_spark)
+                reflector.sprite_index = reflector_sprite;
+                reflector.image_xscale = 0.21*( 1 - facing * 2)*size;
+                reflector.image_yscale = 0.21*size;
+                reflector.image_speed=1;
+                reflector.image_index=0;
+                reflector.snap=self.id;
+                reflector.depth=depth-1;
+                reflector.image_alpha=0.7;
+                reflector.alarm[0]=11;
+ }
+if timer = 11 || timer =100{
+ image_blend=c_white;
+ nougat=0;
+ if timer = 11{
+ intangible=0;
+ }
+}
+if ( timer < time )
+  {
+ 
+if timer < 80{
+    vspeed=0.4*size;}
+        if timer = 100{
+        with (reflector){instance_destroy();}
+        }
+        if timer >= 70{
+        vspeed=0;
+        gravity_lock=1;
+        if timer < 100{
+        if timer >= 95{
+        reflectoreff1.image_alpha-=0.2;
+        reflectoreff2.image_alpha-=0.2;
+        }
+        if timer < 95{
+        reflectoreff1.image_xscale+=0.0105*(1-facing*2)*size;
+        reflectoreff1.image_yscale+=0.0105*size;
+        reflectoreff2.image_xscale+=0.0105*(1-facing*2)*size;
+        reflectoreff2.image_yscale+=0.0105*size;}
+        }
+        if timer < 128 {
+        retractiblecocc.timer_speed=0
+        retractiblecocc.vspeed=0;
+        retractiblecocc.hspeed=0;
+        retractiblecocc.gravity_lock=1;
+        }
+        }
+        if timer = 128 {
+                sound_play(swingsnd1);
+                sound_play(atk_voice3);
+                create_hitbox(save_damage,32+116*facing,save_knockback,save_knockback_growth,30,17,FritzSwordHit3,obj_spark_stun,1.20 , 0.88 , 31.08 , 27.01,self.id,3,5);
+                hitbox.di = 0.3;
+                hitbox.stun_scalar=((save_knockback_growth/2)+(save_smash_kb*1.3))*2.4;
+                hitbox.stun_base=35+(save_knockback*2.6*(save_smash_charge/10));
+                create_hitbox2(save_damage,32+116*facing,save_knockback,save_knockback_growth,30,17,FritzSwordHit3,obj_spark_stun,0.90 , 0.67 , 30.45 , 46.75,self.id,3,5);
+                hitbox2.di = 0.3;
+                hitbox2.stun_scalar=((save_knockback_growth/2)+(save_smash_kb*1.3))*2.4;
+                hitbox2.stun_base=35+(save_knockback*2.6*(save_smash_charge/10));
+                create_hitbox3(save_damage,32+116*facing,save_knockback,save_knockback_growth,30,17,FritzSwordHit3,obj_spark_stun,1.31 , 0.41 , 10.50 , 54.73,self.id,3,5);
+                hitbox3.di = 0.3;
+                hitbox3.stun_scalar=((save_knockback_growth/2)+(save_smash_kb*1.3))*2.4;
+                hitbox3.stun_base=35+(save_knockback*2.6*(save_smash_charge/10));
+                retractiblecocc.timer_speed=1;
+                retractiblecocc.gravity_lock=0;
+                }
+
+        if ( place_meeting(x,y,attack_box)  ) && timer >= 6 && timer  < 11{
+        temp = instance_nearest(x,y,attack_box);
+        if ( temp.hit <= 1 && temp.attacker != self.id ) {
+      if ( team_attack || temp.attacker == 99 || temp.attacker.team != team ) {
+         timer = 70;
+         time = 179;
+         reflector.alarm[0]=30;
+         sound_play(reflector2_sound);
+         reflector.image_speed=0;
+         reflector.image_alpha=1;
+         retractiblecocc=temp.attacker;
+                reflectoreff1 = instance_create(x-0.63*( 1 - facing * 2)*size , y, obj_spark)
+                reflectoreff1.sprite_index = reflectoreff_sprite;
+                reflectoreff1.image_xscale = 0*( 1 - facing * 2)*size;
+                reflectoreff1.image_yscale = 0*size;
+                reflectoreff1.image_speed=0;
+                reflectoreff1.image_index=0;
+                reflectoreff1.y=temp.y;
+                reflectoreff1.snap=self.id;
+                reflectoreff1.depth=depth-1;
+                reflectoreff1.alarm[0]=30;
+                reflectoreff2 = instance_create(x-0.63*( 1 - facing * 2)*size , y-26.88* size, obj_spark)
+                reflectoreff2.sprite_index = reflectoreff2_sprite;
+                reflectoreff2.image_xscale = 0*( 1 - facing * 2)*size;
+                reflectoreff2.image_yscale = 0*size;
+                reflectoreff2.image_speed=0;
+                reflectoreff2.image_index=0;
+                reflectoreff2.snap=self.id;
+                reflectoreff2.depth=depth+1;
+                reflectoreff2.alarm[0]=30;
+                reflectoreff3 = instance_create(x-0.63*( 1 - facing * 2)*size , y-22.88* size, obj_spark)
+                reflectoreff3.sprite_index = reflectoreff3_sprite;
+                reflectoreff3.image_xscale = 0.21*( 1 - facing * 2)*size;
+                reflectoreff3.image_yscale = 0.21*size;
+                reflectoreff3.image_speed=1;
+                reflectoreff3.image_index=0;
+                reflectoreff3.snap=self.id;
+                reflectoreff3.depth=depth+1;
+         duster = instance_create ( 0 , 0 , obj_freeze );
+         duster.dontpause = self.id;
+         duster.alarm[0] = 15;
+         sound_play(downb_sound);
+         if ( x < temp.attacker.x )
+    facing = 0;
+      else
+    facing = 1;
+          intangible = 1;
+        image_alpha = 1;
+        hspeed = 0;
+        vspeed = 0;
+        temp.attacker.timer_speed = 0;
+        save_damage = temp.damage*1.1;
+        save_knockback = temp.bkb*2.5;
+        save_knockback_growth = temp.kbg*2.5;
+        if temp.attacker.smash_charge>9{
+        save_smash_charge=temp.attacker.charge;}
+        else{
+        save_smash_charge=10;
+        }
+        save_smash_kb=temp.charge_kb;
+      if save_damage > 120 {
+      save_damage = 120;}
+      if save_damage < 10
+      save_damage = 10;
+      if save_knockback>16{
+      save_knockback=16;
+      }
+      if save_knockback>3{
+      save_knockback=3;
+      }
+      if save_knockback_growth > 11{
+      save_knockback_growth=11;
+      }
+      if save_knockback_growth < 1{
+      save_knockback_growth=1;
+      }
+        temp.attacker.alarm[1] = 43;
+        with (temp){
+      instance_destroy();
+      }
+        }
+      }
+    }
+
+    if ( place_meeting(x,y,projectile_box)  ) && timer >= 6 && timer  < 11{
+        temp = instance_nearest(x,y,projectile_box);
+        if ( temp.hit <= 1 && temp.attacker != self.id ) {
+      if ( team_attack || temp.attacker == 99 || temp.attacker.team != team ) {
+      if distance_to_point(temp.attacker.x, temp.attacker.y)<=62.16{
+      timer = 70;
+         time = 179;
+         reflector.alarm[0]=30;
+         sound_play(reflector2_sound);
+         reflector.image_speed=0;
+         reflector.image_alpha=1;
+         retractiblecocc=temp.attacker;
+                reflectoreff1 = instance_create(x-0.63*( 1 - facing * 2)*size , y, obj_spark)
+                reflectoreff1.sprite_index = reflectoreff_sprite;
+                reflectoreff1.image_xscale = 0*( 1 - facing * 2)*size;
+                reflectoreff1.image_yscale = 0*size;
+                reflectoreff1.image_speed=0;
+                reflectoreff1.image_index=0;
+                reflectoreff1.y=temp.y;
+                reflectoreff1.snap=self.id;
+                reflectoreff1.depth=depth-1;
+                reflectoreff1.alarm[0]=30;
+                reflectoreff2 = instance_create(x-0.63*( 1 - facing * 2)*size , y-26.88* size, obj_spark)
+                reflectoreff2.sprite_index = reflectoreff2_sprite;
+                reflectoreff2.image_xscale = 0*( 1 - facing * 2)*size;
+                reflectoreff2.image_yscale = 0*size;
+                reflectoreff2.image_speed=0;
+                reflectoreff2.image_index=0;
+                reflectoreff2.snap=self.id;
+                reflectoreff2.depth=depth+1;
+                reflectoreff2.alarm[0]=30;
+                reflectoreff3 = instance_create(x-0.63*( 1 - facing * 2)*size , y-22.88* size, obj_spark)
+                reflectoreff3.sprite_index = reflectoreff3_sprite;
+                reflectoreff3.image_xscale = 0.21*( 1 - facing * 2)*size;
+                reflectoreff3.image_yscale = 0.21*size;
+                reflectoreff3.image_speed=1;
+                reflectoreff3.image_index=0;
+                reflectoreff3.snap=self.id;
+                reflectoreff3.depth=depth+1;
+         duster = instance_create ( 0 , 0 , obj_freeze );
+         duster.dontpause = self.id;
+         duster.alarm[0] = 15;
+         sound_play(downb_sound);
+         if ( x < temp.attacker.x )
+    facing = 0;
+      else
+    facing = 1;
+          intangible = 1;
+        image_alpha = 1;
+        hspeed = 0;
+        vspeed = 0;
+        temp.attacker.timer_speed = 0;
+        save_damage = temp.damage*1.1;
+        save_knockback = temp.bkb*2.5;
+        save_knockback_growth = temp.kbg*2.5;
+        if temp.attacker.smash_charge>9{
+        save_smash_charge=temp.attacker.charge;}
+        else{
+        save_smash_charge=10;
+        }
+        save_smash_kb=temp.charge_kb;
+      if save_damage > 120 {
+      save_damage = 120;}
+      if save_damage < 10
+      save_damage = 10;
+      if save_knockback>16{
+      save_knockback=16;
+      }
+      if save_knockback>3{
+      save_knockback=3;
+      }
+      if save_knockback_growth > 11{
+      save_knockback_growth=11;
+      }
+      if save_knockback_growth < 1{
+      save_knockback_growth=1;
+      }
+        temp.attacker.alarm[1] = 43;
+        with (temp){
+      instance_destroy();
+      }
+      }
+      else{
+      timer=200;
+      time=226;
+      sprite_index=run_sprite;
+      image_speed = 0;
+      image_index = 0;
+      hspeed = 0;
+      vspeed=0;
+      sound_stop(special_voice);
+      sound_play(special_voice);
+      if temp.attacker.x>x{
+      facing=0;
+      }
+      if temp.attacker.x<x{
+      facing=1;
+      }
+        with (temp){
+      instance_destroy();
+      }
+      }
+      
+        }
+   
+      }
+    }
+    if timer >= 200{
+
+      fast_fall = 0;
+fast_fall_temp = 0;
+air_move=0;
+
+
+
+
+if ( timer < time )
+  {
+    if timer < 225{
+    intangible=1;
+    }
+    else{
+    intangible=0;
+    }
+    if timer >= 208 && timer <=228{
+    vspeed=0;
+    gravity_lock=1;
+    after_image(3,c_white,0.7);
+       if timer < 222{
+          hspeed=8*(1-facing*2)*size;
+                    }
+       if timer >=222{
+        hspeed-=1.33*(1-facing*2)*size;
+                    }
+                               }
+  }
+    }
+ 
+	}

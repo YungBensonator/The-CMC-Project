@@ -1,0 +1,89 @@
+if state_type = "jump" {
+        vspeed -= 0.1;
+        state_type = "air_attack";
+        attack_type = "uair";
+        image_speed = 0;
+        sprite_index = uair_sprite;
+        image_index=0;
+        timer = 0;
+        time = 35;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 4: image_angle = 45-facing*90; shakex = -11*size*(1-facing*2); shakey = 4*size; break;
+  case 9: image_angle = 0; shakex = 0; shakey = 0; image_index = 1; break;
+  case 11: image_angle = 45-facing*90; shakex = -10*size*(1-facing*2); shakey = 4*size; break;
+  case 13: image_angle = 0; shakex = 0; shakey = 3*size; image_index = 2; break;
+  case 15: image_angle = 45-facing*90; shakex = -7*size*(1-facing*2); shakey = 4*size; break;
+  case 17: image_angle = 0; shakex = 0; shakey = 0; image_index = 3; break;
+  case 21: image_index = 4; break;
+  case 25: image_index = 5; break;
+  case 29: image_index = 6; break;
+  }
+        if timer < time {
+            state_type = "air_attack";
+            if timer = 9 {
+                sound_play(attacksnd1);
+                play_attack_voice()
+                create_hitbox2(13,65+facing*60,5.15,4.9,13,9,kick2,obj_spark_hit3,0.5,0.3,4,18,self.id,2,2);
+                create_hitbox(7,70+facing*40,4.85,4.5,11,7,kick2,obj_spark_hit1,0.7,0.7,10,21,self.id,12,2);
+		hitbox.hit_stun = 10;
+		hitbox2.hit_stun = 10;
+                }
+			if timer = 11
+			{
+			hitbox.hitbox_x = (7-facing*14)*size;
+            hitbox.hitbox_y = 30*size;
+			}
+            if timer = 13 {
+                hitbox.damage = round(8*size);
+                hitbox.bkb = 4.5*size;
+                hitbox.kbg = 1.9*size;
+                hitbox.dir = 120 - facing*60;
+                hitbox.hitbox_x = (-4+facing*8)*size;
+                hitbox.hitbox_y = 33*size;
+                hitbox.shield_damage = round(8*size);
+                hitbox.hitlag_frames = round(5*size);
+                hitbox.sfx = kick2;
+                hitbox.gfx = obj_spark_hit1;
+            }
+			if timer = 15
+			{
+			hitbox.hitbox_x = (-10+facing*20)*size;
+            hitbox.hitbox_y = 25*size;
+			}
+            if timer = 17 {
+                hitbox.kbg = 4.3*size;
+                hitbox.dir = 145 - facing*110;
+                hitbox.hitbox_x = (-8+facing*16)*size;
+                hitbox.hitbox_y = 15*size;
+                hitbox.sfx = kick2;
+                hitbox.gfx = obj_spark_hit1;
+            }
+	if timer = 27
+	interrupt = 1
+        if air = 0 {
+		image_angle = 0;
+                state_type="land";
+                sprite_index = land_sprite;
+                attack_type="none";
+                time = 7;
+                timer=0;
+		shakex = 0;
+		shakey = 0;
+                }
+        }  
+if timer >= time -1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+	sprite_index = jump_sprite;
+	image_index = 6;
+	image_speed = 0;
+    if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

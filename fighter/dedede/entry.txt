@@ -1,0 +1,44 @@
+if ( timer == 0 )
+{
+visible = 0;
+sprite_index = jump_sprite;
+image_speed = 0;
+image_index = 0;
+}
+
+if ( timer == 1 )
+  {
+  sound_play(taunt_voice);
+    entryfx = instance_create(x-35*(1-2*facing),y,obj_spark);
+    entryfx.sprite_index = entry_sprite;
+    entryfx.image_speed = 0.2;
+    entryfx.image_index = 0;
+    entryfx.image_alpha = 1;
+    entryfx.image_xscale = image_xscale*1;
+    entryfx.image_yscale = image_yscale*1;
+    entryfx.depth = depth - 1;
+    entryfx.hspeed = 1*(1-2*facing);
+	//entryfx.snap = self.id;
+  }
+if ( entryfx.image_index >= 4.8 )
+  {
+     entryfx.image_index = 0;
+  }
+
+if ( timer >= 42 )
+{
+with (entryfx)
+{
+instance_destroy();
+}
+  sound_play(mid_jump_sound);
+  y = y-25;
+visible = 1;
+if air > 0
+        state_type = "jump";
+    else
+        state_type = "stand";
+sprite_index = jump_sprite;
+timer = 0;
+time = -1;
+}

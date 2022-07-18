@@ -1,0 +1,95 @@
+if state_type = "stand" || state_type ="run" || state_type ="crouch"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "usmash";
+        image_speed = 0;
+        sprite_index = usmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+        charge_frame = 5
+}
+
+
+	
+if timer < time {
+hspeed = 0
+    state_type = "attack";
+    switch ( timer )
+      {
+	case 4: image_index = 1; break;
+	case 8: image_index = 2; break;
+	case 12: image_index = 3; break;
+	case 16: image_index = 4; break;
+	case 20: image_index = 5; break;
+	case 24: image_index = 6; break;
+	case 28: image_index = 7; break;
+	case 32: image_index = 8; break;
+      }
+	  
+	if timer = 10{
+	effectjab = create_blur(x,y-35*size,self.id);
+	effectjab.sprite_index = powblock_sprite;
+	effectjab.x = x;
+    effectjab.y = y-35*size;
+    effectjab.image_speed = 0;
+	effectjab.image_alpha = 1;
+    effectjab.image_xscale = 1*size;
+    effectjab.image_yscale = 1*size;
+    effectjab.depth = depth - 0.1;
+	effectjab.snap = self.id
+	}
+	  
+	  
+	if timer = 17 {
+		instance_create(x+12-facing*24,y-17,obj_spark_effect)
+		duster = instance_create(x,y,obj_dust_effect);
+		duster.facing = facing; 
+		blur = instance_create(x,y-30,obj_spark_shockwave)
+		blur.image_xscale = 0.25*size*(1-facing*2)
+		blur.image_yscale = 0.25*size
+		sound_play(pow_sound);
+		if smash_charge > 80 {
+		create_hitbox ( 14 , 90 , 6 , 7 , 27 , 8 , kick3 ,obj_spark_hit4,9999,9999,0,0,self.id,3,4)
+		hitbox.ground_only = 1;
+		create_hitbox2 ( 14 , 90 , 6 , 7 , 27 , 8 , kick3 ,obj_spark_hit4,2.5,2.5,0,30,self.id,3,4)
+		}
+		else {
+		create_hitbox ( 14 , 90 , 6 , 7 , 27 , 8 , kick3 ,obj_spark_hit4,2.5,2.5,0,30,self.id,3,4)
+		hitbox.charge_dmg = 0;
+	    hitbox.shake_ampl = 0.8
+		}
+		}
+		
+	if timer >=16 and timer <24{
+	if instance_exists(effectjab){
+	effectjab.image_xscale *= 1.05
+	effectjab.image_yscale *= 1.05
+	effectjab.image_alpha -= 0.1
+	}
+	if timer >=10 and timer <24{
+		effectjab.x = x
+		}
+	}
+	
+	if timer = 24{
+	if instance_exists(effectjab){
+	with (effectjab){instance_destroy()}
+	}
+	}
+			
+			
+
+    }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        
+
+
+
+

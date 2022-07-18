@@ -1,0 +1,81 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" )
+  {
+    state_type = "air_attack";
+    sprite_index = fair_sprite;
+    time = 44;
+    if hammerstall
+    temp2 = 1
+    else
+    temp2 = 0
+    hammerstall = 0;
+    attack_type = "fair";
+    timer = 0;
+    image_speed = 0;
+    image_index = 0;
+    
+  }
+
+if ( timer < time )
+  {
+    switch ( timer )
+      {
+	case 2: image_index = 0;  break;
+	case 3: image_index = 0; break;
+	case 5: image_index = 0; break;
+	case 10: image_index = 0; break;
+	case 15: image_index = 2; break;
+	case 18: image_index = 9; break;
+	case 21: image_index = 10; break;
+	case 24: image_index = 11; break;
+	case 27: image_index = 12; break;
+	case 30: image_index = 13; break;
+	case 33: image_index = 14; break;
+	case 36: image_index = 15; break;
+	case 39: sprite_index = uair_sprite;image_index = 6; break;
+	case 42:  sprite_index = uair_sprite;image_index = 6; break;
+      }
+
+ 
+
+
+	if ( timer = 5 )
+	  {
+	    instance_create(x+12-facing*24,y-17,obj_spark_effect)
+	    timer = 10 
+	  }
+	if ( timer = 15 ){
+	    create_hitbox(17,14+facing*150,4.5,4.5,17,10,kick3,obj_spark_hit2,0.6,0.6,13,6,self.id,6,9);
+		sound_play(swing_sound);
+		}
+	if timer = 18 {
+	hitbox.hitbox_x = 15*(1-facing*2)
+	hitbox.hitbox_y = 8
+
+
+	}
+	if ( air = 0 )
+	  {
+	    state_type = "land";
+	    attack_type = "none";
+	    timer = 0;
+	    time = 16;
+	    sprite_index = land_sprite;
+	    duster = instance_create(x+size*(5-facing*10),y,obj_dust_effect);
+	    duster.facing = 1-facing;
+	    duster.image_alpha = 0.6;
+	    duster = instance_create(x-size*(5-facing*10),y,obj_dust_effect);
+	    duster.facing = facing;
+	    duster.image_alpha = 0.6;
+	  }
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    if ( air = 0 )
+	state_type = "stand";
+    else
+	state_type = "jump";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }

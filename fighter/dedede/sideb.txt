@@ -1,0 +1,121 @@
+if state_type = "stand" || state_type = "run" || state_type = "crouch" || state_type = "jump" {
+        state_type = "air_attack";
+	if air = 0 {
+        hspeed = 0
+        air_move = 0
+	state_type = "attack";
+        }
+        attack_type = "sideb";
+        image_speed = 0;
+	deeSpawn = 0;
+	if(instance_exists(dee) || instance_exists(doo) || instance_exists(gordo))
+		deeSpawn = 1;
+	if (!deeSpawn)
+		tempDee +=1;
+	if(tempDee > 3)
+		tempDee = 1;
+        sprite_index = sideb_sprite;
+        image_index=0;
+        timer = 0;
+        time = 43;
+        timer_speed=1;
+}
+        if timer < time {
+			switch ( timer ) {
+			case 6: image_index = 1; break;
+			case 13: image_index = 2; break;
+			case 16: image_index = 3; break;
+			case 18: image_index = 4; break;
+			case 20: image_index = 5; break;
+			case 39: image_index = 3; break;		
+			}
+	if air = 0
+	hspeed = 0
+             state_type = "air_attack";
+	    if (timer = 6 && !deeSpawn){
+		sound_play(sideb_sound1);
+		sideD = instance_create(x+30*(1-2*facing)*size, y-12*size,obj_spark);
+		sideD.image_xscale = 1 * (1-facing*2) * size;
+		sideD.image_yscale = 1 * size;
+		sideD.image_index = 0;
+		sideD.image_speed = 0;
+		sideD.depth = -7;
+		//sideD.image_alpha = 0;
+		sideD.snap = self.id;
+		switch(tempDee){
+			case 1: sideD.sprite_index = dee_sprite; break;
+			case 2: sideD.sprite_index = doo_sprite; break;
+			case 3: sideD.sprite_index = gordo_sprite; break;
+		}
+
+	    }
+            if timer = 13 {
+                instance_create(x+10-facing*20,y-20,obj_spark_effect)
+            }
+            if timer = 18 {
+		with (sideD)
+		{
+			instance_destroy();
+		}
+		sound_play(swing_sound2);
+		if (deeSpawn)
+    		create_hitbox(7,75+facing*30,6.5,0,8,4,ddhit2,obj_spark_hit1, 2.12 , 1.29 , 30 , 12 ,self.id,1,2);
+		else
+    		create_hitbox(7,75+facing*30,6.5,0,8,4,ddhit2,obj_spark_hit1, 2.12 , 1.29 , 30 , 12 ,self.id,1,2);  
+    		hitbox.di = 0.4;
+    		hitbox.hit_stun = 2;
+    		hitbox.shield_stun = 1.5
+                duster = instance_create(x,y,obj_dust_effect)
+                duster.facing = 1-facing
+                duster.image_alpha = 0.75 
+                if air 
+                    vspeed = -0.6*size;
+		if ( tempDee = 1 && !deeSpawn) 
+  		{
+			sound_play(sideb_sound2);
+    			dee = instance_create(x+size*(30*(1-2*facing)),y-size*12,dee_item);
+    			dee.sprite_index = dee_sprite;
+    			dee.image_speed = 0;
+    			dee.image_index = 1;
+			dee.image_size = 1*size;
+			dee.sprite_size = 1*size;
+			dee.vspeed = -150;
+  		}
+		if ( tempDee = 2 && !deeSpawn) 
+  		{
+			sound_play(sideb_sound2);
+    			doo = instance_create(x+size*(30*(1-2*facing)),y-size*12,doo_item);
+    			doo.sprite_index = doo_sprite;
+    			doo.image_speed = 0;
+    			doo.image_index = 1;
+			doo.image_size = 1*size;
+			doo.sprite_size = 1*size;
+			doo.vspeed = -150;
+  		}
+		if ( tempDee = 3 && !deeSpawn) 
+  		{
+			sound_play(sideb_sound2);
+    			gordo = instance_create(x+size*(30*(1-2*facing)),y-size*12,gordo_item);
+    			gordo.sprite_index = gordo_sprite;
+    			gordo.image_speed = 0;
+    			gordo.image_index = 1;
+			gordo.image_size = 1*size;
+			gordo.sprite_size = 1*size;
+			gordo.vspeed = -150;
+  		}
+            }
+            if timer = 19 {
+                if air 
+                    vspeed = -0.6*size;
+            }
+        }  
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    if air = 0
+    state_type = "stand";
+    else
+    state_type = "jump";
+    timer = 0;
+    time =-1;
+    }
+        

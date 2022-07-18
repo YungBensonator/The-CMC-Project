@@ -1,0 +1,56 @@
+if state_type = "crouch" || state_type = "stand" || state_type = "run" {
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "dtilt";
+        image_speed = 0;
+        sprite_index = dtilt_sprite;
+        image_index=0;
+        timer = 0;
+        time = 58;
+        tempytempytemp=1;
+        timer_speed=1;
+        if moveleft{
+        facing=1;
+        }
+        if moveright{
+        facing=0;
+        }
+}
+
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 4: image_index = 1; sound_play(unsheath_sound); break;
+    case 8: image_index = 2; break;
+    case 12: image_index = 3; break;
+    case 16: image_index = 4; hspeed=0; break;
+    case 20: image_index = 5; break;
+    case 24: image_index = 6; break;
+    case 28: image_index = 7; break;
+    case 32: image_index = 8; break;
+    case 36: image_index = 9; break;
+    case 40: image_index = 10; break;
+    case 44: image_index = 11; break;
+    case 48: image_index = 12; hspeed=-3*(1-facing*2)*size; break;
+    case 51: image_index = 13; sound_play(sheath_sound); hspeed=0; break;
+    case 54: image_index = 14; break;
+}
+        if timer < time {
+            state_type = "attack";
+            if timer = 12 {
+            tempytempytemp=0;
+                sound_play(swingsnd2);
+                sound_play(atk_voice1);
+                hspeed=3*(1-facing*2)*size;
+                create_hitbox(20,5+170*facing,7,4.1,19,12,FritzSwordHit3,obj_spark_slash2,1.81 , 1.00 , 21.42 , 10.92,self.id,8,2);
+                hitbox.hit_stun = 7;
+            }
+
+}
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "crouch";
+    timer = 0;
+    time =-1;
+    }
+        

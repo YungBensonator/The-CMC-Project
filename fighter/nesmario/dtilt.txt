@@ -1,0 +1,77 @@
+fast_fall = 0;
+fast_fall_temp = 0;
+if state_type = "run" || state_type = "stand" {
+    attacking = 0
+    attack_type = "dtilt"
+    target = none;
+    if air = 0 {
+        state_type = "attack";
+        hspeed = 0; }
+    else {
+        state_type = "attack";
+        hspeed *= 0.25;
+        }
+        image_speed = 0;
+        sprite_index = crouch_sprite;
+        image_index=0;
+        timer = 0;
+        time = 33;
+        timer_speed=1;
+}
+switch ( timer )
+  {
+  case 3: image_index = 1; sprite_index = jump_sprite; shakey = -8;   break;
+  case 4: image_index = 1; shakey = -19; nesmover.y = -19;   break;
+  case 5: image_index = 1; shakey = -21 nesmover.y = -21;   break;
+  case 6: shakey = -22; nesmover.y = -22; break;
+  case 7: shakey = -23; nesmover.y = -23; break;
+  case 8: shakey = -23; nesmover.y = -23;break;
+  case 9: shakey = -23; nesmover.y = -23;break;
+  case 10: shakey = -22; nesmover.y = -22; break;
+  case 11: shakey = -21; nesmover.y = -21; image_index = 2; break;
+  case 12: shakey = -19; nesmover.y = -19; break;
+  case 13: shakey = -9; nesmover.y = -9; break;
+  case 14: shakey = -5; nesmover.y = -5;break;
+  case 15: shakey = -0 sprite_index = usmash_sprite; image_index = 1; break;
+  }
+        if timer < time {
+            if timer = 3 {
+                sound_play(jump_sound);
+				
+        }
+		if timer = 11 {
+		create_hitbox(3,270,2.9,0,6,6,kick2,obj_spark_hit3,0.5,0.5,0,21,self.id,5,1);
+		hitbox.di =-1
+		
+		
+		}
+
+		if timer = 12 {
+		hitbox.hitbox_y -= 2
+		}
+		if timer = 13 {
+		hitbox.hitbox_y -= 10
+		}
+		if timer = 14 {
+		hitbox.hitbox_y -= 4
+		}
+			if timer = 15 {
+			instance_create(x-3*(1-facing*2),y,obj_down_impact)
+			sound_play(stomp_sound2);
+			create_hitbox(6,365,4.9,5.2,25,9,kick3,obj_spark_hit4,1.5,0.5,-3,6,self.id,9,2);
+			}
+	}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    if air > 0
+	{
+    state_type = "jump";
+	sprite_index = jump_sprite;
+	image_index = 2;
+	image_speed = 0;
+	}
+    timer = 0;
+    time =-1;
+    }
+        

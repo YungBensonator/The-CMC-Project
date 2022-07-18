@@ -1,0 +1,246 @@
+
+if state_type = "crouch" || state_type = "stand" || state_type = "run"  || state_type = "jump"{
+
+  sound_play ( powerup_sound );
+        hspeed = 0;
+        state_type = "air_attack";
+        attack_type = "final_smash";
+        image_speed = 0;
+        sprite_index = downb_sprite;
+        image_index=0;
+  timer = 0;
+  timer_speed = 1;
+  time = 900;
+  intangible = 1;
+  final_smashes += 1;
+  smash_power = 0;
+  air_move = 0;
+  fs_land = 0;
+  }
+if timer >= 8
+image_blend=choose(16776960,65280,65535,255,16711935,16711680,4235519,c_white)
+if ( timer >= time - 1 )
+  {
+  sound_play (pipe_sound);
+    if ( track_id > -1 )
+      tempmus_stop ( track_id );
+  smash_power = 0;
+  attack_type = "none";
+  intangible = 0;
+  if ( air > 0 )
+    state_type = "jump"; 
+    else
+    state_type = "stand";
+  timer = 0;
+  time = -1;
+image_blend= c_white
+  exit;
+  }
+
+	if timer < time
+      {	switch ( timer )
+      {
+	case 2: image_index = 1; break;
+	case 4: image_index = 2; break;
+	case 6: image_index = 3; break;
+	case 8: image_index = 4; break;
+
+
+	case 10: image_index = 5; break;
+	case 12: image_index = 6; break;
+	case 14: image_index = 7; break;
+	case 16: image_index = 8; break;
+	case 18: image_index = 9; break;
+	case 20: image_index = 10; break;
+    case 22: image_index = 11; break;
+	case 24: image_index = 12; break;
+	case 26: image_index = 13; break;
+	case 28: image_index = 14; break;
+	case 30: image_index = 15; break;
+	
+	case 32: image_index = 0; break;
+
+      }}
+if ( timer < 40 )
+{
+gravity_lock = 1;
+vspeed = 0;
+}
+if ( timer == 4 )
+  {
+  image_index = 2;
+  image_speed = 0;
+  }
+if ( timer < 8 )
+  {
+  shakey = lengthdir_y ( 0 , timer * 4.5 );
+  }
+if ( timer == 8 )
+  {
+track_id = tempmus_play2 ( superstar , 892 );
+mode = 1;
+  instance_create ( x , y - actual_height * 0.5 , obj_spark_shockwave );
+  shakey = -0;
+  }
+if ( timer >= 8 && timer < 40 && timer mod 2 == 0 )
+  {
+  var a;
+  a = instance_create ( x , y - actual_height * 0.5 , obj_spark );
+  a.image_speed = 0.25;
+  a.sprite_index = global.spark_sprite2;
+  a.image_xscale = 0.05+random(0.1);
+  a.image_yscale = a.image_xscale;
+  a.speed = 7 + random ( 2 );
+  a.direction = random(360);
+  a.depth = depth + 1;
+  a.image_angle = random(360);
+  a.angle_add = -20 + random(40);
+  }
+if ( timer >= 32 && timer < 40 )
+  {
+  shakey = lengthdir_y ( 0 , ( timer - 80 ) * 4.5 + 90 );
+  }
+if ( timer >= 40 && timer < time )
+  {
+
+            if ai = 1  { // tanks flacon
+                if offstage = 0 {
+                    if enemy.x >= x {
+                        moveright=1
+                        moveleft = 0 }
+                    else { moveleft = 1
+                        moveright = 0 }
+                    if enemy.y > y+2 {
+                        movedown = 1
+                        moveup = 0 }
+                    if enemy.y < y-38 {
+                        moveup = 1
+                        movedown = 0 }
+                    }
+            if offstage = 1 {
+                //movedown = 0
+                    moveup = 1
+                if x < ( obj_game_control.camera_boundary_l + obj_game_control.camera_boundary_r ) * 0.5 {
+                    moveright = 1
+                    moveleft = 0  }
+                else {
+                    moveleft = 1
+                    moveright =0 }
+                }
+        }
+
+  if ( timer mod 2 == 0 )
+  {
+    var a;
+    a = instance_create ( x , y - actual_height * 0.5 , obj_spark );
+    a.image_speed = 0.5;
+    a.image_alpha = 0.5;
+    a.sprite_index = global.spark_sprite2;
+    a.image_xscale = 0.05+random(0.1);
+    a.image_yscale = a.image_xscale;
+    a.speed = 3 + random ( 2 );
+    a.direction = random(360);
+    a.depth = depth + 1;
+    a.image_angle = random(360);
+    a.angle_add = -20 + random(40);
+    }
+  if ( timer mod 15 == 0 )
+    {
+    create_hitbox ( 11 , 53 + facing * 74 , 5.4 , 11.5 , -1 , 1 , punch4 , obj_spark_hit4 , 0.7 , 1.1 , 0 , 15 , self.id , 9 , 6 );
+    }
+  if ( attack_success )
+    {
+    sound_play ( caparacho );
+    attack_success = 0;
+    }
+  shakey = 0;
+  if ( fs_land > 0 )
+    {
+    fs_land -= 1;
+    if ( fs_land == 0 )
+      {
+      sprite_index = stand_sprite;
+      image_index = 0;
+      image_speed = 0.25;
+      }
+    exit;
+    }
+  if ( !on_floor && !on_platform )
+    {
+    //vspeed += grav * 0.6;
+    if ( sprite_index != jump_sprite and sprite_index != mid_jump_sprite)
+      {
+      sprite_index = jump_sprite;
+      image_index = -0.5;
+      image_speed = 0;
+      }
+    if ( vspeed < 0 && image_index < 5 )||(sprite_index = mid_jump_sprite && vspeed < 0 && image_index < 3 )
+      image_index += 0.5;
+      else
+    if ( vspeed >= 0 && image_index < 5 )||(sprite_index = mid_jump_sprite && vspeed >= 0 && image_index < 3 )
+      image_index += 0.5;
+    if ( movejump && air < 2 ) and sprite_index != mid_jump_sprite
+      {
+      movejump = 0;
+      air = 2;
+      vspeed = -mid_jump_speed;
+	image_index = -0.5
+      exit;
+      }
+    if ( moveleft )
+      {
+      facing = 1;
+      if ( hspeed > -air_speed )
+        hspeed -= air_accel;
+      }
+      else
+    if ( moveright )
+      {
+      facing = 0;
+      if ( hspeed < air_speed )
+        hspeed += air_accel;
+      }
+      else
+      hspeed *= 0.9;
+    }
+    else
+    {
+    vspeed = 0;
+    if ( sprite_index == jump_sprite || sprite_index = mid_jump_sprite)
+      {
+      sprite_index = land_sprite;
+      image_index = 0;
+      fs_land = 3;
+      exit;
+      }
+    if ( movejump )
+      {
+      movejump = 0;
+      air = 1;
+      vspeed = -jump_speed;
+      exit;
+      }
+    if ( moveright )
+      {
+      sprite_index = walk_sprite;
+      hspeed = air_speed;
+      facing = 0;
+      }
+      else
+    if ( moveleft )
+      {
+      sprite_index = walk_sprite;
+      hspeed = -air_speed;
+      facing = 1;
+      }
+      else
+      {
+      hspeed *= 0.65;
+      sprite_index = stand_sprite;
+      }
+    if ( movedown )
+      {
+      dropthrough = 11;
+      }
+    }
+  }

@@ -1,0 +1,95 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 91;
+        timer_speed=1;
+        charge_frame = 20;
+        derigible=0;
+        tempytempytemp=1;
+}
+
+    switch (timer){
+    case 1: image_index = 0; break;
+    case 5: image_index = 1; break;
+    case 10: image_index = 2; sound_play(unsheath_sound); break;
+    case 15: image_index = 3; break;
+    case 20: image_index = 4; break;
+    case 25: image_index = 5; break;
+    case 28: image_index = 6; break;
+    case 31: image_index = 7; break;
+    case 35: image_index = 8; break;
+    case 39: image_index = 9; break;
+    case 42: image_index = 10; break;
+    case 46: image_index = 11; break;
+    case 70: image_index = 12; break;
+    case 76: image_index = 13; sound_play(sheath_sound); break;
+    case 82: image_index = 14; break;
+}    
+        if timer < time {
+        if timer < 20 && derigible = 0 && !attacking{
+        derigible=1;
+        }
+        if attacking=1 && timer < 20 && derigible>0{
+        if timer < 10{
+        sound_play(unsheath_sound);
+        }
+        timer=20;
+        smash_charge=13;
+        }
+             state_type = "attack";
+            if timer < 28{
+            hspeed = 1.5*(1-facing*2)*size;
+            }
+            if timer >= 70{
+            hspeed=-1.5*(1-facing*2)*size;
+            }
+            if timer = 28 {
+            tempytempytemp=0;
+                sound_play(swingsnd3);
+                sound_play(atk_voice1);
+                create_hitbox(35,32+116*facing,8.5,5.6,30,17,FritzSwordHit3,obj_spark_slash1,1.20 , 0.88 , 31.08 , 27.01,self.id,6,3);
+                hitbox.shake_type = 1;
+                hitbox.shake_ampl = 0;
+                hitbox.charge_dmg = 0.6;
+                hitbox.charge_hitlag = 0.2;
+                hitbox.charge_kb = 1.6;
+                hitbox.di = 0.3;
+                create_hitbox2(35,32+116*facing,8.5,5.6,30,17,FritzSwordHit3,obj_spark_slash1,0.90 , 0.67 , 30.45 , 46.75,self.id,3,2);
+                hitbox2.shake_type = 1;
+                hitbox2.shake_ampl = 0;
+                hitbox2.charge_dmg = 0.6;
+                hitbox2.charge_hitlag = 0.2;
+                hitbox2.charge_kb = 1.6;
+                hitbox2.di = 0.3;
+                create_hitbox3(35,32+116*facing,8.5,5.6,30,17,FritzSwordHit3,obj_spark_slash1,1.31 , 0.41 , 10.50 , 54.73,self.id,3,2);
+                hitbox3.shake_type = 1;
+                hitbox3.shake_ampl = 0;
+                hitbox3.charge_dmg = 0.6;
+                hitbox3.charge_hitlag = 0.2;
+                hitbox3.charge_kb = 1.6;
+                hitbox3.di = 0.3;
+                }
+
+            if timer = 31{
+                hitbox.image_xscale=1.17*size;
+                hitbox.image_yscale=0.16*size;
+                hitbox.hitbox_x=23.10*(1-facing*2)*size;
+                hitbox.hitbox_y=16.30*size;
+                hitbox.image_angle = ( 1 - facing * 2 ) * 339.15;
+}
+}
+
+
+
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

@@ -1,0 +1,111 @@
+no_hurtbox = 1;
+ if (sprite_index = stand_sprite){
+image_speed = 0.18;
+}
+if sprite_index = walk_sprite{
+image_speed = 0.12;
+}
+if (sprite_index = run_sprite||sprite_index=air_dodge_sprite) && (state_type="run"||state_type="airdodge") && image_index >= 4{
+image_index = 1;
+}
+if state_type="crouch" && sprite_index=crouch_sprite{
+image_speed=0;
+switch (timer){
+ case 1: image_index=0; break;
+ case 8: image_index=1; break;
+ case 16: image_index=2; break;
+}
+}
+if sprite_index=jump_sprite && state_type!="edge"{
+    image_speed=0.2;
+}
+airdodge_type=0;
+
+if air = 0 {
+  whoosh=0;
+}
+if state_type="flinch" || state_type = "air_flinch" && whoosh > 0{
+  whoosh-=1;
+}
+if state_type = "run" && sprite_index = run_sprite{
+    if timer mod 24 = 0{
+        fritzafterimage = instance_create(x , y , obj_spark);
+        fritzafterimage.sprite_index = sprite_index;
+        fritzafterimage.image_xscale = 0.21*(1-facing*2)*size;
+        fritzafterimage.image_yscale = size*0.21;
+        fritzafterimage.image_speed=0;
+        fritzafterimage.image_index=image_index;
+        fritzafterimage.alarm[0]=12;
+        fritzafterimage.depth=depth+1;
+        fritzafterimage.image_alpha=0.7;
+        fritzafterimage.number=-number;
+}
+fritzafterimage.image_alpha-=0.07;
+}
+if nougat=1 && attack_type!="b"{
+    image_blend=c_white;
+    nougat=0;
+}
+//percent=image_number
+
+if timer = 0 && attack_type!="sideb" && attack_type!="b" && attack_type!="downb" && attack_type!="upb" && attack_type!="none" && attack_type!="edge_attack" && attack_type!="edge_roll" && attack_type!="edge_jump" && attack_type!="taunt" && attack_type!="final_smash" && attack_type!="jab" && attack_type!="nair" && attack_type!="dash_attack"{
+tempytempytemp=1;
+}
+if attack_type="none"{
+tempytempytemp=0;
+}
+if tempytempytemp !=0 && special = 1{
+tempytempytemp=0;
+if movedown{
+if air > 0{
+    state_type="jump";
+    }
+    if air = 0{
+    state_type="stand";
+    }
+    attack_type="none";
+    timer=0;
+    time = -1;
+    char_downb();
+}
+if moveleft{
+if air > 0{
+    state_type="jump";
+    }
+    if air = 0{
+    state_type="stand";
+    }
+    attack_type="none";
+    facing=1;
+    timer=0;
+    time = -1;
+    char_sideb();
+}
+if moveright{
+if air > 0{
+    state_type="jump";
+    }
+    if air = 0{
+    state_type="stand";
+    }
+    attack_type="none";
+    facing=0;
+    timer=0;
+    time = -1;
+    char_sideb();
+}
+if moveup{
+if air > 0{
+    state_type="jump";
+    }
+    if air = 0{
+    state_type="stand";
+    }
+    attack_type="none";
+    timer=0;
+    time = -1;
+    char_upb();
+}
+}
+if global.countemupfritzy >= 10{
+nacidio_unlock=1;}

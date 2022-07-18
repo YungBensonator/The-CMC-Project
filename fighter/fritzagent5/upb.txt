@@ -1,0 +1,66 @@
+if ( state_type = "stand" || state_type = "run" || state_type = "jump" || state_type = "crouch")&& whoosh < 3{
+        state_type = "air_attack";
+        attack_type = "upb";
+        image_speed = 0;
+        timer = 0;
+        time = 26;
+        sprite_index=run_sprite;
+        image_speed = 0;
+        image_index = 0;
+        hspeed = 0;
+        vspeed=0;
+        intangible=1;
+        tempdirect=0;
+        sound_stop(special_voice);
+        sound_play(special_voice);
+}
+
+fast_fall = 0;
+fast_fall_temp = 0;
+air_move=0;
+
+
+      switch ( timer )
+      {
+    case 1: image_index = 0; break;
+    case 8: image_index = 1; sound_stop(special_sound); sound_play(special_sound); break;
+    case 10: image_index = 2; break;
+    case 12: image_index = 3; intangible=0; break;
+    case 14: image_index = 4; break;
+    case 16: image_index = 1; break;
+    case 18: image_index = 2; break;
+    case 20: image_index = 3; break;
+    case 22: image_index = 0; whoosh+=1; break;
+      }
+
+if ( timer < time )
+  {
+    if timer >= 8 && timer <=28{
+    if tempdirect=1{
+    hspeed=-3.5*size;
+    }
+    if tempdirect=2{
+    hspeed=3.5*size;
+    }
+    if tempdirect=3{
+    hspeed=0;}
+    after_image(3,c_white,0.7);
+       if timer < 22{
+          vspeed=-8*size;
+                    }
+       if timer >=22{
+        vspeed+=1.33*size;
+                    }
+                               }
+    if timer = 8{
+    if moveleft{
+    tempdirect=1;
+    }
+    if moveright{
+    tempdirect=2;
+    }
+    if !moveleft && !moveright{
+    tempdirect=3;
+    }
+    }
+  }
