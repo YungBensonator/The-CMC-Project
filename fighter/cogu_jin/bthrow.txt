@@ -1,0 +1,207 @@
+if time = -1 {
+hspeed = 0;
+state_type = "attack";
+attack_type = "bthrow";
+image_speed = 0;
+sprite_index = bthrow_sprite;
+image_index=0;
+timer = 0;
+time = 105;
+timer_speed=1;
+target.timer_speed = 0;
+target.alarm[0] = 90
+}
+
+if timer < time {
+	switch (timer) { 
+	case 0: image_index = 0; break; 
+	case 2: image_index = 1; break; 
+	case 7: image_index = 2; break; 
+	case 12: image_index = 3; break; 
+	case 17: image_index = 4; break; 
+	case 22: image_index = 5; break; 
+	case 27: image_index = 6; break; 
+	case 59: image_index = 7; break; 
+	case 64: image_index = 8; break; 
+	case 69: image_index = 9; break; 
+	case 74: image_index = 10; break; 
+	case 79: image_index = 11; break; 
+	case 84: image_index = 12; break; 
+	case 89: image_index = 13; break; 
+	case 94: image_index = 14; break; 
+	case 99: image_index = 15; break; 
+}
+
+switch (timer) { 
+	case 59: iciclespike.image_index = 0; break; 
+	case 61: iciclespike.image_index = 1; break; 
+	case 63: iciclespike.image_index = 2; break; 
+	case 65: iciclespike.image_index = 3; break; 
+	case 67: iciclespike.image_index = 4; break; 
+	case 70: iciclespike.image_index = 5; break; 
+	case 90: iciclespike.image_index = 6; break; 
+	case 92: iciclespike.image_index = 7; break; 
+	case 94: iciclespike.image_index = 8; break; 
+}
+
+
+switch (timer) { 
+	case 59: iciclespike2.image_index = 0; break; 
+	case 61: iciclespike2.image_index = 1; break; 
+	case 63: iciclespike2.image_index = 2; break; 
+	case 65: iciclespike2.image_index = 3; break; 
+	case 67: iciclespike2.image_index = 4; break; 
+	case 70: iciclespike2.image_index = 5; break; 
+	case 90: iciclespike2.image_index = 6; break; 
+	case 92: iciclespike2.image_index = 7; break; 
+	case 94: iciclespike2.image_index = 8; break; 
+}
+
+
+
+if timer < 2 {
+	 target.x = x + place_x(108);
+	target.depth = depth - 0.1;
+	if sprite_exists(target.neck_sprite)
+	{
+	target.sprite_index = target.neck_sprite;
+	target.y = y + place_y(22);
+	}
+	else
+	{
+	target.sprite_index = target.flinch_sprite;
+	target.y = y + place_y(22) + target.actual_height * 0.5;
+	}
+}
+	
+	if timer >= 2 and timer < 7 {
+		 target.x = x + place_x(93);
+	target.depth = depth - 0.1;
+	if sprite_exists(target.neck_sprite)
+	{
+	target.sprite_index = target.neck_sprite;
+	target.y = y + place_y(26);
+	}
+	else
+	{
+	target.sprite_index = target.flinch_sprite;
+	target.y = y + place_y(26) + target.actual_height * 0.5;
+	}
+}
+
+if timer >= 7 and timer < 12 {
+		 target.x = x + place_x(66);
+	target.depth = depth - 0.1;
+	if sprite_exists(target.neck_sprite)
+	{
+	target.sprite_index = target.neck_sprite;
+	target.y = y + place_y(25);
+	}
+	else
+	{
+	target.sprite_index = target.flinch_sprite;
+	target.y = y + place_y(25) + target.actual_height * 0.5;
+	}
+}
+
+if timer >= 12 and timer < 17 {
+		 target.x = x + place_x(43);
+	target.depth = depth - 0.1;
+	if sprite_exists(target.neck_sprite)
+	{
+	target.sprite_index = target.neck_sprite;
+	target.y = y + place_y(27);
+	}
+	else
+	{
+	target.sprite_index = target.flinch_sprite;
+	target.y = y + place_y(27) + target.actual_height * 0.5;
+	}
+}
+
+if timer >= 17 and timer < 90 {
+		 target.x = x + place_x(27);
+	target.state_type = "flinch"
+target.depth = depth + 1;
+target.speed = 0;
+target.gravity_lock = 1;
+	if sprite_exists(target.neck_sprite)
+	{
+	target.sprite_index = target.neck_sprite;
+	target.y = y + place_y(27);
+	}
+	else
+	{
+	target.sprite_index = target.flinch_sprite;
+	target.y = y + place_y(27) + target.actual_height * 0.5;
+	}
+}
+
+if timer = 17
+sound_play(choose(bthrow_voice,bthrow_voice2,bthrow_voice3))
+
+
+
+
+
+if timer = 59 {
+	iciclespike = create_spark(-40,5,self.id);
+    iciclespike.sprite_index = iciclespike_sprite;
+    iciclespike.image_speed = 0;
+    iciclespike.image_alpha = 1;
+    iciclespike.image_xscale = 0.25 * (1-facing*2);
+    iciclespike.image_yscale = 0.25;
+    iciclespike.depth = depth - 0.1;
+    iciclespike.snap = self.id
+	sound_play(icecreate_sound);
+	iciclespike2 = create_spark(-5,5,self.id);
+    iciclespike2.sprite_index = iciclespike_sprite;
+    iciclespike2.image_speed = 0;
+    iciclespike2.image_alpha = 1;
+    iciclespike2.image_xscale = -0.25 * (1-facing*2);
+    iciclespike2.image_yscale = 0.25;
+    iciclespike2.depth = depth - 0.1;
+    iciclespike2.snap = self.id
+}
+
+if timer = 65 {
+	create_hitbox ( 10, 90, 0.1, 0.1, 60, 10, bbslash3, obj_spark_hit1 , 1.8 , 1.47 , -20.95 , 27.65 , self.id , 4 , 4 );
+	hitbox.di = 0
+	icecube = create_projectile(5, 90, 0, 0, 200, 1, bbslash3, obj_spark_hit1, 0.2, 0.2, 15, 30, self.id, 1000, char_custom1);
+		icecube.hit = 2
+		icecube.x = target.x;
+        icecube.y=target.y-(target.actual_height / 2 );
+		icecube.image_xscale = target.size / 2.2
+		icecube.image_yscale = target.size / 2.2
+		screen_shake(7,3);
+}
+
+
+
+
+
+if timer = 90 {
+	create_hitbox ( 4, angle_correct(150), 6, 5, 60, 1, freeze3, obj_spark_hit1 , 1.8 , 1.47 , -20.95 , 27.65 , self.id , 4 , 4 );
+	icecube.breakup = 1
+	screen_shake(3,7);
+}
+
+if timer = 97 {
+	with(iciclespike) {instance_destroy()}
+	with(iciclespike2) {instance_destroy()}
+}
+
+
+
+	  
+	
+    
+}
+if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
+    facing = 1-facing
+    attack_type = "none";
+    state_type = "stand";
+    timer = 0;
+    time =-1;
+    }
+        

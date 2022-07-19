@@ -1,0 +1,466 @@
+//This is a comment. It has two / symbols preceding it to tell the game it must ignore these lines.
+//If these were not used or you were to delete them, the game will crash upon trying to read this file.
+//This is because computers don't understand our language. They understand specific commands and functions instead.
+
+//Comments are used to document what everything in your code does for your own reference.
+//They're also used to help others understand your code. For example, you reading this right now.
+
+/* This is an extended comment. It has a / followed by a *, and it goes on until there's a * followed by a /.
+By using this kind of comment, I don't have to bother putting a // before every line I write.
+It's very useful.
+It's also used to comment out whole chunks of code for pinpointing issues, or to simply make the game ignore a section of code.
+
+Use this knowledge to your advantage in this init.txt file.
+Delete these symbols if you want to make a section of code be read by the game.
+(you'll need to do this in the voice files section you'll find by scrolling down a bunch).
+
+Thanks for reading! :D
+*/
+
+// System Animations
+
+	entry_sprite = cspr_add_pal('fighter/cogu_jin/entry_strip31.png',31,1,1,0,1,84,107);
+    sprite_start = entry_sprite //from which sprite the game should begin reading downwards in this file. IMPORTANT.
+	
+    stand_sprite = cspr_add_pal('fighter/cogu_jin/stand_strip10.png',10,0,1,0,1,46,97);
+    mask_sprite = cspr_add('fighter/cogu_jin/mask.png',1,0,1,0,1,46,97);
+	//your character's hurtbox when doing anything but crouching
+	//should be a square of a different colour than the sprites's background, of the same dimensions as the standing animation's first frame
+	//it should cover the relevant bodyparts of your character's standing animation's first frame
+	//since it uses the standing sprite as a base, it should also share its aligning coordinates (last two numbers)
+	
+	walk_sprite = cspr_add_pal('fighter/cogu_jin/walk_strip9.png',9,1,1,0,1,49,95);
+    run_sprite = cspr_add_pal('fighter/cogu_jin/run_strip10.png',10,1,1,0,1,48,77);
+	
+    jump_sprite = cspr_add_pal('fighter/cogu_jin/jump_strip10.png',10,1,1,0,1,39,141);
+    mid_jump_sprite = jump_sprite;
+	
+	crouch_sprite = cspr_add_pal('fighter/cogu_jin/crouch_strip10.png',10,1,1,0,1,55,66);
+	crouch_pre_sprite = cspr_add_pal('fighter/cogu_jin/crouchpre_strip2.png',2,1,1,0,1,48,79);
+	crouch_end_sprite = cspr_add_pal('fighter/cogu_jin/crouchend_strip2.png',2,1,1,0,1,48,79);
+    crouch_mask_sprite = cspr_add('fighter/cogu_jin/crouchmask.png',1,0,1,0,1,55,66);
+	
+	shield_sprite = cspr_add_pal('fighter/cogu_jin/shield_strip3.png',3,1,1,0,1,61,91);
+    roll_sprite = cspr_add_pal('fighter/cogu_jin/roll_strip11.png',11,1,1,0,1,67,84);
+	air_dodge_sprite = cspr_add_pal('fighter/cogu_jin/airdodge_strip5.png',5,1,1,0,1,50,62); 
+	spot_dodge_sprite = cspr_add_pal('fighter/cogu_jin/spotdodge_strip6.png',6,1,1,0,1,51,98); 
+	
+    flinch_sprite = cspr_add_pal('fighter/cogu_jin/flinch.png',1,1,1,0,1,45,92);
+    flinch2_sprite = cspr_add_pal('fighter/cogu_jin/flinch2.png',1,1,1,0,1,38,88);
+    flinch3_sprite = cspr_add_pal('fighter/cogu_jin/flinch3.png',1,1,1,0,1,48,85);
+	
+	launched_sprite = cspr_add_pal('fighter/cogu_jin/launched_strip2.png',2,1,1,0,1,39,109);
+	//this sprite is for when you're actually launched by a strong attack, should be 8 frames long preferably, imagine the sonic battle sprite where you're spinning backwards in the air. Align it in the same way you align flinch sprites, and make sure the sprite doesn't have extra canvas space so that the game actually spins it properly to avoid wack results
+	
+	broken_sprite = cspr_add_pal('fighter/cogu_jin/broken_strip5.png',5,1,1,0,1,47,80);
+    fall_sprite = cspr_add_pal('fighter/cogu_jin/fall_strip2.png',2,1,1,0,1,39,141);
+	land_sprite = cspr_add_pal('fighter/cogu_jin/land_strip5.png',5,1,1,0,1,49,122);
+	
+	sleep_sprite = broken_sprite // sprite for when jigglypuff sings to you
+	
+	taunt_sprite = cspr_add_pal('fighter/cogu_jin/taunt_strip9.png',9,1,1,0,1,60,95);
+    win_sprite = cspr_add_pal('fighter/cogu_jin/win_strip9.png',9,1,1,0,1,50,109);
+    lose_sprite = cspr_add_pal('fighter/cogu_jin/lose_strip9.png',9,1,1,0,1,38,97);
+	
+	henrytaunt_sprite = taunt_sprite; //for if the opponent uses the henry distraction dance assist on you
+	
+	edge_sprite = cspr_add_pal('fighter/cogu_jin/edge.png',1,1,1,0,1,106,35);
+    edge_climb_sprite = edge_sprite;
+	
+	down_sprite = cspr_add_pal('fighter/cogu_jin/getup_strip10.png',10,1,1,0,1,65,88);
+    ukemi_sprite = spot_dodge_sprite;
+	
+    swim_sprite = air_dodge_sprite;
+    ladder_sprite = fall_sprite;
+    vehicle_sprite = fall_sprite //ACTUALLY USE THESE THREE AND REPLACE THEM BY FITTING SPRITES FOR THE GAME'S NEXT VERSION
+
+// Attack Animations
+
+    entryice_sprite = cspr_add('fighter/cogu_jin/entryice_strip13.png',13,1,1,0,1,156,171);
+    jab3slash_sprite = cspr_add('fighter/cogu_jin/jab3slash_strip3.png',3,1,1,0,1,146,84);
+    ssmashice_sprite = cspr_add('fighter/cogu_jin/ssmashice_strip3.png',3,1,1,0,1,97,85);
+    ssmashice2_sprite = cspr_add('fighter/cogu_jin/ssmashice2_strip3.png',3,1,1,0,1,47,123);
+    ssmashicebreak_sprite = cspr_add('fighter/cogu_jin/ssmashicebreak_strip3.png',3,1,1,0,1,114,105);
+    dsmashgroundice_sprite = cspr_add('fighter/cogu_jin/dsmashgroundice_strip5.png',5,1,1,0,1,40,25);
+	dsmashice_sprite = cspr_add('fighter/cogu_jin/dsmashice_strip3.png',3,1,1,0,1,104,265);
+	dsmashicebreak_sprite = cspr_add('fighter/cogu_jin/dsmashicebreak_strip3.png',3,1,1,0,1,102,269);
+	usmashslash_sprite = cspr_add('fighter/cogu_jin/usmashslash_strip5.png',5,1,1,0,1,139,50);
+	crest_sprite = cspr_add('fighter/cogu_jin/usmashcrest.png',1,1,1,0,1,128,128);
+	nairice_sprite = cspr_add('fighter/cogu_jin/nairice.png',1,1,1,0,1,165,169);
+	nairglow_sprite = cspr_add('fighter/cogu_jin/nairglow.png',1,1,1,0,1,57,59);
+	fairslash_sprite = cspr_add('fighter/cogu_jin/fairslash_strip4.png',4,1,1,0,1,176,95);
+	dairslash_sprite = cspr_add('fighter/cogu_jin/dairslash.png',1,1,1,0,1,63,155);
+	downbairslash_sprite = cspr_add('fighter/cogu_jin/downbairslash_strip4.png',4,1,1,0,1,95,63);
+	icecube_sprite = cspr_add('fighter/cogu_jin/icecube_strip15.png',15,1,1,0,1,64,92);
+	icecubebreak_sprite = cspr_add('fighter/cogu_jin/icecubebreak_strip13.png',13,1,1,0,1,97,115);
+	slash_eff2 = cspr_add_alpha('fighter/cogu_jin/slasheff.png',1,1,0,727,50);
+	icesword_sprite = cspr_add('fighter/cogu_jin/icesword_strip8.png',8,1,1,0,1,110,38);
+	icestar_sprite = cspr_add('fighter/cogu_jin/bstar.png',1,1,1,0,1,84,85);
+	snowflake_sprite = cspr_add('fighter/cogu_jin/snowflake.png',1,1,1,0,1,49,49);
+	icecar_sprite = cspr_add('fighter/cogu_jin/icecar.png',1,1,1,0,1,134,39);
+	sidebdownslash_sprite = cspr_add('fighter/cogu_jin/sidebdownslash.png',1,1,1,0,1,76,119);
+	sidebforwardslash_sprite = cspr_add('fighter/cogu_jin/sidebforwardslash.png',1,1,1,0,1,155,70);
+	arcticdagger_sprite = cspr_add('fighter/cogu_jin/arcticdagger_strip3.png',3,1,1,0,1,125,250);
+	icetrail_sprite = cspr_add('fighter/cogu_jin/icetrail_strip27.png',27,1,1,0,1,146,22);
+	iciclespike_sprite = cspr_add('fighter/cogu_jin/iciclespike_strip9.png',9,1,1,0,1,102,236);
+	icearrowform_sprite = cspr_add('fighter/cogu_jin/icearrowform_strip2.png',2,1,1,0,1,182,43);
+	icearrowspin_sprite = cspr_add('fighter/cogu_jin/icearrowspin_strip3.png',3,1,1,0,1,182,43);
+	crest_sprite = cspr_add('fighter/cogu_jin/crest.png',1,1,1,0,1,109,128);
+	astral_finish_fx_sprite = cspr_add_alpha('fighter/cogu_jin/astralfinish.png',1,1,0,395,225);
+	blackbg_sprite = cspr_add('fighter/cogu_jin/blackbg.png',1,0,0,0,0,25,25);
+	whitebg_sprite = cspr_add('fighter/cogu_jin/whitebg.png',1,0,0,0,0,25,25);
+	fsbg_sprite = cspr_add('fighter/cogu_jin/finalsmashbg.png',1,0,0,0,0,512,512);
+	fsice_sprite = cspr_add('fighter/cogu_jin/fsice1.png',1,0,0,0,0,206,439);
+	fsice2_sprite = cspr_add('fighter/cogu_jin/fsice2.png',1,0,0,0,0,173,467);
+	fsice3_sprite = cspr_add('fighter/cogu_jin/fsice3.png',1,0,0,0,0,153,579);
+	fsice4_sprite = cspr_add('fighter/cogu_jin/fsice4.png',1,0,0,0,0,42,539);
+	fsice5_sprite = cspr_add('fighter/cogu_jin/fsice5.png',1,0,0,0,0,182,412);
+	fsice6_sprite = cspr_add('fighter/cogu_jin/fsice6.png',1,0,0,0,0,229,342);
+	fsice7_sprite = cspr_add('fighter/cogu_jin/fsice7.png',1,0,0,0,0,97,407);
+	fsice8_sprite = cspr_add('fighter/cogu_jin/fsice8.png',1,0,0,0,0,39,326);
+
+    jab_sprite = cspr_add_pal('fighter/cogu_jin/jab_strip6.png',6,1,1,0,1,65,97);
+    jab2_sprite = cspr_add_pal('fighter/cogu_jin/jab2_strip12.png',12,1,1,0,1,60,99);
+    jab3_sprite = cspr_add_pal('fighter/cogu_jin/jab3_strip17.png',17,1,1,0,1,59,102);
+	
+    utilt_sprite = cspr_add_pal('fighter/cogu_jin/utilt_strip9.png',9,1,1,0,1,76,129);
+	dtilt_sprite = cspr_add_pal('fighter/cogu_jin/dtilt_strip15.png',15,1,1,0,1,60,88);
+
+    ssmash_sprite = cspr_add_pal('fighter/cogu_jin/ssmash_strip14.png',14,1,1,0,1,43,98);
+    usmash_sprite = cspr_add_pal('fighter/cogu_jin/usmash_strip10.png',10,1,1,0,1,98,151);
+    usmash2_sprite = cspr_add_pal('fighter/cogu_jin/usmash2_strip17.png',17,1,1,0,1,69,111);
+    dsmash_sprite = cspr_add_pal('fighter/cogu_jin/dsmash_strip17.png',17,0,1,0,1,56,107);
+	
+    nair_sprite = cspr_add_pal('fighter/cogu_jin/nair_strip10.png',10,1,1,0,1,45,136);
+    fair_sprite = cspr_add_pal('fighter/cogu_jin/fair_strip10.png',10,1,1,0,1,62,94);
+    uair_sprite = cspr_add_pal('fighter/cogu_jin/uair_strip13.png',13,1,1,0,1,75,113);
+    dair_sprite = cspr_add_pal('fighter/cogu_jin/dair_strip14.png',14,1,1,0,1,45,138);	
+	
+	dash_attack_sprite = cspr_add_pal('fighter/cogu_jin/dashattack_strip12.png',12,0,1,0,1,76,127);
+    edge_attack_sprite = stilt_sprite
+	
+    b_sprite = cspr_add_pal('fighter/cogu_jin/b_strip16.png',16,1,1,0,1,48,97);
+    airb_sprite = cspr_add_pal('fighter/cogu_jin/airb_strip14.png',14,1,1,0,1,53,141);
+	sideb_sprite = cspr_add_pal('fighter/cogu_jin/sideb_strip8.png',8,0,1,0,1,54,105);
+	sidebdown_sprite = cspr_add_pal('fighter/cogu_jin/sidebdown_strip9.png',9,0,1,0,1,84,144);
+	sidebdownland_sprite = cspr_add_pal('fighter/cogu_jin/sidebdownland_strip9.png',9,0,1,0,1,73,99);
+	sidebforward_sprite = cspr_add_pal('fighter/cogu_jin/sidebforward_strip10.png',10,0,1,0,1,52,112);
+	sidebforwardland_sprite = cspr_add_pal('fighter/cogu_jin/sidebforwardland_strip6.png',6,0,1,0,1,37,114);
+    downb_sprite = cspr_add_pal('fighter/cogu_jin/downb_strip6.png',6,0,1,0,1,28,101);
+    downb2_sprite = cspr_add_pal('fighter/cogu_jin/downb2_strip21.png',21,0,1,0,1,83,129);
+    downb3_sprite = cspr_add_pal('fighter/cogu_jin/downb3_strip37.png',37,0,1,0,1,80,129);
+    downb_air_sprite = cspr_add_pal('fighter/cogu_jin/downbair_strip16.png',16,0,1,0,1,81,144);
+	final_smash_sprite = cspr_add_pal('fighter/cogu_jin/finalsmash_strip42.png',42,0,1,0,1,112,151);
+	final_smash2_sprite = cspr_add_pal('fighter/cogu_jin/finalsmash2_strip3.png',3,0,1,0,1,35,90);
+	final_smash3_sprite = cspr_add_pal('fighter/cogu_jin/finalsmash3_strip20.png',20,0,1,0,1,71,148);
+	
+// Grabs and Throws
+    
+    grab_sprite = cspr_add_pal('fighter/cogu_jin/grab_strip7.png',7,1,1,0,1,58,97);
+    hold_sprite = cspr_add_pal('fighter/cogu_jin/hold.png',1,1,1,0,1,56,125);
+    pummel_sprite = jab_sprite;
+    fthrow_sprite = cspr_add_pal('fighter/cogu_jin/fthrow_strip27.png',27,0,1,0,1,76,165);
+    bthrow_sprite = cspr_add_pal('fighter/cogu_jin/bthrow_strip16.png',16,0,1,0,1,74,104);
+    uthrow_sprite = cspr_add_pal('fighter/cogu_jin/icebowshoot_strip25.png',25,1,1,0,1,60,113);
+    dthrow_sprite = cspr_add_pal('fighter/cogu_jin/dthrow_strip15.png',15,1,1,0,1,98,125);
+	
+// Item-Related
+	
+	item_down_sprite = crouch_sprite;
+	item_forward_sprite = jab_sprite;
+    item_up_sprite = jab_sprite;
+    item_heavy_sprite = shield_sprite;
+    item_swing_sprite = utilt_sprite; //sprite for homerun bat, lightsaber, and similar swingable items. Should clearly swing from above and forwards.
+    item_swing_frame = 1; //frame at which the character is at the zenith of swinging their hand/appendage forwards
+    hammer_swing_frame = 0; //frame at which the character starts swinging their hand, should ideally be pointing upwards
+    item_shoot_sprite = stilt_sprite; //sprite for ray gun and similar shootable weapons. Should be the character in a position similar to holding a gun.
+    item_shoot_frame = 2; //frame at which the character should shoot the gun in question.
+	
+    sprite_end = dthrow_sprite //which DECLARED (cspr_add) sprite is the last one the game should load. IMPORTANT.
+
+// Scripts
+	
+    entry_script = char_entry;
+    taunt_script = char_taunt;
+    win_script = char_win;
+    lose_script = char_lose;
+    edge_jump_script = char_edge_jump;
+    edge_roll_script = char_edge_roll;
+    step_script = char_step;
+	
+    jab_script = char_jab;
+	
+    stilt_script = char_stilt;
+    utilt_script = char_utilt;
+    dtilt_script = char_dtilt;
+	
+    ssmash_script=char_ssmash;
+    usmash_script=char_usmash;
+    dsmash_script=char_dsmash;
+	
+    nair_script = char_nair;
+    fair_script = char_fair;
+    bair_script = char_bair;
+    uair_script = char_uair;
+    dair_script = char_dair;
+	
+    dash_attack_script = char_dash_attack;
+    edge_attack_script = char_edge_attack;
+    down_attack_script = char_down_attack;
+	
+    b_script = char_b;
+    upb_script = char_upb;
+    sideb_script = char_sideb;
+    smashb_script=sideb_script;
+    downb_script = char_downb;
+    final_smash_script = char_final_smash;
+	
+    grab_script = char_grab;
+    hold_script = char_hold;
+    fthrow_script = char_fthrow;
+    bthrow_script = char_bthrow;
+    uthrow_script = char_uthrow;
+    dthrow_script = char_dthrow;
+    ai_attack_script = char_ai;
+	
+// Sounds
+	
+    jump_sound = sound_add("fighter/cogu_jin/jump.wav",0,1);
+	punch_sound = sound_add("fighter/cogu_jin/swg1.wav",0,1);
+	punch2_sound = sound_add("fighter/cogu_jin/swg2.wav",0,1);
+	punch3_sound = sound_add("fighter/cogu_jin/swg3.wav",0,1);
+	sheath_sound = sound_add("fighter/cogu_jin/sheath.wav",0,1);
+	icecreate_sound = sound_add("fighter/cogu_jin/icecreate.wav",0,1);
+	fthrow_sound = sound_add("fighter/cogu_jin/fthrowsfx.wav",0,1);
+	crackle1_sound = sound_add("fighter/cogu_jin/icecrackle1.wav",0,1);
+	crackle2_sound = sound_add("fighter/cogu_jin/icecrackle2.wav",0,1);
+	crackle3_sound = sound_add("fighter/cogu_jin/icecrackl3.wav",0,1);
+	fsicebreak_sound = sound_add("fighter/cogu_jin/fsicebreak.wav",0,1);
+	
+	
+	bbhit1 = add_hit_sfx(0,"fighter/cogu_jin/cfhit1.wav")
+    bbhit2 = add_hit_sfx(1,"fighter/cogu_jin/cfhit2.wav")
+    bbhit3 = add_hit_sfx(2,"fighter/cogu_jin/cfhit3.wav")
+    bbhit4 = add_hit_sfx(3,"fighter/cogu_jin/cfhit4.wav")
+	bbslash1 = add_hit_sfx(4,"fighter/cogu_jin/cfslash1.wav")
+    bbslash2 = add_hit_sfx(5,"fighter/cogu_jin/cfslash2.wav")
+    bbslash3 = add_hit_sfx(6,"fighter/cogu_jin/cfslash3.wav")
+    bbslash4 = add_hit_sfx(7,"fighter/cogu_jin/cfslash4.wav")
+	
+	
+    sound_start = jump_sound //from which sound the game should begin loading sounds in. IMPORTANT.
+    mid_jump_sound = jump_sound;
+
+// Voices
+    entry_voice = sound_add("fighter/cogu_jin/entry.wav",0,1);
+    entry_ragna_voice = sound_add("fighter/cogu_jin/entry_ragna.wav",0,1);
+    win_voice = sound_add("fighter/cogu_jin/win.wav",0,1);
+    astral_voice = sound_add("fighter/cogu_jin/astralA1.ogg",0,1);
+    astral_voice2 = sound_add("fighter/cogu_jin/astralB1.ogg",0,1);
+    astral_voice3 = sound_add("fighter/cogu_jin/astralB2.ogg",0,1);
+	mid_jump_voice = sound_add("fighter/cogu_jin/jump_voice.ogg",0,1)
+	b_voice = sound_add("fighter/cogu_jin/hishouken1.ogg",0,1);
+	b_voice2 = sound_add("fighter/cogu_jin/hishouken2.ogg",0,1);
+	b_voice3 = sound_add("fighter/cogu_jin/hishouken3.ogg",0,1);
+	b_voice4 = sound_add("fighter/cogu_jin/hishouken4.ogg",0,1);
+	bex_voice = sound_add("fighter/cogu_jin/hishousetsu1.ogg",0,1);
+	bex_voice2 = sound_add("fighter/cogu_jin/hishousetsu2.ogg",0,1);
+	bex_voice3 = sound_add("fighter/cogu_jin/hishousetsu3.ogg",0,1);
+	bex_voice4 = sound_add("fighter/cogu_jin/hishousetsu4.ogg",0,1);
+    upb_voice = sound_add("fighter/cogu_jin/dthrowA1.ogg",0,1);
+    upb_voice2 = sound_add("fighter/cogu_jin/dthrowA2.ogg",0,1);
+	sideb_voice = sound_add("fighter/cogu_jin/musou1.ogg",0,1);
+	sideb_voice2 = sound_add("fighter/cogu_jin/musou2.ogg",0,1);
+	sideb_voice3 = sound_add("fighter/cogu_jin/musou3.ogg",0,1);
+    downb_voice = sound_add("fighter/cogu_jin/sekkajinA1.ogg",0,1);
+    downb_voice2 = sound_add("fighter/cogu_jin/sekkajinA2.ogg",0,1);
+    downb_voice3 = sound_add("fighter/cogu_jin/sekkajinA3.ogg",0,1);
+    downb2_voice = sound_add("fighter/cogu_jin/sekkajinB1.ogg",0,1);
+    downb2_voice2 = sound_add("fighter/cogu_jin/sekkajinB2.ogg",0,1);
+    downb2_voice3 = sound_add("fighter/cogu_jin/sekkajinB3.ogg",0,1);
+    downbwhiff_voice = sound_add("fighter/cogu_jin/sekkajinW1.ogg",0,1);
+    downbwhiff_voice2 = sound_add("fighter/cogu_jin/sekkajinW2.ogg",0,1);
+	downbair_voice = sound_add("fighter/cogu_jin/hizangeki1.ogg",0,1);
+	downbair_voice2 = sound_add("fighter/cogu_jin/hizangeki2.ogg",0,1);
+	downbair_voice3 = sound_add("fighter/cogu_jin/hizangeki3.ogg",0,1);
+	downbair_voice4 = sound_add("fighter/cogu_jin/hizangeki4.ogg",0,1);
+	usmash_voice = sound_add("fighter/cogu_jin/usmash1.ogg",0,1);
+	usmash_voice2 = sound_add("fighter/cogu_jin/usmash2.ogg",0,1);
+	usmash_voice3 = sound_add("fighter/cogu_jin/usmash3.ogg",0,1);
+	frostbyte_voice = sound_add("fighter/cogu_jin/frostbyte1.ogg",0,1);
+	frostbyte_voice2 = sound_add("fighter/cogu_jin/frostbyte2.ogg",0,1);
+	frostbyte_voice3 = sound_add("fighter/cogu_jin/frostbyte3.ogg",0,1);
+	frostbyte_voice4 = sound_add("fighter/cogu_jin/frostbyte4.ogg",0,1);
+	attack_voice1 = sound_add("fighter/cogu_jin/attack_voice1.ogg",0,1);
+    attack_voice2 = sound_add("fighter/cogu_jin/attack_voice2.ogg",0,1);
+    attack_voice3 = sound_add("fighter/cogu_jin/attack_voice3.ogg",0,1);
+    attack_voice4 = sound_add("fighter/cogu_jin/attack_voice4.ogg",0,1);
+	hit_voice1 = sound_add("fighter/cogu_jin/hit1.ogg",0,1);
+	hit_voice2 = sound_add("fighter/cogu_jin/hit2.ogg",0,1);
+	starko_voice = sound_add("fighter/cogu_jin/hit.ogg",0,1);
+    fly_voice1 = sound_add("fighter/cogu_jin/fly1.ogg",0,1);
+    fly_voice2 = sound_add("fighter/cogu_jin/fly2.ogg",0,1);
+    die_voice1 = sound_add("fighter/cogu_jin/die1.ogg",0,1);
+    die_voice2 = sound_add("fighter/cogu_jin/die2.ogg",0,1);
+	taunt_voice = sound_add("fighter/cogu_jin/taunt1.ogg",0,1);
+	taunt_voice2 = sound_add("fighter/cogu_jin/taunt2.ogg",0,1);
+	taunt_voice3 = sound_add("fighter/cogu_jin/taunt3.ogg",0,1);
+	taunt_voice4 = sound_add("fighter/cogu_jin/taunt4.ogg",0,1);
+	fthrow_voice = sound_add("fighter/cogu_jin/fthrow.ogg",0,1);
+	uthrow_voice = sound_add("fighter/cogu_jin/uthrow1.ogg",0,1);
+	uthrow_voice2 = sound_add("fighter/cogu_jin/uthrow2.ogg",0,1);
+	dthrow_voice = sound_add("fighter/cogu_jin/dthrow.ogg",0,1);
+	dthrow_voice2 = sound_add("fighter/cogu_jin/dthrowA3.ogg",0,1);
+	bthrow_voice = sound_add("fighter/cogu_jin/bthrow1.ogg",0,1);
+	bthrow_voice2 = sound_add("fighter/cogu_jin/bthrow2.ogg",0,1);
+	bthrow_voice3 = sound_add("fighter/cogu_jin/bthrow3.ogg",0,1);
+	starko_voice = sound_add("fighter/cogu_jin/starko.ogg",0,1);
+	sound_mute = entry_voice
+   /*
+
+	//Delete the * and / symbols preceding and ending this section when you're ready to start adding voice files to your character.
+	
+	jump_voice = sound_add("fighter/cogu_jin/attack.wav",0,1); // voice for first jump
+	mid_jump_voice = sound_add("fighter/cogu_jin/attack.wav",0,1); // voice for double jump
+    sound_mute = mid_jump_voice
+	//sound_mute takes the sound you specify and mutes all sounds from that sound onwards for when you grab a Metal Cap.
+	//Effect lasts until Metal Cap runs out.
+	
+	b_voice = sound_add("fighter/cogu_jin/smash.wav",0,1);
+    upb_voice = sound_add("fighter/cogu_jin/smash.wav",0,1);
+	sideb_voice = sound_add("fighter/cogu_jin/smash.wav",0,1);
+    downb_voice = sound_add("fighter/cogu_jin/smash.wav",0,1);
+	
+    usmash_voice = sound_add("fighter/cogu_jin/smash.wav",0,1);
+	ssmash_voice = sound_add("fighter/cogu_jin/smash.wav",0,1);
+	dsmash_voice = sound_add("fighter/cogu_jin/smash.wav",0,1);
+	
+    attack_voice1 = sound_add("fighter/cogu_jin/attack.wav",0,1);
+    attack_voice2 = sound_add("fighter/cogu_jin/attack2.wav",0,1);
+    attack_voice3 = sound_add("fighter/cogu_jin/attack3.wav",0,1);
+    attack_voice4 = sound_add("fighter/cogu_jin/attack4.wav",0,1);
+	 
+	hit_voice1 = sound_add("fighter/cogu_jin/hit.wav",0,1); // voice for when you get hit by a normal attack
+	hit_voice2 = hit_voice1 // another voice for when you get hit by a normal attack
+	broken_voice = sound_add("fighter/cogu_jin/hit.wav",0,1); // voice for when your shield breaks and you get up and are stunned
+	
+    starko_voice = sound_add("fighter/cogu_jin/hit.wav",0,1);
+    fly_voice1 = sound_add("fighter/cogu_jin/hit.wav",0,1);
+    fly_voice2 = sound_add("fighter/cogu_jin/hit2.wav",0,1);
+    die_voice1 = sound_add("fighter/cogu_jin/die.wav",0,1);
+    die_voice2 = sound_add("fighter/cogu_jin/die2.wav",0,1);;
+	entry_voice = sound_add("fighter/cogu_jin/intro.wav",0,1);
+	taunt_voice = sound_add("fighter/cogu_jin/nipah.wav",0,1);
+	
+	*/
+	
+    sound_end = bthrow_voice3 //at which DECLARED (sound_add) sound the game should stop loading sounds in. IMPORTANT.
+	
+// Stats
+	
+    weight = 0.22;
+    grav = 0.24;
+	
+    max_jumps=3;
+    jumptimer = 1
+    jump_speed = 5.78;
+    mid_jump_speed = 5.57;
+    short_hop_speed = 2.7;
+	
+	jump_voice_freq = 0.5
+	mid_jump_voice_freq = 0.5 //frequency at which the game plays the character's voice when jumping or double jumping. Valid values range from 0 to 1. Default is 0.5
+	
+    walk_speed = 2;
+    run_speed = 3.7;
+    run_start_speed = 1.27;
+    run_accel = 0.67
+    fric = 0.90;
+	
+    air_speed = 2.9;
+    fall_speed = 3.5;
+    fast_fall_multiplier = 1.7;
+    air_accel = 0.35;
+    airdash_speed = 8;
+	
+    xsize = 0.45;
+    ysize = 0.45;
+	
+
+	//At what speed you can change directions and maneuver horizontally in mid air.
+	//Porky has a 0.175 air_accel (very, very slow maneuvering) while Jigglypuff has a 0.6 air_accel (can maneuver very freely)
+	
+
+	//These two change the size of your character. 
+	//Make sure to set these stats up first thing when setting your character's system stats up, since hitbox and projectile positions won't change alongside these two if you change them later. This may cause undesired results.
+	
+	//PLEASE DON'T HAVE THE XSIZE HAVE A DIFFERENT VALUE THAN THE YSIZE. XSIZE = YSIZE.
+	//If for example, xsize = 0.1 and ysize = 0.1, this is a good setting.
+	//If, instead, xsize = 1 but ysize = 0.5, this is horrible. This one will stretch the character horizontally and it will look hideous. You can play around with this to see what I mean. Always make sure xsize and ysize share the same value.
+	
+    ability = "ice"
+	// Ability Kirby gets upon absorbing this character you're making.
+	// Available:
+	// "fire"
+	// "beam"
+	// "fighter"
+	// "wheel"
+	// "laser"
+	// "sword"
+	// "bomb"
+	// "spark"
+	// "parasol"
+	// "falcon"
+	// "ice"
+	// "hammer"
+	// "cutter"
+	// "leaf"
+	// "whip"
+	// "esp"
+	// "sleep"
+	// "animal"
+	// "famicom"
+	// "magic"
+
+    smash_power_gain = 1
+	//Rate at which your smash bar fills up, default is 1.
+	
+    smash_charge_sound = 0
+	//Sound that plays when you charge a smash attack
+	//0 is the default chargesnd1 (find it in the sfx folder), 1 is chargesnd2, anything else won't play anything.
+	
+	crouch_pre_time = 4
+crouch_end_time = 4
+as_crouch = 0.33
+no_hurtbox = 1
+	
+//Don't touch the ones below
+
+    state_type = "enter";
+    attack_type = "none";
+    image_yscale = ysize;
+    jumptimer = 1 //Determines frame lag on jump.
+    moveright = 0; moveleft = 0; moveup = 0; movedown = 0;
+	attacking =0; movejump = 0;
+    mask_index = stand_sprite;
+    points = 0;
+    kos = 0;
+    falls = 0;
+    air = 0;
+    time = 90;
+    timer = 0;
+    timer_speed = 1;
+    facing = 0;
+    hitby = 0;
+    special_land_time = 13
+    ranged_attacks = 4
+    ranged_attack_types[0] = "upb"
+    ranged_attack_types[1] = "upb"
+    ranged_attack_types[2] = "downb"
+    ranged_attack_types[3] = "downb"
+    scancel_type[0]=0
+    scancel_type[1]=0
+    scancel_type[2]=1
+    scancel_type[3]=1
+    scancel_type[4]=0
+    max_attack_dist = 55
+    held_item=-1

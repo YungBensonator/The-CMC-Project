@@ -1,0 +1,136 @@
+if timer = 1
+/*
+hello yeah I know you're probably fucking terrified of projectiles but lemme teach you how this shit works
+first off, the timer for projectiles always starts at 1 instead of 0 like your regular attack move scripts do, so this conditional is basically initializing everything the projectile's gonna have
+*/
+{
+visible = 1;
+//self explanatory
+image_xscale = 0.3 * (1-facing*2)
+image_speed = 0
+image_index = 0
+priority = 3
+proj.stun = 0
+//you set the projectile's priority with this so you can determine whether or not it's gonna clash against other projectiles
+//from 1 to 4 it'll be able to either clash, be overridden or override projectiles with equal, lower or higher priority respectively.
+//with a value of 5, it'll directly completely ignore any and all other enemy projectiles.
+sprite_index = attacker.icestar_sprite
+moving_object = 1
+//whether or not this projectile is gonna interact with surfaces like floors, ceilings, walls or platforms.
+//if set to 1, it'll stop its vertical speed if crashing against a floor or ceiling, and its horizontal speed if hitting a wall.
+//if set to 0, it'll go through all surfaces.
+ungrazable = 1
+direction = angle_correct(0)
+//set the general speed the projectile is gonna have, regardless of horizontal or vertical. The direction depends on the "direction" variable below.
+//set an angle going from 0 to 359, where if your character faces to the right when firing the projectile:
+//0 is to the right, 90 is directly upwards, 180 is to the left, and 270 is directly downwards.
+//Values between these four correspond to diagonals (45, 135, 225, 315)
+lifetime = 0
+hits = 0
+//this sets the projectile's orientation to match the direction it's heading towards.
+//Useful if you're not just shooting it forwards, but at a set direction.
+}
+
+
+if timer > 1 
+//inside this conditional you'll code everything you'd normally code for a regular move's "if timer < time", but regarding the projectile itself.
+{
+	
+lifetime += 1
+
+    if timer = 2 {
+	nairglow = instance_create(x,y,obj_spark);
+	nairglow.sprite_index = attacker.nairglow_sprite;
+    nairglow.image_speed = 0;
+    nairglow.image_alpha = 0.7;
+    nairglow.image_xscale = 0.2 * (1-facing*2);
+    nairglow.image_yscale = 0.2;
+    nairglow.depth = depth + 0.1;
+    nairglow.snap = self.id
+	nairglow.loop = 9999
+	}
+	
+	if timer >= 2 and timer < 10 {
+	nairglow.image_xscale += 0.05 * (1-facing*2)
+	nairglow.image_yscale += 0.05 
+}
+
+/*
+if timer >= 20 {
+	nairglow.image_xscale -= 0.1 * (1-facing*2)
+	nairglow.image_yscale -= 0.1
+}
+
+if timer = 19 {
+	with (nairglow) {instance_destroy()}
+}
+*/
+		
+	if timer mod 8 = 0 and hit = 1 and lifetime < 200 {
+	hit = 0
+	hits += 1
+	}
+	
+	if hits >= 8 and lifetime < 199
+	lifetime = 199
+	
+	if lifetime >= 200 {
+	dir = angle_correct(40)
+	sfx = freeze3
+	gfx = obj_spark_freeze
+	bkb = 0
+	kbg = 0
+      hit_stun = 0
+	}
+	
+	if lifetime >= 200 and hit = 1 {
+		with (nairglow) {instance_destroy()}
+	instance_destroy()
+	}
+	
+	if lifetime >= 280 and lifetime <= 300 {
+		image_xscale -= 0.015 * (1-facing*2)
+		image_yscale -= 0.015
+		nairglow.image_xscale -= 0.015 * (1-facing*2)
+	nairglow.image_yscale -= 0.015
+	}
+	
+	if lifetime >= 300 {
+		with (nairglow) {instance_destroy()}
+	instance_destroy()
+	}
+
+	
+	if timer mod 10 = 0 {
+	snowflake1 = create_projectile(1, 90, 0.1, 0, 1, 2, freeze2, obj_spark_ice2, 0.3, 0.3, 0, 0, attacker.id, 1000, char_custom3);
+	snowflake1.x = x + random_range(-50, 0) * (1-facing*2)
+	snowflake1.y = y - random_range(-38, 0)
+	snowflake2 = create_projectile(1, 90, 0.1, 0, 1, 2, freeze2, obj_spark_ice2, 0.3, 0.3, 0, 0, attacker.id, 1000, char_custom3);
+	snowflake2.x = x + random_range(0, 50) * (1-facing*2)
+	snowflake2.y = y - random_range(0, 38)
+	snowflake1.facing = facing
+	snowflake2.facing = facing
+	}
+	
+
+	
+	}
+	
+	if hit = 1
+	time = 1000
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+	
+
+
+//this destroys the projectile if it touches a wall, a floor or a platform without having hit any enemies. Delete it if that's not what you want.

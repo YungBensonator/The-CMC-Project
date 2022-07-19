@@ -1,0 +1,96 @@
+if state_type = "stand" || state_type ="run"{
+        hspeed = 0;
+        state_type = "attack";
+        attack_type = "ssmash";
+        image_speed = 0;
+        sprite_index = ssmash_sprite;
+        image_index=0;
+        timer = 0;
+        time = 40;
+        timer_speed=1;
+        charge_frame = 1;
+}
+if ( timer < time )
+  {
+  state_type = "attack";
+    switch (timer) { 
+	case 0: image_index = 0; break; 
+	case 1: image_index = 1; break; 
+	case 2: image_index = 2; break; 
+	case 4: image_index = 3; break; 
+	case 5: image_index = 4; break; 
+	case 7: image_index = 5; break; 
+	case 9: image_index = 6; break; 
+	case 11: image_index = 7; break; 
+	case 14: image_index = 8; break; 
+	case 22: image_index = 9; break; 
+	case 26: image_index = 10; break; 
+	case 30: image_index = 11; break; 
+	case 34: image_index = 12; break; 
+	case 37: image_index = 13; break; 
+}
+
+   
+	  
+	if timer = 11 {
+    create_hitbox ( 10 , angle_correct(25) , 6.5 , 5 , 25 , 14 , bbslash4 , obj_spark_ice2 , 2.09 , 1.12 , 32.85 , 19.80 , self.id , 3 , 4 );
+	sound_play(icecreate_sound)
+	effect_create_above(ef_ring,x + 23 * (1-facing*2),y-27,0.5,c_aqua)
+	 ssmashice = create_spark(42,24,self.id);
+    ssmashice.sprite_index = ssmashice_sprite;
+    ssmashice.image_speed = 0;
+    ssmashice.image_alpha = 1;
+    ssmashice.image_xscale = 0.2 * (1-facing*2);
+    ssmashice.image_yscale = 0.2;
+    ssmashice.depth = depth - 0.1;
+	ssmashice.loop = 9999
+	ssmashice2 = create_spark(25,24,self.id);
+    ssmashice2.sprite_index = ssmashice2_sprite;
+    ssmashice2.image_speed = 0;
+    ssmashice2.image_alpha = 1;
+    ssmashice2.image_xscale = 0.2 * (1-facing*2);
+    ssmashice2.image_yscale = 0.2;
+    ssmashice2.depth = depth - 0.1;
+    ssmashice2.snap = self.id
+	ssmashice2.loop = 9999
+	duster = instance_create(x-(3-facing*6)*size,y,obj_dust_effect)
+                duster.facing = facing
+                duster.image_xscale = 0.3
+                duster.image_yscale = 0.3
+				duster.image_blend = c_aqua
+				sound_play(choose(frostbyte_voice,frostbyte_voice2,frostbyte_voice3,frostbyte_voice4))
+				
+				
+	}
+	
+	if timer = 26 {
+		ssmashice.sprite_index = ssmashicebreak_sprite
+		ssmashice.loop = 0
+		ssmashice.image_speed = 0.4
+		ssmashice.image_index = 0
+		ssmashice.vspeed = 0.5
+		sound_play2(freeze2);
+	}
+	
+	if timer >= 26 {
+		ssmashice2.image_alpha -= 0.1
+	}
+	
+	if timer = 36 {
+		with (ssmashice2) {instance_destroy()}
+	}
+	
+	
+	
+
+    
+  }
+
+if ( timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" )
+  {
+    state_type = "stand";
+    attack_type = "none";
+    timer = 0;
+    time = -1;
+  }
+        
