@@ -1187,9 +1187,9 @@ if(b_temp = 2)
 		case 349: image_index = 4; break;
 
 		case 351: image_index = 7; break;
-		case 353: image_index = 8; time += 30; break;
-		case 365+30: image_index = 8; break;
-		case 371+30: image_index = 9; break;
+		case 353: image_index = 8; time += 50;  break;
+		case 365+50: image_index = 8; break;
+		case 371+50: image_index = 9;break;
 	}
 	if temp3 = 1
 	switch (timer) 
@@ -1262,7 +1262,7 @@ if(b_temp = 2)
 		{
 			part_particles_create(psys_front, x - 9 + random(2), y - 14 - random(3), ptype_smashspark, 1);
 		}
-		if timer = 85 
+		if timer = 53 
 		{
 			sound_play(b_new_voice);
 		}
@@ -1271,6 +1271,12 @@ if(b_temp = 2)
 			temp2 = 1
 		}
 	}
+	
+	if(timer = 60){timer += 25;}
+	if(timer = 85){spirit_spark.image_index = 0; }
+	
+	
+	
 	if temp2 = 1 && ((timer > 150 && timer < 350) || timer > 450) && !instance_exists(auraspark) 
 	{
 		auraspark = instance_create(x, y, obj_spark)
@@ -1298,6 +1304,7 @@ if(b_temp = 2)
 	temp3 += 1
 	
 	
+	if(timer = 130){ sound_play(b_new_voice2);}
 	////////shoot the bloo my dude
 	if ((special = 1 && !ai) || (ai && random(1200) > 150 + enemy_dist) || timer = 270) && timer > 140 && timer < 400 && time = 378 && temp = 0 && temp3 >= -1 
 	{
@@ -1545,6 +1552,8 @@ if(b_temp = 2)
 			temp = 1
 			timer = 300
 		}
+		
+		//if(yadayada){ sound_play(b_new_voice2);}
 		if timer >= 211 && timer <= 270 
 		{
 			if air = 0 
@@ -1586,13 +1595,12 @@ if(b_temp = 2)
 			sound_stop(b_mee_voice);
 			sound_stop(spiritbomb_charge_sound);
 			sound_play(blast_sound);
-			sound_play(b_new_voice2);
 			with spirit_spark instance_destroy();
 			spark = instance_create(x + (15 - facing * 30) * size, y - 19*size - (temp4 * 10) * size, obj_spark_shockwave)
 			spark.image_xscale *= 0.09 * size
 			spark.image_yscale *= 0.33 * size
 			spark.image_blend = c_blue
-			kameproj = create_projectile(3.5 + kaioken * 3, 90, 1, 0.0000001, 10 + kaioken * 2, 4 / size, crush, obj_spark_hit1, 0.55*size, 0.35*size, size*(48 - (temp4 * 15) - (tempup * 12) - (temp4 * (tempup * 3)) - (tempdown * 12)), size*(17 + (temp4 * 9) + (tempup * 26) + (temp4 * (tempup * 4.5)) - (tempdown * 26)), self.id, 50, goku_kamehameha);
+			kameproj = create_projectile(3.5 + kaioken * 3, 90, 1, 0.0000001, 10 + kaioken * 2, 4, crush, obj_spark_hit1, 0.55*size, 0.35*size, size*(48 - (temp4 * 15) - (tempup * 12) - (temp4 * (tempup * 3)) - (tempdown * 12)), size*(17 + (temp4 * 9) + (tempup * 26) + (temp4 * (tempup * 4.5)) - (tempdown * 26)), self.id, 50, goku_kamehameha);
 			kameproj.di = 0.00001;
 			kameproj.image_xscale *= 2.4;
 			kameproj.max_hits = 6
@@ -1640,7 +1648,7 @@ if(b_temp = 2)
 	hspeed = 0
 	// Warp Kamehameha
 	
-	if timer > 15 && timer < 300 && temp = 0 && attacking = 1 && air < max_jumps && temp3 = 0 {
+	if timer > 15 && timer < 130 && temp = 0 && attacking = 1 && air < max_jumps && temp3 = 0 {
 		temp3 = 1
 		temptimer = timer
 		spirit_spark.visible = 0
