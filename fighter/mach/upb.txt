@@ -16,7 +16,7 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
     image_speed = 0.35;
     sprite_index = upb_sprite;
     image_index=0.1;
-    time = 32;
+    time = 31; 
     timer_speed=1;
 	has_hit = 0
     if (moveright = 1 && !ai) || (ai && x < nearest_edge.x)
@@ -27,26 +27,26 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
         if timer < time {
 	if timer > 25
 	force_edge_grab = 1
-            if timer = 8 {
-                intangible = 0;
+            if timer = 12 {
+                //intangible = 0;
                 sound_play(upb_sound);
                 sound_play(upb_voice);
-                create_hitbox(4,370,8,0,5,12,kick2,obj_spark_hit1,1.5,1.2,0,12,self.id,1,4);
+                create_hitbox(4,370,8,0,5,12,kick2,obj_spark_hit1,0.5,1.2,7,12,self.id,1,4);
 				hitbox.weight_kb = 1
 		        hitbox.execute_on_hit = "attacker.has_hit = 1"
                 //create_hitbox(4,65+facing*50,7.95,0,5,12,kick2,obj_spark_hit1,0.8,1,17,23,self.id,1,4);
                 hitbox.di = -1
-                hspeed = (4 - facing*8)*size;
-                vspeed = -8.2*size;
+                hspeed = (3 - facing*6)*size;
+                vspeed = -5.2*size;
                 image_speed = 0.2
                 after_image(5,c_teal,0.85)
                 instance_create(x+10*(1-facing*2)*size,y-18*size,obj_spark_effect)
                 flashing = true
                 alarm[7] = 4
             }
-            if timer = 10 || timer = 12 || timer = 14 || timer = 16 {
-                intangible = 1
-                create_hitbox(1.5,370,8,0,5,1,kick2,obj_spark_hit1,1.5,1.2,0,12,self.id,1,3);
+            if timer = 14 || timer = 16 || timer = 18 || timer = 20 {
+                //intangible = 1
+                create_hitbox(1.5,370,8,0,5,1,kick2,obj_spark_hit1,0.5,1.2,7,12,self.id,1,3);
 				hitbox.weight_kb = 1
 		        hitbox.execute_on_hit = "attacker.has_hit = 1"
                 //create_hitbox(1.5,65+facing*50,7.85,0,5,1,kick2,obj_spark_hit1,0.8,1,13,26,self.id,1,3);
@@ -55,22 +55,22 @@ if state_type = "run" || state_type = "stand" || state_type = "jump" && air < ma
                 vspeed -= 0.9*grav*size*GRAV_MUL;
                 after_image(5,c_teal,0.85)
                 }
-			if has_hit = 1 and timer <= 17{
+			if has_hit = 1 and timer <= 21{
 		target.direction = point_direction(target.x,target.y,x,y)
 	}
-            if timer = 18 {
-                intangible = 0
-                 create_hitbox(5,65+facing*50,6,5.6,5,12,kick3,obj_spark_hit2,1.5,1.2,0,12,self.id,3,3);
-                 //create_hitbox(5,65+facing*50,6,5.6,5,12,kick3,obj_spark_hit2,0.8,1,13,26,self.id,3,3);
+            if timer = 22 {
+                //intangible = 0
+                 create_hitbox(5,65+facing*50,6,5.6,5,12,kick3,obj_spark_hit2,1.2,1.2,0,12,self.id,1,3);
+                 //create_hitbox(5,65+facing*50,6,5.6,5,12,kick3,obj_spark_hit2,0.8,1,13,26,self.id,1,3);
                  air = max_jumps;
                  after_image(5,c_teal,0.85)
                  hitbox.shake_type = 1
                  hitbox.shake_kb = 3
                  hitbox.shake_ampl = 1.4 }
-            if timer = 21 || timer = 22 || timer = 23 {
-                vspeed = -4.75*size
+            if timer = 25 || timer = 26 || timer = 27 {
+                vspeed = -5*size
             }
-            if timer >= 21 && timer <= 27
+            if timer >= 25 && timer <= 31
                 hspeed = (1-facing*2)*size
         }
 

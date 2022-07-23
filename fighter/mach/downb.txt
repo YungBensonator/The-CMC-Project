@@ -65,7 +65,7 @@ temp_no_hurtbox = 1
                 create_hitbox2(3.5,362,6,2.8,2,1,kick3,obj_spark_hit4,1.15,1.4,23,-2,self.id,3,2);
             }
         }  
-    if air = 0 && temp > 0 {
+    if (air = 0 && temp > 0 && attack_success) {
 	sound_stop(downb_voice1);
 	sound_stop(downb_voice2);
 	sound_stop(downb_voice3);
@@ -79,6 +79,21 @@ temp_no_hurtbox = 1
         duster = instance_create(x+12*size*(1-facing*2),y,obj_dust_effect);
         duster.facing = 1-facing;  
     }
+	else if air = 0 && temp > 0
+	{
+	sound_stop(downb_voice1);
+	sound_stop(downb_voice2);
+	sound_stop(downb_voice3);
+        state_type="land";
+        attack_type="none";
+        time=37;
+        sprite_index = land_sprite;
+        timer=0;
+        duster = instance_create(x-2*size*(1-facing*2),y,obj_dust_effect);
+        duster.facing = facing; 
+        duster = instance_create(x+12*size*(1-facing*2),y,obj_dust_effect);
+        duster.facing = 1-facing; 
+		}
 if timer >= time-1 && state_type != "flinch" && state_type != "air_flinch" {
     attack_type = "none";
     if air > 0
